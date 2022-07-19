@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,8 +28,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import joshuatee.wx.Extensions.getInputStream
-import joshuatee.wx.MyApplication
-
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.external.ExternalGifDecoder
 import joshuatee.wx.util.UtilityImg
 
@@ -43,12 +42,12 @@ internal object UtilitySpcCompmap {
             layers.indices.forEach {
                 layers[it] = layers[it].replace("a", "")
                 val gd = ExternalGifDecoder()
-                gd.read(("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + layers[it] + ".gif").getInputStream())
+                gd.read(("${GlobalVariables.nwsSPCwebsitePrefix}/exper/compmap/" + layers[it] + ".gif").getInputStream())
                 drawables.add(BitmapDrawable(context.resources, gd.bitmap))
             }
         } else {
             val externalGifDecoder = ExternalGifDecoder()
-            externalGifDecoder.read(("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + "basemap" + ".gif").getInputStream())
+            externalGifDecoder.read(("${GlobalVariables.nwsSPCwebsitePrefix}/exper/compmap/" + "basemap" + ".gif").getInputStream())
             drawables.add(BitmapDrawable(context.resources, externalGifDecoder.bitmap))
         }
         return UtilityImg.layerDrawableToBitmap(drawables)

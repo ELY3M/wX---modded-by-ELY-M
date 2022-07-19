@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,20 +22,18 @@
 
 package joshuatee.wx.util
 
-import android.content.Context
+//elys mod //leave it
 import android.graphics.*
 import android.graphics.Paint.Style
-import android.graphics.drawable.BitmapDrawable
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.Location
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
-import joshuatee.wx.objects.GeographyType
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.objects.*
 import joshuatee.wx.radar.LatLon
+import joshuatee.wx.settings.RadarPreferences
 
 internal object UtilityCanvas {
 
@@ -44,8 +42,8 @@ internal object UtilityCanvas {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
         val path = Path()
-        val paintList = listOf(MyApplication.radarColorFfw, MyApplication.radarColorTstorm, MyApplication.radarColorTor)
-        val dataList = listOf(MyApplication.severeDashboardFfw.value, MyApplication.severeDashboardTst.value, MyApplication.severeDashboardTor.value)
+        val paintList = listOf(RadarPreferences.radarColorFfw, RadarPreferences.radarColorTstorm, RadarPreferences.radarColorTor)
+        val dataList = listOf(ObjectPolygonWarning.severeDashboardFfw.value, ObjectPolygonWarning.severeDashboardTst.value, ObjectPolygonWarning.severeDashboardTor.value)
         if (projectionType.needsCanvasShift) canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         paint.strokeWidth = projectionNumbers.polygonWidth.toFloat()
         dataList.forEachIndexed { index, it ->
@@ -75,13 +73,13 @@ internal object UtilityCanvas {
         paint.textSize = textSize.toFloat()
         UtilityCities.list.indices.forEach {
             val coordinates = if (projectionType.isMercator) {
-                UtilityCanvasProjection.computeMercatorNumbers(UtilityCities.list[it]!!.x, UtilityCities.list[it]!!.y, projectionNumbers)
+                UtilityCanvasProjection.computeMercatorNumbers(UtilityCities.list[it].x, UtilityCities.list[it].y, projectionNumbers)
             } else {
-                UtilityCanvasProjection.compute4326Numbers(UtilityCities.list[it]!!.x, UtilityCities.list[it]!!.y, projectionNumbers)
+                UtilityCanvasProjection.compute4326Numbers(UtilityCities.list[it].x, UtilityCities.list[it].y, projectionNumbers)
             }
             if (textSize > 0) {
                 canvas.drawText(
-                        MyApplication.comma.split(UtilityCities.list[it]!!.city)[0],
+                        RegExp.comma.split(UtilityCities.list[it].city)[0],
                         coordinates[0].toFloat() + 4,
                         coordinates[1].toFloat() - 4,
                         paint
@@ -98,7 +96,7 @@ internal object UtilityCanvas {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
         paint.strokeWidth = 1.0f
-        paint.color = MyApplication.radarColorLocdot
+        paint.color = RadarPreferences.radarColorLocdot
         if (projectionType.needsCanvasShift) canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         val x = Location.x.toDoubleOrNull() ?: 0.0
         val y = Location.y.replace("-", "").toDoubleOrNull() ?: 0.0
@@ -107,13 +105,14 @@ internal object UtilityCanvas {
         } else {
             UtilityCanvasProjection.compute4326Numbers(x, y, projectionNumbers)
         }
-        paint.color = MyApplication.radarColorLocdot
+        paint.color = RadarPreferences.radarColorLocdot
 
+	//elys mod
         //custom locationdot//
-        if (MyApplication.locationDotFollowsGps) {
-            UtilityLog.d("wx", "Path to location.png: "+MyApplication.FilesPath + "location.png")
-            val locationicon: Bitmap = BitmapFactory.decodeFile(MyApplication.FilesPath + "location.png");
-            val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, MyApplication.radarLocIconSize, MyApplication.radarLocIconSize, false)
+        if (RadarPreferences.locationDotFollowsGps) {
+            UtilityLog.d("wx", "Path to location.png: "+ GlobalVariables.FilesPath + "location.png")
+            val locationicon: Bitmap = BitmapFactory.decodeFile(GlobalVariables.FilesPath + "location.png");
+            val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, RadarPreferences.radarLocIconSize, RadarPreferences.radarLocIconSize, false)
             canvas.drawBitmap(locationiconresized, coordinates[0].toFloat(), coordinates[1].toFloat(), null)
         } else {
         canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2f, paint)
@@ -130,11 +129,12 @@ internal object UtilityCanvas {
         if (projectionType.needsCanvasShift) canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         paint.strokeWidth = projectionNumbers.polygonWidth.toFloat()
         paint.color = polygonType.color
+        // TODO FIXME refactor
         val prefToken = when (polygonType) {
-            PolygonType.MCD -> MyApplication.mcdLatLon.value
-            PolygonType.MPD -> MyApplication.mpdLatLon.value
-            PolygonType.WATCH -> MyApplication.watchLatLon.value
-            PolygonType.WATCH_TORNADO -> MyApplication.watchLatLonTor.value
+            PolygonType.MCD -> ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.latLonList.value
+            PolygonType.MPD -> ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.latLonList.value
+            PolygonType.WATCH -> ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.latLonList.value
+            PolygonType.WATCH_TORNADO -> ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH_TORNADO]!!.latLonList.value
             else -> ""
         }
         val list = prefToken.split(":").dropLastWhile { it.isEmpty() }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,19 +22,43 @@
 
 package joshuatee.wx.util
 
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.util.bzip2.Compression
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.io.BufferedReader
+import java.io.BufferedInputStream
+import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
+import java.io.DataInputStream
 
 object UtilityIO {
+
+    fun uncompress(context: Context, fileName: String): DataInputStream {
+        val dis = UCARRandomAccessFile(getFilePath(context, fileName))
+        dis.bigEndian = true
+        // ADVANCE PAST WMO HEADER
+        while (dis.readShort().toInt() != -1) {
+            // while (dis.readUnsignedShort() != 16) {
+        }
+        dis.skipBytes(100)
+        val magic = ByteArray(3)
+        magic[0] = 'B'.code.toByte()
+        magic[1] = 'Z'.code.toByte()
+        magic[2] = 'h'.code.toByte()
+        val compression = Compression.getCompression(magic)
+        val compressedFileSize = dis.length() - dis.filePointer
+        val buf = ByteArray(compressedFileSize.toInt())
+        dis.read(buf)
+        dis.close()
+        val decompressedStream = compression.decompress(ByteArrayInputStream(buf))
+        return DataInputStream(BufferedInputStream(decompressedStream))
+    }
 
     fun saveInputStream(context: Context, inputSteam: InputStream, filename: String) {
         try {
@@ -122,7 +146,7 @@ object UtilityIO {
             val reader = BufferedReader(InputStreamReader(inputStream!!))
             var line = reader.readLine()
             while (line != null) {
-                content += line + MyApplication.newline
+                content += line + GlobalVariables.newline
                 line = reader.readLine()
             }
         } catch (e: Exception) {

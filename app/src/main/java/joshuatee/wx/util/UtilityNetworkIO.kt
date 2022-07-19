@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,8 +28,8 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-
 import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import okhttp3.Request
 
 object UtilityNetworkIO {
@@ -39,7 +39,7 @@ object UtilityNetworkIO {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
@@ -61,12 +61,12 @@ object UtilityNetworkIO {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
-                out.append(line + MyApplication.newline)
+                out.append(line + GlobalVariables.newline)
                 line = bufferedReader.readLine()
             }
             bufferedReader.close()
@@ -84,7 +84,7 @@ object UtilityNetworkIO {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             val bufferedReader = BufferedReader(InputStreamReader(BufferedInputStream(response.body!!.byteStream())))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
@@ -102,7 +102,7 @@ object UtilityNetworkIO {
     fun getBitmapFromUrl(url: String): Bitmap = try {
             UtilityLog.d("wx", "getBitmapFromUrl: $url")
             val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()))
         } catch (e: Exception) {
             UtilityImg.getBlankBitmap()
@@ -123,7 +123,7 @@ object UtilityNetworkIO {
     fun getInputStreamFromUrl(url: String): InputStream? = try {
             UtilityLog.d("wx", "getInputStreamFromUrl: $url")
             val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             response.body!!.byteStream()
     } catch (e: IOException) {
             UtilityLog.handleException(e)

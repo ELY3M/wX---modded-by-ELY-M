@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -20,7 +20,7 @@
  */
 //modded by ELY M.
 
-package joshuatee.wx
+package joshuatee.wx.common
 
 object GlobalArrays {
 
@@ -92,7 +92,7 @@ object GlobalArrays {
             "TMDW IL, Chicago Midway",
             "TORD IL, Chicago O'Hare",
             "TIDS IN, Indianapolis",
-            "TICT KS, Wichita",
+            "TICH KS, Wichita",
             "TSDF KY, Louisville",
             "TMSY LA, New Orleans",
             "TBOS MA, Boston",
@@ -502,7 +502,7 @@ object GlobalArrays {
             "TMDW: IL, Chicago Midway",
             "TORD: IL, Chicago O'Hare",
             "TIDS: IN, Indianapolis",
-            "TICT: KS, Wichita",
+            "TICH: KS, Wichita",
             "TSDF: KY, Louisville",
             "TMSY: LA, New Orleans",
             "TBOS: MA, Boston",

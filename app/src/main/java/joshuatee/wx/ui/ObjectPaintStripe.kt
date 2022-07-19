@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,16 +23,16 @@ package joshuatee.wx.ui
 
 import android.graphics.Color
 import android.graphics.Paint
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 
 class ObjectPaintStripe {
 
     val paint = Paint()
 
     init {
-        val red = Color.red(MyApplication.nwsIconBottomColor)
-        val green = Color.green(MyApplication.nwsIconBottomColor)
-        val blue = Color.blue(MyApplication.nwsIconBottomColor)
+        val red = Color.red(UIPreferences.nwsIconBottomColor)
+        val green = Color.green(UIPreferences.nwsIconBottomColor)
+        val blue = Color.blue(UIPreferences.nwsIconBottomColor)
         paint.color = Color.argb(200, red, green, blue)
     }
 }

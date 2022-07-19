@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,9 +27,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.view.View
-
 import joshuatee.wx.MyApplication
-import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
+import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.UtilityLog
 
 class ViewColorLegend(context: Context, private val product: String) : View(context) {
@@ -63,9 +64,9 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     private fun setColorWithBuffers(prodId: Int, index: Int) {
         try {
             myPaint.color = Color.rgb(
-                    MyApplication.colorMap[prodId]!!.redValues.get(index).toInt() and 0xFF,
-                    MyApplication.colorMap[prodId]!!.greenValues.get(index).toInt() and 0xFF,
-                    MyApplication.colorMap[prodId]!!.blueValues.get(index).toInt() and 0xFF
+                    ObjectColorPalette.colorMap[prodId]!!.redValues.get(index).toInt() and 0xFF,
+                    ObjectColorPalette.colorMap[prodId]!!.greenValues.get(index).toInt() and 0xFF,
+                    ObjectColorPalette.colorMap[prodId]!!.blueValues.get(index).toInt() and 0xFF
             )
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -76,13 +77,12 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     public override fun onDraw(canvas: Canvas) {
         paintText.style = Paint.Style.FILL
         paintText.strokeWidth = 1f
-        paintText.textSize = MyApplication.radarShowLegendTextSize.toFloat() //was 30f
-        paintText.color = MyApplication.radarShowLegendTextColor
-        //if (!MyApplication.blackBg) paintText.color = Color.BLACK
-        val startHeight = MyApplication.actionBarHeight.toFloat()
-        val width = MyApplication.radarShowLegendWidth.toFloat() //was 50f
+        paintText.textSize = RadarPreferences.radarShowLegendTextSize.toFloat() //was 30f
+        paintText.color = RadarPreferences.radarShowLegendTextColor
+        //if (!RadarPreferences.blackBg) paintText.color = Color.BLACK
+        val startHeight = UIPreferences.actionBarHeight.toFloat()
+        val width = RadarPreferences.radarShowLegendWidth.toFloat() //was 50f
         val widthStarting = 0f
-        //val strokeWidth = 10
         val textFromLegend = 10f
         val heightFudge = 30f
         val screenHeight = MyApplication.dm.heightPixels.toFloat()
@@ -252,10 +252,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 (100 downTo -1 step 1).forEach {
                     if (it % 5 == 0) {
                         canvas.drawText(
-                            UtilityStringExternal.truncate(
-                                (it / 100.0).toString(),
-                                4
-                            ) + units,
+                            (it / 100.0).toString().take(4) + units,
                             widthStarting + width + textFromLegend,
                             3f * scaledHeightVel * (100 - it).toFloat() + heightFudge + startHeight,
                             paintText
@@ -335,16 +332,16 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 var j = WXGLRadarActivity.dspLegendMax
                 while (j > 0) {
                     canvas.drawText(
-                        UtilityStringExternal.truncate(j.toString(), 4) + units,
+                        j.toString().take(4) + units,
                         widthStarting + width + textFromLegend,
-                        255f / WXGLRadarActivity.dspLegendMax * scaledHeightVel * (WXGLRadarActivity.dspLegendMax - j) + heightFudge + startHeight,
+                        255.0f / WXGLRadarActivity.dspLegendMax * scaledHeightVel * (WXGLRadarActivity.dspLegendMax - j) + heightFudge + startHeight,
                         paintText
                     )
                     if (!unitsDrawn) {
                         unitsDrawn = true
                         units = ""
                     }
-                    j -= WXGLRadarActivity.dspLegendMax / 16f
+                    j -= WXGLRadarActivity.dspLegendMax / 16.0f
                 }
             }
             else -> {}

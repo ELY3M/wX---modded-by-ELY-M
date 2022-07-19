@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,13 +22,13 @@
 package joshuatee.wx.notifications
 
 import android.content.Context
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.util.Utility
 
 object UtilityNotificationTools {
 
     fun nwsLocalAlertNotFiltered(context: Context, title: String): Boolean {
         val nwsWfoFilterStr = Utility.readPref(context, "NOTIF_WFO_FILTER", "")
-        return MyApplication.colon.split(nwsWfoFilterStr).none { it.length > 5 && title.startsWith(it) }
+        return RegExp.colon.split(nwsWfoFilterStr).none { it.length > 5 && title.startsWith(it) }
     }
 }

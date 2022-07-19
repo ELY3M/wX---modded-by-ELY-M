@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,8 +33,8 @@ import android.widget.LinearLayout
 import java.util.Locale
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.R
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
@@ -99,7 +99,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         miStatusParam1 = menu.findItem(R.id.action_status_param1)
         miStatusParam2 = menu.findItem(R.id.action_status_param2)
         star = menu.findItem(R.id.action_fav)
-        star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         title = activityArguments[2]
         if (om.numPanes < 2) {
             fab1 = ObjectFab(this, this, R.id.fab1) {
@@ -126,7 +126,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         miStatus.title = "in through"
         om.displayData = DisplayDataNoSpinner(this, this, om.numPanes, om)
         setupModel()
-        favList = UtilityFavorites.setupMenu(this, MyApplication.srefFav, om.displayData.param[om.curImg], prefToken)
+        favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
         UtilityModelSpcSrefInterface.createData()
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
         drw = ObjectNavDrawerCombo(
@@ -142,10 +142,10 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun updateStarIcon() {
-        if (MyApplication.srefFav.contains(":" + om.displayData.param[om.curImg] + ":"))
-            star.setIcon(MyApplication.STAR_ICON)
+        if (UIPreferences.srefFav.contains(":" + om.displayData.param[om.curImg] + ":"))
+            star.setIcon(GlobalVariables.STAR_ICON)
         else
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+            star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
     }
 
     private fun getRunStatus() {
@@ -172,7 +172,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        favList = UtilityFavorites.setupMenu(this, MyApplication.srefFav, om.displayData.param[om.curImg], prefToken)
+        favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
         updateMenuTitles()
         updateStarIcon()
         UtilityModels.getContentNonSpinner(this, om, listOf(""))
@@ -231,7 +231,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
-        favList = UtilityFavorites.setupMenu(this, MyApplication.srefFav, om.displayData.param[om.curImg], prefToken)
+        favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
         when (item.itemId) {
             R.id.action_param -> genericDialog(favList) {
                 when (it) {
@@ -259,7 +259,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun showHelpTextDialog() {
-        UtilityAlertDialog.showHelpTextWeb("${MyApplication.nwsSPCwebsitePrefix}/exper/sref/about_sref.html", this)
+        UtilityAlertDialog.showHelpTextWeb("${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/about_sref.html", this)
     }
 
     private fun toggleFavorite() {

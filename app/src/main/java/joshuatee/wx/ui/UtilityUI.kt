@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,28 +26,24 @@ import android.content.Context
 import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.Toast
-import android.widget.TextView
 import kotlin.math.sqrt
 import kotlin.math.pow
-import joshuatee.wx.R
 import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
 object UtilityUI {
 
-    fun makeToastLegacy(context: Context, message: String) {
-        val view = View.inflate(context, R.layout.toast, null)
-        val linearLayout: LinearLayout = view.findViewById(R.id.toast_layout_root)
-        val text: TextView = linearLayout.findViewById(R.id.text)
-        text.text = message
-        val toast = Toast(context.applicationContext)
-        toast.duration = Toast.LENGTH_LONG
-        toast.view = linearLayout
-        toast.show()
-    }
+//    fun makeToastLegacy(context: Context, message: String) {
+//        val view = View.inflate(context, R.layout.toast, null)
+//        val linearLayout: LinearLayout = view.findViewById(R.id.toast_layout_root)
+//        val text: TextView = linearLayout.findViewById(R.id.text)
+//        text.text = message
+//        val toast = Toast(context.applicationContext)
+//        toast.duration = Toast.LENGTH_LONG
+//        toast.view = linearLayout
+//        toast.show()
+//    }
 
     fun immersiveMode(activity: Activity) {
         if (UIPreferences.radarImmersiveMode) {

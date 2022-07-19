@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -39,7 +39,7 @@ class DisplayDataNoSpinner(context: Context, activity: Activity, numPanes: Int, 
 
     init {
         val resourceId = listOf(R.id.iv1, R.id.iv2)
-        (0 until numPanes).forEach {index -> img[index] = activity.findViewById(resourceId[index]) }
+        (0 until numPanes).forEach { index -> img[index] = activity.findViewById(resourceId[index]) }
         if (numPanes > 1) {
             img[0].setOnTouchImageViewListener { img[1].setZoom(img[0]) }
             img[1].setOnTouchImageViewListener { img[0].setZoom(img[1]) }

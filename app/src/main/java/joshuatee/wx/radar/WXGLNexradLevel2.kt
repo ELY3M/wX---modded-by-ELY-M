@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,11 +23,10 @@ package joshuatee.wx.radar
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
 import android.content.Context
-
 import joshuatee.wx.Jni
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 
 class WXGLNexradLevel2 {
@@ -43,7 +42,7 @@ class WXGLNexradLevel2 {
     private var ibuff = ByteBuffer.allocate(0)
 
     init {
-        if (MyApplication.radarUseJni) {
+        if (RadarPreferences.radarUseJni) {
             obuff = ByteBuffer.allocateDirect(829472)
             ibuff = ByteBuffer.allocateDirect(600000)
             // decomp size is a follows ref 827040 vel 460800
@@ -54,7 +53,7 @@ class WXGLNexradLevel2 {
     fun decodeAndPlot(context: Context, fileName: String, prod: String, radarStatusStr: String, idxStr: String, performDecompression: Boolean) {
         val decompFileName = "$fileName.decomp$idxStr"
         val productCode: Short = if (prod == "L2VEL") 154 else 153
-        if (MyApplication.radarUseJni) {
+        if (RadarPreferences.radarUseJni) {
             ibuff.position(0)
             obuff.position(0)
             try {
@@ -91,7 +90,7 @@ class WXGLNexradLevel2 {
         msecs.order(ByteOrder.nativeOrder())
         msecs.position(0)
         try {
-            if (MyApplication.radarUseJni) {
+            if (RadarPreferences.radarUseJni) {
                 Jni.level2Decode(
                     UtilityIO.getFilePath(context, decompFileName),
                     binWord,
@@ -137,13 +136,13 @@ class WXGLNexradLevel2 {
             val days2 = days.short
             val milliSeconds = msecs.int
             val d = UtilityTime.radarTimeL2(days2, milliSeconds)
-            val radarInfo = d.toString() + MyApplication.newline + "Product Code: " + productCode.toString()
+            val radarInfo = d.toString() + GlobalVariables.newline + "Product Code: " + productCode.toString()
             WXGLNexrad.writeRadarInfo(context, radarStatusStr, radarInfo)
             binSize = WXGLNexrad.getBinSize(productCode.toInt())
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        if (!MyApplication.radarUseJni) {
+        if (!RadarPreferences.radarUseJni) {
             UtilityFileManagement.deleteFile(context, decompFileName)
         }
     }

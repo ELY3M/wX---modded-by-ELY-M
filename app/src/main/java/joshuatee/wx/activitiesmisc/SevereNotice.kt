@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,8 +24,8 @@ package joshuatee.wx.activitiesmisc
 import android.graphics.Bitmap
 import java.util.regex.Pattern
 import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.UtilityString
 
@@ -38,7 +38,7 @@ internal class SevereNotice(val type: PolygonType) {
     val bitmaps = mutableListOf<Bitmap>()
     var numbers = mutableListOf<String>()
     var pattern: Pattern = Pattern.compile("")
-    private var typeAsString = when (type) {
+    var typeAsString = when (type) {
         PolygonType.MCD -> "MCD"
         PolygonType.WATCH -> "WATCH"
         PolygonType.MPD -> "MPD"
@@ -68,9 +68,9 @@ internal class SevereNotice(val type: PolygonType) {
                 numbers[count] = String.format("%4s", numbers[count]).replace(' ', '0')
             }
             val url = when (type) {
-                PolygonType.MCD -> "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd" + numbers[count] + ".gif"
-                PolygonType.WATCH -> "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + numbers[count] + "_radar.gif"
-                PolygonType.MPD -> "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" + numbers[count] + ".gif"
+                PolygonType.MCD -> "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd" + numbers[count] + ".gif"
+                PolygonType.WATCH -> "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + numbers[count] + "_radar.gif"
+                PolygonType.MPD -> "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/images/mcd" + numbers[count] + ".gif"
                 else -> ""
             }
             bitmaps.add(url.getImage())

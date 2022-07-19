@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,16 +23,12 @@
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
@@ -66,42 +62,19 @@ class SettingsAboutActivity : BaseActivity() {
         val faqButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         faqButton.setTextColor(UIPreferences.textHighlightColor)
         faqButton.text = "View FAQ (current app issues listed at top)"
-        faqButton.setOnClickListener {
-            ObjectIntent.showWeb(this, faqUrl)
-        }
+        faqButton.setOnClickListener { ObjectIntent.showWeb(this, faqUrl) }
 
         val releaseNotesButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
         releaseNotesButton.text = "View release notes"
-        releaseNotesButton.setOnClickListener {
-            ObjectIntent.showWeb(this, releaseNotesUrl)
-        }
-
-        val emailButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        emailButton.setTextColor(UIPreferences.textHighlightColor)
-        emailButton.text = "Email developer joshua.tee@gmail.com"
-        emailButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("joshua.tee@gmail.com"))
-            intent.putExtra(Intent.EXTRA_SUBJECT, "wX version $version")
-            startActivity(Intent.createChooser(intent, "Send Email"))
-        }
-
-        val iOSVersion = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        iOSVersion.setTextColor(UIPreferences.textHighlightColor)
-        iOSVersion.text = "iOS port of wX is called wXL23"
-        iOSVersion.setOnClickListener {
-            ObjectIntent.showWeb(this, iOSUrl)
-        }
+        releaseNotesButton.setOnClickListener { ObjectIntent.showWeb(this, releaseNotesUrl) }
 
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files (should not be needed)", MyApplication.textSizeNormal, MyApplication.paddingSettings)
+        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files (should not be needed)", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
         cardDeleteFiles.setOnClickListener {
             ObjectPopupMessage(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         }
-
-        linearLayout.addView(cardDeleteFiles.card)
+        linearLayout.addView(cardDeleteFiles.get())
         displayContent()
     }
 

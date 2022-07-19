@@ -14,15 +14,15 @@ import android.content.Intent
 import android.os.IBinder
 import android.provider.Settings
 import androidx.core.content.ContextCompat
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.notifications.UtilityNotification
 import android.app.NotificationManager
 import android.media.projection.MediaProjectionManager
 import android.os.Build
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.UtilityTime
 
 class TelecineService : Service() {
@@ -34,10 +34,10 @@ class TelecineService : Service() {
 
     private val listener = object : RecordingSession.Listener {
         override fun onStart() {
-            if (MyApplication.telecineSwitchShowTouches) {
+            if (UIPreferences.telecineSwitchShowTouches) {
                 Settings.System.putInt(MyApplication.contentResolverLocal, SHOW_TOUCHES, 1)
             }
-            if (!MyApplication.telecineSwitchRecordingNotification) {
+            if (!UIPreferences.telecineSwitchRecordingNotification) {
                 return
             }
             val context = applicationContext
@@ -54,7 +54,7 @@ class TelecineService : Service() {
         }
 
         override fun onStop() {
-            if (MyApplication.telecineSwitchShowTouches) {
+            if (UIPreferences.telecineSwitchShowTouches) {
                 Settings.System.putInt(MyApplication.contentResolverLocal, SHOW_TOUCHES, 0)
             }
         }
@@ -101,7 +101,7 @@ class TelecineService : Service() {
         val requestID= UtilityTime.currentTimeMillis().toInt()
         UtilityNotification.initChannels(this)
         val notification = NotificationCompat.Builder(this, UtilityNotification.notiChannelStrNoSound)
-                .setSmallIcon(MyApplication.ICON_RADAR)
+                .setSmallIcon(GlobalVariables.ICON_RADAR)
                 .setWhen(requestIDLong)
                 .setContentTitle("wX")
                 .setContentText(label)

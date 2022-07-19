@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,12 +22,10 @@
 package joshuatee.wx.canada
 
 import java.util.Locale
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.GlobalArrays
+import joshuatee.wx.common.GlobalArrays
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.radar.LatLon
 
 object UtilityCanada {
@@ -44,13 +42,13 @@ object UtilityCanada {
 
     fun getIcons7Day(html: String): String {
         var iconList = ""
-        val days = html.split((MyApplication.newline + MyApplication.newline)).dropLastWhile { it.isEmpty() }
+        val days = html.split((GlobalVariables.newline + GlobalVariables.newline)).dropLastWhile { it.isEmpty() }
         days.forEach { iconList += translateIconName(it) + "!" }
         return iconList
     }
 
     fun getIcons7DayAsList(html: String): List<String> {
-        val days = html.split((MyApplication.newline + MyApplication.newline)).dropLastWhile { it.isEmpty() }
+        val days = html.split((GlobalVariables.newline + GlobalVariables.newline)).dropLastWhile { it.isEmpty() }
         return days.map { translateIconName(it) }
     }
 
@@ -230,13 +228,13 @@ object UtilityCanada {
         return newName
     }
 
-    fun getProvidenceHtml(prov: String) = (MyApplication.canadaEcSitePrefix + "/forecast/canada/index_e.html?id=$prov").getHtmlSep()
+    fun getProvidenceHtml(prov: String) = (GlobalVariables.canadaEcSitePrefix + "/forecast/canada/index_e.html?id=$prov").getHtmlSep()
 
     fun getLocationHtml(location: LatLon): String {
         val prov = location.latString.split(":").dropLastWhile { it.isEmpty() }
         val id = location.lonString.split(":").dropLastWhile { it.isEmpty() }
         return if (prov.size > 1 && id.isNotEmpty()) {
-            (MyApplication.canadaEcSitePrefix + "/rss/city/" + prov[1].lowercase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
+            (GlobalVariables.canadaEcSitePrefix + "/rss/city/" + prov[1].lowercase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
         } else {
             ""
         }
@@ -245,17 +243,17 @@ object UtilityCanada {
     fun getLocationUrl(x: String, y: String): String {
         val prov = x.split(":").dropLastWhile { it.isEmpty() }
         val id = y.split(":").dropLastWhile { it.isEmpty() }
-        return if (prov.count() < 2 || id.count() < 1) {
+        return if (prov.count() < 2 || id.isEmpty()) {
             ""
         } else {
-            MyApplication.canadaEcSitePrefix + "/city/pages/" + prov[1].lowercase(Locale.US) + "-" + id[0] + "_metric_e.html"
+            GlobalVariables.canadaEcSitePrefix + "/city/pages/" + prov[1].lowercase(Locale.US) + "-" + id[0] + "_metric_e.html"
         }
     }
 
     fun getStatus(html: String) = html.parse("<b>Observed at:</b>(.*?)<br/>")
 
     fun getRadarSite(x: String, y: String): String {
-        val url = (MyApplication.canadaEcSitePrefix + "/city/pages/"
+        val url = (GlobalVariables.canadaEcSitePrefix + "/city/pages/"
                 + x.split(":").dropLastWhile { it.isEmpty() }[1].lowercase(Locale.US) + "-"
                 + y.split(":").dropLastWhile { it.isEmpty() }[0] + "_metric_e.html")
         val html = url.getHtmlSep()
@@ -269,8 +267,8 @@ object UtilityCanada {
         val temp = html.parse("<b>Temperature:</b> (.*?)&deg;C <br/>.*?<b>Humidity:</b> .*? %<br/>.*?<b>Dewpoint:</b> .*?&deg;C <br/>")
         val rh = html.parse("<b>Temperature:</b> .*?&deg;C <br/>.*?<b>Humidity:</b> (.*?) %<br/>.*?<b>Dewpoint:</b> .*?&deg;C <br/>")
         val dew = html.parse("<b>Temperature:</b> .*?&deg;C <br/>.*?<b>Humidity:</b> .*? %<br/>.*?<b>Dewpoint:</b> (.*?)&deg;C <br/>")
-        val wind = Utility.fromHtml(html.parse("<b>Wind:</b> (.*?)<br/>")).replace(MyApplication.newline, "")
-        return temp + MyApplication.DEGREE_SYMBOL + " / " + dew + MyApplication.DEGREE_SYMBOL + " (" + rh + "%) - " + pressure + "kPa - " + wind + " - " + vis + " - " + sum + " "
+        val wind = Utility.fromHtml(html.parse("<b>Wind:</b> (.*?)<br/>")).replace(GlobalVariables.newline, "")
+        return temp + GlobalVariables.DEGREE_SYMBOL + " / " + dew + GlobalVariables.DEGREE_SYMBOL + " (" + rh + "%) - " + pressure + "kPa - " + wind + " - " + vis + " - " + sum + " "
     }
 
     fun get7Day(html: String): String {
@@ -286,7 +284,7 @@ object UtilityCanada {
                 continue
             }
             val string = resultListDay[i].split(":")[0] + ": " + stringList[j]
-            sevenDayForecast += string + MyApplication.newline + MyApplication.newline
+            sevenDayForecast += string + GlobalVariables.newline + GlobalVariables.newline
             j += 1
         }
         return sevenDayForecast
@@ -305,7 +303,7 @@ object UtilityCanada {
         chunk = html.parse("<div id=\"watch\" class=\"floatLeft\">(.*?)</div>")
         urls = chunk.parseColumn("<a href=\"(.*?)\">.*?</a>")
         titles = chunk.parseColumn("<a href=\".*?\">(.*?)</a>")
-        val watchUrl = urls.joinToString(",${MyApplication.canadaEcSitePrefix}")
+        val watchUrl = urls.joinToString(",${GlobalVariables.canadaEcSitePrefix}")
         val watch = titles.joinToString("<BR>")
         val result = mutableListOf(warning + statement + watch, "$warningUrl,$statementUrl,$watchUrl")
         if (!result[0].contains("No watches or warnings in effect")) {

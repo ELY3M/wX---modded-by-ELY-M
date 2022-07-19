@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -44,7 +44,8 @@ object UtilityWXGLTextObject {
     fun updateWpcFronts(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach { textObjects[it].addWpcPressureCenters() }
     }
-        
+    
+    //elys mod    
     fun updateHailLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
             textObjects[it].initializeHailLabels()

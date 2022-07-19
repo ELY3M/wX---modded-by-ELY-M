@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,7 +22,6 @@
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
-
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
@@ -31,6 +30,7 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.*
 import java.util.*
 
@@ -40,11 +40,8 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     // Use image maps to select locations for canada to save
     // arg1: province or territory
     //
-    //
 
-    companion object {
-        const val URL = ""
-    }
+    companion object { const val URL = "" }
 
     private var url = ""
 
@@ -165,7 +162,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 
     private fun getCityFromXml(token: String): String {
         val data = UtilityIO.readTextFileFromRaw(this@SettingsLocationCanadaMapActivity.resources, R.raw.maps)
-        val lines = data.split(MyApplication.newline)
+        val lines = data.split(GlobalVariables.newline)
         lines.forEach { if (it.contains(token)) return it.parse("title=\"(.*?)\"") }
         return ""
     }

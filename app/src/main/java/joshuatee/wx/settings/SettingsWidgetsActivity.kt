@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,9 +27,7 @@ import android.os.Bundle
 import android.widget.CompoundButton
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SwitchCompat
-
 import joshuatee.wx.R
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.WidgetFile
@@ -49,47 +47,16 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         linearLayout = findViewById(R.id.linearLayout)
         abSwitch = findViewById(R.id.abSwitch)
         toolbar.subtitle = "Please tap on text for additional help."
-        val locationNameShortLength = 20
-        val locations = (1 until Location.numLocations + 1).map { "$it: " + UtilityStringExternal.truncate(Utility.readPref(this, "LOC" + it + "_LABEL", ""), locationNameShortLength) }
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "Warnings in radar mosaic",
-                        "WIDGET_MOSAIC_WARNINGS",
-                        R.string.loc1_radar_warnings_label
-                ).card
-        )
+        val locations = (1 until Location.numLocations + 1).map {
+            "$it: " + Utility.readPref(this, "LOC" + it + "_LABEL", "").take(20)
+        }
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Do not show 7day in CC widget",
                         "WIDGET_CC_DONOTSHOW_7_DAY",
                         R.string.cc_widget_show_sevenday
-                ).card
-        )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "Download nexrad radar",
-                        WidgetFile.NEXRAD_RADAR.prefString,
-                        R.string.loc1_radar_label
-                ).card
-        )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "Download mosaics",
-                        WidgetFile.VIS.prefString,
-                        R.string.loc1_mosaics_label
-                ).card
-        )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "Download radar mosaic",
-                        WidgetFile.MOSAIC_RADAR.prefString,
-                        R.string.loc1_mosaics_rad_label
-                ).card
+                ).get()
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
@@ -97,7 +64,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         "Download AFD",
                         WidgetFile.AFD.prefString,
                         R.string.loc1_txt_label
-                ).card
+                ).get()
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
@@ -105,7 +72,31 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         "Download HWO",
                         WidgetFile.HWO.prefString,
                         R.string.loc1_txt_hwo_label
-                ).card
+                ).get()
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Download mosaics",
+                        WidgetFile.VIS.prefString,
+                        R.string.loc1_mosaics_label
+                ).get()
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Download nexrad radar",
+                        WidgetFile.NEXRAD_RADAR.prefString,
+                        R.string.loc1_radar_label
+                ).get()
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Download radar mosaic",
+                        WidgetFile.MOSAIC_RADAR.prefString,
+                        R.string.loc1_mosaics_rad_label
+                ).get()
         )
         linearLayout.addView(
                 ObjectSettingsSpinner(

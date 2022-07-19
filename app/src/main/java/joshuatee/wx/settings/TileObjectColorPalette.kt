@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,9 +25,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.appcompat.widget.Toolbar
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.radar.UtilityUSImgWX
+import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.radarcolorpalettes.UtilityColorPaletteGeneric
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityIO
@@ -46,8 +45,8 @@ internal class TileObjectColorPalette(val colorMapLabel: String, val toolbar: To
         if (UtilityFileManagement.internalFileExist(context, "colormap" + product + this.colorMapLabel)) {
             bitmapWithText = UtilityIO.bitmapFromInternalStorage(context, "colormap" + product + this.colorMapLabel)
         } else {
-            oldMap = MyApplication.radarColorPalette[productAsInt]!!
-            MyApplication.radarColorPalette[productAsInt] = colorMapLabel
+            oldMap = ObjectColorPalette.radarColorPalette[productAsInt]!!
+            ObjectColorPalette.radarColorPalette[productAsInt] = colorMapLabel
             try {
                 UtilityColorPaletteGeneric.loadColorMap(context, productAsInt)
             } catch (e: Exception) {
@@ -56,7 +55,7 @@ internal class TileObjectColorPalette(val colorMapLabel: String, val toolbar: To
             bitmap = UtilityUSImgWX.bitmapForColorPalette(context, productAsInt)
             bitmapWithText = UtilityImg.drawTextToBitmap(context, bitmap, colorMapLabel, textColor)
             UtilityIO.bitmapToInternalStorage(context, bitmapWithText, "colormap$product$colorMapLabel")
-            MyApplication.radarColorPalette[productAsInt] = oldMap
+            ObjectColorPalette.radarColorPalette[productAsInt] = oldMap
         }
     }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,81 +21,82 @@
 
 package joshuatee.wx.objects
 
-import joshuatee.wx.MyApplication
+import joshuatee.wx.radar.RadarGeometry
+import joshuatee.wx.settings.RadarPreferences
 import java.nio.ByteBuffer
 
 enum class GeographyType constructor(var relativeBuffer: ByteBuffer, var count: Int, var color: Int, var pref: Boolean, var lineWidth: Int) {
 
     STATE_LINES(
-        MyApplication.stateRelativeBuffer,
-        MyApplication.countState,
-        MyApplication.radarColorState,
-        true,
-        MyApplication.radarStateLineSize
+            RadarGeometry.stateRelativeBuffer,
+            RadarGeometry.countState,
+            RadarPreferences.radarColorState,
+            true,
+            RadarPreferences.radarStateLineSize
     ),
     COUNTY_LINES(
-        MyApplication.countyRelativeBuffer,
-        MyApplication.countCounty,
-        MyApplication.radarColorCounty,
-        MyApplication.radarCounty,
-        MyApplication.radarCountyLineSize
+            RadarGeometry.countyRelativeBuffer,
+            RadarGeometry.countCounty,
+            RadarPreferences.radarColorCounty,
+            RadarPreferences.radarCounty,
+            RadarPreferences.radarCountyLineSize
     ),
     LAKES(
-        MyApplication.lakesRelativeBuffer,
-        MyApplication.countLakes,
-        MyApplication.radarColorLakes,
-        MyApplication.radarLakes,
-        MyApplication.radarLakeLineSize
+            RadarGeometry.lakesRelativeBuffer,
+            RadarGeometry.countLakes,
+            RadarPreferences.radarColorLakes,
+            RadarPreferences.radarLakes,
+            RadarPreferences.radarLakeLineSize
     ),
     HIGHWAYS(
-        MyApplication.hwRelativeBuffer,
-        MyApplication.countHw,
-        MyApplication.radarColorHw,
-        MyApplication.radarHw,
-        MyApplication.radarHwLineSize
+            RadarGeometry.hwRelativeBuffer,
+            RadarGeometry.countHw,
+            RadarPreferences.radarColorHw,
+            RadarPreferences.radarHw,
+            RadarPreferences.radarHwLineSize
     ),
     HIGHWAYS_EXTENDED(
-        MyApplication.hwExtRelativeBuffer,
-        MyApplication.countHwExt,
-        MyApplication.radarColorHwExt,
-        MyApplication.radarHwEnhExt,
-        MyApplication.radarHwExtLineSize
+            RadarGeometry.hwExtRelativeBuffer,
+            RadarGeometry.countHwExt,
+            RadarPreferences.radarColorHwExt,
+            RadarPreferences.radarHwEnhExt,
+            RadarPreferences.radarHwExtLineSize
     ),
-    CITIES(ByteBuffer.allocate(0), 0, MyApplication.radarColorCity, MyApplication.radarCities, 0),
-    COUNTY_LABELS(ByteBuffer.allocate(0), 0, MyApplication.radarColorCountyLabels, MyApplication.radarCountyLabels, 0),
+    CITIES(ByteBuffer.allocate(0), 0, RadarPreferences.radarColorCity, RadarPreferences.radarCities, 0),
+    COUNTY_LABELS(ByteBuffer.allocate(0), 0, RadarPreferences.radarColorCountyLabels, RadarPreferences.radarCountyLabels, 0),
     NONE(ByteBuffer.allocateDirect(0), 0, 0, false, 0);
 
     // FIXME refresh rest of values
     companion object {
         fun refresh() {
-            HIGHWAYS_EXTENDED.relativeBuffer = MyApplication.hwExtRelativeBuffer
-            STATE_LINES.relativeBuffer = MyApplication.stateRelativeBuffer
-            STATE_LINES.count = MyApplication.countState
-            COUNTY_LINES.relativeBuffer = MyApplication.countyRelativeBuffer
-            COUNTY_LINES.count = MyApplication.countCounty
-            HIGHWAYS.relativeBuffer = MyApplication.hwRelativeBuffer
-            HIGHWAYS.count = MyApplication.countHw
-            HIGHWAYS_EXTENDED.relativeBuffer = MyApplication.hwExtRelativeBuffer
-            LAKES.relativeBuffer = MyApplication.lakesRelativeBuffer
-            STATE_LINES.color = MyApplication.radarColorState
-            COUNTY_LINES.color = MyApplication.radarColorCounty
-            LAKES.color = MyApplication.radarColorLakes
-            HIGHWAYS_EXTENDED.color = MyApplication.radarColorHwExt
-            HIGHWAYS.color = MyApplication.radarColorHw
+            HIGHWAYS_EXTENDED.relativeBuffer = RadarGeometry.hwExtRelativeBuffer
+            STATE_LINES.relativeBuffer = RadarGeometry.stateRelativeBuffer
+            STATE_LINES.count = RadarGeometry.countState
+            COUNTY_LINES.relativeBuffer = RadarGeometry.countyRelativeBuffer
+            COUNTY_LINES.count = RadarGeometry.countCounty
+            HIGHWAYS.relativeBuffer = RadarGeometry.hwRelativeBuffer
+            HIGHWAYS.count = RadarGeometry.countHw
+            HIGHWAYS_EXTENDED.relativeBuffer = RadarGeometry.hwExtRelativeBuffer
+            LAKES.relativeBuffer = RadarGeometry.lakesRelativeBuffer
+            STATE_LINES.color = RadarPreferences.radarColorState
+            COUNTY_LINES.color = RadarPreferences.radarColorCounty
+            LAKES.color = RadarPreferences.radarColorLakes
+            HIGHWAYS_EXTENDED.color = RadarPreferences.radarColorHwExt
+            HIGHWAYS.color = RadarPreferences.radarColorHw
 
             STATE_LINES.pref = true
-            COUNTY_LINES.pref = MyApplication.radarCounty
-            LAKES.pref = MyApplication.radarLakes
-            HIGHWAYS.pref = MyApplication.radarHw
-            HIGHWAYS_EXTENDED.pref = MyApplication.radarHwEnhExt
-            CITIES.pref = MyApplication.radarCities
-            COUNTY_LABELS.pref = MyApplication.radarCountyLabels
+            COUNTY_LINES.pref = RadarPreferences.radarCounty
+            LAKES.pref = RadarPreferences.radarLakes
+            HIGHWAYS.pref = RadarPreferences.radarHw
+            HIGHWAYS_EXTENDED.pref = RadarPreferences.radarHwEnhExt
+            CITIES.pref = RadarPreferences.radarCities
+            COUNTY_LABELS.pref = RadarPreferences.radarCountyLabels
 
-            STATE_LINES.lineWidth = MyApplication.radarStateLineSize
-            COUNTY_LINES.lineWidth = MyApplication.radarCountyLineSize
-            LAKES.lineWidth = MyApplication.radarLakeLineSize
-            HIGHWAYS.lineWidth = MyApplication.radarHwLineSize
-            HIGHWAYS_EXTENDED.lineWidth = MyApplication.radarHwExtLineSize
+            STATE_LINES.lineWidth = RadarPreferences.radarStateLineSize
+            COUNTY_LINES.lineWidth = RadarPreferences.radarCountyLineSize
+            LAKES.lineWidth = RadarPreferences.radarLakeLineSize
+            HIGHWAYS.lineWidth = RadarPreferences.radarHwLineSize
+            HIGHWAYS_EXTENDED.lineWidth = RadarPreferences.radarHwExtLineSize
         }
     }
 }

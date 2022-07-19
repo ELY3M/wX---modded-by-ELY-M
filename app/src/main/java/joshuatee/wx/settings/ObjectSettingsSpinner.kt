@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,11 +29,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Spinner
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
@@ -44,20 +40,20 @@ class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefI
 
     init {
         val objectTextView = ObjectTextView(context)
-        objectTextView.setPadding(MyApplication.paddingSettings)
-        objectTextView.tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        objectTextView.setPadding(UIPreferences.paddingSettings)
+        objectTextView.get().layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
         objectTextView.text = label
         objectTextView.gravity = Gravity.CENTER_VERTICAL
-        objectTextView.tv.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
+        objectTextView.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
         val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.HORIZONTAL, Gravity.CENTER_VERTICAL)
         objectLinearLayout.matchParent()
-        objectLinearLayout.addView(objectTextView.tv)
+        objectLinearLayout.addView(objectTextView.get())
         val spinner = Spinner(context)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             setupSpinner(spinner, false)
         }
         val dataAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerArr)
-        dataAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
+        dataAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
         spinner.adapter = dataAdapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -78,7 +74,7 @@ class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefI
         }
         var value = Utility.readPref(context, pref, prefInit)
         if (pref == "WIDGET_LOCATION") {
-            value += ": " + UtilityStringExternal.truncate(Utility.readPref(context, "LOC" + value + "_LABEL", ""), 20)
+            value += ": " + Utility.readPref(context, "LOC" + value + "_LABEL", "").take(20)
         }
         spinner.setSelection(dataAdapter.getPosition(value))
         objectLinearLayout.addView(spinner)

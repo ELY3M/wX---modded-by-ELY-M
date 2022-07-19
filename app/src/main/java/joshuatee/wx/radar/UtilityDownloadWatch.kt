@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,24 +23,31 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityString
 
 internal object UtilityDownloadWatch {
 
-    const val type = "WATCH"
-    val timer = DownloadTimer(type)
+    val type = PolygonType.WATCH
+    val timer = DownloadTimer("WATCH")
 
-    fun get(context: Context) { if (timer.isRefreshNeeded(context)) getWatch(context) }
+    fun get(context: Context) {
+        if (timer.isRefreshNeeded(context)) {
+            getWatch(context)
+        }
+    }
 
     fun getWatch(context: Context): WatchData {
-        val html = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/".getHtml()
-        if (html != "" ) MyApplication.severeDashboardWat.valueSet(context, html)
+        val html = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/".getHtml()
+        if (html != "" ) {
+            ObjectPolygonWatch.polygonDataByType[type]!!.storage.valueSet(context, html)
+        }
         val numberList = getListOfNumbers(context)
         val htmlList = mutableListOf<String>()
         var watchLatLonList = ""
@@ -58,21 +65,25 @@ internal object UtilityDownloadWatch {
             }
         }
         if (PolygonType.MCD.pref) {
-            MyApplication.watchLatLonList.valueSet(context, watchLatLonList)
-            MyApplication.watchLatLon.valueSet(context, watchLatLon)
-            MyApplication.watchLatLonTor.valueSet(context, watchLatLonTor)
+            ObjectPolygonWatch.watchLatlonCombined.valueSet(context, watchLatLonList)
+            ObjectPolygonWatch.polygonDataByType[type]!!.latLonList.valueSet(context, watchLatLon)
+            ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH_TORNADO]!!.latLonList.valueSet(context, watchLatLonTor)
         }
         return WatchData(numberList, htmlList)
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
-        val listOriginal = UtilityString.parseColumn(MyApplication.severeDashboardWat.value, RegExp.watchPattern)
+        val listOriginal = UtilityString.parseColumn(ObjectPolygonWatch.polygonDataByType[type]!!.storage.value, RegExp.watchPattern)
         val list = listOriginal.map { String.format("%4s", it).replace(' ', '0') }
         var watchNoList = ""
-        list.forEach { watchNoList += "$it:" }
-        if (PolygonType.MCD.pref) MyApplication.watchNoList.valueSet(context, watchNoList)
+        list.forEach {
+            watchNoList += "$it:"
+        }
+        if (PolygonType.MCD.pref) {
+            ObjectPolygonWatch.polygonDataByType[type]!!.numberList.valueSet(context, watchNoList)
+        }
         return list
     }
 
-    fun getLatLon(number: String) = UtilityString.getHtmlAndParseLastMatch("${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
+    fun getLatLon(number: String) = UtilityString.getHtmlAndParseLastMatch("${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
 }

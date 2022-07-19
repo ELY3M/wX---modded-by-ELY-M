@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -31,7 +31,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityLog
 
 internal object UtilityModelSpcHrefInputOutput {
@@ -39,7 +39,7 @@ internal object UtilityModelSpcHrefInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val htmlRunStatus = "${MyApplication.nwsSPCwebsitePrefix}/exper/href/".getHtml()
+            val htmlRunStatus = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/".getHtml()
             val html = htmlRunStatus.parse("\\{model: \"href\",product: \"500mb_mean\",sector: \"conus\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",\\})")
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
@@ -63,25 +63,25 @@ internal object UtilityModelSpcHrefInputOutput {
         val products = om.currentParam.split(",")
         val bitmaps = mutableListOf<Bitmap>()
         val urls = mutableListOf(
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/spc_white_1050px.png",
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/noaa_overlay_1050px.png"
+                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/spc_white_1050px.png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/noaa_overlay_1050px.png"
         )
         products.forEach {
             val url = if (it.contains("cref_members")) {
                 val paramArr = it.split(" ")
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
+                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
                         "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" +
                         paramArr[0] + "." + sector.lowercase(Locale.US) + ".f0" + time +
                         "00." + paramArr[1] + ".tl00.png"
             } else {
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
+                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
                         "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + it +
                         "." + sector.lowercase(Locale.US) + ".f0" + time + "00.png"
             }
             urls.add(url)
             UtilityLog.d("wx", url)
         }
-        urls.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.png")
+        urls.add("${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.png")
         urls.forEach {
             bitmaps.add(it.getImage())
         }

@@ -4,10 +4,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import joshuatee.wx.MyApplication
-
 import joshuatee.wx.R
 import joshuatee.wx.objects.TextSize
+import joshuatee.wx.settings.UIPreferences
 
 class SingleTextAdapterList(private val dataSet: MutableList<String>) : RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
 
@@ -18,7 +17,7 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
         init {
             ObjectCard(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
-            label.setPadding(MyApplication.paddingSettings)
+            label.setPadding(UIPreferences.paddingSettings)
         }
 
         // was onItemClick(adapterPosition)

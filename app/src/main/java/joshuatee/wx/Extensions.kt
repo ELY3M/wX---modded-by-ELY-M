@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,7 +24,6 @@ package joshuatee.wx.Extensions
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import java.util.regex.Pattern
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.*
@@ -46,8 +45,6 @@ fun String.removeHtml() = this.replace(Regex("\\<[^>]*>"),"")
 fun String.removeLineBreaks() = this.replace("\n", "ABC123").replace("ABC123ABC123", "\n")
         .replace("ABC123", " ")
         .replace("  ", " ")
-
-fun String.truncate(size: Int) = UtilityStringExternal.truncate(this, size)
 
 fun String.insert(index: Int, string: String) = StringBuilder(this).insert(index, string).toString()
 

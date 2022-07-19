@@ -25,6 +25,7 @@ package joshuatee.wx.space
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
@@ -38,9 +39,9 @@ internal object UtilityAurora {
     )
 
     val urls = listOf(
-        "${MyApplication.nwsSwpcWebSitePrefix}/images/animations/ovation/north/latest.jpg",
-        "${MyApplication.nwsSwpcWebSitePrefix}/images/animations/ovation/south/latest.jpg",
-        "${MyApplication.nwsSwpcWebSitePrefix}/images/planetary-k-index.gif"
+        "${GlobalVariables.nwsSwpcWebSitePrefix}/images/animations/ovation/north/latest.jpg",
+        "${GlobalVariables.nwsSwpcWebSitePrefix}/images/animations/ovation/south/latest.jpg",
+        "${GlobalVariables.nwsSwpcWebSitePrefix}/images/planetary-k-index.gif"
     )
 
 /*

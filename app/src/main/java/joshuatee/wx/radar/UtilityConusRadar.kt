@@ -12,7 +12,9 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.*
 import android.graphics.drawable.LayerDrawable
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ProjectionType
+import joshuatee.wx.settings.RadarPreferences
 import java.io.File
 import kotlinx.coroutines.*
 import java.io.FileOutputStream
@@ -383,7 +385,7 @@ public object UtilityConusRadar {
         var fos: FileOutputStream? = null
         try {
             //val dir = File(context.filesDir.toString())
-            val dir = File(MyApplication.FilesPath)
+            val dir = File(GlobalVariables.FilesPath)
             //if (!dir.mkdirs())
             //    UtilityLog.d("wx", "failed to mkdir: " + context.filesDir)
             val file = File(dir, fileName)
@@ -396,7 +398,7 @@ public object UtilityConusRadar {
 
     // save image
     private fun saveImage(bitmap: Bitmap) {
-        val fos = getFileOutputStream(MyApplication.conusImageName)
+        val fos = getFileOutputStream(GlobalVariables.conusImageName)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
         fos?.close()
     }
@@ -446,7 +448,7 @@ public object UtilityConusRadar {
 
     fun nwsConusRadarSquare(context: Context) {
         val imgUrl =
-                "${MyApplication.nwsConusRadar}"
+                "${GlobalVariables.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
         var bitmap = imgUrl.getImage()
         var bitmapCanvas = UtilityImg.getBlankBitmap()
@@ -470,9 +472,9 @@ public object UtilityConusRadar {
     //TODO Hack job! need to use real plotting with nwsConusRadar(context: Context)
     fun nwsConusRadarWithMap(context: Context) {
         val imgUrl =
-                "${MyApplication.nwsConusRadar}"
+                "${GlobalVariables.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
-        val cd = if (MyApplication.blackBg) {
+        val cd = if (RadarPreferences.blackBg) {
             ColorDrawable(Color.BLACK)
         } else {
             ColorDrawable(Color.WHITE)
@@ -495,9 +497,9 @@ public object UtilityConusRadar {
     }
     //TODO Hack job! need to use real plotting with nwsConusRadar(context: Context)
     fun nwsConusRadarWithMapSquare(context: Context) {
-        val imgUrl = "${MyApplication.nwsConusRadar}"
+        val imgUrl = "${GlobalVariables.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
-        val cd = if (MyApplication.blackBg) {
+        val cd = if (RadarPreferences.blackBg) {
             ColorDrawable(Color.BLACK)
         } else {
             ColorDrawable(Color.WHITE)
@@ -526,7 +528,7 @@ public object UtilityConusRadar {
 
 
     fun nwsConusRadar(context: Context) {
-        val imgUrl = "${MyApplication.nwsConusRadar}"
+        val imgUrl = "${GlobalVariables.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
         var bitmap = imgUrl.getImage()
         bitmap = UtilityImg.eraseBackground(bitmap, -1)

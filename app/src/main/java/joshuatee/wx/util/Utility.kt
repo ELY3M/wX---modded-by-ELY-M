@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -34,7 +34,8 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.UtilityRadar
 import joshuatee.wx.radar.UtilityRadarUI
 import joshuatee.wx.settings.UtilityNavDrawer
@@ -46,15 +47,15 @@ object Utility {
 
     private fun showDiagnostics(context: Context): String {
         var diagnostics = ""
-        diagnostics += MyApplication.dm.widthPixels.toString() + " Screen width" + MyApplication.newline
-        diagnostics += MyApplication.dm.heightPixels.toString() + " Screen height" + MyApplication.newline
-        diagnostics += UtilityUI.statusBarHeight(context).toString() + " Status bar height" + MyApplication.newline
+        diagnostics += MyApplication.dm.widthPixels.toString() + " Screen width" + GlobalVariables.newline
+        diagnostics += MyApplication.dm.heightPixels.toString() + " Screen height" + GlobalVariables.newline
+        diagnostics += UtilityUI.statusBarHeight(context).toString() + " Status bar height" + GlobalVariables.newline
         var landScape = false
         if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             landScape = true
         }
-        diagnostics += landScape.toString() + " Landscape" + MyApplication.newline
-        diagnostics += "Homescreen navdrawer list: " + UtilityNavDrawer.getNavDrawerTokenList(context) + MyApplication.newline
+        diagnostics += landScape.toString() + " Landscape" + GlobalVariables.newline
+        diagnostics += "Homescreen navdrawer list: " + UtilityNavDrawer.getNavDrawerTokenList(context) + GlobalVariables.newline
         return diagnostics
     }
 
@@ -214,57 +215,57 @@ object Utility {
             UtilityLog.handleException(e)
         }
         var string = activity.resources.getString(R.string.about_wx) +
-                MyApplication.newline + version + MyApplication.newline + MyApplication.newline +
+                GlobalVariables.newline + version + GlobalVariables.newline + GlobalVariables.newline +
                 "Use alt-? on the main screen and in nexrad radar to show keyboard shortcuts"
-        string += MyApplication.newline + MyApplication.newline + "Diagnostics information:" + MyApplication.newline
-        string += readPref(context, "JOBSERVICE_TIME_LAST_RAN", "") + "  Last background update" + MyApplication.newline
-        string += UtilityRadarUI.getLastRadarTime(context) + "  Last radar update" + MyApplication.newline
+        string += GlobalVariables.newline + GlobalVariables.newline + "Diagnostics information:" + GlobalVariables.newline
+        string += readPref(context, "JOBSERVICE_TIME_LAST_RAN", "") + "  Last background update" + GlobalVariables.newline
+        string += UtilityRadarUI.getLastRadarTime(context) + "  Last radar update" + GlobalVariables.newline
         string += showDiagnostics(context)
-        string += "Tablet: " + UtilityUI.isTablet().toString() + MyApplication.newline
-        string += "Forecast zone: " + UtilityDownloadNws.forecastZone + MyApplication.newline
-        string += "Notification Cancel String: " + readPref(context, "NOTIF_STR", "") + MyApplication.newline
+        string += "Tablet: " + UtilityUI.isTablet().toString() + GlobalVariables.newline
+        string += "Forecast zone: " + UtilityDownloadNws.forecastZone + GlobalVariables.newline
+        string += "Notification Cancel String: " + readPref(context, "NOTIF_STR", "") + GlobalVariables.newline
         return string
     }
 
-    fun showMainScreenShortCuts() = "Ctrl-r: Nexrad radar" + MyApplication.newline +
-                "Ctrl-m: Show submenu" + MyApplication.newline +
-                "Ctrl-d: Severe Dashboard" + MyApplication.newline +
-                "Ctrl-c: Goes Viewer" + MyApplication.newline +
-                "Ctrl-a: Local text product viewer" + MyApplication.newline +
-                "Ctrl-s: Settings" + MyApplication.newline +
-                "Ctrl-2: Dual Pane Radar" + MyApplication.newline +
-                "Ctrl-4: Quad Pane Radar" + MyApplication.newline +
-                "Ctrl-e: SPC Mesoanalysis" + MyApplication.newline +
-                "Ctrl-n: NCEP Models" + MyApplication.newline +
-                "Ctrl-h: Hourly" + MyApplication.newline +
-                "Ctrl-o: NHC" + MyApplication.newline +
-                "Ctrl-l: Show locations" + MyApplication.newline +
-                "Ctrl-i: National images" + MyApplication.newline +
-                "Ctrl-z: National text discussions" + MyApplication.newline +
-                "Ctrl-j: Previous tab" + MyApplication.newline +
-                "Ctrl-k: Next tab" + MyApplication.newline
+    fun showMainScreenShortCuts() = "Ctrl-r: Nexrad radar" + GlobalVariables.newline +
+                "Ctrl-m: Show submenu" + GlobalVariables.newline +
+                "Ctrl-d: Severe Dashboard" + GlobalVariables.newline +
+                "Ctrl-c: Goes Viewer" + GlobalVariables.newline +
+                "Ctrl-a: Local text product viewer" + GlobalVariables.newline +
+                "Ctrl-s: Settings" + GlobalVariables.newline +
+                "Ctrl-2: Dual Pane Radar" + GlobalVariables.newline +
+                "Ctrl-4: Quad Pane Radar" + GlobalVariables.newline +
+                "Ctrl-e: SPC Mesoanalysis" + GlobalVariables.newline +
+                "Ctrl-n: NCEP Models" + GlobalVariables.newline +
+                "Ctrl-h: Hourly" + GlobalVariables.newline +
+                "Ctrl-o: NHC" + GlobalVariables.newline +
+                "Ctrl-l: Show locations" + GlobalVariables.newline +
+                "Ctrl-i: National images" + GlobalVariables.newline +
+                "Ctrl-z: National text discussions" + GlobalVariables.newline +
+                "Ctrl-j: Previous tab" + GlobalVariables.newline +
+                "Ctrl-k: Next tab" + GlobalVariables.newline
 
-    fun showRadarShortCuts() = "Ctrl-l: Show map" + MyApplication.newline +
-                "Ctrl-m: Show submenu" + MyApplication.newline +
-                "Ctrl-a: Animate / stop animate" + MyApplication.newline +
-                "Ctrl-r: Show reflectivity" + MyApplication.newline +
-                "Ctrl-v: Show velocity" + MyApplication.newline +
-                "Ctrl-f: Toggle favorite" + MyApplication.newline +
-                "Ctrl-2: Show dual pane radar" + MyApplication.newline +
-                "Ctrl-4: Show quad pane radar" + MyApplication.newline +
-                "Ctrl-UpArrow: Zoom out" + MyApplication.newline +
-                "Ctrl-DownArrow: Zoom in" + MyApplication.newline +
-                "Arrow keys: pan radar" + MyApplication.newline +
-                "Reload key: reload radar" + MyApplication.newline
+    fun showRadarShortCuts() = "Ctrl-l: Show map" + GlobalVariables.newline +
+                "Ctrl-m: Show submenu" + GlobalVariables.newline +
+                "Ctrl-a: Animate / stop animate" + GlobalVariables.newline +
+                "Ctrl-r: Show reflectivity" + GlobalVariables.newline +
+                "Ctrl-v: Show velocity" + GlobalVariables.newline +
+                "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
+                "Ctrl-2: Show dual pane radar" + GlobalVariables.newline +
+                "Ctrl-4: Show quad pane radar" + GlobalVariables.newline +
+                "Ctrl-UpArrow: Zoom out" + GlobalVariables.newline +
+                "Ctrl-DownArrow: Zoom in" + GlobalVariables.newline +
+                "Arrow keys: pan radar" + GlobalVariables.newline +
+                "Reload key: reload radar" + GlobalVariables.newline
 
-    fun showWfoTextShortCuts() = "Ctrl-l: Show map" + MyApplication.newline +
-                "Ctrl-m: Show submenu" + MyApplication.newline +
-                "Ctrl-f: Toggle favorite" + MyApplication.newline +
-                "Ctrl-p: Play audio - TTS" + MyApplication.newline +
-                "Ctrl-s: Stop audio - TTS" + MyApplication.newline +
-                "Ctrl-d: Show navigation drawer" + MyApplication.newline
+    fun showWfoTextShortCuts() = "Ctrl-l: Show map" + GlobalVariables.newline +
+                "Ctrl-m: Show submenu" + GlobalVariables.newline +
+                "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
+                "Ctrl-p: Play audio - TTS" + GlobalVariables.newline +
+                "Ctrl-s: Stop audio - TTS" + GlobalVariables.newline +
+                "Ctrl-d: Show navigation drawer" + GlobalVariables.newline
 
-    fun showLocationEditShortCuts() = "Ctrl-g: Use GPS to find location" + MyApplication.newline + "Ctrl-m: Show submenu" + MyApplication.newline
+    fun showLocationEditShortCuts() = "Ctrl-g: Use GPS to find location" + GlobalVariables.newline + "Ctrl-m: Show submenu" + GlobalVariables.newline
 
     //elys mod    
     fun checkInternet(context: Context) {

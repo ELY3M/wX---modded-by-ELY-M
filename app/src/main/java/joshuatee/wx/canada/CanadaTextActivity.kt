@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,9 +28,9 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.ObjectCALegal
 import joshuatee.wx.ui.ObjectCardText
@@ -55,7 +55,7 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        ObjectCALegal(this, linearLayout, MyApplication.canadaEcSitePrefix)
+        ObjectCALegal(this, linearLayout, GlobalVariables.canadaEcSitePrefix)
         product = Utility.readPref(this, "CA_TEXT_LASTUSED", product)
         getContent()
     }

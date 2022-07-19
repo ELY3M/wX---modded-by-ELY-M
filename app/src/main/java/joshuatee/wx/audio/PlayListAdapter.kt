@@ -4,10 +4,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
@@ -45,7 +44,7 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) : Recyc
         holder.label.text = items[0]
         holder.timeAndSize.text = items[1]
         val string = Utility.fromHtml(Utility.readPref("PLAYLIST_" + items[0], ""))
-        holder.contentPreview.text = string.replace(MyApplication.newline, " ").take(maxLength)
+        holder.contentPreview.text = string.replace(GlobalVariables.newline, " ").take(maxLength)
     }
 
     fun deleteItem(index: Int) {

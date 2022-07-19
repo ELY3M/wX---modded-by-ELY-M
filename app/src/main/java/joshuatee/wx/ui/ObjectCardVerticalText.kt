@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,7 +28,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 
 class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
 
@@ -40,7 +40,7 @@ class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
         objectLinearLayout.linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         objectLinearLayout.linearLayout.isBaselineAligned = false
         objectCard.addView(objectLinearLayout)
-        (0 until numberOfColumns).forEach {_ ->
+        repeat(numberOfColumns) {
             val linearLayout = LinearLayout(context)
             linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
             objectLinearLayout.linearLayout.addView(linearLayout)
@@ -53,7 +53,7 @@ class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
     }
 
     constructor(context: Context, numberOfColumns: Int, linearLayout: LinearLayout, toolbar: Toolbar) : this(context, numberOfColumns) {
-        linearLayout.addView(card)
+        linearLayout.addView(get())
         setOnClickListener { UtilityToolbar.showHide(toolbar) }
     }
 
@@ -61,12 +61,14 @@ class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
         if (list.size == textViews.size) {
             list.indices.forEach {
                 textViews[it].text = list[it]
-                textViews[it].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+                textViews[it].setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
             }
         }
     }
 
-    val card get() = objectCard.card
+    private fun get() = objectCard.card
 
-    fun setOnClickListener(fn: View.OnClickListener) = objectCard.setOnClickListener(fn)
+    fun setOnClickListener(fn: View.OnClickListener) {
+        objectCard.setOnClickListener(fn)
+    }
 }

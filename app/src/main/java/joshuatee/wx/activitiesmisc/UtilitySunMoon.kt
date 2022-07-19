@@ -22,7 +22,8 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp.colon
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.Location
 
@@ -47,8 +48,8 @@ object UtilitySunMoon {
             x = Location.x.toDouble()
             y = Location.y.toDouble()
         } else {
-            val tmpX = MyApplication.colon.split(Location.x)
-            val tmpY = MyApplication.colon.split(Location.y)
+            val tmpX = colon.split(Location.x)
+            val tmpY = colon.split(Location.y)
             if (tmpX.size > 2 && tmpY.size > 1) {
                 x = tmpX[2].toDouble()
                 y = tmpY[1].toDouble()
@@ -95,26 +96,26 @@ object UtilitySunMoon {
 
 
         //val header = "Sun/Moon Data" + MyApplication.newline
-        var content = "Astronomical Rise: " + astronomical.rise + MyApplication.newline
-        content += "Nautical Rise: " + nautical.rise + MyApplication.newline
-        content += "Civil Rise: " + civil.rise + MyApplication.newline
-        content += "SunRise: " + suntimes.rise + MyApplication.newline
-        content += "Sun Upper Transit: " + suntimes.noon + MyApplication.newline
-        content += "SunSet: " + suntimes.set + MyApplication.newline
-        content += "Civil Set: " + civil.set + MyApplication.newline
-        content += "Nautical Set: " + nautical.set + MyApplication.newline
-        content += "Astronomical Set: " + astronomical.set + MyApplication.newline
+        var content = "Astronomical Rise: " + astronomical.rise + GlobalVariables.newline
+        content += "Nautical Rise: " + nautical.rise + GlobalVariables.newline
+        content += "Civil Rise: " + civil.rise + GlobalVariables.newline
+        content += "SunRise: " + suntimes.rise + GlobalVariables.newline
+        content += "Sun Upper Transit: " + suntimes.noon + GlobalVariables.newline
+        content += "SunSet: " + suntimes.set + GlobalVariables.newline
+        content += "Civil Set: " + civil.set + GlobalVariables.newline
+        content += "Nautical Set: " + nautical.set + GlobalVariables.newline
+        content += "Astronomical Set: " + astronomical.set + GlobalVariables.newline
 
-        content += "MoonRise: " + moontimes.rise + MyApplication.newline
+        content += "MoonRise: " + moontimes.rise + GlobalVariables.newline
         //FIXME find out if can get moon upper transit
-        content += "MoonSet: " + moontimes.set + MyApplication.newline
+        content += "MoonSet: " + moontimes.set + GlobalVariables.newline
 
-        content += "Moon Age: " + UtilityStringExternal.truncate(moonage.toString(), 5) + MyApplication.newline
-        content += "Moon Illumination: " + UtilityStringExternal.truncate(moonFracillum.toString(),5) + "%" + MyApplication.newline
+        content += "Moon Age: " + UtilityStringExternal.truncate(moonage.toString(), 5) + GlobalVariables.newline
+        content += "Moon Illumination: " + UtilityStringExternal.truncate(moonFracillum.toString(),5) + "%" + GlobalVariables.newline
 
         //get current moon phase
         val getCurrentPhase = getPhase(moonage)
-        content += getCurrentPhase + " is the current phase" + MyApplication.newline
+        content += getCurrentPhase + " is the current phase" + GlobalVariables.newline
 
 
 

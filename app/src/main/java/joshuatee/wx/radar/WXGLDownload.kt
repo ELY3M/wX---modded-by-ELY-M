@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,22 +22,19 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
 import okhttp3.Request
-
 import joshuatee.wx.Extensions.*
-
-import joshuatee.wx.GlobalDictionaries
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.GlobalDictionaries
+import joshuatee.wx.common.GlobalVariables
+import java.util.regex.Pattern
 
 class WXGLDownload {
 
@@ -45,8 +42,10 @@ class WXGLDownload {
 
         // in response to 56+ hr maint on 2022-04-19 to nomands, change URL to backup
         // https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf
-        // private const val nwsRadarLevel2Pub = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
-        private const val nwsRadarLevel2Pub = "https://ftpprd.ncep.noaa.gov/data/nccf/radar/nexrad_level2/"
+        private const val nwsRadarLevel2Pub = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+        // private const val nwsRadarLevel2Pub = "https://ftpprd.ncep.noaa.gov/data/nccf/radar/nexrad_level2/"
+        private val pattern1: Pattern = Pattern.compile(">(sn.[0-9]{4})</a>")
+        private val pattern2: Pattern = Pattern.compile(".*?([0-9]{2}-[A-Za-z]{3}-[0-9]{4} [0-9]{2}:[0-9]{2}).*?")
 
         fun getRadarFile(context: Context, urlStr: String, radarSite: String, product: String, indexString: String, tdwr: Boolean): String {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, tdwr)
@@ -86,17 +85,17 @@ class WXGLDownload {
         private fun getLevel3FilesForAnimation(context: Context, frameCount: Int, product: String, ridPrefix: String, radarSite: String): List<String> {
             val fileList = mutableListOf<String>()
             var htmlOut = getRadarDirectoryUrl(radarSite, product, ridPrefix).getHtml()
-            var snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
-            var snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
+            var snFiles = htmlOut.parseColumn(pattern1)
+            var snDates = htmlOut.parseColumn(pattern2)
             if (snDates.isEmpty()) {
                 htmlOut = getRadarDirectoryUrl(radarSite, product, ridPrefix).getHtml()
-                snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
-                snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
+                snFiles = htmlOut.parseColumn(pattern1)
+                snDates = htmlOut.parseColumn(pattern2)
             }
             if (snDates.isEmpty()) {
                 htmlOut = getRadarDirectoryUrl(radarSite, product, ridPrefix).getHtml()
-                snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
-                snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
+                snFiles = htmlOut.parseColumn(pattern1)
+                snDates = htmlOut.parseColumn(pattern2)
             }
             if (snDates.isEmpty()) {
                 return listOf("")
@@ -190,7 +189,7 @@ class WXGLDownload {
             }
             return try {
                 val request = Request.Builder().url(url).header("Range", "bytes=0-$byteEnd").build()
-                val response = MyApplication.httpClient!!.newCall(request).execute() // was client
+                val response = MyApplication.httpClient.newCall(request).execute() // was client
                 response.body!!.byteStream()
             } catch (e: IOException) {
                 null
@@ -213,11 +212,10 @@ class WXGLDownload {
 
         fun getRadarFileUrl(radarSite: String, product: String, tdwr: Boolean): String {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, tdwr)
-            return MyApplication.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/sn.last"
+            return GlobalVariables.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/sn.last"
         }
 
-        private fun getRadarDirectoryUrl(radarSite: String, product: String, ridPrefix: String): String {
-            return MyApplication.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/"
-        }
+        private fun getRadarDirectoryUrl(radarSite: String, product: String, ridPrefix: String) =
+                GlobalVariables.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/"
     }
 }

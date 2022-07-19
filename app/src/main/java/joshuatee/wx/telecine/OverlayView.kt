@@ -20,7 +20,6 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.TextView
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.util.UtilityImg
 import java.util.Locale
@@ -31,6 +30,7 @@ import android.view.ViewAnimationUtils.createCircularReveal
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+import joshuatee.wx.settings.UIPreferences
 
 internal class OverlayView private constructor(
     context: Context,
@@ -137,8 +137,8 @@ internal class OverlayView private constructor(
                 })
                 reveal.start()
                 postDelayed(
-                    { if (MyApplication.telecineSwitchShowCountdown) showCountDown() else countdownComplete() },
-                    (if (MyApplication.telecineSwitchShowCountdown) COUNTDOWN_DELAY else NON_COUNTDOWN_DELAY).toLong()
+                    { if (UIPreferences.telecineSwitchShowCountdown) showCountDown() else countdownComplete() },
+                    (if (UIPreferences.telecineSwitchShowCountdown) COUNTDOWN_DELAY else NON_COUNTDOWN_DELAY).toLong()
                 )
             }
             R.id.record_overlay_cancel -> animate().translationX(animationWidth.toFloat())

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -32,9 +31,9 @@ import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getHtml
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.Extensions.startAnimation
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.models.DisplayDataNoSpinner
 import joshuatee.wx.models.ObjectModelNoSpinner
 import joshuatee.wx.models.UtilityModels
@@ -159,7 +158,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         } else
             menu.findItem(R.id.action_multipane).isVisible = false
         star = menu.findItem(R.id.action_fav)
-        star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         if (showRadar) {
             menuRadar.title = on + menuRadarStr
         }
@@ -207,12 +206,12 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        favListParm = UtilityFavorites.setupMenu(this@SpcMesoActivity, MyApplication.spcMesoFav, displayData.param[curImg], prefToken)
+        favListParm = UtilityFavorites.setupMenu(this@SpcMesoActivity, UIPreferences.spcMesoFav, displayData.param[curImg], prefToken)
         invalidateOptionsMenu()
-        if (MyApplication.spcMesoFav.contains(":" + displayData.param[curImg] + ":"))
-            star.setIcon(MyApplication.STAR_ICON)
+        if (UIPreferences.spcMesoFav.contains(":" + displayData.param[curImg] + ":"))
+            star.setIcon(GlobalVariables.STAR_ICON)
         else
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+            star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         FutureVoid(this@SpcMesoActivity,
                 {
                     (0 until numPanes).forEach {
@@ -400,7 +399,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
-        favListParm = UtilityFavorites.setupMenu(this, MyApplication.spcMesoFav, displayData.param[curImg], prefToken)
+        favListParm = UtilityFavorites.setupMenu(this, UIPreferences.spcMesoFav, displayData.param[curImg], prefToken)
         when (item.itemId) {
             R.id.action_product -> genericDialog(favListParm) {
                 when (it) {
@@ -417,16 +416,16 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     checkOverlayPerms()
                 } else {
                     var title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[0]
-                    if (animRan) {
-                        UtilityShare.animGif(this, title, displayData.animDrawable[0])
-                    } else {
+//                    if (animRan) {
+//                        UtilityShare.animGif(this, title, displayData.animDrawable[0])
+//                    } else {
                         if (numPanes == 1) {
                             UtilityShare.bitmap(this, this, title, displayData.bitmap[0])
                         } else {
                             title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
                             UtilityShare.bitmap(this, this, title, displayData.bitmap[curImg])
                         }
-                    }
+//                    }
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -447,7 +446,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private fun getHelp() {
         FutureText2(
                 this@SpcMesoActivity,
-                { ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() },
+                { ("${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() },
                 { s ->
                     var helpText = s
                     if (helpText.contains("Page Not Found")) {

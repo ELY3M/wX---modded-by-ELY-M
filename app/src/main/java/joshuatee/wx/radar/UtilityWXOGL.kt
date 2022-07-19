@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,15 +25,14 @@ import android.content.Context
 import java.io.EOFException
 import java.io.File
 import java.io.IOException
-import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalPolygon
 import joshuatee.wx.util.UCARRandomAccessFile
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.Extensions.*
-
-//import joshuatee.wx.RegExp
+import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.ObjectWarning
+import joshuatee.wx.settings.RadarPreferences
 
 object UtilityWXOGL {
 
@@ -121,8 +120,8 @@ object UtilityWXOGL {
     }
 
     fun showTextProducts(latLon: LatLon): String {
-        var html = MyApplication.severeDashboardTor.value + MyApplication.severeDashboardTst.value + MyApplication.severeDashboardFfw.value
-        MyApplication.radarWarningPolygons.forEach {
+        var html = ObjectPolygonWarning.severeDashboardTor.value + ObjectPolygonWarning.severeDashboardTst.value + ObjectPolygonWarning.severeDashboardFfw.value
+        RadarPreferences.radarWarningPolygons.forEach {
             if (it.isEnabled) html += it.storage.value
         }
         val warnings = ObjectWarning.parseJson(html)

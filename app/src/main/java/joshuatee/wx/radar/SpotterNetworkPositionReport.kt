@@ -17,6 +17,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.settings.RadarPreferences
 import java.text.SimpleDateFormat
 import org.json.JSONException
 import org.json.JSONObject
@@ -37,7 +38,7 @@ object SpotterNetworkPositionReport {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var success: Boolean = false
     val timer = DownloadTimer("SPOTTERGPSREPORT")
-    var key: String = MyApplication.sn_key
+    var key: String = RadarPreferences.sn_key
     var lat: Double = 0.0
     var lon: Double = 0.0
     var altitude: Double = 0.0
@@ -47,7 +48,7 @@ object SpotterNetworkPositionReport {
     var gpsprovider: String = ""
 
 
-    var strkey: String? = MyApplication.sn_key
+    var strkey: String? = RadarPreferences.sn_key
     var strlat: String? = ""
     var strlon: String? = ""
     var straltitude: String? = ""
@@ -130,7 +131,7 @@ object SpotterNetworkPositionReport {
         if (lat == null && lon == null) {
             Log.i(TAG, "No SN report sent - Null position packet")
         }
-        var key = MyApplication.sn_key
+        var key = RadarPreferences.sn_key
         if (key.length < 2 || lat == 0.0 && lon == 0.0) {
             Log.i(TAG, "No SN report sent - Invalid data: Key " + key + " Position " + lat + "/" + lon)
             if (key.length < 2) {

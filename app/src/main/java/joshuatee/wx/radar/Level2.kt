@@ -37,9 +37,7 @@ package joshuatee.wx.radar
 // This file has now been extensively modified from the original
 
 import java.nio.ByteBuffer
-
 import android.content.Context
-
 import joshuatee.wx.util.UCARRandomAccessFile
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog

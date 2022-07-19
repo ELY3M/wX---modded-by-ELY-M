@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,10 +25,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import joshuatee.wx.GlobalDictionaries
+import joshuatee.wx.common.GlobalDictionaries
 import java.util.Locale
-import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.CapAlert
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
@@ -51,8 +51,8 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
     private val cardText = ObjectCardText(context)
 
     init {
-        linearLayout.addView(cardText.card)
-        linearLayout.addView(objectCardImageView.card)
+        linearLayout.addView(cardText.get())
+        linearLayout.addView(objectCardImageView.get())
     }
 
     fun updateImage(bitmap: Bitmap) {
@@ -63,10 +63,10 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
     fun updateContent(data: String, filterOriginal: String, firstRun: Boolean) {
         linearLayout.removeAllViews()
         scrollView.smoothScrollTo(0, 0)
-        linearLayout.addView(cardText.card)
+        linearLayout.addView(cardText.get())
         objectCardImageView = ObjectCardImage(context, bitmap)
         objectCardImageView.setOnClickListener { ObjectIntent.showImage(context, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")) }
-        linearLayout.addView(objectCardImageView.card)
+        linearLayout.addView(objectCardImageView.get())
         totalAlertsCnt = 0
         val mapEvent = mutableMapOf<String, Int>()
         val mapState = mutableMapOf<String, Int>()
@@ -121,7 +121,7 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
                     objectCardAlertSummaryItem.setListener { showWarningDetails(url) }
                     objectCardAlertSummaryItem.radarButton.setOnClickListener { radarInterface(nwsOffice) }
                     objectCardAlertSummaryItem.detailsButton.setOnClickListener { showWarningDetails(url) }
-                    linearLayout.addView(objectCardAlertSummaryItem.card)
+                    linearLayout.addView(objectCardAlertSummaryItem.get())
                     i += 1
                 }
             }
@@ -133,16 +133,16 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         var filter = filterOriginal
         filter = filter.replace("[|*?.]".toRegex(), " ")
         if (mapOut.isNotEmpty()) {
-            cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")" + MyApplication.newline + mapOut)
+            cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")" + GlobalVariables.newline + mapOut)
         } else {
             cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")")
         }
         if (firstRun) {
-            val filterArray1 = mapEvent.keys.toList()
+            val filterArray1 = mapEvent.keys.sorted().toList()
             val filterArray1Label = mutableListOf<String>()
             filterArray1.indices.forEach { filterArray1Label.add(filterArray1[it] + ": " + mapEvent[filterArray1[it]]) }
 
-            val filterArray2 = mapState.keys.toList()
+            val filterArray2 = mapState.keys.sorted().toList()
             val filterArray2Label = mutableListOf<String>()
             filterArray2.indices.forEach { filterArray2Label.add(filterArray2[it] + ": " + mapState[filterArray2[it]]) }
 

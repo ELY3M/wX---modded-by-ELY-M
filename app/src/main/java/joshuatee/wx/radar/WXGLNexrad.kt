@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,10 +22,10 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import joshuatee.wx.GlobalArrays
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.R
-
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.Utility
 
 object WXGLNexrad {
@@ -89,6 +89,7 @@ object WXGLNexrad {
         159,
         161,
         163,
+        165,
         172
     )
 
@@ -186,7 +187,7 @@ object WXGLNexrad {
     }
 
     // FIXME use different split
-    fun isRidTdwr(rid: String) = GlobalArrays.tdwrRadars.any { rid == MyApplication.space.split(it)[0] }
+    fun isRidTdwr(rid: String) = GlobalArrays.tdwrRadars.any { rid == RegExp.space.split(it)[0] }
 
     fun getTdwrFromRid(rid: String) = closestTdwrToNexrad[rid] ?: ""
 
@@ -196,11 +197,11 @@ object WXGLNexrad {
         Utility.writePref(context, prefPrefix + "_ZOOM", wxglRender.zoom)
         Utility.writePref(context, prefPrefix + "_X", wxglRender.x)
         Utility.writePref(context, prefPrefix + "_Y", wxglRender.y)
-        MyApplication.wxoglRid = wxglRender.rid
-        MyApplication.wxoglProd = wxglRender.product
-        MyApplication.wxoglZoom = wxglRender.zoom
-        MyApplication.wxoglX = wxglRender.x
-        MyApplication.wxoglY = wxglRender.y
+        RadarPreferences.wxoglRid = wxglRender.rid
+        RadarPreferences.wxoglProd = wxglRender.product
+        RadarPreferences.wxoglZoom = wxglRender.zoom
+        RadarPreferences.wxoglX = wxglRender.x
+        RadarPreferences.wxoglY = wxglRender.y
     }
 
     fun savePrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {

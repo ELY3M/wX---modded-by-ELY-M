@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,15 +22,12 @@
 package joshuatee.wx.audio
 
 import java.util.Locale
-
 import android.content.Context
 import android.view.View
-
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcMesoActivity
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.ObjectPopupMessage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.WpcTextProductsActivity
 
@@ -41,7 +38,7 @@ object UtilityVoiceCommand {
         var radarSite = radarSiteArg
         var wfo = wfoOriginal
         var gotHit = true
-        val tokens = MyApplication.space.split(vrString)
+        val tokens = RegExp.space.split(vrString)
         if (vrString.contains("radar")) {
             var validRid = true
             if (tokens.size > 1) {
@@ -122,9 +119,6 @@ object UtilityVoiceCommand {
         } else if (vrString.contains("forecast")) {
             val forecast = Utility.readPref(context, "FCST", "")
             UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")
-        } else if (vrString.contains("download playlist")) {
-            ObjectPopupMessage(view, "Download initiated")
-            ObjectIntent(context, DownloadPlaylistService::class.java, DownloadPlaylistService.URL, "true")
         } else if (vrString.contains("playlist")) {
             UtilityTts.synthesizeTextAndPlayPlaylist(context, 1)
         } else {

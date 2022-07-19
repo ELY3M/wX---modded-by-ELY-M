@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,8 +21,7 @@
 
 package joshuatee.wx.objects
 
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.Utility
@@ -118,13 +117,13 @@ class ObjectWarning() {
         fun getBulkData(type1: PolygonType): String {
             return when (type1) {
                 PolygonType.TOR -> {
-                    MyApplication.severeDashboardTor.value
+                    ObjectPolygonWarning.severeDashboardTor.value
                 }
                 PolygonType.TST -> {
-                    MyApplication.severeDashboardTst.value
+                    ObjectPolygonWarning.severeDashboardTst.value
                 }
                 PolygonType.FFW -> {
-                    MyApplication.severeDashboardFfw.value
+                    ObjectPolygonWarning.severeDashboardFfw.value
                 }
                 else -> {
                     ""

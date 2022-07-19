@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -50,12 +50,12 @@ class SettingsMainActivity : BaseActivity() {
         UtilityTheme.setPrimaryColor(this)
         val backuprestore = UtilityBackupRestore()
         val version = Utility.getVersion(this)
-        val textSize = MyApplication.textSizeLarge
-        val padding = MyApplication.paddingSettings
+        val textSize = UIPreferences.textSizeLarge
+        val padding = UIPreferences.paddingSettings
         toolbar.subtitle = "$version, tap on text for additional help."
         val cardAbout = ObjectCardText(this, "About wX", textSize, padding)
         val cardLocations = ObjectCardText(this, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding)
-        val cardsn = ObjectCardText(this, "Spotter Network Settings", MyApplication.textSizeNormal, SettingsSpotterNetwork::class.java, MyApplication.paddingSettings)
+        val cardsn = ObjectCardText(this, "Spotter Network Settings", UIPreferences.textSizeNormal, SettingsSpotterNetwork::class.java, UIPreferences.paddingSettings)
         val cardNotif = ObjectCardText(this, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
         val cardWidgets = ObjectCardText(this, "Widgets", textSize, SettingsWidgetsActivity::class.java, padding)
         val cardColors = ObjectCardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding)
@@ -64,9 +64,9 @@ class SettingsMainActivity : BaseActivity() {
         val cardHS = ObjectCardText(this, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding)
         val cardUI = ObjectCardText(this, "User Interface", textSize, SettingsUIActivity::class.java, padding)
         val cardCtoF = ObjectCardText(this, "Celsius to fahrenheit table", textSize, padding)
-        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", MyApplication.textSizeNormal, MyApplication.paddingSettings)
-        val cardbackuppref = ObjectCardText(this, "Backup Settings", MyApplication.textSizeNormal, MyApplication.paddingSettings)
-        val cardrestorepref = ObjectCardText(this, "Restore Settings", MyApplication.textSizeNormal, MyApplication.paddingSettings)
+        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
+        val cardbackuppref = ObjectCardText(this, "Backup Settings", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
+        val cardrestorepref = ObjectCardText(this, "Restore Settings", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
         cardCtoF.setOnClickListener {
             ObjectIntent.showText(this, arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table"))
         }
@@ -75,36 +75,36 @@ class SettingsMainActivity : BaseActivity() {
         cardDeleteFiles.setOnClickListener {
             ObjectIntent.showText(this, arrayOf(UtilityFileManagement.deleteCacheFiles(this), "Deleted old radar files"))
         }
-        cardAbout.setOnClickListener {
-            ObjectIntent(this, SettingsAboutActivity::class.java)
-        }
+        cardAbout.setOnClickListener { ObjectIntent(this, SettingsAboutActivity::class.java) }
         listOf(
-                cardAbout.card,
-                cardLocations.card,
-		cardsn.card,
-                cardNotif.card,
-                cardWidgets.card,
-                cardColors.card,
-                cardPL.card,
-                cardRadar.card,
-                cardHS.card,
-                cardUI.card,
-                cardCtoF.card,
-                cardDeleteFiles.card,
-		cardbackuppref.card,
-		cardrestorepref.card
+                cardAbout.get(),
+                cardLocations.get(),
+		cardsn.get(),
+                cardNotif.get(),
+                cardWidgets.get(),
+                cardColors.get(),
+                cardPL.get(),
+                cardRadar.get(),
+                cardHS.get(),
+                cardUI.get(),
+                cardCtoF.get(),
+                cardDeleteFiles.get(),
+		cardbackuppref.get(),
+		cardrestorepref.get()
         ).forEach {
             linearLayout.addView(it)
         }
 	
+	//elys mod
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Check for Internet on startup",
                         "CHECKINTERNET",
                         R.string.checkinternet_switch_label
-                ).card
+                ).get()
         )
+	//
 
     }
 

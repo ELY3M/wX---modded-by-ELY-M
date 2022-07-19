@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
@@ -61,9 +59,9 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
         holder.text1.color = UIPreferences.textHighlightColor
         holder.currentConditions.text = Location.getObservation(position)
         if (nonUs) {
-            holder.text2.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(lon, 6)})"
+            holder.text2.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${lat.take(6)} , ${lon.take(6)})"
         } else {
-            holder.text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${UtilityStringExternal.truncate(Location.getX(position), 6)} , ${UtilityStringExternal.truncate(Location.getY(position), 6)})"
+            holder.text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${Location.getX(position).take(6)} , ${Location.getY(position).take(6)})"
         }
     }
 

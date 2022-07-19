@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,7 +25,8 @@ import android.content.Context
 import joshuatee.wx.Extensions.getHtmlSep
 import joshuatee.wx.Extensions.parse
 import joshuatee.wx.Extensions.parseColumn
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.DownloadTimer
 
 internal object UtilitySwoDayOne {
@@ -54,7 +55,7 @@ internal object UtilitySwoDayOne {
 		&&*/
             val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
             val day = 1
-            val html = ("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlSep()
+            val html = ("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlSep()
             val htmlChunk = html.parse("... CATEGORICAL ...(.*?&)&") // was (.*?)&&
             threatList.indices.forEach { threatIndex ->
                 var data = ""
@@ -68,30 +69,35 @@ internal object UtilitySwoDayOne {
                     data = data.replace(" :", ":")
                 }
                 val polygons = data.split(":").dropLastWhile { it.isEmpty() }
-                polygons.forEach { polygon ->
-                    val numbers = MyApplication.space.split(polygon)
-                    val x = numbers.filterIndexed { index: Int, _: String -> index and 1 == 0 }.map { it.toDoubleOrNull() ?: 0.0 }
-                    val y = numbers.filterIndexed { index: Int, _: String -> index and 1 != 0 }.map { (it.toDoubleOrNull() ?: 0.0) * -1.0 }
-                    if (x.isNotEmpty() && y.isNotEmpty()) {
-                        warningList.add(x[0])
-                        warningList.add(y[0])
-                        (1..x.size - 2).forEach { j ->
-                            if (x[j] < 99.0) {
-                                warningList.add(x[j])
-                                warningList.add(y[j])
-                                warningList.add(x[j])
-                                warningList.add(y[j])
-                            } else {
-                                warningList.add(x[j - 1])
-                                warningList.add(y[j - 1])
-                                warningList.add(x[j + 1])
-                                warningList.add(y[j + 1])
+                if (polygons.isNotEmpty()) {
+                    polygons.forEach { polygon ->
+                        val numbers = RegExp.space.split(polygon)
+                        val x = numbers.filterIndexed { index: Int, _: String -> index and 1 == 0 }.map { it.toDoubleOrNull() ?: 0.0 }
+                        val y = numbers.filterIndexed { index: Int, _: String -> index and 1 != 0 }.map { (it.toDoubleOrNull() ?: 0.0) * -1.0 }
+                        if (x.isNotEmpty() && y.isNotEmpty()) {
+                            warningList.add(x[0])
+                            warningList.add(y[0])
+                            (1..x.size - 2).forEach { j ->
+                                if (x[j] < 99.0) {
+                                    warningList.add(x[j])
+                                    warningList.add(y[j])
+                                    warningList.add(x[j])
+                                    warningList.add(y[j])
+                                } else {
+                                    warningList.add(x[j - 1])
+                                    warningList.add(y[j - 1])
+                                    warningList.add(x[j + 1])
+                                    warningList.add(y[j + 1])
+                                }
                             }
+                            warningList.add(x.last())
+                            warningList.add(y[x.lastIndex])
                         }
-                        warningList.add(x.last())
-                        warningList.add(y[x.lastIndex])
+                        hashSwo[threatIndex] = warningList
                     }
-                    hashSwo[threatIndex] = warningList
+                } else {
+                    // zero out
+                    hashSwo[threatIndex] = listOf()
                 }
             }
         }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,13 +26,12 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
 import android.widget.RemoteViews
-import joshuatee.wx.MyApplication
-import joshuatee.wx.R
-import joshuatee.wx.UtilityWidget
-import joshuatee.wx.WX
-import joshuatee.wx.fragments.UtilityNws
+import joshuatee.wx.*
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityForecastIcon
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityTimeSunMoon
 
@@ -49,7 +48,7 @@ class ObjectWidgetCC(context: Context) {
         val sevenDay = Utility.readPref(context, "7DAY_EXT_WIDGET", "No data")
         var bitmap = UtilityImg.getBlankBitmap()
         if (Location.isUS(widgetLocationNumberAsInteger)) {
-            bitmap = UtilityNws.getIcon(context, iconUrl)
+            bitmap = UtilityForecastIcon.getIcon(context, iconUrl)
         }
         val stringSeparator = " - "
         val currentConditionsList = currentConditionsString.split(stringSeparator).dropLastWhile { it.isEmpty() }
@@ -63,7 +62,7 @@ class ObjectWidgetCC(context: Context) {
                             true
                     )
             )
-            remoteViews.setTextColor(R.id.location, MyApplication.widgetTextColor)
+            remoteViews.setTextColor(R.id.location, UIPreferences.widgetTextColor)
         }
         if (currentConditionsList.size > 4 && !currentConditionsList[0].contains("NA") && Location.isUS(widgetLocationNumberAsInteger)) {
             val temperatureList = currentConditionsList[0].split("/").dropLastWhile { it.isEmpty() }
@@ -74,24 +73,24 @@ class ObjectWidgetCC(context: Context) {
             }
             remoteViews.setTextViewText(R.id.pressure, currentConditionsList[1])
             remoteViews.setTextViewText(R.id.visibility, currentConditionsList[3])
-            remoteViews.setTextColor(R.id.bigdewpt, MyApplication.widgetTextColor)
-            remoteViews.setTextColor(R.id.wind, MyApplication.widgetTextColor)
-            remoteViews.setTextColor(R.id.pressure, MyApplication.widgetTextColor)
-            remoteViews.setTextColor(R.id.visibility, MyApplication.widgetTextColor)
+            remoteViews.setTextColor(R.id.bigdewpt, UIPreferences.widgetTextColor)
+            remoteViews.setTextColor(R.id.wind, UIPreferences.widgetTextColor)
+            remoteViews.setTextColor(R.id.pressure, UIPreferences.widgetTextColor)
+            remoteViews.setTextColor(R.id.visibility, UIPreferences.widgetTextColor)
             remoteViews.setTextViewText(R.id.updatetime, currentConditionsTime)
-            remoteViews.setTextColor(R.id.updatetime, MyApplication.widgetTextColor)
+            remoteViews.setTextColor(R.id.updatetime, UIPreferences.widgetTextColor)
             remoteViews.setTextViewText(R.id.bigtemp, temperatureList[0])
             remoteViews.setTextViewText(R.id.bigdewpt, temperatureList[1].replace("^ ".toRegex(), ""))
-            remoteViews.setTextColor(R.id.bigtemp, MyApplication.widgetHighlightTextColor)
+            remoteViews.setTextColor(R.id.bigtemp, UIPreferences.widgetHighlightTextColor)
         }
-        if (!MyApplication.widgetCCShow7Day) {
+        if (!UIPreferences.widgetCCShow7Day) {
             remoteViews.setTextViewText(R.id.text4, sevenDay)
-            remoteViews.setTextColor(R.id.text4, MyApplication.widgetTextColor)
+            remoteViews.setTextColor(R.id.text4, UIPreferences.widgetTextColor)
         }
-        val wbIcon = UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_navigation_white_24dp, MyApplication.widgetHighlightTextColor)
+        val wbIcon = UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_navigation_white_24dp, UIPreferences.widgetHighlightTextColor)
         var windBardRotate = 0.0f
         if (currentConditionsList.size > 2) {
-            val tmpWindArr = MyApplication.space.split(currentConditionsList[2])
+            val tmpWindArr = RegExp.space.split(currentConditionsList[2])
             var windDirStr = ""
             if (tmpWindArr.isNotEmpty()) {
                 windDirStr = tmpWindArr[0]
@@ -108,7 +107,7 @@ class ObjectWidgetCC(context: Context) {
                 else -> 1000f
             }
         }
-        val scaleFactor = MyApplication.deviceScale / 3.0f * 1.25f
+        val scaleFactor = UIPreferences.deviceScale / 3.0f * 1.25f
         val matrix = Matrix()
         matrix.postRotate(windBardRotate, 100f, 100f)
         var rotatedWb = Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
@@ -121,7 +120,7 @@ class ObjectWidgetCC(context: Context) {
             remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
             remoteViews.setImageViewBitmap(R.id.iv, bitmap)
         }
-        if (!MyApplication.widgetPreventTap) {
+        if (!UIPreferences.widgetPreventTap) {
             UtilityWidget.setupIntent(context, remoteViews, WX::class.java, R.id.layout, "WX")
         }
     }

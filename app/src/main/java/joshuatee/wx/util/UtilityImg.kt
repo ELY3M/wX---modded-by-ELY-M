@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -38,8 +38,8 @@ import androidx.core.graphics.drawable.DrawableCompat
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import joshuatee.wx.Extensions.getImage
-
 import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImageView2
@@ -67,20 +67,8 @@ object UtilityImg {
 
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
 
-//    fun getBitmapRemoveBackground(imgUrl: String, color: Int) = eraseBackground(imgUrl.getImage(), color)
-
     fun getBitmapAddWhiteBackground(context: Context, imgUrl: String) =
             layerDrawableToBitmap(listOf(ColorDrawable(Color.WHITE), BitmapDrawable(context.resources, imgUrl.getImage())))
-
-    // FIXME rename Posn to Position
-//    fun firstRunSetZoomPosn(firstRunF: Boolean, img: TouchImageView2, pref: String): Boolean {
-//        var firstRun = firstRunF
-//        if (!firstRun) {
-//            img.setZoom(pref)
-//            firstRun = true
-//        }
-//        return firstRun
-//    }
 
     fun imgRestorePosnZoom(context: Context, img: TouchImageView2, prefStr: String) {
         img.setZoom(
@@ -102,19 +90,6 @@ object UtilityImg {
             Utility.writePref(context, prefStr + "_X", x)
             Utility.writePref(context, prefStr + "_Y", y)
             Utility.writePref(context, prefStr + "_ZOOM", z)
-            when (prefStr) {
-                "SPCHRRR" -> {
-                    MyApplication.spchrrrZoom = z
-                    MyApplication.spchrrrX = x
-                    MyApplication.spchrrrY = y
-                }
-                "WPCGEFS1" -> {
-                    MyApplication.wpcgefsZoom = z
-                    MyApplication.wpcgefsX = x
-                    MyApplication.wpcgefsY = y
-                }
-                else -> {}
-            }
         }
     }
 
@@ -143,7 +118,7 @@ object UtilityImg {
         }
     }
 
-    fun animInterval(context: Context) = 50 * Utility.readPref(context, "ANIM_INTERVAL", MyApplication.animationIntervalDefault)
+    fun animInterval(context: Context) = 50 * Utility.readPref(context, "ANIM_INTERVAL", UIPreferences.animationIntervalDefault)
 
     fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap) = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 
@@ -167,23 +142,23 @@ object UtilityImg {
         return bitmap
     }
 
-    fun drawableToBitmap(drawable: Drawable): Bitmap {
-        val width = drawable.intrinsicWidth
-        val height = drawable.intrinsicHeight
-        val bitmap: Bitmap
-        if (width > 0 && height > 0) {
-            bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-        } else {
-            bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-        }
-        return bitmap
-    }
+//    fun drawableToBitmap(drawable: Drawable): Bitmap {
+//        val width = drawable.intrinsicWidth
+//        val height = drawable.intrinsicHeight
+//        val bitmap: Bitmap
+//        if (width > 0 && height > 0) {
+//            bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
+//            val canvas = Canvas(bitmap)
+//            drawable.setBounds(0, 0, canvas.width, canvas.height)
+//            drawable.draw(canvas)
+//        } else {
+//            bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
+//            val canvas = Canvas(bitmap)
+//            drawable.setBounds(0, 0, canvas.width, canvas.height)
+//            drawable.draw(canvas)
+//        }
+//        return bitmap
+//    }
 
     fun eraseBackground(src: Bitmap, color: Int): Bitmap {
         val width = src.width
@@ -204,8 +179,8 @@ object UtilityImg {
 
     fun resizeViewSetImgInCard(bitmap: Bitmap, imageView: ImageView, numberAcross: Int = 1) {
         val layoutParams = imageView.layoutParams
-        layoutParams.width = (MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) / numberAcross
-        layoutParams.height = ((MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) * bitmap.height / bitmap.width ) / numberAcross
+        layoutParams.width = (MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) / numberAcross
+        layoutParams.height = ((MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) * bitmap.height / bitmap.width ) / numberAcross
         imageView.layoutParams = layoutParams
         imageView.setImageBitmap(bitmap)
     }

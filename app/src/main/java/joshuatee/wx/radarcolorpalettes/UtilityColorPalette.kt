@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,12 +25,12 @@ package joshuatee.wx.radarcolorpalettes
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.GlobalVariables.PalFilesPath
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
 import java.io.*
+
 
 object UtilityColorPalette {
 
@@ -41,8 +41,11 @@ object UtilityColorPalette {
     fun getColorMapStringFromDisk(context: Context, product: Int, code: String): String {
 
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED|| ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            UtilityLog.d("wx", "stupid permission!!!!!!!!!!!!!!!")
+            UtilityLog.d("wx", "stupid permission!!!!!!!!!!!!!  FUCK YOU GOOGLE!!!!")
+
         }
+
+
 
         //TODO TESTING scan dir for *_94.txt files....
         //scanfor94pal()
@@ -110,7 +113,7 @@ object UtilityColorPalette {
         //Log.i(TAG, "trying to open "+palfile)
         var text = ""
         try {
-            val initialFile = File(MyApplication.PalFilesPath + palfile)
+            val initialFile = File(PalFilesPath + palfile)
             val getpalfile = FileInputStream(initialFile)
             text = UtilityIO.readTextFile(getpalfile)
             //Log.i(TAG, palfile + ": " + text + "\n")

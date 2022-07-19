@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,13 +27,12 @@ import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 
 class ObjectTouchImageView {
 
-    var img: TouchImageView2
+    private var img: TouchImageView2
     private val context: Context
     private var imageLoaded = false
     var firstRun = false
@@ -74,6 +73,10 @@ class ObjectTouchImageView {
         setOnClickListener { UtilityToolbar.showHide(toolbar) }
     }
 
+    var visibility
+        get() = img.visibility
+        set(value) { img.visibility = value }
+
     fun setBitmap(bitmap: Bitmap) {
         img.setImageBitmap(bitmap)
         imageLoaded = true
@@ -82,15 +85,25 @@ class ObjectTouchImageView {
         }
     }
 
-    fun setOnClickListener(listener: View.OnClickListener): Unit = img.setOnClickListener(listener)
+    fun setOnClickListener(listener: View.OnClickListener) {
+        img.setOnClickListener(listener)
+    }
 
-    fun setImageDrawable(animDrawable: AnimationDrawable): Unit = img.setImageDrawable(animDrawable)
+    fun setImageDrawable(animDrawable: AnimationDrawable) {
+        img.setImageDrawable(animDrawable)
+    }
 
-    fun resetZoom(): Unit = img.resetZoom()
+    fun resetZoom() {
+        img.resetZoom()
+    }
 
-    fun setMaxZoom(zoom: Float) { img.maxZoom = zoom }
+    fun setMaxZoom(zoom: Float) {
+        img.maxZoom = zoom
+    }
 
-    fun setZoom(zoom: Float): Unit = img.setZoom(zoom)
+    fun setZoom(zoom: Float) {
+        img.setZoom(zoom)
+    }
 
     fun setListener(context: Context, drw: ObjectNavDrawer, fn: () -> Unit) {
         img.setOnTouchListener(object : OnSwipeTouchListener(context) {
@@ -124,20 +137,9 @@ class ObjectTouchImageView {
                 Utility.writePref(context, prefStr + "_X", x)
                 Utility.writePref(context, prefStr + "_Y", y)
                 Utility.writePref(context, prefStr + "_ZOOM", z)
-                when (prefStr) {
-                    "SPCHRRR" -> {
-                        MyApplication.spchrrrZoom = z
-                        MyApplication.spchrrrX = x
-                        MyApplication.spchrrrY = y
-                    }
-                    "WPCGEFS1" -> {
-                        MyApplication.wpcgefsZoom = z
-                        MyApplication.wpcgefsX = x
-                        MyApplication.wpcgefsY = y
-                    }
-                    else -> {}
-                }
             }
         }
     }
+
+    fun get() = img
 }

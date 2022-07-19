@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,8 +24,8 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile.VIS
 import joshuatee.wx.vis.GoesActivity
@@ -38,7 +38,7 @@ class ObjectWidgetVis(context: Context) {
         val intentHome = Intent("android.intent.action.MAIN")
         intentHome.addCategory("android.intent.category.HOME")
         UtilityWidget.setImage(context, remoteViews, VIS.fileName)
-        if (!MyApplication.widgetPreventTap) {
+        if (!UIPreferences.widgetPreventTap) {
             UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.iv, GoesActivity.RID, arrayOf(""), VIS.action)
         }
     }

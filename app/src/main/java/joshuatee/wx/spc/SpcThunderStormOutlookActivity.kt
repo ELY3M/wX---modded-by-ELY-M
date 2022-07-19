@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,14 +22,12 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-
 import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
-
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
@@ -78,8 +76,8 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
         bitmaps = MutableList(urls.size){ UtilityImg.getBlankBitmap() }
         linearLayout.removeAllViews()
         objectImageSummary = ObjectImageSummary(this@SpcThunderStormOutlookActivity, linearLayout, bitmaps)
-        for (i in urls.indices) {
-            FutureVoid(this, { bitmaps[i] = urls[i].getImage() }, { updateImage(i) })
+        urls.indices.forEach {
+            FutureVoid(this, { bitmaps[it] = urls[it].getImage() }, { updateImage(it) })
         }
     }
 

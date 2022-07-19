@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,7 +28,7 @@ import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import joshuatee.wx.MyApplication
-import joshuatee.wx.GlobalArrays
+import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.radar.RID
 import joshuatee.wx.objects.DistanceUnit
@@ -50,14 +50,14 @@ object UtilityLocation {
             } else {
                 val tmpXArr = joshuatee.wx.settings.Location.getX(it).split(":")
                 lat = if (tmpXArr.size > 2) tmpXArr[2] else ""
-                    val tmpYArr = joshuatee.wx.settings.Location.getY(it).replace("-", "").split(":")
-                    lon = if (tmpYArr.size > 1) tmpYArr[1] else ""
-                }
-                latLon.add(To.double(lat))
-                latLon.add(To.double(lon))
+                val tmpYArr = joshuatee.wx.settings.Location.getY(it).replace("-", "").split(":")
+                lon = if (tmpYArr.size > 1) tmpYArr[1] else ""
             }
-            return latLon
+            latLon.add(To.double(lat))
+            latLon.add(To.double(lon))
         }
+        return latLon
+    }
 
     fun getGps(context: Context): DoubleArray {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager

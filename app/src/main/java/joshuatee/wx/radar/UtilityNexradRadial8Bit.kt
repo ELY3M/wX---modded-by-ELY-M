@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,7 +23,6 @@ package joshuatee.wx.radar
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -31,8 +30,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Paint.Style
-
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 import java.lang.AssertionError
 import java.io.IOException
@@ -46,7 +46,7 @@ internal object UtilityNexradRadial8Bit {
         val rBuff = ByteBuffer.allocateDirect(32)
         UtilityCanvasMain.setImageOffset(context)
         val canvas = Canvas(bitmap)
-        val zeroColor = MyApplication.nexradRadarBackgroundColor
+        val zeroColor = RadarPreferences.nexradRadarBackgroundColor
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
             dis.bigEndian = true
@@ -90,7 +90,7 @@ internal object UtilityNexradRadial8Bit {
             rBuff.order(ByteOrder.nativeOrder())
             rBuff.position(0)
             val numberOfRangeBins = UtilityWXOGLPerf.decode8BitWX(context, fileName, radialStart, binWord)
-            val binSize = WXGLNexrad.getBinSize(productCode.toInt()) * 0.2f * MyApplication.widgetNexradSize.toFloat()
+            val binSize = WXGLNexrad.getBinSize(productCode.toInt()) * 0.2f * UIPreferences.widgetNexradSize.toFloat()
             val centerX = 500 + UtilityCanvasMain.xOffset.toInt()
             val centerY = 500 + UtilityCanvasMain.yOffset.toInt()
             val paint = Paint()
@@ -129,9 +129,9 @@ internal object UtilityNexradRadial8Bit {
                 "DSA" -> colorMapProductCode = 172
                 else -> colorMapProductCode = 94
             }
-            bufR = MyApplication.colorMap[colorMapProductCode]!!.redValues
-            bufG = MyApplication.colorMap[colorMapProductCode]!!.greenValues
-            bufB = MyApplication.colorMap[colorMapProductCode]!!.blueValues
+            bufR = ObjectColorPalette.colorMap[colorMapProductCode]!!.redValues
+            bufG = ObjectColorPalette.colorMap[colorMapProductCode]!!.greenValues
+            bufB = ObjectColorPalette.colorMap[colorMapProductCode]!!.blueValues
             for (g in 0 until numberOfRadials) {
                 angle = radialStart.float
                 binWord.mark()

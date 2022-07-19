@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,9 +27,8 @@ import android.content.res.ColorStateList
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 
 class ObjectFab {
 
@@ -47,7 +46,9 @@ class ObjectFab {
         setOnClickListener(fn)
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) = fab.setOnClickListener(fn)
+    fun setOnClickListener(fn: View.OnClickListener) {
+        fab.setOnClickListener(fn)
+    }
 
     var visibility
         get() = fab.visibility
@@ -68,15 +69,15 @@ class ObjectFab {
             fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         }
         fabSetResDrawable(context, icon)
-        fab.elevation = MyApplication.fabElevation
-        fab.translationZ = MyApplication.fabElevationDepressed
+        fab.elevation = UIPreferences.fabElevation
+        fab.translationZ = UIPreferences.fabElevationDepressed
     }
 
     private fun setupFab(context: Context) {
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         }
-        fab.elevation = MyApplication.fabElevation
-        fab.translationZ = MyApplication.fabElevationDepressed
+        fab.elevation = UIPreferences.fabElevation
+        fab.translationZ = UIPreferences.fabElevationDepressed
     }
 }

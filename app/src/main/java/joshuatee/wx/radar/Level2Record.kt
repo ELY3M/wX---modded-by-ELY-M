@@ -38,7 +38,6 @@ package joshuatee.wx.radar
 
 import java.io.IOException
 import java.nio.ByteBuffer
-
 import joshuatee.wx.util.UCARRandomAccessFile
 
 internal class Level2Record @Throws(IOException::class)

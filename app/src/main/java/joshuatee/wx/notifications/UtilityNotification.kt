@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,14 +32,12 @@ import android.graphics.Color
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.media.app.NotificationCompat.MediaStyle
-
 import joshuatee.wx.activitiesmisc.HourlyActivity
 import joshuatee.wx.audio.AudioServiceBack
 import joshuatee.wx.audio.AudioServiceForward
 import joshuatee.wx.audio.AudioServiceToggleState
 import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.fragments.UtilityNws
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.audio.VoiceCommandActivity
@@ -50,10 +48,13 @@ import joshuatee.wx.util.*
 import android.app.NotificationChannel
 import android.os.Build
 import joshuatee.wx.*
-
 import joshuatee.wx.Extensions.*
 import android.media.AudioAttributes
 import androidx.core.app.NotificationManagerCompat
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.NotificationPreferences
+import joshuatee.wx.settings.UIPreferences
 
 object UtilityNotification {
 
@@ -89,26 +90,26 @@ object UtilityNotification {
                             arrayOf(hazUrls, hazSum, "sound")
                     )
                     val cancelStr = Location.getY(locNumInt) + hazUrls.parse("(</h2> <p>.*?</strong> </p>)").replace(",".toRegex(), "").replace(" ".toRegex(), "")
-                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
-                        val sound = MyApplication.locations[locNumInt].sound && !inBlackout || MyApplication.locations[locNumInt].sound && MyApplication.alertBlackoutTornado
+                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
+                        val sound = MyApplication.locations[locNumInt].sound && !inBlackout || MyApplication.locations[locNumInt].sound && NotificationPreferences.alertBlackoutTornado
                         val notifObj = ObjectNotification(
                                 context,
                                 sound,
                                 noMain,
                                 Utility.fromHtml(hazUrls),
                                 objectPendingIntents.resultPendingIntent,
-                                MyApplication.ICON_ALERT,
+                                GlobalVariables.ICON_ALERT,
                                 noSummary,
                                 NotificationCompat.PRIORITY_HIGH,
                                 Color.BLUE,
-                                MyApplication.ICON_ACTION,
+                                GlobalVariables.ICON_ACTION,
                                 objectPendingIntents.resultPendingIntent2,
                                 context.resources.getString(R.string.read_aloud)
                         )
                         val notification = createNotificationBigTextWithAction(notifObj)
                         notifObj.sendNotification(context, cancelStr, 1, notification)
                     }
-                    notifUrls += cancelStr + MyApplication.notificationStrSep
+                    notifUrls += cancelStr + NotificationPreferences.notificationStrSep
                 }
             }
             if (alertPresent && MyApplication.locations[locNumInt].notificationRadar) {
@@ -116,7 +117,7 @@ object UtilityNotification {
                 var nws1StateCurrent = ""
                 if (Location.isUS(locNumInt)) {
                     val nwsLocation = Utility.getWfoSiteName(MyApplication.locations[locNumInt].wfo)
-                    val nwsLocationArr = MyApplication.comma.split(nwsLocation)
+                    val nwsLocationArr = RegExp.comma.split(nwsLocation)
                     nws1StateCurrent = nwsLocationArr[0]
                 }
                 val bitmap: Bitmap
@@ -139,13 +140,13 @@ object UtilityNotification {
                 }
                 stackBuilder2.addNextIntent(resultIntent2)
                 val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                if (!(MyApplication.alertOnlyOnce && oldNotifStr.contains(url2 + "radar"))) {
-                    noti2 = createNotificationBigPicture(context, noMain, resultPendingIntent2, MyApplication.ICON_RADAR, bitmap)
+                if (!(NotificationPreferences.alertOnlyOnce && oldNotifStr.contains(url2 + "radar"))) {
+                    noti2 = createNotificationBigPicture(context, noMain, resultPendingIntent2, GlobalVariables.ICON_RADAR_WHITE, bitmap)
                     if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
                         notifier2.notify(url2 + "radar", 1, noti2)
                     }
                 }
-                notifUrls += url2 + "radar" + MyApplication.notificationStrSep
+                notifUrls += url2 + "radar" + NotificationPreferences.notificationStrSep
             } // end if for radar
         } // end of if to test if alerts1 are enabled
         return notifUrls
@@ -175,10 +176,10 @@ object UtilityNotification {
             val currentUpdateTime = UtilityTime.currentTimeMillis()
             val lastUpdateTime = Utility.readPref(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
             if (MyApplication.locations[locNumInt].ccNotification) {
-                notifUrls += url + "CC" + MyApplication.notificationStrSep
+                notifUrls += url + "CC" + NotificationPreferences.notificationStrSep
             }
             if (MyApplication.locations[locNumInt].sevenDayNotification) {
-                notifUrls += url + "7day" + MyApplication.notificationStrSep
+                notifUrls += url + "7day" + NotificationPreferences.notificationStrSep
             }
             if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
                 val objCc = ObjectCurrentConditions(context, locNumInt)
@@ -189,8 +190,8 @@ object UtilityNotification {
                 if (locNum == widgetLocNum && widgetsEnabled) UtilityWidget.widgetDownloadData(context, objCc, objSevenDay, objHazards)
                 if (MyApplication.locations[locNumInt].ccNotification) {
                     noMain = locLabelStr
-                    noBody = objCc.data + MyApplication.newline + objCc.status
-                    noSummary = objCc.data + MyApplication.newline + objCc.status
+                    noBody = objCc.data + GlobalVariables.newline + objCc.status
+                    noSummary = objCc.data + GlobalVariables.newline + objCc.status
                     val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     val resultIntent: Intent
                     if (Location.isUS(locNumInt)) {
@@ -207,7 +208,7 @@ object UtilityNotification {
                         stackBuilder.addParentStack(CanadaHourlyActivity::class.java)
                     stackBuilder.addNextIntent(resultIntent)
                     val resultPendingIntent = stackBuilder.getPendingIntent(x, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                    val tmpArr = noBody.split(MyApplication.DEGREE_SYMBOL.toRegex()).dropLastWhile { it.isEmpty() }
+                    val tmpArr = noBody.split(GlobalVariables.DEGREE_SYMBOL.toRegex()).dropLastWhile { it.isEmpty() }
                     var smallIconResource = R.drawable.temp_0
                     if (tmpArr.isNotEmpty()) {
                         smallIconResource = if (Location.isUS(locNumInt)) {
@@ -219,9 +220,9 @@ object UtilityNotification {
                         }
                     }
                     val bmc = if (Location.isUS(locNumInt)) {
-                        UtilityNws.getIcon(context, objCc.iconUrl)
+                        UtilityForecastIcon.getIcon(context, objCc.iconUrl)
                     } else {
-                        UtilityNws.getIcon(context, UtilityCanada.translateIconNameCurrentConditions(objCc.data, objCc.status))
+                        UtilityForecastIcon.getIcon(context, UtilityCanada.translateIconNameCurrentConditions(objCc.data, objCc.status))
                     }
                     val noti = createNotificationBigTextBigIcon(
                             context,
@@ -261,11 +262,11 @@ object UtilityNotification {
                             noMain,
                             noBody,
                             objectPendingIntents.resultPendingIntent,
-                            MyApplication.ICON_FORECAST,
+                            GlobalVariables.ICON_FORECAST,
                             noSummary,
                             Notification.PRIORITY_MIN,
                             Color.YELLOW,
-                            MyApplication.ICON_ACTION,
+                            GlobalVariables.ICON_ACTION,
                             objectPendingIntents.resultPendingIntent2,
                             "7 Day Forecast"
                     )
@@ -286,7 +287,7 @@ object UtilityNotification {
         val channel = NotificationChannel("default", "Channel name", NotificationManager.IMPORTANCE_HIGH)
         channel.description = "wX weather"
         channel.setSound(
-                Uri.parse(MyApplication.notifSoundUri), AudioAttributes.Builder()
+                Uri.parse(NotificationPreferences.notifSoundUri), AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION_COMMUNICATION_INSTANT)
                 .build()
         )
@@ -308,7 +309,7 @@ object UtilityNotification {
                         .setContentTitle(noMain)
                         .setSmallIcon(iconRadar)
                         .setSound(null)
-                        .setAutoCancel(MyApplication.alertAutocancel)
+                        .setAutoCancel(NotificationPreferences.alertAutocancel)
                         .setColor(UIPreferences.colorNotif)
                         .setLargeIcon(bitmap)
         ).bigPicture(bitmap).build()!!
@@ -329,9 +330,9 @@ object UtilityNotification {
                             .setContentText(notification.noBody)
                             .setContentIntent(notification.resultPendingIntent)
                             .setOnlyAlertOnce(true)
-                            .setAutoCancel(MyApplication.alertAutocancel)
+                            .setAutoCancel(NotificationPreferences.alertAutocancel)
                             .setColor(UIPreferences.colorNotif)
-                            .setSound(Uri.parse(MyApplication.notifSoundUri)) // was Settings.System.DEFAULT_NOTIFICATION_URI
+                            .setSound(Uri.parse(NotificationPreferences.notifSoundUri)) // was Settings.System.DEFAULT_NOTIFICATION_URI
                             .setPriority(notification.priority)
                             .addAction(
                                     notification.iconAction,
@@ -341,8 +342,12 @@ object UtilityNotification {
                             .setLights(notification.color, onMs, offMs)
                             .setSmallIcon(notification.iconAlert)
             ).bigText(notification.noSummary).build()!!
-            if (MyApplication.notifSoundRepeat) noti.flags = noti.flags or Notification.FLAG_INSISTENT
-            if (MyApplication.notifTts) UtilityTts.synthesizeTextAndPlay(notification.context, notification.noMain, notification.noMain)
+            if (NotificationPreferences.notifSoundRepeat) {
+                noti.flags = noti.flags or Notification.FLAG_INSISTENT
+            }
+            if (NotificationPreferences.notifTts) {
+                UtilityTts.synthesizeTextAndPlay(notification.context, notification.noMain, notification.noMain)
+            }
         } else {
             noti = NotificationCompat.BigTextStyle(
                     NotificationCompat.Builder(notification.context, notiChannelStrNoSound)
@@ -351,7 +356,7 @@ object UtilityNotification {
                             .setContentIntent(notification.resultPendingIntent)
                             .setOnlyAlertOnce(true)
                             .setSound(null)
-                            .setAutoCancel(MyApplication.alertAutocancel)
+                            .setAutoCancel(NotificationPreferences.alertAutocancel)
                             .setColor(UIPreferences.colorNotif)
                             .setPriority(notification.priority)
                             .addAction(notification.iconAction, notification.buttonStr, notification.actionPendingIntent)
@@ -366,14 +371,14 @@ object UtilityNotification {
         initChannels(context)
         var title = titleF
         if (title == "")
-            title = MyApplication.mediaNotifTtsTitle
+            title = NotificationPreferences.mediaNotifTtsTitle
         else
-            MyApplication.mediaNotifTtsTitle = title
+            NotificationPreferences.mediaNotifTtsTitle = title
         val pauseIcon =
                 if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
-                    MyApplication.ICON_PAUSE_PRESSED
+                    GlobalVariables.ICON_PAUSE_PRESSED
                 else
-                    MyApplication.ICON_PAUSE
+                    GlobalVariables.ICON_PAUSE
         val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val noti: Notification
         val resultIntent = Intent(context, VoiceCommandActivity::class.java)
@@ -395,9 +400,9 @@ object UtilityNotification {
         } else {
             ""
         }
-        val actionBack = NotificationCompat.Action.Builder(MyApplication.ICON_SKIP_BACK, "", resultPendingIntentBack).build()
+        val actionBack = NotificationCompat.Action.Builder(GlobalVariables.ICON_SKIP_BACK, "", resultPendingIntentBack).build()
         val actionPlay = NotificationCompat.Action.Builder(pauseIcon, "", resultPendingIntent2).build()
-        val actionForward = NotificationCompat.Action.Builder(MyApplication.ICON_SKIP_FORWARD, "", resultPendingIntentForward).build()
+        val actionForward = NotificationCompat.Action.Builder(GlobalVariables.ICON_SKIP_FORWARD, "", resultPendingIntentForward).build()
         val style = MediaStyle().setShowActionsInCompactView(0, 1, 2)
         noti = NotificationCompat.Builder(context, notiChannelStrNoSound)
                 .setContentTitle("wX $title")
@@ -411,7 +416,7 @@ object UtilityNotification {
                 .addAction(actionBack)
                 .addAction(actionPlay)
                 .addAction(actionForward)
-                .setSmallIcon(MyApplication.ICON_MIC)
+                .setSmallIcon(GlobalVariables.ICON_MIC)
                 .build()
         notifier.notify("wx_media", 1, noti)
     }
@@ -419,7 +424,6 @@ object UtilityNotification {
     // this is used primary by the current conditions notification
     // bug: https://code.google.com/p/android/issues/detail?id=43179&q=setSmallIcon&colspec=ID%20Type%20Status%20Owner%20Summary%20Stars
     // pulldown small icon taking default level
-
     private fun createNotificationBigTextBigIcon(context: Context, sound: Boolean, noMain: String, noBody: String, resultPendingIntent: PendingIntent, smallIcon: Int,
             iconAlert: Bitmap, noSummary: String, prio: Int): Notification {
         initChannels(context)
@@ -436,14 +440,14 @@ object UtilityNotification {
                             .setOnlyAlertOnce(true)
                             .setAutoCancel(false)
                             .setColor(UIPreferences.colorNotif)
-                            .setSound(Uri.parse(MyApplication.notifSoundUri))
+                            .setSound(Uri.parse(NotificationPreferences.notifSoundUri))
                             .setPriority(prio)
                             .setSmallIcon(smallIcon)
                             .setLargeIcon(bitmap)
             ).bigText(noSummary).build()!!
-            if (MyApplication.notifSoundRepeat)
+            if (NotificationPreferences.notifSoundRepeat)
                 noti.flags = noti.flags or Notification.FLAG_INSISTENT
-            if (MyApplication.notifTts)
+            if (NotificationPreferences.notifTts)
                 UtilityTts.synthesizeTextAndPlay(context, noMain, noMain)
         } else {
             noti = NotificationCompat.BigTextStyle(

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,8 +23,8 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.RemoteViews
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile.NEXRAD_RADAR
 import joshuatee.wx.radar.WXGLRadarActivity
@@ -39,7 +39,7 @@ class ObjectWidgetNexradRadar(context: Context) {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
         val radarSite = Location.getRid(context, widgetLocationNumber)
         UtilityWidget.setImage(context, remoteViews, NEXRAD_RADAR.fileName)
-        if (!MyApplication.widgetPreventTap) {
+        if (!UIPreferences.widgetPreventTap) {
             UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.iv, WXGLRadarActivity.RID, arrayOf(radarSite), NEXRAD_RADAR.action)
         }
     }

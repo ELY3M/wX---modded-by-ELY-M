@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,12 +21,11 @@
 
 package joshuatee.wx.util
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.Location
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.LatLon
 
 class ObjectSevenDay {
@@ -70,21 +69,25 @@ class ObjectSevenDay {
         get() = detailedForecasts
 
     private fun convertExt7DayToList() {
-        detailedForecasts = sevenDayLong.split(MyApplication.newline + MyApplication.newline).dropLastWhile { it.isEmpty() }.toMutableList()
+        detailedForecasts = sevenDayLong.split(GlobalVariables.newline + GlobalVariables.newline).dropLastWhile { it.isEmpty() }.toMutableList()
     }
 
     private fun getIcons7Day(html: String): String {
         return if (UIPreferences.useNwsApi) {
             val icons = html.parseColumn("\"icon\": \"(.*?)\",")
             var iconList = ""
-            icons.forEach { iconList += "$it!" }
+            icons.forEach {
+                iconList += "$it!"
+            }
             iconList
         } else {
             val forecastStringList = UtilityUS.getCurrentConditionsUS(html)
             val iconString = forecastStringList[0]
             val icons = UtilityString.parseColumn(iconString, "<icon-link>(.*?)</icon-link>")
             var iconList = ""
-            icons.forEach { iconList += "$it!" }
+            icons.forEach {
+                iconList += "$it!"
+            }
             iconList
         }
     }
@@ -97,10 +100,10 @@ class ObjectSevenDay {
             val detailedForecasts = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
             return if ((names.size == temperatures.size) && (temperatures.size == shortForecasts.size) && (shortForecasts.size == detailedForecasts.size)) {
                 val objectForecasts = (names.indices).map { ObjectForecast(names[it], temperatures[it], shortForecasts[it], detailedForecasts[it]) }
-                var forecasts = MyApplication.newline + MyApplication.newline
+                var forecasts = GlobalVariables.newline + GlobalVariables.newline
                 objectForecasts.forEach {
                     forecasts += it.name + "(" + it.temperature + "): " + it.shortForecast
-                    forecasts += MyApplication.newline + MyApplication.newline
+                    forecasts += GlobalVariables.newline + GlobalVariables.newline
                 }
                 forecasts
             } else {
@@ -110,11 +113,11 @@ class ObjectSevenDay {
             val forecastStringList = UtilityUS.getCurrentConditionsUS(html)
             val forecastString = forecastStringList[2]
             val forecasts = forecastString.split("\n").dropLastWhile { it.isEmpty() }
-            var forecast = MyApplication.newline + MyApplication.newline
+            var forecast = GlobalVariables.newline + GlobalVariables.newline
             forecasts.forEach { s ->
                 if (s != "") {
                     forecast += s.trim()
-                    forecast += MyApplication.newline
+                    forecast += GlobalVariables.newline
                 }
             }
             return forecast
@@ -128,12 +131,12 @@ class ObjectSevenDay {
             this.icons = html.parseColumn("\"icon\": \"(.*?)\",").toMutableList()
             val shortForecasts = html.parseColumn("\"shortForecast\": \"(.*?)\",")
             val detailedForecastsLocal = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
-            var forecast = MyApplication.newline + MyApplication.newline
+            var forecast = GlobalVariables.newline + GlobalVariables.newline
             if (names.size == temperatures.size && temperatures.size == shortForecasts.size && shortForecasts.size == detailedForecastsLocal.size) {
                 val forecasts = (names.indices).map { ObjectForecast(names[it], temperatures[it], shortForecasts[it], detailedForecastsLocal[it]) }
                 forecasts.forEach {
                     forecast += it.name + ": " + it.detailedForecast
-                    forecast += MyApplication.newline + MyApplication.newline
+                    forecast += GlobalVariables.newline + GlobalVariables.newline
                     detailedForecasts.add(it.name + ": " + it.detailedForecast)
                 }
             }
@@ -146,12 +149,12 @@ class ObjectSevenDay {
             val iconString = forecastStringList[0]
             val forecasts = forecastString.split("\n").dropLastWhile { it.isEmpty() }
             val iconList = UtilityString.parseColumn(iconString, "<icon-link>(.*?)</icon-link>")
-            var forecast = MyApplication.newline + MyApplication.newline
+            var forecast = GlobalVariables.newline + GlobalVariables.newline
             forecasts.forEachIndexed { index, s ->
                 if (s != "") {
                     detailedForecasts.add(s.trim())
                     forecast += s.trim()
-                    forecast += MyApplication.newline + MyApplication.newline
+                    forecast += GlobalVariables.newline + GlobalVariables.newline
                     if (iconList.size > index) {
                         icons.add(iconList[index])
                     }

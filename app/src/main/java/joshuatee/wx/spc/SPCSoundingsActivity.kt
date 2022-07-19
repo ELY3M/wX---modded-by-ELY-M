@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,9 +30,9 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.getHtml
 import joshuatee.wx.Extensions.parse
 import joshuatee.wx.Extensions.safeGet
-
 import joshuatee.wx.R
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.*
@@ -72,7 +72,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
         office = UtilityLocation.getNearestSoundingSite(Location.latLon)
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
+        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.get()))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToSnd)
         getContent()
     }
@@ -83,18 +83,18 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        locations = UtilityFavorites.setupMenu(this@SpcSoundingsActivity, MyApplication.sndFav, office, prefToken)
+        locations = UtilityFavorites.setupMenu(this@SpcSoundingsActivity, UIPreferences.sndFav, office, prefToken)
         invalidateOptionsMenu()
-        if (MyApplication.sndFav.contains(":$office:")) {
-            star.setIcon(MyApplication.STAR_ICON)
+        if (UIPreferences.sndFav.contains(":$office:")) {
+            star.setIcon(GlobalVariables.STAR_ICON)
         } else {
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+            star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
         FutureVoid(this, { bitmap = UtilitySpcSoundings.getImage(this@SpcSoundingsActivity, office) }, ::showImage)
     }
 
     private fun showImage() {
-        img.img.visibility = View.VISIBLE
+        img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.setMaxZoom(4f)
         img.firstRunSetZoomPosn("SOUNDING")
@@ -106,14 +106,14 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun downloadSpcPlot() {
-        imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
-        val html = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/".getHtml()
+        imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
+        val html = "${GlobalVariables.nwsSPCwebsitePrefix}/obswx/maps/".getHtml()
         val date = html.parse("/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
         bitmap = UtilityImg.getBitmapAddWhiteBackground(this@SpcSoundingsActivity, imgUrl + "_" + date + ".gif")
     }
 
     private fun showSpcPlot() {
-        img.img.visibility = View.VISIBLE
+        img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.setMaxZoom(4f)
     }
@@ -130,7 +130,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
             R.id.action_sfc -> setPlotAndGet("sfc")
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_fav -> toggleFavorite()
-            R.id.action_spc_help -> ObjectIntent.showWebView(this, arrayOf("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", office))
+            R.id.action_spc_help -> ObjectIntent.showWebView(this, arrayOf("${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", office))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -153,7 +153,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        locations = UtilityFavorites.setupMenu(this, MyApplication.sndFav, office, prefToken)
+        locations = UtilityFavorites.setupMenu(this, UIPreferences.sndFav, office, prefToken)
         when (item.itemId) {
             R.id.action_sector -> genericDialog(locations) {
                 if (locations.isNotEmpty()) {

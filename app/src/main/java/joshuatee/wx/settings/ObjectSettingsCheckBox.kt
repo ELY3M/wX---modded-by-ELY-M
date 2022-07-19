@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,11 +30,10 @@ import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import joshuatee.wx.Extensions.setPadding
-
 import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.GeographyType
+import joshuatee.wx.radar.RadarGeometry
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.ObjectDialogue
@@ -50,9 +49,9 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
     init {
         val textView = TextView(context)
         ObjectCardText.textViewSetup(textView)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
         textView.setTextColor(UIPreferences.backgroundColor)
-        textView.setPadding(MyApplication.paddingSettings)
+        textView.setPadding(UIPreferences.paddingSettings)
         textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
         textView.text = label
         textView.gravity = Gravity.CENTER_VERTICAL
@@ -76,7 +75,8 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
                 "RADAR_TOOLBAR_TRANSPARENT",
                 "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
                 "USE_NWS_API_HOURLY",
-                "LIGHTNING_USE_GOES"
+                "LIGHTNING_USE_GOES",
+                "USE_AWC_MOSAIC",
         )
         checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
              || ( pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")
@@ -98,7 +98,7 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
                 Utility.writePref(context, pref, "false")
             }
             if (pref == "SIMPLE_MODE") {
-                if (MyApplication.simpleMode != Utility.readPref(context, "SIMPLE_MODE", "false").startsWith("t")) {
+                if (UIPreferences.simpleMode != Utility.readPref(context, "SIMPLE_MODE", "false").startsWith("t")) {
                     Utility.commitPref(context)
                     UtilityAlertDialog.restart()
                 }
@@ -120,10 +120,10 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
                     MyApplication.initPreferences(context)
                     when (pref) {
-                        "RADAR_STATE_HIRES" -> MyApplication.initRadarGeometryByType(context, GeographyType.STATE_LINES)
-                        "RADAR_COUNTY_HIRES" -> MyApplication.initRadarGeometryByType(context, GeographyType.COUNTY_LINES)
-                        "RADAR_HW_ENH_EXT" -> MyApplication.initRadarGeometryByType(context, GeographyType.HIGHWAYS_EXTENDED)
-                        "RADAR_CAMX_BORDERS" -> MyApplication.initRadarGeometryByType(context, GeographyType.STATE_LINES)
+                        "RADAR_STATE_HIRES" -> RadarGeometry.initRadarGeometryByType(context, GeographyType.STATE_LINES)
+                        "RADAR_COUNTY_HIRES" -> RadarGeometry.initRadarGeometryByType(context, GeographyType.COUNTY_LINES)
+                        "RADAR_HW_ENH_EXT" -> RadarGeometry.initRadarGeometryByType(context, GeographyType.HIGHWAYS_EXTENDED)
+                        "RADAR_CAMX_BORDERS" -> RadarGeometry.initRadarGeometryByType(context, GeographyType.STATE_LINES)
                     }
                     GeographyType.refresh()
                 }
@@ -137,7 +137,7 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
         checkBox.isChecked = value
     }
 
-    val card get() = objectCard.card
+    fun get() = objectCard.get()
 
     internal fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener) {
         checkBox.setOnCheckedChangeListener(listener)

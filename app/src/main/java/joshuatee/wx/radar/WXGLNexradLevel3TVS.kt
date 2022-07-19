@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,30 +22,30 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UtilityLocation
+import java.util.regex.Pattern
 
 internal object WXGLNexradLevel3TVS {
 
     private const val tvsBaseFn = "nids_tvs_tab"
+    private val pattern1: Pattern = Pattern.compile("P {2}TVS(.{20})")
+    private val pattern2: Pattern = Pattern.compile(".{9}(.{7})")
 
     fun decodeAndPlot(context: Context, radarSite: String, fnSuffix: String): List<Double> {
         val fileName = tvsBaseFn + fnSuffix
         val stormList = mutableListOf<Double>()
         val location = UtilityLocation.getSiteLocation(radarSite)
         WXGLDownload.getNidsTab(context, "TVS", radarSite, fileName)
-        val tvs: MutableList<String>
+        val tvs: List<String>
         try {
             val data = UtilityLevel3TextProduct.readFile(context, fileName)
             // P  TVS    R7   216/ 50    29    57    57/ 6.5    15.9    6.5/ 22.4    18/ 6.5    &#0;
-            tvs = data.parseColumn(RegExp.tvsPattern1).toMutableList()
+            tvs = data.parseColumn(pattern1)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
             return listOf()
@@ -55,8 +55,8 @@ internal object WXGLNexradLevel3TVS {
         }
         tvs.forEach {
             val ecc = ExternalGeodeticCalculator()
-            val string = it.parse(RegExp.tvsPattern2)
-            val items = MyApplication.slash.split(string)
+            val string = it.parse(pattern2)
+            val items = RegExp.slash.split(string)
             val degree = items[0].replace(" ", "").toIntOrNull() ?: 0
             val nm = items[1].replace(" ", "").toIntOrNull() ?: 0
             val start = ExternalGlobalCoordinates(location)

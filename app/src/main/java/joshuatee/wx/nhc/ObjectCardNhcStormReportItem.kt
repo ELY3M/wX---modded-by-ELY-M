@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,8 +25,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import joshuatee.wx.UIPreferences
-
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectLinearLayout
 import joshuatee.wx.ui.ObjectTextView
@@ -44,8 +43,8 @@ class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout,
 
     init {
         val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
-        objectLinearLayout.addViews(listOf(textViewTop.tv, textViewTime.tv, textViewMovement.tv))
-        objectLinearLayout.addViews(listOf(textViewPressure.tv, textViewWindSpeed.tv, textViewBottom.tv))
+        objectLinearLayout.addViews(listOf(textViewTop.get(), textViewTime.get(), textViewMovement.get()))
+        objectLinearLayout.addViews(listOf(textViewPressure.get(), textViewWindSpeed.get(), textViewBottom.get()))
         objectCard.addView(objectLinearLayout.linearLayout)
         textViewTop.text = stormData.name + " (" + stormData.classification + ") " + stormData.center
         textViewTime.text = stormData.dateTime.replace("T", " ").replace(":00.000Z", "Z")
@@ -53,12 +52,14 @@ class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout,
         textViewPressure.text = "Min pressure: " + stormData.pressure
         textViewWindSpeed.text = "Max sustained: " + stormData.intensity
         textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.id.uppercase(Locale.US)
-        linearLayout.addView(objectCard.card)
+        linearLayout.addView(objectCard.get())
     }
 
-    val card get() = objectCard.card
+//    val card get() = objectCard.card
+
+    fun get() = objectCard.get()
 
     fun setListener(fn: View.OnClickListener) {
-        objectCard.card.setOnClickListener(fn)
+        objectCard.setOnClickListener(fn)
     }
 }

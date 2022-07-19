@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -40,15 +40,14 @@ import androidx.fragment.app.Fragment
 import androidx.cardview.widget.CardView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.util.*
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotificationTools
 import joshuatee.wx.objects.*
 import joshuatee.wx.radar.*
+import joshuatee.wx.settings.*
+import joshuatee.wx.settings.UtilityHomeScreen
 import joshuatee.wx.ui.*
 import kotlinx.coroutines.*
 
@@ -107,7 +106,7 @@ class LocationFragment : Fragment() {
     private var paneList = listOf<Int>()
     private var bitmapForCurrentConditions: Bitmap? = null
     private var objectCurrentConditions = ObjectCurrentConditions()
-    var bitmaps = listOf<Bitmap>()
+    private var bitmaps = listOf<Bitmap>()
 
     private fun addDynamicCards() {
         var currentConditionsAdded = false
@@ -125,7 +124,7 @@ class LocationFragment : Fragment() {
             val numPanes = 1
             if (token == "TXT-CC" || token == "TXT-CC2") {
                 if (!currentConditionsAdded && objectCardCurrentConditions != null) {
-                    linearLayout.addView(objectCardCurrentConditions!!.card)
+                    linearLayout.addView(objectCardCurrentConditions!!.get())
                     currentConditionsAdded = true
                 }
             } else if (token == "TXT-HAZ") {
@@ -141,7 +140,7 @@ class LocationFragment : Fragment() {
                 wxglRenders.add(WXGLRender(activityReference, 4))
                 oglrIdx = oglrCount
                 oglrCount += 1
-                cardViews.add(ObjectCard(activityReference).card)
+                cardViews.add(ObjectCard(activityReference).get())
                 wxglSurfaceViews.add(WXGLSurfaceView(activityReference, widthDivider, numPanes, 1))
                 wxglRenders[index].rid = ""
                 oldRadarSites[index] = ""
@@ -154,23 +153,23 @@ class LocationFragment : Fragment() {
                 wxglTextObjects[index].initializeLabels(activityReference)
                 relativeLayouts[index].addView(wxglSurfaceViews[index])
                 cardViews.last().addView(relativeLayouts[index])
-                cardViews.last().layoutParams = RelativeLayout.LayoutParams(MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt(), MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt())
+                cardViews.last().layoutParams = RelativeLayout.LayoutParams(MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt(), MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt())
                 linearLayout.addView(cardViews.last())
                 index += 1
             } else if (token.contains("TXT-")) {
                 val hsTextTmp = ObjectCardHSText(activityReference, token.replace("TXT-", ""))
-                linearLayout.addView(hsTextTmp.card)
+                linearLayout.addView(hsTextTmp.get())
                 homeScreenTextCards.add(hsTextTmp)
                 hsTextTmp.setOnClickListener { hsTextTmp.toggleText() }
             } else if (token.contains("IMG-")) {
                 val hsImageTmp = ObjectCardHSImage(activityReference, token.replace("IMG-", ""))
-                linearLayout.addView(hsImageTmp.card)
+                linearLayout.addView(hsImageTmp.get())
                 homeScreenImageCards.add(hsImageTmp)
                 setImageOnClick()
             } else if (token.contains("NXRD-")) {
                 wxglRenders.add(WXGLRender(activityReference, 4))
                 oglrCount += 1
-                cardViews.add(ObjectCard(activityReference).card)
+                cardViews.add(ObjectCard(activityReference).get())
                 wxglSurfaceViews.add(WXGLSurfaceView(activityReference, widthDivider, numPanes, 1))
                 wxglSurfaceViews[index].index = index
                 wxglRenders[index].rid = token.replace("NXRD-", "")
@@ -184,8 +183,8 @@ class LocationFragment : Fragment() {
                 relativeLayouts[index].addView(wxglSurfaceViews[index])
                 cardViews.last().addView(relativeLayouts[index])
                 cardViews.last().layoutParams = RelativeLayout.LayoutParams(
-                        MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt(),
-                        MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()
+                        MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt(),
+                        MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()
                 )
                 linearLayout.addView(cardViews.last())
                 index += 1
@@ -195,7 +194,7 @@ class LocationFragment : Fragment() {
                     homeScreenWebCards.add(ObjectCard(activityReference))
                     homeScreenWebViews.add(wv)
                     homeScreenWebCards.last().addView(homeScreenWebViews.last())
-                    linearLayout.addView(homeScreenWebCards.last().card)
+                    linearLayout.addView(homeScreenWebCards.last().get())
                 }
             }
         } // end of loop over HM tokens
@@ -210,7 +209,7 @@ class LocationFragment : Fragment() {
                     inflater.inflate(R.layout.fragment_location_white, container, false)
                 else
                     inflater.inflate(R.layout.fragment_location, container, false)
-        homescreenFavLocal = MyApplication.homescreenFav
+        homescreenFavLocal = UIPreferences.homescreenFav
         if (homescreenFavLocal.contains("TXT-CC") || homescreenFavLocal.contains("TXT-HAZ") || homescreenFavLocal.contains("TXT-7DAY")) {
             needForecastData = true
         }
@@ -225,7 +224,7 @@ class LocationFragment : Fragment() {
         // The button the user will tape so change location
         locationLabel = ObjectCardText(activityReference, linearLayout, Location.name, TextSize.MEDIUM)
         val locationLabelPadding = if (UtilityUI.isTablet()) 10 else 20
-        locationLabel.tv.setPadding(locationLabelPadding)
+        locationLabel.setPaddingAmount(locationLabelPadding)
         locationLabel.setTextColor(UIPreferences.textHighlightColor)
         locationLabel.setOnClickListener { locationDialogue.show() }
         if (homescreenFavLocal.contains("TXT-CC2")) {
@@ -240,7 +239,7 @@ class LocationFragment : Fragment() {
         }
         addDynamicCards()
         getContent()
-        if (MyApplication.locDisplayImg) {
+        if (UIPreferences.locDisplayImg) {
             wxglSurfaceViews.indices.forEach {
                 glviewInitialized = UtilityRadarUI.initGlviewFragment(wxglSurfaceViews[it], it, wxglRenders, wxglSurfaceViews, wxglTextObjects, changeListener)
             }
@@ -260,9 +259,9 @@ class LocationFragment : Fragment() {
             if (oglrIdx != -1) {
                 radarLocationChangedAl[oglrIdx] = false
             }
-            if (MyApplication.locDisplayImg && oglrIdx != -1) {
-                wxglSurfaceViews[oglrIdx].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
-                wxglRenders[oglrIdx].setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
+            if (UIPreferences.locDisplayImg && oglrIdx != -1) {
+                wxglSurfaceViews[oglrIdx].scaleFactor = RadarPreferences.wxoglSize.toFloat() / 10.0f
+                wxglRenders[oglrIdx].setViewInitial(RadarPreferences.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
             }
             homeScreenImageCards.forEach { it.resetZoom() }
             setImageOnClick()
@@ -284,7 +283,7 @@ class LocationFragment : Fragment() {
         homeScreenWebViews.indices.forEach { _ -> getWebProduct() }
         x = Location.x
         y = Location.y
-        if (MyApplication.locDisplayImg) {
+        if (UIPreferences.locDisplayImg) {
             getAllRadars()
         }
         val currentTime = UtilityTime.currentTimeMillis()
@@ -302,14 +301,14 @@ class LocationFragment : Fragment() {
         locationLabel.text = Location.name
         sevenDayCards.forEach { it.refreshTextSize() }
         homeScreenTextCards.forEach { it.refreshTextSize() }
-        hazardsCards.forEach { it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal) }
+        hazardsCards.forEach { it.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal) }
         // TODO use a Timer class to handle the data refresh stuff
         val currentTime = UtilityTime.currentTimeMillis()
         val currentTimeSec = currentTime / 1000
         val refreshIntervalSec = (UIPreferences.refreshLocMin * 60).toLong()
         val xOld = x
         val yOld = y
-        if (MyApplication.locDisplayImg) {
+        if (UIPreferences.locDisplayImg) {
             if (!glviewInitialized) {
                 wxglSurfaceViews.indices.forEach {
                     glviewInitialized = UtilityRadarUI.initGlviewFragment(
@@ -383,7 +382,7 @@ class LocationFragment : Fragment() {
             }
         }
         // recent adds Jan 2020
-        if (MyApplication.radarWarnings && activityReferenceWithNull != null) {
+        if (RadarPreferences.radarWarnings && activityReferenceWithNull != null) {
             withContext(Dispatchers.IO) { UtilityDownloadWarnings.get(activityReference) }
             if (!wxglRenders[idx].product.startsWith("2")) {
                 UtilityRadarUI.plotWarningPolygons(wxglSurfaceViews[idx], wxglRenders[idx], false)
@@ -441,7 +440,7 @@ class LocationFragment : Fragment() {
                 objectCardCurrentConditions?.setStatus(currentConditionsTime + radarTime)
             }
         }
-        if (MyApplication.wxoglCenterOnLocation) {
+        if (RadarPreferences.wxoglCenterOnLocation) {
             wxglSurfaceViews[idx].resetView()
         }
     }
@@ -513,9 +512,9 @@ class LocationFragment : Fragment() {
 
     private fun setImageOnClick() {
         homeScreenImageCards.indices.forEach { ii ->
-            val cl = MyApplication.HM_CLASS[homeScreenImageCards[ii].product]
-            val id = MyApplication.HM_CLASS_ID[homeScreenImageCards[ii].product]
-            val argsOrig = MyApplication.HM_CLASS_ARGS[homeScreenImageCards[ii].product]
+            val cl = UtilityHomeScreen.HM_CLASS[homeScreenImageCards[ii].product]
+            val id = UtilityHomeScreen.HM_CLASS_ID[homeScreenImageCards[ii].product]
+            val argsOrig = UtilityHomeScreen.HM_CLASS_ARGS[homeScreenImageCards[ii].product]
             homeScreenImageCards[ii].setOnClickListener {
                 if (argsOrig != null) {
                     val args = arrayOfNulls<String>(argsOrig.size)
@@ -571,14 +570,12 @@ class LocationFragment : Fragment() {
         hazardsCards.clear()
         hazardsExpandedAl.add(false)
         hazardsCards.add(ObjectCardText(activityReference))
-        hazardsCards[0].setPaddingAmount(MyApplication.paddingSettings)
-        hazardsCards[0].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-        hazardsCards[0].setTextColor(UIPreferences.textHighlightColor)
+        hazardsCards[0].setupHazard()
         hazardsCards[0].text = hazUrl
         val hazUrlCa = objectHazards.hazards
         hazardsCards[0].setOnClickListener { ObjectIntent.showText(activityReference, arrayOf(Utility.fromHtml(hazUrlCa), hazUrl)) }
         if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) {
-            linearLayoutHazards?.addView(hazardsCards[0].card)
+            linearLayoutHazards?.addView(hazardsCards[0].get())
         }
     }
 
@@ -625,12 +622,12 @@ class LocationFragment : Fragment() {
         val oldRidIdx = wxglRenders[idxIntG].rid
         wxglRenders[idxIntG].rid = ridNew
         if (idxIntG != oglrIdx) {
-            MyApplication.homescreenFav = MyApplication.homescreenFav.replace("NXRD-$oldRidIdx", "NXRD-" + wxglRenders[idxIntG].rid)
-            Utility.writePref(activityReference, "HOMESCREEN_FAV", MyApplication.homescreenFav)
+            UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace("NXRD-$oldRidIdx", "NXRD-" + wxglRenders[idxIntG].rid)
+            Utility.writePref(activityReference, "HOMESCREEN_FAV", UIPreferences.homescreenFav)
         }
         radarLocationChangedAl[idxIntG] = true
-        wxglSurfaceViews[idxIntG].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
-        wxglRenders[idxIntG].setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
+        wxglSurfaceViews[idxIntG].scaleFactor = RadarPreferences.wxoglSize.toFloat() / 10.0f
+        wxglRenders[idxIntG].setViewInitial(RadarPreferences.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
         getRadar(idxIntG)
     }
 
@@ -656,12 +653,10 @@ class LocationFragment : Fragment() {
             if (UtilityNotificationTools.nwsLocalAlertNotFiltered(activityReference, objectHazards.titles[z])) {
                 hazardsExpandedAl.add(false)
                 hazardsCards.add(ObjectCardText(activityReference))
-                hazardsCards[z].setPaddingAmount(MyApplication.paddingSettings)
-                hazardsCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-                hazardsCards[z].setTextColor(UIPreferences.textHighlightColor)
+                hazardsCards[z].setupHazard()
                 hazardsCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
                 hazardsCards[z].setOnClickListener { ObjectIntent.showHazard(activityReference, arrayOf(objectHazards.urls[z])) }
-                linearLayoutHazards?.addView(hazardsCards[z].card)
+                linearLayoutHazards?.addView(hazardsCards[z].get())
             } else {
                 hazardsExpandedAl.add(false)
                 hazardsCards.add(ObjectCardText(activityReference))
@@ -690,9 +685,9 @@ class LocationFragment : Fragment() {
             objectCurrentConditions.timeCheck()
             if (homescreenFavLocal.contains("TXT-CC2")) {
                 bitmapForCurrentConditions = if (Location.isUS) {
-                    UtilityNws.getIcon(activityReference, objectCurrentConditions.iconUrl)
+                    UtilityForecastIcon.getIcon(activityReference, objectCurrentConditions.iconUrl)
                 } else {
-                    UtilityNws.getIcon(activityReference, UtilityCanada.translateIconNameCurrentConditions(objectCurrentConditions.data, objectCurrentConditions.status))
+                    UtilityForecastIcon.getIcon(activityReference, UtilityCanada.translateIconNameCurrentConditions(objectCurrentConditions.data, objectCurrentConditions.status))
                 }
             }
         } catch (e: Exception) {
@@ -727,7 +722,7 @@ class LocationFragment : Fragment() {
         try {
             Utility.writePref(activityReference, "FCST", objectSevenDay.sevenDayLong)
             if (homescreenFavLocal.contains("TXT-7DAY")) {
-                bitmaps = objectSevenDay.icons.map { UtilityNws.getIcon(activityReference, it) }
+                bitmaps = objectSevenDay.icons.map { UtilityForecastIcon.getIcon(activityReference, it) }
             }
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -743,7 +738,7 @@ class LocationFragment : Fragment() {
                 bitmaps.forEachIndexed { index, bitmap ->
                     val objectCard7Day = ObjectCard7Day(activityReference, bitmap, Location.isUS, index, day7Arr)
                     objectCard7Day.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
-                    linearLayoutForecast?.addView(objectCard7Day.card)
+                    linearLayoutForecast?.addView(objectCard7Day.get())
                     sevenDayCards.add(objectCard7Day)
                 }
                 // sunrise card
@@ -755,7 +750,7 @@ class LocationFragment : Fragment() {
                 } catch (e: Exception) {
                     UtilityLog.handleException(e)
                 }
-                linearLayoutForecast?.addView(cardSunrise.card)
+                linearLayoutForecast?.addView(cardSunrise.get())
             }
             //
             // Canada legal card

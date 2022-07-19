@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,8 +32,9 @@ import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.R
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.audio.AudioPlayActivity
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
@@ -87,15 +88,15 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             wfo = "OUN"
         }
         title = "LSR"
-        locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
         getContent()
     }
 
     override fun onRestart() {
-        if (ridFavOld != MyApplication.wfoFav) {
-            locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
+        if (ridFavOld != UIPreferences.wfoFav) {
+            locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         }
         super.onRestart()
     }
@@ -117,7 +118,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView.visibility = View.VISIBLE
         wfo = loc.uppercase(Locale.US)
         mapShown = false
-        locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         getContent()
     }
 
@@ -126,7 +127,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         when (item.itemId) {
             R.id.action_sector -> genericDialog(locations) {
                 if (locations.isNotEmpty()) {
@@ -164,15 +165,15 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        locations = UtilityFavorites.setupMenu(this@LsrByWfoActivity, MyApplication.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this@LsrByWfoActivity, UIPreferences.wfoFav, wfo, prefToken)
         invalidateOptionsMenu()
-        if (MyApplication.wfoFav.contains(":$wfo:")) {
-            star.setIcon(MyApplication.STAR_ICON)
+        if (UIPreferences.wfoFav.contains(":$wfo:")) {
+            star.setIcon(GlobalVariables.STAR_ICON)
         } else {
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+            star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
         scrollView.smoothScrollTo(0, 0)
-        ridFavOld = MyApplication.wfoFav
+        ridFavOld = UIPreferences.wfoFav
         linearLayout.removeAllViewsInLayout()
         FutureVoid(this, ::downloadFirst, ::getLsrFromWfo)
     }

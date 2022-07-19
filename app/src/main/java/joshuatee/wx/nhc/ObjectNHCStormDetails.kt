@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,9 +22,7 @@
 package joshuatee.wx.nhc
 
 import java.io.Serializable
-
-import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityMath
 import java.util.*
 
@@ -40,32 +38,35 @@ class ObjectNhcStormDetails(
         var lat: String,
         var lon: String,
         var intensity: String,
-        var status: String): Serializable {
+        var status: String,
+        advisoryUrl: String,
+        var forecastAdvisoryUrl: String,
+        var forecastDiscussionUrl: String,
+        var windSpeedProbabilitiesUrl: String
+        ): Serializable {
 
-    var center: String = "$lat $lon"
+    var center = "$lat $lon"
     var dateTime = lastUpdate
     var movement = UtilityMath.convertWindDir(movementDir.toDoubleOrNull() ?: 0.0) + " at " + movementSpeed + " mph"
     var baseUrl: String
     var goesUrl: String
+    var advisoryNumber = advisoryUrl.split("/").last().replace(".shtml", "")
 
     init {
-        //var modBinNumber = binNumber
-        var modBinNumber = binNumber.substring(0, 2) + id.substring(2, 4)
-        if (modBinNumber.length == 3) {
-            modBinNumber = modBinNumber.insert(2, "0")
-        }
+        // OLD changed Jul 22
+//        var modBinNumber = binNumber.substring(0, 2) + id.substring(2, 4)
+//        if (modBinNumber.length == 3) {
+//            modBinNumber = modBinNumber.insert(2, "0")
+//        }
+        val modBinNumber = id.substring(0, 4).uppercase()
         baseUrl = "https://www.nhc.noaa.gov/storm_graphics/" + modBinNumber + "/" + id.uppercase(Locale.US)
         goesUrl = "https://cdn.star.nesdis.noaa.gov/FLOATER/data/" + id.uppercase(Locale.US) + "/GEOCOLOR/latest.jpg"
     }
 
-    fun forTopHeader(): String {
-        return "$movement, $pressure mb, $intensity mph"
-    }
+    fun forTopHeader() = "$movement, $pressure mb, $intensity mph"
 
-    fun summaryForNotification(): String {
-        return name + " " + classification + MyApplication.newline + center + MyApplication.newline +
-                movement + MyApplication.newline + pressure + " mb" + MyApplication.newline + intensity + " mph"
-    }
+    fun summaryForNotification() = name + " " + classification + GlobalVariables.newline + center + GlobalVariables.newline +
+                movement + GlobalVariables.newline + pressure + " mb" + GlobalVariables.newline + intensity + " mph"
 }
 
 /*

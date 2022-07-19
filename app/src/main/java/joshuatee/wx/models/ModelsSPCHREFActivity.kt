@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,7 +32,7 @@ import android.view.View
 import android.widget.LinearLayout
 import java.util.Locale
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
@@ -55,7 +55,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var miStatusParam2: MenuItem
     private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var om: ObjectModelNoSpinner
-    private var activityArguments: Array<String>? = arrayOf()
+    private lateinit var activityArguments: Array<String>
     private lateinit var timeMenuItem: MenuItem
     private lateinit var runMenuItem: MenuItem
 
@@ -71,9 +71,8 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        activityArguments = intent.getStringArrayExtra(INFO)
-        if (activityArguments == null) activityArguments = arrayOf("1", "SPCHREF", "SPC HREF")
-        om = ObjectModelNoSpinner(this, activityArguments!![1], activityArguments!![0])
+        activityArguments = intent.getStringArrayExtra(INFO)!!
+        om = ObjectModelNoSpinner(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_spchref, R.menu.models_spchref, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
@@ -84,7 +83,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = activityArguments!![2]
+        title = activityArguments[2]
         val menu = toolbarBottom.menu
         timeMenuItem = menu.findItem(R.id.action_time)
         runMenuItem = menu.findItem(R.id.action_run)
@@ -154,7 +153,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_animate -> UtilityModels.getAnimate(this@ModelsSpcHrefActivity, om, listOf(""))
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
-            R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", activityArguments!![1], activityArguments!![2]))
+            R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()

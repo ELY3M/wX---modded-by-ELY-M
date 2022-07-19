@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,13 +30,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.radar.AwcRadarMosaicActivity
+import joshuatee.wx.radar.RadarMosaicNwsActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.radar.WXGLRadarActivity
@@ -105,13 +105,23 @@ class MiscFragment : Fragment() {
                     arrayOf(),
                     "nhc", "NHC"
             )
-            hm["nwsmosaic"] = TileObject(
-                    R.drawable.nws_sector,
-                    AwcRadarMosaicActivity::class.java,
-                    AwcRadarMosaicActivity.URL,
-                    arrayOf(""),
-                    "nwsmosaic", "NWS Radar Mosaics"
-            )
+            if (UIPreferences.useAwcMosaic) {
+                hm["nwsmosaic"] = TileObject(
+                        R.drawable.nws_sector,
+                        AwcRadarMosaicActivity::class.java,
+                        AwcRadarMosaicActivity.URL,
+                        arrayOf(""),
+                        "nwsmosaic", "NWS Radar Mosaics"
+                )
+            } else {
+                hm["nwsmosaic"] = TileObject(
+                        R.drawable.nws_sector,
+                        RadarMosaicNwsActivity::class.java,
+                        RadarMosaicNwsActivity.URL,
+                        arrayOf(""),
+                        "nwsmosaic", "NWS Radar Mosaics"
+                )
+            }
             hm["goes"] = TileObject(
                     R.drawable.goes,
                     GoesActivity::class.java,

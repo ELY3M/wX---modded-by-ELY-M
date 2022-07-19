@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -388,7 +388,7 @@ object UtilityRadar {
         "TTUL" to "OK, Tulsa",
         "TDCA" to "MD, Washington National",
         "TPBI" to "FL, West Palm Beach",
-        "TICT" to "KS, Wichita"
+        "TICH" to "KS, Wichita"
     )
 
     val wfoSiteToLat = mapOf(
@@ -1005,7 +1005,7 @@ object UtilityRadar {
         "THOU" to "29.515852", // Houston Hobby (HOU), TX THOU HGX 116
         "TIAD" to "39.083667", // Dulles (IAD), VA TIAD LWX 473
         "TIAH" to "30.06472", // Houston International (IAH), TX TIAH HGX 253
-        "TICT" to "37.506844", // Wichita (ICT), KS TICH ICT 1,350
+        "TICH" to "37.506844", // Wichita (ICT), KS TICH ICT 1,350
         "TIDS" to "39.636556", // Indianapolis (IND), IN TIDS IND 847
         "TJFK" to "40.588633", // New York City (JFK), NY TJFK OKX 112
         "TLAS" to "36.144", // Las Vegas (LAS), NV TLAS VEF 2,058
@@ -1224,7 +1224,7 @@ object UtilityRadar {
         "THOU" to "95.241692",
         "TIAD" to "77.529224",
         "TIAH" to "95.5675",
-        "TICT" to "97.437228",
+        "TICH" to "97.437228",
         "TIDS" to "86.435286",
         "TJFK" to "73.880303",
         "TLAS" to "115.007",

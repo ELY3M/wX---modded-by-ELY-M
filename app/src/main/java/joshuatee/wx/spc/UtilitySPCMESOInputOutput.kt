@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,15 +28,11 @@ import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.Utility
-
-import kotlin.math.*
 
 object UtilitySpcMesoInputOutput {
 
@@ -50,12 +46,12 @@ object UtilitySpcMesoInputOutput {
 
         val drawables = mutableListOf<Drawable>()
         val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !showRadar) "_sf.gif" else ".gif"
-        val imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
-        val radImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
-        val outlookImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
-        val watchWarningImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/warns/warns.gif"
-        val topographyImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
-        val countyImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/cnty/cnty.gif"
+        val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
+        val radImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
+        val outlookImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
+        val watchWarningImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/warns/warns.gif"
+        val topographyImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
+        val countyImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/cnty/cnty.gif"
 
         var bitmap = imgUrl.getImage()
         drawables.add(ColorDrawable(Color.WHITE))
@@ -84,35 +80,15 @@ object UtilitySpcMesoInputOutput {
         return UtilityImg.layerDrawableToBitmap(drawables)
     }
 
-    fun getAnimation(context: Context, product: String, sector: String, frameCnt: Int): AnimationDrawable {
+    fun getAnimation(context: Context, product: String, sector: String, frameCount: Int): AnimationDrawable {
         var urls = listOf<String>()
-        val timeList = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
+        val timeList = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
         val delay = UtilityImg.animInterval(context)
-        if (timeList.size > frameCnt) {
-            urls = stride(frameCnt - 1, -1, -1).map { "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + product + "/" + product + "_" + timeList[it] + ".gif" }
+        if (timeList.size > frameCount) {
+            urls = (frameCount - 1 downTo 0).map {
+                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + product + "/" + product + "_" + timeList[it] + ".gif"
+            }
         }
         return UtilityImgAnim.getAnimationDrawableFromUrlListWhiteBackground(context, urls, delay)
-    }
-
-    private fun stride(start: Int, end: Int, incr: Int): IntArray {
-        val arrSize = ceil((end - start).toDouble() / incr.toDouble()).toInt()
-        val retArr = IntArray(arrSize)
-        var j = 0
-        if (start < end) {
-            var i = start
-            while (i < end) {
-                retArr[j] = i
-                j += 1
-                i += incr
-            }
-        } else {
-            var i = start
-            while (i > end) {
-                retArr[j] = i
-                j += 1
-                i += incr
-            }
-        }
-        return retArr
     }
 }

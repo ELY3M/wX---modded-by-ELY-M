@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -31,7 +31,7 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.GlobalArrays
+import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
@@ -88,7 +88,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     }
 
     private fun showImage() {
-        img.img.visibility = View.VISIBLE
+        img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(imgPrefToken)
     }

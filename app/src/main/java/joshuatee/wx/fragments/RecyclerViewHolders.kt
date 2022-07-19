@@ -6,7 +6,6 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
-
 import joshuatee.wx.R
 import joshuatee.wx.ui.ObjectCard
 

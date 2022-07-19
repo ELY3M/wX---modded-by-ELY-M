@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,8 +23,7 @@ package joshuatee.wx.vis
 
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import joshuatee.wx.MyApplication
-
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 
@@ -46,18 +45,18 @@ internal object UtilityGoesFullDisk {
     )
 
     val urls = listOf(
-        "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GMIR.JPG",
-        "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GMVS.JPG",
-        "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GIIR.JPG",
-        "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GIVS.JPG",
-        "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/rb/10.gif",
-        "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/ir4/10.gif",
-        "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/wv/10.gif",
-        "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/wvblue/10.gif",
-        "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/vis/10.gif",
-        "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/avn/10.gif",
-        "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/ft/10.gif",
-        "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/rbtop/10.gif"
+        "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GMIR.JPG",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GMVS.JPG",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GIIR.JPG",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GIVS.JPG",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/rb/10.gif",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/ir4/10.gif",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/wv/10.gif",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/wvblue/10.gif",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/vis/10.gif",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/avn/10.gif",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/ft/10.gif",
+        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/rbtop/10.gif"
     )
 
     fun getAnimation(context: Context, urlOriginal: String): AnimationDrawable {

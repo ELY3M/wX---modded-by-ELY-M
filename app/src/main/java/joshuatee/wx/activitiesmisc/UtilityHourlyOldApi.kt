@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021 joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,7 +22,7 @@
 package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityTime
@@ -35,8 +35,8 @@ object UtilityHourlyOldApi {
         val html = UtilityIO.getHtml("https://forecast.weather.gov/MapClick.php?lat=" +
                 latLon.latString + "&lon=" +
                 latLon.lonString + "&FcstType=digitalDWML")
-        val header = "Time".ljust(13) + " " + "Temp".ljust(5) + "Dew".ljust(5) + "Precip%".ljust(7) + "Cloud%".ljust(6) + MyApplication.newline
-        return MyApplication.newline + header + parseHourly(html)
+        val header = "Time".ljust(13) + " " + "Temp".ljust(5) + "Dew".ljust(5) + "Precip%".ljust(7) + "Cloud%".ljust(6) + GlobalVariables.newline
+        return GlobalVariables.newline + header + parseHourly(html)
     }
 
     private fun parseHourly(html: String): String {
@@ -89,7 +89,7 @@ object UtilityHourlyOldApi {
             sb += temp3Val.ljust(5)
             sb += temp4Val.ljust(7)
             sb += temp5Val.ljust(6)
-            sb += MyApplication.newline
+            sb += GlobalVariables.newline
         }
         return sb
     }

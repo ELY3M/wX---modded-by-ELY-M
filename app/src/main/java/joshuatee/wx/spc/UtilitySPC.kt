@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,21 +23,23 @@ package joshuatee.wx.spc
 
 import android.content.Context
 import android.graphics.Bitmap
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityVtec
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectPolygonWarning
+import joshuatee.wx.objects.ObjectPolygonWatch
+import joshuatee.wx.objects.PolygonType
 
 object UtilitySpc {
 
-    fun getStormReportsTodayUrl() = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
+    fun getStormReportsTodayUrl() = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
 
     internal val thunderStormOutlookImages: List<Bitmap>
         get() {
-            val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
+            val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
             val html = url.getHtml()
             val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
             return dates.map { "${url}imgs/enh_$it.gif".getImage() }
@@ -45,7 +47,7 @@ object UtilitySpc {
 
     internal val thunderStormOutlookUrls: List<String>
         get() {
-            val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
+            val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
             val html = url.getHtml()
             val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
             return dates.map { "${url}imgs/enh_$it.gif" }
@@ -85,29 +87,35 @@ object UtilitySpc {
         var dashboardStrWat = ""
         var dashboardStrMpd = ""
         var dashboardStrMcd = ""
-        if (MyApplication.checkspc) {
-            if (!MyApplication.severeDashboardMcd.value.contains(mcdNothingString)) {
+        if (UIPreferences.checkspc) {
+            if (!ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.storage.value.contains(mcdNothingString)) {
                 mdPresent = true
-                val items = MyApplication.severeDashboardMcd.value.parseColumn(RegExp.mcdPatternUtilSpc)
+                val items = ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.storage.value.parseColumn(RegExp.mcdPatternUtilSpc)
                 mdCount = items.size
-                items.forEach { dashboardStrMcd += ":$it" }
+                items.forEach {
+                    dashboardStrMcd += ":$it"
+                }
             }
-            if (!MyApplication.severeDashboardWat.value.contains(watchNothingString)) {
+            if (!ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.storage.value.contains(watchNothingString)) {
                 watchPresent = true
-                val items = MyApplication.severeDashboardWat.value.parseColumn(RegExp.watchPattern)
+                val items = ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.storage.value.parseColumn(RegExp.watchPattern)
                 watchCount = items.size
-                items.forEach { dashboardStrWat += ":$it" }
+                items.forEach {
+                    dashboardStrWat += ":$it"
+                }
             }
         }
-        if (MyApplication.checkwpc) {
-            if (!MyApplication.severeDashboardMpd.value.contains(mpdNothingString)) {
+        if (UIPreferences.checkwpc) {
+            if (!ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.storage.value.contains(mpdNothingString)) {
                 mpdPresent = true
-                val items = MyApplication.severeDashboardMpd.value.parseColumn(RegExp.mpdPattern)
+                val items = ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.storage.value.parseColumn(RegExp.mpdPattern)
                 mpdCount = items.size
-                items.forEach { dashboardStrMpd += ":$it" }
+                items.forEach {
+                    dashboardStrMpd += ":$it"
+                }
             }
         }
-        var label = MyApplication.tabHeaders[1]
+        var label = UIPreferences.tabHeaders[1]
         val tabStrSpc: String
         if (watchPresent || mdPresent || mpdPresent) {
             if (watchPresent) label += " W($watchCount)"
@@ -115,23 +123,23 @@ object UtilitySpc {
             if (mpdPresent) label += " P($mpdCount)"
             tabStrSpc = label
         } else {
-            tabStrSpc = MyApplication.tabHeaders[1]
+            tabStrSpc = UIPreferences.tabHeaders[1]
         }
         // US Warn
         var usWarnPresent = false
         var torCount = 0
         var tStormCount = 0
         var floodCount = 0
-        if (MyApplication.checktor) {
-            tStormCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTst.value)
-            torCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTor.value)
-            floodCount = UtilityVtec.getStormCount(MyApplication.severeDashboardFfw.value)
+        if (UIPreferences.checktor) {
+            tStormCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
+            torCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
+            floodCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
             if (tStormCount > 0 || torCount > 0 || floodCount > 0) usWarnPresent = true
         }
         val tabStr = if (usWarnPresent) {
-            MyApplication.tabHeaders[2] + " W(" + tStormCount + "," + torCount + "," + floodCount + ")"
+            UIPreferences.tabHeaders[2] + " W(" + tStormCount + "," + torCount + "," + floodCount + ")"
         } else {
-            MyApplication.tabHeaders[2]
+            UIPreferences.tabHeaders[2]
         }
         return listOf(tabStrSpc, tabStr)
     }

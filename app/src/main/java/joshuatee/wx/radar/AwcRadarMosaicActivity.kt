@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,7 +28,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
@@ -129,7 +129,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
                     checkOverlayPerms()
                 } else {
                     if (animRan) {
-                        UtilityShare.animGif(this, "NWS mosaic", animDrawable)
+                        //UtilityShare.animGif(this, "NWS mosaic", animDrawable)
                     } else {
                         UtilityShare.bitmap(this, this, "NWS mosaic", bitmap)
                     }

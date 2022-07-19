@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,8 +24,9 @@ package joshuatee.wx.util
 import android.content.Context
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.radar.UtilityMetar
-import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.radar.RID
 import java.util.*
 
@@ -56,8 +57,8 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
     init {
         val obsClosest = UtilityMetar.findClosestObservation(context, location, index)
         UtilityUS.obsClosestClass = obsClosest.name
-        val urlMetar = "${MyApplication.nwsRadarPub}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
-        val metarData = urlMetar.getHtmlSep().replace("<br>", MyApplication.newline)
+        val urlMetar = "${GlobalVariables.nwsRadarPub}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
+        val metarData = urlMetar.getHtmlSep().replace("<br>", GlobalVariables.newline)
         temperature = metarData.parse("Temperature: (.*?) F")
         dewPoint = metarData.parse("Dew Point: (.*?) F")
         windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")
@@ -68,9 +69,9 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         relativeHumidity = metarData.parse("Relative Humidity: (.*?)%")
         windChill = metarData.parse("Windchill: (.*?) F")
         heatIndex = UtilityMath.heatIndex(temperature, relativeHumidity)
-        rawMetar = metarData.parse("ob: (.*?)" + MyApplication.newline)
-        metarSkyCondition = metarData.parse("Sky conditions: (.*?)" + MyApplication.newline)
-        metarWeatherCondition = metarData.parse("Weather: (.*?)" + MyApplication.newline)
+        rawMetar = metarData.parse("ob: (.*?)" + GlobalVariables.newline)
+        metarSkyCondition = metarData.parse("Sky conditions: (.*?)" + GlobalVariables.newline)
+        metarWeatherCondition = metarData.parse("Weather: (.*?)" + GlobalVariables.newline)
         metarSkyCondition = capitalizeString(metarSkyCondition)
         metarWeatherCondition = capitalizeString(metarWeatherCondition)
         condition = if (metarWeatherCondition == "" || metarWeatherCondition.contains("Inches Of Snow On Ground")) {
@@ -79,10 +80,12 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
             metarWeatherCondition
         }
         condition = condition.replace("; Lightning Observed", "")
-        if (condition == "Mist") condition = "Fog/Mist"
+        if (condition == "Mist") {
+            condition = "Fog/Mist"
+        }
         icon = decodeIconFromMetar(condition, obsClosest)
         condition = condition.replace(";", " and")
-        val metarDataList = metarData.split(MyApplication.newline)
+        val metarDataList = metarData.split(GlobalVariables.newline)
         if (metarDataList.size > 2) {
             val localStatus = metarDataList[1].split("/")
             if (localStatus.size > 1) {
@@ -109,7 +112,9 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
     private fun capitalizeString(string: String): String {
         val tokens = string.split(" ")
         var newString = ""
-        tokens.forEach { word -> newString += word.replaceFirstChar { it.uppercase() } + " " }
+        tokens.forEach { word ->
+            newString += word.replaceFirstChar { it.uppercase() } + " "
+        }
         return newString.trimEnd()
     }
 
@@ -117,12 +122,12 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         var newValue = "NA"
         if (value != "") {
             val tempD = value.toDoubleOrNull() ?: 0.0
-            newValue = if (MyApplication.unitsF) UtilityMath.roundToString(tempD) else UtilityMath.fahrenheitToCelsius(tempD)
+            newValue = if (UIPreferences.unitsF) UtilityMath.roundToString(tempD) else UtilityMath.fahrenheitToCelsius(tempD)
         }
         return newValue
     }
 
-    private fun changePressureUnits(value: String) = if (!MyApplication.unitsM) UtilityMath.pressureMBtoIn(value) else "$value mb"
+    private fun changePressureUnits(value: String) = if (!UIPreferences.unitsM) UtilityMath.pressureMBtoIn(value) else "$value mb"
 
     private fun decodeIconFromMetar(condition: String, obs: RID): String {
         // https://api.weather.gov/icons/land/day/ovc?size=medium
@@ -142,7 +147,7 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         }
         val conditionModified = condition.split(";")[0]
         val shortCondition = UtilityMetarConditions.iconFromCondition[conditionModified] ?: ""
-        return MyApplication.nwsApiUrl + "/icons/land/$timeOfDay/$shortCondition?size=medium"
+        return GlobalVariables.nwsApiUrl + "/icons/land/$timeOfDay/$shortCondition?size=medium"
     }
 }
 

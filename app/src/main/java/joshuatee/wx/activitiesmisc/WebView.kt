@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,7 +30,7 @@ import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.UtilityUI
@@ -66,8 +66,8 @@ class WebView : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_webview_toolbar, null, false)
         webView = findViewById(R.id.webView)
-        val activityArguments = intent.getStringArrayExtra(URL)
-        url = activityArguments!![0]
+        val activityArguments = intent.getStringArrayExtra(URL)!!
+        url = activityArguments[0]
         title = activityArguments[1]
         val webSettings = webView.settings
         webSettings.javaScriptEnabled = true

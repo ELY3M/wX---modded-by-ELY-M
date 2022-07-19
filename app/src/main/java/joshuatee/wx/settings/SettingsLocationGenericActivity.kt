@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,9 +37,7 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
 import joshuatee.wx.canada.UtilityCitiesCanada
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.FutureText2
@@ -224,7 +222,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 alertSpcfwSw,
                 alertWpcmpdSw
         ).forEach{
-            linearLayout.addView(it.card)
+            linearLayout.addView(it.get())
         }
         hideNonUSNotifications()
     }
@@ -265,7 +263,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 alertSpcfwSw,
                 alertWpcmpdSw
         ).forEach{
-            it.card.visibility = View.VISIBLE
+            it.get().visibility = View.VISIBLE
         }
         // FIXME fold into forEach above
         alertSw.isChecked(alertNotificationCurrent == "true")
@@ -315,7 +313,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         UtilityCitiesCanada.initialize()
         val combinedCitiesList = UtilityCitiesExtended.cityLabels.toList()
         val cityArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, combinedCitiesList)
-        cityArrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
+        cityArrayAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
         searchView.setAdapter(cityArrayAdapter)
         searchView.queryHint = "Enter city here"
         searchView.setOnItemClickListener { _, _, position, _ ->
@@ -503,7 +501,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 alertSpcfwSw,
                 alertWpcmpdSw
         ).forEach{
-            it.card.visibility = visibility
+            it.get().visibility = visibility
         }
     }
 

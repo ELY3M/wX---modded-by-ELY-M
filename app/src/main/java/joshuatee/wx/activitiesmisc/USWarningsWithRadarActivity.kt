@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -74,8 +74,8 @@ class USWarningsWithRadarActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer, R.menu.uswarn, false)
         scrollView = findViewById(R.id.scrollView)
         linearLayout = findViewById(R.id.linearLayout)
-        val activityArguments = intent.getStringArrayExtra(URL)
-        turlLocal[0] = activityArguments!![0]
+        val activityArguments = intent.getStringArrayExtra(URL)!!
+        turlLocal[0] = activityArguments[0]
         turlLocal[1] = activityArguments[1]
         objectAlertSummary = ObjectAlertSummary(this, linearLayout, scrollView)
         objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())

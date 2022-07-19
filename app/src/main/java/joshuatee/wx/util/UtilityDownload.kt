@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,18 +25,19 @@ package joshuatee.wx.util
 import java.util.Locale
 import android.content.Context
 import android.graphics.Bitmap
-import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.UtilityLightning
 import joshuatee.wx.activitiesmisc.UtilitySunMoon
 import joshuatee.wx.activitiesmisc.UtilityUSHourly
 import joshuatee.wx.audio.UtilityPlayList
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.*
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.UtilityAwcRadarMosaic
+import joshuatee.wx.radar.UtilityNwsRadarMosaic
 import joshuatee.wx.vis.UtilityGoes
 
 object UtilityDownload {
@@ -45,13 +46,20 @@ object UtilityDownload {
 
     fun getRadarMosaic(context: Context): Bitmap {
         return try {
-            var product = "rad_rala"
-            val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
-            val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
-            var sector = "us"
-            sector = Utility.readPref(context, prefTokenSector, sector)
-            product = Utility.readPref(context, prefTokenProduct, product)
-            UtilityAwcRadarMosaic.get(sector, product)
+            if (UIPreferences.useAwcMosaic) {
+                var product = "rad_rala"
+                val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
+                val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
+                var sector = "us"
+                sector = Utility.readPref(context, prefTokenSector, sector)
+                product = Utility.readPref(context, prefTokenProduct, product)
+                UtilityAwcRadarMosaic.get(sector, product)
+            } else {
+                val prefTokenSector = "REMEMBER_NWSMOSAIC_SECTOR"
+                var sector = UtilityNwsRadarMosaic.getNearestMosaic(Location.latLon)
+                sector = Utility.readPref(context, prefTokenSector, sector)
+                UtilityNwsRadarMosaic.get(sector)
+            }
         } catch (e: Exception) {
             UtilityLog.handleException(e)
             UtilityImg.getBlankBitmap()
@@ -85,38 +93,38 @@ object UtilityDownload {
             "USWARN" -> url = "https://forecast.weather.gov/wwamap/png/US.png"
             "AKWARN" -> url = "https://forecast.weather.gov/wwamap/png/ak.png"
             "HIWARN" -> url = "https://forecast.weather.gov/wwamap/png/hi.png"
-            "FMAP" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaad1.gif"
-            "FMAPD2" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaad2.gif"
-            "FMAPD3" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaad3.gif"
-            "FMAP12" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/92fwbg.gif"
-            "FMAP24" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/94fwbg.gif"
-            "FMAP36" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/96fwbg.gif"
-            "FMAP48" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/98fwbg.gif"
-            "FMAP72" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf072.gif"
-            "FMAP96" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf096.gif"
-            "FMAP120" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf120.gif"
-            "FMAP144" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf144.gif"
-            "FMAP168" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf168.gif"
-            "FMAP3D" -> url = "${MyApplication.nwsWPCwebsitePrefix}/medr/9jhwbg_conus.gif"
-            "FMAP4D" -> url = "${MyApplication.nwsWPCwebsitePrefix}/medr/9khwbg_conus.gif"
-            "FMAP5D" -> url = "${MyApplication.nwsWPCwebsitePrefix}/medr/9lhwbg_conus.gif"
-            "FMAP6D" -> url = "${MyApplication.nwsWPCwebsitePrefix}/medr/9mhwbg_conus.gif"
-            "QPF1" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/fill_94qwbg.gif"
-            "QPF2" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/fill_98qwbg.gif"
-            "QPF3" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/fill_99qwbg.gif"
-            "QPF1-2" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/d12_fill.gif"
-            "QPF1-3" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/d13_fill.gif"
-            "QPF4-5" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/95ep48iwbg_fill.gif"
-            "QPF6-7" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/97ep48iwbg_fill.gif"
-            "QPF1-5" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/p120i.gif"
-            "QPF1-7" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/p168i.gif"
-            "WPC_ANALYSIS" -> url = "${MyApplication.nwsWPCwebsitePrefix}/images/wwd/radnat/NATRAD_24.gif"
-            "NHC2ATL" -> url = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png"
-            "NHC5ATL" -> url = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png"
-            "NHC2EPAC" -> url = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png"
-            "NHC5EPAC" -> url = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
-            "NHC2CPAC" -> url = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png"
-            "NHC5CPAC" -> url = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
+            "FMAP" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/noaa/noaad1.gif"
+            "FMAPD2" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/noaa/noaad2.gif"
+            "FMAPD3" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/noaa/noaad3.gif"
+            "FMAP12" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/92fwbg.gif"
+            "FMAP24" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/94fwbg.gif"
+            "FMAP36" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/96fwbg.gif"
+            "FMAP48" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/98fwbg.gif"
+            "FMAP72" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf072.gif"
+            "FMAP96" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf096.gif"
+            "FMAP120" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf120.gif"
+            "FMAP144" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf144.gif"
+            "FMAP168" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf168.gif"
+            "FMAP3D" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/medr/9jhwbg_conus.gif"
+            "FMAP4D" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/medr/9khwbg_conus.gif"
+            "FMAP5D" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/medr/9lhwbg_conus.gif"
+            "FMAP6D" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/medr/9mhwbg_conus.gif"
+            "QPF1" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/fill_94qwbg.gif"
+            "QPF2" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/fill_98qwbg.gif"
+            "QPF3" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/fill_99qwbg.gif"
+            "QPF1-2" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/d12_fill.gif"
+            "QPF1-3" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/d13_fill.gif"
+            "QPF4-5" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/95ep48iwbg_fill.gif"
+            "QPF6-7" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/97ep48iwbg_fill.gif"
+            "QPF1-5" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/p120i.gif"
+            "QPF1-7" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/p168i.gif"
+            "WPC_ANALYSIS" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/images/wwd/radnat/NATRAD_24.gif"
+            "NHC2ATL" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png"
+            "NHC5ATL" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png"
+            "NHC2EPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png"
+            "NHC5EPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
+            "NHC2CPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png"
+            "NHC5CPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
             "SPC_TST" -> {
                 needsBitmap = false
                 val images = UtilitySpc.thunderStormOutlookImages
@@ -148,7 +156,7 @@ object UtilityDownload {
             }
             "SPCMESO1" -> {
                 var param = "500mb"
-                val items = MyApplication.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
+                val items = UIPreferences.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
                 if (items.size > 3) param = items[3]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -159,7 +167,7 @@ object UtilityDownload {
             }
             "SPCMESO2" -> {
                 var param = "pmsl"
-                val items = MyApplication.spcMesoFav.split(":")
+                val items = UIPreferences.spcMesoFav.split(":")
                 if (items.size > 4) param = items[4]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -170,7 +178,7 @@ object UtilityDownload {
             }
             "SPCMESO3" -> {
                 var param = "ttd"
-                val items = MyApplication.spcMesoFav.split(":")
+                val items = UIPreferences.spcMesoFav.split(":")
                 if (items.size > 5) param = items[5]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -181,7 +189,7 @@ object UtilityDownload {
             }
             "SPCMESO4" -> {
                 var param = "rgnlrad"
-                val items = MyApplication.spcMesoFav.split(":")
+                val items = UIPreferences.spcMesoFav.split(":")
                 if (items.size > 6) param = items[6]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -192,7 +200,7 @@ object UtilityDownload {
             }
             "SPCMESO5" -> {
                 var param = "lllr"
-                val items = MyApplication.spcMesoFav.split(":")
+                val items = UIPreferences.spcMesoFav.split(":")
                 if (items.size > 7) param = items[7]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -203,7 +211,7 @@ object UtilityDownload {
             }
             "SPCMESO6" -> {
                 var param = "laps"
-                val items = MyApplication.spcMesoFav.split(":")
+                val items = UIPreferences.spcMesoFav.split(":")
                 if (items.size > 8) param = items[8]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -263,27 +271,31 @@ object UtilityDownload {
                 val html = textUrl.getHtmlWithNewLine()
                 text = UtilityString.extractPre(html).removeLineBreaks().removeHtml()
             }
-            prod == "SWPC3DAY" -> text = (MyApplication.nwsSwpcWebSitePrefix + "/text/3-day-forecast.txt").getHtmlWithNewLine()
-            prod == "SWPC27DAY" -> text = (MyApplication.nwsSwpcWebSitePrefix + "/text/27-day-outlook.txt").getHtmlWithNewLine()
-            prod == "SWPCWWA" -> text = (MyApplication.nwsSwpcWebSitePrefix + "/text/advisory-outlook.txt").getHtmlWithNewLine()
-            prod == "SWPCHIGH" -> text = (MyApplication.nwsSwpcWebSitePrefix + "/text/weekly.txt").getHtmlWithNewLine().removeLineBreaks()
-            prod == "SWPCDISC" -> text = (MyApplication.nwsSwpcWebSitePrefix + "/text/discussion.txt").getHtmlWithNewLine().removeLineBreaks()
-            prod == "SWPC3DAYGEO" -> text = (MyApplication.nwsSwpcWebSitePrefix + "/text/3-day-geomag-forecast.txt").getHtmlWithNewLine()
-            prod.startsWith("MIATWS") -> text = "${MyApplication.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod".getHtmlWithNewLine()
-            prod.contains("MIATCP") || prod.contains("MIATCM") || prod.contains("MIATCD") || prod.contains("MIAPWS") || prod.contains("MIAHS") -> {
-                val url = "${MyApplication.nwsNhcWebsitePrefix}/text/$prod.shtml"
+            prod == "SWPC3DAY" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/3-day-forecast.txt").getHtmlWithNewLine()
+            prod == "SWPC27DAY" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/27-day-outlook.txt").getHtmlWithNewLine()
+            prod == "SWPCWWA" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/advisory-outlook.txt").getHtmlWithNewLine()
+            prod == "SWPCHIGH" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/weekly.txt").getHtmlWithNewLine().removeLineBreaks()
+            prod == "SWPCDISC" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/discussion.txt").getHtmlWithNewLine().removeLineBreaks()
+            prod == "SWPC3DAYGEO" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/3-day-geomag-forecast.txt").getHtmlWithNewLine()
+            prod.startsWith("MIATWS") -> text = "${GlobalVariables.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod".getHtmlWithNewLine()
+            prod.contains("MIATCP") || prod.contains("MIATCM")
+                    || prod.contains("MIATCD") || prod.contains("MIAPWS")
+                    || prod.contains("MIAHS") || prod.startsWith("MIAWPC")
+                    || prod.startsWith("HFOTCP") || prod.startsWith("HFOTCD")
+                    || prod.startsWith("HFOTCM") || prod.startsWith("HFOPWS") -> {
+                val url = "${GlobalVariables.nwsNhcWebsitePrefix}/text/$prod.shtml"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeHtml()
             }
-            prod.contains("MIAT") || prod == "HFOTWOCP" -> text = "${MyApplication.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod".getHtmlWithNewLine().removeLineBreaks()
+            prod.contains("MIAT") || prod == "HFOTWOCP" -> text = "${GlobalVariables.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod".getHtmlWithNewLine().removeLineBreaks()
             prod.startsWith("SCCNS") -> {
-                val url = "${MyApplication.nwsWPCwebsitePrefix}/discussions/nfd" + prod.lowercase(Locale.US).replace("ns", "") + ".html"
+                val url = "${GlobalVariables.nwsWPCwebsitePrefix}/discussions/nfd" + prod.lowercase(Locale.US).replace("ns", "") + ".html"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeHtml()
             }
             prod.contains("SPCMCD") -> {
                 val no = prod.substring(6)
-                val textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md$no.html"
+                val textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md$no.html"
                 text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
                 text = text.replace("^<br><br>".toRegex(), "")
                 if (UIPreferences.nwsTextRemovelinebreaks) {
@@ -294,7 +306,7 @@ object UtilityDownload {
             }
             prod.contains("SPCWAT") -> {
                 val no = prod.substring(6)
-                val textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$no.html"
+                val textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww$no.html"
                 text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
                 text = text.replace("^<br>".toRegex(), "")
                 if (UIPreferences.nwsTextRemovelinebreaks) {
@@ -304,7 +316,7 @@ object UtilityDownload {
             }
             prod.contains("WPCMPD") -> {
                 val no = prod.substring(6)
-                val textUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
+                val textUrl = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
                 text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
                 text = text.replace("^<br>".toRegex(), "")
                 text = text.replace("^ <br>".toRegex(), "")
@@ -314,10 +326,10 @@ object UtilityDownload {
                 }
             }
             prod.startsWith("GLF") && !prod.contains("%") -> text = getTextProduct(context, "$prod%")
-            prod.contains("FOCN45") -> text = "${MyApplication.nwsRadarPub}/data/raw/fo/focn45.cwwg..txt".getHtmlWithNewLine().removeLineBreaks()
-            prod.startsWith("AWCN") -> text = ("${MyApplication.nwsRadarPub}/data/raw/aw/" + prod.lowercase(Locale.US) + ".cwwg..txt").getHtmlWithNewLine().removeLineBreaks()
+            prod.contains("FOCN45") -> text = "${GlobalVariables.nwsRadarPub}/data/raw/fo/focn45.cwwg..txt".getHtmlWithNewLine().removeLineBreaks()
+            prod.startsWith("AWCN") -> text = ("${GlobalVariables.nwsRadarPub}/data/raw/aw/" + prod.lowercase(Locale.US) + ".cwwg..txt").getHtmlWithNewLine().removeLineBreaks()
             prod.contains("NFD") -> {
-                text = (MyApplication.nwsOpcWebsitePrefix + "/mobile/mobile_product.php?id=" + prod.uppercase(Locale.US)).getHtml()
+                text = (GlobalVariables.nwsOpcWebsitePrefix + "/mobile/mobile_product.php?id=" + prod.uppercase(Locale.US)).getHtml()
                 text = Utility.fromHtml(text)
             }
             // use forecast but site=NWS
@@ -339,17 +351,17 @@ object UtilityDownload {
                 text = UtilityString.extractPreLsr(html)
             }
             prod.contains("FWDDY1") -> {
-                val url = "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/fwdy1.html"
+                val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/fwdy1.html"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
             prod.contains("FWDDY2") -> {
-                val url = "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/fwdy2.html"
+                val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/fwdy2.html"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
             prod.contains("FWDDY38") -> {
-                val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/"
+                val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/fire_wx/"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
@@ -360,49 +372,49 @@ object UtilityDownload {
                 val daysAndRegion = prod.replace("FXCN01_", "").lowercase(Locale.US)
                 text = ("http://collaboration.cmc.ec.gc.ca/cmc/cmop/FXCN/" + dateString + "/fx_" + daysAndRegion + "_" + dateString + "00.html")
                         .getHtml()
-                        .replace(MyApplication.newline + MyApplication.newline, MyApplication.newline)
+                        .replace(GlobalVariables.newline + GlobalVariables.newline, GlobalVariables.newline)
                 text = Utility.fromHtml(text)
             }
             prod.startsWith("VFD") -> {
                 val t2 = prod.substring(3)
-                text = (MyApplication.nwsAWCwebsitePrefix + "/fcstdisc/data?cwa=K$t2").getHtmlSep()
+                text = (GlobalVariables.nwsAWCwebsitePrefix + "/fcstdisc/data?cwa=K$t2").getHtmlSep()
                 text = text.parse("<!-- raw data starts -->(.*?)<!-- raw data ends -->")
-                text = text.replace(Regex("<br>\\s+<br>\\s+"), MyApplication.newline).removeHtml()
+                text = text.replace(Regex("<br>\\s+<br>\\s+"), GlobalVariables.newline).removeHtml()
             }
-            prod.contains("FPCN48") -> text = "${MyApplication.nwsRadarPub}/data/raw/fp/fpcn48.cwao..txt".getHtmlSep()
+            prod.contains("FPCN48") -> text = "${GlobalVariables.nwsRadarPub}/data/raw/fp/fpcn48.cwao..txt".getHtmlSep()
             prod.contains("QPFPFD") -> {
-                val textUrl = MyApplication.nwsWPCwebsitePrefix + "/discussions/hpcdiscussions.php?disc=qpfpfd"
+                val textUrl = GlobalVariables.nwsWPCwebsitePrefix + "/discussions/hpcdiscussions.php?disc=qpfpfd"
                 text = textUrl.getHtmlSep()
                 text = text.parse(RegExp.pre2Pattern)
             }
             prod.contains("PMDTHR") -> {
-                val url = MyApplication.nwsCPCNcepWebsitePrefix + "/products/predictions/threats/threats.php"
+                val url = GlobalVariables.nwsCPCNcepWebsitePrefix + "/products/predictions/threats/threats.php"
                 text = url.getHtmlSep()
                 text = text.parse("<div id=\"discDiv\">(.*?)</div>")
-                text = text.replace("<br><br>", MyApplication.newline).removeHtml()
+                text = text.replace("<br><br>", GlobalVariables.newline).removeHtml()
             }
             prod.contains("USHZD37") -> {
                 val url = "https://www.wpc.ncep.noaa.gov/threats/threats.php"
                 text = url.getHtmlSep()
                 text = text.parse("<div class=.haztext.>(.*?)</div>")
-                text = text.replace("<br><br>", MyApplication.newline)
+                text = text.replace("<br><br>", GlobalVariables.newline)
             }
             prod.contains("PMD30D") -> {
-                val textUrl = MyApplication.tgftpSitePrefix + "/data/raw/fx/fxus07.kwbc.pmd.30d.txt"
+                val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxus07.kwbc.pmd.30d.txt"
                 text = textUrl.getHtmlWithNewLine()
                 text = text.removeLineBreaks()
             }
             prod.contains("PMD90D") -> {
-                val textUrl = MyApplication.tgftpSitePrefix + "/data/raw/fx/fxus05.kwbc.pmd.90d.txt"
+                val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxus05.kwbc.pmd.90d.txt"
                 text = textUrl.getHtmlWithNewLine()
                 text = text.removeLineBreaks()
             }
             prod.contains("PMDHCO") -> {
-                val textUrl = MyApplication.tgftpSitePrefix + "/data/raw/fx/fxhw40.kwbc.pmd.hco.txt"
+                val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxhw40.kwbc.pmd.hco.txt"
                 text = textUrl.getHtmlWithNewLine()
             }
             prod.contains("PMDMRD") -> {
-                val textUrl = MyApplication.tgftpSitePrefix + "/data/raw/fx/fxus06.kwbc.pmd.mrd.txt"
+                val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxus06.kwbc.pmd.mrd.txt"
                 text = textUrl.getHtmlWithNewLine().removeLineBreaks()
             }
             prod.startsWith("RWR") -> {
@@ -428,10 +440,10 @@ object UtilityDownload {
             prod.startsWith("RTP") && prod.length == 5 -> {
                 val product = prod.substring(0, 3)
                 val location = prod.substring(3, 5).replace("%", "")
-                val url = MyApplication.nwsApiUrl + "/products/types/$product/locations/$location"
+                val url = GlobalVariables.nwsApiUrl + "/products/types/$product/locations/$location"
                 val html = url.getNwsHtml()
                 val urlProd = html.parse("\"id\": \"(.*?)\"")
-                val prodHtml = (MyApplication.nwsApiUrl + "/products/$urlProd").getNwsHtml()
+                val prodHtml = (GlobalVariables.nwsApiUrl + "/products/$urlProd").getNwsHtml()
                 text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
                 text = text.replace("\\n\\n", "\n")
                 text = text.replace("\\n", "\n")
@@ -444,7 +456,7 @@ object UtilityDownload {
                 text = UtilityString.extractPreLsr(text)
                 text = text.replace("<br>", "\n")
             }
-            prod.contains("CTOF") -> text = "Celsius to Fahrenheit table" + MyApplication.newline + UtilityMath.celsiusToFahrenheitTable()
+            prod.contains("CTOF") -> text = "Celsius to Fahrenheit table" + GlobalVariables.newline + UtilityMath.celsiusToFahrenheitTable()
             else -> {
                 // Feb 8 2020 Sat
                 // The NWS API for text products has been unstable Since Wed Feb 5
@@ -452,10 +464,10 @@ object UtilityDownload {
                 val t1 = prod.substring(0, 3)
                 val t2 = prod.substring(3).replace("%", "")
                 if (useNwsApi) {
-                    val url = MyApplication.nwsApiUrl + "/products/types/$t1/locations/$t2"
+                    val url = GlobalVariables.nwsApiUrl + "/products/types/$t1/locations/$t2"
                     val html = url.getNwsHtml()
                     val urlProd = html.parse("\"id\": \"(.*?)\"")
-                    val prodHtml = (MyApplication.nwsApiUrl + "/products/$urlProd").getNwsHtml()
+                    val prodHtml = (GlobalVariables.nwsApiUrl + "/products/$urlProd").getNwsHtml()
                     text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
                     if (!prod.startsWith("RTP")) {
                         text = text.replace("\\n\\n", "<BR>")
@@ -527,7 +539,7 @@ object UtilityDownload {
         val url = "https://forecast.weather.gov/product.php?site=NWS&product=$t1&issuedby=$t2&version=$version"
         var text = UtilityString.getHtmlAndParseSep(url, RegExp.prePattern)
         text = text.replace(
-                "Graphics available at <a href=\"${MyApplication.nwsWPCwebsitePrefix}/basicwx/basicwx_wbg.php\"><u>www.wpc.ncep.noaa.gov/basicwx/basicwx_wbg.php</u></a>",
+                "Graphics available at <a href=\"${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/basicwx_wbg.php\"><u>www.wpc.ncep.noaa.gov/basicwx/basicwx_wbg.php</u></a>",
                 ""
         )
         text = text.substring(text.indexOf('>') + 1)

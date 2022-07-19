@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,12 +22,10 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
-
 import joshuatee.wx.util.UtilityLog
 
 internal object UtilityWXOGLPerfL3FourBit {

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,7 +35,8 @@ import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
@@ -87,7 +88,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         activityArguments = intent.getStringArrayExtra(URL)!!
         if (activityArguments[0] == "pmdspd") {
-            product = MyApplication.wpcTextFav
+            product = UIPreferences.wpcTextFav
         } else {
             product = activityArguments[0]
             initialProduct = product
@@ -100,16 +101,16 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        products = UtilityFavorites.setupMenu(this@WpcTextProductsActivity, MyApplication.nwsTextFav, product, prefToken)
+        products = UtilityFavorites.setupMenu(this@WpcTextProductsActivity, UIPreferences.nwsTextFav, product, prefToken)
         invalidateOptionsMenu()
         updateSubmenuNotificationText()
         scrollView.smoothScrollTo(0, 0)
-        if (MyApplication.nwsTextFav.contains(":$product:")) {
-            star.setIcon(MyApplication.STAR_ICON)
+        if (UIPreferences.nwsTextFav.contains(":$product:")) {
+            star.setIcon(GlobalVariables.STAR_ICON)
         } else {
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+            star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
-        ridFavOld = MyApplication.nwsTextFav
+        ridFavOld = UIPreferences.nwsTextFav
         FutureVoid(this, { html = UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product) }, ::showText)
     }
 
@@ -123,7 +124,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initialProduct != product) {
             Utility.writePref(this@WpcTextProductsActivity, "WPC_TEXT_FAV", product)
-            MyApplication.wpcTextFav = product
+            UIPreferences.wpcTextFav = product
         }
     }
 
@@ -148,7 +149,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
-        products = UtilityFavorites.setupMenu(this, MyApplication.nwsTextFav, product, prefToken)
+        products = UtilityFavorites.setupMenu(this, UIPreferences.nwsTextFav, product, prefToken)
         when (item.itemId) {
             R.id.action_product -> {
                 genericDialog(products) {

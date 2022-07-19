@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,13 +35,6 @@ class ObjectColorPaletteLine {
 
     constructor(items: List<String>) {
         dbz = To.int(items[1])
-        red = To.int(items[2])
-        green = To.int(items[3])
-        blue = To.int(items[4])
-    }
-
-    constructor(items: List<String>, fn: (List<String>) -> Int) {
-        dbz = fn(items)
         red = To.int(items[2])
         green = To.int(items[3])
         blue = To.int(items[4])

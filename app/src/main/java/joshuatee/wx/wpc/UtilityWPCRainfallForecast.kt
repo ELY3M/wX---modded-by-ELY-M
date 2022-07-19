@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,8 +21,8 @@
 
 package joshuatee.wx.wpc
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.common.GlobalVariables
 
 internal object UtilityWpcRainfallForecast {
 
@@ -33,9 +33,9 @@ internal object UtilityWpcRainfallForecast {
     )
 
     val urls = listOf(
-        "${MyApplication.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
-        "${MyApplication.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
-        "${MyApplication.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"
+        "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
+        "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
+        "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"
     )
 
     const val activityTitle = R.string.title_activity_hpcrainfall_forecast

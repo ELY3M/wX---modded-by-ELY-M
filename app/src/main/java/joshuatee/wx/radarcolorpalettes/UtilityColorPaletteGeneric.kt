@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,8 +23,6 @@ package joshuatee.wx.radarcolorpalettes
 
 import android.content.Context
 
-import joshuatee.wx.MyApplication
-
 object UtilityColorPaletteGeneric {
 
     private fun generate(context: Context, colorMapProductCode: Int, code: String) {
@@ -35,7 +33,7 @@ object UtilityColorPaletteGeneric {
         val lowerEnd: Int
         var prodOffset = 0.0
         var prodScale = 1.0
-        val objectColorPalette = MyApplication.colorMap[colorMapProductCode]!!
+        val objectColorPalette = ObjectColorPalette.colorMap[colorMapProductCode]!!
         when (colorMapProductCode) {
             94 -> {
                 scale = 2
@@ -94,14 +92,16 @@ object UtilityColorPaletteGeneric {
                 if (items.size > 4) {
                     if (priorLineHas6) {
                         objectColorPaletteLines.add(ObjectColorPaletteLine(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset - 1).toInt(), r, g, b))
-                        objectColorPaletteLines.add(ObjectColorPaletteLine(items){
-                            ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt()
-                        })
+//                        objectColorPaletteLines.add(ObjectColorPaletteLine(items){
+//                            ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt()
+//                        })
+                        objectColorPaletteLines.add(ObjectColorPaletteLine(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt(), items[2], items[3], items[4]))
                         priorLineHas6 = false
                     } else {
-                        objectColorPaletteLines.add(ObjectColorPaletteLine(items){
-                            ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt()
-                        })
+//                        objectColorPaletteLines.add(ObjectColorPaletteLine(items){
+//                            ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt()
+//                        })
+                        objectColorPaletteLines.add(ObjectColorPaletteLine(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt(), items[2], items[3], items[4]))
                     }
                     if (items.size > 7) {
                         priorLineHas6 = true
@@ -169,7 +169,7 @@ object UtilityColorPaletteGeneric {
     fun loadColorMap(context: Context, product: Int) {
         // This is the entrance method to load a colormap called at various spots
         // http://www.usawx.com/grradarexamples.htm
-        var code = MyApplication.radarColorPalette[product] ?: ""
+        var code = ObjectColorPalette.radarColorPalette[product] ?: ""
         if (code == "COD") {
             code =  "CODENH"
         }

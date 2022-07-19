@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,17 +22,15 @@
 package joshuatee.wx.radar
 
 import android.graphics.Color
-
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
 import joshuatee.wx.Jni
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.settings.RadarPreferences
 
 open class ObjectOglBuffers() {
 
@@ -168,7 +166,7 @@ open class ObjectOglBuffers() {
     companion object {
         // TVS
         private fun redrawTriangle(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
-            if (!MyApplication.radarUseJni) {
+            if (!RadarPreferences.radarUseJni) {
                 UtilityWXOGLPerf.genTriangle(buffers, projectionNumbers)
             } else {
                 Jni.genTriangle(
@@ -191,7 +189,7 @@ open class ObjectOglBuffers() {
 
         // HI
         private fun redrawTriangleUp(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
-            if (!MyApplication.radarUseJni) {
+            if (!RadarPreferences.radarUseJni) {
                 UtilityWXOGLPerf.genTriangleUp(buffers, projectionNumbers)
             } else {
                 Jni.genTriangleUp(
@@ -214,7 +212,7 @@ open class ObjectOglBuffers() {
 
         // LOCDOT, SPOTTER
         private fun redrawCircle(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
-            if (!MyApplication.radarUseJni) {
+            if (!RadarPreferences.radarUseJni) {
                 UtilityWXOGLPerf.genCircle(buffers, projectionNumbers)
             } else {
                 Jni.genCircle(
@@ -238,7 +236,7 @@ open class ObjectOglBuffers() {
 
         // WIND BARB CIRCLE
         private fun redrawCircleWithColor(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
-            if (!MyApplication.radarUseJni) {
+            if (!RadarPreferences.radarUseJni) {
                 UtilityWXOGLPerf.genCircleWithColor(buffers, projectionNumbers)
             } else {
                 Jni.genCircleWithColor(

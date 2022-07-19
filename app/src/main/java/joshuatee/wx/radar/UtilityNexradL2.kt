@@ -38,7 +38,6 @@ package joshuatee.wx.radar
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -47,9 +46,8 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Paint.Style
 import androidx.core.content.ContextCompat
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMath
 
@@ -104,14 +102,14 @@ internal object UtilityNexradL2 {
         val colorMapProductCode: Int
         if (productCode == 153) {
             colorMapProductCode = 94
-            cR = MyApplication.colorMap[colorMapProductCode]!!.redValues
-            cG = MyApplication.colorMap[colorMapProductCode]!!.greenValues
-            cB = MyApplication.colorMap[colorMapProductCode]!!.blueValues
+            cR = ObjectColorPalette.colorMap[colorMapProductCode]!!.redValues
+            cG = ObjectColorPalette.colorMap[colorMapProductCode]!!.greenValues
+            cB = ObjectColorPalette.colorMap[colorMapProductCode]!!.blueValues
         } else {
             colorMapProductCode = 99
-            cR = MyApplication.colorMap[colorMapProductCode]!!.redValues
-            cG = MyApplication.colorMap[colorMapProductCode]!!.greenValues
-            cB = MyApplication.colorMap[colorMapProductCode]!!.blueValues
+            cR = ObjectColorPalette.colorMap[colorMapProductCode]!!.redValues
+            cG = ObjectColorPalette.colorMap[colorMapProductCode]!!.greenValues
+            cB = ObjectColorPalette.colorMap[colorMapProductCode]!!.blueValues
         }
         var tmpVal: Int
         while (g < numberOfRadials) {

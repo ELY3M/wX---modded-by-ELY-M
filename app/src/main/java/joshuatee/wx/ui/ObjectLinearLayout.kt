@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -39,19 +39,35 @@ class ObjectLinearLayout(val context: Context) {
 
     constructor(context: Context, orientation: Int, gravity: Int) : this(context, orientation) { this.gravity = gravity }
 
-    fun removeAllViewsInLayout() = linearLayout.removeAllViewsInLayout()
+    fun removeAllViewsInLayout() {
+        linearLayout.removeAllViewsInLayout()
+    }
 
-    fun addView(child: View) = linearLayout.addView(child)
+    fun addView(child: View) {
+        linearLayout.addView(child)
+    }
 
-    fun addView(objectTextView: ObjectTextView) = linearLayout.addView(objectTextView.tv)
+    fun addView(objectTextView: ObjectTextView) {
+        linearLayout.addView(objectTextView.get())
+    }
 
-    fun addView(objectLinearLayout: ObjectLinearLayout) = linearLayout.addView(objectLinearLayout.linearLayout)
+    fun addView(objectLinearLayout: ObjectLinearLayout) {
+        linearLayout.addView(objectLinearLayout.linearLayout)
+    }
 
-    fun addView(objectImageView: ObjectImageView) = linearLayout.addView(objectImageView.imageView)
+    fun addView(objectImageView: ObjectImageView) {
+        linearLayout.addView(objectImageView.imageView)
+    }
 
-    fun addViews(children: List<View>) { children.forEach { view -> linearLayout.addView(view) } }
+    fun addViews(children: List<View>) {
+        children.forEach {
+            linearLayout.addView(it)
+        }
+    }
 
-    fun removeAllViews() = linearLayout.removeAllViews()
+    fun removeAllViews() {
+        linearLayout.removeAllViews()
+    }
 
     fun matchParent() {
         linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)

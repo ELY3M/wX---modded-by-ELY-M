@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,11 +24,10 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.LinearLayout
-
 import joshuatee.wx.R
-import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.WXGLNexrad
+import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
 
@@ -45,9 +44,9 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
             val card = ObjectCardText(
                     this,
                     linearLayout,
-                    WXGLNexrad.productCodeStringToName[product] + ": " + MyApplication.radarColorPalette[product],
-                    MyApplication.textSizeNormal,
-                    MyApplication.paddingSettings
+                    WXGLNexrad.productCodeStringToName[product] + ": " + ObjectColorPalette.radarColorPalette[product],
+                    UIPreferences.textSizeNormal,
+                    UIPreferences.paddingSettings
             )
             card.setOnClickListener {
                 ObjectIntent(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString()))
@@ -59,7 +58,7 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
     override fun onRestart() {
         cardColorPalettes.indices.forEach {
             val product = WXGLNexrad.productCodeStringToName[WXGLNexrad.colorPaletteProducts[it]] ?: "Reflectivity"
-            val label = product + ": " + MyApplication.radarColorPalette[WXGLNexrad.colorPaletteProducts[it]]
+            val label = product + ": " + ObjectColorPalette.radarColorPalette[WXGLNexrad.colorPaletteProducts[it]]
             cardColorPalettes[it].text = label
         }
         super.onRestart()

@@ -16,6 +16,7 @@ import org.xml.sax.SAXException
 import androidx.core.content.ContextCompat
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityAlertDialog
 import java.io.*
 import java.nio.file.Files
@@ -25,7 +26,7 @@ class UtilityBackupRestore {
 
 
         private val TAG = "joshuatee BackupRestore"
-        val backupFilePath = File(MyApplication.BackupFilesPath)
+        val backupFilePath = File(GlobalVariables.BackupFilesPath)
         //BACKUP
         fun backupPrefs(context: Context) {
             val error: String?
@@ -34,13 +35,13 @@ class UtilityBackupRestore {
             //checking for perms before check dir//
             if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Log.i(TAG, "storage perms are good!")
-                val dir = File(MyApplication.BackupFilesPath)
+                val dir = File(GlobalVariables.BackupFilesPath)
                 if (!dir.exists()) {
                     Log.i(TAG, "making backup dir")
                     dir.mkdirs()
                 }
 
-                val paldir = File(MyApplication.BackupPalFilesPath)
+                val paldir = File(GlobalVariables.BackupPalFilesPath)
                 if (!paldir.exists()) {
                     Log.i(TAG, "making backup pal dir")
                     paldir.mkdirs()
@@ -55,7 +56,7 @@ class UtilityBackupRestore {
 
 
 
-            val fileCopiedTo = File(MyApplication.BackupFilesPath + "preferenceBackup.xml")
+            val fileCopiedTo = File(GlobalVariables.BackupFilesPath + "preferenceBackup.xml")
             var fileCopiedFrom = File(context.filesDir.absolutePath + "/../shared_prefs/" + context.packageName + "_preferences.xml")
             Log.d(TAG, "First Trying  " + fileCopiedFrom.absolutePath)
             if (!fileCopiedFrom.exists()) {
@@ -74,9 +75,9 @@ class UtilityBackupRestore {
                 dst.transferFrom(src, 0, src.size())
                 src.close()
                 dst.close()
-                Log.d(TAG, "wXPATH=${MyApplication.BackupFilesPath}")
+                Log.d(TAG, "wXPATH=${GlobalVariables.BackupFilesPath}")
                 Log.d(TAG, "where backup files are written to " + backupFilePath.absolutePath)
-                UtilityAlertDialog.showDialogBox("Backup Done", R.drawable.wx, "Backed up user preferences and files to " + MyApplication.BackupFilesPath, context)
+                UtilityAlertDialog.showDialogBox("Backup Done", R.drawable.wx, "Backed up user preferences and files to " + GlobalVariables.BackupFilesPath, context)
                 return
             } catch (e: FileNotFoundException) {
                 error = e.message
@@ -91,7 +92,7 @@ class UtilityBackupRestore {
 
         //RESTORE
         fun restorePrefs(context: Context): Boolean {
-            val backupFile = File(MyApplication.BackupFilesPath, "preferenceBackup.xml")
+            val backupFile = File(GlobalVariables.BackupFilesPath, "preferenceBackup.xml")
             val error = ""
             try {
                 val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
@@ -165,8 +166,8 @@ class UtilityBackupRestore {
     private fun backupfiles()
     {
 
-        val s = File(MyApplication.FilesPath)
-        val d = File(MyApplication.BackupFilesPath)
+        val s = File(GlobalVariables.FilesPath)
+        val d = File(GlobalVariables.BackupFilesPath)
         s.listFiles().forEach {
             Log.i(TAG, "backing up: "+it.name+" to "+File(d.absolutePath).path+ '/' +it.name)
             if (it.exists()) {
@@ -181,8 +182,8 @@ class UtilityBackupRestore {
     //restore our icons, pal files and stuff
     private fun restorefiles()
     {
-        val s = File(MyApplication.BackupFilesPath)
-        val d = File(MyApplication.FilesPath)
+        val s = File(GlobalVariables.BackupFilesPath)
+        val d = File(GlobalVariables.FilesPath)
         s.listFiles().forEach {
             Log.i(TAG, "backing up: "+it.name+" to "+File(d.absolutePath).path+ '/' +it.name)
             it.copyRecursively(File(File(d.absolutePath).path + '/' + it.name), true)

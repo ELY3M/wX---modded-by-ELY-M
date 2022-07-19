@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,28 +26,31 @@ import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import java.util.Locale
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityImgAnim
+import java.util.regex.Pattern
 
 internal object UtilityModelNcepInputOutput {
+
+    private val pattern1: Pattern = Pattern.compile("([0-9]{2}Z)")
+    private val pattern2: Pattern = Pattern.compile("var current_cycle_white . .([0-9 ]{11} UTC)")
 
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
         val runCompletionDataStr = StringBuilder(100)
-        val url = "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model=" + model.uppercase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area"
+        val url = "${GlobalVariables.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model=" + model.uppercase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area"
         val fullHtml = url.getHtml()
-        val html = fullHtml.parse(RegExp.ncepPattern2).replace("UTC", "Z").replace(" ", "")
+        val html = fullHtml.parse(pattern2).replace("UTC", "Z").replace(" ", "")
         runCompletionDataStr.append(html.replace("Z", " UTC"))
         if (runCompletionDataStr.length > 8) {
             runCompletionDataStr.insert(8, " ")
         }
-        val timeCompleteUrl = "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.lowercase(Locale.US) +
+        val timeCompleteUrl = "${GlobalVariables.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.lowercase(Locale.US) +
                 "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" + spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" +
                 runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
         val timeCompleteHtml = timeCompleteUrl.replace(" ", "%20").getHtml()
         runData.imageCompleteStr = timeCompleteHtml.parseLastMatch("SubmitImageForm.(.*?).\"")
-        runData.mostRecentRun = html.parseLastMatch(RegExp.ncepPattern1)
+        runData.mostRecentRun = html.parseLastMatch(pattern1)
         return runData
     }
 
@@ -58,12 +61,12 @@ internal object UtilityModelNcepInputOutput {
             time
         }
         val imgUrl = when (om.model) {
-            "GFS" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+            "GFS" -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.sector.lowercase(Locale.US) + "/" + om.currentParam + "/" + om.model.lowercase(Locale.US) + "_" +
                     om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
-            "HRRR" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+            "HRRR" -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + modifiedTime + "_" + om.currentParam + ".gif"
-            else -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+            else -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }
         return imgUrl.getImage()

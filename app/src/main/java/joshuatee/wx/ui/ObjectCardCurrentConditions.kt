@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,8 +25,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.Gravity
 import android.widget.LinearLayout
-
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.ObjectCurrentConditions
@@ -43,19 +42,19 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
         val linearLayoutHorizontal = ObjectLinearLayout(context, LinearLayout.HORIZONTAL)
         val linearLayoutVertical = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
         if (version == 2) {
-            textViewTop.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, 0)
-            textViewMiddle.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, 0)
-            textViewBottom.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, MyApplication.paddingSmall)
-            linearLayoutVertical.addViews(listOf(textViewTop.tv, textViewMiddle.tv, textViewBottom.tv))
+            textViewTop.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
+            textViewMiddle.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
+            textViewBottom.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, UIPreferences.paddingSmall)
+            linearLayoutVertical.addViews(listOf(textViewTop.get(), textViewMiddle.get(), textViewBottom.get()))
             linearLayoutHorizontal.addViews(listOf(objectImageView.imageView, linearLayoutVertical.linearLayout))
         } else {
             // legacy code
             textViewTop.gravity = Gravity.CENTER
             textViewBottom.gravity = Gravity.CENTER
             textViewMiddle.gravity = Gravity.CENTER
-            textViewTop.setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
-            textViewBottom.setPadding(MyApplication.padding, 0, MyApplication.padding, 2)
-            textViewMiddle.setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
+            textViewTop.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
+            textViewBottom.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 2)
+            textViewMiddle.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
             linearLayoutHorizontal.orientation = LinearLayout.VERTICAL
             linearLayoutHorizontal.addView(textViewTop)
             linearLayoutHorizontal.addView(textViewBottom)
@@ -63,7 +62,7 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
         objCard.addView(linearLayoutHorizontal)
     }
 
-    val card get() = objCard.card
+    fun get() = objCard.card
 
     fun refreshTextSize() {
         textViewTop.refreshTextSize(TextSize.MEDIUM)
@@ -71,18 +70,24 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
         textViewBottom.refreshTextSize(TextSize.SMALL)
     }
 
-    fun setStatus(text: String) { textViewBottom.text = text }
+    fun setStatus(text: String) {
+        textViewBottom.text = text
+    }
 
-    fun setTopLine(text: String) { textViewTop.text = text }
+    fun setTopLine(text: String) {
+        textViewTop.text = text
+    }
 
-    private fun setMiddleLine(text: String) { textViewMiddle.text = text }
+    private fun setMiddleLine(text: String) {
+        textViewMiddle.text = text
+    }
 
     fun setListener(alertDialogStatus: ObjectDialogue?, alertDialogStatusAl: MutableList<String>, radarTimestamps: () -> List<String>) {
         objectImageView.imageView.setOnClickListener {
             alertDialogStatusAl.clear()
             alertDialogStatusAl.add("Edit Location...")
             alertDialogStatusAl.add("Force Data Refresh...")
-            if (MyApplication.locDisplayImg && Location.isUS) {
+            if (UIPreferences.locDisplayImg && Location.isUS) {
                 alertDialogStatusAl.add("Radar type: Reflectivity")
                 alertDialogStatusAl.add("Radar type: Velocity")
                 alertDialogStatusAl.add("Reset zoom and center")

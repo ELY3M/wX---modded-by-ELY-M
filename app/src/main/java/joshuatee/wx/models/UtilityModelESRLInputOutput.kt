@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,11 +28,17 @@ import java.util.Locale
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
+import java.util.regex.Pattern
 
 internal object UtilityModelEsrlInputOutput {
 
     private const val urlBase = "https://rapidrefresh.noaa.gov"
+    private val pattern1: Pattern = Pattern.compile("<option selected>([0-9]{2} \\w{3} [0-9]{4} - [0-9]{2}Z)<.option>")
+    private val pattern2: Pattern = Pattern.compile("<option>([0-9]{2} \\w{3} [0-9]{4} - [0-9]{2}Z)<.option>")
+    private val pattern3: Pattern = Pattern.compile("[0-9]{2} \\w{3} ([0-9]{4}) - [0-9]{2}Z")
+    private val pattern4: Pattern = Pattern.compile("([0-9]{2}) \\w{3} [0-9]{4} - [0-9]{2}Z")
+    private val pattern5: Pattern = Pattern.compile("[0-9]{2} \\w{3} [0-9]{4} - ([0-9]{2})Z")
+    private val pattern6: Pattern = Pattern.compile("[0-9]{2} (\\w{3}) [0-9]{4} - [0-9]{2}Z")
 
     fun getRunTime(model: String, param: String): RunTimeData {
         val runData = RunTimeData()
@@ -44,12 +50,12 @@ internal object UtilityModelEsrlInputOutput {
             "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.lowercase(Locale.US) + "_jet&domain=full").getHtml()
             else -> ("$urlBase/" + model.lowercase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.lowercase(Locale.US) + "_jet&domain=full").getHtml()
         }
-        var html = htmlRunStatus.parse(RegExp.eslHrrrPattern1)
-        val oldRunTimes = htmlRunStatus.parseColumn(RegExp.eslHrrrPattern2)
-        var year = html.parse(RegExp.eslHrrrPattern3)
-        var day = html.parse(RegExp.eslHrrrPattern4)
-        var hour = html.parse(RegExp.eslHrrrPattern5)
-        var monthStr = html.parse(RegExp.eslHrrrPattern6)
+        var html = htmlRunStatus.parse(pattern1)
+        val oldRunTimes = htmlRunStatus.parseColumn(pattern2)
+        var year = html.parse(pattern3)
+        var day = html.parse(pattern4)
+        var hour = html.parse(pattern5)
+        var monthStr = html.parse(pattern6)
         monthStr = monthStr.replace("Jan", "01")
                 .replace("Feb", "02")
                 .replace("Mar", "03")
@@ -70,10 +76,10 @@ internal object UtilityModelEsrlInputOutput {
         if (html != "") {
             var i = 0
             while (i < 12 && i < oldRunTimes.size) {
-                year = oldRunTimes[i].parse(RegExp.eslHrrrPattern3)
-                day = oldRunTimes[i].parse(RegExp.eslHrrrPattern4)
-                hour = oldRunTimes[i].parse(RegExp.eslHrrrPattern5)
-                monthStr = oldRunTimes[i].parse(RegExp.eslHrrrPattern6)
+                year = oldRunTimes[i].parse(pattern3)
+                day = oldRunTimes[i].parse(pattern4)
+                hour = oldRunTimes[i].parse(pattern5)
+                monthStr = oldRunTimes[i].parse(pattern6)
                 monthStr = monthStr.replace("Jan", "01")
                         .replace("Feb", "02")
                         .replace("Mar", "03")
@@ -136,7 +142,9 @@ internal object UtilityModelEsrlInputOutput {
     }
 
     fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val timeList = om.times
         val bitmaps = (om.spinnerTimeValue until timeList.size).map { getImage(om, timeList[it].split(" ").getOrNull(0) ?: "") }
         return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)

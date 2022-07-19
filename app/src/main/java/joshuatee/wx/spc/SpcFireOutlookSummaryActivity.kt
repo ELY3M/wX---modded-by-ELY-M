@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -69,8 +69,8 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        for (i in UtilitySpcFireOutlook.urls.indices) {
-            FutureVoid(this, { bitmaps[i] = UtilitySpcFireOutlook.urls[i].getImage() }) { updateImage(i) }
+        UtilitySpcFireOutlook.urls.indices.forEach {
+            FutureVoid(this, { bitmaps[it] = UtilitySpcFireOutlook.urls[it].getImage() }) { updateImage(it) }
         }
     }
 

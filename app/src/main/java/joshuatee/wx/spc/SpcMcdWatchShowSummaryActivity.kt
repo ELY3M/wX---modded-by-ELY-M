@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -36,14 +36,14 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 
 class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     //
-    // show a summary of  MCD or a specific MCD, long press on image to save location
+    // show a summary of  MCD or a specific MCD
     //
     // Arguments
     // - MCD/Wat number
@@ -89,18 +89,18 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
         number = intent.getStringArrayExtra(NO)!![0]
         if (number.contains("wat")) {
             number = number.replace("w", "")
-            imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + number + "_radar.gif"
-            textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$number.html"
-            url = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/"
+            imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + number + "_radar.gif"
+            textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww$number.html"
+            url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/"
             patternStr = "[om] Watch #([0-9]*?)</a>"
             nothingPresentStr = "No active watches"
             activityLabel = "Watches"
             product = "SPCWAT$number"
             polygonType = PolygonType.WATCH
         } else {
-            imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd$number.gif"
-            textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md$number.html"
-            url = "${MyApplication.nwsSPCwebsitePrefix}/products/md/"
+            imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$number.gif"
+            textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md$number.html"
+            url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/"
             patternStr = "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
             nothingPresentStr = "No active MCDs"
             activityLabel = "MCDs"
@@ -120,21 +120,21 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
         mcdList.forEach {
             if (number.contains("at")) {
                 val mcdNo2 = String.format("%4s", it).replace(' ', '0')
-                imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNo2 + "_radar.gif"
+                imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNo2 + "_radar.gif"
                 mcdNumbers.add(mcdNo2)
             } else {
-                imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd$it.gif"
+                imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$it.gif"
                 mcdNumbers.add(it)
             }
             bitmaps.add(imgUrl.getImage())
         }
         if (mcdList.size == 1) {
             if (number.contains("at")) {
-                textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/w" + mcdNumbers[0] + ".html"
+                textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/w" + mcdNumbers[0] + ".html"
                 titleString = "Watch " + mcdNumbers[0].replace("w", "")
                 product = "SPCWAT" + mcdNumbers[0].replace("w", "")
             } else {
-                textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md" + mcdNumbers[0] + ".html"
+                textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md" + mcdNumbers[0] + ".html"
                 titleString = "MCD " + mcdNumbers[0]
                 product = "SPCMCD" + mcdNumbers[0]
             }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,8 +22,8 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.util.UtilityIO
 
 internal object UtilityCitiesExtended {
@@ -47,7 +47,7 @@ internal object UtilityCitiesExtended {
             cityLat = Array(lines.size) {0.0}
             cityLon = Array(lines.size) {0.0}
             for (index in lines.indices) {
-                tokens = MyApplication.comma.split(lines[index])
+                tokens = RegExp.comma.split(lines[index])
                 latitude = tokens[2].toDoubleOrNull() ?: 0.0
                 longitude = (tokens[3].replace("-", "")).toDoubleOrNull() ?: 0.0
                 if (tokens.size > 4) {

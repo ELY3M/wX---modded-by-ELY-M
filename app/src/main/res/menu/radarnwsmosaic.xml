@@ -1,5 +1,4 @@
-/*
-
+<!-- 
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -17,31 +16,18 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
- */
+ -->
 
-package joshuatee.wx
-
-import android.content.Context
-import androidx.preference.PreferenceManager
-import joshuatee.wx.util.Utility
-
-class DataStorage(private val preference: String) {
-
-    private var storedVal = ""
-
-    val value: String
-        get() = storedVal
-
-    // update in memory value from what is on disk
-    fun update(context: Context) {
-        storedVal = Utility.readPref(context, preference, "")
-    }
-
-    fun valueSet(context: Context, newValue: String) {
-        storedVal = newValue
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val editor = preferences.edit()
-        editor.putString(preference, newValue)
-        editor.apply()
-    }
-}
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_animate"
+        android:icon="@drawable/ic_play_arrow_24dp"
+        android:title="@string/label_animate"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="@string/label_share"
+        app:showAsAction="ifRoom" />
+</menu>

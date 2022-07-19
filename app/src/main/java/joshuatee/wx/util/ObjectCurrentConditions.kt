@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,11 +22,10 @@
 package joshuatee.wx.util
 
 import android.content.Context
-import joshuatee.wx.MyApplication
 import joshuatee.wx.canada.UtilityCanada
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
-
 import joshuatee.wx.radar.LatLon
 
 class ObjectCurrentConditions {
@@ -75,10 +74,10 @@ class ObjectCurrentConditions {
     private fun process(context: Context, latLon: LatLon, index: Int = 0) {
         val objectMetar = ObjectMetar(context, latLon, index)
         time = objectMetar.conditionsTimeStr
-        val temperature = objectMetar.temperature + MyApplication.DEGREE_SYMBOL
-        val windChill = objectMetar.windChill + MyApplication.DEGREE_SYMBOL
-        val heatIndex = objectMetar.heatIndex + MyApplication.DEGREE_SYMBOL
-        val dewPoint = objectMetar.dewPoint + MyApplication.DEGREE_SYMBOL
+        val temperature = objectMetar.temperature + GlobalVariables.DEGREE_SYMBOL
+        val windChill = objectMetar.windChill + GlobalVariables.DEGREE_SYMBOL
+        val heatIndex = objectMetar.heatIndex + GlobalVariables.DEGREE_SYMBOL
+        val dewPoint = objectMetar.dewPoint + GlobalVariables.DEGREE_SYMBOL
         val relativeHumidity = objectMetar.relativeHumidity + "%"
         val seaLevelPressure = objectMetar.seaLevelPressure
         val windDirection = objectMetar.windDirection

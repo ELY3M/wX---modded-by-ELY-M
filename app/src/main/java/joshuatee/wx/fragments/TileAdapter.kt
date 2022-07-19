@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
 import java.util.Collections
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.util.Utility
@@ -27,11 +25,7 @@ internal class TileAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolders, position: Int) {
-        val bitmap = if (!MyApplication.tileDownsize) {
-            UtilityImg.loadBitmap(context, itemList[position].photo, false)
-        } else {
-            UtilityImg.loadBitmap(context, itemList[position].photo, true)
-        }
+        val bitmap = UtilityImg.loadBitmap(context, itemList[position].photo, false)
         val layoutParams = holder.imageView.layoutParams
         layoutParams.width = MyApplication.dm.widthPixels / tilesPerRow
         layoutParams.height = layoutParams.width * bitmap.height / bitmap.width
@@ -58,7 +52,9 @@ internal class TileAdapter(
             }
         }
         var prefSave = ""
-        itemList.forEach { prefSave = prefSave + it.objectTagStr + ":" }
+        itemList.forEach {
+            prefSave = prefSave + it.objectTagStr + ":"
+        }
         Utility.writePref(context, this.prefVar, prefSave)
         notifyItemMoved(fromPosition, toPosition)
         return true

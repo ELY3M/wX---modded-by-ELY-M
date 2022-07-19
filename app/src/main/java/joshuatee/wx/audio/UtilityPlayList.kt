@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,8 +24,9 @@ package joshuatee.wx.audio
 import java.util.Locale
 import android.content.Context
 import android.view.View
-
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.ObjectPopupMessage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
@@ -37,9 +38,9 @@ object UtilityPlayList {
 
     fun add(context: Context, view: View, product: String, text: String) {
         val productUpperCase = product.uppercase(Locale.US)
-        if (!MyApplication.playlistStr.contains(productUpperCase)) {
-            Utility.writePref(context, "PLAYLIST", MyApplication.playlistStr + ":" + productUpperCase)
-            MyApplication.playlistStr = MyApplication.playlistStr + ":" + productUpperCase
+        if (!UIPreferences.playlistStr.contains(productUpperCase)) {
+            Utility.writePref(context, "PLAYLIST", UIPreferences.playlistStr + ":" + productUpperCase)
+            UIPreferences.playlistStr = UIPreferences.playlistStr + ":" + productUpperCase
             ObjectPopupMessage(view, productUpperCase + " saved to playlist: " + text.length)
         } else {
             ObjectPopupMessage(view, productUpperCase + " already in playlist: " + text.length)
@@ -52,7 +53,7 @@ object UtilityPlayList {
     fun checkAndSave(context: Context, product: String, text: String) {
         val productUpperCase = product.uppercase(Locale.US)
         val formattedDate = UtilityTime.getDateAsString(FORMAT_TIME_STR)
-        if (MyApplication.playlistStr.contains(productUpperCase)) {
+        if (UIPreferences.playlistStr.contains(productUpperCase)) {
             Utility.writePref(context, "PLAYLIST_$productUpperCase", text)
             Utility.writePref(context, "PLAYLIST_" + productUpperCase + "_TIME", formattedDate)
         }
@@ -60,7 +61,7 @@ object UtilityPlayList {
 
     internal fun downloadAll(context: Context): String {
         var string = ""
-        val items = MyApplication.colon.split(MyApplication.playlistStr)
+        val items = RegExp.colon.split(UIPreferences.playlistStr)
         val formattedDate = UtilityTime.getDateAsString(FORMAT_TIME_STR)
         (1 until items.size).forEach {
             var text = UtilityDownload.getTextProduct(context, items[it])
@@ -75,7 +76,7 @@ object UtilityPlayList {
             string += items[it] + " " + text.length.toString() + " "
         }
         val date = UtilityTime.getDateAsString("MM-dd-yy HH:mm:SS Z")
-        Utility.writePref(context, "PLAYLIST_STATUS", date + MyApplication.newline + string)
+        Utility.writePref(context, "PLAYLIST_STATUS", date + GlobalVariables.newline + string)
         return string
     }
 }

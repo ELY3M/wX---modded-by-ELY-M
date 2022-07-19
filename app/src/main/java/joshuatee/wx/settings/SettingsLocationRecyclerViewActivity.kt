@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -77,7 +77,9 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     private fun updateList() {
         locations = MutableList(Location.numLocations) { "" }
-        MyApplication.locations.forEach { it.updateObservation("") }
+        MyApplication.locations.forEach {
+            it.updateObservation("")
+        }
     }
 
     private fun updateListWithCurrentConditions() {
@@ -107,7 +109,9 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 
-    private fun edit(position: Int) { ObjectIntent.showLocationEdit(this, arrayOf((position + 1).toString(), "")) }
+    private fun edit(position: Int) {
+        ObjectIntent.showLocationEdit(this, arrayOf((position + 1).toString(), ""))
+    }
 
     private fun delete(position: Int) {
         if (settingsLocationAdapterList.itemCount > 1) {
@@ -152,5 +156,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         settingsLocationAdapterList.notifyDataSetChanged()
     }
 
-    private fun addLocation() { ObjectIntent.showLocationEdit(this, arrayOf((locations.size + 1).toString(), "")) }
+    private fun addLocation() {
+        ObjectIntent.showLocationEdit(this, arrayOf((locations.size + 1).toString(), ""))
+    }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,10 +25,15 @@ import android.content.Context
 import android.graphics.Color
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
 import joshuatee.wx.util.UtilityLog
 
 class ObjectColorPalette(val context: Context, private val colormapCode: Int) {
+
+    companion object {
+        val colorMap = mutableMapOf<Int, ObjectColorPalette>()
+        val radarColorPalette = mutableMapOf<Int, String>()
+        val radarColorPaletteList = mutableMapOf<Int, String>()
+    }
 
     var redValues: ByteBuffer = ByteBuffer.allocateDirect(16)
         private set

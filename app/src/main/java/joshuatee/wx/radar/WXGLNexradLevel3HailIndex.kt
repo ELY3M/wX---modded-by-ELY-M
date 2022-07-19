@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,25 +23,25 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-
-import joshuatee.wx.util.UCARRandomAccessFile
-import joshuatee.wx.external.ExternalEllipsoid
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
-import java.io.File
+import java.util.regex.Pattern
 
-object WXGLNexradLevel3HailIndex {
+internal object WXGLNexradLevel3HailIndex {
 
     private const val hiBaseFn = "nids_hi_tab"
     private const val markerSize = 0.015
     var hailList = mutableListOf<Hail>()
 
+    private val pattern1: Pattern = Pattern.compile("AZ/RAN(.*?)V")
+    private val pattern2: Pattern = Pattern.compile("POSH/POH(.*?)V")
+    private val pattern3: Pattern = Pattern.compile("MAX HAIL SIZE(.*?)V")
+    private val pattern4: Pattern = Pattern.compile("[0-9]*\\.?[0-9]+")
+    private val pattern5: Pattern = Pattern.compile("\\d+")
 
 
 /*
@@ -86,26 +86,32 @@ object WXGLNexradLevel3HailIndex {
         val hailSize: List<String>
         try {
             val data = UtilityLevel3TextProduct.readFile(context, fileName)
-            posn = data.parseColumn(RegExp.hiPattern1)
-            hailPercent = data.parseColumn(RegExp.hiPattern2)
-            hailSize = data.parseColumn(RegExp.hiPattern3)
+            posn = data.parseColumn(pattern1)
+            hailPercent = data.parseColumn(pattern2)
+            hailSize = data.parseColumn(pattern3)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
             return listOf()
         }
         var posnStr = ""
-        posn.forEach { posnStr += it.replace("/", " ") }
+        posn.forEach {
+            posnStr += it.replace("/", " ")
+        }
         var hailPercentStr = ""
-        hailPercent.forEach { hailPercentStr += it.replace("/", " ") }
+        hailPercent.forEach {
+            hailPercentStr += it.replace("/", " ")
+        }
         hailPercentStr = hailPercentStr.replace("UNKNOWN", " 0 0 ")
         var hailSizeStr = ""
-        hailSize.forEach { hailSizeStr += it.replace("/", " ") }
+        hailSize.forEach {
+            hailSizeStr += it.replace("/", " ")
+        }
         hailSizeStr = hailSizeStr.replace("UNKNOWN", " 0.00 ")
         hailSizeStr = hailSizeStr.replace("<0.25", " 0.24 ")
         hailSizeStr = hailSizeStr.replace("<0.50", " 0.49 ")
-        val posnNumbers = posnStr.parseColumnAll(RegExp.stiPattern3)
-        val hailPercentNumbers = hailPercentStr.parseColumnAll(RegExp.stiPattern3)
-        val hailSizeNumbers = hailSizeStr.parseColumnAll(RegExp.hiPattern4)
+        val posnNumbers = posnStr.parseColumnAll(pattern5)
+        val hailPercentNumbers = hailPercentStr.parseColumnAll(pattern5)
+        val hailSizeNumbers = hailSizeStr.parseColumnAll(pattern4)
         if (posnNumbers.size == hailPercentNumbers.size && posnNumbers.size > 1 && hailSizeNumbers.isNotEmpty()) {
             var k = 0 // k is used to track hail size which is /2 of other 2 arrays
             for (s in posnNumbers.indices step 2) {

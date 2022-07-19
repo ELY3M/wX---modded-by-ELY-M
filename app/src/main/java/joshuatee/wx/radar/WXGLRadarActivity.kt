@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,7 +24,6 @@ package joshuatee.wx.radar
 
 import android.annotation.SuppressLint
 import java.io.File
-
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -45,15 +44,17 @@ import android.view.*
 import joshuatee.wx.R
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.telecine.TelecineService
-import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.SettingsRadarActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.UIPreferences
-import joshuatee.wx.GlobalArrays
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
 import kotlinx.coroutines.*
@@ -207,7 +208,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
 	    
     	//elys mod
-        if (MyApplication.checkinternet) {
+        if (UIPreferences.checkinternet) {
             Utility.checkInternet(this@WXGLRadarActivity)
         }
         setupAlertDialogRadarLongPress()
@@ -286,18 +287,18 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             wxglSurfaceViews[it].wxglTextObjects = wxglTextObjects
             wxglTextObjects[it].initializeLabels(this)
         }
-        if (MyApplication.wxoglRememberLocation && !archiveMode && !fixedSite) {
-            wxglSurfaceView.scaleFactor = MyApplication.wxoglZoom
-            if (MyApplication.wxoglRid != "") {
-                wxglRender.rid = MyApplication.wxoglRid
+        if (RadarPreferences.wxoglRememberLocation && !archiveMode && !fixedSite) {
+            wxglSurfaceView.scaleFactor = RadarPreferences.wxoglZoom
+            if (RadarPreferences.wxoglRid != "") {
+                wxglRender.rid = RadarPreferences.wxoglRid
             }
-            wxglRender.product = MyApplication.wxoglProd
-            wxglRender.setViewInitial(MyApplication.wxoglZoom, MyApplication.wxoglX, MyApplication.wxoglY)
+            wxglRender.product = RadarPreferences.wxoglProd
+            wxglRender.setViewInitial(RadarPreferences.wxoglZoom, RadarPreferences.wxoglX, RadarPreferences.wxoglY)
         } else {
-            wxglSurfaceView.scaleFactor = MyApplication.wxoglSize / 10.0f
-            wxglRender.setViewInitial(MyApplication.wxoglSize / 10.0f, 0.0f, 0.0f)
+            wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize / 10.0f
+            wxglRender.setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
         }
-        if (MyApplication.radarShowLegend) {
+        if (RadarPreferences.radarShowLegend) {
             showLegend()
         }
         title = wxglRender.product
@@ -318,10 +319,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private fun isTdwr() = wxglRender.product in WXGLNexrad.tdwrProductList
 
     private fun setStarButton() {
-        if (MyApplication.ridFav.contains(":" + wxglRender.rid + ":")) {
-            starButton.setIcon(MyApplication.STAR_ICON_WHITE)
+        if (UIPreferences.ridFav.contains(":" + wxglRender.rid + ":")) {
+            starButton.setIcon(GlobalVariables.STAR_ICON_WHITE)
         } else {
-            starButton.setIcon(MyApplication.STAR_OUTLINE_ICON_WHITE)
+            starButton.setIcon(GlobalVariables.STAR_OUTLINE_ICON_WHITE)
         }
         starButton.title = starButtonString
     }
@@ -331,7 +332,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         inOglAnim = false
         inOglAnimPaused = false
         setStarButton()
-        animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+        animateButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
         animateButton.title = animateButtonPlayString
         restarted = true
         restartedZoom = true
@@ -347,7 +348,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun checkForAutoRefresh() {
-        if (MyApplication.wxoglRadarAutoRefresh || MyApplication.locationDotFollowsGps) {
+        if (RadarPreferences.wxoglRadarAutoRefresh || RadarPreferences.locationDotFollowsGps) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -358,7 +359,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     locationManager?.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             //20000.toLong(),
-                            (MyApplication.radarLocationUpdateInterval * 1000).toLong(),
+                            (RadarPreferences.radarLocationUpdateInterval * 1000).toLong(),
                             WXGLNexrad.radarLocationUpdateDistanceInMeters,
                             locationListener
                     )
@@ -369,13 +370,13 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             startRepeatingTask()
         }
 	//elys mod
-        if (MyApplication.sn_locationreport) {
+        if (RadarPreferences.sn_locationreport) {
             UtilityLog.d("wx", "starting location report")
             sn_Handler_m = Handler(Looper.getMainLooper())
             start_sn_reporting()
         }
 
-        if (MyApplication.radarConusRadar) {
+        if (RadarPreferences.radarConusRadar) {
             conus_Handler_m = Handler(Looper.getMainLooper())
             start_conusimage()
         }
@@ -383,7 +384,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        radarSitesForFavorites = UtilityFavorites.setupMenu(this@WXGLRadarActivity, MyApplication.ridFav, wxglRender.rid, prefToken)
+        radarSitesForFavorites = UtilityFavorites.setupMenu(this@WXGLRadarActivity, UIPreferences.ridFav, wxglRender.rid, prefToken)
         invalidateOptionsMenu()
         if (!isGetContentInProgress) {
             isGetContentInProgress = true
@@ -490,10 +491,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 UtilityRadarUI.plotWarningPolygons(wxglSurfaceView, wxglRender, archiveMode)
             }
             // FIXME move to method
-            val tstCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTst.value)
-            val torCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTor.value)
-            val ffwCount = UtilityVtec.getStormCount(MyApplication.severeDashboardFfw.value)
-            if (MyApplication.radarWarnings) {
+            val tstCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
+            val torCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
+            val ffwCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
+            if (RadarPreferences.radarWarnings) {
                 title = wxglRender.product + " (" + tstCount.toString() + "," + torCount.toString() + "," + ffwCount.toString() + ")"
             }
             if (PolygonType.MCD.pref && !archiveMode) {
@@ -511,7 +512,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     UtilityRadarUI.plotMpdPolygons(wxglSurfaceView, wxglRender, archiveMode)
                 }
             }
-            if (MyApplication.radarShowWpcFronts && !archiveMode) {
+            if (RadarPreferences.radarShowWpcFronts && !archiveMode) {
                 withContext(Dispatchers.IO) { UtilityWpcFronts.get(this@WXGLRadarActivity) }
                 if (!wxglRender.product.startsWith("2")) {
                     UtilityRadarUI.plotWpcFronts(wxglSurfaceView, wxglRender, archiveMode)
@@ -636,7 +637,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 SystemClock.sleep(2000)
             }
             setStarButton()
-            animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+            animateButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
             animateButton.title = animateButtonPlayString
             getContent()
             if (item.itemId == R.id.action_a) {
@@ -647,11 +648,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_help -> ObjectDialogue( this,
                     resources.getString(R.string.help_radar)
-                            + MyApplication.newline + MyApplication.newline
+                            + GlobalVariables.newline + GlobalVariables.newline
                             + resources.getString(R.string.help_radar_drawingtools)
-                            + MyApplication.newline + MyApplication.newline
+                            + GlobalVariables.newline + GlobalVariables.newline
                             + resources.getString(R.string.help_radar_recording)
-                            + MyApplication.newline + MyApplication.newline
+                            + GlobalVariables.newline + GlobalVariables.newline
             )
             R.id.action_jellybean_drawtools -> {
                 val intent = TelecineService.newIntent(this, 1, Intent())
@@ -664,16 +665,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     showDistanceTool = "true"
                     checkOverlayPerms()
                 } else {
-                    if (animRan) {
-                        val animDrawable = UtilityUSImgWX.animationFromFiles(this, wxglRender.rid, wxglRender.product, frameCountGlobal, "", true)
-                        UtilityShare.animGif(
-                                this,
-                                wxglRender.rid + " (" + Utility.getRadarSiteName(wxglRender.rid) + ") " + wxglRender.product,
-                                animDrawable
-                        )
-                    } else {
+//                    if (animRan) {
+//                        val animDrawable = UtilityUSImgWX.animationFromFiles(this, wxglRender.rid, wxglRender.product, frameCountGlobal, "", true)
+//                        UtilityShare.animGif(
+//                                this,
+//                                wxglRender.rid + " (" + Utility.getRadarSiteName(wxglRender.rid) + ") " + wxglRender.product,
+//                                animDrawable
+//                        )
+//                    } else {
                         getImageForShare()
-                    }
+//                    }
                 }
             }
             R.id.action_settings -> startActivity(Intent(this, SettingsRadarActivity::class.java))
@@ -718,7 +719,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_a12 -> animateRadar(12)
             R.id.action_a18 -> animateRadar(18)
             R.id.action_a6_sm -> animateRadar(6)
-            R.id.action_a -> animateRadar(MyApplication.uiAnimIconFrames.toIntOrNull() ?: 0)
+            R.id.action_a -> animateRadar(RadarPreferences.uiAnimIconFrames.toIntOrNull() ?: 0)
             R.id.action_a36 -> animateRadar(36)
             R.id.action_a72 -> animateRadar(72)
             R.id.action_a144 -> animateRadar(144)
@@ -749,9 +750,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun animateRadar(frameCount: Int) {
-        animateButton.setIcon(MyApplication.ICON_STOP_WHITE)
+        animateButton.setIcon(GlobalVariables.ICON_STOP_WHITE)
         animateButton.title = animateButtonStopString
-        starButton.setIcon(MyApplication.ICON_PAUSE_WHITE)
+        starButton.setIcon(GlobalVariables.ICON_PAUSE_WHITE)
         starButton.title = pauseButtonString
         getAnimate(frameCount)
     }
@@ -782,8 +783,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         objectImageMap.hideMap()
         wxglRender.rid = radarSite
         mapShown = false
-        wxglSurfaceView.scaleFactor = MyApplication.wxoglSize / 10.0f
-        wxglRender.setViewInitial(MyApplication.wxoglSize / 10.0f, 0.0f, 0.0f)
+        wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize / 10.0f
+        wxglRender.setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
         adjustTiltMenu()
         getContent()
     }
@@ -923,7 +924,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            if (MyApplication.locationDotFollowsGps && !archiveMode) {
+            if (RadarPreferences.locationDotFollowsGps && !archiveMode) {
                 makeUseOfNewLocation(location)
             }
         }
@@ -947,7 +948,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         getGPSFromDouble()
         wxglRender.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
         wxglSurfaceView.requestRender()
-        if (MyApplication.wxoglCenterOnLocation) {
+        if (RadarPreferences.wxoglCenterOnLocation) {
             UtilityWXGLTextObject.hideLabels(1, wxglTextObjects)
             UtilityWXGLTextObject.showLabels(1, wxglTextObjects)
         }
@@ -1021,12 +1022,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)
             legend = ViewColorLegend(this, wxglRender.product)
             rl.addView(legend, layoutParams)
-            MyApplication.radarShowLegend = true
+            RadarPreferences.radarShowLegend = true
             Utility.writePref(this, "RADAR_SHOW_LEGEND", "true")
         } else {
             rl.removeView(legend)
             legendShown = false
-            MyApplication.radarShowLegend = false
+            RadarPreferences.radarShowLegend = false
             Utility.writePref(this, "RADAR_SHOW_LEGEND", "false")
         }
     }
@@ -1042,12 +1043,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private fun stopAnimation() {
         inOglAnim = false
         inOglAnimPaused = false
-        animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+        animateButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
         animateButton.title = animateButtonPlayString
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        radarSitesForFavorites = UtilityFavorites.setupMenu(this, MyApplication.ridFav, wxglRender.rid, prefToken)
+        radarSitesForFavorites = UtilityFavorites.setupMenu(this, UIPreferences.ridFav, wxglRender.rid, prefToken)
         when (item.itemId) {
             R.id.action_sector -> {
                 genericDialog(radarSitesForFavorites) {
@@ -1113,7 +1114,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getReflectivity() {
-        if (MyApplication.radarIconsLevel2 && wxglRender.product.matches("N[0-3]Q".toRegex())) {
+        if (RadarPreferences.radarIconsLevel2 && wxglRender.product.matches("N[0-3]Q".toRegex())) {
             wxglRender.product = "L2REF"
             tiltOption = false
         } else {
@@ -1129,7 +1130,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getVelocity() {
-        if (MyApplication.radarIconsLevel2 && wxglRender.product.matches("N[0-3]U".toRegex())) {
+        if (RadarPreferences.radarIconsLevel2 && wxglRender.product.matches("N[0-3]U".toRegex())) {
             wxglRender.product = "L2VEL"
             tiltOption = false
         } else {
@@ -1147,11 +1148,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private fun actionToggleFavorite() {
         if (inOglAnim) {
             inOglAnimPaused = if (!inOglAnimPaused) {
-                starButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+                starButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
                 starButton.title = resumeButtonString
                 true
             } else {
-                starButton.setIcon(MyApplication.ICON_PAUSE_WHITE)
+                starButton.setIcon(GlobalVariables.ICON_PAUSE_WHITE)
                 starButton.title = pauseButtonString
                 false
             }
@@ -1212,11 +1213,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                         // (revert) 2016_08 have this apply to Level 3 in addition to Level 2
                         if (wxglRender.product.contains("L2")) SystemClock.sleep(2000)
                         setStarButton()
-                        animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+                        animateButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
                         animateButton.title = animateButtonPlayString
                         getContent()
                     } else {
-                        animateRadar(MyApplication.uiAnimIconFrames.toIntOrNull() ?: 0)
+                        animateRadar(RadarPreferences.uiAnimIconFrames.toIntOrNull() ?: 0)
                     }
                 }
                 return true
@@ -1283,15 +1284,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (radarShown) {
             UtilityLog.d("radarshow", "showRadar() setting to false")
             radarShown = false
-            MyApplication.radarShowRadar = false
+            RadarPreferences.radarShowRadar = false
             Utility.writePref(this, "RADAR_SHOW_RADAR", "false")
-            UtilityLog.d("radarshow", "showRadar() MyApplication.radarShowRadar: "+MyApplication.radarShowRadar)
+            UtilityLog.d("radarshow", "showRadar() MyApplication.radarShowRadar: "+RadarPreferences.radarShowRadar)
         } else {
             UtilityLog.d("radarshow", "showRadar() setting to true")
             radarShown = true
-            MyApplication.radarShowRadar = true
+            RadarPreferences.radarShowRadar = true
             Utility.writePref(this, "RADAR_SHOW_RADAR", "true")
-            UtilityLog.d("radarshow", "showRadar() MyApplication.radarShowRadar: "+MyApplication.radarShowRadar)
+            UtilityLog.d("radarshow", "showRadar() MyApplication.radarShowRadar: "+RadarPreferences.radarShowRadar)
         }
     }
 

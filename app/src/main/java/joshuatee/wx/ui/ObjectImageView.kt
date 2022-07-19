@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,8 +25,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.widget.ImageView
 import joshuatee.wx.Extensions.setPadding
-import joshuatee.wx.MyApplication
 import joshuatee.wx.fragments.UtilityLocationFragment
+import joshuatee.wx.settings.UIPreferences
 
 class ObjectImageView(context: Context) {
 
@@ -34,7 +34,7 @@ class ObjectImageView(context: Context) {
 
     fun setImage(bitmap: Bitmap) {
         imageView.setImageBitmap(bitmap)
-        imageView.setPadding(MyApplication.paddingSmall)
+        imageView.setPadding(UIPreferences.paddingSmall)
         val layoutParams = imageView.layoutParams
         val imageSize = UtilityLocationFragment.setNwsIconSize()
         layoutParams.width = imageSize

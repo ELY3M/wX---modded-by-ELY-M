@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,7 +23,6 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Bitmap
-
 import joshuatee.wx.util.UtilityImg
 
 class ObjectCardHSImage(context: Context, val product: String) : ObjectCardImage(context) {
@@ -34,5 +33,7 @@ class ObjectCardHSImage(context: Context, val product: String) : ObjectCardImage
         card.addView(img)
     }
 
-    fun setImage(bitmap: Bitmap) = UtilityImg.resizeViewSetImgInCard(bitmap, img)
+    fun setImage(bitmap: Bitmap) {
+        UtilityImg.resizeViewSetImgInCard(bitmap, img)
+    }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,6 +28,8 @@ object To {
     fun float(s: String) = s.toFloatOrNull() ?: 0.0f
 
     fun double(s: String) = s.toDoubleOrNull() ?: 0.0
+
+    fun string(i: Int) = i.toString()
 
     fun stringPadLeft(s: String, padAmount: Int) = String.format("%-" + padAmount.toString() + "s", s)
 

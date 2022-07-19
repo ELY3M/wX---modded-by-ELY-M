@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,24 +27,25 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
-
 import android.content.Context
-import android.graphics.*
+import android.graphics.Color
 import android.opengl.GLSurfaceView.Renderer
-import android.opengl.*
+import android.opengl.GLES20
 import android.opengl.Matrix
 import joshuatee.wx.Extensions.isEven
 import android.util.Log
 import joshuatee.wx.Jni
-import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.*
 import android.graphics.Bitmap
+import android.graphics.RectF
+import joshuatee.wx.common.GlobalVariables
 import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 
@@ -100,7 +101,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     private var gpsX = 0.toDouble()
     private var gpsY = 0.toDouble()
     private val zoomToHideMiscFeatures = 0.5f
-    private val radarBuffers = ObjectOglRadarBuffers(context, MyApplication.nexradRadarBackgroundColor)
+    private val radarBuffers = ObjectOglRadarBuffers(context, RadarPreferences.nexradRadarBackgroundColor)
     private val spotterBuffers = ObjectOglBuffers(PolygonType.SPOTTER, zoomToHideMiscFeatures)
     private val stateLineBuffers = ObjectOglBuffers(GeographyType.STATE_LINES, 0.0f)
     private val countyLineBuffers = ObjectOglBuffers(GeographyType.COUNTY_LINES, 0.75f) // was .75
@@ -163,7 +164,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                     it.draw(projectionNumbers)
                 }
             }
-            if (locationDotBuffers.isInitialized && MyApplication.locationDotFollowsGps) {
+            if (locationDotBuffers.isInitialized && RadarPreferences.locationDotFollowsGps) {
                 locIconBuffers.lenInit = 0f //was locationDotBuffers.lenInit
                 UtilityWXOGLPerf.genLocdot(locIconBuffers, projectionNumbers, gpsX, gpsY)
             }
@@ -206,10 +207,10 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         set(value) { prod = value }
 
     init {
-        bgColorFRed = Color.red(MyApplication.nexradRadarBackgroundColor) / 255.0f
-        bgColorFGreen = Color.green(MyApplication.nexradRadarBackgroundColor) / 255.0f
-        bgColorFBlue = Color.blue(MyApplication.nexradRadarBackgroundColor) / 255.0f
-        defaultLineWidth = MyApplication.radarDefaultLinesize.toFloat()
+        bgColorFRed = Color.red(RadarPreferences.nexradRadarBackgroundColor) / 255.0f
+        bgColorFGreen = Color.green(RadarPreferences.nexradRadarBackgroundColor) / 255.0f
+        bgColorFBlue = Color.blue(RadarPreferences.nexradRadarBackgroundColor) / 255.0f
+        defaultLineWidth = RadarPreferences.radarDefaultLinesize.toFloat()
         try {
             triangleIndexBuffer = ByteBuffer.allocateDirect(12 * breakSize15)
             lineIndexBuffer = ByteBuffer.allocateDirect(4 * breakSizeLine)
@@ -222,14 +223,14 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         triangleIndexBuffer.position(0)
         lineIndexBuffer.order(ByteOrder.nativeOrder())
         lineIndexBuffer.position(0)
-        if (!MyApplication.radarUseJni) {
+        if (!RadarPreferences.radarUseJni) {
             UtilityWXOGLPerf.generateIndex(triangleIndexBuffer, breakSize15, breakSize15)
             UtilityWXOGLPerf.generateIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
         } else {
             Jni.genIndex(triangleIndexBuffer, breakSize15, breakSize15)
             Jni.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
         }
-        MyApplication.radarWarningPolygons.forEach { genericWarningBuffers.add(ObjectOglBuffers(it)) }
+        RadarPreferences.radarWarningPolygons.forEach { genericWarningBuffers.add(ObjectOglBuffers(it)) }
         if (UtilityUI.isTablet()) {
             zoomScreenScaleFactor = 2.0
         }
@@ -302,10 +303,10 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         radarBuffers.initialize()
         radarBuffers.setToPositionZero()
         val objectColorPalette =
-                if (MyApplication.colorMap.containsKey(radarBuffers.productCode.toInt())) {
-                    MyApplication.colorMap[radarBuffers.productCode.toInt()]!!
+                if (ObjectColorPalette.colorMap.containsKey(radarBuffers.productCode.toInt())) {
+                    ObjectColorPalette.colorMap[radarBuffers.productCode.toInt()]!!
                 } else {
-                    MyApplication.colorMap[94]!!
+                    ObjectColorPalette.colorMap[94]!!
                 }
         try {
             val fourBitProducts = listOf<Short>(56, 30, 181, 78, 80, 37, 38, 41, 57)
@@ -313,7 +314,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 totalBins = UtilityWXOGLPerfRaster.generate(radarBuffers, wxglNexradLevel3.binWord)
             } else if (!product.contains("L2")) {
                 totalBins = if (!fourBitProducts.contains(radarBuffers.productCode)) {
-                    if (!MyApplication.radarUseJni || radarBuffers.productCode.toInt() == 2153 || radarBuffers.productCode.toInt() == 2154)
+                    if (!RadarPreferences.radarUseJni || radarBuffers.productCode.toInt() == 2153 || radarBuffers.productCode.toInt() == 2154)
                         UtilityWXOGLPerf.decode8BitAndGenRadials(context, radarBuffers)
                     else {
                         Jni.decode8BitAndGenRadials(
@@ -339,7 +340,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 }
             } else {
                 wxglNexradLevel2.binWord.position(0)
-                totalBins = if (MyApplication.radarUseJni)
+                totalBins = if (RadarPreferences.radarUseJni)
                     Jni.level2GenRadials(
                             radarBuffers.floatBuffer,
                             radarBuffers.colorBuffer,
@@ -409,7 +410,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         GLES20.glEnableVertexAttribArray(colorHandle)
         matrixProjectionAndView = matrixProjectionAndViewOrig
         Matrix.multiplyMM(matrixProjectionAndView, 0, matrixProjection, 0, matrixView, 0)
-        if (!MyApplication.wxoglCenterOnLocation) {
+        if (!RadarPreferences.wxoglCenterOnLocation) {
             Matrix.translateM(matrixProjectionAndView, 0, x, y, 0.0f)
         } else {
             Matrix.translateM(matrixProjectionAndView, 0, gpsLatLonTransformed[0] * zoom, gpsLatLonTransformed[1] * zoom, 0.0f)
@@ -418,8 +419,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_SolidColor, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
 	
         //show/hide radar
-        UtilityLog.d("radarshow", "showradar: " + MyApplication.radarShowRadar)
-        if (MyApplication.radarShowRadar) {
+        UtilityLog.d("radarshow", "showradar: " + RadarPreferences.radarShowRadar)
+        if (RadarPreferences.radarShowRadar) {
         (0 until chunkCount).forEach {
             radarChunkCnt = if (it < chunkCount - 1) {
                 breakSizeRadar * 6
@@ -449,7 +450,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             //FIXME use real plotting....
          /*
             Log.i(TAG, "zoom: " + zoom)
-            if (MyApplication.radarConusRadar) {
+            if (RadarPreferences.radarConusRadar) {
                 if (zoom < 0.093f) {
                     Log.i(TAG, "zoom out to conusradar")
                     drawConusRadar(conusRadarBuffers)
@@ -490,26 +491,26 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         //drawLocation(locationDotBuffers)
 
 
-            if (MyApplication.radarUserPoints) {
+            if (RadarPreferences.radarUserPoints) {
                 if (zoom > userPointsBuffers.scaleCutOff) {
                     drawUserPoints(userPointsBuffers)
                 }
             }
 
 
-            if (MyApplication.locationDotFollowsGps) {
+            if (RadarPreferences.locationDotFollowsGps) {
                 locIconBuffers.chunkCount = 1
                 drawLocation(locIconBuffers)
             } else {
 	        //drawTriangles(wbCircleBuffers)
             //GLES20.glLineWidth(defaultLineWidth)
             // FIXME use new configurable
-            GLES20.glLineWidth(MyApplication.radarGpsCircleLineSize.toFloat())
+            GLES20.glLineWidth(RadarPreferences.radarGpsCircleLineSize.toFloat())
             drawTriangles(locationDotBuffers)
             }
 
 
-        if (MyApplication.locdotBug)  {
+        if (RadarPreferences.locdotBug)  {
             Log.i(TAG, "bearing: " + WXGLRadarActivity.bearingCurrent)
             Log.i(TAG, "speed: " + WXGLRadarActivity.speedCurrent)
             if (WXGLRadarActivity.speedCurrent >= 0.43) {
@@ -526,7 +527,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         GLES20.glLineWidth(PolygonType.SWO.size)
         listOf(swoBuffers).forEach { drawPolygons(it, 8) }
         if (zoom < (0.50 / zoomScreenScaleFactor)) {
-            GLES20.glLineWidth(MyApplication.radarWatchMcdLineSize)
+            GLES20.glLineWidth(RadarPreferences.radarWatchMcdLineSize)
             wpcFrontBuffersList.forEach { drawElement(it) }
         }
 
@@ -540,9 +541,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         //hack job!!!
         if (!displayHold) {
             Log.i(TAG, "zoom: " + zoom)
-            Log.i(TAG, "zoom setting: "+MyApplication.radarConusRadarZoom+ " math: "+(MyApplication.radarConusRadarZoom / 1000.0))
-            if (MyApplication.radarConusRadar) {
-                if (zoom < (MyApplication.radarConusRadarZoom / 1000.0).toFloat()) {
+            Log.i(TAG, "zoom setting: "+RadarPreferences.radarConusRadarZoom+ " math: "+(RadarPreferences.radarConusRadarZoom / 1000.0))
+            if (RadarPreferences.radarConusRadar) {
+                if (zoom < (RadarPreferences.radarConusRadarZoom / 1000.0).toFloat()) {
                     Log.i(TAG, "zoom out to conusradar")
                     drawConusRadarTest(conusRadarBuffers)
                 }
@@ -557,9 +558,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         //hack job!!!
         if (!displayHold) {
             UtilityLog.d("wx", "zoom: " + zoom)
-            UtilityLog.d("wx", "zoom setting: "+MyApplication.radarConusRadarZoom+ " math: "+(MyApplication.radarConusRadarZoom / 1000.0))
-            if (MyApplication.radarConusRadar) {
-                if (zoom < (MyApplication.radarConusRadarZoom / 1000.0).toFloat()) {
+            UtilityLog.d("wx", "zoom setting: "+RadarPreferences.radarConusRadarZoom+ " math: "+(RadarPreferences.radarConusRadarZoom / 1000.0))
+            if (RadarPreferences.radarConusRadar) {
+                if (zoom < (RadarPreferences.radarConusRadarZoom / 1000.0).toFloat()) {
                     UtilityLog.d("wx", "zoom out to conusradar")
                     displayConus = true
                 } else { displayConus = false }
@@ -587,7 +588,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
 
-            val conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(MyApplication.FilesPath + MyApplication.conusImageName)
+            val conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
             val ridx = Utility.readPref(context, "RID_" + rid + "_X", "0.0f").toFloat()
             val ridy = Utility.readPref(context, "RID_" + rid + "_Y", "0.0f").toFloat() / -1.0
             UtilityLog.d("wx", rid + " rid x: " + ridx + " y: " + ridy)
@@ -731,7 +732,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             uvBuffer = tbb.asFloatBuffer()
             uvBuffer.put(uvs)
             uvBuffer.position(0)
-            OpenGLShader.LoadImage(MyApplication.FilesPath + MyApplication.conusImageName)
+            OpenGLShader.LoadImage(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
 
             val mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_conus, "vPosition")
             GLES20.glEnableVertexAttribArray(mPositionHandle)
@@ -769,12 +770,12 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
             sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            //var conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(MyApplication.FilesPath + "conus.gif")
+            //var conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(RadarPreferences.FilesPath + "conus.gif")
 
             GLES20.glUniform1f(sizeHandle, 1600f) //was 1600f
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             //val conusbitmap: Bitmap? = ///UtilityConusRadar.nwsConusRadar(context)
-            conusradarId = OpenGLShader.LoadTexture(MyApplication.FilesPath + MyApplication.conusImageName)
+            conusradarId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(positionHandle)
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
@@ -795,9 +796,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
             sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            GLES20.glUniform1f(sizeHandle, MyApplication.radarUserPointSize.toFloat())
+            GLES20.glUniform1f(sizeHandle, RadarPreferences.radarUserPointSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
-            userPointId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "userpoint.png")
+            userPointId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + "userpoint.png")
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(positionHandle)
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
@@ -818,9 +819,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
                 sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-                GLES20.glUniform1f(sizeHandle, MyApplication.radarLocIconSize.toFloat())
+                GLES20.glUniform1f(sizeHandle, RadarPreferences.radarLocIconSize.toFloat())
                 iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
-                locationId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "location.png")
+                locationId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + "location.png")
                 GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
                 GLES20.glEnableVertexAttribArray(positionHandle)
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
@@ -841,9 +842,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
             sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            GLES20.glUniform1f(sizeHandle, MyApplication.radarLocBugSize.toFloat())
+            GLES20.glUniform1f(sizeHandle, RadarPreferences.radarLocBugSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
-            val rotatebug: Bitmap = OpenGLShader.RotateBitmap(MyApplication.FilesPath + "headingbug.png", WXGLRadarActivity.bearingCurrent.toDouble())
+            val rotatebug: Bitmap = OpenGLShader.RotateBitmap(GlobalVariables.FilesPath + "headingbug.png", WXGLRadarActivity.bearingCurrent.toDouble())
             locationBugId = OpenGLShader.LoadBitmapTexture(rotatebug)
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(positionHandle)
@@ -867,9 +868,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
                 sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-                GLES20.glUniform1f(sizeHandle, MyApplication.radarTvsSize.toFloat())
+                GLES20.glUniform1f(sizeHandle, RadarPreferences.radarTvsSize.toFloat())
                 iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
-                tvsId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "tvs.png")
+                tvsId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + "tvs.png")
                 GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
                 GLES20.glEnableVertexAttribArray(positionHandle)
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
@@ -893,9 +894,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
             sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            GLES20.glUniform1f(sizeHandle, MyApplication.radarHiSize.toFloat())
+            GLES20.glUniform1f(sizeHandle, RadarPreferences.radarHiSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
-            hiId = OpenGLShader.LoadTexture(MyApplication.FilesPath + hailSizeIcon)
+            hiId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + hailSizeIcon)
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(positionHandle)
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
@@ -903,8 +904,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             GLES20.glUniform1i(iTexture, 0)
             GLES20.glEnable(GLES20.GL_BLEND)
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-            //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-            GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
 
 
@@ -974,7 +975,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         Matrix.setLookAtM(matrixView, 0, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
         Matrix.multiplyMM(matrixProjectionAndView, 0, matrixProjection, 0, matrixView, 0)
         Matrix.multiplyMM(matrixProjectionAndViewOrig, 0, matrixProjection, 0, matrixView, 0)
-        if (!MyApplication.wxoglCenterOnLocation) {
+        if (!RadarPreferences.wxoglCenterOnLocation) {
             Matrix.translateM(matrixProjectionAndView, 0, x, y, 0.0f)
         } else {
             Matrix.translateM(matrixProjectionAndView, 0, gpsLatLonTransformed[0] * zoom, gpsLatLonTransformed[1] * zoom, 0.0f)
@@ -1008,14 +1009,14 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             buffers.count = buffers.geotype.count
             buffers.breakSize = 30000
             buffers.initialize(4 * buffers.count, 0, 3 * buffers.breakSize * 2, buffers.geotype.color)
-            if (MyApplication.radarUseJni) {
+            if (RadarPreferences.radarUseJni) {
                 Jni.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             } else {
                 UtilityWXOGLPerf.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             }
             buffers.isInitialized = true
         }
-        if (!MyApplication.radarUseJni) {
+        if (!RadarPreferences.radarUseJni) {
             if (useMercatorProjection) {
                 UtilityWXOGLPerf.genMercator(buffers.geotype.relativeBuffer, buffers.floatBuffer, projectionNumbers, buffers.count)
             } else {
@@ -1047,7 +1048,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         val remainder: Int
         buffers.initialize(4 * 4 * list.size, 0, 3 * 4 * list.size, buffers.type.color)
         try {
-            if (MyApplication.radarUseJni) {
+            if (RadarPreferences.radarUseJni) {
                 Jni.colorGen(buffers.colorBuffer, 4 * list.size, buffers.colorArray)
             } else {
                 UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * list.size, buffers.colorArray)
@@ -1124,10 +1125,10 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         var locYCurrent = locYCurrentF
         var locationMarkers = mutableListOf<Double>()
 	
-        if (MyApplication.locationDotFollowsGps) {
+        if (RadarPreferences.locationDotFollowsGps) {
             locationDotBuffers.lenInit = 0f
         } else {
-            locationDotBuffers.lenInit = MyApplication.radarLocdotSize.toFloat()
+            locationDotBuffers.lenInit = RadarPreferences.radarLocdotSize.toFloat()
         }
         locYCurrent = locYCurrent.replace("-", "")
         val x = locXCurrent.toDoubleOrNull() ?: 0.0
@@ -1135,7 +1136,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         if (PolygonType.LOCDOT.pref) {
             locationMarkers = UtilityLocation.latLonAsDouble()
         }
-        if (MyApplication.locationDotFollowsGps || archiveMode) {
+        if (RadarPreferences.locationDotFollowsGps || archiveMode) {
             locationMarkers.add(x)
             locationMarkers.add(y)
             gpsX = x
@@ -1153,7 +1154,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         locIconBuffers.initialize(32 * locIconBuffers.triangleCount,
                 8 * locIconBuffers.triangleCount,
                 6 * locIconBuffers.triangleCount,
-                MyApplication.radarColorLocdot)
+                RadarPreferences.radarColorLocdot)
 
 
         //location bug
@@ -1161,11 +1162,11 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         locBugBuffers.initialize(32 * locBugBuffers.triangleCount,
                 8 * locBugBuffers.triangleCount,
                 6 * locBugBuffers.triangleCount,
-                MyApplication.radarColorLocdot)
+                RadarPreferences.radarColorLocdot)
 
 
         /* not needed .. have custom location icon
-        if (MyApplication.radarUseJni) {
+        if (RadarPreferences.radarUseJni) {
             Jni.colorGen(
                     locCircleBuffers.colorBuffer,
                     2 * locCircleBuffers.triangleCount,
@@ -1181,7 +1182,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         */
 
 
-        if (MyApplication.locationDotFollowsGps) {
+        if (RadarPreferences.locationDotFollowsGps) {
             locIconBuffers.lenInit = locationDotBuffers.lenInit
             val gpsCoordinates = UtilityCanvasProjection.computeMercatorNumbers(gpsX, gpsY, projectionNumbers)
             gpsLatLonTransformed[0] = -gpsCoordinates[0].toFloat()
@@ -1197,7 +1198,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 	    
 	    
 	    //location bug//
-            if (MyApplication.locdotBug) {
+            if (RadarPreferences.locdotBug) {
                 locBugBuffers.lenInit = 0f
                 UtilityWXOGLPerf.genLocdot(locBugBuffers, projectionNumbers, gpsX, gpsY)
             }
@@ -1241,7 +1242,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         UtilityWXOGLPerf.genMarker(conusRadarBuffers, pn, 36.105, 97.141)
         //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 40.750220, 99.476964)
         //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, pn.xDbl, pn.yDbl)
-        //UtilityWXOGLPerf.genMercator(MyApplication.stateRelativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
+        //UtilityWXOGLPerf.genMercator(RadarPreferences.stateRelativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
         */
 
         conusRadarBuffers.isInitialized = true
@@ -1253,7 +1254,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
     fun constructSpotters() {
         spotterBuffers.isInitialized = false //leave it at false or the app will crash randomly
-        spotterBuffers.lenInit = MyApplication.radarSpotterSize.toFloat()
+        spotterBuffers.lenInit = RadarPreferences.radarSpotterSize.toFloat()
         spotterBuffers.triangleCount = 6
         UtilitySpotter.get(context)
         spotterBuffers.xList = UtilitySpotter.x
@@ -1266,7 +1267,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     }
 
     fun constructHi() {
-        hiBuffers.lenInit = 0f //MyApplication.radarHiSize.toFloat()
+        hiBuffers.lenInit = 0f //RadarPreferences.radarHiSize.toFloat()
         val stormList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString)
         hiBuffers.setXYList(stormList)
         WXGLNexradLevel3HailIndex.hailList
@@ -1323,7 +1324,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     }
 
     fun constructTvs() {
-        tvsBuffers.lenInit = 0f //MyApplication.radarTvsSize.toFloat()
+        tvsBuffers.lenInit = 0f //RadarPreferences.radarTvsSize.toFloat()
         tvsBuffers.setXYList(WXGLNexradLevel3TVS.decodeAndPlot(context, rid, indexString))
         constructMarker(tvsBuffers)
 
@@ -1363,7 +1364,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         } else {
             buffers.initialize(4 * 4 * totalBinsGeneric, 0, 3 * 4 * totalBinsGeneric, buffers.warningType!!.color)
         }
-        if (MyApplication.radarUseJni) {
+        if (RadarPreferences.radarUseJni) {
             Jni.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
         } else {
             UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
@@ -1411,7 +1412,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         wpcFrontBuffersList = mutableListOf()
         wpcFrontPaints = mutableListOf()
         var coordinates: DoubleArray
-        val fronts = UtilityWpcFronts.fronts.toMutableList()
+        val fronts = UtilityWpcFronts.fronts.toList()
         fronts.forEach { _ ->
             val buff = ObjectOglBuffers()
             buff.breakSize = 30000
@@ -1459,7 +1460,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     }
 
     private fun constructWBCircle() {
-        wbCircleBuffers.lenInit = MyApplication.radarAviationSize.toFloat()
+        wbCircleBuffers.lenInit = RadarPreferences.radarAviationSize.toFloat()
         wbCircleBuffers.xList = UtilityMetar.metarDataList[paneNumber].x
         wbCircleBuffers.yList = UtilityMetar.metarDataList[paneNumber].y
         wbCircleBuffers.colorIntArray = UtilityMetar.metarDataList[paneNumber].obsArrAviationColor
@@ -1479,7 +1480,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     fun constructSwoLines() {
         val hashSwo = UtilitySwoDayOne.hashSwo.toMap()
         var coordinates: DoubleArray
-        val fSize = (0..4).filter { hashSwo[it] != null }.sumBy { hashSwo.getOrElse(it) { listOf() }.size }
+        val fSize = (0..4).filter { hashSwo[it] != null }.sumOf { hashSwo.getOrElse(it) { listOf() }.size }
         swoBuffers.breakSize = 15000
         swoBuffers.chunkCount = 1
         val totalBinsSwo = fSize / 4

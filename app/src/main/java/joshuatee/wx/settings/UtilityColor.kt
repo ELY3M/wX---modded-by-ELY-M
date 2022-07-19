@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,18 +24,16 @@ package joshuatee.wx.settings
 
 import android.graphics.Color
 
-import joshuatee.wx.MyApplication
-
 internal object UtilityColor {
 
     fun setColor(prefVal: String) = when (prefVal) {
-        "RADAR_COLOR_HW" -> if (MyApplication.blackBg) {
+        "RADAR_COLOR_HW" -> if (RadarPreferences.blackBg) {
             Color.BLUE
         } else {
             Color.BLUE
         }
         "DRAW_TOOL_COLOR" -> Color.rgb(143, 213, 253)
-        "RADAR_COLOR_HW_EXT" -> if (MyApplication.blackBg) {
+        "RADAR_COLOR_HW_EXT" -> if (RadarPreferences.blackBg) {
             Color.BLUE
         } else {
             Color.BLUE
@@ -68,7 +66,11 @@ internal object UtilityColor {
         "NEXRAD_RADAR_BACKGROUND_COLOR" -> Color.BLACK
         else -> {
             var color = Color.BLACK
-            MyApplication.radarWarningPolygons.forEach { if (it.prefTokenColor == prefVal) color = it.color }
+            RadarPreferences.radarWarningPolygons.forEach {
+                if (it.prefTokenColor == prefVal) {
+                    color = it.color
+                }
+            }
             color
         }
     }

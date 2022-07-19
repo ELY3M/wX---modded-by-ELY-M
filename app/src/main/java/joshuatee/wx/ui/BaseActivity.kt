@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,10 +25,8 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -44,7 +42,7 @@ abstract class BaseActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         if (bottomToolbar) {
             toolbarBottom = findViewById(R.id.toolbar_bottom)
-            if (MyApplication.iconsEvenSpaced) {
+            if (UIPreferences.iconsEvenSpaced) {
                 UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, menuResId!!)
             } else {
                 toolbarBottom.inflateMenu(menuResId!!)

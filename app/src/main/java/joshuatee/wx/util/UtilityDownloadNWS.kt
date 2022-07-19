@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,17 +25,16 @@ import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.Locale
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.radar.LatLon
 import okhttp3.Request
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 
 object UtilityDownloadNws {
 
-    private const val USER_AGENT_STR = "Android ${MyApplication.packageNameAsString} ${MyApplication.emailAsString}"
+    private const val USER_AGENT_STR = "Android ${GlobalVariables.packageNameAsString} ${GlobalVariables.emailAsString}"
     private const val ACCEPT_STR = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
 
     var forecastZone = ""
@@ -43,9 +42,9 @@ object UtilityDownloadNws {
     fun getHazardData(url: String) = getStringFromUrlJson(url)
 
     fun getCap(sector: String) = if (sector == "us") {
-        getStringFromUrlXml(MyApplication.nwsApiUrl + "/alerts/active?region_type=land")
+        getStringFromUrlXml(GlobalVariables.nwsApiUrl + "/alerts/active?region_type=land")
     } else {
-        getStringFromUrlXml(MyApplication.nwsApiUrl + "/alerts/active/area/" + sector.uppercase(Locale.US))
+        getStringFromUrlXml(GlobalVariables.nwsApiUrl + "/alerts/active/area/" + sector.uppercase(Locale.US))
     }
 
     // https://forecast-v3.weather.gov/documentation?redirect=legacy
@@ -67,7 +66,7 @@ object UtilityDownloadNws {
                     //.addHeader("Accept", ACCEPT_STR)
                     .addHeader("Accept", header)
                     .build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
@@ -90,7 +89,7 @@ object UtilityDownloadNws {
                     .url(url)
                     .header("User-Agent", USER_AGENT_STR)
                     .build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
@@ -114,7 +113,7 @@ object UtilityDownloadNws {
                     .header("User-Agent", USER_AGENT_STR)
                     .addHeader("Accept", ACCEPT_STR)
                     .build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
@@ -139,7 +138,7 @@ object UtilityDownloadNws {
                     .header("User-Agent", USER_AGENT_STR)
                     .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1")
                     .build()
-            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
@@ -163,17 +162,16 @@ object UtilityDownloadNws {
         return hourlyUrl.getNwsHtml()
     }
 
-    fun get7DayData(latLon: LatLon): String {
-        return if (UIPreferences.useNwsApi) {
-            val pointsData = getLocationPointData(latLon)
-            val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
-            // set static var at object level for use elsewhere
-            forecastZone = forecastUrl
-            forecastUrl.getNwsHtml()
-        } else {
-            UtilityUS.getLocationHtml(latLon.latString, latLon.lonString)
-        }
-    }
+    fun get7DayData(latLon: LatLon) =
+            if (UIPreferences.useNwsApi) {
+                val pointsData = getLocationPointData(latLon)
+                val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
+                // set static var at object level for use elsewhere
+                forecastZone = forecastUrl
+                forecastUrl.getNwsHtml()
+            } else {
+                UtilityUS.getLocationHtml(latLon.latString, latLon.lonString)
+            }
 
-    private fun getLocationPointData(latLon: LatLon) = (MyApplication.nwsApiUrl + "/points/" + latLon.latString + "," + latLon.lonString).getNwsHtml()
+    private fun getLocationPointData(latLon: LatLon) = (GlobalVariables.nwsApiUrl + "/points/" + latLon.latString + "," + latLon.lonString).getNwsHtml()
 }

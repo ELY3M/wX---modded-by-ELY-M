@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -40,8 +40,7 @@ import joshuatee.wx.Extensions.getHtmlSep
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
-import joshuatee.wx.MyApplication
-import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.radar.WXGLNexrad
@@ -119,8 +118,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         title = "() Storm Reports -"
         toolbar.subtitle = no
         updateIowaMesoData()
-        imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/$no.gif"
-        textUrl = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/$no.csv"
+        imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$no.gif"
+        textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$no.csv"
         stateArray = listOf("")
         objectNavDrawer = ObjectNavDrawer(this, stateArray)
         objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -164,7 +163,6 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun updateImage() {
-        //objectCardImage = ObjectCardImage(this@SpcStormReportsActivity, linearLayout, bitmap)
         objectCardImage.setImage2(bitmap)
         addListener()
     }
@@ -180,19 +178,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val linesOfData = text.split("<br>").dropLastWhile { it.isEmpty() }
         mapState.clear()
         boxText.removeAllViews()
-        // objectCardImage = ObjectCardImage(this@SpcStormReportsActivity, linearLayout, bitmap)
         addListener()
-//        objectCardImage.setOnClickListener {
-//            val stDatePicker = DatePickerDialog(this, pDateSetListener, year, month, day)
-//            val cal = Calendar.getInstance()
-//            cal.set(Calendar.YEAR, 2004) // 2011-05-27 was the earliest date for filtered, moved to non-filtered and can go back to 2004-03-23
-//            cal.set(Calendar.MONTH, 2)
-//            cal.set(Calendar.DAY_OF_MONTH, 23)
-//            stDatePicker.datePicker.minDate = cal.timeInMillis - 1000
-//            stDatePicker.datePicker.maxDate = UtilityTime.currentTimeMillis()
-//            stDatePicker.setCanceledOnTouchOutside(true)
-//            stDatePicker.show()
-//        }
         objectCardImage.resetZoom()
         val objectCardText = ObjectCardText(this@SpcStormReportsActivity, boxText.get())
         objectCardText.visibility = View.GONE
@@ -212,9 +198,11 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 }
                 val stormCard = ObjectCardStormReportItem(this@SpcStormReportsActivity)
                 stormCard.setId(k)
-                boxText.addView(stormCard.card)
+                boxText.addView(stormCard.get())
                 stormCard.setTextFields(stormReport)
-                if (!isHeader) registerForContextMenu(stormCard.card)
+                if (!isHeader) {
+                    registerForContextMenu(stormCard.get())
+                }
                 val xStr = stormReport.lat
                 val yStr = stormReport.lon
                 stormCard.setListener {
@@ -229,12 +217,16 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var mapOut = mapState.toString()
         mapOut = mapOut.replace("[{}]".toRegex(), "")
         objectCardText.text = mapOut
-        out.insert(0, Utility.fromHtml("<br><b>" + mapOut + MyApplication.newline + "</b><br>"))
+        out.insert(0, Utility.fromHtml("<br><b>" + mapOut + GlobalVariables.newline + "</b><br>"))
         if (firstRun) {
             stateArray = mapState.keys.toList()
             val stateArrayLabel = mutableListOf<String>()
-            stateArray.indices.forEach { stateArrayLabel.add(stateArray[it] + ": " + mapState[stateArray[it]]) }
-            if (stateArrayLabel.size > 0) objectNavDrawer.updateLists(this@SpcStormReportsActivity, stateArrayLabel)
+            stateArray.indices.forEach {
+                stateArrayLabel.add(stateArray[it] + ": " + mapState[stateArray[it]])
+            }
+            if (stateArrayLabel.size > 0) {
+                objectNavDrawer.updateLists(this@SpcStormReportsActivity, stateArrayLabel)
+            }
             firstRun = false
         }
         title = "($stormCnt) Storm Reports - $filter"
@@ -258,8 +250,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (previousMonth != month || previousYear != year || previousDay != day) {
             updateIowaMesoData()
             no = date + "_rpts"
-            imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/$no.gif"
-            textUrl = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/$no.csv"
+            imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$no.gif"
+            textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$no.csv"
             firstRun = true
             filter = "All"
             getContent()
@@ -303,7 +295,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var y = stormReports[id].lon
         var time = stormReports[id].time
         var radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(x, y))
-        time = UtilityStringExternal.truncate(time, 3)
+        time = time.take(3)
         if (prod == "TR0" || prod == "TV0") {
             radarSite = WXGLNexrad.getTdwrFromRid(radarSite)
         }

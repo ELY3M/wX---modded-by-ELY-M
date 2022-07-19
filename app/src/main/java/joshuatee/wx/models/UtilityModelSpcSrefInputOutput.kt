@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,7 +27,7 @@ import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 
 internal object UtilityModelSpcSrefInputOutput {
 
@@ -38,7 +38,7 @@ internal object UtilityModelSpcSrefInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val html = "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/".getHtml()
+            val html = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/".getHtml()
             val tmpTxt = html.parse(pattern2)
             val result = html.parseColumn(pattern3)
             val latestRunAl = tmpTxt.split("</a>").dropLastWhile { it.isEmpty() }
@@ -55,7 +55,7 @@ internal object UtilityModelSpcSrefInputOutput {
 
     fun getImage(context: Context, om: ObjectModelNoSpinner, time: String): Bitmap {
         val run = om.run.replace("z", "")
-        val url = "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
+        val url = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
         return UtilityImg.getBitmapAddWhiteBackground(context, url)
     }
 

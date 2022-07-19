@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,9 +25,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.radar.SpotterReports
 import joshuatee.wx.ui.ObjectCard
@@ -61,7 +61,7 @@ internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
         holder.type.text = dataSet[position].type
         holder.time.text = dataSet[position].time
-        holder.city.text = dataSet[position].city.replace(MyApplication.newline, " ")
+        holder.city.text = dataSet[position].city.replace(GlobalVariables.newline, " ")
         holder.name.text = dataSet[position].lastName + ", " + dataSet[position].firstName
         holder.summary.text = dataSet[position].narrative
     }

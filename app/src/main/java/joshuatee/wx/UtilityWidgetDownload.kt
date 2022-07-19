@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,15 +24,15 @@ package joshuatee.wx
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Locale
-
 import android.content.Context
 import android.graphics.Bitmap
 import joshuatee.wx.Extensions.getImage
-
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.nhc.UtilityNhc
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.*
 import joshuatee.wx.wpc.UtilityWpcImages
 
@@ -97,7 +97,7 @@ internal object UtilityWidgetDownload {
         val fileOutputStream = getFileOutputStream(context, fileName)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
         fileOutputStream?.close()
-        val fos2 = getFileOutputStream(context, MyApplication.WIDGET_FILE_BAK + fileName)
+        val fos2 = getFileOutputStream(context, GlobalVariables.WIDGET_FILE_BAK + fileName)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos2)
         fos2?.close()
     }
@@ -115,7 +115,7 @@ internal object UtilityWidgetDownload {
     }
 
     private fun textWpc(context: Context) {
-        val text = UtilityDownload.getTextProduct(context, MyApplication.wpcTextFav)
+        val text = UtilityDownload.getTextProduct(context, UIPreferences.wpcTextFav)
         Utility.writePref(context, "TEXTWPC_WIDGET", text)
         Utility.commitPref(context)
     }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import java.util.Locale
 import android.os.Bundle
 import joshuatee.wx.R
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.Extensions.*
@@ -62,13 +61,12 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         title = "Canadian Locations"
         toolbar.subtitle = "Select a location and then use the back arrow to save."
         cityDisplay = false
-        // FIXME don't pass R.id in, assign to val and pass instead of kotlin synthetic
         objectRecyclerView = ObjectRecyclerView(this, this, R.id.card_list, provArr.toMutableList(), ::provinceClicked)
     }
 
     private fun provinceClicked(position: Int) {
         if (!cityDisplay) {
-            provSelected = UtilityStringExternal.truncate(provArr[position], 2)
+            provSelected = provArr[position].take(2)
             title = "Canadian Locations ($provSelected)"
             getContent()
         } else {

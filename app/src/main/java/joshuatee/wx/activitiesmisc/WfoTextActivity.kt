@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -38,10 +38,12 @@ import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
-import joshuatee.wx.MyApplication
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.settings.Location
-import joshuatee.wx.GlobalArrays
+import joshuatee.wx.common.GlobalArrays
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.ui.ObjectCardText
@@ -127,7 +129,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             wfo = "OUN"
         }
         product = if (activityArguments[1] == "") {
-            MyApplication.wfoTextFav
+            UIPreferences.wfoTextFav
         } else {
             activityArguments[1]
         }
@@ -136,7 +138,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             product = "RTP$state"
         }
         title = product
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(objectCardText.card, scrollView))
+        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(objectCardText.get(), scrollView))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
         getContent()
     }
@@ -153,23 +155,23 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        if (ridFavOld != MyApplication.wfoFav) {
-            locationList = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
+        if (ridFavOld != UIPreferences.wfoFav) {
+            locationList = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         }
         super.onRestart()
     }
 
     private fun getContent() {
-        locationList = UtilityFavorites.setupMenu(this@WfoTextActivity, MyApplication.wfoFav, wfo, prefToken)
+        locationList = UtilityFavorites.setupMenu(this@WfoTextActivity, UIPreferences.wfoFav, wfo, prefToken)
         updateSubmenuNotificationText()
         invalidateOptionsMenu()
-        if (MyApplication.wfoFav.contains(":$wfo:")) {
-            star.setIcon(MyApplication.STAR_ICON)
+        if (UIPreferences.wfoFav.contains(":$wfo:")) {
+            star.setIcon(GlobalVariables.STAR_ICON)
         } else {
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+            star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
         scrollView.smoothScrollTo(0, 0)
-        ridFavOld = MyApplication.wfoFav
+        ridFavOld = UIPreferences.wfoFav
         if (product != oldProduct) {
             version = 1
         }
@@ -218,7 +220,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             } else {
                 Utility.writePref(this@WfoTextActivity, "WFO_TEXT_FAV", product)
             }
-            MyApplication.wfoTextFav = product
+            UIPreferences.wfoTextFav = product
         }
         oldProduct = product
         oldWfo = wfo
@@ -286,14 +288,14 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val state = locationList[0].split(" ")[1]
         wfoListPerState.clear()
         GlobalArrays.wfos.filter { it.contains(state) }.forEach {
-                    wfoListPerState.add(MyApplication.space.split(it)[0].replace(":", ""))
+                    wfoListPerState.add(RegExp.space.split(it)[0].replace(":", ""))
                 }
         wfoListPerState.sort()
     }
 
     private fun getContentByState() {
         scrollView.smoothScrollTo(0, 0)
-        ridFavOld = MyApplication.wfoFav
+        ridFavOld = UIPreferences.wfoFav
         if (product != oldProduct) {
             version = 1
         }
@@ -323,7 +325,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         wfoProd.forEach {
             val textCard = ObjectCardText(this@WfoTextActivity, linearLayout)
             textCard.setTextAndTranslate(it)
-            cardList.add(textCard.card)
+            cardList.add(textCard.get())
         }
     }
 
@@ -331,7 +333,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
-        locationList = UtilityFavorites.setupMenu(this@WfoTextActivity, MyApplication.wfoFav, wfo, prefToken)
+        locationList = UtilityFavorites.setupMenu(this@WfoTextActivity, UIPreferences.wfoFav, wfo, prefToken)
         when (item.itemId) {
             R.id.action_sector -> genericDialog(locationList) {
                 if (locationList.isNotEmpty()) {

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,9 +29,7 @@ import androidx.appcompat.widget.Toolbar
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.VideoRecordActivity
 
 object UtilityToolbar {
@@ -44,9 +42,9 @@ object UtilityToolbar {
     }
 
     fun fullScreenMode(toolbar: Toolbar, toolbarBottom: Toolbar) {
-        toolbar.elevation = MyApplication.elevationPref
-        toolbarBottom.elevation = MyApplication.elevationPref
-        if (MyApplication.fullscreenMode) {
+        toolbar.elevation = UIPreferences.elevationPref
+        toolbarBottom.elevation = UIPreferences.elevationPref
+        if (UIPreferences.fullscreenMode) {
             toolbar.visibility = View.GONE
             toolbarBottom.visibility = View.GONE
         }
@@ -55,17 +53,19 @@ object UtilityToolbar {
     fun fullScreenMode(activity: VideoRecordActivity) = fullScreenMode(activity.toolbar, activity.toolbarBottom)
 
     fun fullScreenMode(toolbar: Toolbar) {
-        toolbar.elevation = MyApplication.elevationPref
-        if (MyApplication.fullscreenMode) toolbar.visibility = View.GONE
+        toolbar.elevation = UIPreferences.elevationPref
+        if (UIPreferences.fullscreenMode) {
+            toolbar.visibility = View.GONE
+        }
     }
 
     // overload to simply set elevation
     fun fullScreenMode(toolbar: Toolbar, blank: Boolean) {
-        toolbar.elevation = MyApplication.elevationPref
+        toolbar.elevation = UIPreferences.elevationPref
     }
 
     fun showHide(toolbar: Toolbar, toolbarBottom: Toolbar) {
-        if (!MyApplication.lockToolbars) {
+        if (!UIPreferences.lockToolbars) {
             if (toolbar.isShown) {
                 toolbar.visibility = View.GONE
                 toolbarBottom.visibility = View.GONE
@@ -77,7 +77,7 @@ object UtilityToolbar {
     }
 
     fun showHide(toolbar: Toolbar) {
-        if (!MyApplication.lockToolbars) {
+        if (!UIPreferences.lockToolbars) {
             if (toolbar.isShown) toolbar.visibility = View.GONE else toolbar.visibility = View.VISIBLE
         }
     }

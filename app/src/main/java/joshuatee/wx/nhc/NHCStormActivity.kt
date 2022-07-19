@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,7 +28,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
-
 import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityNotificationNhc
 import joshuatee.wx.objects.FutureText
@@ -59,16 +58,18 @@ class NhcStormActivity : BaseActivity() {
     private var imagesPerRow = 2
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
     private val imageUrls = listOf(
-            "_5day_cone_with_line_and_wind_sm2.png",
-            "_key_messages.png",
-            "WPCQPF_sm2.gif",
-            "WPCERO_sm2.gif",
-            "_earliest_reasonable_toa_34_sm2.png",
-            "_most_likely_toa_34_sm2.png",
-            "_wind_probs_34_F120_sm2.png",
-            "_wind_probs_50_F120_sm2.png",
-            "_wind_probs_64_F120_sm2.png"
+        "_5day_cone_with_line_and_wind_sm2.png",
+        "_key_messages.png",
+        "WPCQPF_sm2.gif",
+        "WPCERO_sm2.gif",
+        "_earliest_reasonable_toa_34_sm2.png",
+        "_most_likely_toa_34_sm2.png",
+        "_wind_probs_34_F120_sm2.png",
+        "_wind_probs_50_F120_sm2.png",
+        "_wind_probs_64_F120_sm2.png"
     )
+    private var textProductUrl = ""
+    private var office = "MIA"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.nhc_storm, menu)
@@ -85,6 +86,12 @@ class NhcStormActivity : BaseActivity() {
         title = stormData.name + " " + stormData.classification
         toolbar.subtitle = stormData.forTopHeader()
         product = "MIATCP${stormData.binNumber}"
+
+        textProductUrl = stormData.advisoryNumber
+        if (textProductUrl.startsWith("HFO")) {
+            office = "HFO"
+        }
+
         if (UtilityUI.isLandScape(this)) {
             imagesPerRow = 3
         }
@@ -98,7 +105,9 @@ class NhcStormActivity : BaseActivity() {
 
     private fun getContent() {
         FutureVoid( this, ::downloadImages, ::showImages)
-        FutureText(this, product, ::showText)
+//        FutureText(this, product, ::showText)
+        UtilityLog.d("wxNHC2", textProductUrl)
+        FutureText(this, textProductUrl, ::showText)
     }
 
     private fun downloadImages() {
@@ -153,10 +162,10 @@ class NhcStormActivity : BaseActivity() {
         when (item.itemId) {
             R.id.action_cloud -> ObjectIntent.showVisNhc(this, stormData.goesUrl)
             R.id.action_share -> UtilityShare.text(this, this, stormData.name, "", bitmaps)
-            R.id.action_MIATCPEP2 -> ObjectIntent.showWpcText(this, arrayOf("MIATCP${stormData.binNumber}"))
-            R.id.action_MIATCMEP2 -> ObjectIntent.showWpcText(this, arrayOf("MIATCM${stormData.binNumber}"))
-            R.id.action_MIATCDEP2 -> ObjectIntent.showWpcText(this, arrayOf("MIATCD${stormData.binNumber}"))
-            R.id.action_MIAPWSEP2 -> ObjectIntent.showWpcText(this, arrayOf("MIAPWS${stormData.binNumber}"))
+            R.id.action_MIATCPEP2 -> ObjectIntent.showWpcText(this, arrayOf("${office}TCP${stormData.binNumber}"))
+            R.id.action_MIATCMEP2 -> ObjectIntent.showWpcText(this, arrayOf("${office}TCM${stormData.binNumber}"))
+            R.id.action_MIATCDEP2 -> ObjectIntent.showWpcText(this, arrayOf("${office}TCD${stormData.binNumber}"))
+            R.id.action_MIAPWSEP2 -> ObjectIntent.showWpcText(this, arrayOf("${office}PWS${stormData.binNumber}"))
             R.id.action_mute_notification -> UtilityNotificationNhc.muteNotification(this, stormData.id)
             else -> return super.onOptionsItemSelected(item)
         }

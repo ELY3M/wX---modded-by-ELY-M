@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,26 +23,32 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityNotificationWpc
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityString
 
 internal object UtilityDownloadMpd {
 
-    const val type = "MPD"
-    // val typeEnum = PolygonType.MPD
-    val timer = DownloadTimer(type)
+    val type = PolygonType.MPD
+    val timer = DownloadTimer("MPD")
 
-    fun get(context: Context) { if (timer.isRefreshNeeded(context)) getMpd(context) }
+    fun get(context: Context) {
+        if (timer.isRefreshNeeded(context)) {
+            getMpd(context)
+        }
+    }
 
     fun getMpd(context: Context): WatchData {
-        val html = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php".getHtml()
-        if (html != "") MyApplication.severeDashboardMpd.valueSet(context, html)
+        val html = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php".getHtml()
+        if (html != "") {
+            ObjectPolygonWatch.polygonDataByType[type]!!.storage.valueSet(context, html)
+        }
         val numberList = getListOfNumbers(context)
         val htmlList = mutableListOf<String>()
         var latLonString = ""
@@ -51,20 +57,26 @@ internal object UtilityDownloadMpd {
             htmlList.add(mcdData[0])
             latLonString += mcdData[1]
         }
-        if (PolygonType.MPD.pref || UtilityNotificationWpc.locationNeedsMpd()) MyApplication.mpdLatLon.valueSet(context, latLonString)
+        if (type.pref || UtilityNotificationWpc.locationNeedsMpd()) {
+            ObjectPolygonWatch.polygonDataByType[type]!!.latLonList.valueSet(context, latLonString)
+        }
         return WatchData(numberList, htmlList)
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
-        val list = UtilityString.parseColumn(MyApplication.severeDashboardMpd.value, RegExp.mpdPattern)
+        val list = UtilityString.parseColumn(ObjectPolygonWatch.polygonDataByType[type]!!.storage.value, RegExp.mpdPattern)
         var mpdNoList = ""
-        list.forEach { mpdNoList += "$it:" }
-        if (PolygonType.MPD.pref || UtilityNotificationWpc.locationNeedsMpd()) MyApplication.mpdNoList.valueSet(context, mpdNoList)
+        list.forEach {
+            mpdNoList += "$it:"
+        }
+        if (type.pref || UtilityNotificationWpc.locationNeedsMpd()) {
+            ObjectPolygonWatch.polygonDataByType[type]!!.numberList.valueSet(context, mpdNoList)
+        }
         return list
     }
 
     // return the raw MPD text and the lat/lon as a list
-    fun getLatLon(context: Context, number: String): List<String> {
+    private fun getLatLon(context: Context, number: String): List<String> {
         val html = UtilityDownload.getTextProduct(context, "WPCMPD$number")
         return listOf(html, UtilityNotification.storeWatchMcdLatLon(html))
     }

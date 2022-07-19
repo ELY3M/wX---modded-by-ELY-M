@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,8 +23,7 @@ package joshuatee.wx.spc
 
 import android.util.SparseArray
 import joshuatee.wx.Extensions.safeGet
-
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
 
@@ -148,7 +147,7 @@ object UtilitySpcMeso {
 
     internal fun setParamFromFav(token: String): String {
         var param = ""
-        val tmpArr = MyApplication.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
+        val tmpArr = UIPreferences.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
         when (token) {
             "SPCMESO1" -> param = if (tmpArr.size > 3) tmpArr[3] else "500mb"
             "SPCMESO2" -> param = if (tmpArr.size > 4) tmpArr[4] else "pmsl"

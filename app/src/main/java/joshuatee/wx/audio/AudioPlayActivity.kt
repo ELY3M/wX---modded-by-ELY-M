@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,9 +30,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
@@ -62,7 +62,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         toolbarBottom = findViewById(R.id.toolbar_bottom)
-        if (MyApplication.iconsEvenSpaced) {
+        if (UIPreferences.iconsEvenSpaced) {
             UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, menuResId)
         } else {
             toolbarBottom.inflateMenu(menuResId)
@@ -73,9 +73,9 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         initBottomToolbar()
         UtilityTts.initTts(this)
         pausePressedIcon = if (Utility.isThemeAllWhite()) {
-            MyApplication.ICON_PAUSE_PRESSED_BLUE
+            GlobalVariables.ICON_PAUSE_PRESSED_BLUE
         } else {
-            MyApplication.ICON_PAUSE_PRESSED
+            GlobalVariables.ICON_PAUSE_PRESSED
         }
     }
 
@@ -87,7 +87,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
             pause.setIcon(pausePressedIcon)
         else
-            pause.setIcon(MyApplication.ICON_PAUSE)
+            pause.setIcon(GlobalVariables.ICON_PAUSE)
     }
 
     protected fun audioPlayMenu(item: Int, txt: String, prod: String, playlistToken: String): Boolean {
@@ -97,7 +97,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
             R.id.action_read_aloud -> {
                 if (isStoragePermissionGranted) {
                     UtilityTts.synthesizeTextAndPlay(this, txt, prod)
-                    pause.setIcon(MyApplication.ICON_PAUSE)
+                    pause.setIcon(GlobalVariables.ICON_PAUSE)
                     if (UIPreferences.mediaControlNotif) UtilityNotification.createMediaControlNotification(applicationContext, "")
                 } else {
                     UtilityLog.d("wx", "perm to write to storage was not granted")
@@ -110,7 +110,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                 if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
                     pause.setIcon(pausePressedIcon)
                 else
-                    pause.setIcon(MyApplication.ICON_PAUSE)
+                    pause.setIcon(GlobalVariables.ICON_PAUSE)
                 if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif)
                     UtilityNotification.createMediaControlNotification(applicationContext, "")
             }
@@ -124,7 +124,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
             pause.setIcon(pausePressedIcon)
         else
-            pause.setIcon(MyApplication.ICON_PAUSE)
+            pause.setIcon(GlobalVariables.ICON_PAUSE)
         super.onRestart()
     }
 
@@ -153,7 +153,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     UtilityTts.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
-                    pause.setIcon(MyApplication.ICON_PAUSE)
+                    pause.setIcon(GlobalVariables.ICON_PAUSE)
                     if (UIPreferences.mediaControlNotif) {
                         UtilityNotification.createMediaControlNotification(applicationContext, "")
                     }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -72,15 +72,15 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
             item.gravity = Gravity.CENTER_HORIZONTAL
             if (Utility.isThemeAllBlack()) {
                 item.color = Color.WHITE
-                item.tv.setBackgroundColor(Color.BLACK)
+                item.setBackgroundColor(Color.BLACK)
             } else {
                 item.color = Color.BLACK
             }
-            item.tv.setOnClickListener {
+            item.setOnClickListener {
                 functions[index](position)
                 dismiss()
             }
-            linearLayout.addView(item.tv)
+            linearLayout.addView(item.get())
         }
         return fragmentView
     }
@@ -88,7 +88,7 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (usedForLocation && Location.numLocations == 1) {
-            listOf(1,2,3).forEach{ textViewList[it].tv.visibility = View.INVISIBLE }
+            listOf(1,2,3).forEach{ textViewList[it].visibility = View.INVISIBLE }
         }
         initView()
     }

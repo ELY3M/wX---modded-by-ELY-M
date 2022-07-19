@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,10 +29,8 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.Spotter
@@ -135,20 +133,20 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun checkFavorite(position: Int) {
-        if (MyApplication.spotterFav.contains(spotterList[position].unique + ":")) {
-            MyApplication.spotterFav = MyApplication.spotterFav.replace(spotterList[position].unique + ":", "")
+        if (UIPreferences.spotterFav.contains(spotterList[position].unique + ":")) {
+            UIPreferences.spotterFav = UIPreferences.spotterFav.replace(spotterList[position].unique + ":", "")
             spotterList[position].lastName = spotterList[position].lastName.replace("0FAV ", "")
         } else {
-            MyApplication.spotterFav = MyApplication.spotterFav + spotterList[position].unique + ":"
+            UIPreferences.spotterFav = UIPreferences.spotterFav + spotterList[position].unique + ":"
             spotterList[position].lastName = "0FAV " + spotterList[position].lastName
         }
         sortSpotters()
         ca.notifyDataSetChanged()
-        Utility.writePref(this, "SPOTTER_FAV", MyApplication.spotterFav)
+        Utility.writePref(this, "SPOTTER_FAV", UIPreferences.spotterFav)
     }
 
     private fun markFavorites() {
-        spotterList.filter { MyApplication.spotterFav.contains(it.unique + ":") && !it.lastName.contains("0FAV ") }.forEach {
+        spotterList.filter { UIPreferences.spotterFav.contains(it.unique + ":") && !it.lastName.contains("0FAV ") }.forEach {
                     it.lastName = "0FAV " + it.lastName
                 }
         sortSpotters()

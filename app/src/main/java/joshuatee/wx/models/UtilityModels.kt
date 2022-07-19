@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,9 +30,8 @@ import java.sql.Date
 import java.util.Calendar
 import java.util.TimeZone
 import joshuatee.wx.Extensions.startAnimation
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
-import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.Utility
@@ -45,7 +44,7 @@ object UtilityModels {
     fun getContentNonSpinner(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>) {
         om.sectorInt = om.sectors.indexOf(om.sector)
         if (om.truncateTime) {
-            om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
+            om.time = om.time.take(om.timeTruncate)
         }
         writePrefs(context, om)
         FutureVoid(
@@ -111,13 +110,13 @@ object UtilityModels {
     }
 
     fun legacyShare(activity: Activity, context: Context, animRan: Boolean, om: ObjectModelNoSpinner) {
-        if (animRan)
-            UtilityShare.animGif(
-                    context,
-                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
-                    om.displayData.animDrawable[0]
-            )
-        else
+//        if (animRan)
+//            UtilityShare.animGif(
+//                    context,
+//                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
+//                    om.displayData.animDrawable[0]
+//            )
+//        else
             UtilityShare.bitmap(
                     activity,
                     context,
@@ -137,7 +136,7 @@ object UtilityModels {
         // 06 000
         // 06 003
         // 006 009
-        timeStr = UtilityStringExternal.truncate(timeStr, 3)
+        timeStr = timeStr.take(3)
         val runInt = runStr.toIntOrNull() ?: 0
         val timeInt = timeStr.toIntOrNull() ?: 0
         // realTimeGmt - the time in GMT as related to the current model run looking forward in hours
@@ -205,7 +204,7 @@ object UtilityModels {
                 run = ((run.toIntOrNull() ?: 0) - 24).toString()
             }
             (0 until listTime.size).forEach {
-                val tmpStr = MyApplication.space.split(listTime[it])[0].replace(prefix, "")
+                val tmpStr = RegExp.space.split(listTime[it])[0].replace(prefix, "")
                 listTime[it] = prefix + tmpStr + " " + convertTimeRunToTimeString(run, tmpStr, showDate)
             }
             //dataAdapterTime.notifyDataSetChanged()

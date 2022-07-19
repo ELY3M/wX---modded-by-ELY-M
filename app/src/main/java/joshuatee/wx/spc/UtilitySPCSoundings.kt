@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,11 +22,11 @@
 package joshuatee.wx.spc
 
 import android.content.Context
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityImg
 
 object UtilitySpcSoundings {
 
     fun getImage(context: Context, office: String) = UtilityImg.getBitmapAddWhiteBackground(
-            context, "${MyApplication.nwsSPCwebsitePrefix}/exper/soundings/LATEST/$office.gif")
+            context, "${GlobalVariables.nwsSPCwebsitePrefix}/exper/soundings/LATEST/$office.gif")
 }

@@ -31,10 +31,10 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.widget.RemoteViews
 import android.widget.Toast
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityTime
-
 import java.util.Random
 
 /**
@@ -141,9 +141,9 @@ class WeatherWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
-        const val CLICK_ACTION = "${MyApplication.packageNameAsString}.weatherlistwidget.CLICK"
-        const val REFRESH_ACTION = "${MyApplication.packageNameAsString}.weatherlistwidget.REFRESH"
-        const val EXTRA_DAY_ID = "${MyApplication.packageNameAsString}.weatherlistwidget.day"
+        const val CLICK_ACTION = "${GlobalVariables.packageNameAsString}.weatherlistwidget.CLICK"
+        const val REFRESH_ACTION = "${GlobalVariables.packageNameAsString}.weatherlistwidget.REFRESH"
+        const val EXTRA_DAY_ID = "${GlobalVariables.packageNameAsString}.weatherlistwidget.day"
         var workerThread: HandlerThread? = null
         var workerQueue: Handler? = null
         var weatherDataProviderObserver: WeatherDataProviderObserver? = null

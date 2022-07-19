@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,15 +26,13 @@ import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
-import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
 class ObjectCardHSText(context: Context, val product: String) {
 
     private val objectCard = ObjectCard(context)
-    private val textView: TextView = TextView(context)
+    private val textView = TextView(context)
     private var textShort = ""
     private var textLong = ""
     private var textShownSmall = true
@@ -70,7 +68,7 @@ class ObjectCardHSText(context: Context, val product: String) {
             longText = Utility.fromHtml(longTextDownload)
         }
         setTextLong(longText)
-        val shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
+        val shortText = longText.take(UIPreferences.homescreenTextLength)
         setTextShort(shortText)
         setText(shortText)
         if (product == "HOURLY") {
@@ -78,15 +76,25 @@ class ObjectCardHSText(context: Context, val product: String) {
         }
     }
 
-    fun refreshTextSize() = textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+    fun refreshTextSize() {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+    }
 
-    private fun setTextLong(text: String) { textLong = text }
+    private fun setTextLong(text: String) {
+        textLong = text
+    }
 
-    private fun setTextShort(text: String) { textShort = text }
+    private fun setTextShort(text: String) {
+        textShort = text
+    }
 
-    fun setOnClickListener(fn: View.OnClickListener) = textView.setOnClickListener(fn)
+    fun setOnClickListener(fn: View.OnClickListener) {
+        textView.setOnClickListener(fn)
+    }
 
-    private fun typefaceMono() { textView.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL) }
+    private fun typefaceMono() {
+        textView.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
+    }
 
-    val card get() = objectCard.card
+    fun get() = objectCard.card
 }

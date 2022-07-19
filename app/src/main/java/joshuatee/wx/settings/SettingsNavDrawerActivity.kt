@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.LinearLayout
-
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityAlertDialog
@@ -48,7 +47,7 @@ class SettingsNavDrawerActivity : BaseActivity() {
                             this,
                             it,
                             UtilityNavDrawer.getPrefVar(UtilityNavDrawer.labelToTokenMap[it] ?: ""),
-                            R.string.nav_drawer_main_screen_toggle).card
+                            R.string.nav_drawer_main_screen_toggle).get()
             )
         }
     }

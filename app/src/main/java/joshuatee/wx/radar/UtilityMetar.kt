@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,15 +23,16 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import android.graphics.Color
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.DownloadTimer
+import java.util.regex.Pattern
 
 internal object UtilityMetar {
 
@@ -45,6 +46,12 @@ internal object UtilityMetar {
     private val obsLatLon = mutableMapOf<String, Array<String>>()
     val timer = DownloadTimer("METAR")
 
+    private val pattern1: Pattern = Pattern.compile(".*? (M?../M?..) .*?")
+    private val pattern2: Pattern = Pattern.compile(".*? A([0-9]{4})")
+    private val pattern3: Pattern = Pattern.compile("AUTO ([0-9].*?KT) .*?")
+    private val pattern4: Pattern = Pattern.compile("Z ([0-9].*?KT) .*?")
+    private val pattern5: Pattern = Pattern.compile("SM (.*?) M?[0-9]{2}/")
+
     fun getStateMetarArrayForWXOGL(context: Context, rid: String, paneNumber: Int) {
         if (timer.isRefreshNeeded(context) || rid != metarDataList[paneNumber].obsStateOld) {
             val obsAl = mutableListOf<String>()
@@ -57,7 +64,7 @@ internal object UtilityMetar {
             metarDataList[paneNumber].obsStateOld = rid
             val obsList = getObservationSites(context, rid)
             // https://www.aviationweather.gov/metar/data?ids=KDTW%2CKARB&format=raw&date=&hours=0
-            val html = "${MyApplication.nwsAWCwebsitePrefix}/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
+            val html = "${GlobalVariables.nwsAWCwebsitePrefix}/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
             val metarsTmp = html.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
             val metars = condenseObs(metarsTmp)
             if (!initializedObsMap) {
@@ -74,17 +81,21 @@ internal object UtilityMetar {
                 var validWind = false
                 var validWindGust = false
                 if ((z.startsWith("K") || z.startsWith("P")) && !z.contains("NIL")) {
-                    val tmpArr2 = MyApplication.space.split(z)
-                    val tmpBlob = z.parse(RegExp.patternMetarWxogl1) // ".*? (M{0,1}../M{0,1}..) .*?"
-                    val tdArr = MyApplication.slash.split(tmpBlob)
+                    val tmpArr2 = RegExp.space.split(z)
+                    val tmpBlob = z.parse(pattern1)
+                    val tdArr = RegExp.slash.split(tmpBlob)
                     var timeBlob = ""
-                    if (tmpArr2.size > 1) timeBlob = tmpArr2[1]
-                    var pressureBlob = z.parse(RegExp.patternMetarWxogl2) // ".*? A([0-9]{4})"
-                    var windBlob = z.parse(RegExp.patternMetarWxogl3) // "AUTO ([0-9].*?KT) .*?"
-                    if (windBlob == "") windBlob = z.parse(RegExp.patternMetarWxogl4)
-                    val conditionsBlob = z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
+                    if (tmpArr2.size > 1) {
+                        timeBlob = tmpArr2[1]
+                    }
+                    var pressureBlob = z.parse(pattern2)
+                    var windBlob = z.parse(pattern3)
+                    if (windBlob == "") {
+                        windBlob = z.parse(pattern4)
+                    }
+                    val conditionsBlob = z.parse(pattern5)
                     var visBlob = z.parse(" ([0-9].*?SM) ")
-                    val visBlobArr = MyApplication.space.split(visBlob)
+                    val visBlobArr = RegExp.space.split(visBlob)
                     val visBlobDisplay = visBlobArr.last()
                     visBlob = visBlobArr.last().replace("SM", "")
                     // might have 1/2 or 1/4 , just call it zero
@@ -158,10 +169,10 @@ internal object UtilityMetar {
                             obsAl.add(latLon[0] + ":" + latLon[1] + ":" + temperature + "/" + dewPoint)
                             obsAlExt.add(
                                 latLon[0] + ":" + latLon[1] + ":" + temperature + "/" + dewPoint + " (" + obsSite + ")"
-                                        + MyApplication.newline + pressureBlob + " - " + visBlobDisplay
-                                        + MyApplication.newline + windBlob
-                                        + MyApplication.newline + conditionsBlob
-                                        + MyApplication.newline + timeBlob
+                                        + GlobalVariables.newline + pressureBlob + " - " + visBlobDisplay
+                                        + GlobalVariables.newline + windBlob
+                                        + GlobalVariables.newline + conditionsBlob
+                                        + GlobalVariables.newline + timeBlob
                             )
                             if (validWind) {
                                 obsAlWb.add(latLon[0] + ":" + latLon[1] + ":" + windDir + ":" + windInKt)
@@ -203,7 +214,7 @@ internal object UtilityMetar {
         }
         localMetarSites.sortBy { it.distance }
         // http://weather.noaa.gov/pub/data/observations/metar/decoded/KCSV.TXT
-        return (MyApplication.nwsRadarPub + "data/observations/metar/decoded/" + localMetarSites[0].name + ".TXT").getHtmlSep().replace("<br>", MyApplication.newline)
+        return (GlobalVariables.nwsRadarPub + "data/observations/metar/decoded/" + localMetarSites[0].name + ".TXT").getHtmlSep().replace("<br>", GlobalVariables.newline)
     }
 
     //

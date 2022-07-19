@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -43,12 +43,14 @@ import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.content.ContextCompat
 import joshuatee.wx.Extensions.parse
-import joshuatee.wx.GlobalArrays
+import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.SettingsRadarActivity
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
@@ -257,7 +259,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     params.height = MyApplication.dm.heightPixels / 2 + UtilityUI.statusBarHeight(this)
                 else
                     params.height = MyApplication.dm.heightPixels /
-                            2 - MyApplication.actionBarHeight /
+                            2 - UIPreferences.actionBarHeight /
                             2 - UtilityUI.statusBarHeight(this) / 2 -
                             (UtilityUI.navigationBarHeight(this) / 2.0).toInt()
                 if (UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode && numberOfPanes == 4) {
@@ -272,7 +274,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 val params = relativeLayouts[it].layoutParams
                 if (!landScape) {
                     params.height = MyApplication.dm.heightPixels / 2 -
-                            (MyApplication.actionBarHeight / 2) - UtilityUI.statusBarHeight(this) / 2 -
+                            (UIPreferences.actionBarHeight / 2) - UtilityUI.statusBarHeight(this) / 2 -
                             (UtilityUI.navigationBarHeight(this) / 2.0).toInt()
                     params.width = MyApplication.dm.widthPixels
                 } else {
@@ -317,7 +319,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 wxglRenders[it].rid = Utility.readPref(this, prefPrefix + "_RID", initialRadarSite)
             }
         }
-        if (MyApplication.dualpaneshareposn) {
+        if (RadarPreferences.dualpaneshareposn) {
                 (1 until numberOfPanes).forEach { wxglRenders[it].rid = wxglRenders[0].rid }
         }
         val defaultProducts = listOf("N0Q", "N0U", "N0C", "DVL")
@@ -333,25 +335,25 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             xPref = "_X"
             yPref = "_Y"
         }
-        wxglSurfaceViews[0].scaleFactor = Utility.readPref(this, prefPrefix + zoomPref, MyApplication.wxoglSize.toFloat() / 10.0f)
+        wxglSurfaceViews[0].scaleFactor = Utility.readPref(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f)
         wxglRenders[0].setViewInitial(
-                Utility.readPref(this, prefPrefix + zoomPref, MyApplication.wxoglSize.toFloat() / 10.0f),
+                Utility.readPref(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
                 Utility.readPref(this, prefPrefix + xPref, 0.0f),
                 Utility.readPref(this, prefPrefix + yPref, 0.0f)
         )
-        if (MyApplication.dualpaneshareposn) {
+        if (RadarPreferences.dualpaneshareposn) {
             (1 until numberOfPanes).forEach {
                 wxglSurfaceViews[it].scaleFactor = wxglSurfaceViews[0].scaleFactor
                 wxglRenders[it].setViewInitial(
-                        Utility.readPref(this, prefPrefix + zoomPref, MyApplication.wxoglSize.toFloat() / 10.0f),
+                        Utility.readPref(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
                         wxglRenders[0].x, wxglRenders[0].y
                 )
             }
         } else {
             (1 until numberOfPanes).forEach {
-                wxglSurfaceViews[it].scaleFactor = Utility.readPref(this, prefPrefix + "_ZOOM" + (it + 1).toString(), MyApplication.wxoglSize.toFloat() / 10.0f)
+                wxglSurfaceViews[it].scaleFactor = Utility.readPref(this, prefPrefix + "_ZOOM" + (it + 1).toString(), RadarPreferences.wxoglSize.toFloat() / 10.0f)
                 wxglRenders[it].setViewInitial(
-                        Utility.readPref(this, prefPrefix + "_ZOOM" + (it + 1).toString(), MyApplication.wxoglSize.toFloat() / 10.0f),
+                        Utility.readPref(this, prefPrefix + "_ZOOM" + (it + 1).toString(), RadarPreferences.wxoglSize.toFloat() / 10.0f),
                         Utility.readPref(this, prefPrefix + "_X" + (it + 1).toString(), 0.0f),
                         Utility.readPref(this, prefPrefix + "_Y" + (it + 1).toString(), 0.0f)
                 )
@@ -372,7 +374,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     // TODO method for ContextCompat
     private fun checkForAutoRefresh() {
-        if (MyApplication.wxoglRadarAutoRefresh || MyApplication.locationDotFollowsGps) {
+        if (RadarPreferences.wxoglRadarAutoRefresh || RadarPreferences.locationDotFollowsGps) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -382,7 +384,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 if (gpsEnabled != null && gpsEnabled) {
                     locationManager?.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
-                            (MyApplication.radarLocationUpdateInterval * 1000).toLong(),
+                            (RadarPreferences.radarLocationUpdateInterval * 1000).toLong(),
                             WXGLNexrad.radarLocationUpdateDistanceInMeters,
                             locationListener
                     )
@@ -394,7 +396,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
 	
 	//elys mod
-        if (MyApplication.sn_locationreport) {
+        if (RadarPreferences.sn_locationreport) {
             UtilityLog.d("wx", "starting location report")
             sn_Handler_m = Handler(Looper.getMainLooper())
             start_sn_reporting()
@@ -406,7 +408,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         delay = UtilityImg.animInterval(this)
         inOglAnim = false
         inOglAnimPaused = false
-        animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+        animateButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
         animateButton.title = animateButtonPlayString
         restartedZoom = true
         panesList.forEach {
@@ -475,7 +477,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 		UtilityWXGLTextObject.updateObservations(numberOfPanes, wxglTextObjects)
       	    	} 
 		
-		
+		//elys mod
 		//TODO test me in multi-pane
             	if (PolygonType.HAIL_LABELS.pref) { 
 		UtilityWXGLTextObject.updateHailLabels(numberOfPanes, wxglTextObjects)
@@ -508,7 +510,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 //    UtilityWXGLTextObject.updateWpcFronts(numberOfPanes, wxglTextObjects)
                 //}
                 UtilityRadarUI.updateLastRadarTime(this@WXGLRadarActivityMultiPane)
-                if (MyApplication.wxoglCenterOnLocation) {
+                if (RadarPreferences.wxoglCenterOnLocation) {
                     wxglSurfaceViews[z].resetView()
                     //UtilityWXGLTextObject.hideLabels(it, wxglTextObjects)
                     //UtilityWXGLTextObject.showLabels(it, wxglTextObjects)
@@ -658,7 +660,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             // otherwise the new selection might overwrite in the OGLR object - hack
             // (revert) 2016_08 have this apply to Level 3 in addition to Level 2
             if (wxglRenders[0].product.contains("L2") || wxglRenders[1].product.contains("L2")) SystemClock.sleep(2000)
-            animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+            animateButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
             animateButton.title = animateButtonPlayString
             // spotter code is serialized for now
             if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
@@ -673,31 +675,31 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         when (item.itemId) {
             R.id.action_help -> ObjectDialogue(this,
                     resources.getString(R.string.help_radar)
-                            + MyApplication.newline + MyApplication.newline
+                            + GlobalVariables.newline + GlobalVariables.newline
                             + resources.getString(R.string.help_radar_drawingtools)
-                            + MyApplication.newline + MyApplication.newline
+                            + GlobalVariables.newline + GlobalVariables.newline
                             + resources.getString(R.string.help_radar_recording)
-                            + MyApplication.newline + MyApplication.newline
+                            + GlobalVariables.newline + GlobalVariables.newline
             )
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    if (animRan) {
-                        val animDrawable = UtilityUSImgWX.animationFromFiles(
-                                this,
-                                wxglRenders[curRadar].rid,
-                                wxglRenders[curRadar].product,
-                                frameCountGlobal,
-                                (curRadar + 1).toString(),
-                                true
-                        )
-                        UtilityShare.animGif(
-                                this,
-                                wxglRenders[curRadar].rid + " (" + Utility.getRadarSiteName(wxglRenders[curRadar].rid)
-                                        + ") " + wxglRenders[curRadar].product, animDrawable
-                        )
-                    } else {
+//                    if (animRan) {
+//                        val animDrawable = UtilityUSImgWX.animationFromFiles(
+//                                this,
+//                                wxglRenders[curRadar].rid,
+//                                wxglRenders[curRadar].product,
+//                                frameCountGlobal,
+//                                (curRadar + 1).toString(),
+//                                true
+//                        )
+//                        UtilityShare.animGif(
+//                                this,
+//                                wxglRenders[curRadar].rid + " (" + Utility.getRadarSiteName(wxglRenders[curRadar].rid)
+//                                        + ") " + wxglRenders[curRadar].product, animDrawable
+//                        )
+//                    } else {
                         UtilityShare.bitmap(
                                 this,
                                 this,
@@ -706,7 +708,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                                         + wxglRenders[curRadar].product,
                                 getBitmapForShare()
                         )
-                    }
+//                    }
                 }
             }
             R.id.action_settings -> startActivity(Intent(this@WXGLRadarActivityMultiPane, SettingsRadarActivity::class.java))
@@ -757,7 +759,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_a12 -> animateRadar(12)
             R.id.action_a18 -> animateRadar(18)
             R.id.action_a6_sm -> animateRadar(6)
-            R.id.action_a -> animateRadar(MyApplication.uiAnimIconFrames.toIntOrNull() ?: 0)
+            R.id.action_a -> animateRadar(RadarPreferences.uiAnimIconFrames.toIntOrNull() ?: 0)
             R.id.action_a36 -> animateRadar(36)
             R.id.action_a72 -> animateRadar(72)
             R.id.action_a144 -> animateRadar(144)
@@ -765,11 +767,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_fav -> {
                 if (inOglAnim) {
                     inOglAnimPaused = if (!inOglAnimPaused) {
-                        pauseButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+                        pauseButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
                         pauseButton.title = resumeButtonString
                         true
                     } else {
-                        pauseButton.setIcon(MyApplication.ICON_PAUSE_WHITE)
+                        pauseButton.setIcon(GlobalVariables.ICON_PAUSE_WHITE)
                         pauseButton.title = pauseButtonString
                         false
                     }
@@ -800,9 +802,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun animateRadar(frameCount: Int) {
-        animateButton.setIcon(MyApplication.ICON_STOP_WHITE)
+        animateButton.setIcon(GlobalVariables.ICON_STOP_WHITE)
         animateButton.title = animateButtonStopString
-        pauseButton.setIcon(MyApplication.ICON_PAUSE_WHITE)
+        pauseButton.setIcon(GlobalVariables.ICON_PAUSE_WHITE)
         pauseButton.title = pauseButtonString
         getAnimate(frameCount)
     }
@@ -837,23 +839,23 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             if (wxglRenders[0].product.contains("L2") || wxglRenders[1].product.contains("L2")) {
                 SystemClock.sleep(2000)
             }
-            animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
+            animateButton.setIcon(GlobalVariables.ICON_PLAY_WHITE)
             animateButton.title = animateButtonPlayString
         }
-        if (MyApplication.dualpaneshareposn) {
+        if (RadarPreferences.dualpaneshareposn) {
             // if one long presses change the currently active radar as well
             curRadar = idxIntAl
             panesList.forEach {
                 wxglRenders[it].rid = newRadar
-                wxglSurfaceViews[it].scaleFactor = MyApplication.wxoglSize / 10.0f
-                wxglRenders[it].setViewInitial(MyApplication.wxoglSize / 10.0f, 0.0f, 0.0f)
+                wxglSurfaceViews[it].scaleFactor = RadarPreferences.wxoglSize / 10.0f
+                wxglRenders[it].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
             }
         } else {
             // if one long presses change the currently active radar as well
             curRadar = idxIntAl
             wxglRenders[idxIntAl].rid = newRadar
-            wxglSurfaceViews[idxIntAl].scaleFactor = MyApplication.wxoglSize / 10.0f
-            wxglRenders[idxIntAl].setViewInitial(MyApplication.wxoglSize / 10.0f, 0.0f, 0.0f)
+            wxglSurfaceViews[idxIntAl].scaleFactor = RadarPreferences.wxoglSize / 10.0f
+            wxglRenders[idxIntAl].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
         }
         if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
             getContentSerial()
@@ -867,7 +869,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         val infoArr = Array(numberOfPanes) { "" }
         panesList.forEach {
             infoArr[it] = WXGLNexrad.getRadarInfo(this,(it + 1).toString())
-            scanInfo += infoArr[it] + MyApplication.newline + MyApplication.newline
+            scanInfo += infoArr[it] + GlobalVariables.newline + GlobalVariables.newline
         }
         ObjectDialogue(this, scanInfo)
     }
@@ -972,13 +974,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private fun setToolbarTitle() {
         if (numberOfPanes == 4) {
-            title = if (MyApplication.dualpaneshareposn) {
+            title = if (RadarPreferences.dualpaneshareposn) {
                 (curRadar + 1).toString() + ":" + wxglRenders[0].rid + "(" + wxglRenders[0].product + "," + wxglRenders[1].product + "," + wxglRenders[2].product + "," + wxglRenders[3].product + ")"
             } else {
                 (curRadar + 1).toString() + ": " + wxglRenders[0].rid + "(" + wxglRenders[0].product + ") " + wxglRenders[1].rid + "(" + wxglRenders[1].product + ") " + wxglRenders[2].rid + "(" + wxglRenders[2].product + ") " + wxglRenders[3].rid + "(" + wxglRenders[3].product + ")"
             }
         } else if (numberOfPanes == 2) {
-            title = if (MyApplication.dualpaneshareposn) {
+            title = if (RadarPreferences.dualpaneshareposn) {
                 (curRadar + 1).toString() + ":" + wxglRenders[0].rid + "(" + wxglRenders[0].product + "," + wxglRenders[1].product + ")"
             } else {
                 (curRadar + 1).toString() + ": " + wxglRenders[0].rid + "(" + wxglRenders[0].product + ") " + wxglRenders[1].rid + "(" + wxglRenders[1].product + ") "
@@ -1003,7 +1005,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         panesList.forEach {
             wxglRenders[it].constructLocationDot(locXCurrent, locYCurrent, false)
             wxglSurfaceViews[it].requestRender()
-            if (MyApplication.wxoglCenterOnLocation) {
+            if (RadarPreferences.wxoglCenterOnLocation) {
                 wxglSurfaceViews[it].resetView()
                 UtilityWXGLTextObject.hideLabels(it, wxglTextObjects)
                 UtilityWXGLTextObject.showLabels(it, wxglTextObjects)
@@ -1040,7 +1042,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private fun longPressRadarSiteSwitch(string: String) {
         val newRadarSite = string.parse(UtilityRadarUI.longPressRadarSiteRegex)
-        if (MyApplication.dualpaneshareposn) {
+        if (RadarPreferences.dualpaneshareposn) {
             panesList.forEach { wxglRenders[it].rid = newRadarSite }
             ridChanged = true
             ridMapSwitch(wxglRenders[curRadar].rid)
@@ -1096,7 +1098,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun getContentIntelligent() {
-        if (MyApplication.dualpaneshareposn) {
+        if (RadarPreferences.dualpaneshareposn) {
             if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) getContentSerial() else getContentParallel()
         } else {
             getContent(wxglSurfaceViews[curRadar], wxglRenders[curRadar], curRadar)

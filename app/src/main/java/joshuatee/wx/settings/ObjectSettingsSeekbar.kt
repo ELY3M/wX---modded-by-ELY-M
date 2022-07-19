@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,8 +29,6 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.SeekBar
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 
@@ -48,7 +46,7 @@ internal class ObjectSettingsSeekBar(
     private val initValue = when (pref) {
         "RADAR_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
         "RADAR_HI_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
-        "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(context, pref, MyApplication.uiAnimIconFrames)).toIntOrNull() ?: 0
+        "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(context, pref, RadarPreferences.uiAnimIconFrames)).toIntOrNull() ?: 0
         "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 0))
         else -> Utility.readPref(context, pref, defValue)
     }
@@ -56,13 +54,13 @@ internal class ObjectSettingsSeekBar(
     private val seekBar = SeekBar(context)
 
     init {
-        objectTextView.setPadding(MyApplication.padding)
-        objectTextView.tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        objectTextView.setPadding(UIPreferences.padding)
+        objectTextView.get().layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
         objectTextView.gravity = Gravity.TOP
-        objectTextView.tv.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
+        objectTextView.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
         val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
         objectLinearLayout.matchParent()
-        objectLinearLayout.addView(objectTextView.tv)
+        objectLinearLayout.addView(objectTextView.get())
         seekBar.max = highValue - lowValue
         seekBar.progress = convert(initValue)
         val padding = 30
@@ -75,7 +73,7 @@ internal class ObjectSettingsSeekBar(
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (pref == "TEXTVIEW_FONT_SIZE") {
-                    objectTextView.tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(convertForSave(seekBar.progress), context))
+                    objectTextView.get().setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(convertForSave(seekBar.progress), context))
                 }
                 updateLabel()
             }

@@ -6,6 +6,33 @@ FAQ can be accessed via Settings -> About
 
 Please also review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md) impacting all or some users.
 
+## 55615 2022_07_16 (BETA)
+* [REF] Refactor some parts of the code base to make it more maintainable - you should not notice anything
+* [ADD] (main screen tabs) Switch to ViewPager2 and use FragmentStateAdapter since Google deprecated ViewPager - you should not notice anything
+* [ADD] Option to use new NWS Radar Mosaic (restart required). This is a temporary option as it appears likely the default mosaic will switch to NWS (away from AWC) later this year. Note the behavior may change slightly as the feature is refined
+* [REF] Change Level2 data site back to nomads after maintenance in Apr 2022
+* [REF] (remove unused assets to slightly reduce size of app) remove MyApplication.radarHwEnh, git rm ./app/src/main/res/raw/hw
+* [ADD] NWS Radar Mosaic - play icon toggles to stop and add ability to stop animation via button
+* [ADD] Nexrad radar long press - shorten verbiage
+* [FIX] partial - For NHC central pacific storms (images show but not text product - work in progress)
+
+## 55607 2022_07_09 (BETA)
+* [FIX] NHC notifications will now alert for ATL or EPAC depending on which is selected
+* [ADD] In the US Alert viewer, show warning types and states in sorted manner
+* [ADD] Settings -> UI alphabetize
+* [ADD] refine labels in Settings -> UI
+* [ADD] remove option "Reduce size of tile images" TILE_IMAGE_DOWNSIZE
+* [ADD] remove option "Show VR button on main screen" VR_BUTTON
+* [ADD] Target the latest version of Android (this is periodically required to be compliant with Google Play Store)
+* [ADD] Upgrade software component required by wX (okhttp)
+
+## 55603 2022_06_29 (BETA)
+* [FIX] terminal radar TICH (Wichita, KS) was not properly coded (was TICT), it is now available for use
+* [FIX] prevent nexrad radar from showing stale SWO data (earlier fix was not good)
+* [ADD] SPC Meso additions
+  - under Thermodynamics add "Skew-T Maps" skewt
+  - under "Winter Weather" add "Winter Skew-T Maps" skewt-winter
+
 ## 55599 2022_04_16
 * [FIX] more robustness for Hourly using old NWS API
 * [ADD] Please see URL above for a new page about upcoming changes to certain parts of wX

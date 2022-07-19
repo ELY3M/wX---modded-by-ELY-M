@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,8 +25,8 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectWarning
 
 class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, private val warning: ObjectWarning) {
@@ -37,8 +37,8 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
     private val textViewStart = ObjectTextView(context)
     private val textViewEnd = ObjectTextView(context)
     private val textViewBottom = ObjectTextView(context, backgroundText = true)
-    val radarButton = ObjectButton(context,"Radar", MyApplication.ICON_RADAR)
-    val detailsButton = ObjectButton(context,"Details", MyApplication.ICON_CURRENT)
+    val radarButton = ObjectButton(context,"Radar", GlobalVariables.ICON_RADAR)
+    val detailsButton = ObjectButton(context,"Details", GlobalVariables.ICON_CURRENT)
 
     init {
         val linearLayoutVertical = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
@@ -56,8 +56,6 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
         linearLayout.addView(objectCard.card)
     }
 
-    val card get() = objectCard.card
-
     fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
 
     private fun setTextFields() {
@@ -68,5 +66,7 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
         textViewBottom.text = warning.area
     }
 
-    fun setId(id: Int) { objectCard.card.id = id }
+    fun setId(id: Int) {
+        objectCard.card.id = id
+    }
 }

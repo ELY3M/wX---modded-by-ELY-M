@@ -17,14 +17,12 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import android.util.Log
-
 import java.io.ByteArrayInputStream
 import java.io.EOFException
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
-
 import joshuatee.wx.util.UCARRandomAccessFile
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog

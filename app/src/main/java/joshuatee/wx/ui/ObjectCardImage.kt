@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,7 +27,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TableLayout
 import androidx.appcompat.widget.Toolbar
-
 import joshuatee.wx.util.UtilityImg
 
 open class ObjectCardImage {
@@ -54,7 +53,7 @@ open class ObjectCardImage {
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
         objectCard.addView(img)
-        linearLayout.addView(card)
+        linearLayout.addView(get())
     }
 
     constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, bitmap: Bitmap) {
@@ -64,7 +63,7 @@ open class ObjectCardImage {
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objectCard.addView(img)
-        linearLayout.addView(card)
+        linearLayout.addView(get())
         setOnClickListener { UtilityToolbar.showHide(toolbar) }
     }
 
@@ -75,7 +74,7 @@ open class ObjectCardImage {
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objectCard.addView(img)
-        linearLayout.addView(card)
+        linearLayout.addView(get())
         setOnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
@@ -89,7 +88,7 @@ open class ObjectCardImage {
         this.context = context
         img = TouchImageView2(context)
         objectCard = ObjectCard(context)
-        linearLayout.addView(card)
+        linearLayout.addView(get())
     }
 
     open fun setImage(bitmap: Bitmap, numberAcross: Int = 1) {
@@ -109,11 +108,15 @@ open class ObjectCardImage {
 
     fun resetZoom() = img.resetZoom()
 
-    val card get() = objectCard.card
+    protected val card get() = objectCard.card
+
+    fun get() = objectCard.card
 
     var visibility
         get() = objectCard.visibility
         set(newValue) { objectCard.visibility = newValue }
 
-    fun setOnClickListener(fn: View.OnClickListener) = img.setOnClickListener(fn)
+    fun setOnClickListener(fn: View.OnClickListener) {
+        img.setOnClickListener(fn)
+    }
 }

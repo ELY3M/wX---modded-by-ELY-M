@@ -23,9 +23,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.fragments.UtilityLocationFragment
-import joshuatee.wx.fragments.UtilityNws
+import joshuatee.wx.util.UtilityForecastIcon
 
 /**
  * This is the service that provides the factory to be bound to the collection service.
@@ -72,7 +72,7 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
             if (list.size > 1) {
                 t1 = list[0].replace(":", " ") + " (" +
                         UtilityLocationFragment.extractTemperature(list[1]) +
-                        MyApplication.DEGREE_SYMBOL +
+                        GlobalVariables.DEGREE_SYMBOL +
                         UtilityLocationFragment.extractWindDirection(list[1].substring(1)) +
                         UtilityLocationFragment.extract7DayMetrics(list[1].substring(1)) + ")"
                 t2 = list[1]
@@ -85,7 +85,7 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
                 t1 = items[4].replace("^ ", "") + " " + list[0] + items[2]
                 t2 = list[1].replace("^ ", "") + sep + items[1] + sep + items[3]
             }
-            t2 += MyApplication.newline + preferences.getString("UPDTIME_WIDGET", "No data")
+            t2 += GlobalVariables.newline + preferences.getString("UPDTIME_WIDGET", "No data")
         }
         remoteViews.setTextViewText(R.id.widget_tv1, String.format(formatString, temp, t1))
         remoteViews.setTextViewText(R.id.widget_tv2, String.format(formatString, temp, t2))
@@ -94,7 +94,7 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
         val icons = iconString.split("!")
         if (position < icons.size) {
             remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
-            remoteViews.setImageViewBitmap(R.id.iv, UtilityNws.getIcon(context, icons[position]))
+            remoteViews.setImageViewBitmap(R.id.iv, UtilityForecastIcon.getIcon(context, icons[position]))
         }
         val fillInIntent = Intent()
         val extras = Bundle()

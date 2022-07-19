@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,11 +21,10 @@
 
 package joshuatee.wx.util
 
-import joshuatee.wx.MyApplication
 // FIXME see if this external can be removed
 import joshuatee.wx.external.ExternalDuplicateRemover
-
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.common.GlobalVariables
 
 object UtilityVtec {
 
@@ -43,11 +42,11 @@ object UtilityVtec {
                 } else {
                     ""
                 }
-                dashboardString += "  " + officeLabel + MyApplication.newline
+                dashboardString += "  " + officeLabel + GlobalVariables.newline
             }
         }
         dashboardString = ExternalDuplicateRemover().stripDuplicates(dashboardString)
-        return dashboardString.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size
+        return dashboardString.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }.size
     }
 
     fun getStormCountGeneric(data: String) = data.parseColumn("(\"id\": \"https://api.weather.gov/alerts/urn:oid)").size

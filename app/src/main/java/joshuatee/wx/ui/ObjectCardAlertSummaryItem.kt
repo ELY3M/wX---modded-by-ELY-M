@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,10 +26,9 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.parseMultiple
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
-
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.TextSize
 
 class ObjectCardAlertSummaryItem(context: Context) {
@@ -40,12 +39,12 @@ class ObjectCardAlertSummaryItem(context: Context) {
     private val textViewStart = ObjectTextView(context, TextSize.SMALL)
     private val textViewEnd = ObjectTextView(context, TextSize.SMALL)
     private val textViewBottom = ObjectTextView(context, backgroundText = true)
-    val radarButton = ObjectButton(context,"Radar", MyApplication.ICON_RADAR)
-    val detailsButton = ObjectButton(context,"Details", MyApplication.ICON_CURRENT)
+    val radarButton = ObjectButton(context,"Radar", GlobalVariables.ICON_RADAR)
+    val detailsButton = ObjectButton(context,"Details", GlobalVariables.ICON_CURRENT)
 
     init {
         val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
-        objectLinearLayout.addViews(listOf(textViewTop.tv, textViewTitle.tv, textViewStart.tv, textViewEnd.tv, textViewBottom.tv))
+        objectLinearLayout.addViews(listOf(textViewTop.get(), textViewTitle.get(), textViewStart.get(), textViewEnd.get(), textViewBottom.get()))
         val linearLayoutHorizontal = LinearLayout(context)
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         linearLayoutHorizontal.layoutParams = layoutParams
@@ -55,9 +54,11 @@ class ObjectCardAlertSummaryItem(context: Context) {
         objectCard.addView(objectLinearLayout)
     }
 
-    val card get() = objectCard.card
+    fun get() = objectCard.get()
 
-    fun setId(id: Int) { objectCard.card.id = id }
+    fun setId(id: Int) {
+        objectCard.card.id = id
+    }
 
     fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
 
@@ -78,7 +79,7 @@ class ObjectCardAlertSummaryItem(context: Context) {
         }
         textViewTop.text = "$office ($location)"
         if (office == "") {
-            textViewTop.tv.visibility = View.GONE
+            textViewTop.visibility = View.GONE
         }
         textViewBottom.text = capAlert.area
         textViewTitle.text = title
@@ -86,7 +87,7 @@ class ObjectCardAlertSummaryItem(context: Context) {
         if (endTime != "") {
             textViewEnd.text = "End: $endTime"
         } else {
-            textViewEnd.tv.visibility = View.GONE
+            textViewEnd.visibility = View.GONE
         }
     }
 }

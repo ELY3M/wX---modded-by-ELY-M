@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,16 +25,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
 import androidx.core.app.ShareCompat.IntentBuilder
 import java.io.File
 import java.io.FileOutputStream
-import joshuatee.wx.MyApplication
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.common.GlobalVariables
 
 object UtilityShare {
 
-    fun prepTextForShare(text: String) = text.replace(MyApplication.newline, MyApplication.newline + MyApplication.newline)
+    fun prepTextForShare(text: String) = text.replace(GlobalVariables.newline, GlobalVariables.newline + GlobalVariables.newline)
 
     fun textAsAttachment(activity: Activity, context: Context, subject: String, text: String, filename: String) {
         val dir = File(context.filesDir.toString() + "/shared")
@@ -42,7 +40,7 @@ object UtilityShare {
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         }
         val file = File(dir, filename)
-        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", file)
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
@@ -89,7 +87,7 @@ object UtilityShare {
         val dir = File(context.filesDir.toString() + "/shared")
         if (!dir.mkdirs()) UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         val file = File(dir, "img1.png")
-        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", file)
         try {
             val fos = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
@@ -112,14 +110,14 @@ object UtilityShare {
         }
     }
 
-    internal var animDrawablePublic: AnimationDrawable? = null
-    internal var subjectPublic: String? = null
+//    internal var animDrawablePublic: AnimationDrawable? = null
+//    internal var subjectPublic: String? = null
 
-    fun animGif(context: Context, subject: String, animDrawable: AnimationDrawable) {
-        UtilityUI.makeToastLegacy(context, "Creating animated gif")
-        animDrawablePublic = animDrawable
-        subjectPublic = subject
-        val intent = Intent(context, CreateAnimatedGifService::class.java)
-        context.startService(intent)
-    }
+//    fun animGif(context: Context, subject: String, animDrawable: AnimationDrawable) {
+//        UtilityUI.makeToastLegacy(context, "Creating animated gif")
+//        animDrawablePublic = animDrawable
+//        subjectPublic = subject
+//        val intent = Intent(context, CreateAnimatedGifService::class.java)
+//        context.startService(intent)
+//    }
 }

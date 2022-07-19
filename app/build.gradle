@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion '31.0.0'
 
 
     defaultConfig {
         applicationId "joshuatee.wx"
         minSdkVersion 21   // 5.0
-        targetSdkVersion 31
+        targetSdkVersion 32
         // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -95,7 +95,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.jjoe64:graphview:4.2.2'
-    implementation "com.squareup.okhttp3:okhttp:4.9.3"
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
     // implementation "androidx.navigation:navigation-compose:1.0.0-alpha07"
 
     // https://developer.android.com/studio/write/java8-support

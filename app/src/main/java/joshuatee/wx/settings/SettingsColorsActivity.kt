@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,6 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.LinearLayout
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.objects.GeographyType
@@ -73,9 +72,13 @@ class SettingsColorsActivity : BaseActivity() {
             "NWS Forecast Icon Bottom color" to "NWS_ICON_BOTTOM_COLOR",
             "Nexrad Radar Background color" to "NEXRAD_RADAR_BACKGROUND_COLOR"
         )
-        MyApplication.radarWarningPolygons.forEach { mapColorToPref[it.name + " color"] = it.prefTokenColor }
+        RadarPreferences.radarWarningPolygons.forEach {
+            mapColorToPref[it.name + " color"] = it.prefTokenColor
+        }
         objectSettingsColorLabels = mapColorToPref.keys.sorted().map { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
-        objectSettingsColorLabels.forEach { linearLayout.addView(it.card) }
+        objectSettingsColorLabels.forEach {
+            linearLayout.addView(it.get())
+        }
     }
 
     override fun onRestart() {
@@ -91,6 +94,8 @@ class SettingsColorsActivity : BaseActivity() {
 
     private fun setColorOnButtons() {
         MyApplication.initPreferences(this)
-        objectSettingsColorLabels.forEach { it.refreshColor() }
+        objectSettingsColorLabels.forEach {
+            it.refreshColor()
+        }
     }
 }

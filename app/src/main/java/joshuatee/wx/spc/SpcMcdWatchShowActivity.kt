@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,6 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.widget.LinearLayout
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
@@ -42,7 +41,8 @@ import joshuatee.wx.util.UtilityShare
 
 class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
-    // show a specific MCD, Watch, or MPD - long press on image to save location
+    //
+    // show a specific MCD, Watch, or MPD
     //
     // Arguments
     //
@@ -107,7 +107,9 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, objectWatchProduct.text, number, objectWatchProduct.prod)) return true
+        if (audioPlayMenu(item.itemId, objectWatchProduct.text, number, objectWatchProduct.prod)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_radar -> ObjectIntent.showRadarBySite(this, objectWatchProduct.getClosestRadar())
             R.id.action_share_all -> UtilityShare.bitmap(this, this, objectWatchProduct.title, objectWatchProduct.bitmap, Utility.fromHtml(objectWatchProduct.text))

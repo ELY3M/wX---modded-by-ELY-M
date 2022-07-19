@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -157,10 +157,10 @@ class LatLon() {
         fun latLonListToListOfDoubles(latLons: List<LatLon>, projectionNumbers: ProjectionNumbers): List<Double> {
             val warningList = mutableListOf<Double>()
             if (latLons.isNotEmpty()) {
-                val startCoordinates = UtilityCanvasProjection.computeMercatorNumbers(latLons[0], projectionNumbers).toMutableList()
+                val startCoordinates = UtilityCanvasProjection.computeMercatorNumbers(latLons[0], projectionNumbers).toList()
                 warningList += startCoordinates
                 (1 until latLons.size).forEach { index ->
-                    val coordinates = UtilityCanvasProjection.computeMercatorNumbers(latLons[index], projectionNumbers).toMutableList()
+                    val coordinates = UtilityCanvasProjection.computeMercatorNumbers(latLons[index], projectionNumbers).toList()
                     warningList += coordinates
                     warningList += coordinates
                 }

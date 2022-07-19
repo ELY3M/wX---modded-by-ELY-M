@@ -29,7 +29,6 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-
 import joshuatee.wx.R
 import kotlin.math.min
 import kotlin.math.roundToInt

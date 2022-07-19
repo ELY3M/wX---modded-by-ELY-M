@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -18,49 +18,47 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M. 
-
+//Modded by ELY M. - Aurora Forecast
+ 
 package joshuatee.wx.ui
 
 import joshuatee.wx.activitiesmisc.UtilityOpcImages
 import joshuatee.wx.activitiesmisc.UtilityObservations
 import joshuatee.wx.vis.UtilityGoesFullDisk
-import joshuatee.wx.space.*
+import joshuatee.wx.space.UtilityAurora
 
 class ObjectImagesCollection(val title: String, val urls: List<String>, val labels: List<String>, val prefTokenIdx: String, val prefImagePosition: String) {
 
     companion object {
-        fun initialize(): MutableMap<String, ObjectImagesCollection> {
-            val collectionMap = mutableMapOf<String, ObjectImagesCollection>()
-            collectionMap["OPC"] = ObjectImagesCollection(
+
+        val imageCollectionMap = mapOf(
+            "OPC" to ObjectImagesCollection(
                     "OPC",
                     UtilityOpcImages.urls,
                     UtilityOpcImages.labels,
                     "OPC_IMG_FAV_IDX",
-                    "OPCIMG"
-            )
-            collectionMap["OBSERVATIONS"] = ObjectImagesCollection(
+                    "OPCIMG"),
+            "OBSERVATIONS" to ObjectImagesCollection(
                     "Observations",
                     UtilityObservations.urls,
                     UtilityObservations.labels,
                     "SFC_OBS_IMG_IDX",
-                    "OBS"
-            )
-            collectionMap["GOESFD"] = ObjectImagesCollection(
+                    "OBS"),
+            "GOESFD" to ObjectImagesCollection(
                     "GOESFD",
                     UtilityGoesFullDisk.urls,
                     UtilityGoesFullDisk.labels,
                     "GOESFULLDISK_IMG_FAV_IDX",
-                    "GOESFULLDISKIMG"
-            )
-            collectionMap["AURORA"] = ObjectImagesCollection(
+                    "GOESFULLDISKIMG"),
+					
+            //elys mod
+            "AURORA" to ObjectImagesCollection(
                     "AURORA",
                     UtilityAurora.urls,
                     UtilityAurora.labels,
                     "AURORA_IMG_FAV_IDX",
-                    "AURORA"
-            )
-            return collectionMap
-        }
+                    "AURORA"),
+									
+        )
     }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -18,13 +18,100 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//Modded by ELY M.  
 
 package joshuatee.wx.common
 
+import android.os.Environment
+import joshuatee.wx.R
+import java.util.regex.Pattern
+
 object GlobalVariables {
 
-    const val nwsAWCwebsitePrefix = "https://www.aviationweather.gov"
-    const val nwsOpcWebsitePrefix = "https://ocean.weather.gov"
+    val newline: String = System.lineSeparator()
+
+    const val packageNameAsString = "joshuatee.wx"
+    const val packageNameFileNameAsString = "joshuatee_wx"
+    const val emailAsString = "elymbmx@gmail.com"
+	
+	//elys mod
+    val FilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
+    val PalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/pal/"
+    val BackupFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/"
+    val BackupPalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/pal/"
+	
+	
+	//conus radar for zoom out
+    //const val nwsConusRadar = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
+    //const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
+
+    //const val nwsConusRadar = "https://atlas.niu.edu/analysis/radar/CONUS/usrad_current_b.gif"  //backup url
+    const val nwsConusRadar = "https://www.aviationweather.gov/data/obs/radar/rad_rala_us.gif"
+    const val conusImageName = "conus.gif"
+
+    //testing
+    const val nwsConusRadarNew = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_raw/ows?service=wms&version=1.3.0&request=GetCapabilities"
+	//end of elys mod 
+
+
+
+    const val nwsRadarPub = "https://tgftp.nws.noaa.gov/"
     const val nwsSPCwebsitePrefix = "https://www.spc.noaa.gov"
-    const val newline = "\n"
+    const val nwsWPCwebsitePrefix = "https://www.wpc.ncep.noaa.gov"
+    const val nwsAWCwebsitePrefix = "https://www.aviationweather.gov"
+    const val nwsGraphicalWebsitePrefix = "https://graphical.weather.gov"
+    const val nwsCPCNcepWebsitePrefix = "https://www.cpc.ncep.noaa.gov"
+    const val nwsGoesWebsitePrefix = "https://www.goes.noaa.gov"
+    const val nwsOpcWebsitePrefix = "https://ocean.weather.gov"
+    const val nwsNhcWebsitePrefix = "https://www.nhc.noaa.gov"
+    const val nwsMagNcepWebsitePrefix = "https://mag.ncep.noaa.gov"
+    const val goes16Url = "https://cdn.star.nesdis.noaa.gov"
+    const val goes16AnimUrl = "https://www.star.nesdis.noaa.gov"
+    const val nwsApiUrl = "https://api.weather.gov"
+    const val nwsSwpcWebSitePrefix = "https://services.swpc.noaa.gov"
+    const val canadaEcSitePrefix = "https://weather.gc.ca"
+    const val tgftpSitePrefix = "https://tgftp.nws.noaa.gov"
+    const val sep = "ABC123"
+    const val pre2Pattern = "<pre>(.*?)</pre>"
+
+    const val ICON_ALERT_2 = R.drawable.ic_report_24dp
+    const val ICON_MAP = R.drawable.ic_public_24dp
+    const val ICON_MPD = R.drawable.ic_brightness_7_24dp
+    const val ICON_TORNADO = R.drawable.ic_flash_off_24dp
+    const val ICON_MCD = R.drawable.ic_directions_24dp
+    const val ICON_ACTION = R.drawable.ic_play_arrow_24dp
+    const val ICON_ALERT = R.drawable.ic_warning_24dp
+    const val ICON_RADAR = R.drawable.ic_flash_on_24dp
+    const val ICON_RADAR_WHITE = R.drawable.ic_flash_on_24dp_white
+    const val ICON_FORECAST = R.drawable.ic_place_24dp
+    const val ICON_CURRENT = R.drawable.ic_info_outline_24dp
+    const val ICON_CURRENT_WHITE = R.drawable.ic_info_outline_24dp_white
+    const val ICON_NHC_1 = R.drawable.ic_brightness_auto_24dp
+    const val ICON_DELETE_WHITE = R.drawable.ic_delete_24dp_white
+    const val STAR_ICON = R.drawable.ic_star_24dp
+    const val STAR_OUTLINE_ICON = R.drawable.ic_star_outline_24dp
+    const val STAR_ICON_WHITE = R.drawable.ic_star_24dp_white
+    const val STAR_OUTLINE_ICON_WHITE = R.drawable.ic_star_outline_24dp_white
+    const val ICON_PLAY_WHITE = R.drawable.ic_play_arrow_24dp_white
+    const val ICON_STOP_WHITE = R.drawable.ic_stop_24dp_white
+    const val ICON_MIC = R.drawable.ic_mic_24dp
+    const val ICON_PAUSE = R.drawable.ic_pause_24dp
+    const val ICON_PAUSE_WHITE = R.drawable.ic_pause_24dp_white
+    const val ICON_PAUSE_PRESSED = R.drawable.ic_pause_white_24dp
+    const val ICON_PAUSE_PRESSED_BLUE = R.drawable.ic_pause_blue_24dp
+    const val ICON_ADD = R.drawable.ic_add_box_24dp
+    const val ICON_ADD2 = R.drawable.ic_add2_box_24dp_white
+    const val ICON_SKIP_BACK = R.drawable.ic_skip_previous_24dp
+    const val ICON_SKIP_FORWARD = R.drawable.ic_skip_next_24dp
+
+    const val DEGREE_SYMBOL = "\u00B0"
+    const val prefSeparator = " : : :"
+    const val WIDGET_FILE_BAK = "BAK"
+
+    //
+    // Legacy forecast support
+    //
+    val utilUSWeatherSummaryPattern: Pattern = Pattern.compile(".*?weather-summary=(.*?)/>.*?")
+    val utilUSPeriodNamePattern: Pattern = Pattern.compile(".*?period-name=(.*?)>.*?")
+    val xmlValuePattern: Pattern = Pattern.compile("<value>")
 }

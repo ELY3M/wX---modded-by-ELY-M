@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,10 +22,11 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarningType
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.UtilityDownloadNws
 
 internal object UtilityDownloadWarnings {
@@ -45,7 +46,7 @@ internal object UtilityDownloadWarnings {
             if (PolygonType.TST.pref) {
                 getPolygonVtec(context)
             }
-            MyApplication.radarWarningPolygons.forEach {
+            RadarPreferences.radarWarningPolygons.forEach {
                 if (it.isEnabled) {
                     it.storage.valueSet(context, getVtecByType(it.type))
                 } else {
@@ -63,21 +64,25 @@ internal object UtilityDownloadWarnings {
 
     // The only difference from the get method above is the absence of any preference check
     // ie - if you call this you are going to download regardless
-    fun getForNotification(context: Context) { if (timer.isRefreshNeeded(context)) getPolygonVtec(context) }
+    fun getForNotification(context: Context) {
+        if (timer.isRefreshNeeded(context)) {
+            getPolygonVtec(context)
+        }
+    }
 
     private fun getPolygonVtec(context: Context) {
         // FIXME improve structure
         val tstData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tStormUrl)
         if (tstData != "") {
-            MyApplication.severeDashboardTst.valueSet(context, tstData)
+            ObjectPolygonWarning.severeDashboardTst.valueSet(context, tstData)
         }
         val ffwData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ffwUrl)
         if (ffwData != "") {
-            MyApplication.severeDashboardFfw.valueSet(context, ffwData)
+            ObjectPolygonWarning.severeDashboardFfw.valueSet(context, ffwData)
         }
         val torData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tornadoUrl)
         if (torData != "") {
-            MyApplication.severeDashboardTor.valueSet(context, torData)
+            ObjectPolygonWarning.severeDashboardTor.valueSet(context, torData)
         }
     }
 

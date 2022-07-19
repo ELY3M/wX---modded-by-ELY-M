@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,8 +23,8 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.RemoteViews
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
@@ -39,7 +39,7 @@ class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
 
     init {
         UtilityWidget.setImage(context, remoteViews, type.fileName)
-        if (!MyApplication.widgetPreventTap) {
+        if (!UIPreferences.widgetPreventTap) {
             when (type) {
                 WPCIMG -> UtilityWidget.setupIntent(context, remoteViews, WpcImagesActivity::class.java, R.id.iv, WpcImagesActivity.URL, arrayOf(""), type.action)
                 SPCMESO -> UtilityWidget.setupIntent(context, remoteViews, SpcMesoActivity::class.java, R.id.iv, SpcMesoActivity.INFO, arrayOf("SPCMESO1", "1", "SPCMESO"), type.action)

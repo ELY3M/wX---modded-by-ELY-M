@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,7 +21,7 @@
 
 package joshuatee.wx.util
 
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ProjectionType
 
 class ProjectionNumbers {
@@ -68,7 +68,7 @@ class ProjectionNumbers {
                 yCenter = 400.0
             }
             ProjectionType.WX_RENDER -> {
-                scale = 38.00 * MyApplication.widgetNexradSize
+                scale = 38.00 * UIPreferences.widgetNexradSize
                 xCenter = 500.0
                 yCenter = 500.0
                 polygonWidth = 2.0

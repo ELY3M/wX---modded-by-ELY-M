@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,8 +25,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.cardview.widget.CardView
 import android.view.View
-
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 
 class ObjectCard {
 
@@ -41,9 +40,9 @@ class ObjectCard {
 
     private fun setupCard() {
         card.setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
-        card.cardElevation = MyApplication.cardElevation
+        card.cardElevation = UIPreferences.cardElevation
         card.setContentPadding(padding, padding, padding, padding)
-        card.radius = MyApplication.cardCorners
+        card.radius = UIPreferences.cardCorners
         card.useCompatPadding = true
         card.preventCornerOverlap = true
     }
@@ -68,9 +67,25 @@ class ObjectCard {
         get() = card.visibility
         set(newValue) { card.visibility = newValue }
 
-    fun addView(view: View) { card.addView(view) }
+    fun addView(view: View) {
+        card.addView(view)
+    }
 
-    fun addView(objectLinearLayout: ObjectLinearLayout) { card.addView(objectLinearLayout.linearLayout) }
+    fun addView(objectLinearLayout: ObjectLinearLayout) {
+        card.addView(objectLinearLayout.linearLayout)
+    }
 
-    fun setOnClickListener(fn: View.OnClickListener) { card.setOnClickListener(fn) }
+    fun setOnClickListener(fn: View.OnClickListener) {
+        card.setOnClickListener(fn)
+    }
+
+    fun setId(id: Int) {
+        card.id = id
+    }
+
+    fun setCardBackgroundColor(color: Int) {
+        card.setCardBackgroundColor(color)
+    }
+
+    fun get() = card
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,9 +27,10 @@ import androidx.core.app.NotificationCompat
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.util.UtilityTime
 
 // FIXME share more code with severe dashboard or radar
@@ -79,26 +80,26 @@ internal object UtilityNotificationTornado {
                             arrayOf(url, ""),
                             arrayOf(url, "sound")
                     )
-                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
-                        val sound = MyApplication.alertNotificationSoundTornadoCurrent && !inBlackout
+                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
+                        val sound = NotificationPreferences.alertNotificationSoundTornadoCurrent && !inBlackout
                         val objectNotification = ObjectNotification(
                                 context,
                                 sound,
                                 noMain,
                                 noBody,
                                 objectPendingIntents.resultPendingIntent,
-                                MyApplication.ICON_TORNADO,
+                                GlobalVariables.ICON_TORNADO,
                                 noSummary,
                                 NotificationCompat.PRIORITY_HIGH,
                                 Color.RED,
-                                MyApplication.ICON_ACTION,
+                                GlobalVariables.ICON_ACTION,
                                 objectPendingIntents.resultPendingIntent2,
                                 context.resources.getString(R.string.read_aloud)
                         )
                         val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
                         objectNotification.sendNotification(context, url, 1, notification)
                     }
-                    notifUrls += url + MyApplication.notificationStrSep
+                    notifUrls += url + NotificationPreferences.notificationStrSep
                 }
             } // end size check of URL list
             i += 1

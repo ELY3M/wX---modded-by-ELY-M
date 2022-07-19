@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -20,7 +20,7 @@
 */
 //modded by ELY M. 
 
-package joshuatee.wx
+package joshuatee.wx.ui
 
 import android.app.Activity
 import android.content.Context
@@ -32,6 +32,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import joshuatee.wx.R
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.audio.UtilityTts
@@ -40,7 +42,7 @@ import joshuatee.wx.canada.*
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsMainActivity
-import joshuatee.wx.ui.ObjectPopupMessage
+import joshuatee.wx.settings.UtilityHomeScreen
 import joshuatee.wx.settings.SettingsAboutActivity //for about
 
 open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListener {
@@ -152,6 +154,6 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     }
 
     fun openActivity(context: Context, activityName: String) {
-        ObjectIntent(context, MyApplication.HM_CLASS[activityName]!!, MyApplication.HM_CLASS_ID[activityName]!!, MyApplication.HM_CLASS_ARGS[activityName]!!)
+        ObjectIntent(context, UtilityHomeScreen.HM_CLASS[activityName]!!, UtilityHomeScreen.HM_CLASS_ID[activityName]!!, UtilityHomeScreen.HM_CLASS_ARGS[activityName]!!)
     }
 }

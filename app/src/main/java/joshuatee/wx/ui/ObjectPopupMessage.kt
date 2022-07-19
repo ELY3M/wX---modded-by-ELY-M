@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 
 class ObjectPopupMessage(view: View, message: String) {
 
@@ -39,7 +39,7 @@ class ObjectPopupMessage(view: View, message: String) {
         val fgColor = Color.WHITE
         val bgColor = Color.BLACK
         textView.setTextColor(fgColor)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
         viewSnack.setBackgroundColor(bgColor)
         snack.show()
     }

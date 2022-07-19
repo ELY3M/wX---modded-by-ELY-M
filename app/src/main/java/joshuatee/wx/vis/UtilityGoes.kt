@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,7 +27,7 @@ import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityString
 
 object UtilityGoes {
@@ -39,8 +39,7 @@ object UtilityGoes {
     }
 
     fun getImageGoesFloater(url: String, product: String): Bitmap {
-        var urlFinal = url
-        urlFinal = urlFinal.replace("GEOCOLOR", product)
+        val urlFinal = url.replace("GEOCOLOR", product)
         return urlFinal.getImage()
     }
 
@@ -64,7 +63,7 @@ object UtilityGoes {
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/cgl/12/latest.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES17/ABI/CONUS/GEOCOLOR/1250x750.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/1250x750.jpg
-        var url = MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
+        var url = GlobalVariables.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
         if (product == "GLM") {
             url = url.replace("ABI", "GLM")
             url = url.replace("$sectorLocal/GLM", "$sectorLocal/EXTENT3")
@@ -80,9 +79,9 @@ object UtilityGoes {
         val productLocal = product.replace("GLM", "EXTENT3")
         val url = when (sector) {
             // https://www.star.nesdis.noaa.gov/GOES/fulldisk_band.php?sat=G17&band=GEOCOLOR&length=12
-            "FD", "FD-G17" -> MyApplication.goes16AnimUrl + "/GOES/fulldisk_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
-            "CONUS", "CONUS-G17" -> MyApplication.goes16AnimUrl + "/GOES/conus_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
-            else -> MyApplication.goes16AnimUrl + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$productLocal&length=$frameCountString"
+            "FD", "FD-G17" -> GlobalVariables.goes16AnimUrl + "/GOES/fulldisk_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
+            "CONUS", "CONUS-G17" -> GlobalVariables.goes16AnimUrl + "/GOES/conus_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
+            else -> GlobalVariables.goes16AnimUrl + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$productLocal&length=$frameCountString"
         }
         val html = url.getHtml().replace("\n", "").replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")
@@ -92,14 +91,13 @@ object UtilityGoes {
     }
 
     fun getAnimationGoesFloater(context: Context, product: String, url: String, frameCount: Int): AnimationDrawable {
-        var baseUrl = url
-        baseUrl = baseUrl.replace("GEOCOLOR", product).replace("latest.jpg", "")
+        val baseUrl = url.replace("GEOCOLOR", product).replace("latest.jpg", "")
         val html = baseUrl.getHtml()
         val urlList = UtilityString.parseColumn(html.replace("\r\n", " "), "<a href=\"([^\\s]*?1000x1000.jpg)\">")
         val returnList = mutableListOf<String>()
         if (urlList.size > frameCount) {
-            for (i in (urlList.size - frameCount) until urlList.size) {
-                returnList.add(baseUrl + urlList[i])
+            ((urlList.size - frameCount) until urlList.size).forEach {
+                returnList.add(baseUrl + urlList[it])
             }
         }
         val bitmaps = returnList.map { it.getImage() }

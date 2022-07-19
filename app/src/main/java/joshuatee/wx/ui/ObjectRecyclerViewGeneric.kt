@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId: Int) {
 
+    // TODO FIXME property to set adapter
     val recyclerView: RecyclerView = activity.findViewById(resourceId)
 
     init {
@@ -37,5 +38,7 @@ class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId
         recyclerView.layoutManager = linearLayoutManager
     }
 
-    fun scrollToPosition(position: Int): Unit = recyclerView.scrollToPosition(position)
+    fun scrollToPosition(position: Int) {
+        recyclerView.scrollToPosition(position)
+    }
 }

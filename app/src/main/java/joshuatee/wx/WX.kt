@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -43,11 +43,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.canada.CanadaAlertsActivity
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.fragments.LocationFragment
 import joshuatee.wx.fragments.ViewPagerAdapter
 import joshuatee.wx.models.ModelsSpcHrefActivity
@@ -56,6 +58,7 @@ import joshuatee.wx.models.ModelsSpcSrefActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.spc.*
 import joshuatee.wx.ui.*
@@ -77,7 +80,7 @@ class WX : CommonActionBarFragment() {
     private lateinit var navigationView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var slidingTabLayout: TabLayout
-    private lateinit var viewPager: ViewPager
+    private lateinit var viewPager: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(UIPreferences.themeInt)
@@ -99,15 +102,15 @@ class WX : CommonActionBarFragment() {
         UtilityTheme.setPrimaryColor(this)
         val toolbarBottom: Toolbar = findViewById(R.id.toolbar_bottom)
         view = findViewById(android.R.id.content)
-        toolbarBottom.elevation = MyApplication.elevationPref
-        if (MyApplication.iconsEvenSpaced) {
+        toolbarBottom.elevation = UIPreferences.elevationPref
+        if (UIPreferences.iconsEvenSpaced) {
             UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, R.menu.cab)
         } else {
             toolbarBottom.inflateMenu(R.menu.cab)
         }
 
         //elys mod
-        if (MyApplication.checkinternet) {
+        if (UIPreferences.checkinternet) {
             Utility.checkInternet(this)
         }
 
@@ -115,8 +118,8 @@ class WX : CommonActionBarFragment() {
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         val menu = toolbarBottom.menu
         voiceRecognitionIcon = menu.findItem(R.id.action_vr)
-        voiceRecognitionIcon.isVisible = MyApplication.vrButton
-        val fab = ObjectFab(this, this, R.id.fab, MyApplication.ICON_RADAR_WHITE) { openNexradRadar(this) }
+        voiceRecognitionIcon.isVisible = UIPreferences.vrButton
+        val fab = ObjectFab(this, this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
         if (UIPreferences.mainScreenRadarFab) {
             val radarMi = menu.findItem(R.id.action_radar)
             radarMi.isVisible = false
@@ -124,12 +127,16 @@ class WX : CommonActionBarFragment() {
             fab.visibility = View.GONE
         }
         viewPager.offscreenPageLimit = 4
-        vpa = ViewPagerAdapter(supportFragmentManager)
+        vpa = ViewPagerAdapter(this)
         viewPager.adapter = vpa
         slidingTabLayout.tabGravity = TabLayout.GRAVITY_FILL
-        slidingTabLayout.setupWithViewPager(viewPager)
-        slidingTabLayout.elevation = MyApplication.elevationPref
-        if (MyApplication.simpleMode || UIPreferences.hideTopToolbar || UIPreferences.navDrawerMainScreen) {
+//        slidingTabLayout.setupWithViewPager(viewPager)
+        TabLayoutMediator(slidingTabLayout, viewPager) { tab, position ->
+            tab.text = "OBJECT ${(position + 1)}"
+        }.attach()
+
+        slidingTabLayout.elevation = UIPreferences.elevationPref
+        if (UIPreferences.simpleMode || UIPreferences.hideTopToolbar || UIPreferences.navDrawerMainScreen) {
             slidingTabLayout.visibility = View.GONE
         }
         slidingTabLayout.setSelectedTabIndicatorColor(UtilityTheme.getPrimaryColorFromSelectedTheme(this, 0))
@@ -274,10 +281,10 @@ class WX : CommonActionBarFragment() {
                 }
                 true
             }
-            ObjectFab(this, this, R.id.fab2, MyApplication.ICON_ADD2) {
+            ObjectFab(this, this, R.id.fab2, GlobalVariables.ICON_ADD2) {
                 val headerSize: Float
                 val tabStr = UtilitySpc.checkSpc()
-                if (MyApplication.checkspc || MyApplication.checktor || MyApplication.checkwpc && (tabStr[0] != "SPC" || tabStr[1] != "MISC")) {
+                if (UIPreferences.checkspc || UIPreferences.checktor || UIPreferences.checkwpc && (tabStr[0] != "SPC" || tabStr[1] != "MISC")) {
                     statusText.visibility = View.VISIBLE
                     statusText.text = tabStr[0] + " " + tabStr[1]
                     headerSize = 280f
@@ -312,12 +319,12 @@ class WX : CommonActionBarFragment() {
     }
 
     private fun refreshDynamicContent() {
-        if (!MyApplication.simpleMode) {
+        if (!UIPreferences.simpleMode) {
             val tabStr = UtilitySpc.checkSpc()
             vpa.setTabTitles(1, tabStr[0])
             vpa.setTabTitles(2, tabStr[1])
             if (slidingTabLayout.tabCount > 2) {
-                slidingTabLayout.getTabAt(0)!!.text = MyApplication.tabHeaders[0]
+                slidingTabLayout.getTabAt(0)!!.text = UIPreferences.tabHeaders[0]
                 slidingTabLayout.getTabAt(1)!!.text = vpa.tabTitles[1]
                 slidingTabLayout.getTabAt(2)!!.text = vpa.tabTitles[2]
             }
@@ -340,7 +347,7 @@ class WX : CommonActionBarFragment() {
 
     override fun onRestart() {
         super.onRestart()
-        voiceRecognitionIcon.isVisible = MyApplication.vrButton
+        voiceRecognitionIcon.isVisible = UIPreferences.vrButton
         backButtonCounter = 0
         refreshDynamicContent()
     }

@@ -390,4 +390,5 @@
     <string name="todo">TODO</string>
     <string name="radar">Radar</string>
     <string name="search_by_name">Search by name</string>
+    <string name="use_awc_mosaic">Use AWC for Radar Mosaic</string>
 </resources>

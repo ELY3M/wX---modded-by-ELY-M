@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,14 +23,12 @@ package joshuatee.wx.radarcolorpalettes
 
 import android.content.Context
 
-import joshuatee.wx.MyApplication
-
 internal object UtilityColorPalette165 {
 
     private const val radarColorPaletteCode = 165
 
     private fun generate(context: Context, code: String) {
-        val objectColorPalette = MyApplication.colorMap[radarColorPaletteCode]!!
+        val objectColorPalette = ObjectColorPalette.colorMap[radarColorPaletteCode]!!
         objectColorPalette.position(0)
         val objectColorPaletteLines = mutableListOf<ObjectColorPaletteLine>()
         val text = UtilityColorPalette.getColorMapStringFromDisk(context, radarColorPaletteCode, code)
@@ -54,6 +52,6 @@ internal object UtilityColorPalette165 {
     }
 
     fun loadColorMap(context: Context) {
-        generate(context, MyApplication.radarColorPalette[radarColorPaletteCode]!!)
+        generate(context, ObjectColorPalette.radarColorPalette[radarColorPaletteCode]!!)
     }
 }

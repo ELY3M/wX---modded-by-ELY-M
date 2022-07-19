@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019 joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,8 +22,8 @@
 package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.Extensions.parseColumn
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
@@ -38,40 +38,40 @@ object UtilityUSHourly {
         val windSpeeds = html.parseColumn("\"windSpeed\": \"(.*?)\"")
         val windDirections = html.parseColumn("\"windDirection\": \"(.*?)\"")
         val shortForecasts = html.parseColumn("\"shortForecast\": \"(.*?)\"")
-        var timeData = "Time" + MyApplication.newline
-        var tempData = "Temp" + MyApplication.newline
-        var windSpeedData = "WindSpd" + MyApplication.newline
-        var windDirData = "WindDir" + MyApplication.newline
-        var conditionData = "Condition" + MyApplication.newline
+        var timeData = "Time" + GlobalVariables.newline
+        var tempData = "Temp" + GlobalVariables.newline
+        var windSpeedData = "WindSpd" + GlobalVariables.newline
+        var windDirData = "WindDir" + GlobalVariables.newline
+        var conditionData = "Condition" + GlobalVariables.newline
         startTimes.indices.forEach {
             val time = UtilityTime.translateTimeForHourly(startTimes[it])
             val temperature = Utility.safeGet(temperatures, it).replace("\"","")
             val windSpeed = Utility.safeGet(windSpeeds, it).replace(" to ", "-")
             val windDirection = Utility.safeGet(windDirections, it)
             val shortForecast = Utility.safeGet(shortForecasts, it)
-            timeData += time + MyApplication.newline
-            tempData += temperature + MyApplication.newline
-            windSpeedData += windSpeed + MyApplication.newline
-            windDirData += windDirection + MyApplication.newline
-            conditionData += shortenConditions(shortForecast) + MyApplication.newline
+            timeData += time + GlobalVariables.newline
+            tempData += temperature + GlobalVariables.newline
+            windSpeedData += windSpeed + GlobalVariables.newline
+            windDirData += windDirection + GlobalVariables.newline
+            conditionData += shortenConditions(shortForecast) + GlobalVariables.newline
         }
         return ObjectHourly(timeData, tempData, windSpeedData, windDirData, conditionData)
     }
 
     internal fun getStringForActivityFromOldApi(html: String): ObjectHourly {
-        var timeData = "Time" + MyApplication.newline
-        var tempData = "Temp" + MyApplication.newline
-        var windSpeedData = "Dew" + MyApplication.newline
-        var windDirData = "Precip%" + MyApplication.newline
-        var conditionData = "Cloud%" + MyApplication.newline
-        html.split(MyApplication.newline).forEach {
+        var timeData = "Time" + GlobalVariables.newline
+        var tempData = "Temp" + GlobalVariables.newline
+        var windSpeedData = "Dew" + GlobalVariables.newline
+        var windDirData = "Precip%" + GlobalVariables.newline
+        var conditionData = "Cloud%" + GlobalVariables.newline
+        html.split(GlobalVariables.newline).forEach {
             val items = it.split("\\s+".toRegex())
             if (items.size > 6) {
-                timeData += items[0] + " " + items[1] + " " + items[2] + MyApplication.newline
-                tempData += items[3] + MyApplication.newline
-                windSpeedData += items[4] + MyApplication.newline
-                windDirData += items[5] + MyApplication.newline
-                conditionData += items[6] + MyApplication.newline
+                timeData += items[0] + " " + items[1] + " " + items[2] + GlobalVariables.newline
+                tempData += items[3] + GlobalVariables.newline
+                windSpeedData += items[4] + GlobalVariables.newline
+                windDirData += items[5] + GlobalVariables.newline
+                conditionData += items[6] + GlobalVariables.newline
             }
         }
         return ObjectHourly(timeData, tempData, windSpeedData, windDirData, conditionData)
@@ -102,12 +102,12 @@ object UtilityUSHourly {
         if (html.length < 300) {
             html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locationNumber))
         }
-        // val header = String.format("%-7s", "Time") + " " + String.format("%-5s", "Temp") + String.format("%-9s", "WindSpd") + String.format("%-8s", "WindDir") + MyApplication.newline
+        // val header = String.format("%-7s", "Time") + " " + String.format("%-5s", "Temp") + String.format("%-9s", "WindSpd") + String.format("%-8s", "WindDir") + GlobalVariables.newline
         val header = To.stringPadLeft("Time", 7) + " " +
                 To.stringPadLeft("Temp", 5) +
                 To.stringPadLeft("WindSpd", 9) +
                 To.stringPadLeft("WindDir", 8) +
-                MyApplication.newline
+                GlobalVariables.newline
         return listOf(header + parse(html), html)
     }
 
@@ -138,7 +138,7 @@ object UtilityUSHourly {
                 // content += String.format("%-12s", shortenConditions(shortForecast[it]))
                 content += To.stringPadLeft(shortenConditions(shortForecast[it]), 12)
             }
-            content += MyApplication.newline
+            content += GlobalVariables.newline
         }
         return content
     }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,12 +33,10 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.radar.WXGLNexrad
+import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.radarcolorpalettes.UtilityColorPalette
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCard
@@ -85,9 +83,9 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         formattedDate = UtilityTime.getDateAsString("MMdd")
         name = if (activityArguments[2].contains("false")) activityArguments[1] else activityArguments[1] + "_" + formattedDate
         palTitle.setText(name)
-        palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
+        palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
         palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, activityArguments[1]))
-        palContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+        palContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
     }
 
     private fun fabSavePalette(context: Context) {
@@ -98,10 +96,11 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             textToSave = textToSave.replace(",,".toRegex(), ",")
             palContent.setText(textToSave)
             Utility.writePref(context, "RADAR_COLOR_PAL_" + type + "_" + palTitle.text.toString(), textToSave)
-            if (!MyApplication.radarColorPaletteList[typeAsInt]!!.contains(palTitle.text.toString())) {
-                MyApplication.radarColorPaletteList[typeAsInt] = MyApplication.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text.toString()
-                Utility.writePref(context, "RADAR_COLOR_PALETTE_" + type + "_LIST", MyApplication.radarColorPaletteList[typeAsInt]!!)
+            if (!ObjectColorPalette.radarColorPaletteList[typeAsInt]!!.contains(palTitle.text.toString())) {
+                ObjectColorPalette.radarColorPaletteList[typeAsInt] = ObjectColorPalette.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text.toString()
+                Utility.writePref(context, "RADAR_COLOR_PALETTE_" + type + "_LIST", ObjectColorPalette.radarColorPaletteList[typeAsInt]!!)
             }
+	    //elys mod
             savepalfile(palTitle.text.toString()+"_"+type+".txt", textToSave)
             toolbar.subtitle = "Last saved: $date"
         } else {
@@ -127,20 +126,20 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 try {
                     if (list.size > 4) {
                         if (priorValue >= (list[1].toDoubleOrNull() ?: 0.0)) {
-                            errors += "The following lines do not have dbz values in increasing order: " + MyApplication.newline + priorValue + " " + list[1] + MyApplication.newline
+                            errors += "The following lines do not have dbz values in increasing order: " + GlobalVariables.newline + priorValue + " " + list[1] + GlobalVariables.newline
                         }
                         priorValue = list[1].toDoubleOrNull() ?: 0.0
                         if ((list[2].toDoubleOrNull() ?: 0.0) > 255 || (list[2].toDoubleOrNull() ?: 0.0) < 0) {
-                            errors = errors + "Red value must be between 0 and 255: " + MyApplication.newline + line + MyApplication.newline
+                            errors = errors + "Red value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
                         if ((list[3].toDoubleOrNull() ?: 0.0) > 255 || (list[3].toDoubleOrNull() ?: 0.0) < 0) {
-                            errors += "Green value must be between 0 and 255: " + MyApplication.newline + line + MyApplication.newline
+                            errors += "Green value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
                         if ((list[4].toDoubleOrNull() ?: 0.0) > 255 || (list[4].toDoubleOrNull() ?: 0.0) < 0) {
-                            errors += "Blue value must be between 0 and 255: " + MyApplication.newline + line + MyApplication.newline
+                            errors += "Blue value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
                     } else {
-                        errors += "The following line does not have the correct number of command separated entries: " + MyApplication.newline + line + MyApplication.newline
+                        errors += "The following line does not have the correct number of command separated entries: " + GlobalVariables.newline + line + GlobalVariables.newline
                     }
                 } catch (e: Exception) {
                     errors += "Problem parsing number."
@@ -193,12 +192,12 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         txtLocal = txtLocal.trim { it <= ' ' }.replace(" +".toRegex(), " ")
         txtLocal = txtLocal.trim { it <= ' ' }.replace(" ".toRegex(), ",")
         txtLocal = txtLocal.replace("\\s".toRegex(), "")
-        val lines = txtLocal.split(MyApplication.newline.toRegex()).dropLastWhile { it.isEmpty() }
-        if (lines.size < 3) txtLocal = txtLocal.replace("Color", MyApplication.newline + "Color")
-        txtLocal = txtLocal.replace("Step", MyApplication.newline + "#Step")
-        txtLocal = txtLocal.replace("Units", MyApplication.newline + "#Units")
-        txtLocal = txtLocal.replace("ND", MyApplication.newline + "#ND")
-        txtLocal = txtLocal.replace("RF", MyApplication.newline + "#RF")
+        val lines = txtLocal.split(GlobalVariables.newline.toRegex()).dropLastWhile { it.isEmpty() }
+        if (lines.size < 3) txtLocal = txtLocal.replace("Color", GlobalVariables.newline + "Color")
+        txtLocal = txtLocal.replace("Step", GlobalVariables.newline + "#Step")
+        txtLocal = txtLocal.replace("Units", GlobalVariables.newline + "#Units")
+        txtLocal = txtLocal.replace("ND", GlobalVariables.newline + "#ND")
+        txtLocal = txtLocal.replace("RF", GlobalVariables.newline + "#RF")
         return txtLocal
     }
 
@@ -249,9 +248,9 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         return convertPalette(content)
     }
 
-
+    //elys mod
     private fun savepalfile(fileName: String, text: String) {
-        val dir = MyApplication.PalFilesPath
+        val dir = GlobalVariables.PalFilesPath
         //println(content)
         File("$dir/$fileName").printWriter().use {
             it.println(text)

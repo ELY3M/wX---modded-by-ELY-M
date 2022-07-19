@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,19 +22,20 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.util.*
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
 import joshuatee.wx.settings.UtilityLocation
 import java.util.*
+import java.util.regex.Pattern
 
 internal object WXGLNexradLevel3StormInfo {
 
     private const val stiBaseFileName = "nids_sti_tab"
+    private val pattern1: Pattern = Pattern.compile("AZ/RAN(.*?)V")
+    private val pattern2: Pattern = Pattern.compile("MVT(.*?)V")
+    private val pattern3: Pattern = Pattern.compile("\\d+")
 
     fun decodeAndPlot(context: Context, fileNameSuffix: String, projectionNumbers: ProjectionNumbers): List<Double> {
         val fileName = stiBaseFileName + fileNameSuffix
@@ -45,21 +46,24 @@ internal object WXGLNexradLevel3StormInfo {
         val motion: List<String>
         try {
             val data = UtilityLevel3TextProduct.readFile(context, fileName)
-            //UtilityLog.bigLog("wx", data)
-            posn = data.parseColumn(RegExp.stiPattern1)
-            motion = data.parseColumn(RegExp.stiPattern2)
+            posn = data.parseColumn(pattern1)
+            motion = data.parseColumn(pattern2)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
             return listOf()
         }
         var posnStr = ""
         posn.map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
-            .forEach { posnStr += it.replace("/", " ") }
+            .forEach {
+                posnStr += it.replace("/", " ")
+            }
         var motionStr = ""
         motion.map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
-            .forEach { motionStr += it.replace("/", " ") }
-        val posnNumbers = posnStr.parseColumnAll(RegExp.stiPattern3)
-        val motNumbers = motionStr.parseColumnAll(RegExp.stiPattern3)
+            .forEach {
+                motionStr += it.replace("/", " ")
+            }
+        val posnNumbers = posnStr.parseColumnAll(pattern3)
+        val motNumbers = motionStr.parseColumnAll(pattern3)
         val degreeShift = 180.00
         val arrowLength = 2.0
         val arrowBend = 20.0
@@ -73,12 +77,12 @@ internal object WXGLNexradLevel3StormInfo {
                 val nm2 = motNumbers[s + 1].toDouble()
                 var start = ExternalGlobalCoordinates(location)
                 var ec = externalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree, nm * 1852.0)
-                stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers).toMutableList()
+                stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers).toList()
                 start = ExternalGlobalCoordinates(ec)
                 ec = externalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree2 + degreeShift, nm2 * 1852.0)
                 // mercator expects lat/lon to both be positive as many products have this
                 val coordinates = UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers)
-                stormList += coordinates.toMutableList()
+                stormList += coordinates.toList()
                 val ecArr = mutableListOf<ExternalGlobalCoordinates>()
                 val latLons = mutableListOf<LatLon>()
                 (0..3).forEach { z ->

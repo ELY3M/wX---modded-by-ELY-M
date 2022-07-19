@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,48 +24,47 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import android.graphics.Color
-
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.nio.ByteBuffer
-
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.UCARRandomAccessFile
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.bzip2.Compression
-
 import kotlin.math.*
 
 internal object UtilityWXOGLPerf {
 
-    private const val M_180_div_PI: Float = (180.0 / PI).toFloat()
-    private const val M_PI_div_4: Float = (PI / 4.0).toFloat()
-    private const val M_PI_div_360: Float = (PI / 360.0).toFloat()
-    private const val TWICE_PI: Float = (2.0f * PI).toFloat()
+    private const val M_180_div_PI = (180.0 / PI).toFloat()
+    private const val M_PI_div_4 = (PI / 4.0).toFloat()
+    private const val M_PI_div_360 = (PI / 360.0).toFloat()
+    private const val TWICE_PI = (2.0 * PI).toFloat()
 
     fun decode8BitAndGenRadials(context: Context, radarBuffers: ObjectOglRadarBuffers): Int {
         var totalBins = 0
         try {
-            val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, radarBuffers.fileName))
-            dis.bigEndian = true
-            // ADVANCE PAST WMO HEADER
-            while (dis.readShort().toInt() != -1) {
-                // while (dis.readUnsignedShort() != 16) {
-            }
-            dis.skipBytes(100)
-            val magic = ByteArray(3)
-            magic[0] = 'B'.code.toByte()
-            magic[1] = 'Z'.code.toByte()
-            magic[2] = 'h'.code.toByte()
-            val compression = Compression.getCompression(magic)
-            val compressedFileSize = dis.length() - dis.filePointer
-            val buf = ByteArray(compressedFileSize.toInt())
-            dis.read(buf)
-            dis.close()
-            val decompressedStream = compression.decompress(ByteArrayInputStream(buf))
-            val dataInputStream = DataInputStream(BufferedInputStream(decompressedStream))
+//            val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, radarBuffers.fileName))
+//            dis.bigEndian = true
+//            // ADVANCE PAST WMO HEADER
+//            while (dis.readShort().toInt() != -1) {
+//                // while (dis.readUnsignedShort() != 16) {
+//            }
+//            dis.skipBytes(100)
+//            val magic = ByteArray(3)
+//            magic[0] = 'B'.code.toByte()
+//            magic[1] = 'Z'.code.toByte()
+//            magic[2] = 'h'.code.toByte()
+//            val compression = Compression.getCompression(magic)
+//            val compressedFileSize = dis.length() - dis.filePointer
+//            val buf = ByteArray(compressedFileSize.toInt())
+//            dis.read(buf)
+//            dis.close()
+//            val decompressedStream = compression.decompress(ByteArrayInputStream(buf))
+//            val dataInputStream = DataInputStream(BufferedInputStream(decompressedStream))
+
+            val dataInputStream = UtilityIO.uncompress(context, radarBuffers.fileName)
             dataInputStream.skipBytes(30)
             var numberOfRleHalfWords: Int
             radarBuffers.colormap.redValues.put(0, Color.red(radarBuffers.bgColor).toByte())
@@ -104,6 +103,12 @@ internal object UtilityWXOGLPerf {
                 binStart = radarBuffers.binSize
                 if (radialNumber == 0) angle0 = angle
                 angleV = if (radialNumber < numberOfRadials - 1) angleNext else angle0
+
+                angleVCos = cos((angleV / M_180_div_PI).toDouble()).toFloat()
+                angleVSin = sin((angleV / M_180_div_PI).toDouble()).toFloat()
+                angleCos = cos((angle / M_180_div_PI).toDouble()).toFloat()
+                angleSin = sin((angle / M_180_div_PI).toDouble()).toFloat()
+
                 for (bin in 0 until numberOfRleHalfWords) {
                     try {
                         curLevel = (dataInputStream.readUnsignedByte() and 0xFF).toByte() // was dis2!!.readUnsignedByte().toInt()
@@ -114,8 +119,6 @@ internal object UtilityWXOGLPerf {
                     if (curLevel == level) {
                         levelCount += 1
                     } else {
-                        angleVCos = cos((angleV / M_180_div_PI).toDouble()).toFloat()
-                        angleVSin = sin((angleV / M_180_div_PI).toDouble()).toFloat()
                         radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVCos)
                         radialIndex += 4
                         radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVSin)
@@ -124,8 +127,7 @@ internal object UtilityWXOGLPerf {
                         radialIndex += 4
                         radarBuffers.floatBuffer.putFloat(radialIndex, (binStart + radarBuffers.binSize * levelCount) * angleVSin)
                         radialIndex += 4
-                        angleCos = cos((angle / M_180_div_PI).toDouble()).toFloat()
-                        angleSin = sin((angle / M_180_div_PI).toDouble()).toFloat()
+
                         radarBuffers.floatBuffer.putFloat(radialIndex, (binStart + radarBuffers.binSize * levelCount) * angleCos)
                         radialIndex += 4
                         radarBuffers.floatBuffer.putFloat(radialIndex, (binStart + radarBuffers.binSize * levelCount) * angleSin)
@@ -198,14 +200,16 @@ internal object UtilityWXOGLPerf {
             } else {
                 radialStart.getFloat(0)
             }
+            angleVCos = cos((angleV / M_180_div_PI).toDouble()).toFloat()
+            angleVSin = sin((angleV / M_180_div_PI).toDouble()).toFloat()
+            angleCos = cos((angle / M_180_div_PI).toDouble()).toFloat()
+            angleSin = sin((angle / M_180_div_PI).toDouble()).toFloat()
             for (bin in 0 until radarBuffers.numRangeBins) {
                 curLevel = binBuff.get(binIndex).toInt()
                 binIndex += 1
                 if (curLevel == level) {
                     levelCount += 1
                 } else {
-                    angleVCos = cos((angleV / M_180_div_PI).toDouble()).toFloat()
-                    angleVSin = sin((angleV / M_180_div_PI).toDouble()).toFloat()
                     radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVCos)
                     radialIndex += 4
                     radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVSin)
@@ -214,8 +218,7 @@ internal object UtilityWXOGLPerf {
                     radialIndex += 4
                     radarBuffers.floatBuffer.putFloat(radialIndex, (binStart + radarBuffers.binSize * levelCount) * angleVSin)
                     radialIndex += 4
-                    angleCos = cos((angle / M_180_div_PI).toDouble()).toFloat()
-                    angleSin = sin((angle / M_180_div_PI).toDouble()).toFloat()
+
                     radarBuffers.floatBuffer.putFloat(radialIndex, (binStart + radarBuffers.binSize * levelCount) * angleCos)
                     radialIndex += 4
                     radarBuffers.floatBuffer.putFloat(radialIndex, (binStart + radarBuffers.binSize * levelCount) * angleSin)

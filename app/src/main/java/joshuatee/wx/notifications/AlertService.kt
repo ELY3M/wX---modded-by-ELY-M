@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,8 +27,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import java.util.Calendar
-
-import joshuatee.wx.audio.UtilityPlayListAutoDownload
 import joshuatee.wx.util.Utility
 
 //
@@ -46,7 +44,7 @@ class AlertService : IntentService("AlertService") {
             val intentLocal = Intent(this, AlertReceiver::class.java)
             val pending = PendingIntent.getBroadcast(this, 0, intentLocal, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             service.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis, (alertNotificationIntervalCurrent * 1000 * 60).toLong(), pending)
-            UtilityPlayListAutoDownload.setAllAlarms(this)
+            // UtilityPlayListAutoDownload.setAllAlarms(this)
         }
     }
 }

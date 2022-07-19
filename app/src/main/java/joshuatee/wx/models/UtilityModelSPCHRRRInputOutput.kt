@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,7 +35,6 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
 
 internal object UtilityModelSpcHrrrInputOutput {
@@ -59,14 +58,14 @@ internal object UtilityModelSpcHrrrInputOutput {
         }
 
     fun getImage(context: Context, om: ObjectModelNoSpinner, time: String, overlayImg: List<String>): Bitmap {
-        val layerUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/"
+        val layerUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/"
         val bitmaps = mutableListOf<Bitmap>()
         val layers = mutableListOf<Drawable>()
         overlayImg.forEach {
             val url = layerUrl + getSectorCode(om.sector).lowercase(Locale.US) + "/" + it + "/" + it + ".gif"
             bitmaps.add(UtilityImg.eraseBackground(url.getImage(), -1))
         }
-        val backgroundUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" + getSectorCode(om.sector).lowercase(Locale.US) + "/R" +
+        val backgroundUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" + getSectorCode(om.sector).lowercase(Locale.US) + "/R" +
                 om.run.replace("Z", "") + "_F" + formatTime(time) + "_V" + getValidTime(om.run, time) +
                 "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
         bitmaps.add(UtilityImg.eraseBackground(backgroundUrl.getImage(), -1))

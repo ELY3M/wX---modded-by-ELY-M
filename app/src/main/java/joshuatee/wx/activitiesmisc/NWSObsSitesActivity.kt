@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,11 +26,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import java.util.Locale
-import joshuatee.wx.Extensions.truncate
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityIO
-import joshuatee.wx.GlobalArrays
+import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.UtilityMetar
 import joshuatee.wx.settings.Location
@@ -46,8 +45,6 @@ class NwsObsSitesActivity : BaseActivity() {
     //
 
     private val listIds = mutableListOf<String>()
-    private val listCity = mutableListOf<String>()
-    private val listSort = mutableListOf<String>()
     private var siteDisplay = false
     private var stateSelected = ""
     private lateinit var objectRecyclerView: ObjectRecyclerView
@@ -79,7 +76,7 @@ class NwsObsSitesActivity : BaseActivity() {
 
     private fun itemClicked(position: Int) {
         if (!siteDisplay) {
-            stateSelected = GlobalArrays.states[position].truncate(2)
+            stateSelected = GlobalArrays.states[position].take(2)
             title = "$titleString ($stateSelected)"
             stateSelected()
         } else {
@@ -107,7 +104,11 @@ class NwsObsSitesActivity : BaseActivity() {
     private fun getContent() {
         val text = UtilityIO.readTextFileFromRaw(resources, R.raw.stations_us4)
         val lines = text.split("\n")
-        listOf(listCity, listIds, listSort).forEach { it.clear() }
+        val listSort = mutableListOf<String>()
+        val listCity = mutableListOf<String>()
+        listOf(listIds).forEach {
+            it.clear()
+        }
         listCity.add("..Back to state list")
         listIds.add("..Back to state list")
         lines.filterTo(listSort) { it.startsWith(stateSelected.uppercase(Locale.US)) }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,13 +28,14 @@ import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
 import joshuatee.wx.spc.SpcFireOutlookSummaryActivity
 import joshuatee.wx.util.UtilityString
-
 import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
-
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.radar.LatLon
+import joshuatee.wx.settings.NotificationPreferences
 
 internal object UtilityNotificationSpcFireWeather {
 
@@ -53,7 +54,7 @@ internal object UtilityNotificationSpcFireWeather {
         val noBody = detailRaw
         val objectPendingIntents = ObjectPendingIntents(context, SpcFireOutlookSummaryActivity::class.java)
         val cancelString = "spcfwloc$day$locNum$threatLevel$validTime"
-        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
+        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
             val objectNotification = ObjectNotification(
                     context,
@@ -61,27 +62,27 @@ internal object UtilityNotificationSpcFireWeather {
                     noMain,
                     noBody,
                     objectPendingIntents.resultPendingIntent,
-                    MyApplication.ICON_ALERT,
+                    GlobalVariables.ICON_ALERT,
                     noBody,
                     NotificationCompat.PRIORITY_HIGH, // was Notification.PRIORITY_DEFAULT
                     Color.YELLOW,
-                    MyApplication.ICON_ACTION,
+                    GlobalVariables.ICON_ACTION,
                     objectPendingIntents.resultPendingIntent2,
                     context.resources.getString(R.string.read_aloud)
             )
             val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
             objectNotification.sendNotification(context, cancelString, 1, notification)
         }
-        return cancelString + MyApplication.notificationStrSep
+        return cancelString + NotificationPreferences.notificationStrSep
     }
 
     fun sendSpcFireWeatherD12LocationNotifications(context: Context): String {
         var notifUrls = ""
         val threatList = listOf("EXTR", "CRIT", "ELEV", "SDRT", "IDRT")
         (1..2).forEach { day ->
-            val urlLocal = "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/fwdy" + day.toString() + ".html"
+            val urlLocal = "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/fwdy" + day.toString() + ".html"
             var urlBlob = UtilityString.getHtmlAndParse(urlLocal, "CLICK FOR <a href=.(.*?txt).>DAY [12] FIREWX AREAL OUTLINE PRODUCT .KWNSPFWFD[12].</a>")
-            urlBlob = "${MyApplication.nwsSPCwebsitePrefix}$urlBlob"
+            urlBlob = "${GlobalVariables.nwsSPCwebsitePrefix}$urlBlob"
             var html = urlBlob.getHtmlSep()
             val validTime = html.parse("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
             html = html.replace("<br>", " ")
@@ -93,7 +94,7 @@ internal object UtilityNotificationSpcFireWeather {
                     string += UtilityNotification.storeWatchMcdLatLon(it)
                     string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO seperates on 8 's
                 } // end looping over polygons of one threat level
-                val items = MyApplication.colon.split(string)
+                val items = RegExp.colon.split(string)
                 items.forEach {
                     val latLons = LatLon.parseStringToLatLons(it, -1.0, false)
                     // inject bounding box coords if first doesn't equal last

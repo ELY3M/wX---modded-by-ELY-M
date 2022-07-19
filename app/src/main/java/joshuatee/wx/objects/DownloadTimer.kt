@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,7 +37,7 @@ class DownloadTimer(private val identifier: String) {
 
     fun isRefreshNeeded(context: Context): Boolean {
         var refreshDataInMinutes: Int = maxOf(Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3), 6)
-        if (identifier == "WARNINGS")
+        if (identifier.contains("WARNINGS"))
             refreshDataInMinutes = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
         var refreshNeeded = false
         val currentTime = UtilityTime.currentTimeMillis()

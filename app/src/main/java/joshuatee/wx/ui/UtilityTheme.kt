@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,16 +23,14 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Color
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
 object UtilityTheme {
 
     val primaryColorFromSelectedTheme: Int
-        get() = MyApplication.primaryColor
+        get() = UIPreferences.primaryColor
 
     fun getPrimaryColorFromSelectedTheme(context: Context, color: Int): Int {
         val attrs = intArrayOf(R.attr.colorPrimary, R.attr.colorPrimaryDark, R.attr.colorAccent)
@@ -46,11 +44,11 @@ object UtilityTheme {
         val attrs = intArrayOf(R.attr.colorPrimary, R.attr.colorPrimaryDark, R.attr.colorAccent)
         val ta = context.theme.obtainStyledAttributes(attrs)
         if (UIPreferences.themeInt != R.style.MyCustomTheme_mixedBlue_NOAB && !UIPreferences.themeIsWhite) {
-            MyApplication.primaryColor = ta.getColor(0, Color.BLACK) //1 index for primaryColorDark
+            UIPreferences.primaryColor = ta.getColor(0, Color.BLACK) //1 index for primaryColorDark
         } else {
-            MyApplication.primaryColor = ta.getColor(2, Color.BLACK) //1 index for primaryColorDark
+            UIPreferences.primaryColor = ta.getColor(2, Color.BLACK) //1 index for primaryColorDark
         }
-        Utility.writePref(context, "MYAPP_PRIMARY_COLOR", MyApplication.primaryColor)
+        Utility.writePref(context, "MYAPP_PRIMARY_COLOR", UIPreferences.primaryColor)
         ta.recycle()
     }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,14 +23,14 @@ package joshuatee.wx.ui
 
 import android.graphics.Paint
 import android.graphics.Typeface
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 
 class ObjectPaint {
 
     val paint = Paint()
 
     init {
-        paint.color = MyApplication.nwsIconTextColor
+        paint.color = UIPreferences.nwsIconTextColor
         paint.textSize = 14f
         paint.typeface = Typeface.DEFAULT_BOLD
         paint.isAntiAlias = true

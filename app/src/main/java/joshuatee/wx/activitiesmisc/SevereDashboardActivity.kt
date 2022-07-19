@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,15 +28,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.MyApplication
-import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.radar.*
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.ui.*
 import joshuatee.wx.R
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.*
 import joshuatee.wx.util.*
 
 class SevereDashboardActivity : BaseActivity() {
@@ -49,25 +45,22 @@ class SevereDashboardActivity : BaseActivity() {
     //
 
     private val bitmaps = mutableListOf<Bitmap>()
-    private var watchCount = 0
-    private var mcdCount = 0
-    private var mpdCount = 0
-    private var tstCount = 0
-    private var ffwCount = 0
-    private var torCount = 0
     private var numberOfImages = 0
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
     private var imagesPerRow = 2
     private lateinit var linearLayout: LinearLayout
     private lateinit var linearLayoutWatches: ObjectLinearLayout
     private lateinit var linearLayoutWarnings: ObjectLinearLayout
-    // TODO FIXME use enum
-    private val snWat = SevereNotice(PolygonType.WATCH)
-    private val snMcd = SevereNotice(PolygonType.MCD)
-    private val snMpd = SevereNotice(PolygonType.MPD)
-    private val wTor = SevereWarning(PolygonType.TOR)
-    private val wTst = SevereWarning(PolygonType.TST)
-    private val wFfw = SevereWarning(PolygonType.FFW)
+    private val watchesByType = mapOf(
+            PolygonType.WATCH to SevereNotice(PolygonType.WATCH),
+            PolygonType.MCD to SevereNotice(PolygonType.MCD),
+            PolygonType.MPD to SevereNotice(PolygonType.MPD),
+    )
+    private val warningsByType = mapOf(
+            PolygonType.TOR to SevereWarning(PolygonType.TOR),
+            PolygonType.TST to SevereWarning(PolygonType.TST),
+            PolygonType.FFW to SevereWarning(PolygonType.FFW),
+    )
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.severe_dashboard, menu)
@@ -99,23 +92,22 @@ class SevereDashboardActivity : BaseActivity() {
     }
 
     private fun downloadWatch() {
-        // TODO FIXME use enum
         bitmaps.add((UtilityDownload.getImageProduct(this@SevereDashboardActivity, "USWARN")))
         bitmaps.add((UtilitySpc.getStormReportsTodayUrl()).getImage())
+        // TODO FIXME refactor
         UtilityDownloadWatch.get(this@SevereDashboardActivity)
-        snWat.getBitmaps(MyApplication.severeDashboardWat.value)
+        watchesByType[PolygonType.WATCH]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.storage.value)
         UtilityDownloadMcd.get(this@SevereDashboardActivity)
-        snMcd.getBitmaps(MyApplication.severeDashboardMcd.value)
+        watchesByType[PolygonType.MCD]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.storage.value)
         UtilityDownloadMpd.get(this@SevereDashboardActivity)
-        snMpd.getBitmaps(MyApplication.severeDashboardMpd.value)
+        watchesByType[PolygonType.MPD]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.storage.value)
     }
 
     private fun downloadWarnings() {
-        // TODO FIXME use enum
         UtilityDownloadWarnings.getForSevereDashboard(this@SevereDashboardActivity)
-        wTor.generateString()
-        wTst.generateString()
-        wFfw.generateString()
+        warningsByType.forEach { (_, severeWarning) ->
+            severeWarning.generateString()
+        }
     }
 
     private fun updateWatch() {
@@ -139,23 +131,21 @@ class SevereDashboardActivity : BaseActivity() {
             }
             numberOfImages += 1
         }
-        showItems(snWat)
-        showItems(snMcd)
-        showItems(snMpd)
-        bitmaps.addAll(snWat.bitmaps)
-        bitmaps.addAll(snMcd.bitmaps)
-        bitmaps.addAll(snMpd.bitmaps)
+        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
+            showItems(watchesByType[it]!!)
+        }
+        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
+            bitmaps.addAll(watchesByType[it]!!.bitmaps)
+        }
         bitmaps.addAll(bitmaps)
-        watchCount = snWat.getCount()
-        mcdCount = snMcd.getCount()
-        mpdCount = snMpd.getCount()
         toolbar.subtitle = getSubTitle()
     }
 
     private fun updateWarnings() {
         linearLayoutWarnings.removeAllViews()
         var numberOfWarnings = 0
-        listOf(wTor, wTst, wFfw).forEach { severeWarning ->
+        listOf(PolygonType.TOR, PolygonType.TST, PolygonType.FFW).forEach {
+            val severeWarning = warningsByType[it]!!
             if (severeWarning.getCount() > 0) {
                 ObjectCardBlackHeaderText(this@SevereDashboardActivity, linearLayoutWarnings.get(), "(" + severeWarning.getCount() + ") " + severeWarning.getName())
                 severeWarning.warningList.forEach { w ->
@@ -172,25 +162,25 @@ class SevereDashboardActivity : BaseActivity() {
                 }
             }
         }
-        tstCount = wTst.getCount()
-        ffwCount = wFfw.getCount()
-        torCount = wTor.getCount()
         toolbar.subtitle = getSubTitle()
     }
 
     private fun getSubTitle(): String {
         var subTitle = ""
-        if (watchCount > 0) {
-            subTitle += "W($watchCount) "
+        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
+            if (watchesByType[it]!!.getCount() > 0) {
+                val id = watchesByType[it]!!.typeAsString[0]
+                subTitle += if (it == PolygonType.MPD) {
+                    "P(${watchesByType[it]!!.getCount()}) "
+                } else {
+                    "$id(${watchesByType[it]!!.getCount()}) "
+                }
+            }
         }
-        if (mcdCount > 0) {
-            subTitle += "M($mcdCount) "
-        }
-        if (mpdCount > 0) {
-            subTitle += "P($mpdCount) "
-        }
-        if (torCount > 0 || tstCount > 0 || ffwCount > 0) {
-            subTitle += " ($tstCount,$torCount,$ffwCount)"
+        if (warningsByType[PolygonType.TOR]!!.getCount() > 0
+                || warningsByType[PolygonType.TST]!!.getCount() > 0
+                || warningsByType[PolygonType.FFW]!!.getCount() > 0) {
+            subTitle += " (${warningsByType[PolygonType.TST]!!.getCount()},${warningsByType[PolygonType.TOR]!!.getCount()},${warningsByType[PolygonType.FFW]!!.getCount()})"
         }
         return subTitle
     }
@@ -206,9 +196,11 @@ class SevereDashboardActivity : BaseActivity() {
             } else {
                 card = ObjectCardImage(this@SevereDashboardActivity, horizontalLinearLayouts.last().get(), sn.bitmaps[j], imagesPerRow)
             }
-            val number = sn.numbers[j]
-            card.setOnClickListener {
-                ObjectIntent.showMcd(this@SevereDashboardActivity, arrayOf(number, "", sn.toString()))
+            if (j < sn.numbers.size) {
+                val number = sn.numbers[j]
+                card.setOnClickListener {
+                    ObjectIntent.showMcd(this@SevereDashboardActivity, arrayOf(number, "", sn.toString()))
+                }
             }
             numberOfImages += 1
         }

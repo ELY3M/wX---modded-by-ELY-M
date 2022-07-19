@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,8 +29,7 @@ import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.ObjectImagesCollection
@@ -44,13 +43,16 @@ import joshuatee.wx.vis.UtilityGoesFullDisk
 
 class ImageCollectionActivity : VideoRecordActivity() {
 
+    //
+    // used for OPC, GOES Full Disk, other?
+    //
+
     companion object { const val TYPE = "" }
 
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var img: ObjectTouchImageView
     private lateinit var drw: ObjectNavDrawer
     private lateinit var imageCollection: ObjectImagesCollection
-    private lateinit var activityArguments: Array<String>
     private var animDrawable = AnimationDrawable()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,8 +72,8 @@ class ImageCollectionActivity : VideoRecordActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.imagecollection, iconsEvenlySpaced = true, bottomToolbar = false)
-        activityArguments = intent.getStringArrayExtra(TYPE)!!
-        imageCollection = MyApplication.imageCollectionMap[activityArguments[0]]!!
+        val activityArguments = intent.getStringArrayExtra(TYPE)!!
+        imageCollection = ObjectImagesCollection.imageCollectionMap[activityArguments[0]]!!
         title = imageCollection.title
         drw = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContent)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, imageCollection.prefTokenIdx)

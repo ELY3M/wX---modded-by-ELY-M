@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,10 +30,10 @@ import android.net.Uri
 import android.os.Environment
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
+import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import java.io.IOException
@@ -45,7 +45,7 @@ object UtilityTts {
     private var ttobjGlobal: TextToSpeech? = null
     private const val TEXT_OLD = ""
     var mediaPlayer: MediaPlayer? = null
-    private const val FILENAME = "/${MyApplication.packageNameAsString}_tts.wav"
+    private const val FILENAME = "/${GlobalVariables.packageNameAsString}_tts.wav"
     private var mpInit = false
     private var fileCount = 0
     private var currentFile = 0
@@ -53,6 +53,13 @@ object UtilityTts {
     private var playlistTotal = 0
     private var playlistNumber = 0
     private var playlistArr = List(2) { "" }
+
+    fun loadTts(context: Context) {
+        if (NotificationPreferences.notifTts) {
+            initTts(context)
+            UtilityLog.d("wx", "DEBUG: TTS init for notif" )
+        }
+    }
 
     fun initTts(context: Context) {
         // samsung bug, if users do not have google TTS selected it will crash - add try-catch so user can at least use rest of prog
@@ -104,7 +111,7 @@ object UtilityTts {
     }
 
     internal fun synthesizeTextAndPlayPlaylist(context: Context, index: Int) {
-        playlistArr = MyApplication.playlistStr.split(":")
+        playlistArr = UIPreferences.playlistStr.split(":")
         playlistNumber = index
         // perform check to see if idx is correct in array
         // got one bug for index being greater
@@ -139,7 +146,7 @@ object UtilityTts {
     }
 
     internal fun synthesizeTextAndPlayNext(context: Context) {
-        playlistArr = MyApplication.playlistStr.split(":")
+        playlistArr = UIPreferences.playlistStr.split(":")
         playlistNumber += 1
         if (playlistNumber >= playlistArr.size) {
             playlistNumber = 1
@@ -177,7 +184,7 @@ object UtilityTts {
     }
 
     private fun synthesizeTextAndPlayPrevious(context: Context) {
-        playlistArr = MyApplication.playlistStr.split(":")
+        playlistArr = UIPreferences.playlistStr.split(":")
         playlistNumber -= 1
         if (playlistNumber == -1) {
             playlistNumber = playlistArr.lastIndex
@@ -245,7 +252,7 @@ object UtilityTts {
         val txt = UtilityTtsTranslations.translateAbbreviation(txtF)
         val myHashRender = HashMap<String, String>()
         val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-        val wxDir = File(musicDir, MyApplication.packageNameAsString)
+        val wxDir = File(musicDir, GlobalVariables.packageNameAsString)
         if (!wxDir.exists() && !wxDir.mkdirs()) {
             return
         }
@@ -298,7 +305,7 @@ object UtilityTts {
 
     private fun playMediaPlayerFile(context: Context, fileNum: Int) {
         val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-        val wxDir = File(musicDir, MyApplication.packageNameAsString)
+        val wxDir = File(musicDir, GlobalVariables.packageNameAsString)
         if (!wxDir.exists() && !wxDir.mkdirs()) {
             return
         }

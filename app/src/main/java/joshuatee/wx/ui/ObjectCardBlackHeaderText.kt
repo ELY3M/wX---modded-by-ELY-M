@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,8 +26,7 @@ import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 
 class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout, val text: String) {
@@ -43,8 +42,6 @@ class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout
         setTextHeader()
     }
 
-    val card get() = objectCard.card
-
     fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
 
     private fun setTextHeader() {
@@ -52,7 +49,7 @@ class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout
         objectTextView.setTextSize(TextSize.LARGE)
         objectTextView.setPadding(20)
         objectTextView.color = UIPreferences.textHighlightColor
-        objectTextView.tv.setBackgroundColor(Color.BLACK)
-        objectTextView.tv.setTextColor(Color.WHITE)
+        objectTextView.setBackgroundColor(Color.BLACK)
+        objectTextView.setTextColor(Color.WHITE)
     }
 }

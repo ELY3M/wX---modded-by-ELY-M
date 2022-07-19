@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,7 +22,6 @@
 package joshuatee.wx
 
 import java.io.File
-
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -34,6 +33,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.app.TaskStackBuilder
 import android.widget.RemoteViews
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.ui.*
@@ -44,7 +44,7 @@ object UtilityWidget {
     private fun uriShareAndGenerate(context: Context, fileName: String): Uri {
         val dir = File(context.filesDir.toString() + "/shared")
         val file = File(dir, fileName)
-        val uri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
+        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", file)
         val localPackageManager = context.packageManager
         val intentHome = Intent("android.intent.action.MAIN")
         intentHome.addCategory("android.intent.category.HOME")
@@ -59,7 +59,7 @@ object UtilityWidget {
 
     fun setImage(context: Context, remoteViews: RemoteViews, fileName: String) {
         val uri = uriShareAndGenerate(context, fileName)
-        val uriBAK = uriShareAndGenerate(context, MyApplication.WIDGET_FILE_BAK + fileName)
+        val uriBAK = uriShareAndGenerate(context, GlobalVariables.WIDGET_FILE_BAK + fileName)
         remoteViews.setImageViewUri(R.id.iv, null)
         remoteViews.setImageViewUri(R.id.iv, uriBAK)
         remoteViews.setImageViewUri(R.id.iv, uri)
@@ -67,7 +67,7 @@ object UtilityWidget {
 
     fun setImage(context: Context, remoteViews: RemoteViews, res: Int, fileName: String) {
         val uri = uriShareAndGenerate(context, fileName)
-        val uriBAK = uriShareAndGenerate(context, MyApplication.WIDGET_FILE_BAK + fileName)
+        val uriBAK = uriShareAndGenerate(context, GlobalVariables.WIDGET_FILE_BAK + fileName)
         remoteViews.setImageViewUri(res, null)
         remoteViews.setImageViewUri(res, uriBAK)
         remoteViews.setImageViewUri(res, uri)
@@ -85,7 +85,7 @@ object UtilityWidget {
                 SPCMESO, CONUSWV, STRPT, WPCIMG -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetGeneric(context, widgetType).remoteViews)
                 SPCSWO -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetSpcSwo(context).remoteViews)
                 NHC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetNhc(context).remoteViews)
-                AFD -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetAfd(context).remoteViews)
+                AFD -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetAfd(context).get())
                 HWO -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetHwo(context).remoteViews)
                 TEXT_WPC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetTextWpc(context).remoteViews)
                 CC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetCC(context).remoteViews)

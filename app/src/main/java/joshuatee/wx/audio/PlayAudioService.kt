@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,10 +23,6 @@ package joshuatee.wx.audio
 
 import android.app.IntentService
 import android.content.Intent
-
-// this service notifies the alarm manager to run AlertReceiver ( notifications ) according to the
-// configured interval
-//
 
 class PlayAudioService : IntentService("PlayAudioService") {
 

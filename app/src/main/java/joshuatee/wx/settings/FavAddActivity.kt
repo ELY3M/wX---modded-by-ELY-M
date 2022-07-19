@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,14 +23,10 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.GlobalArrays
-
+import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.models.UtilityModelSpcSrefInterface
 import joshuatee.wx.ui.BaseActivity
-
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
@@ -136,13 +132,13 @@ class FavAddActivity : BaseActivity() {
 
     private fun saveMyApp(favorite: String) {
         when (type) {
-            "SND" -> MyApplication.sndFav = favorite
-            "WFO" -> MyApplication.wfoFav = favorite
-            "RID" -> MyApplication.ridFav = favorite
-            "NWSTEXT" -> MyApplication.nwsTextFav = favorite
-            "SREF" -> MyApplication.srefFav = favorite
-            "SPCMESO" -> MyApplication.spcMesoFav = favorite
-            "RIDCA" -> MyApplication.caRidFav = favorite
+            "SND" -> UIPreferences.sndFav = favorite
+            "WFO" -> UIPreferences.wfoFav = favorite
+            "RID" -> UIPreferences.ridFav = favorite
+            "NWSTEXT" -> UIPreferences.nwsTextFav = favorite
+            "SREF" -> UIPreferences.srefFav = favorite
+            "SPCMESO" -> UIPreferences.spcMesoFav = favorite
+            "RIDCA" -> UIPreferences.caRidFav = favorite
         }
     }
 }

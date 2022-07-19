@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,8 +23,7 @@ package joshuatee.wx.nhc
 
 import android.graphics.Bitmap
 import joshuatee.wx.Extensions.getImage
-
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 
 class ObjectNhcRegionSummary(region: NhcOceanEnum) {
 
@@ -43,12 +42,12 @@ class ObjectNhcRegionSummary(region: NhcOceanEnum) {
                         "ATL: Five-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png"
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png"
                 )
                 replaceString = "NHC Atlantic Wallet"
-                baseUrl = "${MyApplication.nwsNhcWebsitePrefix}/nhc_at"
+                baseUrl = "${GlobalVariables.nwsNhcWebsitePrefix}/nhc_at"
             }
             NhcOceanEnum.EPAC -> {
                 titles = listOf(
@@ -57,12 +56,12 @@ class ObjectNhcRegionSummary(region: NhcOceanEnum) {
                         "EPAC: Five-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
                 )
                 replaceString = "NHC Eastern Pacific Wallet"
-                baseUrl = "${MyApplication.nwsNhcWebsitePrefix}/nhc_ep"
+                baseUrl = "${GlobalVariables.nwsNhcWebsitePrefix}/nhc_ep"
             }
             NhcOceanEnum.CPAC -> {
                 titles = listOf(
@@ -71,9 +70,9 @@ class ObjectNhcRegionSummary(region: NhcOceanEnum) {
                         "CPAC: Five-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_0d0.png",
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png",
-                        "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_0d0.png",
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png",
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
                 )
                 replaceString = ""
                 baseUrl = ""

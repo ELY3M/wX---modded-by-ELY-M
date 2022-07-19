@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,7 +30,7 @@ import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.ObjectIntent
 
@@ -51,14 +51,14 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
         listLocWatch.clear()
         listLocStatement.clear()
         bitmap = if (province == "ca") {
-            (MyApplication.canadaEcSitePrefix + "/data/warningmap/canada_e.png").getImage()
+            (GlobalVariables.canadaEcSitePrefix + "/data/warningmap/canada_e.png").getImage()
         } else {
-            (MyApplication.canadaEcSitePrefix + "/data/warningmap/" + province + "_e.png").getImage()
+            (GlobalVariables.canadaEcSitePrefix + "/data/warningmap/" + province + "_e.png").getImage()
         }
         val html = if (province == "ca") {
-            (MyApplication.canadaEcSitePrefix + "/warnings/index_e.html").getHtml()
+            (GlobalVariables.canadaEcSitePrefix + "/warnings/index_e.html").getHtml()
         } else {
-            (MyApplication.canadaEcSitePrefix + "/warnings/index_e.html?prov=$province").getHtml()
+            (GlobalVariables.canadaEcSitePrefix + "/warnings/index_e.html?prov=$province").getHtml()
         }
         listLocUrl = html.parseColumnMutable("<tr><td><a href=\"(.*?)\">.*?</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>")
         listLocName = html.parseColumnMutable("<tr><td><a href=\".*?\">(.*?)</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>")
@@ -95,11 +95,11 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
             val province = listLocUrl[index].parse("report_e.html.([a-z]{2}).*?")
             val objectCardText = ObjectCardText(context, linearLayout)
             objectCardText.text = Utility.fromHtml(province.uppercase(Locale.US) + ": " + locWarning + " " + locWatch + " " + locStatement)
-            val url = MyApplication.canadaEcSitePrefix + listLocUrl[index]
+            val url = GlobalVariables.canadaEcSitePrefix + listLocUrl[index]
             val location = listLocName[index]
             objectCardText.setOnClickListener { getWarningDetail(url, location) }
         }
-        ObjectCALegal(activity, linearLayout, MyApplication.canadaEcSitePrefix + "/warnings/index_e.html")
+        ObjectCALegal(activity, linearLayout, GlobalVariables.canadaEcSitePrefix + "/warnings/index_e.html")
     }
 
     val title get() = provinceToLabel[province] + " (" + listLocUrl.size + ")"

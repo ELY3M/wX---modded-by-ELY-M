@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,7 +22,6 @@
 package joshuatee.wx.radar
 
 import java.io.InputStream
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config
@@ -33,15 +32,13 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import joshuatee.wx.Extensions.getInputStream
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.UtilityCanvasMain
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
-
 import joshuatee.wx.R
+import joshuatee.wx.settings.RadarPreferences
 
 object UtilityUSImgWX {
 
@@ -74,7 +71,7 @@ object UtilityUSImgWX {
             } catch (e: Exception) { UtilityLog.handleException(e) }
         }
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = ColorDrawable(MyApplication.nexradRadarBackgroundColor)
+        val colorDrawable = ColorDrawable(RadarPreferences.nexradRadarBackgroundColor)
         try {
             var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
             if (!product.startsWith("L2")) {
@@ -113,7 +110,7 @@ object UtilityUSImgWX {
             scaleType = ProjectionType.WX_RENDER_48
         }
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = ColorDrawable(MyApplication.nexradRadarBackgroundColor)
+        val colorDrawable = ColorDrawable(RadarPreferences.nexradRadarBackgroundColor)
         var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
         if (!product.startsWith("L2")) {
             if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {
@@ -153,7 +150,7 @@ object UtilityUSImgWX {
         val hwLineWidth = 1
         val animDrawable = AnimationDrawable()
         val bitmapCanvas = Bitmap.createBitmap(1000, 1000, Config.ARGB_8888)
-        val cd = if (MyApplication.blackBg) {
+        val cd = if (RadarPreferences.blackBg) {
             ColorDrawable(Color.BLACK)
         } else {
             ColorDrawable(Color.WHITE)
@@ -182,7 +179,7 @@ object UtilityUSImgWX {
         val fileName = "nids_dvn_" + product + "_archive"
         UtilityIO.saveRawToInternalStorage(context, WXGLNexrad.productCodeStringToResourceFile[product] ?: R.raw.dvn94, fileName)
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = if (MyApplication.blackBg) {
+        val colorDrawable = if (RadarPreferences.blackBg) {
             ColorDrawable(Color.BLACK)
         } else {
             ColorDrawable(Color.WHITE)

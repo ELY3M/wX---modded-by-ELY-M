@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,9 +28,10 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.radar.LatLon
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import kotlin.math.*
@@ -46,7 +47,7 @@ class DrawLineView : View {
     private val drawListener = DrawListener()
     private val paint = Paint()
     private val paintText = Paint()
-    private val textSize = MyApplication.textSizeLarge
+    private val textSize = UIPreferences.textSizeLarge
     private var xMiddle = 0.0f
     private var yMiddle = 0.0f
     private var centerX = 0.0f
@@ -89,12 +90,14 @@ class DrawLineView : View {
         isFocusable = true
         isFocusableInTouchMode = true
         this.setOnTouchListener(drawListener)
-        paint.color = MyApplication.drawToolColor
+        paint.color = RadarPreferences.drawToolColor
         paint.isAntiAlias = true
-        paint.strokeWidth = MyApplication.drawToolSize.toFloat()
+        paint.strokeWidth = RadarPreferences.drawToolSize.toFloat()
         paint.textSize = textSize
         paintText.color = Color.WHITE
-        if (!MyApplication.blackBg) paintText.color = Color.BLACK
+        if (!RadarPreferences.blackBg) {
+            paintText.color = Color.BLACK
+        }
         paintText.isAntiAlias = true
         paintText.strokeWidth = 4.5f
         paintText.textSize = textSize

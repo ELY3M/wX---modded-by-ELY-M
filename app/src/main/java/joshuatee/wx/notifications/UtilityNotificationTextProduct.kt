@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,38 +27,39 @@ import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import androidx.core.app.NotificationCompat
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.TextScreenActivity
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.ui.ObjectPopupMessage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 
 object UtilityNotificationTextProduct {
 
-    const val PREF_TOKEN: String = "NOTIF_TEXT_PROD"
+    const val PREF_TOKEN = "NOTIF_TEXT_PROD"
 
     fun toggle(context: Context, view: View, prodOriginal: String) {
         val prod = prodOriginal.uppercase(Locale.US)
-        if (!MyApplication.notifTextProdStr.contains(prod)) {
-            Utility.writePref(context, PREF_TOKEN, MyApplication.notifTextProdStr + ":" + prod)
-            MyApplication.notifTextProdStr = MyApplication.notifTextProdStr + ":" + prod
+        if (!NotificationPreferences.notifTextProdStr.contains(prod)) {
+            Utility.writePref(context, PREF_TOKEN, NotificationPreferences.notifTextProdStr + ":" + prod)
+            NotificationPreferences.notifTextProdStr = NotificationPreferences.notifTextProdStr + ":" + prod
             ObjectPopupMessage(view, "$prod saved to notification list")
         } else {
-            MyApplication.notifTextProdStr = MyApplication.notifTextProdStr.replace(":$prod", "")
-            Utility.writePref(context, PREF_TOKEN, MyApplication.notifTextProdStr)
+            NotificationPreferences.notifTextProdStr = NotificationPreferences.notifTextProdStr.replace(":$prod", "")
+            Utility.writePref(context, PREF_TOKEN, NotificationPreferences.notifTextProdStr)
             ObjectPopupMessage(view, "$prod removed from notification list")
             Utility.removePref(context, PREF_TOKEN + "_" + prod)
         }
     }
 
-    fun showAll() = MyApplication.notifTextProdStr
+    fun showAll() = NotificationPreferences.notifTextProdStr
 
-    fun check(prod: String) = MyApplication.notifTextProdStr.contains(prod)
+    fun check(prod: String) = NotificationPreferences.notifTextProdStr.contains(prod)
 
     internal fun notifyOnAll(context: Context) {
         val matchSize = 250
-        TextUtils.split(MyApplication.notifTextProdStr, ":").forEach { s ->
+        TextUtils.split(NotificationPreferences.notifTextProdStr, ":").forEach { s ->
             if (s != "") {
                 val textProdChunk = UtilityDownload.getTextProduct(context, s)
                 val textProdFirstLine = if (textProdChunk.length > matchSize) {
@@ -88,18 +89,18 @@ object UtilityNotificationTextProduct {
                 arrayOf(textBody, prod, ""),
                 arrayOf(textBody, prod, "sound")
         )
-        val sound = MyApplication.alertNotificationSoundTextProd && !inBlackout
+        val sound = NotificationPreferences.alertNotificationSoundTextProd && !inBlackout
         val objectNotification = ObjectNotification(
                 context,
                 sound,
                 prod,
                 noBody,
                 objectPendingIntents.resultPendingIntent,
-                MyApplication.ICON_CURRENT_WHITE,
+                GlobalVariables.ICON_CURRENT_WHITE,
                 noSummary,
                 NotificationCompat.PRIORITY_HIGH,
                 Color.YELLOW,
-                MyApplication.ICON_ACTION,
+                GlobalVariables.ICON_ACTION,
                 objectPendingIntents.resultPendingIntent2,
                 context.resources.getString(R.string.read_aloud)
         )

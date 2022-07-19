@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,6 +24,7 @@ package joshuatee.wx.objects
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.canada.CanadaHourlyActivity
 import joshuatee.wx.canada.CanadaTextActivity
@@ -31,6 +32,7 @@ import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcStormActivity
 import joshuatee.wx.nhc.ObjectNhcStormDetails
 import joshuatee.wx.radar.AwcRadarMosaicActivity
+import joshuatee.wx.radar.RadarMosaicNwsActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.settings.*
@@ -140,7 +142,12 @@ class ObjectIntent() {
         }
 
         fun showRadarMosaic(context: Context) {
-            ObjectIntent(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf(""))
+            if (UIPreferences.useAwcMosaic) {
+                ObjectIntent(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf(""))
+            } else {
+                ObjectIntent(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf(""))
+            }
+//            ObjectIntent(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf("CONUS"))
         }
 
         fun showSpcStormReports(context: Context) {

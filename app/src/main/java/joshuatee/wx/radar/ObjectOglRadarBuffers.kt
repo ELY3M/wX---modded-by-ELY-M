@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,8 +24,6 @@ package joshuatee.wx.radar
 import android.content.Context
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 
@@ -38,7 +36,7 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
     var productCode = 94.toShort()
 
     val colormap: ObjectColorPalette
-        get() = MyApplication.colorMap[productCode.toInt()]!!
+        get() = ObjectColorPalette.colorMap[productCode.toInt()]!!
 
     fun extractL3Data(rd: WXGLNexradLevel3) {
         productCode = rd.productCode

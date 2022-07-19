@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019 joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,7 +30,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.cardview.widget.CardView
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
@@ -41,7 +40,8 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 
@@ -117,7 +117,7 @@ class HourlyActivity : BaseActivity() {
     }
 
     private fun plotData() {
-        val linesOfData = hourlyData.temp.split(MyApplication.newline).dropLastWhile { it.isEmpty() }
+        val linesOfData = hourlyData.temp.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
         val dataPoints = mutableListOf<DataPoint>()
         (1 until linesOfData.lastIndex).forEach {
             val temp = linesOfData[it].toIntOrNull() ?: 0

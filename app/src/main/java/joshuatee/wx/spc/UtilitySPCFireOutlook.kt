@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,8 +21,8 @@
 
 package joshuatee.wx.spc
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.common.GlobalVariables
 
 internal object UtilitySpcFireOutlook {
 
@@ -33,9 +33,9 @@ internal object UtilitySpcFireOutlook {
     )
 
     val urls = listOf(
-        "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day1otlk_fire.gif",
-        "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day2otlk_fire.gif",
-        "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/imgs/day38otlk_fire.gif"
+        "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/day1otlk_fire.gif",
+        "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/day2otlk_fire.gif",
+        "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/fire_wx/imgs/day38otlk_fire.gif"
     )
 
     const val activityTitle = R.string.title_activity_spcfire_outlook

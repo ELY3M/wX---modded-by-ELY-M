@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,7 +22,8 @@
 package joshuatee.wx.notifications
 
 import android.content.Context
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityTime
 
@@ -31,8 +32,8 @@ object UtilityNotificationUtils {
     fun checkBlackOut(): Boolean {
         val hourCurrent = UtilityTime.currentHourIn24
         var inBlackout = false
-        if (MyApplication.alertBlackout) {
-            if (hourCurrent < MyApplication.alertBlackoutAmCurrent || hourCurrent >= MyApplication.alertBlackoutPmCurrent) {
+        if (NotificationPreferences.alertBlackout) {
+            if (hourCurrent < NotificationPreferences.alertBlackoutAmCurrent || hourCurrent >= NotificationPreferences.alertBlackoutPmCurrent) {
                 inBlackout = true
             }
         }
@@ -51,7 +52,7 @@ object UtilityNotificationUtils {
             val maxCnt = 40
             if (tokenCnt > maxCnt) {
                 issuedStr = ""
-                val issuedTokens = MyApplication.comma.split(issuedStrOrig)
+                val issuedTokens = RegExp.comma.split(issuedStrOrig)
                 for (j in maxCnt / 2 until issuedTokens.size) {
                     issuedStr = issuedStr + "," + issuedTokens[j]
                 }

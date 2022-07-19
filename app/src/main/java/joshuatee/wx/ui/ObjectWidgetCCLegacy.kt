@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,6 +32,7 @@ import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.canada.CanadaAlertsActivity
 import joshuatee.wx.canada.CanadaHourlyActivity
 import joshuatee.wx.canada.CanadaTextActivity
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcSoundingsActivity
@@ -76,11 +77,11 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         try {
             val p = Pattern.compile("<h3>(.*?)</h3>")
             val m = p.matcher(hazardRaw)
-            while (m.find()) hazardSum += MyApplication.newline + m.group(1)
+            while (m.find()) hazardSum += GlobalVariables.newline + m.group(1)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        hazardSum = hazardSum.replace(("^" + MyApplication.newline).toRegex(), "")
+        hazardSum = hazardSum.replace(("^" + GlobalVariables.newline).toRegex(), "")
         if (hazardSum != "") {
             remoteViews.setViewVisibility(R.id.hazard, View.VISIBLE)
         } else {

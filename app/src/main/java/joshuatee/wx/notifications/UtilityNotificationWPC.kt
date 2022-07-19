@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,24 +32,30 @@ import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType.MPD
 import joshuatee.wx.radar.LatLon
+import joshuatee.wx.settings.NotificationPreferences
 
 internal object UtilityNotificationWpc {
 
     fun locationNeedsMpd() = (0 until Location.numLocations).any { MyApplication.locations.getOrNull(it)?.notificationWpcMpd ?: false }
 
     fun sendMpdLocationNotifications(context: Context): String {
-        val textMcd = MyApplication.mpdLatLon.value
-        val textMcdNoList = MyApplication.mpdNoList.value
+        val textMcd = ObjectPolygonWatch.polygonDataByType[MPD]!!.latLonList.value
+        val textMcdNoList = ObjectPolygonWatch.polygonDataByType[MPD]!!.numberList.value
         var notifUrls = ""
-        val items = MyApplication.colon.split(textMcd)
-        val mpdNumbers = MyApplication.colon.split(textMcdNoList)
+        val items = RegExp.colon.split(textMcd)
+        val mpdNumbers = RegExp.colon.split(textMcdNoList)
         items.indices.forEach { z ->
             val latLons = LatLon.parseStringToLatLons(items[z], -1.0, false)
             if (latLons.isNotEmpty()) {
                 val poly2 = ExternalPolygon.Builder()
-                latLons.forEach { latLon -> poly2.addVertex(ExternalPoint(latLon)) }
+                latLons.forEach {
+                    latLon -> poly2.addVertex(ExternalPoint(latLon))
+                }
                 val polygon2 = poly2.build()
                 (1..Location.numLocations).forEach { n ->
                     val locNum = n.toString()
@@ -57,7 +63,9 @@ internal object UtilityNotificationWpc {
                         // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                         // call secondary method to send notification if required
                         val contains = polygon2.contains(Location.getLatLon(n - 1).asPoint())
-                        if (contains) notifUrls += sendMpdNotification(context, locNum, mpdNumbers.safeGet(z))
+                        if (contains) {
+                            notifUrls += sendMpdNotification(context, locNum, mpdNumbers.safeGet(z))
+                        }
                     }
                 }
             }
@@ -80,7 +88,7 @@ internal object UtilityNotificationWpc {
                 arrayOf(mdNo, "sound", polygonType.toString())
         )
         val cancelStr = "wpcmpdloc$mdNo$locNum"
-        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
+        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
             val objectNotification = ObjectNotification(
                     context,
@@ -88,17 +96,17 @@ internal object UtilityNotificationWpc {
                     noMain,
                     mcdPre,
                     objectPendingIntents.resultPendingIntent,
-                    MyApplication.ICON_ALERT,
+                    GlobalVariables.ICON_ALERT,
                     mcdPre,
                     NotificationCompat.PRIORITY_HIGH, // was Notification.PRIORITY_DEFAULT
                     Color.YELLOW,
-                    MyApplication.ICON_ACTION,
+                    GlobalVariables.ICON_ACTION,
                     objectPendingIntents.resultPendingIntent2,
                     context.resources.getString(R.string.read_aloud)
             )
             val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
             objectNotification.sendNotification(context, cancelStr, 1, notification)
         }
-        return cancelStr + MyApplication.notificationStrSep
+        return cancelStr + NotificationPreferences.notificationStrSep
     }
 }

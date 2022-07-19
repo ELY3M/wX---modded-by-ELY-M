@@ -7,7 +7,6 @@ package joshuatee.wx.util
 
 import android.content.Context
 import java.util.Arrays
-
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri

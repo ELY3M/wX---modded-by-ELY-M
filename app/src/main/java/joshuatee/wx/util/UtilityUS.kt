@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019 joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,16 +29,16 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.*
 import joshuatee.wx.settings.Location
-import java.util.*
+import joshuatee.wx.settings.NotificationPreferences
 import java.util.regex.Matcher
 import kotlin.collections.ArrayList
 
-
 object UtilityUS {
 
-    var obsClosestClass: String = ""
+    var obsClosestClass = ""
     private val OBS_CODE_TO_LOCATION = mutableMapOf<String, String>()
 
     internal fun getStatusViaMetar(context: Context, conditionsTimeStr: String): String {
@@ -80,27 +80,27 @@ object UtilityUS {
                     val noSummary = title + ": " + ca.area + " " + ca.summary
                     val objectPendingIntents = ObjectPendingIntents(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url, ""), arrayOf(url, "sound"))
                     val tornadoWarningPresent = title.contains(tornadoWarningString)
-                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
+                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
                         val sound = MyApplication.locations[currentLoc].sound && !inBlackout || MyApplication.locations[currentLoc].sound
-                                && tornadoWarningPresent && MyApplication.alertBlackoutTornado
+                                && tornadoWarningPresent && NotificationPreferences.alertBlackoutTornado
                         val objectNotification = ObjectNotification(
                                 context,
                                 sound,
                                 noMain,
                                 noBody,
                                 objectPendingIntents.resultPendingIntent,
-                                MyApplication.ICON_ALERT,
+                                GlobalVariables.ICON_ALERT,
                                 noSummary,
                                 NotificationCompat.PRIORITY_HIGH,
                                 Color.BLUE,
-                                MyApplication.ICON_ACTION,
+                                GlobalVariables.ICON_ACTION,
                                 objectPendingIntents.resultPendingIntent2,
                                 context.resources.getString(R.string.read_aloud)
                         )
                         val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
                         objectNotification.sendNotification(context, url, 1, notification)
                     }
-                    notificationUrls += url + MyApplication.notificationStrSep
+                    notificationUrls += url + NotificationPreferences.notificationStrSep
                 }
             }
             i += 1
@@ -149,7 +149,7 @@ object UtilityUS {
 
     private fun get7DayExt(rawData: Array<String>): String {
         val forecast = UtilityString.parseXml(rawData[11], "text")
-        val timeP12n13List = UtilityString.parseColumnMutable(rawData[15], MyApplication.utilUS_period_name_pattern)
+        val timeP12n13List = UtilityString.parseColumnMutable(rawData[15], GlobalVariables.utilUSPeriodNamePattern)
         timeP12n13List.add(0, "")
         var forecastString = ""
         for (j in 1 until forecast.size) {
@@ -161,15 +161,15 @@ object UtilityUS {
     }
 
     private fun get7Day(raw_data: Array<String>): String {
-        val dayHash = Hashtable<String, String>()
-        dayHash["Sun"] = "Sat"
-        dayHash["Mon"] = "Sun"
-        dayHash["Tue"] = "Mon"
-        dayHash["Wed"] = "Tue"
-        dayHash["Thu"] = "Wed"
-        dayHash["Fri"] = "Thu"
-        dayHash["Sat"] = "Fri"
-
+        val dayHash = mapOf(
+            "Sun" to "Sat",
+            "Mon" to "Sun",
+            "Tue" to "Mon",
+            "Wed" to "Tue",
+            "Thu" to "Wed",
+            "Fri" to "Thu",
+            "Sat" to "Fri",
+        )
         val sb = StringBuilder(250)
         var k = 1
         val sumCnt: Int
@@ -180,18 +180,16 @@ object UtilityUS {
         val maxTemp = UtilityString.parseXmlValue(raw_data[8])
         val minTemp = UtilityString.parseXmlValue(raw_data[9])
         var m: Matcher
-        //p = Pattern.compile(".*?weather-summary=(.*?)/>.*?");
         try {
-            m = MyApplication.utilUS_weather_summary_pattern.matcher(raw_data[18])
+            m = GlobalVariables.utilUSWeatherSummaryPattern.matcher(raw_data[18])
             weatherSummaryList.add("")
             while (m.find()) {
                 weatherSummaryList.add((m.group(1) ?: "").replace("\"",""))
             }
         } catch (e: Exception) {
         }
-        //p = Pattern.compile(".*?period-name=(.*?)>.*?");
         try {
-            m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[15])
+            m = GlobalVariables.utilUSPeriodNamePattern.matcher(raw_data[15])
             timeP12n13List.add("")
             while (m.find()) {
                 timeP12n13List.add((m.group(1) ?: "").replace("\"",""))
@@ -199,7 +197,7 @@ object UtilityUS {
         } catch (e: Exception) {
         }
         try {
-            m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[16])
+            m = GlobalVariables.utilUSPeriodNamePattern.matcher(raw_data[16])
             timeP24n7List.add("")
             while (m.find()) {
                 timeP24n7List.add((m.group(1) ?: "").replace("\"",""))
@@ -218,7 +216,7 @@ object UtilityUS {
             sb.append(" (")
             sb.append(weatherSummaryList[1])
             sb.append(")")
-            sb.append(MyApplication.newline)
+            sb.append(GlobalVariables.newline)
             sumCnt = 2
             maxCnt = 1
             k++
@@ -257,7 +255,7 @@ object UtilityUS {
             sb.append(Utility.safeGet(weatherSummaryList, k))
             k += 1
             sb.append(")")
-            sb.append(MyApplication.newline)
+            sb.append(GlobalVariables.newline)
             maxCnt++
         }
         if (timeP12n13List.size > 3) {

@@ -17,6 +17,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.UtilityUI
 
 /**
@@ -35,7 +37,7 @@ class DrawView : View {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         setMeasuredDimension(
             MyApplication.dm.widthPixels,
-            MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) - MyApplication.actionBarHeight
+            MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) - UIPreferences.actionBarHeight
         )
     }
 
@@ -71,9 +73,9 @@ class DrawView : View {
         isFocusable = true
         isFocusableInTouchMode = true
         this.setOnTouchListener(drawListener)
-        paint.color = MyApplication.drawToolColor
+        paint.color = RadarPreferences.drawToolColor
         paint.isAntiAlias = true
-        paint.strokeWidth = MyApplication.drawToolSize.toFloat()
+        paint.strokeWidth = RadarPreferences.drawToolSize.toFloat()
     }
 
     /**Called when the system is painting the view to the screen
@@ -91,7 +93,6 @@ class DrawView : View {
                 canvas.drawLine(start.x, start.y, end.x, end.y, paint)
             }
         }
-
         //either enable or disable the undo button
         if (undoButton != null)
         //if there are actions recorded enable the undo button

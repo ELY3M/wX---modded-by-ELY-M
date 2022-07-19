@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,26 +22,25 @@
 package joshuatee.wx.util
 
 import java.util.regex.Pattern
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.common.GlobalVariables
 import java.util.*
 
 object UtilityString {
 
     fun extractPre(html: String): String {
         val separator = "ABC123E"
-        val htmlOneLine = html.replace(MyApplication.newline, separator)
-        val parsedText = htmlOneLine.parse(MyApplication.pre2Pattern)
-        return parsedText.replace(separator, MyApplication.newline)
+        val htmlOneLine = html.replace(GlobalVariables.newline, separator)
+        val parsedText = htmlOneLine.parse(GlobalVariables.pre2Pattern)
+        return parsedText.replace(separator, GlobalVariables.newline)
     }
 
     fun extractPreLsr(html: String): String {
         val separator = "ABC123E"
-        val htmlOneLine = html.replace(MyApplication.newline, separator)
+        val htmlOneLine = html.replace(GlobalVariables.newline, separator)
         val parsedText = htmlOneLine.parse(RegExp.prePattern)
-        return parsedText.replace(separator, MyApplication.newline)
+        return parsedText.replace(separator, GlobalVariables.newline)
     }
 
     internal fun capitalizeString(s: String): String {
@@ -274,7 +273,7 @@ object UtilityString {
             payload = ""
         }
         payload = payload.replace("<name>.*?</name>".toRegex() , "").replace( "</value>" , "")
-        return MyApplication.xml_value_pattern.split(payload)
+        return GlobalVariables.xmlValuePattern.split(payload)
     }
 
     fun parseXmlExt (regexpList: Array<String>, html: String): Array<String> {

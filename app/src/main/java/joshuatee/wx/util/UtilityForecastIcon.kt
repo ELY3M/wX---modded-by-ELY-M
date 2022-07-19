@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -19,20 +19,13 @@
 
 */
 
-package joshuatee.wx.fragments
+package joshuatee.wx.util
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
+import joshuatee.wx.ui.ForecastIcon
 
-import joshuatee.wx.ui.ObjectPaint
-import joshuatee.wx.ui.ObjectPaintStripe
-import joshuatee.wx.ui.UtilityTheme
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityString
-
-object UtilityNws {
+object UtilityForecastIcon {
 
     // Given the raw icon URL from NWS, determine if bitmap is on disk or must be created
     // input examples
@@ -42,27 +35,10 @@ object UtilityNws {
     fun getIcon(context: Context, url: String): Bitmap {
         // UtilityLog.d("wx", url)
         if (url == "NULL" || url == "") {
-            return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+//            return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+            return ForecastIcon.blankBitmap()
         }
-        var fileName = url.replace("?size=medium", "")
-        fileName = fileName.replace("?size=small", "")
-        fileName = fileName.replace("https://api.weather.gov/icons/land/", "")
-        fileName = fileName.replace("http://api.weather.gov/icons/land/", "")
-        fileName = fileName.replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
-        fileName = fileName.replace("day/", "")
-
-        // legacy add
-        fileName = fileName.replace("http://forecast.weather.gov/newimages/medium/", "")
-        fileName = fileName.replace("https://forecast.weather.gov/newimages/medium/", "")
-        fileName = fileName.replace(".png", "")
-        fileName = fileName.replace("http://forecast.weather.gov/DualImage.php?", "")
-        fileName = fileName.replace("https://forecast.weather.gov/DualImage.php?", "")
-        fileName = fileName.replace("&amp", "")
-        // legacy add end
-
-        if (fileName.contains("night")) {
-            fileName = fileName.replace("night/", "n").replace("/", "/n")
-        }
+        val fileName = getFilename(url)
         val fileId = UtilityNwsIcon.iconMap["$fileName.png"]
         return if (fileId == null || fileName.contains(",")) {
             parseBitmapString(context, fileName)
@@ -108,9 +84,6 @@ object UtilityNws {
         }
     }
 
-    private const val dimensions = 86
-    private const val numHeight = 15
-
     // Given two strings return a custom bitmap made of two bitmaps with optional numeric label
     // input examples
     //  rain_showers,60 rain_showers,30
@@ -148,55 +121,61 @@ object UtilityNws {
             rightWeatherCondition = UtilityString.parse(iconRightString, "([a-z_]+)")
         }
         // legacy add end
+        val forecastIcon = ForecastIcon(context, leftWeatherCondition, rightWeatherCondition)
+        forecastIcon.drawLeftText(leftNumber)
+        forecastIcon.drawRightText(rightNumber)
+        return forecastIcon.get()
 
-        val halfWidth = 41
-        val middlePoint = 45
-        val leftCropA = if (leftWeatherCondition.contains("fg")) {
-            middlePoint
-        } else {
-            4
-        }
-        val leftCropB = if (rightWeatherCondition.contains("fg")) {
-            middlePoint
-        } else {
-            4
-        }
-        val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
-        val fileNameLeft = UtilityNwsIcon.iconMap["$leftWeatherCondition.png"]
-        val fileNameRight = UtilityNwsIcon.iconMap["$rightWeatherCondition.png"]
-        if (fileNameLeft == null || fileNameRight == null) {
-            return bitmap
-        }
-        val bitmap1 = UtilityImg.loadBitmap(context, fileNameLeft, false)
-        val bitmap2 = Bitmap.createBitmap(bitmap1, leftCropA, 0, halfWidth, dimensions)
-        canvas.drawBitmap(bitmap2, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
-        val paint = ObjectPaint()
-        val yText = 84
-        val xTextLeft = 2
-        val xText = if (rightNumber == "100") {
-            50
-        } else {
-            58
-        }
-        val paintStripe = ObjectPaintStripe()
+//        val halfWidth = 41
+//        val middlePoint = 45
+//        val leftCropA = if (leftWeatherCondition.contains("fg")) {
+//            middlePoint
+//        } else {
+//            4
+//        }
+//        val leftCropB = if (rightWeatherCondition.contains("fg")) {
+//            middlePoint
+//        } else {
+//            4
+//        }
+//        val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
+//        val canvas = Canvas(bitmap)
+//        canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
+//        val fileNameLeft = UtilityNwsIcon.iconMap["$leftWeatherCondition.png"]
+//        val fileNameRight = UtilityNwsIcon.iconMap["$rightWeatherCondition.png"]
+//        if (fileNameLeft == null || fileNameRight == null) {
+//            return bitmap
+//        }
+//        val bitmap1 = UtilityImg.loadBitmap(context, fileNameLeft, false)
+//        val bitmap2 = Bitmap.createBitmap(bitmap1, leftCropA, 0, halfWidth, dimensions)
+//        canvas.drawBitmap(bitmap2, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
 
-        // legacy add - 2nd conditional
-        if (leftNumber != "" && leftNumber != "0") {
-            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), halfWidth.toFloat(), dimensions.toFloat(), paintStripe.paint)
-            canvas.drawText("$leftNumber%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
-        }
-        val bitmap3 = UtilityImg.loadBitmap(context, fileNameRight, false)
-        val bitmap4 = Bitmap.createBitmap(bitmap3, leftCropB, 0, halfWidth, dimensions)
-        canvas.drawBitmap(bitmap4, middlePoint.toFloat(), 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
 
-        // legacy add - 2nd conditional
-        if (rightNumber != "" && rightNumber != "0") {
-            canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
-            canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.paint)
-        }
-        return bitmap
+//        val paint = ObjectPaint()
+//        val yText = 84
+//        val xTextLeft = 2
+//        val xText = if (rightNumber == "100") {
+//            50
+//        } else {
+//            58
+//        }
+//        val paintStripe = ObjectPaintStripe()
+//
+//        // legacy add - 2nd conditional
+//        if (leftNumber != "" && leftNumber != "0") {
+//            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), halfWidth.toFloat(), dimensions.toFloat(), paintStripe.paint)
+//            canvas.drawText("$leftNumber%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
+//        }
+//        val bitmap3 = UtilityImg.loadBitmap(context, fileNameRight, false)
+//        val bitmap4 = Bitmap.createBitmap(bitmap3, leftCropB, 0, halfWidth, dimensions)
+//        canvas.drawBitmap(bitmap4, middlePoint.toFloat(), 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
+//
+//        // legacy add - 2nd conditional
+//        if (rightNumber != "" && rightNumber != "0") {
+//            canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
+//            canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.paint)
+//        }
+//        return bitmap
     }
 
     // Given one string return a custom bitmap with numeric label
@@ -222,26 +201,52 @@ object UtilityNws {
             weatherCondition = UtilityString.parse(iconString, "([a-z_]+)")
         }
         // legacy add end
+        val forecastIcon = ForecastIcon(context, weatherCondition)
+        forecastIcon.drawSingleText(number)
+        return forecastIcon.get()
 
-        val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
-        val fileName = UtilityNwsIcon.iconMap["$weatherCondition.png"] ?: return bitmap
-        val bitmap1 = UtilityImg.loadBitmap(context, fileName, false)
-        val bitmap2 = Bitmap.createBitmap(bitmap1, 0, 0, dimensions, dimensions)
-        canvas.drawBitmap(bitmap2, 0.0f, 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
-        val paint = ObjectPaint()
-        val yText = 84
-        val xText = if (number == "100") {
-            50
-        } else {
-            58
+//        val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
+//        val canvas = Canvas(bitmap)
+//        canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
+//        val fileName = UtilityNwsIcon.iconMap["$weatherCondition.png"] ?: return bitmap
+//        val bitmap1 = UtilityImg.loadBitmap(context, fileName, false)
+//        val bitmap2 = Bitmap.createBitmap(bitmap1, 0, 0, dimensions, dimensions)
+//        canvas.drawBitmap(bitmap2, 0.0f, 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
+//        val paint = ObjectPaint()
+//        val yText = 84
+//        val xText = if (number == "100") {
+//            50
+//        } else {
+//            58
+//        }
+//        val paintStripe = ObjectPaintStripe()
+//        if (number != "" && number != "0") {
+//            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
+//            canvas.drawText("$number%", xText.toFloat(), yText.toFloat(), paint.paint)
+//        }
+//        return bitmap
+    }
+
+    private fun getFilename(url: String): String {
+        var fileName = url.replace("?size=medium", "")
+        fileName = fileName.replace("?size=small", "")
+        fileName = fileName.replace("https://api.weather.gov/icons/land/", "")
+        fileName = fileName.replace("http://api.weather.gov/icons/land/", "")
+        fileName = fileName.replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
+        fileName = fileName.replace("day/", "")
+
+        // legacy add
+        fileName = fileName.replace("http://forecast.weather.gov/newimages/medium/", "")
+        fileName = fileName.replace("https://forecast.weather.gov/newimages/medium/", "")
+        fileName = fileName.replace(".png", "")
+        fileName = fileName.replace("http://forecast.weather.gov/DualImage.php?", "")
+        fileName = fileName.replace("https://forecast.weather.gov/DualImage.php?", "")
+        fileName = fileName.replace("&amp", "")
+        // legacy add end
+
+        if (fileName.contains("night")) {
+            fileName = fileName.replace("night/", "n").replace("/", "/n")
         }
-        val paintStripe = ObjectPaintStripe()
-        if (number != "" && number != "0") {
-            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
-            canvas.drawText("$number%", xText.toFloat(), yText.toFloat(), paint.paint)
-        }
-        return bitmap
+        return fileName
     }
 }

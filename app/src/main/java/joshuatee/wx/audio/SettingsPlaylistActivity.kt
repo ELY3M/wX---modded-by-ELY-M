@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,15 +32,15 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.app.ActivityCompat
 import java.util.Locale
-import joshuatee.wx.GlobalArrays
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.GlobalArrays
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.UtilityWpcText
 import joshuatee.wx.R
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.*
 
@@ -61,9 +61,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         ObjectFab(this, this, R.id.fab) { playAll() }
         fabPause = ObjectFab(this, this, R.id.fab3) { playItemFab() }
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
-            MyApplication.ICON_PAUSE_PRESSED
+            GlobalVariables.ICON_PAUSE_PRESSED
         } else {
-            MyApplication.ICON_PAUSE_WHITE
+            GlobalVariables.ICON_PAUSE_WHITE
         }
         fabPause.fabSetResDrawable(this, icon)
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
@@ -73,7 +73,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             if (!ridFav.contains(product)) {
                 ridFav = "$ridFav:$product"
                 Utility.writePref(this, prefToken, ridFav)
-                MyApplication.playlistStr = ridFav
+                UIPreferences.playlistStr = ridFav
                 playListItems.add(getLongString(product))
                 getContent()
                 dialog.dismiss()
@@ -91,7 +91,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 ridFav = "$ridFav:$product"
                 Utility.writePref(this, prefToken, ridFav)
                 playListItems.add(getLongString(product))
-                MyApplication.playlistStr = ridFav
+                UIPreferences.playlistStr = ridFav
                 getContent()
                 dialog.dismiss()
             } else {
@@ -123,15 +123,17 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun updateList() {
-        MyApplication.playlistStr = ridFav
+        UIPreferences.playlistStr = ridFav
         val tempList = ridFav.split(":")
         playListItems = (1 until tempList.size).map { getLongString(tempList[it]) }.toMutableList()
     }
 
     private fun updateListNoInit() {
-        MyApplication.playlistStr = ridFav
+        UIPreferences.playlistStr = ridFav
         val tempList = ridFav.split(":")
-        (1 until tempList.size).forEach { playListItems[it - 1] = getLongString(tempList[it]) }
+        (1 until tempList.size).forEach {
+            playListItems[it - 1] = getLongString(tempList[it])
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -181,9 +183,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private fun playItemFab() {
         if (UtilityTts.mediaPlayer != null) UtilityTts.playMediaPlayer(1)
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
-            MyApplication.ICON_PAUSE_PRESSED
+            GlobalVariables.ICON_PAUSE_PRESSED
         } else {
-            MyApplication.ICON_PAUSE
+            GlobalVariables.ICON_PAUSE
         }
         fabPause.fabSetResDrawable(this, icon)
         if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
@@ -192,7 +194,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun playAll() {
-        fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE)
+        fabPause.fabSetResDrawable(this, GlobalVariables.ICON_PAUSE)
         if (isStoragePermissionGranted) UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
         if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
             UtilityNotification.createMediaControlNotification(applicationContext, "")
@@ -212,16 +214,16 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         Utility.writePref(this, prefToken, ridFav)
         Utility.removePref(this, "PLAYLIST_" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0])
         ca.deleteItem(position)
-        MyApplication.playlistStr = ridFav
+        UIPreferences.playlistStr = ridFav
     }
 
     private fun moveDownItem(position: Int) {
-        MyApplication.playlistStr = UtilityUI.moveDown(this, prefToken, playListItems, position)
+        UIPreferences.playlistStr = UtilityUI.moveDown(this, prefToken, playListItems, position)
         ca.notifyDataSetChanged()
     }
 
     private fun moveUpItem(position: Int) {
-        MyApplication.playlistStr = UtilityUI.moveUp(this, prefToken, playListItems, position)
+        UIPreferences.playlistStr = UtilityUI.moveUp(this, prefToken, playListItems, position)
         ca.notifyDataSetChanged()
     }
 

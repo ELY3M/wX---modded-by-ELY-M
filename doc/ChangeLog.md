@@ -12,26 +12,136 @@
 // TODO [REF] add ObjectLocation
 // TODO [FIX] 7day not honoring C/F setting
 // TODO [FIX] usalerts sps don't show radar icon if no poly
-// TODO [REF] deprecate SettingsPlaylistAutodownloadActivity
 // TODO [REF] migrate all to Future* (models/radar/LocationFragment)
 // TODO [FIX] textual vwp is not looking to good
-// TODO [FIX] deprecate UtilityUI.makeToastLegacy
-// TODO [ADD] alphabetize prefs in settings
+// TODO [ADD] alphabetize notif prefs in settings
 // TODO [ADD] have nexrad long press verbiage match iOS version
 // TODO [REF] replace String.format with stuff in to.
 // TODO [FIX] review multipane data usage
 // TODO [FIX] snow squall warning enabled - no way to long press
 // TODO [FIX] settings label for C/F to indicate what it modifies
-// TODO [FIX] usalerts filter is not sorted
 // TODO [ADD] user request for metar homescreen widget
+// TODO [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
 // TODO [REF] ExternalGeodeticCalculator -> convert from class to object since all static
 // TODO [ADD] look to replace AWC radar mosaics with normal NWS (looks like AWC website redesign might obsolete)
-//             https://www.weather.gov/media/notification/pdf2/pns22-09_ridge_ii_public_local_standard_radar_pages.pdf
-//             https://www.weather.gov/media/notification/pdf2/pns22-19_aviation_website_upgrade.pdf
+// [FIX] when animating in vis/mosaic, show stop button, etc
+// [REF] move storage containers in MyApp (DataStorage types) somewhere else
+// [REF] ObjectPolygonWatch ?
+// [REF] PolygonType rename MCD -> Mcd, etc
+// [REF] IntentService is deprecated (AudioService* and others) https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
+// [REF] After Oct 2022 - raise minSDK to Android 6	Level 23	Marshmallow
+// [FIX] common verbiage between nexrad long press ios and android
+// [REF] WXGLRender should show elements based on pref not buffer size (ca/mx statelines ex.)
+// [REF] unecessary try in locfrag
+// [REF] ObjectCard make card protected or private
+// [REF] ObjectRecyclerViewGeneric and others getter/setter for adapter
+// [REF] ObjectTextView make tv private
 ```
 [[_TOC_]]
 
-## 55601 2022_06_03
+## 55623 2022_07_19
+* [REF] misc refactor - UI
+
+## 55622 2022_07_19
+* [REF] misc refactor
+
+## 55621 2022_07_18
+* [REF] remove ./app/src/main/java/joshuatee/wx/util/AnimatedGifEncoderExternal.java
+* [REF] replace UtilityStringExternal.truncate with String.take
+* [FIX] remove deprecated option in settings->widgets (show warnings in radar mosaic)
+* [ADD] minor alphabetization in settings->widgets
+* [ADD] ObjectPolygonWatch and use simple framework (just DataStorage directly)
+
+## 55620 2022_07_17
+* [REF] remove CreateAnimatedGifService.kt
+* [REF] simplify okhttp setup in myapp
+* [FIX] status bar icon for location specific radar notification
+
+## 55619 2022_07_17
+* [REF] remove animated gif share which is not working and is considered deprecated within the program
+
+## 55618 2022_07_17
+* [ADD] Nexrad radar long press - shorten verbiage (con't)
+* [REF] UtilityRadarUI/WXGLSurfaceView change from MutableList to List in some areas
+* [FIX] new NWS Radar Mosaic - remove menu with products that aren't available
+* [FIX] NHC now shows complete summary information and text products for Central Pacific "CP" hurricanes
+* [REF] continue moving content out of MyApp and into UIPreferences and others
+
+## 55616 2022_07_16
+* [ADD] Radar settings - mostly alphabetized now with common options listed at top
+* [REF] update copyright notice
+
+## 55615 2022_07_16
+* [ADD] NWS Radar Mosaic - play icon toggles to stop and add ability to stop animation via button
+* [ADD] Nexrad radar long press - shorten verbiage
+
+## 55614 2022_07_15
+* [FIX] attempted fix for screen recorder in RecordingSession by adding delay for getMediaProjection
+* [FIX] partial - For NHC central pacific storms
+
+## 55613 2022_07_15
+* [REF] continue moving content out of MyApp and into UIPreferences and others
+* [REF] ObjectImagesCollection - remove the need to call init func
+
+## 55612 2022_07_15
+* [REF] continue moving content out of MyApp and into UIPreferences - *fav (favorites for misc activities)
+
+## 55611 2022_07_15
+* [REF] continue moving content out of MyApp and into GlobalVariables and NotificationPreferences
+
+## 55610 2022_07_14
+* [ADD] Switch to ViewPager2 and use FragmentStateAdapter
+* [REF] continue moving content out of MyApp and into GlobalVariables and RadarPreferences
+
+## 55609 2022_07_14
+* [REF] continue moving content out of MyApp and into GlobalVariables and RadarPreferences
+
+## 55608 2022_07_14
+* [REF] complete task "deprecate SettingsPlaylistAutodownloadActivity" by doing the following
+  - remove UtilityPlayListAutoDownload
+  - remove DownloadPlaylistService
+  - remove DownloadPlaylistService from manifest
+* [ADD] Option to use new NWS Radar Mosaic (restart required). This is a temporary option as it appears likely the default mosaic will switch to NWS (away from AWC) later this year
+* [REF] move patterns in RegExp that are only used in one class back into those classes
+* [REF] Change Level2 data site back to nomads after maintenance in Apr 2022
+* [ADD] radar.RadarGeometry and move items from MyApplication to it (ongoing)
+* [REF] remove MyApplication.radarHwEnh, git rm ./app/src/main/res/raw/hw (option has been gone for some time)
+* [REF] move numerous URLs and other val String into GlobalVariables (myapp is too big)
+
+## 55607 2022_07_05
+* [ADD] framework for new NWS Mosaic (to replace AWC later this year), main menu, widget, homescreen widget
+* [FIX] NHC notifications will now alert for ATL or EPAC depending on which is selected
+* [ADD] In the US Alert viewer, show warning types and states in sorted manner
+
+## 55606 2022_07_04
+* [ADD] refine labels in Settings -> UI
+* [ADD] remove option "Reduce size of tile images" TILE_IMAGE_DOWNSIZE
+* [ADD] remove option "Show VR button on main screen" VR_BUTTON
+* [ADD] Settings -> UI alphabetize
+
+## 55605 2022_07_04
+* [REF] UtilityNws -> UtilityForecastIcon, ForecastIcon
+
+## 55604 2022_07_01
+* [REF] following upgrades in build.gradle
+```
+-        targetSdkVersion 31
++        targetSdkVersion 32
+
+-    implementation "com.squareup.okhttp3:okhttp:4.9.3"
++    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+
+-    compileSdkVersion 31
++    compileSdkVersion 32
+```
+## 55603 2022_06_28
+* [FIX] terminal radar TICH (Wichita, KS) was not properly coded (was TICT), it is now available for use
+
+## 55602 2022_06_10
+* [FIX] prevent nexrad radar from showing stale SWO data (earlier fix was not good)
+
+## 55601 2022_06_08
+* [FIX] prevent nexrad radar from showing stale SWO data
 * software updates as follows
 ```
 -    implementation 'com.google.android.material:material:1.6.0'

@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55601"
-    android:versionName="55601-elys"
+    android:versionCode="55623"
+    android:versionName="55623-elys"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -93,10 +93,10 @@
       android:theme="@style/MyCustomTheme_BlackAqua_NOAB"
       >
   </activity>
-  <activity
-      android:name="joshuatee.wx.CommonActionBarFragment"
-      android:parentActivityName="WX" >
-  </activity>
+<!--  <activity-->
+<!--      android:name="joshuatee.wx.ui.CommonActionBarFragment"-->
+<!--      android:parentActivityName="WX" >-->
+<!--  </activity>-->
   <activity
       android:name=".settings.SettingsMainActivity"
       android:label="@string/title_activity_settings_main"
@@ -123,14 +123,10 @@
       android:name=".notifications.AlertService"
       android:enabled="true" >
   </service>
-  <service
-      android:name=".audio.DownloadPlaylistService"
-      android:enabled="true" >
-  </service>
-  <service
-      android:name=".util.CreateAnimatedGifService"
-      android:enabled="true" >
-  </service>
+<!--  <service-->
+<!--      android:name=".util.CreateAnimatedGifService"-->
+<!--      android:enabled="true" >-->
+<!--  </service>-->
   <service
       android:name=".audio.StopAudioService"
       android:enabled="true" >
@@ -202,6 +198,11 @@
   </activity>
   <activity
       android:name=".radar.AwcRadarMosaicActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".radar.RadarMosaicNwsActivity"
       android:label=""
       android:parentActivityName="WX" >
   </activity>

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -150,8 +149,8 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun downloadImages() {
         urls = UtilitySpcSwo.getUrls(day)
-        for (index in urls.indices) {
-            FutureVoid(this, { bitmaps[index] = urls[index].getImage() }, { showImage(index) })
+        urls.indices.forEach {
+            FutureVoid(this, { bitmaps[it] = urls[it].getImage() }, { showImage(it) })
         }
     }
 
@@ -170,9 +169,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun setImageAndClickAction(index: Int) {
         objectCardImageList[index].visibility = View.VISIBLE
         objectCardImageList[index].setImage(bitmaps[index], imagesPerRow)
-        objectCardImageList[index].setOnClickListener {
-            showImageProduct(urls[index], imageLabel)
-        }
+        objectCardImageList[index].setOnClickListener { showImageProduct(urls[index], imageLabel) }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

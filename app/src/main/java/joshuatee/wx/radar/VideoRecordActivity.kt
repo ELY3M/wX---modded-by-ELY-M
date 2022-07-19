@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,10 +35,8 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.ui.UtilityToolbar
 
@@ -65,7 +63,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         toolbarBottom = if (bottomToolbar) findViewById(R.id.toolbar_bottom) else Toolbar(this as Context)
         // for model activities need to force false regardless of user setting
         if (menuResId != null && bottomToolbar) {
-            if (MyApplication.iconsEvenSpaced && iconsEvenlySpaced) {
+            if (UIPreferences.iconsEvenSpaced && iconsEvenlySpaced) {
                 UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, menuResId)
             } else {
                 toolbarBottom.inflateMenu(menuResId)

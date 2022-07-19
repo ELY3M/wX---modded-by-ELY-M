@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,8 +22,6 @@
 package joshuatee.wx.objects
 
 import android.content.Context
-import joshuatee.wx.DataStorage
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityVtec
@@ -52,22 +50,15 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
         }
     }
 
-    // Not currently used
 //    fun getData(): String {
 //        return storage.value
 //    }
 
-    fun getUrlToken(): String {
-        return longName[type] ?: ""
-    }
+    fun getUrlToken() = longName[type] ?: ""
 
-    private fun getUrl(): String {
-        return baseUrl + getUrlToken()
-    }
+    private fun getUrl() = baseUrl + getUrlToken()
 
-    private fun getTypeName(): String {
-        return type.toString().replace("PolygonType.", "")
-    }
+    private fun getTypeName() = type.toString().replace("PolygonType.", "")
 
     val name get() = type.urlToken.replace("%20", " ")
 
@@ -78,6 +69,11 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
     private val prefTokenStorage get() = "SEVERE_DASHBOARD_" + type.productCode
 
     companion object {
+
+        val severeDashboardTor = DataStorage("SEVERE_DASHBOARD_TOR")
+        val severeDashboardTst = DataStorage("SEVERE_DASHBOARD_TST")
+        val severeDashboardFfw = DataStorage("SEVERE_DASHBOARD_FFW")
+
         private var polygonDataByType = mutableMapOf<PolygonWarningType, ObjectPolygonWarning>()
 
         private val polygonList = listOf(
@@ -97,22 +93,33 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
 //            PolygonType.ffw: "Flash%20Flood%20Warning",
         )
 
-        const val baseUrl: String = "https://api.weather.gov/alerts/active?event="
+        const val baseUrl = "https://api.weather.gov/alerts/active?event="
 
         fun areAnyEnabled(): Boolean {
             var anyEnabled = false
-            polygonList.forEach { if (polygonDataByType[it]!!.isEnabled) anyEnabled = true }
+            polygonList.forEach {
+                if (polygonDataByType[it]!!.isEnabled) {
+                    anyEnabled = true
+                }
+            }
             return anyEnabled
         }
 
         fun load(context: Context) {
-            polygonList.forEach { polygonDataByType[it] = ObjectPolygonWarning(context, it) }
+            println("ObjectPolygonWarning load")
+            severeDashboardTor.update(context)
+            severeDashboardTst.update(context)
+            severeDashboardFfw.update(context)
+
+            polygonList.forEach {
+                polygonDataByType[it] = ObjectPolygonWarning(context, it)
+            }
         }
 
         fun isCountNonZero(): Boolean {
-            val tstCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTst.value)
-            val torCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTor.value)
-            val ffwCount = UtilityVtec.getStormCount(MyApplication.severeDashboardFfw.value)
+            val tstCount = UtilityVtec.getStormCount(severeDashboardTst.value)
+            val torCount = UtilityVtec.getStormCount(severeDashboardTor.value)
+            val ffwCount = UtilityVtec.getStormCount(severeDashboardFfw.value)
             var count = tstCount + torCount + ffwCount
             polygonList.forEach {
                 if (polygonDataByType[it]!!.isEnabled) {

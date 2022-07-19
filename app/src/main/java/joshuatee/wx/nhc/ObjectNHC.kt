@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,16 +25,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.LinearLayout
-import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.util.Utility
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectLinearLayout
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.util.*
 
 class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
 
@@ -57,6 +55,16 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
     private var movementSpeeds = listOf<String>()
     private var lastUpdates = listOf<String>()
     private var statusList = mutableListOf<String>()
+
+    private var publicAdvisoriesChunk = listOf<String>()
+    private var forecastAdvisoriesChunk = listOf<String>()
+    private var forecastDiscussionsChunk = listOf<String>()
+    private var windSpeedProbabilitiesChunk = listOf<String>()
+    private var publicAdvisories = mutableListOf<String>()
+    private var forecastAdvisories = mutableListOf<String>()
+    private var forecastDiscussions = mutableListOf<String>()
+    private var windSpeedProbabilities = mutableListOf<String>()
+
     val bitmaps = mutableListOf<Bitmap>()
     private val objectCardImages = mutableListOf<ObjectCardImage>()
     val urls = mutableListOf<String>()
@@ -83,7 +91,7 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
 
     fun getTextData() {
         statusList.clear()
-        val url = MyApplication.nwsNhcWebsitePrefix + "/CurrentStorms.json"
+        val url = GlobalVariables.nwsNhcWebsitePrefix + "/CurrentStorms.json"
         //val url = "https://www.nhc.noaa.gov/productexamples/NHC_JSON_Sample.json"
         val html = url.getHtml()
         ids = html.parseColumn("\"id\": \"(.*?)\"")
@@ -101,9 +109,48 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
         movementDirs = html.parseColumn("\"movementDir\": (.*?),")
         movementSpeeds = html.parseColumn("\"movementSpeed\": (.*?),")
         lastUpdates = html.parseColumn("\"lastUpdate\": \"(.*?)\"")
-        binNumbers.forEach {
-            val text = UtilityDownload.getTextProduct(context, "MIATCP$it")
+
+        // REMOVE Jul 22
+//        binNumbers.forEach {
+//            val text = UtilityDownload.getTextProduct(context, "MIATCP$it")
+//            val status = text.replace("\n", " ").parseFirst("(\\.\\.\\..*?\\.\\.\\.)")
+//            statusList.add(status)
+//        }
+
+        // ADD Jul 22
+        publicAdvisoriesChunk = UtilityString.parseColumn(html, "\"publicAdvisory\": \\{(.*?)\\}")
+        forecastAdvisoriesChunk = UtilityString.parseColumn(html, "\"forecastAdvisory\": \\{(.*?)\\}")
+        forecastDiscussionsChunk = UtilityString.parseColumn(html, "\"forecastDiscussion\": \\{(.*?)\\}")
+        windSpeedProbabilitiesChunk = UtilityString.parseColumn(html, "\"windSpeedProbabilities\": \\{(.*?)\\}")
+
+        for (chunk in publicAdvisoriesChunk) {
+            val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
+            publicAdvisories.add(token)
+        }
+
+        for (chunk in forecastAdvisoriesChunk) {
+            val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
+            forecastAdvisories.add(token)
+        }
+
+        for (chunk in forecastDiscussionsChunk) {
+            val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
+            forecastDiscussions.add(token)
+        }
+
+        for (chunk in windSpeedProbabilitiesChunk) {
+            val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
+            windSpeedProbabilities.add(token)
+        }
+
+        for (adv in publicAdvisories) {
+//            UtilityLog.d("wxNHC", adv)
+            val productToken = adv.split("/").last().replace(".shtml", "")
+            val text = UtilityDownload.getTextProduct(context, productToken)
             val status = text.replace("\n", " ").parseFirst("(\\.\\.\\..*?\\.\\.\\.)")
+//            UtilityLog.d("wxNHC", text)
+//            val items = UtilityString.parseColumn(text, "^(\\.\\.\\..*?\\.\\.\\.)$")
+//            statusList.add(items.joinToString("\n"))
             statusList.add(status)
         }
     }
@@ -112,7 +159,7 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
         linearLayoutText.removeAllViewsInLayout()
         val muteStr = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
         notificationCard = ObjectCardText(context, cardNotificationHeaderText + muteStr)
-        linearLayoutText.addView(notificationCard!!.card)
+        linearLayoutText.addView(notificationCard!!.get())
         notificationCard?.setOnClickListener { clearNhcNotificationBlock() }
         if (muteStr != "") {
             notificationCard?.visibility = View.VISIBLE
@@ -134,7 +181,11 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
                         latitudes[index],
                         longitudes[index],
                         intensities[index],
-                        statusList[index]
+                        statusList[index],
+                        Utility.safeGet(publicAdvisories, index),
+                        Utility.safeGet(forecastAdvisories, index),
+                        Utility.safeGet(forecastDiscussions, index),
+                        Utility.safeGet(windSpeedProbabilities, index),
                 )
                 stormDataList.add(objectNhcStormDetails)
                 val card = ObjectCardNhcStormReportItem(context, linearLayoutText.get(), objectNhcStormDetails)

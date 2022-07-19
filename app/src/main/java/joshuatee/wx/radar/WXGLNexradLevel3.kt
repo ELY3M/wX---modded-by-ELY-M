@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,10 +26,9 @@ import java.io.DataInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
 import android.content.Context
-
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 import java.util.*
 
@@ -71,7 +70,7 @@ class WXGLNexradLevel3 internal constructor() {
 
     init {
         try {
-            if (MyApplication.radarUseJni) {
+            if (RadarPreferences.radarUseJni) {
                 oBuff = ByteBuffer.allocateDirect(1000000)
                 oBuff.order(ByteOrder.nativeOrder())
             }
@@ -168,7 +167,7 @@ class WXGLNexradLevel3 internal constructor() {
             halfword48 = dis.readUnsignedShort().toShort()
             dis.skipBytes(24)
             seekStart = dis.filePointer
-            if (MyApplication.radarUseJni) {
+            if (RadarPreferences.radarUseJni) {
                 compressedFileSize = (dis.length() - dis.filePointer).toInt()
                 iBuff = ByteBuffer.allocateDirect(compressedFileSize)
                 iBuff.order(ByteOrder.nativeOrder())
@@ -278,12 +277,12 @@ class WXGLNexradLevel3 internal constructor() {
     }
 
     private fun formatRadarString(date: Date) = try {
-            date.toString() + MyApplication.newline +
-                    "Radar Mode: " + operationalMode + MyApplication.newline +
-                    "VCP: " + volumeCoveragePattern + MyApplication.newline +
-                    "Product Code: " + productCode + MyApplication.newline +
-                    "Radar height: " + radarHeight + MyApplication.newline +
-                    "Radar Lat: " + latitudeOfRadar + MyApplication.newline +
+            date.toString() + GlobalVariables.newline +
+                    "Radar Mode: " + operationalMode + GlobalVariables.newline +
+                    "VCP: " + volumeCoveragePattern + GlobalVariables.newline +
+                    "Product Code: " + productCode + GlobalVariables.newline +
+                    "Radar height: " + radarHeight + GlobalVariables.newline +
+                    "Radar Lat: " + latitudeOfRadar + GlobalVariables.newline +
                     "Radar Lon: " + longitudeOfRadar
         } catch (e: AssertionError) {
             ""

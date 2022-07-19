@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,8 +23,8 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.RemoteViews
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile.SPCSWO
 import joshuatee.wx.spc.SpcSwoActivity
@@ -38,7 +38,7 @@ class ObjectWidgetSpcSwo(context: Context) {
         ivList.indices.forEach {
             val dayAsString = (it + 1).toString()
             UtilityWidget.setImage(context, remoteViews, ivList[it], SPCSWO.fileName + dayAsString)
-            if (!MyApplication.widgetPreventTap) {
+            if (!UIPreferences.widgetPreventTap) {
                 UtilityWidget.setupIntent(context, remoteViews, SpcSwoActivity::class.java, ivList[it], SpcSwoActivity.NUMBER, arrayOf(dayAsString, ""), SPCSWO.action + dayAsString)
             }
         }

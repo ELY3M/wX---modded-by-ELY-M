@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,9 +33,9 @@ import android.widget.AdapterView
 import android.widget.LinearLayout
 import androidx.core.view.GravityCompat
 import java.util.Locale
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
@@ -208,11 +208,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (om.modelType == ModelType.NCEP) {
             om.run = om.rtd.mostRecentRun
             om.rtd.listRun = om.ncepRuns
-            //spRun.setSelection(om.rtd.mostRecentRun)
-            //if (om.model == "CFS" && 0 == ) UtilityModels.getContent(this@ModelsGenericActivity, om, listOf(""), uiDispatcher)
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             (0 until om.times.size).forEach {
-                val items = MyApplication.space.split(om.times[it])[0]
+                val items = RegExp.space.split(om.times[it])[0]
                 om.times[it] = "$items " + UtilityModels.convertTimeRunToTimeString(om.rtd.mostRecentRun.replace("Z", ""), items, true)
             }
         } else {

@@ -9,7 +9,6 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.CheckedTextView
 import android.widget.LinearLayout
 import android.widget.TextView
-
 import joshuatee.wx.R
 
 class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Group>) : BaseExpandableListAdapter() {

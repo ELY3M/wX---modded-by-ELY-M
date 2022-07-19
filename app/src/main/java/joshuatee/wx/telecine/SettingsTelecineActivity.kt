@@ -39,7 +39,7 @@ class SettingsTelecineActivity : BaseActivity() {
                 "Three Second Countdown",
                 "show-countdown",
                 R.string.loc1_radar_label
-            ).card
+            ).get()
         )
         linearLayout.addView(
             ObjectSettingsCheckBox(
@@ -47,7 +47,7 @@ class SettingsTelecineActivity : BaseActivity() {
                 "Recording Notification",
                 "recording-notification",
                 R.string.loc1_radar_label
-            ).card
+            ).get()
         )
     }
 

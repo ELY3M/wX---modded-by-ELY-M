@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,21 +28,22 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Paint.Style
 import android.graphics.Path
-
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.*
-
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
 import java.util.*
+import java.util.regex.Pattern
 
 object UtilityCanvasStormInfo {
 
     private const val stiBaseFileName = "nids_sti_tab"
+    private val pattern1: Pattern = Pattern.compile("AZ/RAN(.*?)V")
+    private val pattern2: Pattern = Pattern.compile("MVT(.*?)V")
+    private val pattern3: Pattern = Pattern.compile("\\d+")
 
     fun drawNexRadStormMotion(context: Context, projectionType: ProjectionType, bitmap: Bitmap, radarSite: String) {
         val textSize = 22
@@ -65,8 +66,8 @@ object UtilityCanvasStormInfo {
             val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, stiBaseFileName + ""))
             ucarRandomAccessFile.bigEndian = true
             val data = UtilityLevel3TextProduct.read(ucarRandomAccessFile)
-            val posn = data.parseColumn(RegExp.stiPattern1)
-            val motion = data.parseColumn(RegExp.stiPattern2)
+            val posn = data.parseColumn(pattern1)
+            val motion = data.parseColumn(pattern2)
             var posnStr = ""
             var motionStr = ""
             posn.map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
@@ -77,8 +78,8 @@ object UtilityCanvasStormInfo {
                 .forEach {
                     motionStr += it.replace("/", " ")
                 }
-            val posnNumbers = posnStr.parseColumnAll(RegExp.stiPattern3)
-            val motNumbers = motionStr.parseColumnAll(RegExp.stiPattern3)
+            val posnNumbers = posnStr.parseColumnAll(pattern3)
+            val motNumbers = motionStr.parseColumnAll(pattern3)
             var endPoint: DoubleArray
             val degreeShift = 180.00
             val arrowLength = 2.0
@@ -127,8 +128,10 @@ object UtilityCanvasStormInfo {
             UtilityLog.handleException(e)
         }
         val stormLists = FloatArray(stormList.size)
-        stormList.indices.forEach { stormLists[it] = stormList[it].toFloat() }
-        paint.color = MyApplication.radarColorSti
+        stormList.indices.forEach {
+            stormLists[it] = stormList[it].toFloat()
+        }
+        paint.color = RadarPreferences.radarColorSti
         canvas.drawLines(stormLists, paint)
         val wallPath = Path()
         wallPath.reset()

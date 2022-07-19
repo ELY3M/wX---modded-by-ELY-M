@@ -64,7 +64,8 @@ import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.fingerdraw.DrawLineView
 import joshuatee.wx.fingerdraw.DrawView
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.util.FileProvider
 import joshuatee.wx.util.UtilityTime
@@ -81,8 +82,8 @@ internal class RecordingSession(
     private val mainThread = Handler(Looper.getMainLooper())
     private val picturesDir: File? = context.getExternalFilesDir(DIRECTORY_DCIM)
     private val moviesDir: File? = context.getExternalFilesDir(DIRECTORY_MOVIES)
-    private val videoFileFormat = SimpleDateFormat("'${MyApplication.packageNameFileNameAsString}'yyyyMMddHHmmss'.mp4'", Locale.US)
-    private val audioFileFormat = SimpleDateFormat("'${MyApplication.packageNameFileNameAsString}'yyyyMMddHHmmss'.jpeg'", Locale.US)
+    private val videoFileFormat = SimpleDateFormat("'${GlobalVariables.packageNameFileNameAsString}'yyyyMMddHHmmss'.mp4'", Locale.US)
+    private val audioFileFormat = SimpleDateFormat("'${GlobalVariables.packageNameFileNameAsString}'yyyyMMddHHmmss'.jpeg'", Locale.US)
     private val notificationManager: NotificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     private val windowManager: WindowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
     private var projectionManager: MediaProjectionManager? = null
@@ -113,7 +114,7 @@ internal class RecordingSession(
             val cameraWidth = camcorderProfile?.videoFrameWidth ?: -1
             val cameraHeight = camcorderProfile?.videoFrameHeight ?: -1
             val cameraFrameRate = camcorderProfile?.videoFrameRate ?: 30
-            val sizePercentage = MyApplication.telecineVideoSizePercentage
+            val sizePercentage = UIPreferences.telecineVideoSizePercentage
             return calculateRecordingInfo(
                 displayWidth, displayHeight, displayDensity, isLandscape,
                 cameraWidth, cameraHeight, cameraFrameRate, sizePercentage
@@ -210,21 +211,30 @@ internal class RecordingSession(
         } catch (e: IOException) {
             throw RuntimeException("Unable to prepare MediaRecorder.", e)
         }
-        projection = projectionManager!!.getMediaProjection(resultCode, data)
-        val surface = recorder!!.surface
-        display = projection!!.createVirtualDisplay(
-            DISPLAY_NAME,
-            recordingInfo.width,
-            recordingInfo.height,
-            recordingInfo.density,
-            VIRTUAL_DISPLAY_FLAG_PRESENTATION,
-            surface,
-            null,
-            null
-        )
-        recorder!!.start()
-        running = true
-        listener.onStart()
+
+//        projection = projectionManager!!.getMediaProjection(resultCode, data)
+        // delay needed because getMediaProjection() throws an error if it's called too soon
+        Handler(Looper.getMainLooper()).postDelayed({
+            projection = projectionManager!!.getMediaProjection(resultCode, data)
+
+            val surface = recorder!!.surface
+            display = projection!!.createVirtualDisplay(
+                    DISPLAY_NAME,
+                    recordingInfo.width,
+                    recordingInfo.height,
+                    recordingInfo.density,
+                    VIRTUAL_DISPLAY_FLAG_PRESENTATION,
+                    surface,
+                    null,
+                    null
+            )
+            recorder!!.start()
+            running = true
+            listener.onStart()
+
+        }, 1000)
+
+
     }
 
     private fun stopRecording() {
@@ -258,7 +268,7 @@ internal class RecordingSession(
             recorder!!.release()
         }
         display!!.release()
-        val uri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", File(outputFile!!))
+        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", File(outputFile!!))
         mainThread.post {showNotification(uri, null)}
     }
 
@@ -324,75 +334,80 @@ internal class RecordingSession(
         val recordingInfo = screenshotInfo
         val outputName = audioFileFormat.format(Date())
         outputFile = File(picturesDir, outputName).absolutePath
-        projection = projectionManager!!.getMediaProjection(resultCode, data)
-        imageReader = ImageReader.newInstance(recordingInfo.width, recordingInfo.height, PixelFormat.RGBA_8888, 2)
-        val surface = imageReader!!.surface
-        display = projection!!.createVirtualDisplay(
-            DISPLAY_NAME,
-            recordingInfo.width,
-            recordingInfo.height,
-            recordingInfo.density,
-            VIRTUAL_DISPLAY_FLAG_PRESENTATION,
-            surface,
-            null,
-            null
-        )
-        imageReader!!.setOnImageAvailableListener({
-            var image: Image? = null
-            var fos: FileOutputStream? = null
-            var bitmap: Bitmap? = null
-            var croppedBitmap: Bitmap? = null
-            try {
-                image = imageReader!!.acquireLatestImage()
-                if (image != null) {
-                    val flashViewListener = object : FlashView.Listener {
-                        override fun onFlashComplete() {
-                            if (flashView != null) {
-                                windowManager.removeView(flashView)
-                                flashView = null
+
+//        projection = projectionManager!!.getMediaProjection(resultCode, data)
+        // delay needed because getMediaProjection() throws an error if it's called too soon
+        Handler(Looper.getMainLooper()).postDelayed({
+            projection = projectionManager!!.getMediaProjection(resultCode, data)
+            imageReader = ImageReader.newInstance(recordingInfo.width, recordingInfo.height, PixelFormat.RGBA_8888, 2)
+            val surface = imageReader!!.surface
+            display = projection!!.createVirtualDisplay(
+                    DISPLAY_NAME,
+                    recordingInfo.width,
+                    recordingInfo.height,
+                    recordingInfo.density,
+                    VIRTUAL_DISPLAY_FLAG_PRESENTATION,
+                    surface,
+                    null,
+                    null
+            )
+            imageReader!!.setOnImageAvailableListener({
+                var image: Image? = null
+                var fos: FileOutputStream? = null
+                var bitmap: Bitmap? = null
+                var croppedBitmap: Bitmap? = null
+                try {
+                    image = imageReader!!.acquireLatestImage()
+                    if (image != null) {
+                        val flashViewListener = object : FlashView.Listener {
+                            override fun onFlashComplete() {
+                                if (flashView != null) {
+                                    windowManager.removeView(flashView)
+                                    flashView = null
+                                }
                             }
                         }
+                        flashView = FlashView.create(context, flashViewListener)
+                        windowManager.addView(flashView, FlashView.createLayoutParams())
+                        val planes = image.planes
+                        val buffer = planes[0].buffer
+                        val pixelStride = planes[0].pixelStride
+                        val rowStride = planes[0].rowStride
+                        val rowPadding = rowStride - pixelStride * recordingInfo.width
+                        // create bitmap
+                        bitmap = Bitmap.createBitmap(recordingInfo.width + rowPadding / pixelStride, recordingInfo.height, Bitmap.Config.ARGB_8888)
+                        bitmap!!.copyPixelsFromBuffer(buffer)
+                        //Trimming the bitmap to the w/h of the screen. For some reason, image reader adds more pixels to width.
+                        croppedBitmap = Bitmap.createBitmap(bitmap, 0, 0, recordingInfo.width, recordingInfo.height)
+                        bitmap.recycle()
+                        bitmap = null
+                        // write bitmap to a file
+                        fos = FileOutputStream(outputFile!!)
+                        croppedBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                        //UtilityLog.d("wx", outputFile.toString())
+                        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", File(outputFile!!))
+                        showScreenshotNotification(uri, null)
                     }
-                    flashView = FlashView.create(context, flashViewListener)
-                    windowManager.addView(flashView, FlashView.createLayoutParams())
-                    val planes = image.planes
-                    val buffer = planes[0].buffer
-                    val pixelStride = planes[0].pixelStride
-                    val rowStride = planes[0].rowStride
-                    val rowPadding = rowStride - pixelStride * recordingInfo.width
-                    // create bitmap
-                    bitmap = Bitmap.createBitmap(recordingInfo.width + rowPadding / pixelStride, recordingInfo.height, Bitmap.Config.ARGB_8888)
-                    bitmap!!.copyPixelsFromBuffer(buffer)
-                    //Trimming the bitmap to the w/h of the screen. For some reason, image reader adds more pixels to width.
-                    croppedBitmap = Bitmap.createBitmap(bitmap, 0, 0, recordingInfo.width, recordingInfo.height)
-                    bitmap.recycle()
-                    bitmap = null
-                    // write bitmap to a file
-                    fos = FileOutputStream(outputFile!!)
-                    croppedBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-                    //UtilityLog.d("wx", outputFile.toString())
-                    val uri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", File(outputFile!!))
-                    showScreenshotNotification(uri, null)
-                }
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            } finally {
-                if (fos != null) {
-                    try {
-                        fos.close()
-                    } catch (ioe: IOException) {
-                        UtilityLog.handleException(ioe)
+                } catch (e: Exception) {
+                    UtilityLog.handleException(e)
+                } finally {
+                    if (fos != null) {
+                        try {
+                            fos.close()
+                        } catch (ioe: IOException) {
+                            UtilityLog.handleException(ioe)
+                        }
                     }
+                    bitmap?.recycle()
+                    croppedBitmap?.recycle()
+                    image?.close()
+                    imageReader!!.close()
+                    display!!.release()
+                    projection!!.stop()
+                    overlayView!!.animate().alpha(1f).duration = 0
                 }
-                bitmap?.recycle()
-                croppedBitmap?.recycle()
-                image?.close()
-                imageReader!!.close()
-                display!!.release()
-                projection!!.stop()
-                overlayView!!.animate().alpha(1f).duration = 0
-            }
-        }, null)
+            }, null)
+        }, 1000)
     }
 
     private fun showNotification(uri: Uri?, bitmap: Bitmap?) {

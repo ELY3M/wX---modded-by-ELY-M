@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,7 +24,6 @@ package joshuatee.wx.radar
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.IOException
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -33,7 +32,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Paint.Style
 import androidx.core.content.ContextCompat
-
 import joshuatee.wx.R
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog

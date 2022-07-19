@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,10 +24,8 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.parseMultiple
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.objects.TextSize
 
@@ -40,14 +38,15 @@ class ObjectAlertDetail(val context: Context, linearLayout: LinearLayout) {
         private set
 
     init {
-        (0..5).forEach { _ ->
-            val objectTextView = ObjectTextView(context)
-            objectTextViews.add(objectTextView)
-            linearLayout.addView(objectTextView.tv)
+        repeat(6) {
+            objectTextViews.add(ObjectTextView(context))
+            linearLayout.addView(objectTextViews.last().get())
         }
-        objectTextViews[0].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
-        objectTextViews[1].setPadding(MyApplication.padding, 0, MyApplication.padding, MyApplication.padding)
-        (2..5).forEach { objectTextViews[it].setPadding(MyApplication.padding) }
+        objectTextViews[0].setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
+        objectTextViews[1].setPadding(UIPreferences.padding, 0, UIPreferences.padding, UIPreferences.padding)
+        (2..5).forEach {
+            objectTextViews[it].setPadding(UIPreferences.padding)
+        }
     }
 
     fun updateContent(capAlert: CapAlert, url: String) {

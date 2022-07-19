@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -68,11 +68,11 @@ class SpcSwoSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        for (i in listOf(0, 1, 2)) {
-            FutureVoid(this, { bitmaps[i] = UtilitySpcSwo.getUrls((i + 1).toString())[0].getImage() }) { updateImage(i) }
+        (0..2).forEach {
+            FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage() }) { updateImage(it) }
         }
-        for (i in 3 until 8) {
-            FutureVoid(this, { bitmaps[i] = UtilitySpcSwo.getImageUrlsDays48((i + 1).toString()).getImage() }) { updateImage(i) }
+        (3..7).forEach {
+            FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage() }) { updateImage(it) }
         }
     }
 

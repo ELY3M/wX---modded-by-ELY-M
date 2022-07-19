@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,7 +29,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import android.util.SparseArray
 import android.widget.ExpandableListView
 import joshuatee.wx.util.MyExpandableListAdapter
-
 import joshuatee.wx.R
 import joshuatee.wx.util.Group
 import joshuatee.wx.util.Utility

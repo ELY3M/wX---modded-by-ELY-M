@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,16 +22,16 @@
 package joshuatee.wx.nhc
 
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 
 object UtilityNhc {
 
-    const val widgetImageUrlTop = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png"
-    const val widgetImageUrlBottom = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png"
+    const val widgetImageUrlTop = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png"
+    const val widgetImageUrlBottom = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png"
 
     fun getHurricaneInfo(): List<ObjectNhcStormDetails> {
         val stormDataList = mutableListOf<ObjectNhcStormDetails>()
-        val url = MyApplication.nwsNhcWebsitePrefix + "/CurrentStorms.json"
+        val url = GlobalVariables.nwsNhcWebsitePrefix + "/CurrentStorms.json"
         //val url = "https://www.nhc.noaa.gov/productexamples/NHC_JSON_Sample.json"
         val html = url.getHtml()
         val ids = html.parseColumn("\"id\": \"(.*?)\"")
@@ -69,6 +69,10 @@ object UtilityNhc {
                         latitudes[index],
                         longitudes[index],
                         intensities[index],
+                        "",
+                        "",
+                        "",
+                        "",
                         ""
                 )
                 stormDataList.add(objectNhcStormDetails)

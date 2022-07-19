@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,8 +26,6 @@ import android.graphics.Color
 import android.view.Gravity
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectCard
@@ -41,13 +39,13 @@ internal class ObjectSettingsColorLabel(val context: Context, label: String, pri
 
     init {
         refreshColor()
-        objectTextView.setPadding(MyApplication.paddingSettings)
-        objectTextView.tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        objectTextView.setPadding(UIPreferences.paddingSettings)
+        objectTextView.get().layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
         objectTextView.text = label
-        objectTextView.tv.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-        objectCard.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.black))
+        objectTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+        objectCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.black))
         objectTextView.gravity = Gravity.CENTER_VERTICAL
-        objectCard.addView(objectTextView.tv)
+        objectCard.addView(objectTextView.get())
         val prefInner = pref
         objectCard.setOnClickListener {
             ObjectIntent(context, SettingsColorPickerActivity::class.java, SettingsColorPickerActivity.INFO, arrayOf(prefInner, label))
@@ -63,5 +61,5 @@ internal class ObjectSettingsColorLabel(val context: Context, label: String, pri
         }
     }
 
-    val card get() = objectCard.card
+    fun get() = objectCard.get()
 }

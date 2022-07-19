@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,7 +21,8 @@
 
 package joshuatee.wx.util
 
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.settings.UIPreferences
 import java.util.*
 import kotlin.math.*
 
@@ -70,7 +71,7 @@ object UtilityMath {
 
     fun unitsPressure(value: String): String {
         var num = value.toDoubleOrNull() ?: 0.0
-        return if (MyApplication.unitsM) {
+        return if (UIPreferences.unitsM) {
             num *= 33.8637526
             String.format(Locale.US, "%.2f", num) + " mb"
         } else {
@@ -78,22 +79,22 @@ object UtilityMath {
         }
     }
 
-    fun celsiusToFahrenheit(value: String) = if (MyApplication.unitsF) {
-            round(((value.toDoubleOrNull() ?: 0.0) * 9 / 5 + 32)).toInt().toString()
+    fun celsiusToFahrenheit(value: String) = if (UIPreferences.unitsF) {
+            round(((value.toDoubleOrNull() ?: 0.0) * 9.0 / 5.0 + 32.0)).toInt().toString()
         } else {
             value
         }
 
-    internal fun fahrenheitToCelsius(value: Double) = round(((value - 32) * 5 / 9)).toInt().toString()
+    internal fun fahrenheitToCelsius(value: Double) = round(((value - 32.0) * 5.0 / 9.0)).toInt().toString()
 
     // used by celsiusToFahrenheitTable only
-    private fun celsiusToFahrenheitAsInt(value: Int) = round((value * 9 / 5 + 32).toFloat()).toString()
+    private fun celsiusToFahrenheitAsInt(value: Int) = round((value * 9.0 / 5.0 + 32.0).toFloat()).toString()
 
     fun celsiusToFahrenheitTable(): String {
         var table = ""
         val cInit = -40
         for (z in 40 downTo cInit) {
-            table += z.toString() + "  " + celsiusToFahrenheitAsInt(z) + MyApplication.newline
+            table += z.toString() + "  " + celsiusToFahrenheitAsInt(z) + GlobalVariables.newline
         }
         return table
     }
@@ -104,8 +105,8 @@ object UtilityMath {
             ?: 0.0) / 33.8637526)) + " in"
 
     fun pixPerDegreeLon(centerX: Double, factor: Double): Double {
-        val radius = 180 / PI * (1 / cos(Math.toRadians(30.51))) * factor
-        return radius * (PI / 180) * cos(Math.toRadians(centerX))
+        val radius = 180.0 / PI * (1.0 / cos(Math.toRadians(30.51))) * factor
+        return radius * (PI / 180.0) * cos(Math.toRadians(centerX))
     }
 
     fun deg2rad(deg: Double) = deg * PI / 180.0
@@ -135,8 +136,7 @@ object UtilityMath {
             val s7 = 1.22874 * 10.0.pow(-3.0) * t.pow(2.0) * r
             val s8 = 8.5282 * 10.0.pow(-4.0) * t * r.pow(2.0)
             val s9 = 1.99 * 10.0.pow(-6.0) * t.pow(2.0) * r.pow(2.0)
-            val res1 = (s1 + s2 + s3 - s4 - s5 - s6 + s7 + s8 - s9).roundToInt().toString()
-            res1
+            (s1 + s2 + s3 - s4 - s5 - s6 + s7 + s8 - s9).roundToInt().toString()
         } else {
             ""
         }
@@ -148,13 +148,13 @@ object UtilityMath {
     fun unitsTemp(valueF: String): String {
         var value = valueF
         var tmpNum = 0.0
-        if (!MyApplication.unitsF) {
+        if (!UIPreferences.unitsF) {
             // Deduct 32, then multiply by 5, then divide by 9
             try {
                 tmpNum = value.toDouble()
             } catch (e: java.lang.Exception) {
             }
-            tmpNum = (tmpNum - 32) * 5 / 9
+            tmpNum = (tmpNum - 32.0) * 5.0 / 9.0
             value = tmpNum.roundToInt().toString()
         }
         return value

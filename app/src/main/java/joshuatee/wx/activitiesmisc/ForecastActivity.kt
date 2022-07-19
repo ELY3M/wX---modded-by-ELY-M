@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,24 +24,22 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import java.util.Locale
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.fragments.UtilityNws
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.ObjectCurrentConditions
 import joshuatee.wx.util.ObjectHazards
 import joshuatee.wx.util.ObjectSevenDay
+import joshuatee.wx.util.UtilityForecastIcon
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityTimeSunMoon
 import joshuatee.wx.util.UtilityTime
-import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.LatLon
@@ -57,7 +55,6 @@ class ForecastActivity : BaseActivity() {
 
     companion object { const val URL = "" }
 
-    private lateinit var activityArguments: Array<String>
     private var latLon = LatLon()
     private var objectCurrentConditions = ObjectCurrentConditions()
     private var objectHazards = ObjectHazards()
@@ -70,7 +67,7 @@ class ForecastActivity : BaseActivity() {
     private val hazardCards = mutableListOf<ObjectCardText>()
     private lateinit var scrollView: ScrollView
     private lateinit var linearLayout: LinearLayout
-    private var bitmapForCurrentCondition: Bitmap = UtilityImg.getBlankBitmap()
+    private var bitmapForCurrentCondition = UtilityImg.getBlankBitmap()
     private var bitmaps = listOf<Bitmap>()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,12 +80,12 @@ class ForecastActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         scrollView = findViewById(R.id.scrollView)
         linearLayout = findViewById(R.id.linearLayout)
-        activityArguments = intent.getStringArrayExtra(URL)!!
+        val activityArguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(activityArguments[0], activityArguments[1])
         title = "Forecast for"
         toolbar.subtitle = latLon.latString + "," + latLon.lonString
         objectCardCurrentConditions = ObjectCardCurrentConditions(this, 2)
-        linearLayout.addView(objectCardCurrentConditions.card)
+        linearLayout.addView(objectCardCurrentConditions.get())
         linearLayoutHazards = ObjectLinearLayout(this, linearLayout)
         linearLayoutForecast = ObjectLinearLayout(this, linearLayout)
         getContent()
@@ -108,7 +105,7 @@ class ForecastActivity : BaseActivity() {
     private fun downloadCc() {
         objectCurrentConditions = ObjectCurrentConditions(this@ForecastActivity, latLon)
         objectCurrentConditions.timeCheck()
-        bitmapForCurrentCondition = UtilityNws.getIcon(this@ForecastActivity, objectCurrentConditions.iconUrl)
+        bitmapForCurrentCondition = UtilityForecastIcon.getIcon(this@ForecastActivity, objectCurrentConditions.iconUrl)
     }
 
     private fun updateCc() {
@@ -132,7 +129,7 @@ class ForecastActivity : BaseActivity() {
 
     private fun download7Day() {
         objectSevenDay = ObjectSevenDay(latLon)
-        bitmaps = objectSevenDay.icons.map { UtilityNws.getIcon(this@ForecastActivity, it) }
+        bitmaps = objectSevenDay.icons.map { UtilityForecastIcon.getIcon(this@ForecastActivity, it) }
     }
 
     private fun update7Day() {
@@ -140,13 +137,13 @@ class ForecastActivity : BaseActivity() {
         bitmaps.forEachIndexed { index, bitmap ->
             val objectCard7Day = ObjectCard7Day(this@ForecastActivity, bitmap, true, index, objectSevenDay.forecastList)
             objectCard7Day.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
-            linearLayoutForecast.addView(objectCard7Day.card)
+            linearLayoutForecast.addView(objectCard7Day.get())
         }
         // sunrise card
         val objectCardText = ObjectCardText(this@ForecastActivity)
         objectCardText.center()
-        objectCardText.text = (UtilityTimeSunMoon.getSunriseSunset(this@ForecastActivity, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime())
-        linearLayoutForecast.addView(objectCardText.card)
+        objectCardText.text = (UtilityTimeSunMoon.getSunriseSunset(this@ForecastActivity, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime())
+        linearLayoutForecast.addView(objectCardText.get())
     }
 
     private fun setupHazardCards() {
@@ -154,12 +151,10 @@ class ForecastActivity : BaseActivity() {
         hazardCards.clear()
         objectHazards.titles.indices.forEach { z ->
             hazardCards.add(ObjectCardText(this@ForecastActivity))
-            hazardCards[z].setPaddingAmount(MyApplication.paddingSettings)
-            hazardCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-            hazardCards[z].setTextColor(UIPreferences.textHighlightColor)
+            hazardCards[z].setupHazard()
             hazardCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
             hazardCards[z].setOnClickListener { ObjectIntent.showHazard(this@ForecastActivity, arrayOf(objectHazards.urls[z])) }
-            linearLayoutHazards.addView(hazardCards[z].card)
+            linearLayoutHazards.addView(hazardCards[z].get())
         }
     }
 

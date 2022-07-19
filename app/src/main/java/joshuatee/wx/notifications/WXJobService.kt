@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,7 +24,6 @@ package joshuatee.wx.notifications
 import android.app.job.JobParameters
 import android.app.job.JobService
 import joshuatee.wx.util.Utility
-
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityTime
 import java.util.concurrent.RejectedExecutionException

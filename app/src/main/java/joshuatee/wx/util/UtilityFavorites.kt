@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,10 +23,9 @@ package joshuatee.wx.util
 
 import android.content.Context
 import android.view.MenuItem
-
-import joshuatee.wx.MyApplication
-
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.canada.UtilityCanada
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.wpc.UtilityWpcText
 
@@ -44,8 +43,8 @@ object UtilityFavorites {
             val newFav = value.replace(":{2,}".toRegex(), ":")
             savePref(context, newFav, prefToken)
         }
-        if (!value.contains(MyApplication.prefSeparator)) {
-            val newFav = MyApplication.prefSeparator + value.trimStart()
+        if (!value.contains(GlobalVariables.prefSeparator)) {
+            val newFav = GlobalVariables.prefSeparator + value.trimStart()
             savePref(context, newFav, prefToken)
         }
     }
@@ -53,13 +52,13 @@ object UtilityFavorites {
     private fun savePref(context: Context, value: String, prefToken: String) {
         Utility.writePref(context, prefToken, value)
         when (prefToken) {
-            "WFO_FAV" -> MyApplication.wfoFav = value
-            "RID_FAV" -> MyApplication.ridFav = value
-            "SND_FAV" -> MyApplication.sndFav = value
-            "SREF_FAV" -> MyApplication.srefFav = value
-            "NWS_TEXT_FAV" -> MyApplication.nwsTextFav = value
-            "SPCMESO_FAV" -> MyApplication.spcMesoFav = value
-            "RID_CA_FAV" -> MyApplication.caRidFav = value
+            "WFO_FAV" -> UIPreferences.wfoFav = value
+            "RID_FAV" -> UIPreferences.ridFav = value
+            "SND_FAV" -> UIPreferences.sndFav = value
+            "SREF_FAV" -> UIPreferences.srefFav = value
+            "NWS_TEXT_FAV" -> UIPreferences.nwsTextFav = value
+            "SPCMESO_FAV" -> UIPreferences.spcMesoFav = value
+            "RID_CA_FAV" -> UIPreferences.caRidFav = value
         }
     }
 
@@ -92,20 +91,20 @@ object UtilityFavorites {
         var favoriteString = Utility.readPref(context, prefToken, initialValue)
         if (favoriteString.contains(value)) {
             favoriteString = favoriteString.replace("$value:", "")
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+            star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         } else {
             favoriteString = "$favoriteString$value:"
-            star.setIcon(MyApplication.STAR_ICON)
+            star.setIcon(GlobalVariables.STAR_ICON)
         }
         Utility.writePref(context, prefToken, favoriteString)
         when (prefToken) {
-            "RID_FAV" -> MyApplication.ridFav = favoriteString
-            "WFO_FAV" -> MyApplication.wfoFav = favoriteString
-            "SND_FAV" -> MyApplication.sndFav = favoriteString
-            "SREF_FAV" -> MyApplication.srefFav = favoriteString
-            "NWS_TEXT_FAV" -> MyApplication.nwsTextFav = favoriteString
-            "SPCMESO_FAV" -> MyApplication.spcMesoFav = favoriteString
-            "RID_CA_FAV" -> MyApplication.caRidFav = favoriteString
+            "RID_FAV" -> UIPreferences.ridFav = favoriteString
+            "WFO_FAV" -> UIPreferences.wfoFav = favoriteString
+            "SND_FAV" -> UIPreferences.sndFav = favoriteString
+            "SREF_FAV" -> UIPreferences.srefFav = favoriteString
+            "NWS_TEXT_FAV" -> UIPreferences.nwsTextFav = favoriteString
+            "SPCMESO_FAV" -> UIPreferences.spcMesoFav = favoriteString
+            "RID_CA_FAV" -> UIPreferences.caRidFav = favoriteString
         }
     }
 }

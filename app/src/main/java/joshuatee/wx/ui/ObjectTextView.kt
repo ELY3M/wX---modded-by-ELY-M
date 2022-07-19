@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,14 +27,12 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import joshuatee.wx.Extensions.setPadding
-
-import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 
 class ObjectTextView(val context: Context) {
 
-    var tv = AppCompatTextView(context)
+    private var tv = AppCompatTextView(context)
 
     var text
         get() = tv.text.toString()
@@ -44,9 +42,17 @@ class ObjectTextView(val context: Context) {
         get() = tv.gravity
         set(value) { tv.gravity = value }
 
+    var visibility
+        get() = tv.visibility
+        set(value) { tv.visibility = value }
+
+//    var layoutParams: ViewGroup.LayoutParams
+//        get() = tv.layoutParams
+//        set(value) { tv.layoutParams = value }
+
     init {
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-        tv.setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+        tv.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
         tv.gravity = Gravity.START
     }
 
@@ -82,13 +88,15 @@ class ObjectTextView(val context: Context) {
 
     fun refreshTextSize(size: TextSize) {
         when (size) {
-            TextSize.SMALL -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-            TextSize.MEDIUM -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-            TextSize.LARGE -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
+            TextSize.SMALL -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+            TextSize.MEDIUM -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+            TextSize.LARGE -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
         }
     }
 
-    fun setTextSize(size: TextSize): Unit = refreshTextSize(size)
+    fun setTextSize(size: TextSize) {
+        refreshTextSize(size)
+    }
 
     var color
         get() = tv.currentTextColor
@@ -101,12 +109,28 @@ class ObjectTextView(val context: Context) {
 
     private fun setAsSmallText() {
         tv.setTextColor(UIPreferences.backgroundColor)
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
     }
 
-    fun setOnClickListener(fn: View.OnClickListener): Unit = tv.setOnClickListener(fn)
+    fun setOnClickListener(fn: View.OnClickListener) {
+        tv.setOnClickListener(fn)
+    }
 
-    fun setPadding(left: Int, top: Int, right: Int, bottom: Int): Unit = tv.setPadding(left, top, right, bottom)
+    fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
+        tv.setPadding(left, top, right, bottom)
+    }
 
-    fun setPadding(padding: Int): Unit = tv.setPadding(padding)
+    fun setPadding(padding: Int) {
+        tv.setPadding(padding)
+    }
+
+    fun setBackgroundColor(color: Int) {
+        tv.setBackgroundColor(color)
+    }
+
+    fun setTextColor(color: Int) {
+        tv.setTextColor(color)
+    }
+
+    fun get() = tv
 }

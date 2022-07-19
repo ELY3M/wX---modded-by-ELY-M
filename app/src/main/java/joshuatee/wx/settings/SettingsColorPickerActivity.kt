@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,13 +25,11 @@ import joshuatee.wx.R
 import joshuatee.wx.ui.ColorPicker.OnColorChangedListener
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.UtilityToolbar
-
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.graphics.Color
 import android.widget.Button
-import joshuatee.wx.UIPreferences
 import joshuatee.wx.ui.ColorPicker
 import joshuatee.wx.ui.SaturationBar
 import joshuatee.wx.ui.ValueBar

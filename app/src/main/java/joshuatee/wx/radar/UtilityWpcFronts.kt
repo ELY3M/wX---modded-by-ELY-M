@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,11 +22,11 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
 import kotlin.math.*
 import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.DownloadTimer
 
 // Data file - https://www.wpc.ncep.noaa.gov/basicwx/coded_srp.txt
@@ -195,15 +195,15 @@ object UtilityWpcFronts {
         if (timer.isRefreshNeeded(context)) {
             pressureCenters.clear()
             fronts.clear()
-            val urlBlob = MyApplication.nwsWPCwebsitePrefix + "/basicwx/coded_srp.txt"
+            val urlBlob = GlobalVariables.nwsWPCwebsitePrefix + "/basicwx/coded_srp.txt"
             var html = urlBlob.getHtmlSep()
-            html = html.replace("<br>", MyApplication.newline)
-            html = html.replace(MyApplication.newline, MyApplication.sep)
+            html = html.replace("<br>", GlobalVariables.newline)
+            html = html.replace(GlobalVariables.newline, GlobalVariables.sep)
             val timestamp = html.parseFirst("SURFACE PROG VALID ([0-9]{12}Z)")
             Utility.writePref("WPC_FRONTS_TIMESTAMP", timestamp)
-            html = html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" + MyApplication.sep + " " + MyApplication.sep)
-            html = html.replace(MyApplication.sep, MyApplication.newline)
-            val lines = html.split(MyApplication.newline).toMutableList()
+            html = html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" + GlobalVariables.sep + " " + GlobalVariables.sep)
+            html = html.replace(GlobalVariables.sep, GlobalVariables.newline)
+            val lines = html.split(GlobalVariables.newline).toMutableList()
             lines.indices.forEach { index ->
                 if (index < lines.size - 1) {
                     // Handle lines that wrap around, check to see if lines don't start

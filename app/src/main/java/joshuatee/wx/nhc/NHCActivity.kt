@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,8 +28,8 @@ import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import java.util.Locale
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.util.UtilityShare
@@ -86,10 +86,10 @@ class NhcActivity : BaseActivity() {
             R.id.action_share -> UtilityShare.text(this, this, "NHC", "", objectNhc.bitmaps)
             R.id.action_epac_daily -> showImageProduct("https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg", "EPAC Daily Analysis", "false")
             R.id.action_atl_daily -> showImageProduct("https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg", "ATL Daily Analysis", "false")
-            R.id.action_epac_7daily -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anal.gif", "EPAC 7-Day Analysis", "true")
-            R.id.action_atl_7daily -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
-            R.id.action_epac_sst_anomaly -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
-            R.id.action_atl_sst_anomaly -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
+            R.id.action_epac_7daily -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anal.gif", "EPAC 7-Day Analysis", "true")
+            R.id.action_atl_7daily -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
+            R.id.action_epac_sst_anomaly -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
+            R.id.action_atl_sst_anomaly -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
             R.id.action_glcfs -> ObjectIntent.showModel(this, arrayOf("1", "GLCFS", "GLCFS"))
             else -> return super.onOptionsItemSelected(item)
         }

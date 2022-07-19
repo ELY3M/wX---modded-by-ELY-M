@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,8 +24,8 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.util.TypedValue
 import android.widget.RemoteViews
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.activitiesmisc.WfoTextActivity
 import joshuatee.wx.objects.WidgetFile
@@ -33,21 +33,23 @@ import joshuatee.wx.util.Utility
 
 class ObjectWidgetAfd(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
+    private val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
         val wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "")
         val afd = Utility.readPref(context, "AFD_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(afd))
-        remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
         val product = if (Utility.readPref(context, "WFO_TEXT_FAV", "").startsWith("VFD")) {
             "VFD"
         } else {
             "AFD"
         }
-        if (!MyApplication.widgetPreventTap) {
+        if (!UIPreferences.widgetPreventTap) {
             UtilityWidget.setupIntent(context, remoteViews, WfoTextActivity::class.java, R.id.text1, WfoTextActivity.URL, arrayOf(wfo, product), WidgetFile.AFD.action)
         }
     }
+
+    fun get() = remoteViews
 }

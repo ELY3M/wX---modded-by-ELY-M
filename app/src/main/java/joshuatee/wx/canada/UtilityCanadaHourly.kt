@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,24 +22,22 @@
 package joshuatee.wx.canada
 
 import java.util.Locale
-
-import joshuatee.wx.MyApplication
-
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
 
 internal object UtilityCanadaHourly {
 
     fun getString(locNumInt: Int): String {
-        val htmlUrl = MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].lowercase(Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
+        val htmlUrl = GlobalVariables.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].lowercase(Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
         val html = htmlUrl.getHtml()
         val header = "Time    Temp  Summary                  Precip   Wind"
         return header + parse(html)
     }
 
     fun getUrl(locNumInt: Int) =
-            MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].lowercase(
+            GlobalVariables.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].lowercase(
                     Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
 
     private fun parse(htmlFullPage: String): String {
@@ -57,7 +55,7 @@ internal object UtilityCanadaHourly {
         var string = ""
         val space = "   "
         times.indices.forEach {
-            string += MyApplication.newline + times[it] + space +
+            string += GlobalVariables.newline + times[it] + space +
                     Utility.safeGet(temperatures, it).padEnd(3, ' ')  + space +
                     Utility.safeGet(currentConditions, it).padEnd(22, ' ') + space +
                     Utility.safeGet(precipChances, it).padEnd(6, ' ')  + space +

@@ -4,7 +4,6 @@ package joshuatee.wx
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -15,12 +14,15 @@ import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.intentfilter.androidpermissions.PermissionManager
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.settings.*
+import joshuatee.wx.radarcolorpalettes.ColorPalettes
+import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.settings.UtilityStorePreferences
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityLog
 import java.io.*
 import java.nio.charset.Charset
@@ -44,6 +46,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         }
         MyApplication.initPreferences(this)
         Location.refreshLocationData(this)
+        println("UtilityWXJobService started")
         UtilityWXJobService.startService(this)
         if (UIPreferences.mediaControlNotif) {
             UtilityNotification.createMediaControlNotification(applicationContext, "")
@@ -157,14 +160,14 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
 
     fun checkfiles(drawable: Int, filename: String) {
-        UtilityLog.d("wx", "running files check on " + MyApplication.FilesPath)
-        val dir = File(MyApplication.FilesPath)
+        UtilityLog.d("wx", "running files check on " + GlobalVariables.FilesPath)
+        val dir = File(GlobalVariables.FilesPath)
         if (!dir.exists()) {
             UtilityLog.d("wx", "making dir")
             dir.mkdirs()
         }
 
-        var file = File(MyApplication.FilesPath + filename)
+        var file = File(GlobalVariables.FilesPath + filename)
         var fileExists = file.exists()
         if(!fileExists)
         {
@@ -179,7 +182,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
     }
 
     fun saveBitmapToFile(fileName: String, bm: Bitmap) {
-        val file = File(MyApplication.FilesPath, fileName)
+        val file = File(GlobalVariables.FilesPath, fileName)
         try {
             val out = FileOutputStream(file)
             bm.compress(Bitmap.CompressFormat.PNG, 100, out)
@@ -196,14 +199,14 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
     //check colortable files and copy if any missing//
     fun checkpalfiles(resourceId: Int, filename: String) {
-        UtilityLog.d("wx", "running files check on " + MyApplication.PalFilesPath)
-        val dir = File(MyApplication.PalFilesPath)
+        UtilityLog.d("wx", "running files check on " + GlobalVariables.PalFilesPath)
+        val dir = File(GlobalVariables.PalFilesPath)
         if (!dir.exists()) {
             UtilityLog.d("wx", "making dir")
             dir.mkdirs()
         }
 
-        var file = File(MyApplication.PalFilesPath + filename)
+        var file = File(GlobalVariables.PalFilesPath + filename)
         var fileExists = file.exists()
         if(!fileExists)
         {
@@ -216,7 +219,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
     }
 
     private fun saveRawToFile(fileName: String, resourceId: Int) {
-        val dir = MyApplication.PalFilesPath
+        val dir = GlobalVariables.PalFilesPath
         var ins:InputStream = resources.openRawResource(resourceId)
         var content = ins.readBytes().toString(Charset.defaultCharset())
         File("$dir/$fileName").printWriter().use {

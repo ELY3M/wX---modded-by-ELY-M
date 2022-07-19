@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,9 +24,8 @@ package joshuatee.wx.activitiesmisc
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.util.UtilityString
 
@@ -81,14 +80,14 @@ class CapAlert {
             capAlert.zones = eventText.parse("<valueName>UGC</valueName>.*?<value>(.*?)</value>")
             capAlert.text = ""
             capAlert.text += capAlert.title
-            capAlert.text += MyApplication.newline + MyApplication.newline
+            capAlert.text += GlobalVariables.newline + GlobalVariables.newline
             capAlert.text += "Counties: "
             capAlert.text += capAlert.area
-            capAlert.text += MyApplication.newline + MyApplication.newline
+            capAlert.text += GlobalVariables.newline + GlobalVariables.newline
             capAlert.text += capAlert.summary
-            capAlert.text += MyApplication.newline + MyApplication.newline
+            capAlert.text += GlobalVariables.newline + GlobalVariables.newline
             capAlert.text += capAlert.instructions
-            capAlert.text += MyApplication.newline + MyApplication.newline
+            capAlert.text += GlobalVariables.newline + GlobalVariables.newline
             if (UIPreferences.nwsTextRemovelinebreaks) {
                 capAlert.instructions = capAlert.instructions.replace("<br><br>", "<BR><BR>").replace("<br>", " ")
             }

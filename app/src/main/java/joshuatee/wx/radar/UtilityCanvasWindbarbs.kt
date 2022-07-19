@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,11 +27,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Paint.Style
-import joshuatee.wx.MyApplication
-
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.objects.ProjectionType
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.UtilityCanvasMain
 import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.UtilityLog
@@ -58,7 +57,7 @@ object UtilityCanvasWindbarbs {
         if (isGust) {
             paint.color = Color.RED
         } else {
-            paint.color = MyApplication.radarColorObsWindbarbs
+            paint.color = RadarPreferences.radarColorObsWindbarbs
         }
         paint.textSize = textSize.toFloat()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)

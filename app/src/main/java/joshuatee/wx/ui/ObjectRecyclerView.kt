@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -47,13 +47,19 @@ class ObjectRecyclerView(context: Context, activity: Activity, resourceId: Int, 
         recyclerView.adapter = ca
     }
 
-    fun notifyDataSetChanged() = ca.notifyDataSetChanged()
+    fun notifyDataSetChanged() {
+        ca.notifyDataSetChanged()
+    }
 
-    fun setItem(index: Int, str: String) = ca.setItem(index, str)
+    fun setItem(index: Int, str: String) {
+        ca.setItem(index, str)
+    }
 
     fun getItem(index: Int) = ca.getItem(index)
 
-    fun deleteItem(index: Int) = ca.deleteItem(index)
+    fun deleteItem(index: Int) {
+        ca.deleteItem(index)
+    }
 
     override fun toString() = ca.toString()
 }

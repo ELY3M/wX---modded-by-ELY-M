@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,8 +22,8 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.util.UtilityIO
 
 internal object UtilityCountyLabels {
@@ -43,7 +43,7 @@ internal object UtilityCountyLabels {
             countyLat = DoubleArray(lines.size)
             countyLon = DoubleArray(lines.size)
             lines.indices.forEach {
-                tokens = MyApplication.comma.split(lines[it])
+                tokens = RegExp.comma.split(lines[it])
                 countyName[it] = tokens[1]
                 countyLat[it] = tokens[2].toDoubleOrNull() ?: 0.0
                 countyLon[it] = -1.0 * (tokens[3].toDoubleOrNull() ?: 0.0)

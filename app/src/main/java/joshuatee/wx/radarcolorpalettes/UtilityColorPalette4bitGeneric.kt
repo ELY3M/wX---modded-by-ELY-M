@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,15 +22,13 @@
 package joshuatee.wx.radarcolorpalettes
 
 import android.content.Context
-import joshuatee.wx.MyApplication
-
 import joshuatee.wx.R
 import joshuatee.wx.util.UtilityIO
 
 internal object UtilityColorPalette4bitGeneric {
 
     fun generate(context: Context, product: Int) {
-        MyApplication.colorMap[product]!!.position(0)
+        ObjectColorPalette.colorMap[product]!!.position(0)
         val fileId = when (product) {
             19 -> R.raw.colormap19
             30 -> R.raw.colormap30
@@ -39,7 +37,7 @@ internal object UtilityColorPalette4bitGeneric {
         }
         UtilityIO.readTextFileFromRaw(context.resources, fileId).split("\n").forEach { line ->
             if (line.contains(",")) {
-                MyApplication.colorMap[product]!!.putLine(line)
+                ObjectColorPalette.colorMap[product]!!.putLine(line)
             }
         }
     }

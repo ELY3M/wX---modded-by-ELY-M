@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,25 +23,31 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
+import joshuatee.wx.common.RegExp
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityNotificationSpc
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.*
 
 internal object UtilityDownloadMcd {
 
-    const val type = "MCD"
-    // val typeEnum = PolygonType.MCD
-    val timer = DownloadTimer(type)
+    val type = PolygonType.MCD
+    val timer = DownloadTimer("MCD")
 
-    fun get(context: Context) { if (timer.isRefreshNeeded(context)) getMcd(context) }
+    fun get(context: Context) {
+        if (timer.isRefreshNeeded(context)) {
+            getMcd(context)
+        }
+    }
 
     fun getMcd(context: Context): WatchData {
-        val html = "${MyApplication.nwsSPCwebsitePrefix}/products/md/".getHtml()
-        if (html != "" ) MyApplication.severeDashboardMcd.valueSet(context, html)
+        val html = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/".getHtml()
+        if (html != "" ) {
+            ObjectPolygonWatch.polygonDataByType[type]!!.storage.valueSet(context, html)
+        }
         val numberList = getListOfNumbers(context)
         val htmlList = mutableListOf<String>()
         var latLonString = ""
@@ -50,20 +56,26 @@ internal object UtilityDownloadMcd {
             htmlList.add(mcdData[0])
             latLonString += mcdData[1]
         }
-        if (PolygonType.MCD.pref || UtilityNotificationSpc.locationNeedsMcd()) MyApplication.mcdLatLon.valueSet(context, latLonString)
+        if (type.pref || UtilityNotificationSpc.locationNeedsMcd()) {
+            ObjectPolygonWatch.polygonDataByType[type]!!.latLonList.valueSet(context, latLonString)
+        }
         return WatchData(numberList, htmlList)
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
-        val list = UtilityString.parseColumn(MyApplication.severeDashboardMcd.value, RegExp.mcdPatternAlerts)
+        val list = UtilityString.parseColumn(ObjectPolygonWatch.polygonDataByType[type]!!.storage.value, RegExp.mcdPatternAlerts)
         var mcdNoList = ""
-        list.forEach { mcdNoList += "$it:" }
-        if (PolygonType.MCD.pref || UtilityNotificationSpc.locationNeedsMcd()) MyApplication.mcdNoList.valueSet(context, mcdNoList)
+        list.forEach {
+            mcdNoList += "$it:"
+        }
+        if (type.pref || UtilityNotificationSpc.locationNeedsMcd()) {
+            ObjectPolygonWatch.polygonDataByType[type]!!.numberList.valueSet(context, mcdNoList)
+        }
         return list
     }
 
     // return the raw MCD text and the lat/lon as a list
-    fun getLatLon(context: Context, number: String): List<String> {
+    private fun getLatLon(context: Context, number: String): List<String> {
         val html = UtilityDownload.getTextProduct(context, "SPCMCD$number")
         return listOf(html, UtilityNotification.storeWatchMcdLatLon(html))
     }

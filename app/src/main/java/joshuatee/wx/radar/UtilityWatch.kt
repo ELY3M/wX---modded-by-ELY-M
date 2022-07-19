@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,20 +21,21 @@
 
 package joshuatee.wx.radar
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.external.ExternalPolygon
+import joshuatee.wx.objects.ObjectPolygonWatch
 
 internal object UtilityWatch {
 
     fun add(projectionNumbers: ProjectionNumbers, polygonType: PolygonType): List<Double> {
         val warningList = mutableListOf<Double>()
+        // TODO FIXME refactor
         val prefToken = when (polygonType) {
-            PolygonType.MCD -> MyApplication.mcdLatLon.value
-            PolygonType.WATCH -> MyApplication.watchLatLon.value
-            PolygonType.WATCH_TORNADO -> MyApplication.watchLatLonTor.value
-            PolygonType.MPD -> MyApplication.mpdLatLon.value
+            PolygonType.MCD -> ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.latLonList.value
+            PolygonType.WATCH -> ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.latLonList.value
+            PolygonType.WATCH_TORNADO -> ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH_TORNADO]!!.latLonList.value
+            PolygonType.MPD -> ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.latLonList.value
             else -> ""
         }
         if (prefToken != "") {
@@ -50,22 +51,23 @@ internal object UtilityWatch {
     fun show(latLon: LatLon, type: PolygonType): String {
         val numberList: List<String>
         val watchLatLon: String
+        // TODO FIXME refactor
         when (type) {
             PolygonType.WATCH -> {
-                numberList = MyApplication.watchNoList.value.split(":").dropLastWhile { it.isEmpty() }
-                watchLatLon = MyApplication.watchLatLonList.value
+                numberList = ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.numberList.value.split(":").dropLastWhile { it.isEmpty() }
+                watchLatLon = ObjectPolygonWatch.watchLatlonCombined.value
             }
             PolygonType.MCD -> {
-                numberList = MyApplication.mcdNoList.value.split(":").dropLastWhile { it.isEmpty() }
-                watchLatLon = MyApplication.mcdLatLon.value
+                numberList = ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.numberList.value.split(":").dropLastWhile { it.isEmpty() }
+                watchLatLon = ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.latLonList.value
             }
             PolygonType.MPD -> {
-                numberList = MyApplication.mpdNoList.value.split(":").dropLastWhile { it.isEmpty() }
-                watchLatLon = MyApplication.mpdLatLon.value
+                numberList = ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.numberList.value.split(":").dropLastWhile { it.isEmpty() }
+                watchLatLon = ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.latLonList.value
             }
             else -> {
-                numberList = MyApplication.watchNoList.value.split(":").dropLastWhile { it.isEmpty() }
-                watchLatLon = MyApplication.watchLatLonList.value
+                numberList = ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.numberList.value.split(":").dropLastWhile { it.isEmpty() }
+                watchLatLon = ObjectPolygonWatch.watchLatlonCombined.value
             }
         }
         val polygons = watchLatLon.split(":").dropLastWhile { it.isEmpty() }

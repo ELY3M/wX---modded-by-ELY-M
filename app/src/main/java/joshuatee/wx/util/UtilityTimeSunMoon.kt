@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,12 +23,11 @@ package joshuatee.wx.util
 
 import android.content.Context
 import android.text.format.DateFormat
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.external.ExternalSunriseLocation
 import joshuatee.wx.external.ExternalSunriseSunsetCalculator
 import joshuatee.wx.radar.RID
 import joshuatee.wx.settings.Location
-
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -37,8 +36,8 @@ object UtilityTimeSunMoon {
     fun getSunriseSunsetFromObs(obs: RID): List<Calendar> {
         val location = ExternalSunriseLocation(obs.location.latString, obs.location.lonString)
         val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
-        val officialSunriseCal: Calendar = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
-        val officialSunsetCal: Calendar = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
+        val officialSunriseCal = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
+        val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
         return listOf(officialSunriseCal, officialSunsetCal)
     }
 
@@ -87,5 +86,5 @@ object UtilityTimeSunMoon {
     }
 
     fun getForHomeScreen(context: Context) =
-        getSunriseSunset(context, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime()
+        getSunriseSunset(context, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime()
 }

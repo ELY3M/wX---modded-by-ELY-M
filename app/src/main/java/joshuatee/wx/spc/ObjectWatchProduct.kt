@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,7 @@ import android.graphics.Bitmap
 import joshuatee.wx.Extensions.condenseSpace
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.Extensions.parse
-import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.LatLon
@@ -58,19 +58,19 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         when (type) {
             PolygonType.WATCH_TORNADO, PolygonType.WATCH -> {
                 this.productNumber = productNumber.replace("w".toRegex(), "")
-                imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + productNumber + "_radar.gif"
-                textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$productNumber.html"
+                imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + productNumber + "_radar.gif"
+                textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww$productNumber.html"
                 title = "Watch $productNumber"
                 prod = "SPCWAT$productNumber"
             }
             PolygonType.MCD -> {
-                imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd$productNumber.gif"
-                textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md$productNumber.html"
+                imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$productNumber.gif"
+                textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md$productNumber.html"
                 title = "MCD $productNumber"
                 prod = "SPCMCD$productNumber"
             }
             PolygonType.MPD -> {
-                imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$productNumber.gif"
+                imgUrl = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/images/mcd$productNumber.gif"
                 title = "MPD $productNumber"
                 prod = "WPCMPD$productNumber"
             }
@@ -93,9 +93,9 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
 
     private fun getCenterOfPolygon(latLons: List<LatLon>): LatLon {
         val center = LatLon(0.0, 0.0)
-        for (latLon in latLons) {
-            center.lat += latLon.lat
-            center.lon += latLon.lon
+        latLons.forEach {
+            center.lat += it.lat
+            center.lon += it.lon
         }
         val totalPoints = latLons.size
         center.lat = center.lat / totalPoints
