@@ -112,10 +112,10 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         when (item.itemId) {
             R.id.action_radar -> ObjectIntent.showRadarBySite(this, objectWatchProduct.getClosestRadar())
-            R.id.action_share_all -> UtilityShare.bitmap(this, this, objectWatchProduct.title, objectWatchProduct.bitmap, Utility.fromHtml(objectWatchProduct.text))
+            R.id.action_share_all -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap, Utility.fromHtml(objectWatchProduct.text))
             R.id.action_share_text -> UtilityShare.text(this, objectWatchProduct.title, Utility.fromHtml(objectWatchProduct.text))
             R.id.action_share_url -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.textUrl)
-            R.id.action_share_image -> UtilityShare.bitmap(this, this, objectWatchProduct.title, objectWatchProduct.bitmap)
+            R.id.action_share_image -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

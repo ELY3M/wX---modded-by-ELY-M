@@ -95,13 +95,13 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         UtilityWpcText.create()
-        drw = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, this, "")
+        drw = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
         drw.setListener(::changeProduct)
         getContent()
     }
 
     private fun getContent() {
-        products = UtilityFavorites.setupMenu(this@WpcTextProductsActivity, UIPreferences.nwsTextFav, product, prefToken)
+        products = UtilityFavorites.setupMenu(this, UIPreferences.nwsTextFav, product, prefToken)
         invalidateOptionsMenu()
         updateSubmenuNotificationText()
         scrollView.smoothScrollTo(0, 0)
@@ -111,7 +111,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
         ridFavOld = UIPreferences.nwsTextFav
-        FutureVoid(this, { html = UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product) }, ::showText)
+        FutureVoid(this, { html = UtilityDownload.getTextProduct(this, product) }, ::showText)
     }
 
     private fun showText() {
@@ -123,7 +123,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initialProduct != product) {
-            Utility.writePref(this@WpcTextProductsActivity, "WPC_TEXT_FAV", product)
+            Utility.writePref(this, "WPC_TEXT_FAV", product)
             UIPreferences.wpcTextFav = product
         }
     }

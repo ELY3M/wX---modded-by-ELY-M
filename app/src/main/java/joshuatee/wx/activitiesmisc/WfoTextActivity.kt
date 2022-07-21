@@ -92,7 +92,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private val wfoListPerState = mutableListOf<String>()
     private val cardList = mutableListOf<CardView>()
     private lateinit var objectCardText: ObjectCardText
-    private lateinit var drw: ObjectNavDrawer
+    private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var scrollView: ScrollView
     private lateinit var linearLayout: LinearLayout
     private var originalWfo = ""
@@ -115,7 +115,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView = findViewById(R.id.scrollView)
         linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
-        drw = ObjectNavDrawer(this, UtilityWfoText.labels, UtilityWfoText.codes, ::getContentFixThis)
+        objectNavDrawer = ObjectNavDrawer(this, UtilityWfoText.labels, UtilityWfoText.codes, ::getContentFixThis)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
@@ -138,19 +138,19 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             product = "RTP$state"
         }
         title = product
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(objectCardText.get(), scrollView))
+        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(objectCardText.get(), scrollView))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
         getContent()
     }
 
     private fun getContentFixThis() {
         invalidateOptionsMenu()
-        when (drw.token) {
+        when (objectNavDrawer.token) {
             "RTPZZ" -> {
                 val state = Utility.getWfoSiteName(wfo).split(",")[0]
-                getProduct(drw.token.replace("ZZ", state))
+                getProduct(objectNavDrawer.token.replace("ZZ", state))
             }
-            else -> getProduct(drw.token)
+            else -> getProduct(objectNavDrawer.token)
         }
     }
 
@@ -162,7 +162,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        locationList = UtilityFavorites.setupMenu(this@WfoTextActivity, UIPreferences.wfoFav, wfo, prefToken)
+        locationList = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         updateSubmenuNotificationText()
         invalidateOptionsMenu()
         if (UIPreferences.wfoFav.contains(":$wfo:")) {
@@ -178,16 +178,16 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (wfo != oldWfo) {
             version = 1
         }
-        FutureVoid(this@WfoTextActivity, ::download, ::update)
+        FutureVoid(this, ::download, ::update)
     }
 
     private fun download() {
         html = when {
-            product == "CLI" -> UtilityDownload.getTextProduct(this@WfoTextActivity, product + wfo + originalWfo)
-            product.startsWith("RTP") && product.length == 5 -> UtilityDownload.getTextProduct(this@WfoTextActivity, product)
+            product == "CLI" -> UtilityDownload.getTextProduct(this, product + wfo + originalWfo)
+            product.startsWith("RTP") && product.length == 5 -> UtilityDownload.getTextProduct(this, product)
             else -> {
                 if (version == 1) {
-                    UtilityDownload.getTextProduct(this@WfoTextActivity, product + wfo)
+                    UtilityDownload.getTextProduct(this, product + wfo)
                 } else {
                     UtilityDownload.getTextProduct(product + wfo, version)
                 }
@@ -216,15 +216,15 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, product)
         if (activityArguments[1] == "") {
             if (product.startsWith("RTP") && product.length == 5) {
-                Utility.writePref(this@WfoTextActivity, "WFO_TEXT_FAV", "RTPZZ")
+                Utility.writePref(this, "WFO_TEXT_FAV", "RTPZZ")
             } else {
-                Utility.writePref(this@WfoTextActivity, "WFO_TEXT_FAV", product)
+                Utility.writePref(this, "WFO_TEXT_FAV", product)
             }
             UIPreferences.wfoTextFav = product
         }
         oldProduct = product
         oldWfo = wfo
-        Utility.writePref(this@WfoTextActivity, "WFO_LAST_USED", wfo)
+        Utility.writePref(this, "WFO_LAST_USED", wfo)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -304,14 +304,14 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         title = product
         wfoProd.clear()
-        FutureVoid(this@WfoTextActivity, ::downloadState, ::updateState)
+        FutureVoid(this, ::downloadState, ::updateState)
     }
 
     private fun downloadState() {
         html = ""
         wfoListPerState.forEach {
             html = if (version == 1) {
-                UtilityDownload.getTextProduct(this@WfoTextActivity, product + it)
+                UtilityDownload.getTextProduct(this, product + it)
             } else {
                 UtilityDownload.getTextProduct(product + it, version)
             }
@@ -323,17 +323,17 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objectCardText.visibility = View.GONE
         cardList.clear()
         wfoProd.forEach {
-            val textCard = ObjectCardText(this@WfoTextActivity, linearLayout)
+            val textCard = ObjectCardText(this, linearLayout)
             textCard.setTextAndTranslate(it)
             cardList.add(textCard.get())
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
-        locationList = UtilityFavorites.setupMenu(this@WfoTextActivity, UIPreferences.wfoFav, wfo, prefToken)
+        locationList = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         when (item.itemId) {
             R.id.action_sector -> genericDialog(locationList) {
                 if (locationList.isNotEmpty()) {
@@ -378,13 +378,13 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // For navigation drawer
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     // For navigation drawer
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
@@ -396,7 +396,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
             KeyEvent.KEYCODE_D -> {
                 if (event.isCtrlPressed)
-                    drw.drawerLayout.openDrawer(GravityCompat.START)
+                    objectNavDrawer.drawerLayout.openDrawer(GravityCompat.START)
                 true
             }
             KeyEvent.KEYCODE_F -> {

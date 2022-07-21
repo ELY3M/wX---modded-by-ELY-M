@@ -21,8 +21,4 @@
 
 package joshuatee.wx.radar
 
-class RID(val name: String, val location: LatLon) {
-
-    var distance = 0
-
-}
+class RID(val name: String, val location: LatLon, var distance: Double = 0.0)

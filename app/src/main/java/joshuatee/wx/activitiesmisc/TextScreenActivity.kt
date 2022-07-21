@@ -78,7 +78,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this@TextScreenActivity, ::download, ::update)
+        FutureVoid(this, ::download, ::update)
     }
 
     fun download() {

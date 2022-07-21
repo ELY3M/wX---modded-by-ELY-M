@@ -45,10 +45,10 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
-        ObjectFab(this, this, R.id.fab_add) { addLocation() }
+        ObjectFab(this, R.id.fab_add) { addLocation() }
         toolbar.subtitle = "Tap location to edit, delete, or move."
         updateList()
-        recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
+        recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
         settingsLocationAdapterList = SettingsLocationAdapterList(locations)
         recyclerView.recyclerView.adapter = settingsLocationAdapterList
         updateTitle()
@@ -58,13 +58,13 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     private fun getContent() {
         currentConditions.clear()
-        FutureVoid(this@SettingsLocationRecyclerViewActivity, ::download, ::update)
+        FutureVoid(this, ::download, ::update)
 
     }
 
     private fun download() {
         MyApplication.locations.indices.forEach { index ->
-            val objectForecastPackageCurrentConditions = ObjectCurrentConditions(this@SettingsLocationRecyclerViewActivity, index)
+            val objectForecastPackageCurrentConditions = ObjectCurrentConditions(this, index)
             currentConditions.add(objectForecastPackageCurrentConditions)
             objectForecastPackageCurrentConditions.format()
         }

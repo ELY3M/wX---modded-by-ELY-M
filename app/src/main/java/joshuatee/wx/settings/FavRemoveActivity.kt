@@ -98,7 +98,7 @@ class FavRemoveActivity : BaseActivity() {
         title = "Modify $verboseTitle"
         toolbar.subtitle = "Tap item to delete or move."
         updateList()
-        objectRecyclerView = ObjectRecyclerView(this, this, R.id.card_list, labels, ::itemClicked)
+        objectRecyclerView = ObjectRecyclerView(this, R.id.card_list, labels, ::itemClicked)
     }
 
     private fun updateList() {

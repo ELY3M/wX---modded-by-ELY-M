@@ -123,11 +123,17 @@ open class ObjectOglBuffers() {
         }
     }
 
-    fun putFloat(index: Int, newValue: Float) { floatBuffer.putFloat(index, newValue) }
+    fun putFloat(index: Int, newValue: Float) {
+        floatBuffer.putFloat(index, newValue)
+    }
 
-    fun putIndex(newValue: Short) { indexBuffer.putShort(newValue) }
+    fun putIndex(newValue: Short) {
+        indexBuffer.putShort(newValue)
+    }
 
-    fun putIndex(index: Int, newValue: Short) { indexBuffer.putShort(index, newValue) }
+    fun putIndex(index: Int, newValue: Short) {
+        indexBuffer.putShort(index, newValue)
+    }
 
     fun putColor(b: Byte) {
         if (colorBuffer.position() < colorBuffer.capacity()) {

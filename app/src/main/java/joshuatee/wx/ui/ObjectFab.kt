@@ -34,16 +34,19 @@ import joshuatee.wx.settings.UIPreferences
 class ObjectFab {
 
     private val fab: FloatingActionButton
+    private val context: Context
 
-    constructor(activity: Activity, context: Context, resId: Int, fn: View.OnClickListener) {
+    constructor(activity: Activity, resId: Int, fn: View.OnClickListener) {
         fab = activity.findViewById(resId)
-        setupFab(context)
+        context = activity
+        setupFab(activity)
         setOnClickListener(fn)
     }
 
-    constructor(activity: Activity, context: Context, resId: Int, iconID: Int, fn: View.OnClickListener) {
+    constructor(activity: Activity, resId: Int, iconID: Int, fn: View.OnClickListener) {
         fab = activity.findViewById(resId)
-        setupFab(context, iconID)
+        context = activity
+        setupFab(iconID)
         setOnClickListener(fn)
     }
 
@@ -64,16 +67,16 @@ class ObjectFab {
             }
         }
 
-    fun fabSetResDrawable(context: Context, resourceDrawable: Int) {
+    fun fabSetResDrawable(resourceDrawable: Int) {
         val drawable = ContextCompat.getDrawable(context, resourceDrawable)
         fab.setImageDrawable(drawable)
     }
 
-    private fun setupFab(context: Context, icon: Int) {
+    private fun setupFab(icon: Int) {
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         }
-        fabSetResDrawable(context, icon)
+        fabSetResDrawable(icon)
         fab.elevation = UIPreferences.fabElevation
         fab.translationZ = UIPreferences.fabElevationDepressed
     }

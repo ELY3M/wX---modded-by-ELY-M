@@ -83,7 +83,7 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     }
 
     private fun getContent() {
-        FutureVoid(this, { html = UtilityDownload.getTextProduct(this@WpcRainfallForecastActivity, textProduct) }, ::showText)
+        FutureVoid(this, { html = UtilityDownload.getTextProduct(this, textProduct) }, ::showText)
         FutureVoid(this, { bitmap = imageUrl.getImage()}, ::showImage)
     }
 
@@ -99,7 +99,7 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
             objectCardImage.setImage(bitmap)
         }
         objectCardImage.setOnClickListener {
-            ObjectIntent.showImage(this@WpcRainfallForecastActivity, arrayOf(imageUrl, textProduct, "true"))
+            ObjectIntent.showImage(this, arrayOf(imageUrl, textProduct, "true"))
         }
     }
 
@@ -108,10 +108,10 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, this, textProduct, bitmap, objectCardText.text)
+            R.id.action_share_all -> UtilityShare.bitmap(this, textProduct, bitmap, objectCardText.text)
             R.id.action_share_text -> UtilityShare.text(this, textProduct, objectCardText.text)
             R.id.action_share_url -> UtilityShare.text(this, textProduct, textProduct)
-            R.id.action_share_image -> UtilityShare.bitmap(this, this, textProduct, bitmap)
+            R.id.action_share_image -> UtilityShare.bitmap(this, textProduct, bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

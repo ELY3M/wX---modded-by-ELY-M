@@ -75,13 +75,13 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
 
     private fun getTypeName() = type.toString().replace("PolygonType.", "")
 
-    private fun getUrl() = when (type) {
-        PolygonType.MCD -> GlobalVariables.nwsSPCwebsitePrefix + "/products/md/"
-        PolygonType.WATCH -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
-        PolygonType.WATCH_TORNADO -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
-        PolygonType.MPD -> GlobalVariables.nwsWPCwebsitePrefix + "/metwatch/metwatch_mpd.php"
-        else -> ""
-    }
+//    private fun getUrl() = when (type) {
+//        PolygonType.MCD -> GlobalVariables.nwsSPCwebsitePrefix + "/products/md/"
+//        PolygonType.WATCH -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
+//        PolygonType.WATCH_TORNADO -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
+//        PolygonType.MPD -> GlobalVariables.nwsWPCwebsitePrefix + "/metwatch/metwatch_mpd.php"
+//        else -> ""
+//    }
 
     private fun update() {
         isEnabled = Utility.readPref(prefTokenEnabled(), "false").startsWith("t")

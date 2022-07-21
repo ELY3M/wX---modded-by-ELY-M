@@ -63,7 +63,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
-    private lateinit var drw: ObjectNavDrawerCombo
+    private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var om: ObjectModelNoSpinner
     private lateinit var timeMenuItem: MenuItem
     private lateinit var runMenuItem: MenuItem
@@ -102,11 +102,11 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         title = activityArguments[2]
         if (om.numPanes < 2) {
-            fab1 = ObjectFab(this, this, R.id.fab1) {
+            fab1 = ObjectFab(this, R.id.fab1) {
                 om.leftClick()
                 getContent()
             }
-            fab2 = ObjectFab(this, this, R.id.fab2) {
+            fab2 = ObjectFab(this, R.id.fab2) {
                 om.rightClick()
                 getContent()
             }
@@ -129,15 +129,14 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
         UtilityModelSpcSrefInterface.createData()
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        drw = ObjectNavDrawerCombo(
+        objectNavDrawerCombo = ObjectNavDrawerCombo(
                 this,
                 UtilityModelSpcSrefInterface.groups,
                 UtilityModelSpcSrefInterface.longCodes,
                 UtilityModelSpcSrefInterface.shortCodes,
-                this,
                 ""
         )
-        drw.setListener(::refreshSpinner)
+        objectNavDrawerCombo.setListener(::refreshSpinner)
         getRunStatus()
     }
 
@@ -167,7 +166,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
         om.run = om.rtd.listRun.safeGet(0)
-        om.setTimeIdx(Utility.readPref(this@ModelsSpcSrefActivity, om.prefRunPosn, 1))
+        om.setTimeIdx(Utility.readPref(this, om.prefRunPosn, 1))
         getContent()
     }
 
@@ -185,7 +184,9 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawerCombo.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_back -> {
                 om.leftClick()
@@ -219,10 +220,10 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(this, this, om.animRan, om)
+                    UtilityModels.legacyShare(this, om.animRan, om)
                 }
             }
-            R.id.action_animate -> UtilityModels.getAnimate(this@ModelsSpcSrefActivity, om, listOf(""))
+            R.id.action_animate -> UtilityModels.getAnimate(this, om, listOf(""))
             R.id.action_help -> showHelpTextDialog()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -230,7 +231,9 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawerCombo.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
         when (item.itemId) {
             R.id.action_param -> genericDialog(favList) {
@@ -250,12 +253,12 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawerCombo.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawerCombo.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     private fun showHelpTextDialog() {
@@ -267,8 +270,8 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun refreshSpinner() {
-        om.displayData.param[om.curImg] = drw.getUrl()
-        om.displayData.paramLabel[om.curImg] = drw.getLabel()
+        om.displayData.param[om.curImg] = objectNavDrawerCombo.getUrl()
+        om.displayData.paramLabel[om.curImg] = objectNavDrawerCombo.getLabel()
         getContent()
     }
 

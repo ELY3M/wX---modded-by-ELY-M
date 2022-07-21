@@ -66,7 +66,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         palTitle = findViewById(R.id.palTitle)
         palContent = findViewById(R.id.palContent)
         toolbarBottom.setOnMenuItemClickListener(this)
-        ObjectFab(this, this, R.id.fab) { fabSavePalette(this) }
+        ObjectFab(this, R.id.fab) { fabSavePalette(this) }
         ObjectCard(this, R.id.cv1)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             listOf(palTitle, palContent).forEach {
@@ -158,7 +158,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             R.id.action_reset -> palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, activityArguments[1]))
             R.id.action_clear -> palContent.setText("")
             R.id.action_help -> ObjectDialogue(this,"Not implemented yet.")
-            R.id.action_share -> UtilityShare.textAsAttachment(this, this, palTitle.text.toString(), palContent.text.toString(), "wX_colormap_" + palTitle.text.toString() + ".txt")
+            R.id.action_share -> UtilityShare.textAsAttachment(this, palTitle.text.toString(), palContent.text.toString(), "wX_colormap_" + palTitle.text.toString() + ".txt")
             R.id.action_load -> loadSettings()
             else -> return super.onOptionsItemSelected(item)
         }

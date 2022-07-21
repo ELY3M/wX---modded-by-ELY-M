@@ -70,9 +70,9 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
+        img = ObjectTouchImageView(this, toolbar, toolbarBottom, R.id.iv)
         office = UtilityLocation.getNearestSoundingSite(Location.latLon)
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.get()))
+        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.get()))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToSnd)
         getContent()
     }
@@ -83,14 +83,14 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        locations = UtilityFavorites.setupMenu(this@SpcSoundingsActivity, UIPreferences.sndFav, office, prefToken)
+        locations = UtilityFavorites.setupMenu(this, UIPreferences.sndFav, office, prefToken)
         invalidateOptionsMenu()
         if (UIPreferences.sndFav.contains(":$office:")) {
             star.setIcon(GlobalVariables.STAR_ICON)
         } else {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
-        FutureVoid(this, { bitmap = UtilitySpcSoundings.getImage(this@SpcSoundingsActivity, office) }, ::showImage)
+        FutureVoid(this, { bitmap = UtilitySpcSoundings.getImage(this, office) }, ::showImage)
     }
 
     private fun showImage() {
@@ -98,7 +98,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         img.setBitmap(bitmap)
         img.setMaxZoom(4f)
         img.firstRunSetZoomPosn("SOUNDING")
-        Utility.writePref(this@SpcSoundingsActivity, "SOUNDING_SECTOR", office)
+        Utility.writePref(this, "SOUNDING_SECTOR", office)
     }
 
     private fun getContentSPCPlot() {
@@ -109,7 +109,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
         val html = "${GlobalVariables.nwsSPCwebsitePrefix}/obswx/maps/".getHtml()
         val date = html.parse("/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
-        bitmap = UtilityImg.getBitmapAddWhiteBackground(this@SpcSoundingsActivity, imgUrl + "_" + date + ".gif")
+        bitmap = UtilityImg.getBitmapAddWhiteBackground(this, imgUrl + "_" + date + ".gif")
     }
 
     private fun showSpcPlot() {
@@ -120,7 +120,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, this, "$office sounding", bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "$office sounding", bitmap)
             R.id.action_250mb -> setPlotAndGet("250")
             R.id.action_300mb -> setPlotAndGet("300")
             R.id.action_500mb -> setPlotAndGet("500")
@@ -191,7 +191,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, "SOUNDING")
+        img.imgSavePosnZoom("SOUNDING")
         super.onStop()
     }
 }

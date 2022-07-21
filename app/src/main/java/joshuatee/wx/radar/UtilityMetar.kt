@@ -210,7 +210,7 @@ internal object UtilityMetar {
         readMetarData(context)
         val localMetarSites = metarSites.toMutableList()
         localMetarSites.indices.forEach { i ->
-            localMetarSites[i].distance = LatLon.distance(location, localMetarSites[i].location, DistanceUnit.MILE).toInt()
+            localMetarSites[i].distance = LatLon.distance(location, localMetarSites[i].location, DistanceUnit.MILE)
         }
         localMetarSites.sortBy { it.distance }
         // http://weather.noaa.gov/pub/data/observations/metar/decoded/KCSV.TXT
@@ -247,7 +247,7 @@ internal object UtilityMetar {
         readMetarData(context)
         val localMetarSites = metarSites.toMutableList()
         localMetarSites.indices.forEach { i ->
-            localMetarSites[i].distance = LatLon.distance(location, localMetarSites[i].location, DistanceUnit.MILE).toInt()
+            localMetarSites[i].distance = LatLon.distance(location, localMetarSites[i].location, DistanceUnit.MILE)
         }
         localMetarSites.sortBy { it.distance }
         return localMetarSites[index]

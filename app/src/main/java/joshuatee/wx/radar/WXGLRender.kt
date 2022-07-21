@@ -553,8 +553,12 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         */
 
         if (displayConus) {
+	    useMercatorProjection = false
             drawConusRadarTest(conusRadarBuffers)
-        }
+        } else {
+	    useMercatorProjection = true
+	}
+	
         //TODO try to use real plotting without adding usa map....
         //hack job!!!
         if (!displayHold) {
@@ -1037,8 +1041,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 )
             } else {
                 // This is not used at the moment
-                UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, projectionNumbers, buffers.count)
-            }
+                UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, projectionNumbers, buffers.count)	    
+	    }
         }
         buffers.setToPositionZero()
     }

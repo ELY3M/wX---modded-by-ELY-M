@@ -100,7 +100,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         linearLayoutMain = findViewById(R.id.linearLayout)
         boxImages = ObjectLinearLayout(this, linearLayoutMain)
         boxText = ObjectLinearLayout(this, linearLayoutMain)
-        objectCardImage = ObjectCardImage(this@SpcStormReportsActivity, boxImages.get(), UtilityImg.getBlankBitmap())
+        objectCardImage = ObjectCardImage(this, boxImages.get(), UtilityImg.getBlankBitmap())
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
         val activityArguments = intent.getStringArrayExtra(NO)
@@ -180,7 +180,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         boxText.removeAllViews()
         addListener()
         objectCardImage.resetZoom()
-        val objectCardText = ObjectCardText(this@SpcStormReportsActivity, boxText.get())
+        val objectCardText = ObjectCardText(this, boxText.get())
         objectCardText.visibility = View.GONE
         objectCardText.setOnClickListener {
             filter = "All"
@@ -196,7 +196,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     val freq3 = mapState[stormReport.state]
                     mapState[stormReport.state] = if (freq3 == null) 1 else freq3 + 1
                 }
-                val stormCard = ObjectCardStormReportItem(this@SpcStormReportsActivity)
+                val stormCard = ObjectCardStormReportItem(this)
                 stormCard.setId(k)
                 boxText.addView(stormCard.get())
                 stormCard.setTextFields(stormReport)
@@ -206,7 +206,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 val xStr = stormReport.lat
                 val yStr = stormReport.lon
                 stormCard.setListener {
-                    ObjectIntent.showWebView(this@SpcStormReportsActivity, arrayOf(UtilityMap.getUrl(xStr, yStr, "10"), "$xStr,$yStr"))
+                    ObjectIntent.showWebView(this, arrayOf(UtilityMap.getUrl(xStr, yStr, "10"), "$xStr,$yStr"))
                 }
                 if (!(stormReport.description.contains("(") && stormReport.description.contains(")"))) {
                     stormCard.setTextHeader(stormReport)
@@ -225,7 +225,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 stateArrayLabel.add(stateArray[it] + ": " + mapState[stateArray[it]])
             }
             if (stateArrayLabel.size > 0) {
-                objectNavDrawer.updateLists(this@SpcStormReportsActivity, stateArrayLabel)
+                objectNavDrawer.updateLists(stateArrayLabel)
             }
             firstRun = false
         }
@@ -335,9 +335,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, this, "Storm Reports - $no", bitmap, out.toString())
+            R.id.action_share_all -> UtilityShare.bitmap(this, "Storm Reports - $no", bitmap, out.toString())
             R.id.action_share_text -> UtilityShare.text(this, "Storm Reports - $no", out.toString())
-            R.id.action_share_image -> UtilityShare.bitmap(this, this, "Storm Reports - $no", bitmap)
+            R.id.action_share_image -> UtilityShare.bitmap(this, "Storm Reports - $no", bitmap)
             R.id.action_lsrbywfo -> ObjectIntent(this, LsrByWfoActivity::class.java, LsrByWfoActivity.URL, arrayOf(Location.wfo, "LSR"))
             else -> return super.onOptionsItemSelected(item)
         }

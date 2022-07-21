@@ -53,7 +53,7 @@ class SpottersActivity : BaseActivity() {
     // can tap on email or phone to respectively email or call the individual
     //
 
-    private lateinit var ca: AdapterSpotter
+    private lateinit var adapter: AdapterSpotter
     private var spotterList = mutableListOf<Spotter>()
     private var spotterList2 = mutableListOf<Spotter>()
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
@@ -71,8 +71,8 @@ class SpottersActivity : BaseActivity() {
 
             override fun onQueryTextChange(query: String): Boolean {
                 val filteredModelList = filter(spotterList2, query)
-                if (::ca.isInitialized) {
-                    ca.animateTo(filteredModelList)
+                if (::adapter.isInitialized) {
+                    adapter.animateTo(filteredModelList)
                     recyclerView.scrollToPosition(0)
                 }
                 return true
@@ -89,8 +89,8 @@ class SpottersActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab, null, false)
         title = titleString
         toolbar.subtitle = "Tap on name for actions."
-        ObjectFab(this, this, R.id.fab, R.drawable.ic_info_outline_24dp_white) { reportFAB() }
-        recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
+        ObjectFab(this, R.id.fab, R.drawable.ic_info_outline_24dp_white) { reportFAB() }
+        recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
         getContent()
     }
 
@@ -99,15 +99,15 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, { spotterList = UtilitySpotter.get(this@SpottersActivity) }, ::showText)
+        FutureVoid(this, { spotterList = UtilitySpotter.get(this) }, ::showText)
     }
 
     private fun showText() {
         markFavorites()
-        ca = AdapterSpotter(spotterList)
-        recyclerView.recyclerView.adapter = ca
+        adapter = AdapterSpotter(spotterList)
+        recyclerView.recyclerView.adapter = adapter
         title = spotterList.size.toString() + " " + titleString
-        ca.setListener(::itemClicked)
+        adapter.setListener(::itemClicked)
     }
 
     private fun changeSearchViewTextColor(view: View?) {
@@ -141,7 +141,7 @@ class SpottersActivity : BaseActivity() {
             spotterList[position].lastName = "0FAV " + spotterList[position].lastName
         }
         sortSpotters()
-        ca.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
         Utility.writePref(this, "SPOTTER_FAV", UIPreferences.spotterFav)
     }
 
@@ -173,7 +173,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun itemClicked(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment(this, position, ca.getItem(position).toString(), false)
+        val bottomSheetFragment = BottomSheetFragment(this, position, adapter.getItem(position).toString(), false)
         bottomSheetFragment.functions = listOf(::showItemOnRadar, ::showItemOnMap, ::toggleFavorite)
         bottomSheetFragment.labelList = listOf("Show on radar", "Show on map", "Toggle favorite")
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)

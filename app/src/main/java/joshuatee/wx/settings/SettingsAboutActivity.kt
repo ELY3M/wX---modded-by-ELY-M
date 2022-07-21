@@ -79,13 +79,13 @@ class SettingsAboutActivity : BaseActivity() {
     }
 
     private fun displayContent() {
-        textCard.text = Utility.showVersion(this, this)
-        html = Utility.showVersion(this, this)
+        textCard.text = Utility.showVersion(this)
+        html = Utility.showVersion(this)
     }
 
     override fun onRestart() {
-        textCard.text = Utility.showVersion(this, this)
-        html = Utility.showVersion(this, this)
+        textCard.text = Utility.showVersion(this)
+        html = Utility.showVersion(this)
         super.onRestart()
     }
 
@@ -98,7 +98,7 @@ class SettingsAboutActivity : BaseActivity() {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        textCard.text = keyCode.toString() + " " + Utility.showVersion(this, this)
+        textCard.text = keyCode.toString() + " " + Utility.showVersion(this)
         return when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT -> true
             KeyEvent.KEYCODE_DPAD_RIGHT -> true

@@ -88,7 +88,7 @@ class FavAddActivity : BaseActivity() {
             }
         }
         title = "Add $verboseTitle"
-        ObjectRecyclerView(this, this, R.id.card_list, data.toMutableList(), ::itemClicked)
+        ObjectRecyclerView(this, R.id.card_list, data.toMutableList(), ::itemClicked)
     }
 
     private fun itemClicked(position: Int) {

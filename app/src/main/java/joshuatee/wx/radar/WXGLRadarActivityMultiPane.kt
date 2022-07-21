@@ -292,14 +292,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     wxglSurfaceViews,
                     wxglRenders[it],
                     wxglRenders,
-                    this@WXGLRadarActivityMultiPane,
+                    this,
                     toolbar,
                     toolbarBottom,
                     changeListener
             )
         }
         objectImageMap = ObjectImageMap(
-                this,
                 this,
                 R.id.map,
                 toolbar,
@@ -702,7 +701,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 //                    } else {
                         UtilityShare.bitmap(
                                 this,
-                                this,
                                 wxglRenders[curRadar].rid +
                                         " (" + Utility.getRadarSiteName(wxglRenders[curRadar].rid) + ") "
                                         + wxglRenders[curRadar].product,
@@ -711,7 +709,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 //                    }
                 }
             }
-            R.id.action_settings -> startActivity(Intent(this@WXGLRadarActivityMultiPane, SettingsRadarActivity::class.java))
+            R.id.action_settings -> startActivity(Intent(this, SettingsRadarActivity::class.java))
             R.id.action_radar_markers -> ObjectIntent.showImage(this, arrayOf("raw:radar_legend", "Radar Markers", "false"))
             R.id.action_radar_site_status_l3 -> ObjectIntent.showWebView(this, arrayOf("http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended"))
             R.id.action_radar_site_status_l2 -> ObjectIntent.showWebView(this, arrayOf("http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended"))
@@ -943,9 +941,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private val sn_handler = Handler(Looper.getMainLooper())
     private val sn_reporter: Runnable = object : Runnable {
         override fun run() {
-            UtilityLog.d("wx", "SendPosition(this@WXGLRadarActivityMultiPane) on lat: "+latD+" lon: "+lonD)
-            SendPosition(this@WXGLRadarActivityMultiPane)
-
+            UtilityLog.d("wx", "SendPosition(this) on lat: "+latD+" lon: "+lonD)
+            SendPosition(applicationContext)
             sn_handler.postDelayed(this, sn_Interval.toLong())
         }
     }
@@ -1021,7 +1018,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private fun getLatLon() = LatLon(locXCurrent, locYCurrent)
 
     private fun setupAlertDialogRadarLongPress() {
-        dialogRadarLongPress = ObjectDialogue(this@WXGLRadarActivityMultiPane, alertDialogStatusAl)
+        dialogRadarLongPress = ObjectDialogue(this, alertDialogStatusAl)
         dialogRadarLongPress!!.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
@@ -1030,7 +1027,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             val strName = alertDialogStatusAl[which]
             UtilityRadarUI.doLongPressAction(
                     strName,
-                    this@WXGLRadarActivityMultiPane,
                     this,
                     wxglSurfaceViews[idxIntAl],
                     wxglRenders[idxIntAl],
@@ -1054,7 +1050,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun alertDialogTdwr() {
-        val objectDialogue = ObjectDialogue(this@WXGLRadarActivityMultiPane, GlobalArrays.tdwrRadars)
+        val objectDialogue = ObjectDialogue(this, GlobalArrays.tdwrRadars)
         objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)

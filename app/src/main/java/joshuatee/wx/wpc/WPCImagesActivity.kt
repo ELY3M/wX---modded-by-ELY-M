@@ -95,7 +95,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
             }
         }
         UtilityWpcImages.create()
-        drw = ObjectNavDrawerCombo(this, UtilityWpcImages.groups, UtilityWpcImages.longCodes, UtilityWpcImages.shortCodes, this, "WPG_IMG")
+        drw = ObjectNavDrawerCombo(this, UtilityWpcImages.groups, UtilityWpcImages.longCodes, UtilityWpcImages.shortCodes, "WPG_IMG")
         drw.setListener { getContent() }
         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
         getContent()
@@ -124,12 +124,12 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
                 drw.getUrl().contains("aviationweather") -> drw.getUrl()
                 else -> drw.getUrl()
             }
-            Utility.writePref(this@WpcImagesActivity, "WPG_IMG_FAV_URL", drw.getUrl())
-            Utility.writePref(this@WpcImagesActivity, "WPG_IMG_IDX", drw.imgIdx)
-            Utility.writePref(this@WpcImagesActivity, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
+            Utility.writePref(this, "WPG_IMG_FAV_URL", drw.getUrl())
+            Utility.writePref(this, "WPG_IMG_IDX", drw.imgIdx)
+            Utility.writePref(this, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
             bitmap = getUrl.getImage()
         } else {
-            bitmap = UtilityDownload.getImageProduct(this@WpcImagesActivity, homeScreenId)
+            bitmap = UtilityDownload.getImageProduct(this, homeScreenId)
             calledFromHomeScreen = false
         }
     }
@@ -171,7 +171,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else
-                    UtilityShare.bitmap(this, this, drw.getLabel(), bitmap)
+                    UtilityShare.bitmap(this, drw.getLabel(), bitmap)
             }
             else -> return super.onOptionsItemSelected(item)
         }

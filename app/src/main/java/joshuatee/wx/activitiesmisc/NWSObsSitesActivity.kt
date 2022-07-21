@@ -67,7 +67,7 @@ class NwsObsSitesActivity : BaseActivity() {
         title = titleString
         updateButton()
         siteDisplay = false
-        objectRecyclerView = ObjectRecyclerView(this, this, R.id.card_list, GlobalArrays.states.toMutableList(), ::itemClicked)
+        objectRecyclerView = ObjectRecyclerView(this, R.id.card_list, GlobalArrays.states.toMutableList(), ::itemClicked)
     }
 
     private fun updateButton() {
@@ -94,7 +94,7 @@ class NwsObsSitesActivity : BaseActivity() {
     private fun showObsSite(obsSite: String) {
         Utility.writePref(prefToken, obsSite)
         updateButton()
-        ObjectIntent.showWebView(this@NwsObsSitesActivity, arrayOf("https://www.weather.gov/wrh/timeseries?site=$obsSite", obsSite))
+        ObjectIntent.showWebView(this, arrayOf("https://www.weather.gov/wrh/timeseries?site=$obsSite", obsSite))
     }
 
     private fun stateSelected() {

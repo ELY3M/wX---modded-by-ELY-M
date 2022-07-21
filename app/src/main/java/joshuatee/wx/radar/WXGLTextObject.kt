@@ -495,7 +495,9 @@ class WXGLTextObject(
         addCountyLabels()
         addObservations()
         addSpottersLabels()
-        if (numberOfPanes == 1 && WXGLRadarActivity.spotterShowSelected) addSpotter()
+        if (numberOfPanes == 1 && WXGLRadarActivity.spotterShowSelected) { 
+	addSpotter()
+	}
         addHailLabels()
         addWpcPressureCenters()
     }
@@ -505,13 +507,17 @@ class WXGLTextObject(
         hideCountyLabels()
         hideObservations()
         hideSpottersLabels()
-        if (numberOfPanes == 1 && WXGLRadarActivity.spotterShowSelected) hideSpotter()
+        if (numberOfPanes == 1 && WXGLRadarActivity.spotterShowSelected) { 
+	hideSpotter()
+	}
         hideHailLabels()
         hideWpcPressureCenters()
     }
 
     fun initializeObservations() {
-        if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) observationsInitialized = true
+        if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) {
+            observationsInitialized = true
+        }
     }
 
     fun addWpcPressureCenters() {
@@ -526,7 +532,9 @@ class WXGLTextObject(
             if (wxglRender.zoom < (0.5 / wxglRender.zoomScreenScaleFactor)) {
                 UtilityWpcFronts.pressureCenters.indices.forEach {
                     var color = Color.rgb(0,127,225)
-                    if (UtilityWpcFronts.pressureCenters[it].type == PressureCenterTypeEnum.LOW) color = Color.RED
+                    if (UtilityWpcFronts.pressureCenters[it].type == PressureCenterTypeEnum.LOW) {
+                        color = Color.RED
+                    }
                     checkAndDrawText(
                             wxglSurfaceView.pressureCenterLabels,
                             UtilityWpcFronts.pressureCenters[it].lat,
@@ -563,7 +571,9 @@ class WXGLTextObject(
             wxglSurfaceView.observations.clear()
             scale = getScale()
             oglrZoom = 1.0f
-            if (wxglRender.zoom < 1.0f) oglrZoom = wxglRender.zoom * 0.8f
+            if (wxglRender.zoom < 1.0f) {
+                oglrZoom = wxglRender.zoom * 0.8f
+            }
             textSize = UIPreferences.textSizeSmall * oglrZoom * fontScaleFactorObs * RadarPreferences.radarTextSize
             val obsArr = UtilityMetar.metarDataList[paneNumber].obsArr.toList()
             val obsArrExt = UtilityMetar.metarDataList[paneNumber].obsArrExt.toList()
@@ -614,5 +624,7 @@ class WXGLTextObject(
         }
     }
 
-    fun setWXGLRender(wxglRender: WXGLRender) { this.wxglRender = wxglRender }
+    fun setWXGLRender(wxglRender: WXGLRender) {
+        this.wxglRender = wxglRender
+    }
 }

@@ -95,7 +95,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
         Utility.writePref(this, "LOCATION_CANADA_CITY", "")
         Utility.writePref(this, "LOCATION_CANADA_ID", "")
-        ObjectFab(this, this, R.id.fab) { fabSaveLocation() }
+        ObjectFab(this, R.id.fab) { fabSaveLocation() }
         val me = toolbarBottom.menu
         listOf(R.id.cv1).forEach { ObjectCard(this, it) }
         val locNumArr = intent.getStringArrayExtra(LOC_NUM)
@@ -280,8 +280,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     private fun saveLocation(locNum: String, xStr: String, yStr: String, labelStr: String) {
         FutureText2(
-                this@SettingsLocationGenericActivity,
-                { Location.save(this@SettingsLocationGenericActivity, locNum, xStr, yStr, labelStr) },
+                this,
+                { Location.save(this, locNum, xStr, yStr, labelStr) })
                 { toastStr ->
                     showMessage(toastStr)
                     updateTitle = true
@@ -292,7 +292,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                         notificationsCanada(false)
                     }
                 }
-        )
     }
 
     override fun onStop() {

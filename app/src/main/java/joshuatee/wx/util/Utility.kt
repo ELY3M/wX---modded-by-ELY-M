@@ -207,7 +207,7 @@ object Utility {
 
     fun safeGet(list: Array<String>, index: Int) = if (list.size <= index) "" else list[index]
 
-    fun showVersion(context: Context, activity: Activity): String {
+    fun showVersion(activity: Activity): String {
         var version = ""
         try {
             version = activity.packageManager.getPackageInfo(activity.packageName, 0).versionName
@@ -218,12 +218,12 @@ object Utility {
                 GlobalVariables.newline + version + GlobalVariables.newline + GlobalVariables.newline +
                 "Use alt-? on the main screen and in nexrad radar to show keyboard shortcuts"
         string += GlobalVariables.newline + GlobalVariables.newline + "Diagnostics information:" + GlobalVariables.newline
-        string += readPref(context, "JOBSERVICE_TIME_LAST_RAN", "") + "  Last background update" + GlobalVariables.newline
-        string += UtilityRadarUI.getLastRadarTime(context) + "  Last radar update" + GlobalVariables.newline
-        string += showDiagnostics(context)
+        string += readPref(activity, "JOBSERVICE_TIME_LAST_RAN", "") + "  Last background update" + GlobalVariables.newline
+        string += UtilityRadarUI.getLastRadarTime(activity) + "  Last radar update" + GlobalVariables.newline
+        string += showDiagnostics(activity)
         string += "Tablet: " + UtilityUI.isTablet().toString() + GlobalVariables.newline
         string += "Forecast zone: " + UtilityDownloadNws.forecastZone + GlobalVariables.newline
-        string += "Notification Cancel String: " + readPref(context, "NOTIF_STR", "") + GlobalVariables.newline
+        string += "Notification Cancel String: " + readPref(activity, "NOTIF_STR", "") + GlobalVariables.newline
         return string
     }
 

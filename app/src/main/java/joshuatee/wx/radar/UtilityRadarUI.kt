@@ -34,6 +34,7 @@ import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.util.*
 import kotlin.math.roundToInt
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
 
@@ -48,9 +49,9 @@ internal object UtilityRadarUI {
 
     fun getLastRadarTime(context: Context) = Utility.readPref(context, lastRadarTimePref, "")
 
-    private fun getRadarStatus(activity: Activity, context: Context, wxglRender: WXGLRender) {
-        FutureText2(context,
-                { UtilityDownload.getRadarStatusMessage(context, wxglRender.rid) },
+    private fun getRadarStatus(activity: Activity, wxglRender: WXGLRender) {
+        FutureText2(activity,
+                { UtilityDownload.getRadarStatusMessage(activity, wxglRender.rid) },
                 { s ->
                     var radarStatus = s
                     if (radarStatus == "") {
@@ -61,10 +62,10 @@ internal object UtilityRadarUI {
         )
     }
 
-    private fun getMetar(wxglSurfaceView: WXGLSurfaceView, activity: Activity, context: Context) {
+    private fun getMetar(wxglSurfaceView: WXGLSurfaceView, activity: Activity) {
         FutureText2(
-                context,
-                { UtilityMetar.findClosestMetar(context, wxglSurfaceView.latLon) },
+                activity,
+                { UtilityMetar.findClosestMetar(activity, wxglSurfaceView.latLon) },
                 { s -> ObjectDialogue(activity, s) }
         )
     }
@@ -121,10 +122,10 @@ internal object UtilityRadarUI {
             }
             longPressList.add("WPC Fronts: " + wpcFrontsTimeStamp)
         }
-        longPressList += wxglRender.ridNewList.map { "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name) }
+        longPressList += wxglRender.ridNewList.map {
+            "Radar: (" + it.distance.roundToInt() + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name)
+        }
         val obsSite = UtilityMetar.findClosestObservation(context, wxglSurfaceView.latLon)
-        // FIXME TODO what is this doing?
-//        ObjectPolygonWarning.isCountNonZero()
         if ((RadarPreferences.radarWarnings || ObjectPolygonWarning.areAnyEnabled()) && ObjectPolygonWarning.isCountNonZero()) {
             longPressList.add("Show Warning")
         }
@@ -139,7 +140,7 @@ internal object UtilityRadarUI {
             longPressList.add("Show MPD")
         }
         // end Thanks to Ely
-        longPressList.add("Nearest observation: " + obsSite.name + " (" + obsSite.distance.toString() + " mi)")
+        longPressList.add("Nearest observation: " + obsSite.name + " (" + obsSite.distance.roundToInt() + " mi)")
         longPressList.add("Nearest forecast: $latLonTitle")
         longPressList.add("Nearest meteogram: " + obsSite.name)
         if (RadarPreferences.radarSpotters || RadarPreferences.radarSpottersLabel) longPressList.add("Spotter Info")
@@ -155,7 +156,6 @@ internal object UtilityRadarUI {
 
     fun doLongPressAction(
             s: String,
-            context: Context,
             activity: Activity,
             wxglSurfaceView: WXGLSurfaceView,
             wxglRender: WXGLRender,
@@ -163,20 +163,21 @@ internal object UtilityRadarUI {
     ) {
         when {
             s.contains("miles from") -> {}
-            s.contains("Show Warning") -> showNearestWarning(context, wxglSurfaceView)
-            s.contains("Show Watch") -> showNearestProduct(context, PolygonType.WATCH, wxglSurfaceView)
-            s.contains("Show MCD") -> showNearestProduct(context, PolygonType.MCD, wxglSurfaceView)
-            s.contains("Show MPD") -> showNearestProduct(context, PolygonType.MPD, wxglSurfaceView)
-            s.contains("Nearest observation") -> getMetar(wxglSurfaceView, activity, context)
-            s.contains("Nearest forecast") -> showNearestForecast(context, wxglSurfaceView)	    
-            s.contains("Nearest meteogram") -> showNearestMeteogram(context, wxglSurfaceView)
-            s.contains("Current radar status message") -> getRadarStatus(activity, context, wxglRender)
-            s.contains("Nearest radar status message") -> showNearestRadarStatus(context, activity, wxglSurfaceView)
-            s.contains("Spotter Info") -> showSpotterInfo(activity, wxglSurfaceView, context)
-            s.contains("Userpoint info") -> showUserPointInfo(activity, context, wxglSurfaceView)
-            s.contains("Add userpoint for") -> addUserPoint(activity, context, wxglSurfaceView)
-            s.contains("Delete userpoint for") ->  deleteUserPoint(activity, context, wxglSurfaceView)
-            s.contains("Delete all userpoints") -> deleteAllUserPoints(activity, context)
+            s.contains("Show Warning") -> showNearestWarning(activity, wxglSurfaceView)
+            s.contains("Show Watch") -> showNearestProduct(activity, PolygonType.WATCH, wxglSurfaceView)
+            s.contains("Show MCD") -> showNearestProduct(activity, PolygonType.MCD, wxglSurfaceView)
+            s.contains("Show MPD") -> showNearestProduct(activity, PolygonType.MPD, wxglSurfaceView)
+            s.contains("Nearest observation") -> getMetar(wxglSurfaceView, activity)
+            s.contains("Nearest forecast") -> showNearestForecast(activity, wxglSurfaceView)
+            s.contains("Nearest meteogram") -> showNearestMeteogram(activity, wxglSurfaceView)
+            s.contains("Current radar status message") -> getRadarStatus(activity, wxglRender)
+            //elys mod //need context....
+            s.contains("Nearest radar status message") -> showNearestRadarStatus(MyApplication.appContext, activity, wxglSurfaceView)
+            s.contains("Spotter Info") -> showSpotterInfo(activity, wxglSurfaceView, MyApplication.appContext)
+            s.contains("Userpoint info") -> showUserPointInfo(activity, MyApplication.appContext, wxglSurfaceView)
+            s.contains("Add userpoint for") -> addUserPoint(activity, MyApplication.appContext, wxglSurfaceView)
+            s.contains("Delete userpoint for") ->  deleteUserPoint(activity, MyApplication.appContext, wxglSurfaceView)
+            s.contains("Delete all userpoints") -> deleteAllUserPoints(activity, MyApplication.appContext)
             else -> function(s)
         }
     }

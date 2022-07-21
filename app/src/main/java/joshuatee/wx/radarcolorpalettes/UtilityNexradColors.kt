@@ -33,7 +33,7 @@ internal object UtilityNexradColors {
         val fudgeFactor = 0.01
         var transformedColor: Float
         val total = 360.0f // hue ranges from 0-360
-        return if (diff > ((total / 2) - fudgeFactor)) {
+        return if (diff > ((total / 2.0) - fudgeFactor)) {
             transformedColor = (total - (b - a)) * -1
             if (transformedColor < 0) {
                 transformedColor += total

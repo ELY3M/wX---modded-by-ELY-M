@@ -161,7 +161,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     }
 
     private fun getCityFromXml(token: String): String {
-        val data = UtilityIO.readTextFileFromRaw(this@SettingsLocationCanadaMapActivity.resources, R.raw.maps)
+        val data = UtilityIO.readTextFileFromRaw(this.resources, R.raw.maps)
         val lines = data.split(GlobalVariables.newline)
         lines.forEach { if (it.contains(token)) return it.parse("title=\"(.*?)\"") }
         return ""

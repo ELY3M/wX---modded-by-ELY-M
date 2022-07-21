@@ -94,7 +94,7 @@ object UtilityLocation {
             sites.add(RID(labelArr[0], getSiteLocation(labelArr[0], prefToken)))
         }
         sites.forEach {
-            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM).toInt()
+            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM)
         }
         sites.sortBy { it.distance }
         return sites[0].name
@@ -113,7 +113,7 @@ object UtilityLocation {
             }
         }
         radarSites.forEach {
-            it.distance = LatLon.distance(location, it.location, DistanceUnit.MILE).toInt()
+            it.distance = LatLon.distance(location, it.location, DistanceUnit.MILE)
         }
         radarSites.sortBy { it.distance }
         return radarSites.subList(0, count)
@@ -133,7 +133,7 @@ object UtilityLocation {
         var currentDistance: Double
         radarSites.forEach {
             currentDistance = LatLon.distance(location, it.location, DistanceUnit.MILE)
-            it.distance = currentDistance.toInt()
+            it.distance = currentDistance
         }
 //        Collections.sort(radarSites, RID.DESCENDING_COMPARATOR)
         radarSites.sortBy { it.distance }
@@ -174,7 +174,7 @@ object UtilityLocation {
     fun getNearestSoundingSite(location: LatLon): String {
         val sites = GlobalArrays.soundingSites.map { RID(it, getSiteLocation(it, "SND")) } as MutableList<RID>
         GlobalArrays.soundingSites.indices.forEach {
-            sites[it].distance = LatLon.distance(location, sites[it].location, DistanceUnit.KM).toInt()
+            sites[it].distance = LatLon.distance(location, sites[it].location, DistanceUnit.KM)
         }
         sites.sortBy { it.distance }
         return sites[0].name
@@ -183,7 +183,9 @@ object UtilityLocation {
     fun getSiteLocation(site: String, officeType: String = "RID"): LatLon {
         // SND, NWS, or RID
         var addChar = "-"
-        if (officeType == "NWS") addChar = "" // WFO
+        if (officeType == "NWS") {
+            addChar = ""
+        }
         val x: String
         val y: String
         when (officeType) {

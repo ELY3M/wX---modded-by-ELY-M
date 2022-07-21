@@ -122,7 +122,9 @@ object UtilityWXOGL {
     fun showTextProducts(latLon: LatLon): String {
         var html = ObjectPolygonWarning.severeDashboardTor.value + ObjectPolygonWarning.severeDashboardTst.value + ObjectPolygonWarning.severeDashboardFfw.value
         RadarPreferences.radarWarningPolygons.forEach {
-            if (it.isEnabled) html += it.storage.value
+            if (it.isEnabled) {
+                html += it.storage.value
+            }
         }
         val warnings = ObjectWarning.parseJson(html)
         var urlToOpen = ""

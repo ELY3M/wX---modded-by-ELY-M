@@ -612,7 +612,7 @@ class LocationFragment : Fragment() {
         dialogRadarLongPress!!.setNegativeButton { dialog, _ -> dialog.dismiss() }
         dialogRadarLongPress!!.setSingleChoiceItems { dialog, which ->
             val item = radarLongPressItems[which]
-            UtilityRadarUI.doLongPressAction(item, activityReference, activityReference, wxglSurfaceViews[idxIntG], wxglRenders[idxIntG], ::longPressRadarSiteSwitch)
+            UtilityRadarUI.doLongPressAction(item, activityReference, wxglSurfaceViews[idxIntG], wxglRenders[idxIntG], ::longPressRadarSiteSwitch)
             dialog.dismiss()
         }
     }
@@ -682,7 +682,7 @@ class LocationFragment : Fragment() {
     private fun getCc() {
         try {
             objectCurrentConditions = ObjectCurrentConditions(activityReference, Location.currentLocation)
-            objectCurrentConditions.timeCheck()
+            objectCurrentConditions.timeCheck(activityReference)
             if (homescreenFavLocal.contains("TXT-CC2")) {
                 bitmapForCurrentConditions = if (Location.isUS) {
                     UtilityForecastIcon.getIcon(activityReference, objectCurrentConditions.iconUrl)

@@ -90,8 +90,8 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         miStatusParam1 = menu.findItem(R.id.action_status_param1)
         miStatusParam2 = menu.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
-            fab1 = ObjectFab(this, this, R.id.fab1) { om.leftClick() }
-            fab2 = ObjectFab(this, this, R.id.fab2) { om.rightClick() }
+            fab1 = ObjectFab(this, R.id.fab1) { om.leftClick() }
+            fab2 = ObjectFab(this, R.id.fab2) { om.rightClick() }
             menu.findItem(R.id.action_img1).isVisible = false
             menu.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
@@ -114,7 +114,6 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 UtilityModelSpcHrefInterface.groups,
                 UtilityModelSpcHrefInterface.longCodes,
                 UtilityModelSpcHrefInterface.shortCodes,
-                this,
                 ""
         )
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
@@ -150,7 +149,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
-            R.id.action_animate -> UtilityModels.getAnimate(this@ModelsSpcHrefActivity, om, listOf(""))
+            R.id.action_animate -> UtilityModels.getAnimate(this, om, listOf(""))
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
             R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
@@ -158,7 +157,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(this, this, om.animRan, om)
+                    UtilityModels.legacyShare(this, om.animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -188,7 +187,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         om.run = om.rtd.mostRecentRun
         (om.startStep until om.endStep).forEach { om.times.add(String.format(Locale.US, "%02d", it)) }
         UtilityModels.updateTime(UtilityString.getLastXChars(om.run, 2), om.rtd.mostRecentRun, om.times, "", false)
-        om.setTimeIdx(Utility.readPref(this@ModelsSpcHrefActivity, om.prefRunPosn, 1))
+        om.setTimeIdx(Utility.readPref(this, om.prefRunPosn, 1))
         getContent()
     }
 

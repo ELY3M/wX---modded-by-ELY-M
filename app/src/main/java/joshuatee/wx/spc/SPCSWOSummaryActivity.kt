@@ -58,7 +58,7 @@ class SpcSwoSummaryActivity : BaseActivity() {
         }
         toolbar.subtitle = "SPC"
         title = "Convective Outlooks"
-        objectImageSummary = ObjectImageSummary(this@SpcSwoSummaryActivity, linearLayout, bitmaps)
+        objectImageSummary = ObjectImageSummary(this, linearLayout, bitmaps)
         getContent()
     }
 
@@ -83,13 +83,13 @@ class SpcSwoSummaryActivity : BaseActivity() {
             "4-8"
         }
         objectImageSummary.setImage(index, bitmaps[index])
-        objectImageSummary.setOnClickListener(index) { ObjectIntent.showSpcSwo(this@SpcSwoSummaryActivity, arrayOf(day, "")) }
+        objectImageSummary.setOnClickListener(index) { ObjectIntent.showSpcSwo(this, arrayOf(day, "")) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.SPC_SWO_SUMMARY)
-            R.id.action_share -> UtilityShare.text(this, this, "Convective Outlook Summary", "", bitmaps)
+            R.id.action_share -> UtilityShare.text(this, "Convective Outlook Summary", "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

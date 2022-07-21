@@ -91,7 +91,7 @@ class USWarningsWithRadarActivity : BaseActivity() {
             }
             getContent()
         }
-        toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }
+        toolbar.setOnClickListener { objectNavDrawer.open() }
         getContent()
     }
 
@@ -129,7 +129,7 @@ class USWarningsWithRadarActivity : BaseActivity() {
         objectAlertSummary.updateContent(html, turlLocal[0], firstRun)
         title = objectAlertSummary.getTitle(turlLocal[1])
         if (firstRun) {
-            objectNavDrawer.updateLists(this@USWarningsWithRadarActivity, objectAlertSummary.navList.toList())
+            objectNavDrawer.updateLists(objectAlertSummary.navList.toList())
             firstRun = false
         }
     }
@@ -149,9 +149,9 @@ class USWarningsWithRadarActivity : BaseActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_warnmap -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
-            R.id.action_warnmapAK -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))
-            R.id.action_warnmapHI -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map"))
+            R.id.action_warnmap -> ObjectIntent.showImage(this, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
+            R.id.action_warnmapAK -> ObjectIntent.showImage(this, arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))
+            R.id.action_warnmapHI -> ObjectIntent.showImage(this, arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map"))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

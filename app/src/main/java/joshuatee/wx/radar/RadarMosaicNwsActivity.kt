@@ -73,9 +73,10 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.radarnwsmosaic, iconsEvenlySpaced = true, bottomToolbar = false)
         val activityArguments = intent.getStringArrayExtra(URL)!!
         objectNavDrawer = ObjectNavDrawer(this, UtilityNwsRadarMosaic.labels, UtilityNwsRadarMosaic.sectors) { getContent() }
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, "")
+        img = ObjectTouchImageView(this, toolbar, R.id.iv, objectNavDrawer, "")
+        toolbar.setOnClickListener { objectNavDrawer.open() }
         img.setMaxZoom(8.0f)
-        img.setListener(this, objectNavDrawer) { getContent() }
+        img.setListener(objectNavDrawer) { getContent() }
         if (activityArguments.isNotEmpty() && activityArguments[0] != "") {
             sector = activityArguments[0]
         }
@@ -102,7 +103,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
         img.setBitmap(bitmap)
         animRan = false
         img.firstRunSetZoomPosn(prefImagePosition)
-        Utility.writePref(this@RadarMosaicNwsActivity, prefTokenSector, objectNavDrawer.url)
+        Utility.writePref(this, prefTokenSector, objectNavDrawer.url)
     }
 
     private fun getAnimate() {
@@ -111,8 +112,8 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
             animDrawable.stop()
         } else {
             animateButton.setIcon(GlobalVariables.ICON_STOP_WHITE)
-            FutureVoid(this@RadarMosaicNwsActivity,
-                    { animDrawable = UtilityNwsRadarMosaic.getAnimation(this@RadarMosaicNwsActivity, objectNavDrawer.url) })
+            FutureVoid(this,
+                    { animDrawable = UtilityNwsRadarMosaic.getAnimation(this, objectNavDrawer.url) })
             { animRan = UtilityImgAnim.startAnimation(animDrawable, img) }
         }
     }
@@ -141,7 +142,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
                     if (animRan) {
                         //UtilityShare.animGif(this, "NWS mosaic", animDrawable)
                     } else {
-                        UtilityShare.bitmap(this, this, "NWS mosaic", bitmap)
+                        UtilityShare.bitmap(this, "NWS mosaic", bitmap)
                     }
                 }
             }
@@ -151,7 +152,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, prefImagePosition)
+        img.imgSavePosnZoom(prefImagePosition)
         super.onStop()
     }
 }

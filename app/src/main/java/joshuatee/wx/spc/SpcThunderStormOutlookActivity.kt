@@ -75,7 +75,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     private fun getImages() {
         bitmaps = MutableList(urls.size){ UtilityImg.getBlankBitmap() }
         linearLayout.removeAllViews()
-        objectImageSummary = ObjectImageSummary(this@SpcThunderStormOutlookActivity, linearLayout, bitmaps)
+        objectImageSummary = ObjectImageSummary(this, linearLayout, bitmaps)
         urls.indices.forEach {
             FutureVoid(this, { bitmaps[it] = urls[it].getImage() }, { updateImage(it) })
         }
@@ -84,13 +84,13 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     private fun updateImage(index: Int) {
         objectImageSummary.setImage(index, bitmaps[index])
         objectImageSummary.setOnClickListener(index) {
-            ObjectIntent.showImage(this@SpcThunderStormOutlookActivity, arrayOf(urls[index], ""))
+            ObjectIntent.showImage(this, arrayOf(urls[index], ""))
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, this, "SPC Thunderstorm Outlook", "", bitmaps)
+            R.id.action_share -> UtilityShare.text(this, "SPC Thunderstorm Outlook", "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

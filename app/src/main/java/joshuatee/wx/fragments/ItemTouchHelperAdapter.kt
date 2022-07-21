@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 /**
- * Interface to listen for a move or dismissal event from a [ItemTouchHelper.Callback].
-
+ * Interface to listen for a move or dismissal event from a ItemTouchHelper.Callback
  * @author Paul Burke (ipaulpro)
  */
 

@@ -34,7 +34,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.ObjectIntent
 
-class ObjectCanadaWarnings(private val context: Context, private val activity: Activity, private val linearLayout: LinearLayout, private val toolbar: Toolbar) {
+class ObjectCanadaWarnings(private val activity: Activity, private val linearLayout: LinearLayout, private val toolbar: Toolbar) {
 
     private var listLocUrl = mutableListOf<String>()
     private var listLocName = mutableListOf<String>()
@@ -69,7 +69,7 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
 
     fun showData() {
         linearLayout.removeAllViews()
-        ObjectCardImage(context, linearLayout, toolbar, bitmap)
+        ObjectCardImage(activity, linearLayout, toolbar, bitmap)
         var locWarning: String
         var locWatch: String
         var locStatement: String
@@ -93,7 +93,7 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
                 locStatement = locStatement.replace("<.*?>".toRegex(), "")
             }
             val province = listLocUrl[index].parse("report_e.html.([a-z]{2}).*?")
-            val objectCardText = ObjectCardText(context, linearLayout)
+            val objectCardText = ObjectCardText(activity, linearLayout)
             objectCardText.text = Utility.fromHtml(province.uppercase(Locale.US) + ": " + locWarning + " " + locWatch + " " + locStatement)
             val url = GlobalVariables.canadaEcSitePrefix + listLocUrl[index]
             val location = listLocName[index]
@@ -105,11 +105,7 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
     val title get() = provinceToLabel[province] + " (" + listLocUrl.size + ")"
 
     private fun getWarningDetail(url: String, location: String) {
-        FutureText2(
-                context,
-                { UtilityCanada.getHazardsFromUrl(url) },
-                { data -> ObjectIntent.showText(context, arrayOf(data, location)) }
-        )
+        FutureText2(activity, { UtilityCanada.getHazardsFromUrl(url) }) { data -> ObjectIntent.showText(activity, arrayOf(data, location)) }
     }
 
     companion object {

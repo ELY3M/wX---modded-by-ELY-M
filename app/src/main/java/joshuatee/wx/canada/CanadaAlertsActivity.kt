@@ -47,7 +47,7 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         scrollView = findViewById(R.id.scrollView)
         linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
-        objectCanadaWarnings = ObjectCanadaWarnings(this, this, linearLayout, toolbar)
+        objectCanadaWarnings = ObjectCanadaWarnings(this, linearLayout, toolbar)
         objectCanadaWarnings.province = Utility.readPref(this, "CA_ALERTS_PROV", objectCanadaWarnings.province)
         title = "Canada Alerts"
         getContent()

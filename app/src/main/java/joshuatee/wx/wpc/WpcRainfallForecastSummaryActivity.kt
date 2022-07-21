@@ -55,7 +55,7 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
         }
         title = "Excessive Rainfall Outlooks"
         toolbar.subtitle = "WPC"
-        objectImageSummary = ObjectImageSummary(this@WpcRainfallForecastSummaryActivity, linearLayout, bitmaps)
+        objectImageSummary = ObjectImageSummary(this, linearLayout, bitmaps)
         getContent()
     }
 
@@ -76,13 +76,13 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
             val textProduct = UtilityWpcRainfallForecast.productCode[index]
             val imageUrl = UtilityWpcRainfallForecast.urls[index]
             val day = (index + 1).toString()
-            ObjectIntent(this@WpcRainfallForecastSummaryActivity, WpcRainfallForecastActivity::class.java, WpcRainfallForecastActivity.NUMBER, arrayOf(textProduct, imageUrl, day))
+            ObjectIntent(this, WpcRainfallForecastActivity::class.java, WpcRainfallForecastActivity.NUMBER, arrayOf(textProduct, imageUrl, day))
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, this, getString(UtilityWpcRainfallForecast.activityTitle), "", bitmaps)
+            R.id.action_share -> UtilityShare.text(this, getString(UtilityWpcRainfallForecast.activityTitle), "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

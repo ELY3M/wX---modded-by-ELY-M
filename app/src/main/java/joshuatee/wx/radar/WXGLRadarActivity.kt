@@ -209,7 +209,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 	    
     	//elys mod
         if (UIPreferences.checkinternet) {
-            Utility.checkInternet(this@WXGLRadarActivity)
+            Utility.checkInternet(this)
         }
         setupAlertDialogRadarLongPress()
         UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
@@ -246,7 +246,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         img = findViewById(R.id.iv)
         img.maxZoom = 6.0f
         wxglSurfaceView = WXGLSurfaceView(this, 1, numberOfPanes, 1)
-        objectImageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf(img, wxglSurfaceView))
+        objectImageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf(img, wxglSurfaceView))
         objectImageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToRid)
         rl = findViewById(R.id.rl)
         rl.addView(wxglSurfaceView)
@@ -596,7 +596,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun progressUpdate(vararg values: String) {
         if ((values[1].toIntOrNull() ?: 0) > 1) {
-            val list = WXGLNexrad.getRadarInfo(this@WXGLRadarActivity,"").split(" ")
+            val list = WXGLNexrad.getRadarInfo(this,"").split(" ")
             if (list.size > 3)
                 toolbar.subtitle = list[3] + " (" + values[0] + "/" + values[1] + ")"
             else
@@ -607,7 +607,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun setSubTitle() {
-        val items = WXGLNexrad.getRadarInfo(this@WXGLRadarActivity,"").split(" ")
+        val items = WXGLNexrad.getRadarInfo(this,"").split(" ")
         if (items.size > 3) {
             toolbar.subtitle = items[3]
             if (UtilityTime.isRadarTimeOld(items[3]))
@@ -743,7 +743,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         ) }
         UtilityShare.bitmap(
                 this@WXGLRadarActivity,
-                this@WXGLRadarActivity,
                 wxglRender.rid + " (" + Utility.getRadarSiteName(wxglRender.rid) + ") " + wxglRender.product,
                 bitmapForShare
         )
@@ -794,7 +793,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun showRadarScanInfo() {
-        ObjectDialogue(this, WXGLNexrad.getRadarInfo(this@WXGLRadarActivity,""))
+        ObjectDialogue(this, WXGLNexrad.getRadarInfo(this,""))
     }
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
@@ -877,8 +876,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private val sn_handler = Handler(Looper.getMainLooper())
     private val sn_reporter: Runnable = object : Runnable {
         override fun run() {
-            UtilityLog.d("wx", "SendPosition(this@WXGLRadarActivity) on lat: "+latD+" lon: "+lonD)
-            SendPosition(this@WXGLRadarActivity)
+            UtilityLog.d("wx", "SendPosition(this) on lat: "+latD+" lon: "+lonD)
+            SendPosition(applicationContext)
             sn_handler.postDelayed(this, sn_Interval.toLong())
         }
     }
@@ -964,17 +963,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private fun getLatLon() = LatLon(locXCurrent, locYCurrent)
 
     private fun setupAlertDialogRadarLongPress() {
-        dialogRadarLongPress = ObjectDialogue(this@WXGLRadarActivity, dialogStatusList)
+        dialogRadarLongPress = ObjectDialogue(this, dialogStatusList)
         dialogRadarLongPress!!.setNegativeButton { dialog, _ ->
             dialog.dismiss()
-            UtilityUI.immersiveMode(this@WXGLRadarActivity)
+            UtilityUI.immersiveMode(this)
         }
         dialogRadarLongPress!!.setSingleChoiceItems { dialog, which ->
             val strName = dialogStatusList[which]
             UtilityRadarUI.doLongPressAction(
                     strName,
-                    this@WXGLRadarActivity,
-                    this@WXGLRadarActivity,
+                    this,
                     wxglSurfaceView,
                     wxglRender,
                     ::longPressRadarSiteSwitch
@@ -991,10 +989,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun alertDialogTdwr() {
-        val diaTdwr = ObjectDialogue(this@WXGLRadarActivity, GlobalArrays.tdwrRadars)
+        val diaTdwr = ObjectDialogue(this, GlobalArrays.tdwrRadars)
         diaTdwr.setNegativeButton { dialog, _ ->
             dialog.dismiss()
-            UtilityUI.immersiveMode(this@WXGLRadarActivity)
+            UtilityUI.immersiveMode(this)
         }
         diaTdwr.setSingleChoiceItems { dialog, which ->
             val strName = GlobalArrays.tdwrRadars[which]
@@ -1076,7 +1074,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 }
             }
             android.R.id.home -> {
-                if (Utility.readPref(this@WXGLRadarActivity, "LAUNCH_TO_RADAR", "false") == "false") {
+                if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
                     NavUtils.navigateUpFromSameTask(this)
                 } else {
                     navigateUp()
@@ -1106,10 +1104,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     
     //elys mod
     private fun getContentVwp() = GlobalScope.launch(uiDispatcher) {
-        //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(this@WXGLRadarActivity, oglr.rid) }
-        //ObjectIntent(this@WXGLRadarActivity, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
+        //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(this, oglr.rid) }
+        //ObjectIntent(this, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
         var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+wxglRender.rid+"-NVW"
-        ObjectIntent(this@WXGLRadarActivity, WebView::class.java, WebView.URL, arrayOf(vmpurl, wxglRender.rid + " VAD Wind Profile"))
+        ObjectIntent(applicationContext, WebView::class.java, WebView.URL, arrayOf(vmpurl, wxglRender.rid + " VAD Wind Profile"))
 
     }
 

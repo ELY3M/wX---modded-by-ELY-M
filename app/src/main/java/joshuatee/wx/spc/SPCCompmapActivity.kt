@@ -41,7 +41,7 @@ class SpcCompmapActivity : BaseActivity() {
     private var layerStr = ""
     private lateinit var img: ObjectTouchImageView
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var drw: ObjectNavDrawer
+    private lateinit var objectNavDrawer: ObjectNavDrawer
     private val paramList = UtilitySpcCompmap.labels.toMutableList()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -52,10 +52,10 @@ class SpcCompmapActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
-        drw = ObjectNavDrawer(this, paramList)
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, false)
-            drw.drawerLayout.closeDrawer(drw.listView)
+        objectNavDrawer = ObjectNavDrawer(this, paramList)
+        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            objectNavDrawer.listView.setItemChecked(position, false)
+            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
             val positionStr = UtilitySpcCompmap.urlIndex[position]
             if (paramList[position].contains("(on)")) {
                 paramList[position] = paramList[position].replace("\\(on\\) ".toRegex(), "")
@@ -67,9 +67,8 @@ class SpcCompmapActivity : BaseActivity() {
                 getContent()
             }
         }
-        toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-        img = ObjectTouchImageView(this, this, R.id.iv)
+        toolbar.setOnClickListener { objectNavDrawer.open() }
+        img = ObjectTouchImageView(this, R.id.iv)
         layerStr = Utility.readPref(this, "SPCCOMPMAP_LAYERSTR", "a7:a19:") // mslp, hpc fronts
         setupInitLayerString()
         getContent()
@@ -90,8 +89,8 @@ class SpcCompmapActivity : BaseActivity() {
                 break
             }
         }
-        drw.listView.setItemChecked(position, false)
-        drw.drawerLayout.closeDrawer(drw.listView)
+        objectNavDrawer.listView.setItemChecked(position, false)
+        objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
         if (!paramList[position].contains("(on)")) {
             paramList[position] = "(on) " + paramList[position]
         }
@@ -109,30 +108,32 @@ class SpcCompmapActivity : BaseActivity() {
     private fun showImage() {
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("SPCCOMPMAP")
-        Utility.writePref(this@SpcCompmapActivity, "SPCCOMPMAP_LAYERSTR", layerStr)
+        Utility.writePref(this, "SPCCOMPMAP_LAYERSTR", layerStr)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, this, "SPC Compmap", bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "SPC Compmap", bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, "SPCCOMPMAP")
+        img.imgSavePosnZoom("SPCCOMPMAP")
         super.onStop()
     }
 }

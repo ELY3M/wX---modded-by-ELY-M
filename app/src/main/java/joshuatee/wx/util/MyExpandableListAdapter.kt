@@ -22,7 +22,9 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, view: View?, parent: ViewGroup): View {
         var convertView = view
         val children = getChild(groupPosition, childPosition) as String
-        if (convertView == null) convertView = inflater.inflate(R.layout.listrow_details, null)
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.listrow_details, null)
+        }
         val text: TextView = convertView!!.findViewById(R.id.textView1)
         val linearLayout: LinearLayout = convertView.findViewById(R.id.linearLayout)
         val spacing: View = convertView.findViewById(R.id.spacing)

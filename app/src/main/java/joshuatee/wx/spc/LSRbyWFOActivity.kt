@@ -89,7 +89,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         title = "LSR"
         locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
+        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
         getContent()
     }
@@ -165,7 +165,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        locations = UtilityFavorites.setupMenu(this@LsrByWfoActivity, UIPreferences.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         invalidateOptionsMenu()
         if (UIPreferences.wfoFav.contains(":$wfo:")) {
             star.setIcon(GlobalVariables.STAR_ICON)

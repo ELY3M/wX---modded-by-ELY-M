@@ -65,7 +65,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
     private lateinit var om: ObjectModelNoSpinner
-    private lateinit var drw: ObjectNavDrawer
+    private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var timeMenuItem: MenuItem
     private lateinit var runMenuItem: MenuItem
     private var firstRunTimeSet = false
@@ -103,8 +103,8 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         miStatusParam1 = menu.findItem(R.id.action_status_param1)
         miStatusParam2 = menu.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
-            fab1 = ObjectFab(this, this, R.id.fab1) { om.leftClick() }
-            fab2 = ObjectFab(this, this, R.id.fab2) { om.rightClick() }
+            fab1 = ObjectFab(this, R.id.fab1) { om.leftClick() }
+            fab2 = ObjectFab(this, R.id.fab2) { om.rightClick() }
             menu.findItem(R.id.action_img1).isVisible = false
             menu.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
@@ -121,15 +121,14 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         miStatus = menu.findItem(R.id.action_status)
         miStatus.title = "in through"
-//        menu.findItem(R.id.action_map).isVisible = false
         om.displayData = DisplayDataNoSpinner(this, this, om.numPanes, om)
-        drw = ObjectNavDrawer(this, om.labels, om.params)
+        objectNavDrawer = ObjectNavDrawer(this, om.labels, om.params)
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, false)
-            drw.drawerLayout.closeDrawer(drw.listView)
-            om.displayData.param[om.curImg] = drw.tokens[position]
-            om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
+        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            objectNavDrawer.listView.setItemChecked(position, false)
+            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+            om.displayData.param[om.curImg] = objectNavDrawer.tokens[position]
+            om.displayData.paramLabel[om.curImg] = objectNavDrawer.getLabel(position)
             getContent()
         }
         setupModel()
@@ -137,13 +136,15 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_back -> om.leftClick()
             R.id.action_forward -> om.rightClick()
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
-            R.id.action_animate -> UtilityModels.getAnimate(this@ModelsGenericActivity ,om, listOf(""))
+            R.id.action_animate -> UtilityModels.getAnimate(this ,om, listOf(""))
             R.id.action_img1 -> {
                 om.curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
@@ -165,7 +166,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(this, this, om.animRan, om)
+                    UtilityModels.legacyShare(this, om.animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -174,7 +175,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_region -> genericDialog(om.sectors) {
                 om.sector = om.sectors[it]
@@ -227,7 +230,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         if (!firstRunTimeSet) {
             firstRunTimeSet = true
-            om.setTimeIdx(Utility.readPref(this@ModelsGenericActivity, om.prefRunPosn, 1))
+            om.setTimeIdx(Utility.readPref(this, om.prefRunPosn, 1))
         } else {
             om.setTimeIdx(1)
         }
@@ -247,12 +250,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
@@ -297,7 +300,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 om.displayData.param[1] = om.params[0]
                 om.displayData.paramLabel[1] = om.labels[0]
             }
-        drw.updateLists(this, om.labels, om.params)
+        objectNavDrawer.updateLists(om.labels, om.params)
         when (om.modelType) {
             ModelType.NCEP -> setupListRunZ(om.numberRuns)
             else -> {}
@@ -308,26 +311,42 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         om.times.clear()
         when (om.modelType) {
             ModelType.GLCFS -> {
-                (om.startStep..om.endStep step om.stepAmount).forEach { om.times.add(String.format(Locale.US, om.format, it)) }
+                (om.startStep..om.endStep step om.stepAmount).forEach {
+                    om.times.add(String.format(Locale.US, om.format, it))
+                }
                 (51..121 step 3).forEach { om.times.add(String.format(Locale.US, om.format, it)) }
             }
             ModelType.NCEP -> {
                 when (om.model) {
                     "HRRR" -> {
-                        (om.startStep..om.endStep step om.stepAmount).forEach { om.times.add(String.format(Locale.US, "%03d" + "00", it)) }
+                        (om.startStep..om.endStep step om.stepAmount).forEach {
+                            om.times.add(String.format(Locale.US, "%03d" + "00", it))
+                        }
                     }
                     "GEFS-SPAG", "GEFS-MEAN-SPRD" -> {
-                        (0..181 step 6).forEach { om.times.add(String.format(Locale.US, "%03d", it)) }
-                        (192..385 step 12).forEach { om.times.add(String.format(Locale.US, "%03d", it)) }
+                        (0..181 step 6).forEach {
+                            om.times.add(String.format(Locale.US, "%03d", it))
+                        }
+                        (192..385 step 12).forEach {
+                            om.times.add(String.format(Locale.US, "%03d", it))
+                        }
                     }
                     "GFS" -> {
-                        (0..241 step 3).forEach { om.times.add(String.format(Locale.US, "%03d", it)) }
-                        (252..385 step 12).forEach { om.times.add(String.format(Locale.US, "%03d", it)) }
+                        (0..241 step 3).forEach {
+                            om.times.add(String.format(Locale.US, "%03d", it))
+                        }
+                        (252..385 step 12).forEach {
+                            om.times.add(String.format(Locale.US, "%03d", it))
+                        }
                     }
-                    else -> (om.startStep..om.endStep step om.stepAmount).forEach { om.times.add(String.format(Locale.US, om.format, it)) }
+                    else -> (om.startStep..om.endStep step om.stepAmount).forEach {
+                        om.times.add(String.format(Locale.US, om.format, it))
+                    }
                 }
             }
-            else -> (om.startStep..om.endStep step om.stepAmount).forEach { om.times.add(String.format(Locale.US, om.format, it)) }
+            else -> (om.startStep..om.endStep step om.stepAmount).forEach {
+                om.times.add(String.format(Locale.US, om.format, it))
+            }
         }
         Utility.writePref(this, om.prefModel, om.model)
     }
@@ -367,7 +386,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 true
             }
             KeyEvent.KEYCODE_D -> {
-                if (event.isCtrlPressed) drw.drawerLayout.openDrawer(GravityCompat.START)
+                if (event.isCtrlPressed) objectNavDrawer.drawerLayout.openDrawer(GravityCompat.START)
                 true
             }
             else -> super.onKeyUp(keyCode, event)

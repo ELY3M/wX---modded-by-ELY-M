@@ -109,17 +109,16 @@ object UtilityModels {
         }
     }
 
-    fun legacyShare(activity: Activity, context: Context, animRan: Boolean, om: ObjectModelNoSpinner) {
+    fun legacyShare(activity: Activity, animRan: Boolean, om: ObjectModelNoSpinner) {
 //        if (animRan)
 //            UtilityShare.animGif(
-//                    context,
+//                    activity,
 //                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
 //                    om.displayData.animDrawable[0]
 //            )
 //        else
             UtilityShare.bitmap(
                     activity,
-                    context,
                     om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
                     om.displayData.bitmap[0]
             )

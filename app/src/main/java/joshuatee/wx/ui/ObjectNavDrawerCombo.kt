@@ -22,7 +22,6 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Color
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -38,7 +37,6 @@ class ObjectNavDrawerCombo(
     items: SparseArray<Group>,
     private val labels: Array<Array<String>>,
     private val tokens: Array<Array<String>>,
-    context: Context,
     prefPrefix: String
 ) {
 
@@ -63,8 +61,8 @@ class ObjectNavDrawerCombo(
         )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         if (prefPrefix != "") {
-            imgIdx = Utility.readPref(context, "${prefPrefix}_IDX", 0)
-            imgGroupIdx = Utility.readPref(context, "${prefPrefix}_GROUPIDX", 0)
+            imgIdx = Utility.readPref(activity, "${prefPrefix}_IDX", 0)
+            imgGroupIdx = Utility.readPref(activity, "${prefPrefix}_GROUPIDX", 0)
         } else {
             imgIdx = 0
             imgGroupIdx = 0

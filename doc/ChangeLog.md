@@ -24,6 +24,7 @@
 // TODO [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
 // TODO [REF] ExternalGeodeticCalculator -> convert from class to object since all static
 // TODO [ADD] look to replace AWC radar mosaics with normal NWS (looks like AWC website redesign might obsolete)
+// [FIX] SPC HREF radar stuff
 // [FIX] when animating in vis/mosaic, show stop button, etc
 // [REF] ObjectPolygonWatch ?
 // [REF] PolygonType rename MCD -> Mcd, etc
@@ -35,8 +36,22 @@
 // [ADD] handle deprecations in UtilityUI https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
 // [FIX] settings color pal editor shows "null"
 // [REF] ImageCollection         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+// [REF] shorten name of some objects ObjectTouchImageView -> ObjectTouchImage, etc
+// [ADD] Class for star icon
 ```
 [[_TOC_]]
+
+## 55628 2022_07_20
+
+## 55627 2022_07_20
+* [FIX] Nexrad: if non-default option to use hi-res State lines data, not all lines were showing
+
+## 55626 2022_07_20
+* [ADD] In US Alerts - if you touch blank space in the top toolbar or the label to the left it will open the navigation drawer
+* [REF] In all activities when a context is needed replace "this@ForecastActivity" with "this" (example)
+
+## 55625 2022_07_20
+* [ADD] In GOES, AWC, and NWS radar mosaic if you touch blank space in the top toolbar or the label to the left it will open the navigation drawer
 
 ## 55624 2022_07_19
 * [REF] misc refactor

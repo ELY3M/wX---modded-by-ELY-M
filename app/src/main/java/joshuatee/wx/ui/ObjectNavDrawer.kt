@@ -34,7 +34,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import joshuatee.wx.R
 import joshuatee.wx.util.Utility
 
-class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
+class ObjectNavDrawer(val activity: Activity, private var labels: List<String>) {
 
     val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
     val listView: ListView = activity.findViewById(R.id.left_drawer)
@@ -64,7 +64,7 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
     }
 
-    fun updateLists(activity: Activity, items: List<String>, tokens: List<String>) {
+    fun updateLists(items: List<String>, tokens: List<String>) {
         listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
         if (Utility.isThemeAllWhite()) {
             listView.setBackgroundColor(Color.WHITE)
@@ -82,7 +82,7 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
         this.tokens = tokens
     }
 
-    fun updateLists(activity: Activity, items: List<String>) {
+    fun updateLists(items: List<String>) {
         listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
         if (Utility.isThemeAllWhite()) {
             listView.setBackgroundColor(Color.WHITE)
@@ -136,5 +136,9 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
             index = position
             fn()
         }
+    }
+
+    fun open() {
+        drawerLayout.openDrawer(listView)
     }
 }

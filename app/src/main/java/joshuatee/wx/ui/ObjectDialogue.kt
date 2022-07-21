@@ -72,16 +72,6 @@ class ObjectDialogue {
         alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }
     }
 
-    fun setupTextView(textView: TextView) {
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-        if (Utility.isThemeAllWhite()) {
-            textView.setTextColor(Color.BLACK)
-        } else {
-            textView.setTextColor(Color.WHITE)
-        }
-        textView.setPadding(20,10,20,10)
-    }
-
     constructor(context: Context, text: String) {
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item)
         alertDialog = AlertDialog.Builder(context)
@@ -91,6 +81,16 @@ class ObjectDialogue {
         val ad = alertDialog.create()
         ad.setCanceledOnTouchOutside(true)
         ad.show()
+    }
+
+    fun setupTextView(textView: TextView) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+        if (Utility.isThemeAllWhite()) {
+            textView.setTextColor(Color.BLACK)
+        } else {
+            textView.setTextColor(Color.WHITE)
+        }
+        textView.setPadding(20,10,20,10)
     }
 
     fun show() {

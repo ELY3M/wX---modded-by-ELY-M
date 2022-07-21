@@ -22,7 +22,6 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Color
 import android.view.View
 import joshuatee.wx.util.ImageMap
@@ -32,7 +31,6 @@ import joshuatee.wx.util.Utility
 
 class ObjectImageMap(
     val activity: Activity,
-    val context: Context,
     resId: Int,
     val toolbar: Toolbar,
     val toolbarBottom: Toolbar,
@@ -83,7 +81,7 @@ class ObjectImageMap(
 
     private fun setupMap() {
         views.forEach { it.visibility = View.GONE }
-        setupImageMap(context, toolbar, toolbarBottom)
+        setupImageMap(toolbar, toolbarBottom)
         map.visibility = View.VISIBLE
     }
 
@@ -103,9 +101,9 @@ class ObjectImageMap(
         })
     }
 
-    private fun setupImageMap(context: Context, toolbar: Toolbar, toolbarBottom: Toolbar) {
+    private fun setupImageMap(toolbar: Toolbar, toolbarBottom: Toolbar) {
         val layoutParams = map.layoutParams
-        layoutParams.height = MyApplication.dm.heightPixels - toolbar.height - toolbarBottom.height - UtilityUI.statusBarHeight(context)
+        layoutParams.height = MyApplication.dm.heightPixels - toolbar.height - toolbarBottom.height - UtilityUI.statusBarHeight(activity)
         layoutParams.width = MyApplication.dm.widthPixels
         map.layoutParams = layoutParams
     }

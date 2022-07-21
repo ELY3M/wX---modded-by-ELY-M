@@ -63,7 +63,7 @@ class ImageShowActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show, R.menu.image_show_activity, false)
-        img = ObjectTouchImageView(this, this, toolbar, R.id.iv)
+        img = ObjectTouchImageView(this, toolbar, R.id.iv)
         val activityArguments: Array<String> = intent.getStringArrayExtra(URL)!!
         url = activityArguments[0]
         title = "Image Viewer"
@@ -101,18 +101,18 @@ class ImageShowActivity : BaseActivity() {
 
     private fun showImage() {
         if (needsWhiteBackground) {
-            bitmap = UtilityImg.addColorBackground(this@ImageShowActivity, bitmap, Color.WHITE)
+            bitmap = UtilityImg.addColorBackground(this, bitmap, Color.WHITE)
         }
         img.setBitmap(bitmap)
     }
 
     private fun getContentFromStorage() {
-        img.setBitmap(UtilityIO.bitmapFromInternalStorage(this@ImageShowActivity, urls[1]))
+        img.setBitmap(UtilityIO.bitmapFromInternalStorage(this, urls[1]))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, this, shareTitle, bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, shareTitle, bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

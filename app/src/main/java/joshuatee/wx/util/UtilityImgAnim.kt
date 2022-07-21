@@ -37,7 +37,9 @@ object UtilityImgAnim {
         val bitmaps = urls.map { it.getImage() }
         bitmaps.forEachIndexed { index, bitmap ->
             if (bitmap.width > 10) {
-                if (index == bitmaps.lastIndex) delay *= 3
+                if (index == bitmaps.lastIndex) {
+                    delay *= 3
+                }
                 animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
             }
         }
@@ -50,7 +52,9 @@ object UtilityImgAnim {
         val bitmaps = urls.map { UtilityImg.getBitmapAddWhiteBackground(context, it) }
         bitmaps.forEachIndexed { index, bitmap ->
             if (bitmap.width > 10) {
-                if (index == bitmaps.lastIndex) delay *= 3
+                if (index == bitmaps.lastIndex) {
+                    delay *= 3
+                }
                 animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
             }
         }
@@ -62,7 +66,9 @@ object UtilityImgAnim {
         val animationDrawable = AnimationDrawable()
         bitmaps.forEachIndexed { index, bitmap ->
             if (bitmap.width > 10) {
-                if (index == bitmaps.lastIndex) delay *= 3
+                if (index == bitmaps.lastIndex) {
+                    delay *= 3
+                }
                 animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
             }
         }
@@ -74,7 +80,9 @@ object UtilityImgAnim {
         var delay = UtilityImg.animInterval(context) * 2
         bitmaps.forEachIndexed { index, bitmap ->
             if (bitmap.width > 10) {
-                if (index == bitmaps.lastIndex) delay *= 3
+                if (index == bitmaps.lastIndex) {
+                    delay *= 3
+                }
                 animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
             }
         }

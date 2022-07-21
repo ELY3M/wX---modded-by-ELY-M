@@ -6,6 +6,21 @@ FAQ can be accessed via Settings -> About
 
 Please also review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md) impacting all or some users.
 
+
+## 55627 2022_07_20 (BETA)
+* [FIX] Nexrad: if non-default option to use hi-res State lines data, not all lines were showing
+
+## 55625 2022_07_20 (BETA)
+* [ADD] In GOES, AWC, and NWS radar mosaic if you touch blank space in the top toolbar or the label to the left it will open the navigation drawer
+* [FIX] remove deprecated option in settings->widgets (show warnings in radar mosaic)
+* [ADD] minor alphabetization in settings->widgets
+* [FIX] status bar icon for location specific radar notification
+* [REF] remove animated gif share which is not working and is considered deprecated within the program
+* [ADD] Nexrad radar long press - shorten verbiage
+* [FIX] new NWS Radar Mosaic - remove menu with products that aren't available
+* [FIX] NHC now shows complete summary information and text products for Central Pacific "CP" hurricanes
+* [ADD] Radar settings - mostly alphabetized now with common options listed at top
+
 ## 55615 2022_07_16 (BETA)
 * [REF] Refactor some parts of the code base to make it more maintainable - you should not notice anything
 * [ADD] (main screen tabs) Switch to ViewPager2 and use FragmentStateAdapter since Google deprecated ViewPager - you should not notice anything

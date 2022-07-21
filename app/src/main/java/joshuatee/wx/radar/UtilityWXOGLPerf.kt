@@ -45,25 +45,6 @@ internal object UtilityWXOGLPerf {
     fun decode8BitAndGenRadials(context: Context, radarBuffers: ObjectOglRadarBuffers): Int {
         var totalBins = 0
         try {
-//            val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, radarBuffers.fileName))
-//            dis.bigEndian = true
-//            // ADVANCE PAST WMO HEADER
-//            while (dis.readShort().toInt() != -1) {
-//                // while (dis.readUnsignedShort() != 16) {
-//            }
-//            dis.skipBytes(100)
-//            val magic = ByteArray(3)
-//            magic[0] = 'B'.code.toByte()
-//            magic[1] = 'Z'.code.toByte()
-//            magic[2] = 'h'.code.toByte()
-//            val compression = Compression.getCompression(magic)
-//            val compressedFileSize = dis.length() - dis.filePointer
-//            val buf = ByteArray(compressedFileSize.toInt())
-//            dis.read(buf)
-//            dis.close()
-//            val decompressedStream = compression.decompress(ByteArrayInputStream(buf))
-//            val dataInputStream = DataInputStream(BufferedInputStream(decompressedStream))
-
             val dataInputStream = UtilityIO.uncompress(context, radarBuffers.fileName)
             dataInputStream.skipBytes(30)
             var numberOfRleHalfWords: Int
@@ -136,7 +117,7 @@ internal object UtilityWXOGLPerf {
                         radialIndex += 4
                         radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleSin)
                         radialIndex += 4
-                        for (notUsed in 0..3) {
+                        repeat(4) {
                             radarBuffers.colorBuffer.put(colorIndex, radarBuffers.colormap.redValues.get(level.toInt() and 0xFF))
                             colorIndex += 1
                             radarBuffers.colorBuffer.put(colorIndex, radarBuffers.colormap.greenValues.get(level.toInt() and 0xFF))
@@ -227,7 +208,7 @@ internal object UtilityWXOGLPerf {
                     radialIndex += 4
                     radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleSin)
                     radialIndex += 4
-                    for (notUsed in 0..3) {
+                    repeat(4) {
                         radarBuffers.colorBuffer.put(colorIndex, radarBuffers.colormap.redValues.get(level and 0xFF))
                         colorIndex += 1
                         radarBuffers.colorBuffer.put(colorIndex, radarBuffers.colormap.greenValues.get(level and 0xFF))
@@ -261,6 +242,7 @@ internal object UtilityWXOGLPerf {
         }
     }
 
+    //elys mod - keeping this
     fun generate4326Projection(inBuff: ByteBuffer, outBuff: ByteBuffer, pn: ProjectionNumbers, count: Int) {
         val pnXFloat = pn.xFloat
         val pnYFloat = pn.yFloat
@@ -433,7 +415,7 @@ internal object UtilityWXOGLPerf {
                 buffers.putIndex(indexForIndex, (indexCount + 2).toShort())
                 indexForIndex += 2
                 indexCount += 3
-                (0..2).forEach { _ ->
+                repeat(3) {
                     buffers.putColor(buffers.solidColorRed)
                     buffers.putColor(buffers.solidColorGreen)
                     buffers.putColor(buffers.solidColorBlue)
@@ -486,7 +468,7 @@ internal object UtilityWXOGLPerf {
                     buffers.putIndex(indexForIndex, (indexCount + 2).toShort())
                     indexForIndex += 2
                     indexCount += 3
-                    (0..2).forEach { _ ->
+                    repeat(3) {
                         buffers.putColor(col[0])
                         buffers.putColor(col[1])
                         buffers.putColor(col[2])
@@ -590,7 +572,9 @@ internal object UtilityWXOGLPerf {
                     tn = tn - tnMod10 + 10
                 radialStartAngle.putFloat((450 - tn / 10).toFloat())
                 dataInputStream.skipBytes(2)
-                for (s in 0 until numberOfRleHalfwords) { binWord.put((dataInputStream.readUnsignedByte() and 0xFF).toByte()) }
+                for (s in 0 until numberOfRleHalfwords) {
+                    binWord.put((dataInputStream.readUnsignedByte() and 0xFF).toByte())
+                }
             }
             dataInputStream.close()
         } catch (e: Exception) {

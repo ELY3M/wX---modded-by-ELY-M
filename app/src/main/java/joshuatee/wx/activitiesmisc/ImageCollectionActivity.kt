@@ -51,7 +51,7 @@ class ImageCollectionActivity : VideoRecordActivity() {
 
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var img: ObjectTouchImageView
-    private lateinit var drw: ObjectNavDrawer
+    private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var imageCollection: ObjectImagesCollection
     private var animDrawable = AnimationDrawable()
 
@@ -63,7 +63,7 @@ class ImageCollectionActivity : VideoRecordActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
-        if (drw.url.contains("jma") && imageCollection.title == "GOESFD") {
+        if (objectNavDrawer.url.contains("jma") && imageCollection.title == "GOESFD") {
             actionAnimate.isVisible = true
         }
         return super.onPrepareOptionsMenu(menu)
@@ -75,11 +75,11 @@ class ImageCollectionActivity : VideoRecordActivity() {
         val activityArguments = intent.getStringArrayExtra(TYPE)!!
         imageCollection = ObjectImagesCollection.imageCollectionMap[activityArguments[0]]!!
         title = imageCollection.title
-        drw = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContent)
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, imageCollection.prefTokenIdx)
-        img.setListener(this, drw, ::getContent)
-        drw.index = Utility.readPref(this, imageCollection.prefTokenIdx, 0)
-        toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+        objectNavDrawer = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContent)
+        img = ObjectTouchImageView(this, toolbar, R.id.iv, objectNavDrawer, imageCollection.prefTokenIdx)
+        img.setListener(objectNavDrawer, ::getContent)
+        objectNavDrawer.index = Utility.readPref(this, imageCollection.prefTokenIdx, 0)
+        toolbar.setOnClickListener { objectNavDrawer.open() }
         getContent()
     }
 
@@ -89,12 +89,12 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     private fun getContent() {
-        toolbar.subtitle = drw.getLabel()
-        FutureVoid(this, { bitmap = drw.url.getImage() }, ::showImage)
+        toolbar.subtitle = objectNavDrawer.getLabel()
+        FutureVoid(this, { bitmap = objectNavDrawer.url.getImage() }, ::showImage)
     }
 
     private fun showImage() {
-        if (drw.url.contains("large_latestsfc.gif")) {
+        if (objectNavDrawer.url.contains("large_latestsfc.gif")) {
             img.setMaxZoom(16.0f)
         } else {
             img.setMaxZoom(4.0f)
@@ -106,23 +106,25 @@ class ImageCollectionActivity : VideoRecordActivity() {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.bitmap(this, this, imageCollection.title, bitmap)
+                    UtilityShare.bitmap(this, imageCollection.title, bitmap)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -131,13 +133,13 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, imageCollection.prefImagePosition)
+        img.imgSavePosnZoom(imageCollection.prefImagePosition)
         super.onStop()
     }
 
     private fun getAnimate() {
-        FutureVoid(this@ImageCollectionActivity,
-            { animDrawable = UtilityGoesFullDisk.getAnimation(this@ImageCollectionActivity, drw.url) })
+        FutureVoid(this,
+            { animDrawable = UtilityGoesFullDisk.getAnimation(this, objectNavDrawer.url) })
             { UtilityImgAnim.startAnimation(animDrawable, img) }
     }
 }

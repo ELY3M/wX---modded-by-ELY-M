@@ -59,7 +59,7 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
         }
         toolbar.subtitle = "SPC"
         title = "Fire Weather Outlooks"
-        objectImageSummary = ObjectImageSummary(this@SpcFireOutlookSummaryActivity, linearLayout, bitmaps)
+        objectImageSummary = ObjectImageSummary(this, linearLayout, bitmaps)
         getContent()
     }
 
@@ -85,7 +85,7 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, this, getString(UtilitySpcFireOutlook.activityTitle), "", bitmaps)
+            R.id.action_share -> UtilityShare.text(this, getString(UtilitySpcFireOutlook.activityTitle), "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

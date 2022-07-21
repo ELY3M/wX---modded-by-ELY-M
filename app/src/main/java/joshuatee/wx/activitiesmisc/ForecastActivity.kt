@@ -103,9 +103,9 @@ class ForecastActivity : BaseActivity() {
     }
 
     private fun downloadCc() {
-        objectCurrentConditions = ObjectCurrentConditions(this@ForecastActivity, latLon)
-        objectCurrentConditions.timeCheck()
-        bitmapForCurrentCondition = UtilityForecastIcon.getIcon(this@ForecastActivity, objectCurrentConditions.iconUrl)
+        objectCurrentConditions = ObjectCurrentConditions(this, latLon)
+        objectCurrentConditions.timeCheck(this)
+        bitmapForCurrentCondition = UtilityForecastIcon.getIcon(this, objectCurrentConditions.iconUrl)
     }
 
     private fun updateCc() {
@@ -129,20 +129,20 @@ class ForecastActivity : BaseActivity() {
 
     private fun download7Day() {
         objectSevenDay = ObjectSevenDay(latLon)
-        bitmaps = objectSevenDay.icons.map { UtilityForecastIcon.getIcon(this@ForecastActivity, it) }
+        bitmaps = objectSevenDay.icons.map { UtilityForecastIcon.getIcon(this, it) }
     }
 
     private fun update7Day() {
         linearLayoutForecast.removeAllViewsInLayout()
         bitmaps.forEachIndexed { index, bitmap ->
-            val objectCard7Day = ObjectCard7Day(this@ForecastActivity, bitmap, true, index, objectSevenDay.forecastList)
+            val objectCard7Day = ObjectCard7Day(this, bitmap, true, index, objectSevenDay.forecastList)
             objectCard7Day.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
             linearLayoutForecast.addView(objectCard7Day.get())
         }
         // sunrise card
-        val objectCardText = ObjectCardText(this@ForecastActivity)
+        val objectCardText = ObjectCardText(this)
         objectCardText.center()
-        objectCardText.text = (UtilityTimeSunMoon.getSunriseSunset(this@ForecastActivity, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime())
+        objectCardText.text = (UtilityTimeSunMoon.getSunriseSunset(this, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime())
         linearLayoutForecast.addView(objectCardText.get())
     }
 
@@ -150,10 +150,10 @@ class ForecastActivity : BaseActivity() {
         linearLayoutHazards.removeAllViews()
         hazardCards.clear()
         objectHazards.titles.indices.forEach { z ->
-            hazardCards.add(ObjectCardText(this@ForecastActivity))
+            hazardCards.add(ObjectCardText(this))
             hazardCards[z].setupHazard()
             hazardCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
-            hazardCards[z].setOnClickListener { ObjectIntent.showHazard(this@ForecastActivity, arrayOf(objectHazards.urls[z])) }
+            hazardCards[z].setOnClickListener { ObjectIntent.showHazard(this, arrayOf(objectHazards.urls[z])) }
             linearLayoutHazards.addView(hazardCards[z].get())
         }
     }
@@ -167,7 +167,7 @@ class ForecastActivity : BaseActivity() {
     }
 
     private fun saveLocation() {
-        val message = Location.save(this@ForecastActivity, latLon)
+        val message = Location.save(this, latLon)
         ObjectPopupMessage(linearLayout, message)
     }
 }

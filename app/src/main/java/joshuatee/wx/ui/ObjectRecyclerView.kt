@@ -22,18 +22,17 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
-import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class ObjectRecyclerView(context: Context, activity: Activity, resourceId: Int, list: MutableList<String>, fn: (Int) -> Unit) {
+class ObjectRecyclerView(activity: Activity, resourceId: Int, list: MutableList<String>, fn: (Int) -> Unit) {
 
     private val recyclerView: RecyclerView = activity.findViewById(resourceId)
     private var ca = SingleTextAdapterList(list)
 
     init {
         recyclerView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(context)
+        val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = ca

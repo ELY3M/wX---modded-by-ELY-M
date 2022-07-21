@@ -119,7 +119,7 @@ class WX : CommonActionBarFragment() {
         val menu = toolbarBottom.menu
         voiceRecognitionIcon = menu.findItem(R.id.action_vr)
         voiceRecognitionIcon.isVisible = UIPreferences.vrButton
-        val fab = ObjectFab(this, this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
+        val fab = ObjectFab(this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
         if (UIPreferences.mainScreenRadarFab) {
             val radarMi = menu.findItem(R.id.action_radar)
             radarMi.isVisible = false
@@ -281,7 +281,7 @@ class WX : CommonActionBarFragment() {
                 }
                 true
             }
-            ObjectFab(this, this, R.id.fab2, GlobalVariables.ICON_ADD2) {
+            ObjectFab(this, R.id.fab2, GlobalVariables.ICON_ADD2) {
                 val headerSize: Float
                 val tabStr = UtilitySpc.checkSpc()
                 if (UIPreferences.checkspc || UIPreferences.checktor || UIPreferences.checkwpc && (tabStr[0] != "SPC" || tabStr[1] != "MISC")) {

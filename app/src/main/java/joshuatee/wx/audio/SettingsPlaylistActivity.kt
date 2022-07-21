@@ -49,7 +49,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private var playListItems = mutableListOf<String>()
     private var ridFav = ""
     private val prefToken = "PLAYLIST"
-    private lateinit var ca: PlayListAdapter
+    private lateinit var adapter: PlayListAdapter
     private lateinit var fabPause: ObjectFab
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
@@ -58,14 +58,14 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
         toolbarBottom.setOnMenuItemClickListener(this)
-        ObjectFab(this, this, R.id.fab) { playAll() }
-        fabPause = ObjectFab(this, this, R.id.fab3) { playItemFab() }
+        ObjectFab(this, R.id.fab) { playAll() }
+        fabPause = ObjectFab(this, R.id.fab3) { playItemFab() }
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             GlobalVariables.ICON_PAUSE_PRESSED
         } else {
             GlobalVariables.ICON_PAUSE_WHITE
         }
-        fabPause.fabSetResDrawable(this, icon)
+        fabPause.fabSetResDrawable(icon)
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.setSingleChoiceItems { dialog, which ->
             val name = diaAfd.getItem(which)
@@ -103,23 +103,19 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         toolbar.subtitle = "Tap item to play, view, delete or move."
         ridFav = Utility.readPref(this, prefToken, "")
         updateList()
-        val recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
-        ca = PlayListAdapter(playListItems)
-        recyclerView.recyclerView.adapter = ca
-        ca.setListener(::itemSelected)
+        val recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
+        adapter = PlayListAdapter(playListItems)
+        recyclerView.recyclerView.adapter = adapter
+        adapter.setListener(::itemSelected)
         UtilityTts.initTts(this)
         getContent()
     }
 
     private fun getContent() {
         FutureVoid(
-                this@SettingsPlaylistActivity,
-                { UtilityPlayList.downloadAll(this@SettingsPlaylistActivity) },
-                {
-                    updateListNoInit()
-                    ca.notifyDataSetChanged()
-                }
-        )
+                this,
+                { UtilityPlayList.downloadAll(this) })
+                { updateListNoInit(); adapter.notifyDataSetChanged() }
     }
 
     private fun updateList() {
@@ -181,21 +177,25 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun playItemFab() {
-        if (UtilityTts.mediaPlayer != null) UtilityTts.playMediaPlayer(1)
+        if (UtilityTts.mediaPlayer != null) {
+            UtilityTts.playMediaPlayer(1)
+        }
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             GlobalVariables.ICON_PAUSE_PRESSED
         } else {
             GlobalVariables.ICON_PAUSE
         }
-        fabPause.fabSetResDrawable(this, icon)
+        fabPause.fabSetResDrawable(icon)
         if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
             UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
     }
 
     private fun playAll() {
-        fabPause.fabSetResDrawable(this, GlobalVariables.ICON_PAUSE)
-        if (isStoragePermissionGranted) UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
+        fabPause.fabSetResDrawable(GlobalVariables.ICON_PAUSE)
+        if (isStoragePermissionGranted) {
+            UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
+        }
         if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
             UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
@@ -213,18 +213,18 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         ridFav = ridFav.replace(":" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0], "")
         Utility.writePref(this, prefToken, ridFav)
         Utility.removePref(this, "PLAYLIST_" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0])
-        ca.deleteItem(position)
+        adapter.deleteItem(position)
         UIPreferences.playlistStr = ridFav
     }
 
     private fun moveDownItem(position: Int) {
         UIPreferences.playlistStr = UtilityUI.moveDown(this, prefToken, playListItems, position)
-        ca.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     private fun moveUpItem(position: Int) {
         UIPreferences.playlistStr = UtilityUI.moveUp(this, prefToken, playListItems, position)
-        ca.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     private fun viewItem(position: Int) {

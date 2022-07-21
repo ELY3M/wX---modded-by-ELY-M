@@ -84,7 +84,7 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() {
         FutureVoid(this, { bitmap = imageUrl.getImage() }, ::showImage)
-        FutureVoid(this, { html = UtilityDownload.getTextProduct(this@SpcFireOutlookActivity, textProduct) }, ::showText)
+        FutureVoid(this, { html = UtilityDownload.getTextProduct(this, textProduct) }, ::showText)
     }
 
     private fun showImage() {
@@ -94,7 +94,7 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
             objectCardImage.setImage(bitmap)
         }
         objectCardImage.setOnClickListener {
-            ObjectIntent.showImage(this@SpcFireOutlookActivity, arrayOf(imageUrl, textProduct, "true"))
+            ObjectIntent.showImage(this, arrayOf(imageUrl, textProduct, "true"))
         }
     }
 
@@ -108,10 +108,10 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, this, textProduct, bitmap, objectCardText.text)
+            R.id.action_share_all -> UtilityShare.bitmap(this, textProduct, bitmap, objectCardText.text)
             R.id.action_share_text -> UtilityShare.text(this, textProduct, objectCardText.text)
             R.id.action_share_url -> UtilityShare.text(this, textProduct, textProduct)
-            R.id.action_share_image -> UtilityShare.bitmap(this, this, textProduct, bitmap)
+            R.id.action_share_image -> UtilityShare.bitmap(this, textProduct, bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

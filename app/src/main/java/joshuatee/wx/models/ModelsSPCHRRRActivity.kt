@@ -56,7 +56,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
-    private lateinit var drw: ObjectNavDrawer
+    private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var om: ObjectModelNoSpinner
     private lateinit var activityArguments: Array<String>
     private lateinit var timeMenuItem: MenuItem
@@ -98,8 +98,8 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         miStatusParam1 = menu.findItem(R.id.action_status_param1)
         miStatusParam2 = menu.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
-            fab1 = ObjectFab(this, this, R.id.fab1) { om.leftClick() }
-            fab2 = ObjectFab(this, this, R.id.fab2) { om.rightClick() }
+            fab1 = ObjectFab(this, R.id.fab1) { om.leftClick() }
+            fab2 = ObjectFab(this, R.id.fab2) { om.rightClick() }
             menu.findItem(R.id.action_img1).isVisible = false
             menu.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
@@ -115,13 +115,13 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         miStatus = menu.findItem(R.id.action_status)
         miStatus.title = "in through"
         om.displayData = DisplayDataNoSpinner(this, this, om.numPanes, om)
-        drw = ObjectNavDrawer(this, UtilityModelSpcHrrrInterface.labels, UtilityModelSpcHrrrInterface.params)
+        objectNavDrawer = ObjectNavDrawer(this, UtilityModelSpcHrrrInterface.labels, UtilityModelSpcHrrrInterface.params)
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, false)
-            drw.drawerLayout.closeDrawer(drw.listView)
-            om.displayData.param[om.curImg] = drw.tokens[position]
-            om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
+        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            objectNavDrawer.listView.setItemChecked(position, false)
+            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+            om.displayData.param[om.curImg] = objectNavDrawer.tokens[position]
+            om.displayData.paramLabel[om.curImg] = objectNavDrawer.getLabel(position)
             UtilityModels.getContentNonSpinner(this, om, overlayImg)
             updateMenuTitles()
         }
@@ -130,7 +130,9 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_img1 -> {
                 om.curImg = 0
@@ -164,14 +166,14 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
             R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrrrActivity::class.java, INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
             R.id.action_back -> om.leftClick()
             R.id.action_forward -> om.rightClick()
-            R.id.action_animate -> UtilityModels.getAnimate(this@ModelsSpcHrrrActivity, om, overlayImg)
+            R.id.action_animate -> UtilityModels.getAnimate(this, om, overlayImg)
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(this,this, om.animRan, om)
+                    UtilityModels.legacyShare(this, om.animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -180,7 +182,9 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_region -> genericDialog(UtilityModelSpcHrrrInterface.sectors) { om.sector = UtilityModelSpcHrrrInterface.sectors[it] }
             else -> return super.onOptionsItemSelected(item)
@@ -206,7 +210,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         om.run = om.rtd.mostRecentRun
         (om.startStep until om.endStep).forEach { om.times.add(String.format(Locale.US, "%02d", it)) }
         UtilityModels.updateTime(UtilityString.getLastXChars(om.run, 2), om.rtd.mostRecentRun, om.times, "", false)
-        om.setTimeIdx(Utility.readPref(this@ModelsSpcHrrrActivity, om.prefRunPosn, 1))
+        om.setTimeIdx(Utility.readPref(this, om.prefRunPosn, 1))
         getContent()
     }
 
@@ -236,12 +240,12 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {

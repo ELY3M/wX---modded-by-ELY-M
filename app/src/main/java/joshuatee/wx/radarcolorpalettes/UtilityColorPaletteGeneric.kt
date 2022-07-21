@@ -92,15 +92,9 @@ object UtilityColorPaletteGeneric {
                 if (items.size > 4) {
                     if (priorLineHas6) {
                         objectColorPaletteLines.add(ObjectColorPaletteLine(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset - 1).toInt(), r, g, b))
-//                        objectColorPaletteLines.add(ObjectColorPaletteLine(items){
-//                            ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt()
-//                        })
                         objectColorPaletteLines.add(ObjectColorPaletteLine(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt(), items[2], items[3], items[4]))
                         priorLineHas6 = false
                     } else {
-//                        objectColorPaletteLines.add(ObjectColorPaletteLine(items){
-//                            ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt()
-//                        })
                         objectColorPaletteLines.add(ObjectColorPaletteLine(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt(), items[2], items[3], items[4]))
                     }
                     if (items.size > 7) {

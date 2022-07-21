@@ -37,7 +37,7 @@ object UtilityNwsRadarMosaic {
         val sites = mutableListOf<RID>()
         cityToLatLon.forEach { m ->
             sites.add(RID(m.key, m.value))
-            sites.last().distance = LatLon.distance(latLon, m.value, DistanceUnit.MILE).toInt()
+            sites.last().distance = LatLon.distance(latLon, m.value, DistanceUnit.MILE)
         }
         sites.sortBy { it.distance }
         return sites[0].name

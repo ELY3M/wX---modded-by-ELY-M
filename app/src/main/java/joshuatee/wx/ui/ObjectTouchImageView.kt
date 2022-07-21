@@ -39,37 +39,37 @@ class ObjectTouchImageView {
     private var prefTokenIdx = ""
     private var drw: ObjectNavDrawer? = null
 
-    constructor(activity: Activity, context: Context, resourceId: Int) {
+    constructor(activity: Activity, resourceId: Int) {
         img = activity.findViewById(resourceId)
-        this.context = context
+        this.context = activity
     }
 
-    constructor(activity: Activity, context: Context, toolbar: Toolbar, resourceId: Int) : this(activity, context, resourceId) {
+    constructor(activity: Activity, toolbar: Toolbar, resourceId: Int) : this(activity, resourceId) {
         setOnClickListener {
             UtilityToolbar.showHide(toolbar)
         }
     }
 
-    constructor(activity: Activity, context: Context, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int) : this(activity, context, resourceId) {
+    constructor(activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int) : this(activity, resourceId) {
         setOnClickListener {
             UtilityToolbar.showHide(toolbar, toolbarBottom)
         }
     }
 
-    constructor(activity: Activity, context: Context, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String) {
+    constructor(activity: Activity, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String) {
         img = activity.findViewById(resourceId)
-        this.context = context
+        this.context = activity
         this.drw = drw
         this.prefTokenIdx = prefTokenIdx
     }
 
-    constructor(activity: Activity, context: Context, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
-    ) : this(activity, context, resourceId, drw, prefTokenIdx) {
+    constructor(activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
+    ) : this(activity, resourceId, drw, prefTokenIdx) {
         setOnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
-    constructor(activity: Activity, context: Context, toolbar: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
-    ) : this(activity, context, resourceId, drw, prefTokenIdx) {
+    constructor(activity: Activity, toolbar: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
+    ) : this(activity, resourceId, drw, prefTokenIdx) {
         setOnClickListener { UtilityToolbar.showHide(toolbar) }
     }
 
@@ -105,7 +105,7 @@ class ObjectTouchImageView {
         img.setZoom(zoom)
     }
 
-    fun setListener(context: Context, drw: ObjectNavDrawer, fn: () -> Unit) {
+    fun setListener(drw: ObjectNavDrawer, fn: () -> Unit) {
         img.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
                 if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, fn)
@@ -124,7 +124,7 @@ class ObjectTouchImageView {
         }
     }
 
-    fun imgSavePosnZoom(context: Context, prefStr: String) {
+    fun imgSavePosnZoom(prefStr: String) {
         if (imageLoaded) {
             val poi = img.scrollPosition
             var z = img.currentZoom

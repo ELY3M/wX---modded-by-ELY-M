@@ -97,6 +97,6 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun radarInterface() {
         val radarLabel = Utility.getRadarSiteName(radarSite)
         val state = radarLabel.split(",").safeGet(0)
-        ObjectIntent.showRadar(this@USAlertsDetailActivity, arrayOf(radarSite, state, "N0Q", ""))
+        ObjectIntent.showRadar(this, arrayOf(radarSite, state, "N0Q", ""))
     }
 }

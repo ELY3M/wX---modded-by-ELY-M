@@ -86,12 +86,10 @@ class NhcStormActivity : BaseActivity() {
         title = stormData.name + " " + stormData.classification
         toolbar.subtitle = stormData.forTopHeader()
         product = "MIATCP${stormData.binNumber}"
-
         textProductUrl = stormData.advisoryNumber
         if (textProductUrl.startsWith("HFO")) {
             office = "HFO"
         }
-
         if (UtilityUI.isLandScape(this)) {
             imagesPerRow = 3
         }
@@ -105,8 +103,6 @@ class NhcStormActivity : BaseActivity() {
 
     private fun getContent() {
         FutureVoid( this, ::downloadImages, ::showImages)
-//        FutureText(this, product, ::showText)
-        UtilityLog.d("wxNHC2", textProductUrl)
         FutureText(this, textProductUrl, ::showText)
     }
 
@@ -128,12 +124,12 @@ class NhcStormActivity : BaseActivity() {
             if (bitmap.width > 100) {
                 val objectCardImage: ObjectCardImage
                 if (numberOfImages % imagesPerRow == 0) {
-                    val objectLinearLayout = ObjectLinearLayout(this@NhcStormActivity, linearLayoutImage.get())
+                    val objectLinearLayout = ObjectLinearLayout(this, linearLayoutImage.get())
                     objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
                     horizontalLinearLayouts.add(objectLinearLayout)
-                    objectCardImage = ObjectCardImage(this@NhcStormActivity, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
+                    objectCardImage = ObjectCardImage(this, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
                 } else {
-                    objectCardImage = ObjectCardImage(this@NhcStormActivity, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
+                    objectCardImage = ObjectCardImage(this, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
                 }
                 numberOfImages += 1
                 objectCardImage.setOnClickListener {
@@ -142,7 +138,7 @@ class NhcStormActivity : BaseActivity() {
                         url = url.dropLast(2)
                     }
                     val fullUrl = url + imageUrls[index]
-                    ObjectIntent.showImage(this@NhcStormActivity, arrayOf(fullUrl, ""))
+                    ObjectIntent.showImage(this, arrayOf(fullUrl, ""))
                 }
             }
         }
@@ -150,7 +146,7 @@ class NhcStormActivity : BaseActivity() {
 
     fun showText(s: String) {
         linearLayoutText.removeAllViews()
-        objectCardText = ObjectCardText(this@NhcStormActivity, linearLayoutText.get(), toolbar, toolbarBottom)
+        objectCardText = ObjectCardText(this, linearLayoutText.get(), toolbar, toolbarBottom)
         if (s.contains("<")) {
             objectCardText.text = Utility.fromHtml(s)
         } else {
@@ -161,7 +157,7 @@ class NhcStormActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_cloud -> ObjectIntent.showVisNhc(this, stormData.goesUrl)
-            R.id.action_share -> UtilityShare.text(this, this, stormData.name, "", bitmaps)
+            R.id.action_share -> UtilityShare.text(this, stormData.name, "", bitmaps)
             R.id.action_MIATCPEP2 -> ObjectIntent.showWpcText(this, arrayOf("${office}TCP${stormData.binNumber}"))
             R.id.action_MIATCMEP2 -> ObjectIntent.showWpcText(this, arrayOf("${office}TCM${stormData.binNumber}"))
             R.id.action_MIATCDEP2 -> ObjectIntent.showWpcText(this, arrayOf("${office}TCD${stormData.binNumber}"))

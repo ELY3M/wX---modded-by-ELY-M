@@ -39,7 +39,7 @@ object RadarGeometry {
     private const val caCnt = 161792
     private const val mxCnt = 151552
 //    var countState = 200000 // v3 205748
-    private const val countStateUs = 205748
+    private var countStateUs = 205748
     var countState = 205748
     var countHw = 862208 // on disk size 3448832 yields  862208
     const val countHwExt = 770048 // on disk 3080192 yields 770048
@@ -68,6 +68,7 @@ object RadarGeometry {
         if (RadarPreferences.radarStateHires) {
             stateLinesFileResId = R.raw.statev3
             countState = 1166552
+            countStateUs = 1166552
         }
         if (RadarPreferences.radarCamxBorders) {
             countState += caCnt + mxCnt

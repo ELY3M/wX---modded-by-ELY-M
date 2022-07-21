@@ -57,9 +57,9 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         homeScreenFavOrig = favoriteString
         toolbar.subtitle = "Tap item to delete or move."
         UtilityToolbar.fullScreenMode(toolbar, false)
-        ObjectFab(this, this, R.id.fab, GlobalVariables.ICON_ADD) { dialogueMain.show() }
+        ObjectFab(this, R.id.fab, GlobalVariables.ICON_ADD) { dialogueMain.show() }
         updateList(true)
-        recyclerView = ObjectRecyclerView(this, this, R.id.card_list, labels, ::prodClicked)
+        recyclerView = ObjectRecyclerView(this, R.id.card_list, labels, ::prodClicked)
         dialogueMain = ObjectDialogue(this, "Select text products:", UtilityHomeScreen.localChoicesText + UtilityWpcText.labels)
         dialogueMain.setSingleChoiceItems { dialog, which ->
             alertDialogClicked(dialogueMain, "TXT-", which)

@@ -188,7 +188,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             })
         }
         UtilitySpcMeso.create()
-        drw = ObjectNavDrawerCombo(this, UtilitySpcMeso.groups, UtilitySpcMeso.longCodes, UtilitySpcMeso.shortCodes, this, "")
+        drw = ObjectNavDrawerCombo(this, UtilitySpcMeso.groups, UtilitySpcMeso.longCodes, UtilitySpcMeso.shortCodes, "")
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
             setAndLaunchParam(drw.getToken(groupPosition, childPosition), groupPosition, childPosition)
@@ -206,22 +206,22 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        favListParm = UtilityFavorites.setupMenu(this@SpcMesoActivity, UIPreferences.spcMesoFav, displayData.param[curImg], prefToken)
+        favListParm = UtilityFavorites.setupMenu(this, UIPreferences.spcMesoFav, displayData.param[curImg], prefToken)
         invalidateOptionsMenu()
         if (UIPreferences.spcMesoFav.contains(":" + displayData.param[curImg] + ":"))
             star.setIcon(GlobalVariables.STAR_ICON)
         else
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
-        FutureVoid(this@SpcMesoActivity,
+        FutureVoid(this,
                 {
                     (0 until numPanes).forEach {
-                        displayData.bitmap[it] = UtilitySpcMesoInputOutput.getImage(this@SpcMesoActivity, displayData.param[it], sector)
+                        displayData.bitmap[it] = UtilitySpcMesoInputOutput.getImage(this, displayData.param[it], sector)
                     }
                 }
         )  {
                 (0 until numPanes).forEach {
                 if (numPanes > 1) {
-                    UtilityImg.resizeViewAndSetImage(this@SpcMesoActivity, displayData.bitmap[it], displayData.img[it])
+                    UtilityImg.resizeViewAndSetImage(this, displayData.bitmap[it], displayData.img[it])
                 } else {
                     displayData.img[it].setImageBitmap(displayData.bitmap[it])
                 }
@@ -231,27 +231,27 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             if (!firstRun) {
                 (0 until numPanes).forEach {
                     displayData.img[it].setZoom(
-                            Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_ZOOM", 1.0f),
-                            Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_X", 0.5f),
-                            Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_Y", 0.5f)
+                            Utility.readPref(this, prefModel + numPanes + it.toString() + "_ZOOM", 1.0f),
+                            Utility.readPref(this, prefModel + numPanes + it.toString() + "_X", 0.5f),
+                            Utility.readPref(this, prefModel + numPanes + it.toString() + "_Y", 0.5f)
                     )
                 }
                 firstRun = true
             }
             imageLoaded = true
-            Utility.writePref(this@SpcMesoActivity, prefParam + curImg, displayData.param[curImg])
-            Utility.writePref(this@SpcMesoActivity, prefParamLabel + curImg, displayData.paramLabel[curImg])
+            Utility.writePref(this, prefParam + curImg, displayData.param[curImg])
+            Utility.writePref(this, prefParamLabel + curImg, displayData.paramLabel[curImg])
             setTitle()
         }
     }
 
     private fun getAnimate(frames: Int) {
         FutureVoid(
-                this@SpcMesoActivity,
+                this,
                 {
                     (0 until numPanes).forEach {
                         displayData.animDrawable[it] = UtilitySpcMesoInputOutput.getAnimation(
-                                this@SpcMesoActivity,
+                                this,
                                 displayData.param[it],
                                 sector,
                                 frames
@@ -420,10 +420,10 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 //                        UtilityShare.animGif(this, title, displayData.animDrawable[0])
 //                    } else {
                         if (numPanes == 1) {
-                            UtilityShare.bitmap(this, this, title, displayData.bitmap[0])
+                            UtilityShare.bitmap(this, title, displayData.bitmap[0])
                         } else {
                             title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
-                            UtilityShare.bitmap(this, this, title, displayData.bitmap[curImg])
+                            UtilityShare.bitmap(this, title, displayData.bitmap[curImg])
                         }
 //                    }
                 }
@@ -445,14 +445,14 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun getHelp() {
         FutureText2(
-                this@SpcMesoActivity,
+                this,
                 { ("${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() },
                 { s ->
                     var helpText = s
                     if (helpText.contains("Page Not Found")) {
                         helpText = "Help is not available for this parameter."
                     }
-                    ObjectDialogue(this@SpcMesoActivity, Utility.fromHtml(helpText))
+                    ObjectDialogue(this, Utility.fromHtml(helpText))
                 }
         )
     }

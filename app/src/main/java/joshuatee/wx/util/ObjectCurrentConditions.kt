@@ -40,13 +40,11 @@ class ObjectCurrentConditions {
     var status = ""
         private set
     private var timeStringUtc = ""
-    lateinit var context: Context
     lateinit var latLon: LatLon
 
     constructor()
 
     constructor(context: Context, locationNumber: Int) {
-        this.context = context
         if (Location.isUS(locationNumber)) {
             latLon = Location.getLatLon(locationNumber)
             process(context, Location.getLatLon(locationNumber))
@@ -63,7 +61,6 @@ class ObjectCurrentConditions {
     }
 
     constructor(context: Context, latLon: LatLon) {
-        this.context = context
         this.latLon = latLon
         process(context, latLon)
 //        data = items[0]
@@ -116,9 +113,9 @@ class ObjectCurrentConditions {
 
     // compare the timestamp in the metar to the current time
     // if older then a certain amount, download the 2nd closest site and process
-    fun timeCheck() {
+    fun timeCheck(context: Context) {
         if (isUS) {
-            val obsTime: ObjectDateTime = ObjectDateTime.fromObs(timeStringUtc)
+            val obsTime = ObjectDateTime.fromObs(timeStringUtc)
             val currentTime = ObjectDateTime.getCurrentTimeInUTC()
             val isTimeCurrent = ObjectDateTime.timeDifference(currentTime, obsTime.dateTime, 120)
             if (!isTimeCurrent) {

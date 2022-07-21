@@ -61,7 +61,7 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         title = "Canadian Locations"
         toolbar.subtitle = "Select a location and then use the back arrow to save."
         cityDisplay = false
-        objectRecyclerView = ObjectRecyclerView(this, this, R.id.card_list, provArr.toMutableList(), ::provinceClicked)
+        objectRecyclerView = ObjectRecyclerView(this, R.id.card_list, provArr.toMutableList(), ::provinceClicked)
     }
 
     private fun provinceClicked(position: Int) {
@@ -86,7 +86,7 @@ class SettingsLocationCanadaActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this@SettingsLocationCanadaActivity, ::download, ::update)
+        FutureVoid(this, ::download, ::update)
     }
 
     private fun download() {

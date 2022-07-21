@@ -64,9 +64,10 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.awcmosaic, iconsEvenlySpaced = true, bottomToolbar = false)
         objectNavDrawer = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors) { getContent(product) }
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, "")
+        img = ObjectTouchImageView(this, toolbar, R.id.iv, objectNavDrawer, "")
+        toolbar.setOnClickListener { objectNavDrawer.open() }
         img.setMaxZoom(8.0f)
-        img.setListener(this, objectNavDrawer) { getContent(product) }
+        img.setListener(objectNavDrawer) { getContent(product) }
         sector = Utility.readPref(this, prefTokenSector, sector)
         product = Utility.readPref(this, prefTokenProduct, product)
         objectNavDrawer.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)
@@ -89,13 +90,13 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
         img.setBitmap(bitmap)
         animRan = false
         img.firstRunSetZoomPosn(prefImagePosition)
-        Utility.writePref(this@AwcRadarMosaicActivity, prefTokenSector, objectNavDrawer.url)
-        Utility.writePref(this@AwcRadarMosaicActivity, prefTokenProduct, product)
+        Utility.writePref(this, prefTokenSector, objectNavDrawer.url)
+        Utility.writePref(this, prefTokenProduct, product)
     }
 
     private fun getAnimate() {
-        FutureVoid(this@AwcRadarMosaicActivity,
-            { animDrawable = UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, objectNavDrawer.url, product) })
+        FutureVoid(this,
+            { animDrawable = UtilityAwcRadarMosaic.getAnimation(this, objectNavDrawer.url, product) })
             { animRan = UtilityImgAnim.startAnimation(animDrawable, img) }
     }
 
@@ -131,7 +132,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
                     if (animRan) {
                         //UtilityShare.animGif(this, "NWS mosaic", animDrawable)
                     } else {
-                        UtilityShare.bitmap(this, this, "NWS mosaic", bitmap)
+                        UtilityShare.bitmap(this, "NWS mosaic", bitmap)
                     }
                 }
             }
@@ -141,7 +142,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, prefImagePosition)
+        img.imgSavePosnZoom(prefImagePosition)
         super.onStop()
     }
 }

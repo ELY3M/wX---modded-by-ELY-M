@@ -47,7 +47,9 @@ internal object UtilityColorPalette165 {
         }
         val diff = 10
         objectColorPaletteLines.forEach {
-            (0 until diff).forEach { _ -> objectColorPalette.putLine(it) }
+            (0 until diff).forEach { _ ->
+                objectColorPalette.putLine(it)
+            }
         }
     }
 

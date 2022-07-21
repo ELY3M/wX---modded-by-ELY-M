@@ -24,29 +24,40 @@ package joshuatee.wx.radar
 
 object UtilityWXGLTextObject {
 
-    fun hideLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach { textObjects[it].hideLabels() }
-
-    fun showLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach { textObjects[it].addLabels() }
-
-    fun updateSpotterLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
-        (0 until numPanes).forEach { textObjects[it].addSpottersLabels() }
+    fun hideLabels(numPanes: Int, textObjects: List<WXGLTextObject>) {
+        (0 until numPanes).forEach {
+            textObjects[it].hideLabels()
+        }
     }
 
-    fun updateObservations(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
+    fun showLabels(numPanes: Int, textObjects: List<WXGLTextObject>) {
+        (0 until numPanes).forEach {
+            textObjects[it].addLabels()
+        }
+    }
+
+    fun updateSpotterLabels(numPanes: Int, textObjects: List<WXGLTextObject>) {
+        (0 until numPanes).forEach {
+            textObjects[it].addSpottersLabels()
+        }
+    }
+
+    fun updateObservations(numPanes: Int, textObjects: List<WXGLTextObject>) {
         (0 until numPanes).forEach {
             textObjects[it].initializeObservations()
             textObjects[it].addObservations()
         }
     }
 
-    fun updateWpcFronts(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
-        (0 until numPanes).forEach { textObjects[it].addWpcPressureCenters() }
+    fun updateWpcFronts(numPanes: Int, textObjects: List<WXGLTextObject>) {
+        (0 until numPanes).forEach {
+            textObjects[it].addWpcPressureCenters()
+        }
     }
+
     
     //elys mod    
-    fun updateHailLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
+    fun updateHailLabels(numPanes: Int, textObjects: List<WXGLTextObject>) {
         (0 until numPanes).forEach {
             textObjects[it].initializeHailLabels()
             textObjects[it].addHailLabels()

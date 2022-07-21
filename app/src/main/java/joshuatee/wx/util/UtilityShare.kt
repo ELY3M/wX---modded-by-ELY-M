@@ -34,13 +34,13 @@ object UtilityShare {
 
     fun prepTextForShare(text: String) = text.replace(GlobalVariables.newline, GlobalVariables.newline + GlobalVariables.newline)
 
-    fun textAsAttachment(activity: Activity, context: Context, subject: String, text: String, filename: String) {
-        val dir = File(context.filesDir.toString() + "/shared")
+    fun textAsAttachment(activity: Activity, subject: String, text: String, filename: String) {
+        val dir = File(activity.filesDir.toString() + "/shared")
         if (!dir.mkdirs()) {
-            UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+            UtilityLog.d("wx", "failed to mkdir: " + activity.filesDir + "/shared")
         }
         val file = File(dir, filename)
-        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(activity, "${GlobalVariables.packageNameAsString}.fileprovider", file)
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
@@ -78,16 +78,16 @@ object UtilityShare {
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
-    fun text(activity: Activity, context: Context, subject: String, text: String, bitmaps: List<Bitmap>) {
+    fun text(activity: Activity, subject: String, text: String, bitmaps: List<Bitmap>) {
         val bitmap = UtilityImg.mergeImagesVertically(bitmaps)
-        bitmap(activity, context, subject, bitmap, text)
+        bitmap(activity, subject, bitmap, text)
     }
 
-    fun bitmap(activity: Activity, context: Context, subject: String, bitmap: Bitmap, text: String = "") {
-        val dir = File(context.filesDir.toString() + "/shared")
-        if (!dir.mkdirs()) UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+    fun bitmap(activity: Activity, subject: String, bitmap: Bitmap, text: String = "") {
+        val dir = File(activity.filesDir.toString() + "/shared")
+        if (!dir.mkdirs()) UtilityLog.d("wx", "failed to mkdir: " + activity.filesDir + "/shared")
         val file = File(dir, "img1.png")
-        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(activity, "${GlobalVariables.packageNameAsString}.fileprovider", file)
         try {
             val fos = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)

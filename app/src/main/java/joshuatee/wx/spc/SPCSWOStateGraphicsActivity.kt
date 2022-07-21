@@ -70,7 +70,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, iconsEvenlySpaced = true, bottomToolbar = false)
         day = intent.getStringArrayExtra(NO)!![0]
         state = Utility.getWfoSiteName(Location.wfo).split(",")[0]
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
+        img = ObjectTouchImageView(this, toolbar, R.id.iv)
         getContent()
     }
 
@@ -102,14 +102,14 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
                 state = GlobalArrays.states[it].split(":")[0]
                 getContent()
             }
-            R.id.action_share -> UtilityShare.bitmap(this, this, "$state SWO D$day", bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this@SpcSwoStateGraphicsActivity, list)
+        val objectDialogue = ObjectDialogue(this, list)
         objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
@@ -123,7 +123,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, imgPrefToken)
+        img.imgSavePosnZoom(imgPrefToken)
         super.onStop()
     }
 }
