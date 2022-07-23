@@ -22,33 +22,31 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.objects.TextSize
 
 class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
 
     private val objectCard = ObjectCard(context)
-    private val textViews = mutableListOf<TextView>()
+    private val textViews = mutableListOf<ObjectTextView>()
 
     init {
-        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.HORIZONTAL, Gravity.CENTER)
-        objectLinearLayout.linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        objectLinearLayout.linearLayout.isBaselineAligned = false
-        objectCard.addView(objectLinearLayout)
+        val objectLinearLayout = HBox(context, Gravity.CENTER)
+        objectLinearLayout.matchParent()
+        objectLinearLayout.isBaselineAligned = false
+        objectCard.addView(objectLinearLayout.get())
         repeat(numberOfColumns) {
-            val linearLayout = LinearLayout(context)
-            linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
-            objectLinearLayout.linearLayout.addView(linearLayout)
-            val textView = TextView(context)
+            val hbox = HBox(context)
+            hbox.wrap()
+            objectLinearLayout.addWidget(hbox.get())
+            val textView = ObjectTextView(context)
             textViews.add(textView)
             textView.gravity = Gravity.START
-            textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            linearLayout.addView(textView)
+            textView.wrap()
+            hbox.addWidget(textView.get())
         }
     }
 
@@ -61,7 +59,7 @@ class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
         if (list.size == textViews.size) {
             list.indices.forEach {
                 textViews[it].text = list[it]
-                textViews[it].setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+                textViews[it].refreshTextSize(TextSize.SMALL)
             }
         }
     }

@@ -73,6 +73,7 @@ open class ObjectOglBuffers() {
     var type = PolygonType.NONE
     var geotype = GeographyType.NONE
     var warningType: ObjectPolygonWarning? = null
+    var hailIcon: String = "hailunknown.png"
 
     constructor(type: PolygonType) : this() { this.type = type }
 

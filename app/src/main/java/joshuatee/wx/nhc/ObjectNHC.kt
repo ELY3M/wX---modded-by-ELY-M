@@ -28,7 +28,7 @@ import android.widget.LinearLayout
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.ObjectLinearLayout
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
@@ -40,7 +40,7 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
     private val cardNotificationHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
     private var numberOfImages = 0
     var imagesPerRow = 2
-    private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
+    private val horizontalLinearLayouts = mutableListOf<VBox>()
     private val regionMap = mutableMapOf<NhcOceanEnum, ObjectNhcRegionSummary>()
     private var stormDataList = mutableListOf<ObjectNhcStormDetails>()
     private var ids = listOf<String>()
@@ -69,8 +69,8 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
     private val objectCardImages = mutableListOf<ObjectCardImage>()
     val urls = mutableListOf<String>()
     private val imageTitles = mutableListOf<String>()
-    private val linearLayoutText = ObjectLinearLayout(context, linearLayout1)
-    private val linearLayoutImages = ObjectLinearLayout(context, linearLayout1)
+    private val boxText = VBox(context, linearLayout1)
+    private val linearLayoutImages = VBox(context, linearLayout1)
 
     init {
         if (UtilityUI.isLandScape(context)) {
@@ -156,10 +156,10 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
     }
 
     fun showTextData() {
-        linearLayoutText.removeAllViewsInLayout()
+        boxText.removeAllViewsInLayout()
         val muteStr = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
         notificationCard = ObjectCardText(context, cardNotificationHeaderText + muteStr)
-        linearLayoutText.addView(notificationCard!!.get())
+        boxText.addWidget(notificationCard!!.get())
         notificationCard?.setOnClickListener { clearNhcNotificationBlock() }
         if (muteStr != "") {
             notificationCard?.visibility = View.VISIBLE
@@ -188,7 +188,7 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
                         Utility.safeGet(windSpeedProbabilities, index),
                 )
                 stormDataList.add(objectNhcStormDetails)
-                val card = ObjectCardNhcStormReportItem(context, linearLayoutText.get(), objectNhcStormDetails)
+                val card = ObjectCardNhcStormReportItem(context, boxText, objectNhcStormDetails)
                 card.setListener { ObjectIntent.showNhcStorm(context, objectNhcStormDetails) }
             }
         }
@@ -200,12 +200,13 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
             val objectCardImage: ObjectCardImage
             val bitmap = UtilityImg.getBlankBitmap()
             if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(context, linearLayoutImages.get())
-                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
+                // TODO FIXME
+                val objectLinearLayout = VBox(context, linearLayoutImages.get())
+                objectLinearLayout.orientation = LinearLayout.HORIZONTAL
                 horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
+                objectCardImage = ObjectCardImage(context, objectLinearLayout.get(), bitmap, imagesPerRow)
             } else {
-                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
+                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().get(), bitmap, imagesPerRow)
             }
             numberOfImages += 1
             objectCardImage.setOnClickListener { ObjectIntent.showImage(context, arrayOf(urls[index], imageTitles[index])) }

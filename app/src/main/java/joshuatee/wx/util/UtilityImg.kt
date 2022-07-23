@@ -42,6 +42,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.ui.UtilityUI
 
@@ -70,7 +71,7 @@ object UtilityImg {
     fun getBitmapAddWhiteBackground(context: Context, imgUrl: String) =
             layerDrawableToBitmap(listOf(ColorDrawable(Color.WHITE), BitmapDrawable(context.resources, imgUrl.getImage())))
 
-    fun imgRestorePosnZoom(context: Context, img: TouchImageView2, prefStr: String) {
+    fun imgRestorePosnZoom(context: Context, img: TouchImage, prefStr: String) {
         img.setZoom(
                 Utility.readPref(context, prefStr + "_ZOOM", 1.0f),
                 Utility.readPref(context, prefStr + "_X", 0.5f),
@@ -78,7 +79,7 @@ object UtilityImg {
         )
     }
 
-    fun imgSavePosnZoom(context: Context, img: TouchImageView2, prefStr: String) {
+    fun imgSavePosnZoom(context: Context, img: TouchImage, prefStr: String) {
         val poi = img.scrollPosition
         var z = img.currentZoom
         if (poi != null) {

@@ -24,14 +24,13 @@ package joshuatee.wx.nhc
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.ObjectCard
-import joshuatee.wx.ui.ObjectLinearLayout
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.ui.ObjectTextView
 import java.util.*
 
-class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout, stormData: ObjectNhcStormDetails) {
+class ObjectCardNhcStormReportItem(context: Context, box: VBox, stormData: ObjectNhcStormDetails) {
 
     private val objectCard = ObjectCard(context)
     private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
@@ -42,17 +41,17 @@ class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout,
     private val textViewBottom = ObjectTextView(context, backgroundText = true)
 
     init {
-        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
-        objectLinearLayout.addViews(listOf(textViewTop.get(), textViewTime.get(), textViewMovement.get()))
-        objectLinearLayout.addViews(listOf(textViewPressure.get(), textViewWindSpeed.get(), textViewBottom.get()))
-        objectCard.addView(objectLinearLayout.linearLayout)
+        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
+        vbox.addViews(listOf(textViewTop.get(), textViewTime.get(), textViewMovement.get()))
+        vbox.addViews(listOf(textViewPressure.get(), textViewWindSpeed.get(), textViewBottom.get()))
+        objectCard.addView(vbox.get())
         textViewTop.text = stormData.name + " (" + stormData.classification + ") " + stormData.center
         textViewTime.text = stormData.dateTime.replace("T", " ").replace(":00.000Z", "Z")
         textViewMovement.text = "Moving: " + stormData.movement
         textViewPressure.text = "Min pressure: " + stormData.pressure
         textViewWindSpeed.text = "Max sustained: " + stormData.intensity
         textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.id.uppercase(Locale.US)
-        linearLayout.addView(objectCard.get())
+        box.addWidget(objectCard.get())
     }
 
     fun get() = objectCard.get()

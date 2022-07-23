@@ -27,6 +27,8 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ObjectWarning
+import joshuatee.wx.radar.LatLon
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityString
 
 class CapAlert {
@@ -57,9 +59,28 @@ class CapAlert {
     private var tornadoThreat = ""
     var motion = ""
     var extended = ""
+    // used for XML
+    private var polygon = ""
 
     fun getClosestRadar(): String {
         return ObjectWarning.getClosestRadarCompute(points)
+    }
+
+    fun getClosestRadarXml(): String {
+        if (points.size > 2) {
+            val latTmp = points[0]
+            val list1 = latTmp.split(",")
+            val lat = list1[0]
+            val lonTmp = points[0]
+            val list2 = lonTmp.split(",")
+            val lon = list2[1]
+            val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, false)
+            if (radarSites.isEmpty()) {
+                return ""
+            }
+            return radarSites[0].name
+        }
+        return ""
     }
 
     companion object {
@@ -78,6 +99,7 @@ class CapAlert {
             capAlert.event = eventText.parse("<cap:event>(.*?)</cap:event>")
             capAlert.vtec = eventText.parse("<valueName>VTEC</valueName>.*?<value>(.*?)</value>")
             capAlert.zones = eventText.parse("<valueName>UGC</valueName>.*?<value>(.*?)</value>")
+            capAlert.polygon = eventText.parse("<cap:polygon>(.*?)</cap:polygon>")
             capAlert.text = ""
             capAlert.text += capAlert.title
             capAlert.text += GlobalVariables.newline + GlobalVariables.newline
@@ -91,6 +113,7 @@ class CapAlert {
             if (UIPreferences.nwsTextRemovelinebreaks) {
                 capAlert.instructions = capAlert.instructions.replace("<br><br>", "<BR><BR>").replace("<br>", " ")
             }
+            capAlert.points = capAlert.polygon.split(" ")
             return capAlert
         }
 

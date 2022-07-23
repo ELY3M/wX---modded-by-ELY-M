@@ -38,19 +38,19 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
 
     private val sectors = listOf("regional", "usa")
     private val nexradCenterList = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var abSwitch: SwitchCompat
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         abSwitch = findViewById(R.id.abSwitch)
         toolbar.subtitle = "Please tap on text for additional help."
         val locations = (1 until Location.numLocations + 1).map {
             "$it: " + Utility.readPref(this, "LOC" + it + "_LABEL", "").take(20)
         }
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Do not show 7day in CC widget",
@@ -58,7 +58,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.cc_widget_show_sevenday
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Download AFD",
@@ -66,7 +66,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_txt_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Download HWO",
@@ -74,7 +74,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_txt_hwo_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Download mosaics",
@@ -82,7 +82,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_mosaics_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Download nexrad radar",
@@ -90,7 +90,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_radar_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Download radar mosaic",
@@ -98,7 +98,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_mosaics_rad_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSpinner(
                         this,
                         "Radar mosaic level",
@@ -108,7 +108,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         sectors
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSpinner(
                         this,
                         "Location",
@@ -118,7 +118,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         locations
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSpinner(
                         this,
                         "Nexrad centered at:",
@@ -128,7 +128,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         nexradCenterList
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Widget check interval in minutes",
@@ -139,7 +139,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         120
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Widget nexrad size",

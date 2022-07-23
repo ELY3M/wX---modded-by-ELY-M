@@ -46,16 +46,16 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var html = ""
     private lateinit var objectCardText: ObjectCardText
     private lateinit var scrollView: ScrollView
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.canada_text)
         scrollView = findViewById(R.id.scrollView)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
-        objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        ObjectCALegal(this, linearLayout, GlobalVariables.canadaEcSitePrefix)
+        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
+        ObjectCALegal(this, box, GlobalVariables.canadaEcSitePrefix)
         product = Utility.readPref(this, "CA_TEXT_LASTUSED", product)
         getContent()
     }

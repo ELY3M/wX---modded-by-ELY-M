@@ -27,9 +27,10 @@ import android.view.View
 import android.widget.LinearLayout
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.ObjectWarning
 
-class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, private val warning: ObjectWarning) {
+class ObjectCardDashAlertItem(val context: Context, val linearLayout: LinearLayout, private val warning: ObjectWarning) {
 
     private val objectCard = ObjectCard(context)
     private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
@@ -37,23 +38,24 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
     private val textViewStart = ObjectTextView(context)
     private val textViewEnd = ObjectTextView(context)
     private val textViewBottom = ObjectTextView(context, backgroundText = true)
-    val radarButton = ObjectButton(context,"Radar", GlobalVariables.ICON_RADAR)
-    val detailsButton = ObjectButton(context,"Details", GlobalVariables.ICON_CURRENT)
+    private val radarButton = ObjectButton(context,"Radar", GlobalVariables.ICON_RADAR)
+    private val detailsButton = ObjectButton(context,"Details", GlobalVariables.ICON_CURRENT)
 
     init {
-        val linearLayoutVertical = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
+        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         listOf(textViewTop, textViewTitle, textViewStart, textViewEnd, textViewBottom).forEach {
-            linearLayoutVertical.addView(it)
+            vbox.addWidget(it.get())
         }
-        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        val linearLayoutHorizontal = LinearLayout(context)
-        linearLayoutHorizontal.layoutParams = layoutParams
-        linearLayoutHorizontal.addView(radarButton.get())
-        linearLayoutHorizontal.addView(detailsButton.get())
-        linearLayoutVertical.addView(linearLayoutHorizontal)
-        objectCard.addView(linearLayoutVertical)
+        val hbox = HBox(context)
+        hbox.wrap()
+        hbox.addWidget(radarButton.get())
+        hbox.addWidget(detailsButton.get())
+        vbox.addLayout(hbox.get())
+        objectCard.addView(vbox)
         setTextFields()
         linearLayout.addView(objectCard.get())
+        radarButton.setOnClickListener { ObjectIntent.showRadarBySite(context, warning.getClosestRadar()) }
+        detailsButton.setOnClickListener { ObjectIntent.showHazard(context, arrayOf(warning.url, "")) }
     }
 
     fun setListener(fn: View.OnClickListener) {
@@ -66,9 +68,5 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
         textViewStart.text = warning.effective.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
         textViewEnd.text = warning.expires.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
         textViewBottom.text = warning.area
-    }
-
-    fun setId(id: Int) {
-        objectCard.setId(id)
     }
 }

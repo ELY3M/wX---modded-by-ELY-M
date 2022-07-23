@@ -37,8 +37,7 @@ class ObjectImageMap(
     private val views: List<View>
 ) {
 
-    // TODO FIXME make private
-    val map: ImageMap = activity.findViewById(resId)
+    private val map: ImageMap = activity.findViewById(resId)
     private var isRadarWithTransparent = false
 
     init {
@@ -72,7 +71,9 @@ class ObjectImageMap(
     fun hideMap() {
         if (map.visibility != View.GONE) {
             map.visibility = View.GONE
-            views.forEach { it.visibility = View.VISIBLE }
+            views.forEach {
+                it.visibility = View.VISIBLE
+            }
             if (isRadarWithTransparent) {
                 UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
             }
@@ -80,7 +81,9 @@ class ObjectImageMap(
     }
 
     private fun setupMap() {
-        views.forEach { it.visibility = View.GONE }
+        views.forEach {
+            it.visibility = View.GONE
+        }
         setupImageMap(toolbar, toolbarBottom)
         map.visibility = View.VISIBLE
     }
@@ -107,4 +110,10 @@ class ObjectImageMap(
         layoutParams.width = MyApplication.dm.widthPixels
         map.layoutParams = layoutParams
     }
+
+    var visibility
+        get() = map.visibility
+        set(value) { map.visibility = value }
+
+    fun get() = map
 }

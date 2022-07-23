@@ -99,8 +99,6 @@ class MyApplication : Application() {
         lateinit var appContext: Context
         var contentResolverLocal: ContentResolver? = null
 
-        val locations = mutableListOf<Location>()
-
         fun initPreferences(context: Context) {
             RadarPreferences.initRadarPreferences()
             UIPreferences.initPreferences(context)

@@ -106,7 +106,9 @@ open class ObjectCardImage {
         objectCard.addView(img)
     }
 
-    fun resetZoom() = img.resetZoom()
+    fun resetZoom() {
+        img.resetZoom()
+    }
 
     protected val card get() = objectCard.get()
 

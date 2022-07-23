@@ -21,7 +21,6 @@
 
 package joshuatee.wx.notifications
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.external.ExternalPoint
@@ -40,8 +39,8 @@ import joshuatee.wx.settings.NotificationPreferences
 internal object UtilityNotificationSpcFireWeather {
 
     fun locationNeedsSpcFireWeather() = (0 until Location.numLocations).any {
-            MyApplication.locations.getOrNull(it)?.notificationSpcFw ?: false
-        }
+        Location.locations.getOrNull(it)?.notificationSpcFw ?: false
+    }
 
     private fun sendSpcFireWeatherNotification(context: Context, locNum: String, day: Int, threatLevel: String, validTime: String): String {
         val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
@@ -55,7 +54,7 @@ internal object UtilityNotificationSpcFireWeather {
         val objectPendingIntents = ObjectPendingIntents(context, SpcFireOutlookSummaryActivity::class.java)
         val cancelString = "spcfwloc$day$locNum$threatLevel$validTime"
         if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
-            val sound = MyApplication.locations[locNumInt].sound && !inBlackout
+            val sound = Location.locations[locNumInt].sound && !inBlackout
             val objectNotification = ObjectNotification(
                     context,
                     sound,
@@ -109,7 +108,7 @@ internal object UtilityNotificationSpcFireWeather {
                         val polygonShape = polygonFrame.build()
                         (1..Location.numLocations).forEach { n ->
                             val locNum = n.toString()
-                            if (MyApplication.locations.getOrNull(n - 1)?.notificationSpcFw == true) {
+                            if (Location.locations.getOrNull(n - 1)?.notificationSpcFw == true) {
                                 // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                                 // call secondary method to send notif if required
                                 if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {

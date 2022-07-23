@@ -59,7 +59,7 @@ class HourlyActivity : BaseActivity() {
     private lateinit var objectCard: ObjectCard
     private lateinit var objectCardVerticalText: ObjectCardVerticalText
     private lateinit var scrollView: ScrollView
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var graphCard: CardView
     private lateinit var graph: GraphView
     private var hourlyData = ObjectHourly()
@@ -74,13 +74,13 @@ class HourlyActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, false)
         scrollView = findViewById(R.id.scrollView)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         graphCard = findViewById(R.id.graphCard)
         graph = findViewById(R.id.graph)
         locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
         objectCard = ObjectCard(this, R.color.black, R.id.graphCard)
         graphCard.visibility = View.GONE
-        objectCardVerticalText = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
+        objectCardVerticalText = ObjectCardVerticalText(this, 5, box, toolbar)
         objectCardVerticalText.setOnClickListener { scrollView.scrollTo(0, 0) }
         title = "Hourly Forecast"
         toolbar.subtitle = Location.getName(locationNumber)

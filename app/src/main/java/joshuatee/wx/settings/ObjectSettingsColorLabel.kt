@@ -24,7 +24,6 @@ package joshuatee.wx.settings
 import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
@@ -40,7 +39,7 @@ internal class ObjectSettingsColorLabel(val context: Context, label: String, pri
     init {
         refreshColor()
         objectTextView.setPadding(UIPreferences.paddingSettings)
-        objectTextView.get().layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        objectTextView.wrap()
         objectTextView.text = label
         objectTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
         objectCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.black))

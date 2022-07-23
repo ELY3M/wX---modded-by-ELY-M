@@ -40,7 +40,7 @@ class SpcSwoSummaryActivity : BaseActivity() {
 
     private val bitmaps = MutableList(8){ UtilityImg.getBlankBitmap() }
     private var imagesPerRow = 2
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -52,13 +52,13 @@ class SpcSwoSummaryActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.spc_swo_summary, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         if (UtilityUI.isLandScape(this)) {
             imagesPerRow = 3
         }
         toolbar.subtitle = "SPC"
         title = "Convective Outlooks"
-        objectImageSummary = ObjectImageSummary(this, linearLayout, bitmaps)
+        objectImageSummary = ObjectImageSummary(this, box, bitmaps)
         getContent()
     }
 

@@ -105,7 +105,7 @@ class SpottersActivity : BaseActivity() {
     private fun showText() {
         markFavorites()
         adapter = AdapterSpotter(spotterList)
-        recyclerView.recyclerView.adapter = adapter
+        recyclerView.adapter = adapter
         title = spotterList.size.toString() + " " + titleString
         adapter.setListener(::itemClicked)
     }
@@ -116,7 +116,9 @@ class SpottersActivity : BaseActivity() {
                 if (view is TextView) {
                     view.setTextColor(Color.WHITE)
                 } else if (view is ViewGroup) {
-                    (0 until view.childCount).forEach { changeSearchViewTextColor(view.getChildAt(it)) }
+                    (0 until view.childCount).forEach {
+                        changeSearchViewTextColor(view.getChildAt(it))
+                    }
                 }
             }
         }

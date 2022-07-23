@@ -22,7 +22,9 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.graphics.Color
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -36,9 +38,9 @@ import joshuatee.wx.util.Utility
 
 class ObjectNavDrawer(val activity: Activity, private var labels: List<String>) {
 
-    val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
-    val listView: ListView = activity.findViewById(R.id.left_drawer)
-    val actionBarDrawerToggle: ActionBarDrawerToggle
+    private val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
+    private val listView: ListView = activity.findViewById(R.id.left_drawer)
+    private val actionBarDrawerToggle: ActionBarDrawerToggle
     var tokens = listOf<String>()
     var index = 0
 
@@ -138,7 +140,33 @@ class ObjectNavDrawer(val activity: Activity, private var labels: List<String>) 
         }
     }
 
+    fun setListener2(fn: AdapterView.OnItemClickListener) {
+        listView.onItemClickListener = fn
+    }
+
+    fun setItemChecked(position: Int, value: Boolean) {
+        listView.setItemChecked(position, value)
+    }
+
     fun open() {
         drawerLayout.openDrawer(listView)
     }
+
+    fun openGravity(gravity: Int) {
+        drawerLayout.openDrawer(gravity)
+    }
+
+    fun close() {
+        drawerLayout.closeDrawer(listView)
+    }
+
+    fun syncState() {
+        actionBarDrawerToggle.syncState()
+    }
+
+    fun onConfigurationChanged(newConfig: Configuration) {
+        actionBarDrawerToggle.onConfigurationChanged(newConfig)
+    }
+
+    fun onOptionsItemSelected(item: MenuItem) = actionBarDrawerToggle.onOptionsItemSelected(item)
 }

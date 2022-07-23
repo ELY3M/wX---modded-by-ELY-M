@@ -133,15 +133,15 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val activityArguments = intent.getStringArrayExtra(RID)
-        if (activityArguments != null && activityArguments.size > 3 ) {
-            if (activityArguments[3] == "true") { // invoked from single pane radar
+        val arguments = intent.getStringArrayExtra(RID)
+        if (arguments != null && arguments.size > 3 ) {
+            if (arguments[3] == "true") { // invoked from single pane radar
                 doNotSavePref = true
                 useSinglePanePref = true
             }
         }
         landScape = UtilityUI.isLandScape(this)
-        numberOfPanes = activityArguments!![2].toIntOrNull() ?: 0
+        numberOfPanes = arguments!![2].toIntOrNull() ?: 0
         panesList = (0 until numberOfPanes).toList()
         UtilityFileManagement.deleteCacheFiles(this)
         isGetContentInProgress = false
@@ -235,11 +235,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             menu.findItem(R.id.action_tilt_blank).isVisible = false
             menu.findItem(R.id.action_tools_blank).isVisible = false
         }
-	
-	//elys mod - I enabled those menus  
+
         // disable new Level3 super-res until NWS is past deployment phase
-        //menu.findItem(R.id.action_n0b).isVisible = false
-        //menu.findItem(R.id.action_n0g).isVisible = false
+	//elys mod - I enabled those menus 
+        menu.findItem(R.id.action_n0b).isVisible = true
+        menu.findItem(R.id.action_n0g).isVisible = true
 
         delay = UtilityImg.animInterval(this)
         panesList.forEach {
@@ -308,8 +308,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         objectImageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToRid)
         oglInView = true
         panesList.forEach {
-            var initialRadarSite = activityArguments[0]
-            if (activityArguments[0] == "") {
+            var initialRadarSite = arguments[0]
+            if (arguments[0] == "") {
                 initialRadarSite = joshuatee.wx.settings.Location.rid
             }
             if (!useSinglePanePref) {
@@ -411,7 +411,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         animateButton.title = animateButtonPlayString
         restartedZoom = true
         panesList.forEach {
-            if (objectImageMap.map.visibility == View.GONE) {
+            if (objectImageMap.visibility == View.GONE) {
                 wxglTextObjects[it].initializeLabels(this)
                 wxglTextObjects[it].addLabels()
             }
@@ -786,7 +786,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_TDWR -> alertDialogTdwr()
             R.id.action_ridmap -> {
                 objectImageMap.toggleMap()
-                oglInView = if (objectImageMap.map.visibility != View.GONE) {
+                oglInView = if (objectImageMap.visibility != View.GONE) {
                     UtilityWXGLTextObject.hideLabels(numberOfPanes, wxglTextObjects)
                     false
                 } else {
@@ -1158,7 +1158,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private fun showMap() {
         objectImageMap.toggleMap()
-        if (objectImageMap.map.visibility != View.GONE) {
+        if (objectImageMap.visibility != View.GONE) {
             UtilityWXGLTextObject.hideLabels(numberOfPanes, wxglTextObjects)
         } else {
             UtilityWXGLTextObject.showLabels(numberOfPanes, wxglTextObjects)

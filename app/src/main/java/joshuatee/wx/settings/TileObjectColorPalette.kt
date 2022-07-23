@@ -35,7 +35,7 @@ import joshuatee.wx.util.UtilityLog
 
 internal class TileObjectColorPalette(val colorMapLabel: String, val toolbar: Toolbar, val prefToken: String, context: Context, product: String, val builtin: Boolean) {
 
-    val bitmapWithText: Bitmap
+    internal val bitmapWithText: Bitmap
 
     init {
         val oldMap: String

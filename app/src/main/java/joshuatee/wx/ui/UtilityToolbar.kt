@@ -50,7 +50,9 @@ object UtilityToolbar {
         }
     }
 
-    fun fullScreenMode(activity: VideoRecordActivity) = fullScreenMode(activity.toolbar, activity.toolbarBottom)
+    fun fullScreenMode(activity: VideoRecordActivity) {
+        fullScreenMode(activity.toolbar, activity.toolbarBottom)
+    }
 
     fun fullScreenMode(toolbar: Toolbar) {
         toolbar.elevation = UIPreferences.elevationPref

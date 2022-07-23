@@ -33,7 +33,6 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.ContextMenu.ContextMenuInfo
-import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import joshuatee.wx.Extensions.getHtmlSep
@@ -87,24 +86,24 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var stormReports = mutableListOf<StormReport>()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var scrollView: ScrollView
-    private lateinit var linearLayoutMain: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var objectCardImage: ObjectCardImage
-    private lateinit var boxImages: ObjectLinearLayout
-    private lateinit var boxText: ObjectLinearLayout
+    private lateinit var boxImages: VBox
+    private lateinit var boxText: VBox
 
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer_bottom_toolbar, R.menu.spc_stormreports)
         scrollView = findViewById(R.id.scrollView)
-        linearLayoutMain = findViewById(R.id.linearLayout)
-        boxImages = ObjectLinearLayout(this, linearLayoutMain)
-        boxText = ObjectLinearLayout(this, linearLayoutMain)
+        box = findViewById(R.id.linearLayout)
+        boxImages = VBox(this, box)
+        boxText = VBox(this, box)
         objectCardImage = ObjectCardImage(this, boxImages.get(), UtilityImg.getBlankBitmap())
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
-        val activityArguments = intent.getStringArrayExtra(NO)
-        no = activityArguments!![0]
+        val arguments = intent.getStringArrayExtra(NO)!!
+        no = arguments[0]
         val cal = Calendar.getInstance()
         year = cal.get(Calendar.YEAR)
         month = cal.get(Calendar.MONTH)
@@ -122,9 +121,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$no.csv"
         stateArray = listOf("")
         objectNavDrawer = ObjectNavDrawer(this, stateArray)
-        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            objectNavDrawer.listView.setItemChecked(position, false)
-            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+        objectNavDrawer.setListener2 { _, _, position, _ ->
+            objectNavDrawer.setItemChecked(position, false)
+            objectNavDrawer.close()
             filter = stateArray.getOrNull(position) ?: ""
             getContent()
         }
@@ -198,7 +197,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 }
                 val stormCard = ObjectCardStormReportItem(this)
                 stormCard.setId(k)
-                boxText.addView(stormCard.get())
+                boxText.addWidget(stormCard.get())
                 stormCard.setTextFields(stormReport)
                 if (!isHeader) {
                     registerForContextMenu(stormCard.get())
@@ -263,12 +262,12 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
@@ -328,7 +327,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         if (audioPlayMenu(item.itemId, out.toString(), "spcstreports", "spcstreports")) {
@@ -345,7 +344,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         return super.onOptionsItemSelected(item)

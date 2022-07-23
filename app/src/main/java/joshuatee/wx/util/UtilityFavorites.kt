@@ -65,7 +65,9 @@ object UtilityFavorites {
     fun setupMenu(context: Context, favoriteString: String, value: String, prefToken: String): List<String> {
         checkAndCorrect(context, favoriteString, prefToken)
         var favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        if (favorites.size < 3) favorites = MutableList(3) { "" }
+        if (favorites.size < 3) {
+            favorites = MutableList(3) { "" }
+        }
         favorites[0] = value
         favorites[1] = ADD_STR
         favorites[2] = MODIFY_STR

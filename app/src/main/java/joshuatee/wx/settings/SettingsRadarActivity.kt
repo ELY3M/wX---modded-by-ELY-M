@@ -42,19 +42,19 @@ import joshuatee.wx.util.Utility
 
 class SettingsRadarActivity : BaseActivity() {
 
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         toolbar.subtitle = "Please tap on text for additional help."
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
-        ObjectCardText(this, linearLayout, "Colors", textSize, SettingsColorsActivity::class.java, padding)
-        ObjectCardText(this, linearLayout, "Color Palettes", textSize, SettingsColorPaletteListingActivity::class.java, padding)
-        ObjectCardText(this, linearLayout, "Screen Recorder", textSize, SettingsTelecineActivity::class.java, padding)
-        linearLayout.addView(
+        ObjectCardText(this, box, "Colors", textSize, SettingsColorsActivity::class.java, padding)
+        ObjectCardText(this, box, "Color Palettes", textSize, SettingsColorPaletteListingActivity::class.java, padding)
+        ObjectCardText(this, box, "Screen Recorder", textSize, SettingsTelecineActivity::class.java, padding)
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Warnings (TST/TOR/FFW)",
@@ -63,7 +63,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).get()
         )
         RadarPreferences.radarWarningPolygons.forEach {
-            linearLayout.addView(
+            box.addView(
                     ObjectSettingsCheckBox(
                             this,
                             it.name,
@@ -72,7 +72,7 @@ class SettingsRadarActivity : BaseActivity() {
                     ).get()
             )
         }
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "SPC MCD/Watches",
@@ -80,7 +80,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.radar_show_watch_default_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "WPC MPDs",
@@ -88,7 +88,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.radar_show_mpd_default_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Location marker",
@@ -102,7 +102,7 @@ class SettingsRadarActivity : BaseActivity() {
                 "LOCDOT_FOLLOWS_GPS",
                 R.string.locdot_follows_gps_label
         )
-        linearLayout.addView(gpsSw.get())
+        box.addView(gpsSw.get())
         gpsSw.setOnCheckedChangeListener { compoundButton, _ ->
             RadarPreferences.locationDotFollowsGps = compoundButton.isChecked
             if (RadarPreferences.locationDotFollowsGps != Utility.readPref(
@@ -121,7 +121,7 @@ class SettingsRadarActivity : BaseActivity() {
         }
 
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Location Heading Bug",
@@ -129,8 +129,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).get()
         )	
     
-
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Black background",
@@ -138,7 +137,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.nws_black_bg_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Canadian and Mexican borders",
@@ -146,7 +145,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.camx_borders_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Center radar on location",
@@ -154,7 +153,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.radar_center_on_location_default_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Cities",
@@ -164,7 +163,7 @@ class SettingsRadarActivity : BaseActivity() {
         )
 
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Conus Radar",
@@ -172,7 +171,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.conus_radar_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Convective Outlook Day One",
@@ -180,7 +179,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.show_swo_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Counties",
@@ -188,7 +187,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.show_county_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Counties use high resolution data",
@@ -196,7 +195,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.county_hires_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "County labels",
@@ -205,7 +204,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).get()
         )
 
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Hail index",
@@ -213,7 +212,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.show_hi_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Highways",
@@ -221,7 +220,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.cod_hw_default_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Launch app directly to radar",
@@ -229,7 +228,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.launch_to_radar_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Lakes and rivers",
@@ -237,7 +236,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.cod_lakes_default_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Multi-pane: share lat/lon/zoom",
@@ -245,7 +244,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.dualpaneshareposn_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Multipurpose radar icons",
@@ -253,7 +252,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.radar_icons_level2_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Observations",
@@ -261,7 +260,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.obs_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Remember location / product",
@@ -269,7 +268,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.rememberloc_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Screen stays on and auto refresh radar",
@@ -277,7 +276,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.autorefresh_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Secondary roads",
@@ -285,7 +284,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.hw_enh_ext_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Spotters",
@@ -293,7 +292,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.spotters_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Spotter labels",
@@ -301,7 +300,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.spotters_label_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "States use high resolution data",
@@ -309,7 +308,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.state_hires_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Storm tracks",
@@ -318,7 +317,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).get()
         )
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Hail index",
@@ -327,7 +326,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).get()
         )
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                 this,
                 "Hail labels",
@@ -335,7 +334,7 @@ class SettingsRadarActivity : BaseActivity() {
                 R.string.show_hi_label_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Tornado Vortex Signature",
@@ -343,7 +342,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.show_tvs_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Use JNI for radar (beta)",
@@ -352,7 +351,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).get()
         )
 
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Wind barbs",
@@ -360,7 +359,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.obs_windbarbs_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "WPC Fronts and pressure highs and lows",
@@ -369,7 +368,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).get()
         )
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Enable userpoints icons on radar",
@@ -382,7 +381,7 @@ class SettingsRadarActivity : BaseActivity() {
         // start of slides
         //
 	
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Animation speed",
@@ -395,7 +394,7 @@ class SettingsRadarActivity : BaseActivity() {
         )
 	
 	//elys mod //radar legends settings//
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Color Legend width",
@@ -406,7 +405,7 @@ class SettingsRadarActivity : BaseActivity() {
                         100
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Color Legend text size",
@@ -420,7 +419,7 @@ class SettingsRadarActivity : BaseActivity() {
 	///////
 
 	//elys mod //Conus Radar Zoom
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Conus Radar Zoom",
@@ -433,7 +432,7 @@ class SettingsRadarActivity : BaseActivity() {
         )
 
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Default line size",
@@ -445,7 +444,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).card
         )
 			
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "GPS update interval",
@@ -456,7 +455,7 @@ class SettingsRadarActivity : BaseActivity() {
                         60
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Refresh interval",
@@ -467,7 +466,7 @@ class SettingsRadarActivity : BaseActivity() {
                         15
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Aviation dot size",
@@ -478,7 +477,7 @@ class SettingsRadarActivity : BaseActivity() {
                         50
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Convective outlook line size",
@@ -489,7 +488,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "County line size",
@@ -500,7 +499,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Detailed observations Zoom",
@@ -511,7 +510,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Draw tool line size",
@@ -523,7 +522,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ).card
         )
 	/*
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "GPS Circle line size",
@@ -537,7 +536,7 @@ class SettingsRadarActivity : BaseActivity() {
 	*/
 	
 	//elys mod
-		linearLayout.addView(
+		box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Hail icon size",
@@ -550,7 +549,7 @@ class SettingsRadarActivity : BaseActivity() {
         )
 		
 	//elys mod
-		linearLayout.addView(
+		box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Hail Text size",
@@ -561,8 +560,7 @@ class SettingsRadarActivity : BaseActivity() {
                         20
                 ).card
         )
-
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Highway line size",
@@ -573,7 +571,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Lake line size",
@@ -586,7 +584,7 @@ class SettingsRadarActivity : BaseActivity() {
         )
 
 	//elys mod 
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Location icon size",
@@ -599,7 +597,7 @@ class SettingsRadarActivity : BaseActivity() {
         )
 		
 	//elys mod 	
-	linearLayout.addView(
+	box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Location bug size",
@@ -610,8 +608,7 @@ class SettingsRadarActivity : BaseActivity() {
                         530
                 ).card
         )
-
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "MCD/MPD/Watch line size",
@@ -622,7 +619,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Secondary road line size",
@@ -633,7 +630,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "State line size",
@@ -644,7 +641,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Storm spotter size",
@@ -655,7 +652,7 @@ class SettingsRadarActivity : BaseActivity() {
                         50
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Storm tracks line size",
@@ -666,7 +663,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Text size",
@@ -679,7 +676,7 @@ class SettingsRadarActivity : BaseActivity() {
         )
 	
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "TVS icon size",
@@ -692,7 +689,7 @@ class SettingsRadarActivity : BaseActivity() {
         )	
 	
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Userpoints icon size",
@@ -703,8 +700,7 @@ class SettingsRadarActivity : BaseActivity() {
                         530
                 ).card
         )		
-	
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Warning line size",
@@ -715,7 +711,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Wind barbs line size",
@@ -726,11 +722,7 @@ class SettingsRadarActivity : BaseActivity() {
                         10
                 ).card
         )
-
-
-
-
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "WXOGL initial view size",

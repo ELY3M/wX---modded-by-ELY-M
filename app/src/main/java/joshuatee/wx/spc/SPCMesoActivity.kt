@@ -27,6 +27,7 @@ import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getHtml
 import joshuatee.wx.Extensions.safeGet
@@ -86,7 +87,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var prefModel = ""
     private lateinit var prefParam: String
     private lateinit var prefParamLabel: String
-    private lateinit var drw: ObjectNavDrawerCombo
+    private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var displayData: DisplayDataNoSpinner
     private val prefToken = "SPCMESO_FAV"
 
@@ -102,11 +103,11 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        var activityArguments = intent.getStringArrayExtra(INFO)
-        if (activityArguments == null) {
-            activityArguments = arrayOf("", "1", "SPCMESO")
-        }
-        val numPanesAsString = activityArguments[1]
+        val arguments = intent.getStringArrayExtra(INFO)!!
+//        if (arguments == null) {
+//            arguments = arrayOf("", "1", "SPCMESO")
+//        }
+        val numPanesAsString = arguments[1]
         numPanes = numPanesAsString.toIntOrNull() ?: 0
         if (numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_spcmeso, R.menu.spcmesomultipane, iconsEvenlySpaced = false, bottomToolbar = true)
@@ -119,7 +120,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = "SPC Meso"
-        prefModel = activityArguments[2]
+        prefModel = arguments[2]
         prefSector = prefModel + numPanesAsString + "_SECTOR_LAST_USED"
         prefParam = prefModel + numPanesAsString + "_PARAM_LAST_USED"
         prefParamLabel = prefModel + numPanesAsString + "_PARAM_LAST_USED_LABEL"
@@ -130,8 +131,8 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             displayData.param[1] = "500mb"
             displayData.paramLabel[1] = "500mb Analysis"
         }
-        if (activityArguments[0] != "" && numPanes == 1) {
-            val tmpArrFav = UtilitySpcMeso.setParamFromFav(activityArguments[0])
+        if (arguments[0] != "" && numPanes == 1) {
+            val tmpArrFav = UtilitySpcMeso.setParamFromFav(arguments[0])
             displayData.param[0] = tmpArrFav
             displayData.paramLabel[0] = UtilitySpcMeso.getLabelFromParam(tmpArrFav)
         } else {
@@ -175,7 +176,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             menuCounty.title = on + menuCountyStr
         }
         if (numPanes == 1) {
-            displayData.img[0].setOnTouchListener(object : OnSwipeTouchListener(this) {
+            displayData.img[0].setListener(object : OnSwipeTouchListener(this) {
                 override fun onSwipeLeft() { if (displayData.img[curImg].currentZoom < 1.01f) {
                     val index = UtilitySpcMeso.moveForward(getFavList())
                     showProductInFavList(index)
@@ -188,10 +189,10 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             })
         }
         UtilitySpcMeso.create()
-        drw = ObjectNavDrawerCombo(this, UtilitySpcMeso.groups, UtilitySpcMeso.longCodes, UtilitySpcMeso.shortCodes, "")
-        drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
-            drw.drawerLayout.closeDrawer(drw.listView)
-            setAndLaunchParam(drw.getToken(groupPosition, childPosition), groupPosition, childPosition)
+        objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilitySpcMeso.groups, UtilitySpcMeso.longCodes, UtilitySpcMeso.shortCodes, "")
+        objectNavDrawerCombo.setListener2 { _, _, groupPosition, childPosition, _ ->
+            objectNavDrawerCombo.close()
+            setAndLaunchParam(objectNavDrawerCombo.getToken(groupPosition, childPosition), groupPosition, childPosition)
             getContent()
             true
         }
@@ -219,14 +220,15 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     }
                 }
         )  {
-                (0 until numPanes).forEach {
-                if (numPanes > 1) {
-                    UtilityImg.resizeViewAndSetImage(this, displayData.bitmap[it], displayData.img[it])
-                } else {
-                    displayData.img[it].setImageBitmap(displayData.bitmap[it])
-                }
-                displayData.img[it].maxZoom = 4f
-                animRan = false
+            (0 until numPanes).forEach {
+                    if (numPanes > 1) {
+                        UtilityImg.resizeViewAndSetImage(this, displayData.bitmap[it], displayData.img[it].get() as ImageView)
+                    } else {
+//                        displayData.img[it].setImageBitmap(displayData.bitmap[it])
+                        displayData.img[it].setBitmap(displayData.bitmap[it])
+                    }
+                    displayData.img[it].setMaxZoom(4.0f)
+                    animRan = false
             }
             if (!firstRun) {
                 (0 until numPanes).forEach {
@@ -266,7 +268,9 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_toggleRadar -> {
                 if (showRadar) {
@@ -396,7 +400,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
         favListParm = UtilityFavorites.setupMenu(this, UIPreferences.spcMesoFav, displayData.param[curImg], prefToken)
@@ -435,12 +439,12 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawerCombo.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawerCombo.onConfigurationChanged(newConfig)
     }
 
     private fun getHelp() {

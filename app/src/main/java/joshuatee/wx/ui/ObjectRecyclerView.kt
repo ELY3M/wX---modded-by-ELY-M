@@ -28,39 +28,39 @@ import androidx.recyclerview.widget.RecyclerView
 class ObjectRecyclerView(activity: Activity, resourceId: Int, list: MutableList<String>, fn: (Int) -> Unit) {
 
     private val recyclerView: RecyclerView = activity.findViewById(resourceId)
-    private var ca = SingleTextAdapterList(list)
+    private var adapter = SingleTextAdapterList(list)
 
     init {
         recyclerView.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(activity)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = linearLayoutManager
-        recyclerView.adapter = ca
-        ca.setOnItemClickListener(object : SingleTextAdapterList.MyClickListener {
+        recyclerView.adapter = adapter
+        adapter.setOnItemClickListener(object : SingleTextAdapterList.MyClickListener {
             override fun onItemClick(position: Int) { fn(position) }
         })
     }
 
     fun refreshList(list: MutableList<String>) {
-        ca = SingleTextAdapterList(list)
-        recyclerView.adapter = ca
+        adapter = SingleTextAdapterList(list)
+        recyclerView.adapter = adapter
     }
 
     fun notifyDataSetChanged() {
-        ca.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     fun setItem(index: Int, str: String) {
-        ca.setItem(index, str)
+        adapter.setItem(index, str)
     }
 
-    fun getItem(index: Int) = ca.getItem(index)
+    fun getItem(index: Int) = adapter.getItem(index)
 
     fun deleteItem(index: Int) {
-        ca.deleteItem(index)
+        adapter.deleteItem(index)
     }
 
     fun get() = recyclerView
 
-    override fun toString() = ca.toString()
+    override fun toString() = adapter.toString()
 }

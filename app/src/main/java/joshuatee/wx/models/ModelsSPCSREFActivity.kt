@@ -59,7 +59,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var star: MenuItem
     private var fab1: ObjectFab? = null
     private var fab2: ObjectFab? = null
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
@@ -81,15 +81,15 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        activityArguments = intent.getStringArrayExtra(INFO)!!
-        om = ObjectModelNoSpinner(this, activityArguments[1], activityArguments[0])
+        arguments = intent.getStringArrayExtra(INFO)!!
+        om = ObjectModelNoSpinner(this, arguments[1], arguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_spcsref, R.menu.models_spcsref, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_spcsrefmultipane, R.menu.models_spcsref, iconsEvenlySpaced = false, bottomToolbar = true)
-            val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
+            val box: LinearLayout = findViewById(R.id.linearLayout)
             if (UtilityUI.isLandScape(this)) {
-                linearLayout.orientation = LinearLayout.HORIZONTAL
+                box.orientation = LinearLayout.HORIZONTAL
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -100,7 +100,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         miStatusParam2 = menu.findItem(R.id.action_status_param2)
         star = menu.findItem(R.id.action_fav)
         star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
-        title = activityArguments[2]
+        title = arguments[2]
         if (om.numPanes < 2) {
             fab1 = ObjectFab(this, R.id.fab1) {
                 om.leftClick()
@@ -184,7 +184,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (objectNavDrawerCombo.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -212,7 +212,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
-            R.id.action_multipane -> ObjectIntent(this, ModelsSpcSrefActivity::class.java, INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
+            R.id.action_multipane -> ObjectIntent(this, ModelsSpcSrefActivity::class.java, INFO, arrayOf("2", arguments[1], arguments[2]))
             R.id.action_fav -> toggleFavorite()
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
@@ -231,7 +231,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawerCombo.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
         favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
@@ -253,12 +253,12 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawerCombo.actionBarDrawerToggle.syncState()
+        objectNavDrawerCombo.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawerCombo.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawerCombo.onConfigurationChanged(newConfig)
     }
 
     private fun showHelpTextDialog() {

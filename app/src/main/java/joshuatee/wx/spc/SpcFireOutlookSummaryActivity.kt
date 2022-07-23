@@ -42,7 +42,7 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
 
     private val bitmaps = MutableList(UtilitySpcFireOutlook.urls.size) { UtilityImg.getBlankBitmap() }
     private var imagesPerRow = 2
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,13 +53,13 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         if (UtilityUI.isLandScape(this)) {
             imagesPerRow = 3
         }
         toolbar.subtitle = "SPC"
         title = "Fire Weather Outlooks"
-        objectImageSummary = ObjectImageSummary(this, linearLayout, bitmaps)
+        objectImageSummary = ObjectImageSummary(this, box, bitmaps)
         getContent()
     }
 

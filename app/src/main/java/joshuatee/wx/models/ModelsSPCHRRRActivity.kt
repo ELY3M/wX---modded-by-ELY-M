@@ -30,7 +30,6 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.LinearLayout
 import java.util.Locale
 import joshuatee.wx.R
@@ -58,7 +57,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     private lateinit var miStatusParam2: MenuItem
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var om: ObjectModelNoSpinner
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private lateinit var timeMenuItem: MenuItem
     private lateinit var runMenuItem: MenuItem
 
@@ -78,19 +77,19 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        activityArguments = intent.getStringArrayExtra(INFO)!!
-        om = ObjectModelNoSpinner(this, activityArguments[1], activityArguments[0])
+        arguments = intent.getStringArrayExtra(INFO)!!
+        om = ObjectModelNoSpinner(this, arguments[1], arguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_nospinner, R.menu.models_spchrrr, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_multipane_nospinner, R.menu.models_spchrrr, iconsEvenlySpaced = false, bottomToolbar = true)
-            val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
+            val box: LinearLayout = findViewById(R.id.linearLayout)
             if (UtilityUI.isLandScape(this)) {
-                linearLayout.orientation = LinearLayout.HORIZONTAL
+                box.orientation = LinearLayout.HORIZONTAL
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = activityArguments[2]
+        title = arguments[2]
         overlayImg.addAll(listOf(*TextUtils.split(Utility.readPref(this, "SPCHRRR_OVERLAY", ""), ":")))
         val menu = toolbarBottom.menu
         timeMenuItem = menu.findItem(R.id.action_time)
@@ -117,9 +116,9 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         om.displayData = DisplayDataNoSpinner(this, this, om.numPanes, om)
         objectNavDrawer = ObjectNavDrawer(this, UtilityModelSpcHrrrInterface.labels, UtilityModelSpcHrrrInterface.params)
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            objectNavDrawer.listView.setItemChecked(position, false)
-            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+        objectNavDrawer.setListener2 { _, _, position, _ ->
+            objectNavDrawer.setItemChecked(position, false)
+            objectNavDrawer.close()
             om.displayData.param[om.curImg] = objectNavDrawer.tokens[position]
             om.displayData.paramLabel[om.curImg] = objectNavDrawer.getLabel(position)
             UtilityModels.getContentNonSpinner(this, om, overlayImg)
@@ -130,7 +129,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -163,7 +162,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
                 overlayImg.clear()
                 UtilityModels.getContentNonSpinner(this, om, overlayImg)
             }
-            R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrrrActivity::class.java, INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
+            R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrrrActivity::class.java, INFO, arrayOf("2", arguments[1], arguments[2]))
             R.id.action_back -> om.leftClick()
             R.id.action_forward -> om.rightClick()
             R.id.action_animate -> UtilityModels.getAnimate(this, om, overlayImg)
@@ -182,7 +181,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -240,12 +239,12 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {

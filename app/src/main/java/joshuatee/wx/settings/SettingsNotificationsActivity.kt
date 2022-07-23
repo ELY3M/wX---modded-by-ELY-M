@@ -46,73 +46,25 @@ import joshuatee.wx.util.Utility
 
 class SettingsNotificationsActivity : BaseActivity() {
 
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         toolbar.subtitle = "Please tap on text for additional help."
-        val cardSound = ObjectCardText(this, linearLayout, "Notification sound chooser", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
-        val cardWFOFilter = ObjectCardText(this, linearLayout, "WFO notification filter", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
+        val cardSound = ObjectCardText(this, box, "Notification sound chooser", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
+        val cardWFOFilter = ObjectCardText(this, box, "WFO notification filter", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
         ObjectCardText(
                 this,
-                linearLayout,
+                box,
                 "Text product notifications: " + UtilityNotificationTextProduct.showAll(),
                 UIPreferences.textSizeNormal,
                 UIPreferences.paddingSettings
         )
         cardSound.setOnClickListener { notifSoundPicker() }
         cardWFOFilter.setOnClickListener { showWFONotificationFilterDialogue() }
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "US Tornado",
-                        "ALERT_TORNADO_NOTIFICATION",
-                        R.string.b_tornado
-                ).get()
-        )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "SPC MCD",
-                        "ALERT_SPCMCD_NOTIFICATION",
-                        R.string.b_mcd
-                ).get()
-        )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "SPC Watch",
-                        "ALERT_SPCWAT_NOTIFICATION",
-                        R.string.b_wat
-                ).get()
-        )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "SPC SWO",
-                        "ALERT_SPCSWO_NOTIFICATION",
-                        R.string.b_swo
-                ).get()
-        )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "SPC SWO include slight",
-                        "ALERT_SPCSWO_SLIGHT_NOTIFICATION",
-                        R.string.b_swo2
-                ).get()
-        )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "WPC MPD",
-                        "ALERT_WPCMPD_NOTIFICATION",
-                        R.string.b_mpd
-                ).get()
-        )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "NHC Advisories EPAC",
@@ -120,7 +72,7 @@ class SettingsNotificationsActivity : BaseActivity() {
                         R.string.b_nhc_epac
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "NHC Advisories ATL",
@@ -128,95 +80,119 @@ class SettingsNotificationsActivity : BaseActivity() {
                         R.string.b_nhc_atl
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "US Tornado Sound",
-                        "ALERT_NOTIFICATION_SOUND_TORNADO",
-                        R.string.alert_sound_tornado_label
+                        "SPC MCD",
+                        "ALERT_SPCMCD_NOTIFICATION",
+                        R.string.b_mcd
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "SPC MCD Sound",
-                        "ALERT_NOTIFICATION_SOUND_SPCMCD",
-                        R.string.alert_sound_spcmcd_label
+                        "SPC SWO",
+                        "ALERT_SPCSWO_NOTIFICATION",
+                        R.string.b_swo
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "SPC Watch Sound",
-                        "ALERT_NOTIFICATION_SOUND_SPCWAT",
-                        R.string.alert_sound_spcwat_label
+                        "SPC SWO include slight",
+                        "ALERT_SPCSWO_SLIGHT_NOTIFICATION",
+                        R.string.b_swo2
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "SPC SWO Sound",
-                        "ALERT_NOTIFICATION_SOUND_SPCSWO",
-                        R.string.alert_sound_spcswo_label
+                        "SPC Watch",
+                        "ALERT_SPCWAT_NOTIFICATION",
+                        R.string.b_wat
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "WPC MPD Sound",
-                        "ALERT_NOTIFICATION_SOUND_WPCMPD",
-                        R.string.alert_sound_wpcmpd_label
+                        "US Tornado",
+                        "ALERT_TORNADO_NOTIFICATION",
+                        R.string.b_tornado
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "NHC Advisories EPAC Sound",
+                        "WPC MPD",
+                        "ALERT_WPCMPD_NOTIFICATION",
+                        R.string.b_mpd
+                ).get()
+        )
+        box.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Sound: NHC Advisories EPAC",
                         "ALERT_NOTIFICATION_SOUND_NHC_EPAC",
                         R.string.alert_sound_nhc_epac_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "NHC Advisories ATL Sound",
+                        "Sound: NHC Advisories ATL",
                         "ALERT_NOTIFICATION_SOUND_NHC_ATL",
                         R.string.alert_sound_nhc_atl_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "Text products Sound",
+                        "Sound: SPC MCD",
+                        "ALERT_NOTIFICATION_SOUND_SPCMCD",
+                        R.string.alert_sound_spcmcd_label
+                ).get()
+        )
+        box.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Sound: SPC SWO",
+                        "ALERT_NOTIFICATION_SOUND_SPCSWO",
+                        R.string.alert_sound_spcswo_label
+                ).get()
+        )
+        box.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Sound: SPC Watch",
+                        "ALERT_NOTIFICATION_SOUND_SPCWAT",
+                        R.string.alert_sound_spcwat_label
+                ).get()
+        )
+        box.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Sound: Text products",
                         "ALERT_NOTIFICATION_SOUND_TEXT_PROD",
                         R.string.alert_sound_text_prod_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "Play sound repeatedly",
-                        "NOTIF_SOUND_REPEAT",
-                        R.string.tv_notif_sound_repeat_label
+                        "Sound: US Tornado",
+                        "ALERT_NOTIFICATION_SOUND_TORNADO",
+                        R.string.alert_sound_tornado_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "Notif text to speech",
-                        "NOTIF_TTS",
-                        R.string.tv_notif_tts_label
+                        "Sound: WPC MPD Sound",
+                        "ALERT_NOTIFICATION_SOUND_WPCMPD",
+                        R.string.alert_sound_wpcmpd_label
                 ).get()
         )
-        linearLayout.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        "Blackout alert sounds",
-                        "ALERT_BLACKOUT",
-                        R.string.alert_blackout_label
-                ).get()
-        )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Alert only once",
@@ -224,7 +200,7 @@ class SettingsNotificationsActivity : BaseActivity() {
                         R.string.alert_onlyonce_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Auto cancel notifs",
@@ -232,7 +208,31 @@ class SettingsNotificationsActivity : BaseActivity() {
                         R.string.alert_autocancel_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Blackout alert sounds",
+                        "ALERT_BLACKOUT",
+                        R.string.alert_blackout_label
+                ).get()
+        )
+        box.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Notif text to speech",
+                        "NOTIF_TTS",
+                        R.string.tv_notif_tts_label
+                ).get()
+        )
+        box.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Play sound repeatedly",
+                        "NOTIF_SOUND_REPEAT",
+                        R.string.tv_notif_sound_repeat_label
+                ).get()
+        )
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Tor warn override blackout",
@@ -240,7 +240,7 @@ class SettingsNotificationsActivity : BaseActivity() {
                         R.string.alert_blackout_tornado_label
                 ).get()
         )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Notification check interval in minutes",
@@ -251,24 +251,24 @@ class SettingsNotificationsActivity : BaseActivity() {
                         121
                 ).card
         )
-        linearLayout.addView(
-                ObjectSettingsSeekBar(
-                        this,
-                        "Notification blackout - PM(h)",
-                        "ALERT_BLACKOUT_PM",
-                        R.string.alert_blackout_pm_np_label,
-                        22,
-                        0,
-                        23
-                ).card
-        )
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsSeekBar(
                         this,
                         "Notification blackout - AM(h)",
                         "ALERT_BLACKOUT_AM",
                         R.string.alert_blackout_am_np_label,
                         7,
+                        0,
+                        23
+                ).card
+        )
+        box.addView(
+                ObjectSettingsSeekBar(
+                        this,
+                        "Notification blackout - PM(h)",
+                        "ALERT_BLACKOUT_PM",
+                        R.string.alert_blackout_pm_np_label,
+                        22,
                         0,
                         23
                 ).card

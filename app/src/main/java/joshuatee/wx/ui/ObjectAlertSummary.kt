@@ -25,7 +25,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import joshuatee.wx.common.GlobalDictionaries
 import java.util.Locale
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.common.GlobalVariables
@@ -42,10 +41,6 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         private set
     var filterArray = listOf<String>()
         private set
-    private val mapButtonZone = mutableMapOf<Int, String>()
-    private val mapButtonNws = mutableMapOf<Int, String>()
-    private val mapButtonState = mutableMapOf<Int, String>()
-    private val mapButtonCounty = mutableMapOf<Int, String>()
     var bitmap = UtilityImg.getBlankBitmap()
     private var objectCardImageView = ObjectCardImage(context, bitmap)
     private val cardText = ObjectCardText(context)
@@ -70,10 +65,6 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         totalAlertsCnt = 0
         val mapEvent = mutableMapOf<String, Int>()
         val mapState = mutableMapOf<String, Int>()
-        mapButtonNws.clear()
-        mapButtonState.clear()
-        mapButtonCounty.clear()
-        mapButtonZone.clear()
         val map = mutableMapOf<String, Int>()
         var i = 0
         try {
@@ -81,10 +72,7 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
             val alerts = UtilityString.parseColumnMutable(data, "<entry>(.*?)</entry>")
             alerts.forEach { alert -> capAlerts.add(CapAlert.initializeFromCap(alert)) }
             capAlerts.forEach { capAlert ->
-                val counties = capAlert.area.split(";")
-                val firstCounty = if (counties.isNotEmpty()) counties[0] else ""
                 val zones = capAlert.zones.split(" ")
-                val firstZone = if (zones.isNotEmpty()) zones[0] else ""
                 totalAlertsCnt += 1
                 val tmpStateList = zones.asSequence().filter { it.length > 1 }.map { it.substring(0, 2) }
                 val uniqueStates = tmpStateList.toSet()
@@ -109,18 +97,10 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
                     unique2States.forEach { state ->
                         val frequencyLocal = map[state]
                         map[state] = if (frequencyLocal == null) 1 else frequencyLocal + 1
-                        mapButtonState[i] = state
                     }
-                    val objectCardAlertSummaryItem = ObjectCardAlertSummaryItem(context)
-                    objectCardAlertSummaryItem.setId(i)
-                    mapButtonNws[i] = nwsOffice
-                    mapButtonCounty[i] = firstCounty
-                    mapButtonZone[i] = firstZone
+                    val objectCardAlertSummaryItem = ObjectCardAlertDetail(context)
                     objectCardAlertSummaryItem.setTextFields(nwsOffice, nwsLoc, capAlert)
-                    val url = capAlert.url
-                    objectCardAlertSummaryItem.setListener { showWarningDetails(url) }
-                    objectCardAlertSummaryItem.radarButton.setOnClickListener { radarInterface(nwsOffice) }
-                    objectCardAlertSummaryItem.detailsButton.setOnClickListener { showWarningDetails(url) }
+                    objectCardAlertSummaryItem.setListener { ObjectIntent.showHazard(context, arrayOf(capAlert.url, "")) }
                     linearLayout.addView(objectCardAlertSummaryItem.get())
                     i += 1
                 }
@@ -149,14 +129,6 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
             filterArray = filterArray1 + filterArray2
             navList = filterArray1Label + filterArray2Label
         }
-    }
-
-    private fun radarInterface(office: String) {
-        ObjectIntent.showRadarBySite(context, GlobalDictionaries.wfoToRadarSite[office] ?: "")
-    }
-
-    private fun showWarningDetails(url: String) {
-        ObjectIntent.showHazard(context, arrayOf(url, ""))
     }
 
     fun getTitle(title: String) = "(" + totalAlertsCnt + ") " + title.uppercase(Locale.US) + " Alerts"

@@ -26,12 +26,11 @@ import android.os.Bundle
 import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.AdapterView
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.ObjectTouchImageView
+import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -39,7 +38,7 @@ import joshuatee.wx.util.UtilityShare
 class SpcCompmapActivity : BaseActivity() {
 
     private var layerStr = ""
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private val paramList = UtilitySpcCompmap.labels.toMutableList()
@@ -53,9 +52,9 @@ class SpcCompmapActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
         objectNavDrawer = ObjectNavDrawer(this, paramList)
-        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            objectNavDrawer.listView.setItemChecked(position, false)
-            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+        objectNavDrawer.setListener2 { _, _, position, _ ->
+            objectNavDrawer.setItemChecked(position, false)
+            objectNavDrawer.close()
             val positionStr = UtilitySpcCompmap.urlIndex[position]
             if (paramList[position].contains("(on)")) {
                 paramList[position] = paramList[position].replace("\\(on\\) ".toRegex(), "")
@@ -68,7 +67,7 @@ class SpcCompmapActivity : BaseActivity() {
             }
         }
         toolbar.setOnClickListener { objectNavDrawer.open() }
-        img = ObjectTouchImageView(this, R.id.iv)
+        image = TouchImage(this, R.id.iv)
         layerStr = Utility.readPref(this, "SPCCOMPMAP_LAYERSTR", "a7:a19:") // mslp, hpc fronts
         setupInitLayerString()
         getContent()
@@ -89,8 +88,8 @@ class SpcCompmapActivity : BaseActivity() {
                 break
             }
         }
-        objectNavDrawer.listView.setItemChecked(position, false)
-        objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+        objectNavDrawer.setItemChecked(position, false)
+        objectNavDrawer.close()
         if (!paramList[position].contains("(on)")) {
             paramList[position] = "(on) " + paramList[position]
         }
@@ -106,23 +105,23 @@ class SpcCompmapActivity : BaseActivity() {
     }
 
     private fun showImage() {
-        img.setBitmap(bitmap)
-        img.firstRunSetZoomPosn("SPCCOMPMAP")
+        image.setBitmap(bitmap)
+        image.firstRunSetZoomPosn("SPCCOMPMAP")
         Utility.writePref(this, "SPCCOMPMAP_LAYERSTR", layerStr)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -133,7 +132,7 @@ class SpcCompmapActivity : BaseActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom("SPCCOMPMAP")
+        image.imgSavePosnZoom("SPCCOMPMAP")
         super.onStop()
     }
 }

@@ -46,22 +46,22 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private var url = ""
     private var html = ""
     private lateinit var textCard: ObjectCardText
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
-        activityArguments = intent.getStringArrayExtra(URL)!!
-        url = activityArguments[0]
-        title = activityArguments[1]
-        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        arguments = intent.getStringArrayExtra(URL)!!
+        url = arguments[0]
+        title = arguments[1]
+        textCard = ObjectCardText(this, box, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
             if (url.contains("<")) textCard.text = Utility.fromHtml(url) else textCard.text = url
             html = url
@@ -87,7 +87,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     fun update() {
         textCard.setTextAndTranslate(Utility.fromHtml(html))
-        UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "textscreen")
+        UtilityTts.conditionalPlay(arguments, 2, applicationContext, html, "textscreen")
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -96,7 +96,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, activityArguments[1], textToShare)
+            R.id.action_share -> UtilityShare.text(this, arguments[1], textToShare)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

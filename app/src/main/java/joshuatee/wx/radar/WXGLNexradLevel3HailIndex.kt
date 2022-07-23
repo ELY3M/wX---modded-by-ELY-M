@@ -29,12 +29,12 @@ import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityLog
+import java.io.File
 import java.util.regex.Pattern
 
 internal object WXGLNexradLevel3HailIndex {
 
     private const val hiBaseFn = "nids_hi_tab"
-    private const val markerSize = 0.015
     var hailList = mutableListOf<Hail>()
 
     private val pattern1: Pattern = Pattern.compile("AZ/RAN(.*?)V")
@@ -43,35 +43,10 @@ internal object WXGLNexradLevel3HailIndex {
     private val pattern4: Pattern = Pattern.compile("[0-9]*\\.?[0-9]+")
     private val pattern5: Pattern = Pattern.compile("\\d+")
 
+    var hailSizeNumber = 0.0
+    var hailSizeText = "Unknown"
+    var hailSizeIcon = "hailunknown.png"
 
-/*
-    val hailData: MutableList<Hail>
-        get() {
-            var currentTime = System.currentTimeMillis()
-            val currentTimeSec = currentTime / 1000
-            val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
-            if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
-                hailList = mutableListOf()
-
-
-                hailList.add(
-                        Spotter(
-                                tmpArr[0],
-                                tmpArr[1],
-                                tmpArr[2],
-                                tmpArr[3],
-                                )
-                )
-
-            }
-
-            initialized = true
-            currentTime = System.currentTimeMillis()
-            lastRefresh = currentTime / 1000
-
-            return hailList
-        }
-*/
 
     fun decodeAndPlot(context: Context, radarSite: String, fnSuffix: String): List<Double> {
         val fileName = hiBaseFn + fnSuffix
@@ -79,7 +54,7 @@ internal object WXGLNexradLevel3HailIndex {
         val location = UtilityLocation.getSiteLocation(radarSite)
         //make sure we clear the list or we get duplicate texts
         hailList.clear()
-        //File("/sdcard/wX/hail2").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true);
+        ///File("/sdcard/wX/hailtest").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true)
         WXGLDownload.getNidsTab(context, "HI", radarSite, fileName)
         val posn: List<String>
         val hailPercent: List<String>
@@ -116,9 +91,10 @@ internal object WXGLNexradLevel3HailIndex {
             var k = 0 // k is used to track hail size which is /2 of other 2 arrays
             for (s in posnNumbers.indices step 2) {
                 val hailSizeDbl = hailSizeNumbers[k].toDoubleOrNull() ?: 0.0
-                var hailSizeText = "unknown"
-                UtilityLog.d("wx", "hailSizeNumbers: "+hailSizeDbl)
-                UtilityLog.d("wx", "hailPercentNumbers: "+hailPercentNumbers[s].toIntOrNull())
+                //var hailSizeText = "Unknown"
+                //var hailSizeIcon = "hailunknown.png"
+                //UtilityLog.d("hailindex", "hailSizeNumbers: "+hailSizeDbl)
+                //UtilityLog.d("hailindex", "hailPercentNumbers: "+hailPercentNumbers[s].toIntOrNull())
                 if (hailSizeDbl > 0.24 && ((hailPercentNumbers[s].toIntOrNull() ?: 0) > 60 || (hailPercentNumbers[s + 1].toDoubleOrNull() ?: 0.0) > 60)) {
                     val ecc = ExternalGeodeticCalculator()
                     val degree = posnNumbers[s].toDoubleOrNull() ?: 0.0
@@ -150,64 +126,79 @@ internal object WXGLNexradLevel3HailIndex {
                     */
 
 
+                    hailSizeText = hailSizeDbl.toString()
+                    
                     if (hailSizeDbl > 0.24) {
+                        hailSizeNumber = 0.25
                         hailSizeText = "0.25"
-                        WXGLRender.hailSizeIcon = "hail05.png"
+                        hailSizeIcon = "hail05.png"
                     }
 
                     if (hailSizeDbl > 0.49) {
+                        hailSizeNumber = 0.50
                         hailSizeText = "0.50"
-                        WXGLRender.hailSizeIcon = "hail0.png"
+                        hailSizeIcon = "hail0.png"
                     }
                     if (hailSizeDbl > 0.74) {
+                        hailSizeNumber = 0.75
                         hailSizeText = "0.75"
-                        WXGLRender.hailSizeIcon = "hail0.png"
+                        hailSizeIcon = "hail0.png"
                     }
                     if (hailSizeDbl > 0.99) {
+                        hailSizeNumber = 1.00
                         hailSizeText = "1.00"
-                        WXGLRender.hailSizeIcon = "hail1.png"
+                        hailSizeIcon = "hail1.png"
                     }
                     if (hailSizeDbl > 1.49) {
+                        hailSizeNumber = 1.50
                         hailSizeText = "1.50"
-                        WXGLRender.hailSizeIcon = "hail1.png"
+                        hailSizeIcon = "hail1.png"
                     }
                     if (hailSizeDbl > 1.99) {
+                        hailSizeNumber = 2.00
                         hailSizeText = "2.00"
-                        WXGLRender.hailSizeIcon = "hail2.png"
+                        hailSizeIcon = "hail2.png"
                     }
                     if (hailSizeDbl > 2.49) {
+                        hailSizeNumber = 2.50
                         hailSizeText = "2.50"
-                        WXGLRender.hailSizeIcon = "hail2.png"
+                        hailSizeIcon = "hail2.png"
                     }
                     if (hailSizeDbl > 2.99) {
+                        hailSizeNumber = 3.00
                         hailSizeText = "3.00"
-                        WXGLRender.hailSizeIcon = "hail3.png"
+                        hailSizeIcon = "hail3.png"
                     }
                     if (hailSizeDbl > 3.49) {
+                        hailSizeNumber = 3.50
                         hailSizeText = "3.50"
-                        WXGLRender.hailSizeIcon = "hail3.png"
+                        hailSizeIcon = "hail3.png"
                     }
                     if (hailSizeDbl > 3.99) {
+                        hailSizeNumber = 4.00
                         hailSizeText = "4.00"
-                        WXGLRender.hailSizeIcon = "hail4.png"
+                        hailSizeIcon = "hail4.png"
                     }
                     if (hailSizeDbl > 4.49) {
+                        hailSizeNumber = 4.50
                         hailSizeText = "4.50"
-                        WXGLRender.hailSizeIcon = "hail4.png"
+                        hailSizeIcon = "hail4.png"
                     }
-                    //TODO add big hail --- only use 1 icon for any hail over 5 inch
+                    //big hail --- only use 1 icon for any hail over 5 inch
                     if (hailSizeDbl > 4.99) {
+                        hailSizeNumber = 5.00
                         hailSizeText = "Big Hail!"
-                        WXGLRender.hailSizeIcon = "hailbig.png"
+                        hailSizeIcon = "hailbig.png"
                     }
 
 
-                    hailList.add(Hail(WXGLRender.hailSizeIcon, hailSizeText, ec.latitude, ec.longitude * -1.0))
+                    hailList.add(Hail(hailSizeIcon, hailSizeText, hailSizeNumber, ec.latitude, ec.longitude * -1.0))
 
 
-                    UtilityLog.d("wx", "hailSizeIcon: "+WXGLRender.hailSizeIcon)
-                    UtilityLog.d("wx", "hailSizeText: "+hailSizeText)
-                    UtilityLog.d("wx", "hailSizeDbl: "+hailSizeDbl)
+                    UtilityLog.d("hailindex", "hailSizeIcon: "+hailSizeIcon)
+                    UtilityLog.d("hailindex", "hailSizeText: "+hailSizeText)
+                    UtilityLog.d("hailindex", "hailSizeNumber: "+hailSizeNumber)
+                    UtilityLog.d("hailindex", "hailSizeDbl: "+hailSizeDbl)
 
 
 

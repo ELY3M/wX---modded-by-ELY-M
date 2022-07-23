@@ -109,7 +109,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         checkfiles(R.drawable.location, "location.png")
         checkfiles(R.drawable.tvs, "tvs.png")
         checkfiles(R.drawable.userpoint, "userpoint.png")
-
+        checkfiles(R.drawable.hailunknown, "hailunknown.png")
         checkfiles(R.drawable.hail05, "hail05.png")
         checkfiles(R.drawable.hail0, "hail0.png")
         checkfiles(R.drawable.hail1, "hail1.png")

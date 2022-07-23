@@ -57,7 +57,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var mapShown = false
     private lateinit var star: MenuItem
     private lateinit var scrollView: ScrollView
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private var locations = listOf<String>()
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
@@ -79,11 +79,11 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.lsrbywfo)
         scrollView = findViewById(R.id.scrollView)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
-        val activityArguments = intent.getStringArrayExtra(URL)
-        wfo = activityArguments!![0]
+        val arguments = intent.getStringArrayExtra(URL)!!
+        wfo = arguments[0]
         if (wfo == "") {
             wfo = "OUN"
         }
@@ -174,7 +174,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = UIPreferences.wfoFav
-        linearLayout.removeAllViewsInLayout()
+        box.removeAllViewsInLayout()
         FutureVoid(this, ::downloadFirst, ::getLsrFromWfo)
     }
 
@@ -209,7 +209,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             var i = 0
             (1..maxVersions + 1 step 2).forEach { version ->
                 lsrList.add("")
-                textList.add(ObjectCardText(this@LsrByWfoActivity, linearLayout))
+                textList.add(ObjectCardText(this, box))
                 val iFinal = i
                 FutureVoid(this, { download(iFinal, version) }, { update(iFinal) })
                 i += 1

@@ -36,17 +36,14 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.util.*
 
-//elys mod - deletefiles keep in   
-import joshuatee.wx.ui.UtilityUI
-
 class SettingsMainActivity : BaseActivity() {
 
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         UtilityTheme.setPrimaryColor(this)
         val backuprestore = UtilityBackupRestore()
         val version = Utility.getVersion(this)
@@ -78,25 +75,25 @@ class SettingsMainActivity : BaseActivity() {
         cardAbout.setOnClickListener { ObjectIntent(this, SettingsAboutActivity::class.java) }
         listOf(
                 cardAbout.get(),
-                cardLocations.get(),
-		cardsn.get(),
-                cardNotif.get(),
-                cardWidgets.get(),
+                cardCtoF.get(),
                 cardColors.get(),
+                cardHS.get(),
+                cardLocations.get(),
+                cardNotif.get(),
                 cardPL.get(),
                 cardRadar.get(),
-                cardHS.get(),
+		cardsn.get(),
                 cardUI.get(),
-                cardCtoF.get(),
+                cardWidgets.get(),
                 cardDeleteFiles.get(),
 		cardbackuppref.get(),
 		cardrestorepref.get()
         ).forEach {
-            linearLayout.addView(it)
+            box.addView(it)
         }
 	
 	//elys mod
-        linearLayout.addView(
+        box.addView(
                 ObjectSettingsCheckBox(
                         this,
                         "Check for Internet on startup",

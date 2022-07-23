@@ -41,7 +41,7 @@ class NhcActivity : BaseActivity() {
 
     private lateinit var objectNhc: ObjectNhc
     private lateinit var scrollView: ScrollView
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.nhc, menu)
@@ -52,8 +52,8 @@ class NhcActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc, false)
         scrollView = findViewById(R.id.scrollView)
-        linearLayout = findViewById(R.id.linearLayout)
-        objectNhc = ObjectNhc(this, linearLayout)
+        box = findViewById(R.id.linearLayout)
+        objectNhc = ObjectNhc(this, box)
         getContent()
     }
 

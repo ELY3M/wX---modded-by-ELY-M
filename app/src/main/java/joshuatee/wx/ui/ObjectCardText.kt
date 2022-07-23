@@ -48,7 +48,9 @@ class ObjectCardText(context: Context) {
         objectCard.addView(tv)
     }
 
-    constructor(context: Context, linearLayout: LinearLayout) : this(context) { linearLayout.addView(get()) }
+    constructor(context: Context, linearLayout: LinearLayout) : this(context) {
+        linearLayout.addView(get())
+    }
 
     constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, toolbarBottom: Toolbar) : this(context) {
         linearLayout.addView(get())
@@ -234,12 +236,13 @@ class ObjectCardText(context: Context) {
     }
 
     companion object {
-        fun textViewSetup(textView: TextView) {
-            textView.setPadding(UIPreferences.padding)
-            textView.gravity = Gravity.START
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
-            textView.setTextColor(UIPreferences.backgroundColor)
-        }
+
+//        fun textViewSetup(textView: TextView) {
+//            textView.setPadding(UIPreferences.padding)
+//            textView.gravity = Gravity.START
+//            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+//            textView.setTextColor(UIPreferences.backgroundColor)
+//        }
 
         fun textViewSetup(objectCardText: ObjectCardText) {
             objectCardText.tv.setPadding(objectCardText.padding)

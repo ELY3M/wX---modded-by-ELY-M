@@ -33,14 +33,8 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.ObjectNavDrawerCombo
-import joshuatee.wx.ui.OnSwipeTouchListener
-import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.ui.*
+import joshuatee.wx.util.*
 
 class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
 
@@ -48,13 +42,12 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
 
     private var bitmap = UtilityImg.getBlankBitmap()
     private var timePeriod = 1
-    private var firstRun = false
-    private var imageLoaded = false
-    private lateinit var drw: ObjectNavDrawerCombo
-    private lateinit var activityArguments: Array<String>
-    private lateinit var img: TouchImageView2
+    private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
+    private lateinit var arguments: Array<String>
+    private lateinit var image: TouchImage
     private var calledFromHomeScreen = false
     private var homeScreenId = ""
+    private val prefImagePosition = "WPCIMG"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.wpcimages, menu)
@@ -66,7 +59,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
         val actionForward = menu.findItem(R.id.action_forward)
         actionBack!!.isVisible = false
         actionForward!!.isVisible = false
-        if (drw.getUrl().contains("https://graphical.weather.gov/images/conus/")) {
+        if (objectNavDrawerCombo.getUrl().contains("https://graphical.weather.gov/images/conus/")) {
             actionBack.isVisible = true
             actionForward.isVisible = true
         }
@@ -76,28 +69,28 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, iconsEvenlySpaced = true, bottomToolbar = false)
-        img = findViewById(R.id.img)
-        img.setOnClickListener(this)
-        img.setOnTouchListener(object : OnSwipeTouchListener(this) {
+        image = TouchImage(this, R.id.img)
+        image.setOnClickListener(this)
+        image.setListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) showNextImg()
+                if (image.currentZoom < 1.01f) showNextImg()
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) showPrevImg()
+                if (image.currentZoom < 1.01f) showPrevImg()
             }
         })
-        activityArguments = intent.getStringArrayExtra(URL)!!
-        activityArguments.let {
-            if (activityArguments.size > 1 && activityArguments[0] == "HS") {
-                homeScreenId = activityArguments[1]
+        arguments = intent.getStringArrayExtra(URL)!!
+        arguments.let {
+            if (arguments.size > 1 && arguments[0] == "HS") {
+                homeScreenId = arguments[1]
                 calledFromHomeScreen = true
             }
         }
         UtilityWpcImages.create()
-        drw = ObjectNavDrawerCombo(this, UtilityWpcImages.groups, UtilityWpcImages.longCodes, UtilityWpcImages.shortCodes, "WPG_IMG")
-        drw.setListener { getContent() }
-        toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+        objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilityWpcImages.groups, UtilityWpcImages.longCodes, UtilityWpcImages.shortCodes, "WPG_IMG")
+        objectNavDrawerCombo.setListener { getContent() }
+        toolbar.setOnClickListener { objectNavDrawerCombo.open() }
         getContent()
     }
 
@@ -109,7 +102,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     private fun getContent() {
         if (!calledFromHomeScreen) {
             title = "Images"
-            toolbar.subtitle = drw.getLabel()
+            toolbar.subtitle = objectNavDrawerCombo.getLabel()
         } else {
             title = "Images"
             toolbar.subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
@@ -120,13 +113,13 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     private fun download() {
         if (!calledFromHomeScreen) {
             val getUrl = when {
-                drw.getUrl().contains("https://graphical.weather.gov/images/conus/") -> drw.getUrl() + timePeriod + "_conus.png"
-                drw.getUrl().contains("aviationweather") -> drw.getUrl()
-                else -> drw.getUrl()
+                objectNavDrawerCombo.getUrl().contains("https://graphical.weather.gov/images/conus/") -> objectNavDrawerCombo.getUrl() + timePeriod + "_conus.png"
+                objectNavDrawerCombo.getUrl().contains("aviationweather") -> objectNavDrawerCombo.getUrl()
+                else -> objectNavDrawerCombo.getUrl()
             }
-            Utility.writePref(this, "WPG_IMG_FAV_URL", drw.getUrl())
-            Utility.writePref(this, "WPG_IMG_IDX", drw.imgIdx)
-            Utility.writePref(this, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
+            Utility.writePref(this, "WPG_IMG_FAV_URL", objectNavDrawerCombo.getUrl())
+            Utility.writePref(this, "WPG_IMG_IDX", objectNavDrawerCombo.imgIdx)
+            Utility.writePref(this, "WPG_IMG_GROUPIDX", objectNavDrawerCombo.imgGroupIdx)
             bitmap = getUrl.getImage()
         } else {
             bitmap = UtilityDownload.getImageProduct(this, homeScreenId)
@@ -135,27 +128,23 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     }
 
     private fun update() {
-        img.setImageBitmap(bitmap)
-        if (!firstRun && activityArguments.size < 2) {
-            img.setZoom("WPCIMG")
-            firstRun = true
-        }
-        imageLoaded = true
+        image.setBitmap(bitmap)
+        image.firstRunSetZoomPosn(prefImagePosition)
         invalidateOptionsMenu()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawerCombo.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawerCombo.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -171,7 +160,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else
-                    UtilityShare.bitmap(this, drw.getLabel(), bitmap)
+                    UtilityShare.bitmap(this, objectNavDrawerCombo.getLabel(), bitmap)
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -185,26 +174,24 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     }
 
     override fun onStop() {
-        if (imageLoaded && activityArguments.size < 2) {
-            UtilityImg.imgSavePosnZoom(this, img, "WPCIMG")
-        }
+        image.imgSavePosnZoom(prefImagePosition)
         super.onStop()
     }
 
     private fun showNextImg() {
-        drw.imgIdx += 1
-        if (UtilityWpcImages.shortCodes[drw.imgGroupIdx][drw.imgIdx] == "") {
-            drw.imgIdx = 0
+        objectNavDrawerCombo.imgIdx += 1
+        if (UtilityWpcImages.shortCodes[objectNavDrawerCombo.imgGroupIdx][objectNavDrawerCombo.imgIdx] == "") {
+            objectNavDrawerCombo.imgIdx = 0
         }
         getContent()
     }
 
     private fun showPrevImg() {
-        drw.imgIdx -= 1
-        if (drw.imgIdx == -1) {
-            for (j in UtilityWpcImages.shortCodes[drw.imgGroupIdx].indices) {
-                if (UtilityWpcImages.shortCodes[drw.imgGroupIdx][j] == "") {
-                    drw.imgIdx = j - 1
+        objectNavDrawerCombo.imgIdx -= 1
+        if (objectNavDrawerCombo.imgIdx == -1) {
+            for (j in UtilityWpcImages.shortCodes[objectNavDrawerCombo.imgGroupIdx].indices) {
+                if (UtilityWpcImages.shortCodes[objectNavDrawerCombo.imgGroupIdx][j] == "") {
+                    objectNavDrawerCombo.imgIdx = j - 1
                     break
                 }
             }

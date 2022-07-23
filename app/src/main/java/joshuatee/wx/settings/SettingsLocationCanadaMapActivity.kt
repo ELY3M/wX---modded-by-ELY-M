@@ -48,8 +48,8 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_canada_map, null, false)
-        val activityArguments = intent.getStringArrayExtra(URL)
-        url = activityArguments!![0]
+        val arguments = intent.getStringArrayExtra(URL)!!
+        url = arguments[0]
         title = url.uppercase(Locale.US)
         toolbar.subtitle = "Select a location and then use the back arrow to save."
         var imgRes = 0
@@ -163,7 +163,11 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     private fun getCityFromXml(token: String): String {
         val data = UtilityIO.readTextFileFromRaw(this.resources, R.raw.maps)
         val lines = data.split(GlobalVariables.newline)
-        lines.forEach { if (it.contains(token)) return it.parse("title=\"(.*?)\"") }
+        lines.forEach {
+            if (it.contains(token)) {
+                return it.parse("title=\"(.*?)\"")
+            }
+        }
         return ""
     }
 }

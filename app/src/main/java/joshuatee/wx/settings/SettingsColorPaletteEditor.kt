@@ -52,7 +52,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         private const val READ_REQUEST_CODE = 42
     }
 
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private var formattedDate = ""
     private var name = ""
     private var type = ""
@@ -75,16 +75,16 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             }
         }
         showLoadFromFileMenuItem()
-        activityArguments = intent.getStringArrayExtra(URL)!!
-        type = activityArguments[0]
+        arguments = intent.getStringArrayExtra(URL)!!
+        type = arguments[0]
         typeAsInt = type.toIntOrNull() ?: 94
         title = "Palette Editor"
         toolbar.subtitle = WXGLNexrad.productCodeStringToName[typeAsInt]
         formattedDate = UtilityTime.getDateAsString("MMdd")
-        name = if (activityArguments[2].contains("false")) activityArguments[1] else activityArguments[1] + "_" + formattedDate
+        name = if (arguments[2].contains("false")) arguments[1] else arguments[1] + "_" + formattedDate
         palTitle.setText(name)
         palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
-        palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, activityArguments[1]))
+        palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1]))
         palContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
     }
 
@@ -155,7 +155,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_reset -> palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, activityArguments[1]))
+            R.id.action_reset -> palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1]))
             R.id.action_clear -> palContent.setText("")
             R.id.action_help -> ObjectDialogue(this,"Not implemented yet.")
             R.id.action_share -> UtilityShare.textAsAttachment(this, palTitle.text.toString(), palContent.text.toString(), "wX_colormap_" + palTitle.text.toString() + ".txt")

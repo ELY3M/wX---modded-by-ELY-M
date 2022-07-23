@@ -29,15 +29,15 @@ import android.widget.LinearLayout
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 
-class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout, val text: String) {
+class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout, val title: String) {
 
     private val objectCard = ObjectCard(context)
-    private val objectTextView = ObjectTextView(context, UIPreferences.textHighlightColor)
+    private val text = ObjectTextView(context, UIPreferences.textHighlightColor)
 
     init {
-        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
-        objectLinearLayout.addView(objectTextView)
-        objectCard.addView(objectLinearLayout)
+        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
+        vbox.addWidget(text.get())
+        objectCard.addView(vbox)
         linearLayout.addView(objectCard.get())
         setTextHeader()
     }
@@ -47,11 +47,11 @@ class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout
     }
 
     private fun setTextHeader() {
-        objectTextView.text = text
-        objectTextView.setTextSize(TextSize.LARGE)
-        objectTextView.setPadding(20)
-        objectTextView.color = UIPreferences.textHighlightColor
-        objectTextView.setBackgroundColor(Color.BLACK)
-        objectTextView.setTextColor(Color.WHITE)
+        text.text = title
+        text.setTextSize(TextSize.LARGE)
+        text.setPadding(20)
+        text.color = UIPreferences.textHighlightColor
+        text.setBackgroundColor(Color.BLACK)
+        text.setTextColor(Color.WHITE)
     }
 }

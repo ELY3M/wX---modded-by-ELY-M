@@ -22,10 +22,12 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.graphics.Color
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.util.SparseArray
+import android.view.MenuItem
 import android.widget.ExpandableListView
 import joshuatee.wx.util.MyExpandableListAdapter
 import joshuatee.wx.R
@@ -40,9 +42,9 @@ class ObjectNavDrawerCombo(
     prefPrefix: String
 ) {
 
-    val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
-    val listView: ExpandableListView = activity.findViewById(R.id.left_drawer)
-    val actionBarDrawerToggle: ActionBarDrawerToggle
+    private val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
+    private val listView: ExpandableListView = activity.findViewById(R.id.left_drawer)
+    private val actionBarDrawerToggle: ActionBarDrawerToggle
     var imgIdx: Int
     var imgGroupIdx: Int
 
@@ -86,4 +88,26 @@ class ObjectNavDrawerCombo(
             true
         }
     }
+
+    fun setListener2(fn: ExpandableListView.OnChildClickListener) {
+        listView.setOnChildClickListener(fn)
+    }
+
+    fun open() {
+        drawerLayout.openDrawer(listView)
+    }
+
+    fun close() {
+        drawerLayout.closeDrawer(listView)
+    }
+
+    fun syncState() {
+        actionBarDrawerToggle.syncState()
+    }
+
+    fun onConfigurationChanged(newConfig: Configuration) {
+        actionBarDrawerToggle.onConfigurationChanged(newConfig)
+    }
+
+    fun onOptionsItemSelected(item: MenuItem) = actionBarDrawerToggle.onOptionsItemSelected(item)
 }

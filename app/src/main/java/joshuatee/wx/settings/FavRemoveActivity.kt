@@ -58,8 +58,8 @@ class FavRemoveActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
-        val activityArguments = intent.getStringArrayExtra(TYPE)
-        type = activityArguments!![0]
+        val arguments = intent.getStringArrayExtra(TYPE)!!
+        type = arguments[0]
         var verboseTitle = ""
         when (type) {
             "SND" -> {

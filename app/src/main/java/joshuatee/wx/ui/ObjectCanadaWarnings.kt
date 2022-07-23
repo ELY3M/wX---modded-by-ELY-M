@@ -22,7 +22,6 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
-import android.content.Context
 import androidx.appcompat.widget.Toolbar
 import android.widget.LinearLayout
 import java.util.Locale

@@ -25,7 +25,6 @@ import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
@@ -81,7 +80,7 @@ object UtilityUS {
                     val objectPendingIntents = ObjectPendingIntents(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url, ""), arrayOf(url, "sound"))
                     val tornadoWarningPresent = title.contains(tornadoWarningString)
                     if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
-                        val sound = MyApplication.locations[currentLoc].sound && !inBlackout || MyApplication.locations[currentLoc].sound
+                        val sound = Location.locations[currentLoc].sound && !inBlackout || Location.locations[currentLoc].sound
                                 && tornadoWarningPresent && NotificationPreferences.alertBlackoutTornado
                         val objectNotification = ObjectNotification(
                                 context,

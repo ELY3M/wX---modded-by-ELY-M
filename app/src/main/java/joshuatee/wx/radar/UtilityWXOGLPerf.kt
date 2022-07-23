@@ -609,7 +609,7 @@ internal object UtilityWXOGLPerf {
         } catch (e: Exception) { UtilityLog.handleException(e) }
     }
     
-//elys mods   
+        //elys mods
         fun genConus(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
         buffers.setToPositionZero()
         val pixYD: Float
@@ -653,7 +653,7 @@ internal object UtilityWXOGLPerf {
         }
     }
 
-    //for tvs / hi imagees
+    //for tvs / hi images
     fun genMarkerList(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
         var pointX: Double
         var pointY: Double

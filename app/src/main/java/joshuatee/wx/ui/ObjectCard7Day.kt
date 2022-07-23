@@ -24,7 +24,6 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
-import android.widget.LinearLayout
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.fragments.UtilityLocationFragment
@@ -38,16 +37,16 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
     private val bottomLineText = ObjectTextView(context, backgroundText = true)
 
     init {
-        val horizontalContainer = ObjectLinearLayout(context, LinearLayout.HORIZONTAL)
-        val verticalContainer = ObjectLinearLayout(context, LinearLayout.VERTICAL)
+        val hbox = HBox(context)
+        val vbox = VBox(context)
         topLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
         bottomLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
-        verticalContainer.addViews(listOf(topLineText.get(), bottomLineText.get()))
+        vbox.addViews(listOf(topLineText.get(), bottomLineText.get()))
         if (!UIPreferences.locfragDontShowIcons) {
-            horizontalContainer.addView(objectImageView)
+            hbox.addWidget(objectImageView.get())
         }
-        horizontalContainer.addView(verticalContainer)
-        objectCard.addView(horizontalContainer)
+        hbox.addLayout(vbox)
+        objectCard.addView(hbox.get())
         val items = if (forecasts.size > day) {
             forecasts[day].split(": ")
         } else {
@@ -87,7 +86,9 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
         bottomLineText.text = text
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) = objectCard.setOnClickListener(fn)
+    fun setOnClickListener(fn: View.OnClickListener) {
+        objectCard.setOnClickListener(fn)
+    }
 
     fun refreshTextSize() {
         topLineText.refreshTextSize(TextSize.MEDIUM)

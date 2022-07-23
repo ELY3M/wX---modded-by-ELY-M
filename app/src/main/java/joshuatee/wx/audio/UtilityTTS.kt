@@ -62,7 +62,7 @@ object UtilityTts {
     }
 
     fun initTts(context: Context) {
-        // samsung bug, if users do not have google TTS selected it will crash - add try-catch so user can at least use rest of prog
+        // samsung bug, if users do not have google TTS selected it will crash - add try-catch so user can at least use rest of program
         //if (!ttsInit) {
             try {
                 ttobjGlobal = TextToSpeech(context) { status ->
@@ -323,7 +323,7 @@ object UtilityTts {
         }
     }
 
-    fun conditionalPlay(activityArguments: Array<String>, index: Int, context: Context, html: String, label: String) {
-        if (activityArguments.size > index && activityArguments[index] == "sound") synthesizeTextAndPlay(context, html, label)
+    fun conditionalPlay(arguments: Array<String>, index: Int, context: Context, html: String, label: String) {
+        if (arguments.size > index && arguments[index] == "sound") synthesizeTextAndPlay(context, html, label)
     }
 }

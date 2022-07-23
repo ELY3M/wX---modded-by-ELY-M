@@ -52,29 +52,29 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     companion object { const val NUMBER = "" }
 
     private var number = ""
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private lateinit var objectCardImage: ObjectCardImage
     private lateinit var objectCardText: ObjectCardText
     private lateinit var objectWatchProduct: ObjectWatchProduct
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private var tabletInLandscape = false
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         if (tabletInLandscape) {
-            linearLayout.orientation = LinearLayout.HORIZONTAL
-            objectCardImage = ObjectCardImage(this, linearLayout, UtilityImg.getBlankBitmap(), 2)
+            box.orientation = LinearLayout.HORIZONTAL
+            objectCardImage = ObjectCardImage(this, box, UtilityImg.getBlankBitmap(), 2)
         } else {
-            objectCardImage = ObjectCardImage(this, linearLayout)
+            objectCardImage = ObjectCardImage(this, box)
         }
-        objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(NUMBER)!!
-        number = activityArguments[0]
-        when (activityArguments[2]) {
+        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
+        arguments = intent.getStringArrayExtra(NUMBER)!!
+        number = arguments[0]
+        when (arguments[2]) {
             "MCD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MCD, number)
             "WATCH" -> objectWatchProduct = ObjectWatchProduct(PolygonType.WATCH, number)
             "MPD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MPD, number)
@@ -103,7 +103,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objectCardImage.setOnClickListener {
             ObjectIntent.showImage(this@SpcMcdWatchShowActivity, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
         }
-        UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
+        UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

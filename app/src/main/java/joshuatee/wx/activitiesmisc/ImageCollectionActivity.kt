@@ -34,7 +34,7 @@ import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.ObjectImagesCollection
 import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.ObjectTouchImageView
+import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
@@ -44,13 +44,13 @@ import joshuatee.wx.vis.UtilityGoesFullDisk
 class ImageCollectionActivity : VideoRecordActivity() {
 
     //
-    // used for OPC, GOES Full Disk, other?
+    // used for OPC, GOES Full Disk, Observations
     //
 
     companion object { const val TYPE = "" }
 
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var imageCollection: ObjectImagesCollection
     private var animDrawable = AnimationDrawable()
@@ -72,12 +72,12 @@ class ImageCollectionActivity : VideoRecordActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.imagecollection, iconsEvenlySpaced = true, bottomToolbar = false)
-        val activityArguments = intent.getStringArrayExtra(TYPE)!!
-        imageCollection = ObjectImagesCollection.imageCollectionMap[activityArguments[0]]!!
+        val arguments = intent.getStringArrayExtra(TYPE)!!
+        imageCollection = ObjectImagesCollection.imageCollectionMap[arguments[0]]!!
         title = imageCollection.title
         objectNavDrawer = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContent)
-        img = ObjectTouchImageView(this, toolbar, R.id.iv, objectNavDrawer, imageCollection.prefTokenIdx)
-        img.setListener(objectNavDrawer, ::getContent)
+        image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, imageCollection.prefTokenIdx)
+        image.setListener(objectNavDrawer, ::getContent)
         objectNavDrawer.index = Utility.readPref(this, imageCollection.prefTokenIdx, 0)
         toolbar.setOnClickListener { objectNavDrawer.open() }
         getContent()
@@ -95,27 +95,27 @@ class ImageCollectionActivity : VideoRecordActivity() {
 
     private fun showImage() {
         if (objectNavDrawer.url.contains("large_latestsfc.gif")) {
-            img.setMaxZoom(16.0f)
+            image.setMaxZoom(16.0f)
         } else {
-            img.setMaxZoom(4.0f)
+            image.setMaxZoom(4.0f)
         }
-        img.setBitmap(bitmap)
-        img.firstRunSetZoomPosn(imageCollection.prefImagePosition)
+        image.setBitmap(bitmap)
+        image.firstRunSetZoomPosn(imageCollection.prefImagePosition)
         invalidateOptionsMenu()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -133,13 +133,13 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(imageCollection.prefImagePosition)
+        image.imgSavePosnZoom(imageCollection.prefImagePosition)
         super.onStop()
     }
 
     private fun getAnimate() {
         FutureVoid(this,
             { animDrawable = UtilityGoesFullDisk.getAnimation(this, objectNavDrawer.url) })
-            { UtilityImgAnim.startAnimation(animDrawable, img) }
+            { UtilityImgAnim.startAnimation(animDrawable, image) }
     }
 }

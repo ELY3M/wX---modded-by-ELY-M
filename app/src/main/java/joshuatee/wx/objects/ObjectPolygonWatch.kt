@@ -22,7 +22,6 @@
 package joshuatee.wx.objects
 
 import android.content.Context
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.*
 
 class ObjectPolygonWatch(val context: Context, val type: PolygonType) {

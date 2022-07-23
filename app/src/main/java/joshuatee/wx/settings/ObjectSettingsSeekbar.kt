@@ -50,30 +50,30 @@ internal class ObjectSettingsSeekBar(
         "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 0))
         else -> Utility.readPref(context, pref, defValue)
     }
-    private val objectTextView = ObjectTextView(context)
+    private val text = ObjectTextView(context)
     private val seekBar = SeekBar(context)
 
     init {
-        objectTextView.setPadding(UIPreferences.padding)
-        objectTextView.get().layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
-        objectTextView.gravity = Gravity.TOP
-        objectTextView.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
-        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
-        objectLinearLayout.matchParent()
-        objectLinearLayout.addView(objectTextView.get())
+        text.setPadding(UIPreferences.padding)
+        text.wrap()
+        text.gravity = Gravity.TOP
+        text.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
+        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
+        vbox.matchParent()
+        vbox.addWidget(text.get())
         seekBar.max = highValue - lowValue
         seekBar.progress = convert(initValue)
         val padding = 30
         val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         layoutParams.setMargins(padding, padding, padding, padding)
         seekBar.layoutParams = layoutParams
-        objectLinearLayout.addView(seekBar)
-        objectCard.addView(objectLinearLayout.linearLayout)
+        vbox.addWidget(seekBar)
+        objectCard.addView(vbox.get())
         updateLabel()
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (pref == "TEXTVIEW_FONT_SIZE") {
-                    objectTextView.get().setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(convertForSave(seekBar.progress), context))
+                    text.get().setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(convertForSave(seekBar.progress), context))
                 }
                 updateLabel()
             }
@@ -100,7 +100,7 @@ internal class ObjectSettingsSeekBar(
     private fun convertForSave(value: Int) = value + lowValue
 
     fun updateLabel() {
-        objectTextView.text = label + " (default is " + defValue.toString() + "): " + convertForSave(seekBar.progress).toString()
+        text.text = label + " (default is " + defValue.toString() + "): " + convertForSave(seekBar.progress).toString()
     }
 
     val card get() = objectCard.get()

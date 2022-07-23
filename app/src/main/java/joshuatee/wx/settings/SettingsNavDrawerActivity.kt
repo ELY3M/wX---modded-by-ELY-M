@@ -32,17 +32,17 @@ import joshuatee.wx.util.UtilityAlertDialog
 class SettingsNavDrawerActivity : BaseActivity() {
 
     private var tokenList = ""
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_navdrawer, null, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         tokenList = UtilityNavDrawer.getNavDrawerTokenList(this)
         title = "Navigation Drawer"
         toolbar.subtitle = "Turn items off or on for the main screen nav drawer."
         UtilityNavDrawer.labels.forEach {
-            linearLayout.addView(
+            box.addView(
                     ObjectSettingsCheckBox(
                             this,
                             it,

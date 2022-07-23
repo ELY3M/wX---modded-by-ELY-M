@@ -66,12 +66,12 @@ class WebView : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_webview_toolbar, null, false)
         webView = findViewById(R.id.webView)
-        val activityArguments = intent.getStringArrayExtra(URL)!!
-        url = activityArguments[0]
-        title = activityArguments[1]
+        val arguments = intent.getStringArrayExtra(URL)!!
+        url = arguments[0]
+        title = arguments[1]
         val webSettings = webView.settings
         webSettings.javaScriptEnabled = true
-        if (activityArguments.size > 2) {
+        if (arguments.size > 2) {
             webSettings.builtInZoomControls = true
             webSettings.displayZoomControls = false
             webSettings.useWideViewPort = true

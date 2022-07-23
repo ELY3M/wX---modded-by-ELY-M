@@ -50,7 +50,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
 
     private var animRan = false
     private var animDrawable = AnimationDrawable()
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private val prefImagePosition = "RADARMOSAICNWS"
@@ -71,14 +71,14 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.radarnwsmosaic, iconsEvenlySpaced = true, bottomToolbar = false)
-        val activityArguments = intent.getStringArrayExtra(URL)!!
+        val arguments = intent.getStringArrayExtra(URL)!!
         objectNavDrawer = ObjectNavDrawer(this, UtilityNwsRadarMosaic.labels, UtilityNwsRadarMosaic.sectors) { getContent() }
-        img = ObjectTouchImageView(this, toolbar, R.id.iv, objectNavDrawer, "")
+        image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
         toolbar.setOnClickListener { objectNavDrawer.open() }
-        img.setMaxZoom(8.0f)
-        img.setListener(objectNavDrawer) { getContent() }
-        if (activityArguments.isNotEmpty() && activityArguments[0] != "") {
-            sector = activityArguments[0]
+        image.setMaxZoom(8.0f)
+        image.setListener(objectNavDrawer) { getContent() }
+        if (arguments.isNotEmpty() && arguments[0] != "") {
+            sector = arguments[0]
         }
         // sector = Utility.readPref(this, prefTokenSector, sector)
         objectNavDrawer.index = UtilityNwsRadarMosaic.sectors.indexOf(sector)
@@ -100,9 +100,9 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     }
 
     private fun showImage() {
-        img.setBitmap(bitmap)
+        image.setBitmap(bitmap)
         animRan = false
-        img.firstRunSetZoomPosn(prefImagePosition)
+        image.firstRunSetZoomPosn(prefImagePosition)
         Utility.writePref(this, prefTokenSector, objectNavDrawer.url)
     }
 
@@ -114,22 +114,22 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
             animateButton.setIcon(GlobalVariables.ICON_STOP_WHITE)
             FutureVoid(this,
                     { animDrawable = UtilityNwsRadarMosaic.getAnimation(this, objectNavDrawer.url) })
-            { animRan = UtilityImgAnim.startAnimation(animDrawable, img) }
+            { animRan = UtilityImgAnim.startAnimation(animDrawable, image) }
         }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -152,7 +152,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(prefImagePosition)
+        image.imgSavePosnZoom(prefImagePosition)
         super.onStop()
     }
 }

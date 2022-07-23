@@ -41,23 +41,23 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private var capAlert = CapAlert()
     private lateinit var objectAlertDetail: ObjectAlertDetail
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var radarIcon: MenuItem
     private var radarSite = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.usalerts_detail)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         ObjectCard(this, R.id.cardView)
         toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
         radarIcon = toolbarBottom.menu.findItem(R.id.action_radar)
         toolbarBottom.setOnMenuItemClickListener(this)
-        objectAlertDetail = ObjectAlertDetail(this, linearLayout)
-        activityArguments = intent.getStringArrayExtra(URL)!!
+        objectAlertDetail = ObjectAlertDetail(this, box)
+        arguments = intent.getStringArrayExtra(URL)!!
         getContent()
     }
 
@@ -67,7 +67,7 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this, { capAlert = CapAlert.createFromUrl(activityArguments[0]) }, ::update)
+        FutureVoid(this, { capAlert = CapAlert.createFromUrl(arguments[0]) }, ::update)
     }
 
     private fun update() {
@@ -75,10 +75,10 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (radarSite == "") {
             radarIcon.isVisible = false
         }
-        objectAlertDetail.updateContent(capAlert, activityArguments[0])
+        objectAlertDetail.updateContent(capAlert, arguments[0])
         toolbar.subtitle = objectAlertDetail.wfoTitle
         title = objectAlertDetail.title
-        UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, Utility.fromHtml(capAlert.text), "alert")
+        UtilityTts.conditionalPlay(arguments, 1, applicationContext, Utility.fromHtml(capAlert.text), "alert")
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

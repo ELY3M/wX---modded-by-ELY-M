@@ -30,7 +30,7 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectTouchImageView
+import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -53,7 +53,7 @@ class ImageShowActivity : BaseActivity() {
     private var bitmap = UtilityImg.getBlankBitmap()
     private var shareTitle = ""
     private var needsWhiteBackground = false
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.image_show_activity, menu)
@@ -63,14 +63,14 @@ class ImageShowActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show, R.menu.image_show_activity, false)
-        img = ObjectTouchImageView(this, toolbar, R.id.iv)
-        val activityArguments: Array<String> = intent.getStringArrayExtra(URL)!!
-        url = activityArguments[0]
+        image = TouchImage(this, toolbar, R.id.iv)
+        val arguments = intent.getStringArrayExtra(URL)!!
+        url = arguments[0]
         title = "Image Viewer"
-        toolbar.subtitle = activityArguments[1]
-        shareTitle = activityArguments[1]
-        if (activityArguments.size > 2) {
-            needsWhiteBackground = activityArguments[2] == "true"
+        toolbar.subtitle = arguments[1]
+        shareTitle = arguments[1]
+        if (arguments.size > 2) {
+            needsWhiteBackground = arguments[2] == "true"
         }
         when {
             url.contains("file:") -> {
@@ -87,7 +87,7 @@ class ImageShowActivity : BaseActivity() {
 
     private fun loadRawBitmap() {
         bitmap = UtilityImg.loadBitmap(this, R.drawable.radar_legend, false)
-        img.setBitmap(bitmap)
+        image.setBitmap(bitmap)
     }
 
     override fun onRestart() {
@@ -103,11 +103,11 @@ class ImageShowActivity : BaseActivity() {
         if (needsWhiteBackground) {
             bitmap = UtilityImg.addColorBackground(this, bitmap, Color.WHITE)
         }
-        img.setBitmap(bitmap)
+        image.setBitmap(bitmap)
     }
 
     private fun getContentFromStorage() {
-        img.setBitmap(UtilityIO.bitmapFromInternalStorage(this, urls[1]))
+        image.setBitmap(UtilityIO.bitmapFromInternalStorage(this, urls[1]))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

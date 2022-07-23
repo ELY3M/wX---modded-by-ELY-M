@@ -54,30 +54,30 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     private var textProduct = ""
     private var imageUrl = ""
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private lateinit var objectCardImage: ObjectCardImage
     private lateinit var objectCardText: ObjectCardText
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private var tabletInLandscape = false
     private var html = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         if (tabletInLandscape) {
-            linearLayout.orientation = LinearLayout.HORIZONTAL
-            objectCardImage = ObjectCardImage(this, linearLayout, UtilityImg.getBlankBitmap(), 2)
+            box.orientation = LinearLayout.HORIZONTAL
+            objectCardImage = ObjectCardImage(this, box, UtilityImg.getBlankBitmap(), 2)
         } else {
-            objectCardImage = ObjectCardImage(this, linearLayout)
+            objectCardImage = ObjectCardImage(this, box)
         }
-        objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(NUMBER)!!
-        textProduct = activityArguments[0]
-        imageUrl = activityArguments[1]
-        title = "Day " + activityArguments[2] + " Excessive Rainfall Discussion"
+        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
+        arguments = intent.getStringArrayExtra(NUMBER)!!
+        textProduct = arguments[0]
+        imageUrl = arguments[1]
+        title = "Day " + arguments[2] + " Excessive Rainfall Discussion"
         toolbar.subtitle = textProduct
         getContent()
     }
@@ -89,7 +89,7 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
 
     private fun showText() {
         objectCardText.text = html
-        UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, objectCardText.text, textProduct)
+        UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectCardText.text, textProduct)
     }
 
     private fun showImage() {

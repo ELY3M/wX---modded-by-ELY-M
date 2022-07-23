@@ -34,16 +34,16 @@ import joshuatee.wx.ui.ObjectCardText
 class SettingsColorPaletteListingActivity : BaseActivity() {
 
     private var cardColorPalettes = mutableListOf<ObjectCardText>()
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         WXGLNexrad.colorPaletteProducts.forEach { product ->
             val card = ObjectCardText(
                     this,
-                    linearLayout,
+                    box,
                     WXGLNexrad.productCodeStringToName[product] + ": " + ObjectColorPalette.radarColorPalette[product],
                     UIPreferences.textSizeNormal,
                     UIPreferences.paddingSettings

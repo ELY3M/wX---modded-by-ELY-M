@@ -67,9 +67,9 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         UtilityToolbar.fullScreenMode(toolbar, false)
-        val activityArguments = intent.getStringArrayExtra(INFO)
-        prefVal = activityArguments!![0]
-        title = activityArguments[1]
+        val arguments = intent.getStringArrayExtra(INFO)
+        prefVal = arguments!![0]
+        title = arguments[1]
         color = UtilityColor.setColor(prefVal)
         val currentColor = Utility.readPref(this, prefVal, color)
         buttonDefault.setTextColor(color)

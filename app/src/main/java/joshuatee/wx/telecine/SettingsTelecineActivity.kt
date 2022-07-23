@@ -22,7 +22,7 @@ class SettingsTelecineActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
+        val box: LinearLayout = findViewById(R.id.linearLayout)
         val vidSize = listOf("100", "75", "50")
         val vidSpinner = ObjectSettingsSpinner(
             this,
@@ -32,8 +32,8 @@ class SettingsTelecineActivity : BaseActivity() {
             R.string.widget_nexrad_size_label,
             vidSize
         )
-        linearLayout.addView(vidSpinner.card)
-        linearLayout.addView(
+        box.addView(vidSpinner.card)
+        box.addView(
             ObjectSettingsCheckBox(
                 this,
                 "Three Second Countdown",
@@ -41,7 +41,7 @@ class SettingsTelecineActivity : BaseActivity() {
                 R.string.loc1_radar_label
             ).get()
         )
-        linearLayout.addView(
+        box.addView(
             ObjectSettingsCheckBox(
                 this,
                 "Recording Notification",

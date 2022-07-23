@@ -24,7 +24,7 @@ package joshuatee.wx.Extensions
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import java.util.regex.Pattern
-import joshuatee.wx.ui.ObjectTouchImageView
+import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.*
 
@@ -88,4 +88,4 @@ fun Int.isEven() = this and 1 == 0
 
 fun AnimationDrawable.startAnimation(img: TouchImageView2) = UtilityImgAnim.startAnimation(this, img)
 
-fun AnimationDrawable.startAnimation(img: ObjectTouchImageView) = UtilityImgAnim.startAnimation(this, img)
+fun AnimationDrawable.startAnimation(img: TouchImage) = UtilityImgAnim.startAnimation(this, img)

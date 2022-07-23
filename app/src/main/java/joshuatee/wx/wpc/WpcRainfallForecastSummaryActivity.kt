@@ -38,7 +38,7 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
 
     private val bitmaps = MutableList(UtilityWpcRainfallForecast.urls.size){ UtilityImg.getBlankBitmap() }
     private var imagesPerRow = 2
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -49,13 +49,13 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         if (UtilityUI.isLandScape(this)) {
             imagesPerRow = 3
         }
         title = "Excessive Rainfall Outlooks"
         toolbar.subtitle = "WPC"
-        objectImageSummary = ObjectImageSummary(this, linearLayout, bitmaps)
+        objectImageSummary = ObjectImageSummary(this, box, bitmaps)
         getContent()
     }
 

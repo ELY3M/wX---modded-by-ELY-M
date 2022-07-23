@@ -21,7 +21,7 @@
 package joshuatee.wx.fragments
 
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.ItemTouchHelper
+//import androidx.recyclerview.widget.ItemTouchHelper
 
 internal interface ItemTouchHelperAdapter {
 

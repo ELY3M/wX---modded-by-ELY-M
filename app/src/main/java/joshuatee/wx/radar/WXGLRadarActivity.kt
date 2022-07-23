@@ -185,24 +185,24 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         isGetContentInProgress = false
         locXCurrent = joshuatee.wx.settings.Location.x
         locYCurrent = joshuatee.wx.settings.Location.y
-        val activityArguments = intent.getStringArrayExtra(RID)
+        val arguments = intent.getStringArrayExtra(RID)
         paneList = (0 until numberOfPanes).toList()
         UtilityFileManagement.deleteCacheFiles(this)
         // for L2 archive called from storm reports
-        if (activityArguments != null) {
-            if (activityArguments.size > 6) {
-                urlStr = activityArguments[4]
-                locXCurrent = activityArguments[5]
-                locYCurrent = activityArguments[6]
+        if (arguments != null) {
+            if (arguments.size > 6) {
+                urlStr = arguments[4]
+                locXCurrent = arguments[5]
+                locYCurrent = arguments[6]
                 archiveMode = true
-            } else if (activityArguments.size > 4) {
-                spotterId = activityArguments[4]
+            } else if (arguments.size > 4) {
+                spotterId = arguments[4]
                 spotterShowSelected = true
             }
-            if (activityArguments.size > 3) {
+            if (arguments.size > 3) {
                 fixedSite = true
             }
-            if (activityArguments.size < 7) {
+            if (arguments.size < 7) {
                 archiveMode = false
 		}
             }
@@ -239,8 +239,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         menu.findItem(R.id.action_jellybean_drawtools).isVisible = false
 
         // disable new Level3 super-res until NWS is past deployment phase
-        //menu.findItem(R.id.action_n0b).isVisible = false
-        //menu.findItem(R.id.action_n0g).isVisible = false
+	//elys mod - I enabled those menus 
+        menu.findItem(R.id.action_n0b).isVisible = true
+        menu.findItem(R.id.action_n0g).isVisible = true
 
         delay = UtilityImg.animInterval(this)
         img = findViewById(R.id.iv)
@@ -267,17 +268,17 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         )
         wxglRender.product = "N0Q"
         oglInView = true
-        if (activityArguments == null) {
+        if (arguments == null) {
             wxglRender.rid = joshuatee.wx.settings.Location.rid
         } else {
-            wxglRender.rid = activityArguments[0]
+            wxglRender.rid = arguments[0]
         }
         // hack, in rare cases a user will save a location that doesn't pick up RID
         if (wxglRender.rid == "") {
             wxglRender.rid = "TLX"
         }
-        if (activityArguments != null && activityArguments.size > 2) {
-            wxglRender.product = activityArguments[2]
+        if (arguments != null && arguments.size > 2) {
+            wxglRender.product = arguments[2]
             if (wxglRender.product == "N0R") {
                 wxglRender.product = "N0Q"
             }
@@ -337,7 +338,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         restarted = true
         restartedZoom = true
         paneList.forEach {
-            if (objectImageMap.map.visibility == View.GONE) {
+            if (objectImageMap.visibility == View.GONE) {
                 wxglTextObjects[it].initializeLabels(this)
                 wxglTextObjects[it].addLabels()
             }
@@ -1161,7 +1162,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun showMap() {
         objectImageMap.toggleMap()
-        if (objectImageMap.map.visibility != View.GONE) {
+        if (objectImageMap.visibility != View.GONE) {
             UtilityWXGLTextObject.hideLabels(numberOfPanes, wxglTextObjects)
         } else {
             UtilityWXGLTextObject.showLabels(numberOfPanes, wxglTextObjects)

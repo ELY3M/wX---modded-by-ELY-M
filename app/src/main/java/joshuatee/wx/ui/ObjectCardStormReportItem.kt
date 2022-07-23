@@ -25,7 +25,6 @@ import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.spc.StormReport
@@ -39,18 +38,21 @@ class ObjectCardStormReportItem(context: Context) {
     private val textViewBottom = ObjectTextView(context, backgroundText = true)
 
     init {
-        val linearLayoutVertical = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
-        linearLayoutVertical.addViews(listOf(textViewTop.get(), textViewTitle.get(), textViewBottom.get()))
-        objectCard.addView(linearLayoutVertical)
+        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
+        vbox.addViews(listOf(textViewTop.get(), textViewTitle.get(), textViewBottom.get()))
+        objectCard.addView(vbox)
     }
 
     fun get() = objectCard.get()
 
+    // This is needed for long press on the card for archived L2 radar (unreliable feature which should be removed)
     fun setId(id: Int) {
         objectCard.setId(id)
     }
 
-    fun setListener(fn: View.OnClickListener) = objectCard.setOnClickListener(fn)
+    fun setListener(fn: View.OnClickListener) {
+        objectCard.setOnClickListener(fn)
+    }
 
     fun setTextFields(stormReport: StormReport) {
         textViewTop.text = stormReport.state + ", " + stormReport.city + " " + stormReport.time

@@ -32,21 +32,21 @@ import joshuatee.wx.util.ObjectCurrentConditions
 
 class ObjectCardCurrentConditions(context: Context, version: Int) {
 
-    private val objCard = ObjectCard(context)
+    private val objectCard = ObjectCard(context)
     private val objectImageView = ObjectImageView(context)
     private val textViewTop = ObjectTextView(context, TextSize.MEDIUM)
     private val textViewBottom = ObjectTextView(context, backgroundText = true)
     private val textViewMiddle = ObjectTextView(context, backgroundText = true)
 
     init {
-        val linearLayoutHorizontal = ObjectLinearLayout(context, LinearLayout.HORIZONTAL)
-        val linearLayoutVertical = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
+        val hbox = HBox(context)
+        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         if (version == 2) {
             textViewTop.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
             textViewMiddle.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
             textViewBottom.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, UIPreferences.paddingSmall)
-            linearLayoutVertical.addViews(listOf(textViewTop.get(), textViewMiddle.get(), textViewBottom.get()))
-            linearLayoutHorizontal.addViews(listOf(objectImageView.get(), linearLayoutVertical.linearLayout))
+            vbox.addViews(listOf(textViewTop.get(), textViewMiddle.get(), textViewBottom.get()))
+            hbox.addViews(listOf(objectImageView.get(), vbox.get()))
         } else {
             // legacy code
             textViewTop.gravity = Gravity.CENTER
@@ -55,14 +55,14 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
             textViewTop.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
             textViewBottom.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 2)
             textViewMiddle.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
-            linearLayoutHorizontal.orientation = LinearLayout.VERTICAL
-            linearLayoutHorizontal.addView(textViewTop)
-            linearLayoutHorizontal.addView(textViewBottom)
+            hbox.orientation = LinearLayout.VERTICAL
+            hbox.addWidget(textViewTop.get())
+            hbox.addWidget(textViewBottom.get())
         }
-        objCard.addView(linearLayoutHorizontal)
+        objectCard.addView(hbox.get())
     }
 
-    fun get() = objCard.get()
+    fun get() = objectCard.get()
 
     fun refreshTextSize() {
         textViewTop.refreshTextSize(TextSize.MEDIUM)

@@ -27,7 +27,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.Spinner
 import joshuatee.wx.R
 import joshuatee.wx.ui.*
@@ -39,15 +38,15 @@ class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefI
     private val objectCard = ObjectCard(context)
 
     init {
-        val objectTextView = ObjectTextView(context)
-        objectTextView.setPadding(UIPreferences.paddingSettings)
-        objectTextView.get().layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
-        objectTextView.text = label
-        objectTextView.gravity = Gravity.CENTER_VERTICAL
-        objectTextView.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
-        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.HORIZONTAL, Gravity.CENTER_VERTICAL)
-        objectLinearLayout.matchParent()
-        objectLinearLayout.addView(objectTextView.get())
+        val text = ObjectTextView(context)
+        text.setPadding(UIPreferences.paddingSettings)
+        text.wrap()
+        text.text = label
+        text.gravity = Gravity.CENTER_VERTICAL
+        text.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
+        val hbox = HBox(context, Gravity.CENTER_VERTICAL)
+        hbox.matchParent()
+        hbox.addWidget(text.get())
         val spinner = Spinner(context)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             setupSpinner(spinner, false)
@@ -77,8 +76,8 @@ class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefI
             value += ": " + Utility.readPref(context, "LOC" + value + "_LABEL", "").take(20)
         }
         spinner.setSelection(dataAdapter.getPosition(value))
-        objectLinearLayout.addView(spinner)
-        objectCard.addView(objectLinearLayout.linearLayout)
+        hbox.addWidget(spinner)
+        objectCard.addView(hbox.get())
     }
 
     val card get() = objectCard.get()

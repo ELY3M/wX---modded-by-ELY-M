@@ -26,37 +26,28 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 
-class ObjectLinearLayout(val context: Context) {
+class HBox(val context: Context) {
 
-    val linearLayout = LinearLayout(context)
+    private val linearLayout = LinearLayout(context)
+
+    init {
+        linearLayout.orientation = LinearLayout.HORIZONTAL
+    }
 
     constructor(context: Context, parentView: LinearLayout) : this(context) {
-        linearLayout.orientation = LinearLayout.VERTICAL
         parentView.addView(linearLayout)
     }
 
-    constructor(context: Context, orientation: Int) : this(context) { this.orientation = orientation }
-
-    constructor(context: Context, orientation: Int, gravity: Int) : this(context, orientation) { this.gravity = gravity }
-
-    fun removeAllViewsInLayout() {
-        linearLayout.removeAllViewsInLayout()
+    constructor(context: Context, gravity: Int) : this(context) {
+        this.gravity = gravity
     }
 
-    fun addView(child: View) {
+    fun addWidget(child: View) {
         linearLayout.addView(child)
     }
 
-    fun addView(objectTextView: ObjectTextView) {
-        linearLayout.addView(objectTextView.get())
-    }
-
-    fun addView(objectLinearLayout: ObjectLinearLayout) {
-        linearLayout.addView(objectLinearLayout.linearLayout)
-    }
-
-    fun addView(objectImageView: ObjectImageView) {
-        linearLayout.addView(objectImageView.get())
+    fun addLayout(objectLinearLayout: VBox) {
+        linearLayout.addView(objectLinearLayout.get())
     }
 
     fun addViews(children: List<View>) {
@@ -73,13 +64,19 @@ class ObjectLinearLayout(val context: Context) {
         linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
     }
 
-    fun get(): LinearLayout {
-        return linearLayout
+    fun wrap() {
+        linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
     }
+
+    fun get() = linearLayout
 
     var visibility
         get() = linearLayout.visibility
         set(value) { linearLayout.visibility = value }
+
+    var isBaselineAligned
+        get() = linearLayout.isBaselineAligned
+        set(value) { linearLayout.isBaselineAligned = value }
 
     var orientation
         get() = linearLayout.orientation

@@ -35,13 +35,13 @@ import joshuatee.wx.ui.BaseActivity
 class SettingsColorsActivity : BaseActivity() {
 
     private var objectSettingsColorLabels = listOf<ObjectSettingsColorLabel>()
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        linearLayout = findViewById(R.id.linearLayout)
-        linearLayout.setBackgroundColor(Color.BLACK)
+        box = findViewById(R.id.linearLayout)
+        box.setBackgroundColor(Color.BLACK)
         val mapColorToPref = mutableMapOf(
             "Highway color" to "RADAR_COLOR_HW",
             "Secondary Highway color" to "RADAR_COLOR_HW_EXT",
@@ -77,7 +77,7 @@ class SettingsColorsActivity : BaseActivity() {
         }
         objectSettingsColorLabels = mapColorToPref.keys.sorted().map { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
         objectSettingsColorLabels.forEach {
-            linearLayout.addView(it.get())
+            box.addView(it.get())
         }
     }
 

@@ -28,7 +28,9 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.WXGLRender
 import joshuatee.wx.settings.Location
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityMath
 import java.util.*
 import java.util.regex.Pattern
 
@@ -204,7 +206,11 @@ object UtilityLocationFragment {
         list.forEach {
             val temp = blob.parse(it)
             if (temp != "") {
-                return temp
+                return if (UIPreferences.unitsF) {
+                    temp
+                } else {
+                    UtilityMath.fahrenheitToCelsius(To.double(temp))
+                }
             }
         }
         return ""

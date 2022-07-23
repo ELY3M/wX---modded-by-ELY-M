@@ -79,7 +79,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private lateinit var locLabelEt: EditText
     private lateinit var locXEt: EditText
     private lateinit var locYEt: EditText
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var rl: RelativeLayout
 
     @SuppressLint("MissingSuperCall")
@@ -88,8 +88,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         locLabelEt = findViewById(R.id.locLabelEt)
         locXEt = findViewById(R.id.locXEt)
         locYEt = findViewById(R.id.locYEt)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         rl = findViewById(R.id.rl)
+
+        UtilityCitiesExtended.create(this)
+        UtilityCitiesCanada.initialize()
 
         toolbarBottom.setOnMenuItemClickListener(this)
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
@@ -97,7 +100,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         Utility.writePref(this, "LOCATION_CANADA_ID", "")
         ObjectFab(this, R.id.fab) { fabSaveLocation() }
         val me = toolbarBottom.menu
-        listOf(R.id.cv1).forEach { ObjectCard(this, it) }
+        ObjectCard(this, R.id.cv1)
         val locNumArr = intent.getStringArrayExtra(LOC_NUM)
         locNum = locNumArr!![0]
         val locNumInt = locNum.toIntOrNull() ?: 0
@@ -222,7 +225,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 alertSpcfwSw,
                 alertWpcmpdSw
         ).forEach{
-            linearLayout.addView(it.get())
+            box.addView(it.get())
         }
         hideNonUSNotifications()
     }
@@ -308,8 +311,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         val inflater = menuInflater
         inflater.inflate(R.menu.settings_location_generic, menu)
         val searchView = menu.findItem(R.id.ab_search).actionView as ArrayAdapterSearchView
-        UtilityCitiesExtended.create(this)
-        UtilityCitiesCanada.initialize()
+//        UtilityCitiesExtended.create(this)
+//        UtilityCitiesCanada.initialize()
         val combinedCitiesList = UtilityCitiesExtended.cityLabels.toList()
         val cityArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, combinedCitiesList)
         cityArrayAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
@@ -511,7 +514,9 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     private fun updateSubTitle() {
         val subTitleString = "WFO: " + Utility.readPref(this, "NWS$locNum", "") + " - Nexrad: " + Utility.readPref(this, "RID$locNum", "")
-        if (subTitleString != "WFO:  - Nexrad: " && updateTitle) toolbar.subtitle = subTitleString
+        if (subTitleString != "WFO:  - Nexrad: " && updateTitle) {
+            toolbar.subtitle = subTitleString
+        }
     }
 
     private fun changeSearchViewTextColor(view: View?) {

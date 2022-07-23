@@ -54,5 +54,9 @@ class ObjectButton(context: Context, title: String, icon: Int) {
         button.setOnClickListener(fn)
     }
 
+    var visibility
+        get() = button.visibility
+        set(value) { button.visibility = value }
+
     fun get() = button
 }

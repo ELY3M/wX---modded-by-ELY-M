@@ -27,7 +27,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
-import joshuatee.wx.MyApplication
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.radar.RID
@@ -209,11 +208,11 @@ object UtilityLocation {
         return LatLon(x, y)
     }
 
-    fun hasAlerts(locNum: Int) = MyApplication.locations[locNum].notification
-        || MyApplication.locations[locNum].notificationMcd
-        || MyApplication.locations[locNum].ccNotification
-        || MyApplication.locations[locNum].sevenDayNotification
-        || MyApplication.locations[locNum].notificationSpcFw
-        || MyApplication.locations[locNum].notificationSwo
-        || MyApplication.locations[locNum].notificationWpcMpd
+    fun hasAlerts(locNum: Int) = joshuatee.wx.settings.Location.locations[locNum].notification
+        || joshuatee.wx.settings.Location.locations[locNum].notificationMcd
+        || joshuatee.wx.settings.Location.locations[locNum].ccNotification
+        || joshuatee.wx.settings.Location.locations[locNum].sevenDayNotification
+        || joshuatee.wx.settings.Location.locations[locNum].notificationSpcFw
+        || joshuatee.wx.settings.Location.locations[locNum].notificationSwo
+        || joshuatee.wx.settings.Location.locations[locNum].notificationWpcMpd
 }

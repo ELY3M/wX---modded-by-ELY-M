@@ -22,10 +22,12 @@
 package joshuatee.wx.ui
 
 import android.content.Context
+import android.graphics.Typeface
 import androidx.appcompat.widget.AppCompatTextView
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.widget.LinearLayout
 import joshuatee.wx.Extensions.setPadding
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
@@ -52,9 +54,13 @@ class ObjectTextView(val context: Context) {
         tv.gravity = Gravity.START
     }
 
-    constructor(context: Context, text: String) : this(context) { tv.text = text }
+    constructor(context: Context, text: String) : this(context) {
+        tv.text = text
+    }
 
-    constructor(context: Context, color: Int) : this(context) { this.color = color }
+    constructor(context: Context, color: Int) : this(context) {
+        this.color = color
+    }
 
     constructor(context: Context, backgroundText: Boolean) : this(context) {
         if (backgroundText) {
@@ -62,7 +68,9 @@ class ObjectTextView(val context: Context) {
         }
     }
 
-    constructor(view: View, resourceId: Int) : this(view.context) { tv = view.findViewById(resourceId) }
+    constructor(view: View, resourceId: Int) : this(view.context) {
+        tv = view.findViewById(resourceId)
+    }
 
     constructor(view: View, resourceId: Int, backgroundText: Boolean) : this(view, resourceId) {
         tv = view.findViewById(resourceId)
@@ -71,16 +79,22 @@ class ObjectTextView(val context: Context) {
         }
     }
 
-    constructor(view: View, resourceId: Int, color: Int) : this(view, resourceId) { this.color = color }
+    constructor(view: View, resourceId: Int, color: Int) : this(view, resourceId) {
+        this.color = color
+    }
 
     constructor(view: View, resourceId: Int, size: TextSize) : this(view.context, size) {
         tv = view.findViewById(resourceId)
         refreshTextSize(size)
     }
 
-    constructor(view: View, resourceId: Int, color: Int, size: TextSize) : this(view, resourceId, size) { this.color = color }
+    constructor(view: View, resourceId: Int, color: Int, size: TextSize) : this(view, resourceId, size) {
+        this.color = color
+    }
 
-    constructor(context: Context, size: TextSize) : this(context) { refreshTextSize(size) }
+    constructor(context: Context, size: TextSize) : this(context) {
+        refreshTextSize(size)
+    }
 
     fun refreshTextSize(size: TextSize) {
         when (size) {
@@ -98,6 +112,10 @@ class ObjectTextView(val context: Context) {
         get() = tv.currentTextColor
         set(newValue) { tv.setTextColor(newValue) }
 
+    var typeface: Typeface
+        get() = tv.typeface
+        set(newValue) { tv.typeface = newValue }
+
     private fun setAsBackgroundText() {
         setAsSmallText()
         tv.setTextColor(UIPreferences.textSmallThemeColor)
@@ -106,6 +124,14 @@ class ObjectTextView(val context: Context) {
     private fun setAsSmallText() {
         tv.setTextColor(UIPreferences.backgroundColor)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+    }
+
+    fun matchParent() {
+        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+    }
+
+    fun wrap() {
+        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
     }
 
     fun setOnClickListener(fn: View.OnClickListener) {

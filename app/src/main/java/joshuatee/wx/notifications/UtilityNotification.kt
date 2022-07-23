@@ -69,7 +69,7 @@ object UtilityNotification {
         val noSummary = ""
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val tornadoWarningString = "Tornado Warning"
-        if (MyApplication.locations.size > locNumInt && MyApplication.locations[locNumInt].notification) {
+        if (Location.locations.size > locNumInt && Location.locations[locNumInt].notification) {
             var locLabelStr = "(" + Location.getName(locNumInt) + ") "
             var alertPresent = false
             if (Location.isUS(locNumInt)) {
@@ -91,7 +91,7 @@ object UtilityNotification {
                     )
                     val cancelStr = Location.getY(locNumInt) + hazUrls.parse("(</h2> <p>.*?</strong> </p>)").replace(",".toRegex(), "").replace(" ".toRegex(), "")
                     if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
-                        val sound = MyApplication.locations[locNumInt].sound && !inBlackout || MyApplication.locations[locNumInt].sound && NotificationPreferences.alertBlackoutTornado
+                        val sound = Location.locations[locNumInt].sound && !inBlackout || Location.locations[locNumInt].sound && NotificationPreferences.alertBlackoutTornado
                         val notifObj = ObjectNotification(
                                 context,
                                 sound,
@@ -112,11 +112,11 @@ object UtilityNotification {
                     notifUrls += cancelStr + NotificationPreferences.notificationStrSep
                 }
             }
-            if (alertPresent && MyApplication.locations[locNumInt].notificationRadar) {
+            if (alertPresent && Location.locations[locNumInt].notificationRadar) {
                 val url2: String
                 var nws1StateCurrent = ""
                 if (Location.isUS(locNumInt)) {
-                    val nwsLocation = Utility.getWfoSiteName(MyApplication.locations[locNumInt].wfo)
+                    val nwsLocation = Utility.getWfoSiteName(Location.locations[locNumInt].wfo)
                     val nwsLocationArr = RegExp.comma.split(nwsLocation)
                     nws1StateCurrent = nwsLocationArr[0]
                 }
@@ -163,8 +163,8 @@ object UtilityNotification {
         var noBody: String
         var noSummary: String
         var locLabelStr: String
-        if (MyApplication.locations.size > locNumInt && (MyApplication.locations[locNumInt].ccNotification
-                        || MyApplication.locations[locNumInt].sevenDayNotification
+        if (Location.locations.size > locNumInt && (Location.locations[locNumInt].ccNotification
+                        || Location.locations[locNumInt].sevenDayNotification
                         || widgetLocNum == locNum && widgetsEnabled)
         ) {
             locLabel = " current conditions"
@@ -175,10 +175,10 @@ object UtilityNotification {
             // problem is if network is down it will be a non deterministic value so we need something different
             val currentUpdateTime = UtilityTime.currentTimeMillis()
             val lastUpdateTime = Utility.readPref(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
-            if (MyApplication.locations[locNumInt].ccNotification) {
+            if (Location.locations[locNumInt].ccNotification) {
                 notifUrls += url + "CC" + NotificationPreferences.notificationStrSep
             }
-            if (MyApplication.locations[locNumInt].sevenDayNotification) {
+            if (Location.locations[locNumInt].sevenDayNotification) {
                 notifUrls += url + "7day" + NotificationPreferences.notificationStrSep
             }
             if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
@@ -187,8 +187,10 @@ object UtilityNotification {
                 val objSevenDay = ObjectSevenDay(locNumInt)
                 val updateTime = UtilityTime.currentTimeMillis()
                 Utility.writePref(context, "CC" + locNum + "_LAST_UPDATE", updateTime)
-                if (locNum == widgetLocNum && widgetsEnabled) UtilityWidget.widgetDownloadData(context, objCc, objSevenDay, objHazards)
-                if (MyApplication.locations[locNumInt].ccNotification) {
+                if (locNum == widgetLocNum && widgetsEnabled) {
+                    UtilityWidget.widgetDownloadData(context, objCc, objSevenDay, objHazards)
+                }
+                if (Location.locations[locNumInt].ccNotification) {
                     noMain = locLabelStr
                     noBody = objCc.data + GlobalVariables.newline + objCc.status
                     noSummary = objCc.data + GlobalVariables.newline + objCc.status
@@ -237,7 +239,7 @@ object UtilityNotification {
                     )
                     notifier.notify(url + "CC", 1, noti)
                 }
-                if (MyApplication.locations[locNumInt].sevenDayNotification) {
+                if (Location.locations[locNumInt].sevenDayNotification) {
                     locLabelStr = "(" + Location.getName(locNumInt) + ")" + " 7 day"
                     noMain = locLabelStr
                     noBody = objSevenDay.sevenDayShort

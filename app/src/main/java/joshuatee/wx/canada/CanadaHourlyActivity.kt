@@ -36,16 +36,16 @@ class CanadaHourlyActivity : BaseActivity() {
     companion object { const val LOC_NUM = "" }
 
     private var locationNumber = 0
-    private lateinit var objectCardText: ObjectCardText
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var text: ObjectCardText
+    private lateinit var box: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
-        objectCardText = ObjectCardText(this, linearLayout, toolbar)
-        ObjectCALegal(this, linearLayout, UtilityCanadaHourly.getUrl(Location.locationIndex))
+        text = ObjectCardText(this, box, toolbar)
+        ObjectCALegal(this, box, UtilityCanadaHourly.getUrl(Location.locationIndex))
         title = Location.getName(locationNumber) + " hourly forecast"
         getContent()
     }
@@ -56,7 +56,7 @@ class CanadaHourlyActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        objectCardText.typefaceMono()
-        FutureText2(this, { UtilityCanadaHourly.getString(locationNumber) }, objectCardText::setText1)
+        text.typefaceMono()
+        FutureText2(this, { UtilityCanadaHourly.getString(locationNumber) }, text::setText1)
     }
 }

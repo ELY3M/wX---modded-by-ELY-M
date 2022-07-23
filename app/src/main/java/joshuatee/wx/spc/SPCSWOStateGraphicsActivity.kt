@@ -49,7 +49,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
     private var day = ""
     private var imgUrl = ""
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
     private var state = ""
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstTime = true
@@ -70,7 +70,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, iconsEvenlySpaced = true, bottomToolbar = false)
         day = intent.getStringArrayExtra(NO)!![0]
         state = Utility.getWfoSiteName(Location.wfo).split(",")[0]
-        img = ObjectTouchImageView(this, toolbar, R.id.iv)
+        image = TouchImage(this, toolbar, R.id.iv)
         getContent()
     }
 
@@ -87,8 +87,8 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     }
 
     private fun showImage() {
-        img.setBitmap(bitmap)
-        img.firstRunSetZoomPosn(imgPrefToken)
+        image.setBitmap(bitmap)
+        image.firstRunSetZoomPosn(imgPrefToken)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -98,7 +98,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
                     UtilityToolbar.fullScreenMode(this)
                     firstTime = false
                 }
-                img.setZoom(1.0f)
+                image.setZoom(1.0f)
                 state = GlobalArrays.states[it].split(":")[0]
                 getContent()
             }
@@ -123,7 +123,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(imgPrefToken)
+        image.imgSavePosnZoom(imgPrefToken)
         super.onStop()
     }
 }

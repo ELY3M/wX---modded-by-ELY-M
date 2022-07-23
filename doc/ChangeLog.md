@@ -9,17 +9,11 @@
 // TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
 // TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
 // TODO [FIX] code cleanup in utilDownloadMcd/w/mpd
-// TODO [REF] add ObjectLocation
-// TODO [FIX] 7day not honoring C/F setting
-// TODO [FIX] usalerts sps don't show radar icon if no poly
 // TODO [REF] migrate all to Future* (models/radar/LocationFragment)
-// TODO [FIX] textual vwp is not looking to good
-// TODO [ADD] alphabetize notif prefs in settings
 // TODO [ADD] have nexrad long press verbiage match iOS version
 // TODO [REF] replace String.format with stuff in to.
 // TODO [FIX] review multipane data usage
 // TODO [FIX] snow squall warning enabled - no way to long press
-// TODO [FIX] settings label for C/F to indicate what it modifies
 // TODO [ADD] user request for metar homescreen widget
 // TODO [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
 // TODO [REF] ExternalGeodeticCalculator -> convert from class to object since all static
@@ -36,12 +30,44 @@
 // [ADD] handle deprecations in UtilityUI https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
 // [FIX] settings color pal editor shows "null"
 // [REF] ImageCollection         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-// [REF] shorten name of some objects ObjectTouchImageView -> ObjectTouchImage, etc
+// [REF] shorten name of some objects , etc, ObjectTextView
+// [FIX] nexrad invoked from alert will not keep site when jump to multipane
 // [ADD] Class for star icon
+// [FIX] USAlerts state count is not accurate
+// [REF] scan for and refactor: val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+// [REF] Look for LinearLayout that should be ObjectLinearLayout
+// [REF] Use ObjectTextView in ObjectCardVerticalText and ObjectSettings*
+// [REF] XML based LinearLayout should be used to initialize ObjectLinearLayout
+// [REF] scan for android.widget.TextView, have ObjectTextView accept layout id
+// [REF] move Spinner, SeekBar, CheckBox, ColorLabel to UI - rename to match desktop if needed
 ```
 [[_TOC_]]
 
-## 55628 2022_07_20
+## 55633 2022_07_23
+
+## 55632 2022_07_23
+* [REF] misc refactor
+* [FIX] 7day not honoring C/F setting
+* [REF] ObjectTouchImageView -> TouchImage
+* [REF] DisplayDataNoSpinner and WpcImagesActivity were not using TouchImage (using raw TouchImageView2)
+
+## 55631 2022_07_22
+* [REF] misc refactor
+
+## 55630 2022_07_22
+* [REF] misc refactor
+
+## 55629 2022_07_22
+* [FIX] slowness in LocationEdit search icon appearing by loading cities before the activity is displayed
+* [FIX] SPC HREF - some images not working, more work is needed (non-production model service)
+* [ADD] Settings->Notification: alphabetize with logical groups
+* [ADD] Settings: alphabetize
+* [FIX] In usalerts for sps (special weather statement) and other alerts - don't show radar button if no polygon data is present
+* [REF] rename ObjectCardAlertSummaryItem to ObjectCardAlertDetail, move button connections into card
+
+## 55628 2022_07_21
+* [REF] add ObjectLocation
+* [REF] move MyApplication.locations to Location
 
 ## 55627 2022_07_20
 * [FIX] Nexrad: if non-default option to use hi-res State lines data, not all lines were showing

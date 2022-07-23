@@ -24,13 +24,14 @@ package joshuatee.wx.ui
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.PointF
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 
-class ObjectTouchImageView {
+class TouchImage {
 
     private var img: TouchImageView2
     private val context: Context
@@ -38,6 +39,11 @@ class ObjectTouchImageView {
     private var firstRun = false
     private var prefTokenIdx = ""
     private var drw: ObjectNavDrawer? = null
+
+    constructor(context: Context) {
+        img = TouchImageView2(context)
+        this.context = context
+    }
 
     constructor(activity: Activity, resourceId: Int) {
         img = activity.findViewById(resourceId)
@@ -77,6 +83,16 @@ class ObjectTouchImageView {
         get() = img.visibility
         set(value) { img.visibility = value }
 
+    val currentZoom
+        get() = img.currentZoom
+
+//    var maxZoom
+//        get() = img.maxZoom
+//        set(value) { img.maxZoom = value }
+
+    val scrollPosition: PointF?
+        get() = img.scrollPosition
+
     fun setBitmap(bitmap: Bitmap) {
         img.setImageBitmap(bitmap)
         imageLoaded = true
@@ -105,6 +121,14 @@ class ObjectTouchImageView {
         img.setZoom(zoom)
     }
 
+    fun setZoom(image: TouchImage) {
+        img.setZoom(image.currentZoom)
+    }
+
+    fun setZoom(x: Float, y: Float, z: Float) {
+        img.setZoom(x, y, z)
+    }
+
     fun setListener(drw: ObjectNavDrawer, fn: () -> Unit) {
         img.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
@@ -115,6 +139,14 @@ class ObjectTouchImageView {
                 if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, fn)
             }
         })
+    }
+
+    fun setListener(fn: OnSwipeTouchListener) {
+        img.setOnTouchListener(fn)
+    }
+
+    fun setListener2(fn: () -> Unit) {
+        img.setOnTouchImageViewListener { fn() }
     }
 
     fun firstRunSetZoomPosn(pref: String) {

@@ -31,7 +31,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.ObjectTouchImageView
+import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -45,7 +45,7 @@ class LightningActivity : VideoRecordActivity() {
     private var bitmap = UtilityImg.getBlankBitmap()
     private var period = "0.25"
     private var periodPretty = "15 MIN"
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private val prefTokenIdx = "LIGHTNING_SECTOR_IDX"
 
@@ -58,7 +58,7 @@ class LightningActivity : VideoRecordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.lightning_activity, iconsEvenlySpaced = true, bottomToolbar = false)
         objectNavDrawer = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls, ::getContent)
-        img = ObjectTouchImageView(this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, prefTokenIdx)
+        image = TouchImage(this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, prefTokenIdx)
         objectNavDrawer.index = Utility.readPref(this, prefTokenIdx, 0)
         period = Utility.readPref(this, "LIGHTNING_PERIOD", period)
         periodPretty = UtilityLightning.getTimePretty(period)
@@ -77,23 +77,25 @@ class LightningActivity : VideoRecordActivity() {
     }
 
     private fun showImage() {
-        img.setBitmap(bitmap)
-        img.firstRunSetZoomPosn("LIGHTNING")
+        image.setBitmap(bitmap)
+        image.firstRunSetZoomPosn("LIGHTNING")
         Utility.writePref(this@LightningActivity, "LIGHTNING_PERIOD", period)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
@@ -119,7 +121,7 @@ class LightningActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom("LIGHTNING")
+        image.imgSavePosnZoom("LIGHTNING")
         super.onStop()
     }
 }

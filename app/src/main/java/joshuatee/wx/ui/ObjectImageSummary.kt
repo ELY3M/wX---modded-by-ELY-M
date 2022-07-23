@@ -39,16 +39,14 @@ class ObjectImageSummary(context: Context, val linearLayout: LinearLayout, val b
         val imagesPerRow = 2
         linearLayout.removeAllViews()
         var numberOfImages = 0
-        val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
+        val horizontalLinearLayouts = mutableListOf<HBox>()
         bitmaps.forEach { bitmap ->
-            val objectCardImage: ObjectCardImage
-            if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
-                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
-                horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
+            val objectCardImage = if (numberOfImages % imagesPerRow == 0) {
+                val hbox = HBox(context, linearLayout)
+                horizontalLinearLayouts.add(hbox)
+                ObjectCardImage(context, hbox.get(), bitmap, imagesPerRow)
             } else {
-                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
+                ObjectCardImage(context, horizontalLinearLayouts.last().get(), bitmap, imagesPerRow)
             }
             objectCardImages.add(objectCardImage)
             numberOfImages += 1

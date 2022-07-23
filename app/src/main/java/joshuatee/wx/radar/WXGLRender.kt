@@ -69,8 +69,6 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         const val ortIntGlobal = 400
         var oneDegreeScaleFactorGlobal = 0.0f
             private set
-        var hailSizeIcon = "hail0.png"
-        var hailSize = 0.toDouble()
 
         var degreesPerPixellat = -0.017971305190311 //had -
         var degreesPerPixellon = 0.017971305190311
@@ -464,14 +462,36 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }
         }
 
+        //elys mod - hailmod
+/*
+        //picked one of images :(
+        listOf(hiBuffers).forEach {
+        if (zoom > it.scaleCutOff) {
+            drawHI(it, it.hailIcon)
+            Log.i("haildraw", "hail it: " +it)
+            Log.i("haildraw", "hailicon: " + it.hailIcon)
+        }
+    }
+*/
 
-        if (zoom > hiBuffers.scaleCutOff) {
-            drawHI(hiBuffers)
+
+            //images overlaying :(
+            WXGLNexradLevel3HailIndex.hailList.indices.forEach {
+                if (zoom > hiBuffers.scaleCutOff) {
+                        drawHI(hiBuffers, WXGLNexradLevel3HailIndex.hailList[it].hailIcon)
+                        Log.i("haildraw", "hail it: " + it)
+                        Log.i("haildraw", "hailicon: " + WXGLNexradLevel3HailIndex.hailList[it].hailIcon)
+                    }
+            }
+
+
+
+        listOf(tvsBuffers).forEach {
+        if (zoom > it.scaleCutOff) {
+            drawTVS(it)
+        }
         }
 
-        if (zoom > tvsBuffers.scaleCutOff) {
-            drawTVS(tvsBuffers)
-        }
 
             GLES20.glLineWidth(3.0f)
             listOf(stiBuffers, wbGustsBuffers, wbBuffers).forEach {
@@ -493,8 +513,10 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
             if (RadarPreferences.radarUserPoints) {
+                listOf(userPointsBuffers).forEach {
                 if (zoom > userPointsBuffers.scaleCutOff) {
-                    drawUserPoints(userPointsBuffers)
+                    drawUserPoints(it)
+                }
                 }
             }
 
@@ -531,8 +553,6 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             GLES20.glLineWidth(RadarPreferences.radarWatchMcdLineSize)
             wpcFrontBuffersList.forEach { drawElement(it) }
         }
-
-
 
     } //displayhold
 
@@ -892,7 +912,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     }
 
     //FIXME need to pick a icon based on hail size//
-    private fun drawHI(buffers: ObjectOglBuffers) {
+    //elys mod - hailmod
+    private fun drawHI(buffers: ObjectOglBuffers, hailIcon: String) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
             GLES20.glUseProgram(OpenGLShader.sp_loadimage)
@@ -901,7 +922,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
             GLES20.glUniform1f(sizeHandle, RadarPreferences.radarHiSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
-            hiId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + hailSizeIcon)
+            hiId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + hailIcon)
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(positionHandle)
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
@@ -915,8 +936,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
         }
-    }
 
+        Log.i("hailicon in drawhi", "hailicon: " + hailIcon)
+    }
 
     // FIXME CRASHING HERE sometimes -- FIXED via "displayhold" code
     /*
@@ -1271,19 +1293,36 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         spotterBuffers.isInitialized = false
     }
 
+    //elys mod - hailmod
     fun constructHi() {
         hiBuffers.lenInit = 0f //RadarPreferences.radarHiSize.toFloat()
         val stormList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString)
         hiBuffers.setXYList(stormList)
+        hiBuffers.hailIcon = WXGLNexradLevel3HailIndex.hailSizeIcon
         WXGLNexradLevel3HailIndex.hailList
         constructMarker(hiBuffers)
+
+        //Log.i("hailconst", "hail size: " + WXGLNexradLevel3HailIndex.hailSizeText)
+        //Log.i("hailconst", "hail setIcon: " + WXGLNexradLevel3HailIndex.hailSizeIcon)
+        //Log.i("hailconst", "hail setDouble: " + WXGLNexradLevel3HailIndex.hailSizeNumber)
+/*
+        WXGLNexradLevel3HailIndex.hailList.indices.forEach {
+
+            hiBuffers.hailIcon = WXGLNexradLevel3HailIndex.hailList[it].hailIcon
+            Log.i("hailconst", "hailSize: " + WXGLNexradLevel3HailIndex.hailList[it].hailSize)
+            Log.i("hailconst", "hailIcon: " + WXGLNexradLevel3HailIndex.hailList[it].hailIcon)
+            Log.i("hailconst", "hailSizeNumber: " + WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber)
+            constructMarker(hiBuffers)
+        }
+*/
+
     }
 
     fun deconstructHi() {
         hiBuffers.isInitialized = false
     }
 
-
+    //elys mod
     fun constructUserPoints() {
         userPointsBuffers.lenInit = 0f
         UtilityUserPoints.userPointsData

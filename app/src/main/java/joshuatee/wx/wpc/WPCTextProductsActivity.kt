@@ -54,7 +54,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private var product = ""
     private var html = ""
     private var initialProduct = ""
@@ -63,9 +63,9 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var notificationToggle: MenuItem
     private var ridFavOld = ""
     private lateinit var textCard: ObjectCardText
-    private lateinit var drw: ObjectNavDrawerCombo
+    private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var scrollView: ScrollView
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private val prefToken = "NWS_TEXT_FAV"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -82,21 +82,21 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpctextproducts, R.menu.wpctext_products)
         scrollView = findViewById(R.id.scrollView)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
-        activityArguments = intent.getStringArrayExtra(URL)!!
-        if (activityArguments[0] == "pmdspd") {
+        arguments = intent.getStringArrayExtra(URL)!!
+        if (arguments[0] == "pmdspd") {
             product = UIPreferences.wpcTextFav
         } else {
-            product = activityArguments[0]
+            product = arguments[0]
             initialProduct = product
         }
-        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        textCard = ObjectCardText(this, box, toolbar, toolbarBottom)
         UtilityWpcText.create()
-        drw = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
-        drw.setListener(::changeProduct)
+        objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
+        objectNavDrawerCombo.setListener(::changeProduct)
         getContent()
     }
 
@@ -121,7 +121,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         } else {
             textCard.typefaceDefault()
         }
-        UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
+        UtilityTts.conditionalPlay(arguments, 2, applicationContext, html, "wpctext")
         if (initialProduct != product) {
             Utility.writePref(this, "WPC_TEXT_FAV", product)
             UIPreferences.wpcTextFav = product
@@ -136,7 +136,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(this, linearLayout, product.uppercase(Locale.US))
+                UtilityNotificationTextProduct.toggle(this, box, product.uppercase(Locale.US))
                 updateSubmenuNotificationText()
             }
             R.id.action_share -> UtilityShare.text(this, product, textToShare)
@@ -146,7 +146,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
         products = UtilityFavorites.setupMenu(this, UIPreferences.nwsTextFav, product, prefToken)
@@ -187,7 +187,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun changeProduct() {
-        product = drw.getUrl()
+        product = objectNavDrawerCombo.getUrl()
         getContent()
     }
 
@@ -201,11 +201,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawerCombo.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawerCombo.onConfigurationChanged(newConfig)
     }
 }

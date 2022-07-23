@@ -36,8 +36,6 @@ object UtilityUserPoints {
     internal var name = ""
     private var initialized = false
     private var tmpsize = 1
-    private const val REFRESH_LOC_MIN = 1
-    private var lastRefresh = 0.toLong()
     internal var x = DoubleArray(1)
         private set
     internal var y = DoubleArray(1)
@@ -49,12 +47,7 @@ object UtilityUserPoints {
 
     val userPointsData: MutableList<Userpoints>
         get() {
-            var currentTime = System.currentTimeMillis()
-            val currentTimeSec = currentTime / 1000
-            //val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
-            //val currentTimeSec = currentTime / 1000
-            val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
-            if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
+            if (!initialized) {
                 userPointsList = mutableListOf()
                 val latAl = mutableListOf<String>()
                 val lonAl = mutableListOf<String>()
@@ -90,19 +83,17 @@ object UtilityUserPoints {
                                     latAl.indices.forEach {
                                         x[it] = latAl[it].toDoubleOrNull() ?: 0.0
                                         y[it] = -1.0 * (lonAl[it].toDoubleOrNull() ?: 0.0)
-                                        UtilityLog.d("userpoint", "Userpoint latlon: x: " + x[it] + " y: " + x[it])
+                                        UtilityLog.d("userpoint", "haillist latlon: x: " + x[it] + " y: " + x[it])
                                     }
 
                                 } else {
-                                    UtilityLog.d("userpoint", "Userpoint latlon: set to 0.0 :(")
+                                    UtilityLog.d("userpoint", "haillist latlon: set to 0.0 :(")
                                     x = DoubleArray(1)
                                     y = DoubleArray(1)
                                     x[0] = 0.0
                                     y[0] = 0.0
                                 }
                                 initialized = true
-                                currentTime = System.currentTimeMillis()
-                                lastRefresh = currentTime / 1000
                             }
                         }
             }

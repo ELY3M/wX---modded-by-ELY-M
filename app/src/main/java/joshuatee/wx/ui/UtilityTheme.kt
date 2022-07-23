@@ -29,7 +29,7 @@ import joshuatee.wx.util.Utility
 
 object UtilityTheme {
 
-    val primaryColorFromSelectedTheme: Int
+    val primaryColorFromSelectedTheme
         get() = UIPreferences.primaryColor
 
     fun getPrimaryColorFromSelectedTheme(context: Context, color: Int): Int {

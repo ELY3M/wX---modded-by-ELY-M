@@ -62,11 +62,11 @@ class ForecastActivity : BaseActivity() {
     private var currentConditionsTime = ""
     private var radarTime = ""
     private lateinit var objectCardCurrentConditions: ObjectCardCurrentConditions
-    private lateinit var linearLayoutForecast: ObjectLinearLayout
-    private lateinit var linearLayoutHazards: ObjectLinearLayout
+    private lateinit var linearLayoutForecast: VBox
+    private lateinit var linearLayoutHazards: VBox
     private val hazardCards = mutableListOf<ObjectCardText>()
     private lateinit var scrollView: ScrollView
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private var bitmapForCurrentCondition = UtilityImg.getBlankBitmap()
     private var bitmaps = listOf<Bitmap>()
 
@@ -79,15 +79,15 @@ class ForecastActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         scrollView = findViewById(R.id.scrollView)
-        linearLayout = findViewById(R.id.linearLayout)
-        val activityArguments = intent.getStringArrayExtra(URL)!!
-        latLon = LatLon(activityArguments[0], activityArguments[1])
+        box = findViewById(R.id.linearLayout)
+        val arguments = intent.getStringArrayExtra(URL)!!
+        latLon = LatLon(arguments[0], arguments[1])
         title = "Forecast for"
         toolbar.subtitle = latLon.latString + "," + latLon.lonString
         objectCardCurrentConditions = ObjectCardCurrentConditions(this, 2)
-        linearLayout.addView(objectCardCurrentConditions.get())
-        linearLayoutHazards = ObjectLinearLayout(this, linearLayout)
-        linearLayoutForecast = ObjectLinearLayout(this, linearLayout)
+        box.addView(objectCardCurrentConditions.get())
+        linearLayoutHazards = VBox(this, box)
+        linearLayoutForecast = VBox(this, box)
         getContent()
     }
 
@@ -137,13 +137,13 @@ class ForecastActivity : BaseActivity() {
         bitmaps.forEachIndexed { index, bitmap ->
             val objectCard7Day = ObjectCard7Day(this, bitmap, true, index, objectSevenDay.forecastList)
             objectCard7Day.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
-            linearLayoutForecast.addView(objectCard7Day.get())
+            linearLayoutForecast.addWidget(objectCard7Day.get())
         }
         // sunrise card
         val objectCardText = ObjectCardText(this)
         objectCardText.center()
         objectCardText.text = (UtilityTimeSunMoon.getSunriseSunset(this, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime())
-        linearLayoutForecast.addView(objectCardText.get())
+        linearLayoutForecast.addWidget(objectCardText.get())
     }
 
     private fun setupHazardCards() {
@@ -154,7 +154,7 @@ class ForecastActivity : BaseActivity() {
             hazardCards[z].setupHazard()
             hazardCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
             hazardCards[z].setOnClickListener { ObjectIntent.showHazard(this, arrayOf(objectHazards.urls[z])) }
-            linearLayoutHazards.addView(hazardCards[z].get())
+            linearLayoutHazards.addWidget(hazardCards[z].get())
         }
     }
 
@@ -168,6 +168,6 @@ class ForecastActivity : BaseActivity() {
 
     private fun saveLocation() {
         val message = Location.save(this, latLon)
-        ObjectPopupMessage(linearLayout, message)
+        ObjectPopupMessage(box, message)
     }
 }

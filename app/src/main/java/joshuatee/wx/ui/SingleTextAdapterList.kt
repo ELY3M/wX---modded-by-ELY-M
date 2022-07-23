@@ -21,17 +21,23 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
         }
 
         // was onItemClick(adapterPosition)
-        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
+        override fun onClick(v: View) {
+            myClickListener!!.onItemClick(layoutPosition)
+        }
     }
 
-    fun setOnItemClickListener(myClickListenerloc: MyClickListener) { myClickListener = myClickListenerloc }
+    fun setOnItemClickListener(myClickListenerloc: MyClickListener) {
+        myClickListener = myClickListenerloc
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.textview, parent, false)
         return DataObjectHolder(view)
     }
 
-    override fun onBindViewHolder(holder: DataObjectHolder, position: Int) { holder.label.text = dataSet[position] }
+    override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
+        holder.label.text = dataSet[position]
+    }
 
     fun deleteItem(index: Int) {
         dataSet.removeAt(index)
@@ -39,7 +45,9 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
     }
 
     fun setItem(index: Int, str: String) {
-        if (index < dataSet.size) dataSet[index] = str
+        if (index < dataSet.size) {
+            dataSet[index] = str
+        }
         notifyDataSetChanged()
     }
 

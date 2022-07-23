@@ -29,7 +29,6 @@ import android.view.Menu
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.LinearLayout
 import androidx.core.view.GravityCompat
 import java.util.Locale
@@ -60,7 +59,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private var fab1: ObjectFab? = null
     private var fab2: ObjectFab? = null
-    private var activityArguments: Array<String>? = arrayOf()
+    private var arguments: Array<String> = arrayOf()
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
@@ -83,20 +82,22 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        activityArguments = intent.getStringArrayExtra(INFO)
-        if (activityArguments == null) activityArguments = arrayOf("1", "NCEP", "NCEP")
-        om = ObjectModelNoSpinner(this, activityArguments!![1], activityArguments!![0])
+        arguments = intent.getStringArrayExtra(INFO)!!
+//        if (arguments == null) {
+//            arguments = arrayOf("1", "NCEP", "NCEP")
+//        }
+        om = ObjectModelNoSpinner(this, arguments[1], arguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_nospinner, R.menu.models_generic, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_multipane_nospinner, R.menu.models_generic, iconsEvenlySpaced = false, bottomToolbar = true)
-            val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
+            val box: LinearLayout = findViewById(R.id.linearLayout)
             if (UtilityUI.isLandScape(this)) {
-                linearLayout.orientation = LinearLayout.HORIZONTAL
+                box.orientation = LinearLayout.HORIZONTAL
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = activityArguments!![2]
+        title = arguments[2]
         val menu = toolbarBottom.menu
         timeMenuItem = menu.findItem(R.id.action_time)
         runMenuItem = menu.findItem(R.id.action_run)
@@ -124,9 +125,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         om.displayData = DisplayDataNoSpinner(this, this, om.numPanes, om)
         objectNavDrawer = ObjectNavDrawer(this, om.labels, om.params)
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            objectNavDrawer.listView.setItemChecked(position, false)
-            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+        objectNavDrawer.setListener2 { _, _, position, _ ->
+            objectNavDrawer.setItemChecked(position, false)
+            objectNavDrawer.close()
             om.displayData.param[om.curImg] = objectNavDrawer.tokens[position]
             om.displayData.paramLabel[om.curImg] = objectNavDrawer.getLabel(position)
             getContent()
@@ -136,7 +137,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -161,7 +162,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
-            R.id.action_multipane -> ObjectIntent.showModel(this, arrayOf("2", activityArguments!![1], activityArguments!![2]))
+            R.id.action_multipane -> ObjectIntent.showModel(this, arrayOf("2", arguments[1], arguments[2]))
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
@@ -175,7 +176,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -250,12 +251,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
@@ -386,7 +387,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 true
             }
             KeyEvent.KEYCODE_D -> {
-                if (event.isCtrlPressed) objectNavDrawer.drawerLayout.openDrawer(GravityCompat.START)
+                if (event.isCtrlPressed) {
+                    objectNavDrawer.openGravity(GravityCompat.START)
+                }
                 true
             }
             else -> super.onKeyUp(keyCode, event)

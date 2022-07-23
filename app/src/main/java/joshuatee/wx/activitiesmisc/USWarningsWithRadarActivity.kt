@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
-import android.widget.AdapterView
 import java.util.Locale
 import android.view.MenuItem
 import android.widget.LinearLayout
@@ -62,7 +61,7 @@ class USWarningsWithRadarActivity : BaseActivity() {
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var objectAlertSummary: ObjectAlertSummary
     private lateinit var scrollView: ScrollView
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.uswarn, menu)
@@ -73,15 +72,15 @@ class USWarningsWithRadarActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer, R.menu.uswarn, false)
         scrollView = findViewById(R.id.scrollView)
-        linearLayout = findViewById(R.id.linearLayout)
-        val activityArguments = intent.getStringArrayExtra(URL)!!
-        turlLocal[0] = activityArguments[0]
-        turlLocal[1] = activityArguments[1]
-        objectAlertSummary = ObjectAlertSummary(this, linearLayout, scrollView)
+        box = findViewById(R.id.linearLayout)
+        val arguments = intent.getStringArrayExtra(URL)!!
+        turlLocal[0] = arguments[0]
+        turlLocal[1] = arguments[1]
+        objectAlertSummary = ObjectAlertSummary(this, box, scrollView)
         objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())
-        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            objectNavDrawer.listView.setItemChecked(position, false)
-            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+        objectNavDrawer.setListener2 { _, _, position, _ ->
+            objectNavDrawer.setItemChecked(position, false)
+            objectNavDrawer.close()
             if (objectAlertSummary.filterArray[position].length != 2) {
                 turlLocal[0] = "^" + objectAlertSummary.filterArray[position]
                 turlLocal[1] = "us"
@@ -136,16 +135,16 @@ class USWarningsWithRadarActivity : BaseActivity() {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {

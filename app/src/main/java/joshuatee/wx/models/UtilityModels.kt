@@ -33,7 +33,7 @@ import joshuatee.wx.Extensions.startAnimation
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.ui.TouchImageView2
+import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -53,9 +53,10 @@ object UtilityModels {
             {
                 (0 until om.numPanes).forEach {
                     if (om.numPanes > 1) {
-                        UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmap[it], om.displayData.img[it])
+                        UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmap[it], om.displayData.img[it].get())
                     } else {
-                        om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
+//                        om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
+                        om.displayData.img[it].setBitmap(om.displayData.bitmap[it])
                     }
                 }
                 om.animRan = false
@@ -210,7 +211,7 @@ object UtilityModels {
         }
     }
 
-    fun setSubtitleRestoreIMGXYZOOM(img: MutableList<TouchImageView2>, toolbar: Toolbar, string: String) {
+    fun setSubtitleRestoreIMGXYZOOM(img: MutableList<TouchImage>, toolbar: Toolbar, s: String) {
         val x = FloatArray(img.size)
         val y = FloatArray(img.size)
         val z = FloatArray(img.size)
@@ -219,14 +220,14 @@ object UtilityModels {
             (0 until img.size).forEach {
                 z[it] = img[it].currentZoom
                 if (img[it].scrollPosition != null) {
-                    point.add(img[it].scrollPosition)
+                    point.add(img[it].scrollPosition!!)
                 } else {
                     point.add(PointF(0.5f, 0.5f))
                 }
                 x[it] = point[it].x
                 y[it] = point[it].y
             }
-            toolbar.subtitle = string
+            toolbar.subtitle = s
             (0 until img.size).filter { !x[it].isNaN() && !y[it].isNaN() }.forEach {
                 img[it].setZoom(z[it], x[it], y[it])
             }

@@ -55,7 +55,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var miStatusParam2: MenuItem
     private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var om: ObjectModelNoSpinner
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private lateinit var timeMenuItem: MenuItem
     private lateinit var runMenuItem: MenuItem
 
@@ -71,19 +71,19 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        activityArguments = intent.getStringArrayExtra(INFO)!!
-        om = ObjectModelNoSpinner(this, activityArguments[1], activityArguments[0])
+        arguments = intent.getStringArrayExtra(INFO)!!
+        om = ObjectModelNoSpinner(this, arguments[1], arguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_spchref, R.menu.models_spchref, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_spchrefmultipane, R.menu.models_spchref, iconsEvenlySpaced = false, bottomToolbar = true)
-            val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
+            val box: LinearLayout = findViewById(R.id.linearLayout)
             if (UtilityUI.isLandScape(this)) {
-                linearLayout.orientation = LinearLayout.HORIZONTAL
+                box.orientation = LinearLayout.HORIZONTAL
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = activityArguments[2]
+        title = arguments[2]
         val menu = toolbarBottom.menu
         timeMenuItem = menu.findItem(R.id.action_time)
         runMenuItem = menu.findItem(R.id.action_run)
@@ -117,8 +117,8 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 ""
         )
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        objectNavDrawerCombo.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
-            objectNavDrawerCombo.drawerLayout.closeDrawer(objectNavDrawerCombo.listView)
+        objectNavDrawerCombo.setListener2 { _, _, groupPosition, childPosition, _ ->
+            objectNavDrawerCombo.close()
             om.displayData.param[om.curImg] = objectNavDrawerCombo.getToken(groupPosition, childPosition)
             om.displayData.paramLabel[om.curImg] = objectNavDrawerCombo.getLabel(groupPosition, childPosition)
             UtilityModels.getContentNonSpinner(this, om, listOf(""))
@@ -129,7 +129,9 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (objectNavDrawerCombo.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_back -> om.leftClick()
             R.id.action_forward -> om.rightClick()
@@ -152,7 +154,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_animate -> UtilityModels.getAnimate(this, om, listOf(""))
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
-            R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
+            R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", arguments[1], arguments[2]))
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
@@ -166,7 +168,9 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawerCombo.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_region -> genericDialog(UtilityModelSpcHrefInterface.sectorsLong) { om.sector = UtilityModelSpcHrefInterface.sectorsLong[it] }
             else -> return super.onOptionsItemSelected(item)
@@ -217,12 +221,12 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawerCombo.actionBarDrawerToggle.syncState()
+        objectNavDrawerCombo.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawerCombo.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawerCombo.onConfigurationChanged(newConfig)
     }
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {

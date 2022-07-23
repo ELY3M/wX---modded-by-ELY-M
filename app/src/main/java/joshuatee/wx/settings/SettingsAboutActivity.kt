@@ -45,8 +45,8 @@ class SettingsAboutActivity : BaseActivity() {
     private val iOSUrl = "https://apps.apple.com/us/app/wxl23/id1171250052"
     //private val releaseNotesUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vT-YfH9yH_qmxLHe25UGlJvHHj_25qmTHJoeWPBbNWlvS4nm0YBmFeAnEpeel3GTL3OYKnvXkMNbnOX/pub"
     private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
-    private lateinit var linearLayout: LinearLayout
-    
+    private lateinit var box: LinearLayout
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.generic_about, menu)
         return true
@@ -55,26 +55,26 @@ class SettingsAboutActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.generic_about, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         val version = Utility.getVersion(this)
         toolbar.subtitle = "version: $version"
 
-        val faqButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        val faqButton = ObjectCardText(this, box, toolbar, toolbarBottom)
         faqButton.setTextColor(UIPreferences.textHighlightColor)
         faqButton.text = "View FAQ (current app issues listed at top)"
         faqButton.setOnClickListener { ObjectIntent.showWeb(this, faqUrl) }
 
-        val releaseNotesButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        val releaseNotesButton = ObjectCardText(this, box, toolbar, toolbarBottom)
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
         releaseNotesButton.text = "View release notes"
         releaseNotesButton.setOnClickListener { ObjectIntent.showWeb(this, releaseNotesUrl) }
 
-        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        textCard = ObjectCardText(this, box, toolbar, toolbarBottom)
         val cardDeleteFiles = ObjectCardText(this, "Delete old radar files (should not be needed)", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
         cardDeleteFiles.setOnClickListener {
-            ObjectPopupMessage(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
+            ObjectPopupMessage(box, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         }
-        linearLayout.addView(cardDeleteFiles.get())
+        box.addView(cardDeleteFiles.get())
         displayContent()
     }
 

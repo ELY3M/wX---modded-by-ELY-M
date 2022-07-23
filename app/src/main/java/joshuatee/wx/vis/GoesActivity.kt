@@ -52,13 +52,13 @@ class GoesActivity : VideoRecordActivity() {
     companion object { const val RID = "" }
 
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
     private var animDrawable = AnimationDrawable()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private var sector = "cgl"
     private var oldSector = "cgl"
     private var savePrefs = true
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private val prefImagePosition = "GOES16_IMG"
     // NHC
     var goesFloater = false
@@ -76,12 +76,12 @@ class GoesActivity : VideoRecordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.goes16, iconsEvenlySpaced = true, bottomToolbar = false)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(RID)!!
+        arguments = intent.getStringArrayExtra(RID)!!
         objectNavDrawer = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes) { getContent(sector) }
-        img = ObjectTouchImageView(this, toolbar, R.id.iv, objectNavDrawer, "")
+        image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
         toolbar.setOnClickListener { objectNavDrawer.open() }
-        img.setMaxZoom(8.0f)
-        img.setListener(objectNavDrawer) { getContent(sector) }
+        image.setMaxZoom(8.0f)
+        image.setListener(objectNavDrawer) { getContent(sector) }
         readPrefs()
         getContent(sector)
     }
@@ -99,22 +99,22 @@ class GoesActivity : VideoRecordActivity() {
     }
 
     private fun display() {
-        img.setBitmap(bitmap)
-        img.firstRunSetZoomPosn(prefImagePosition)
+        image.setBitmap(bitmap)
+        image.firstRunSetZoomPosn(prefImagePosition)
         if (oldSector != sector) {
-            img.setZoom(1.0f)
+            image.setZoom(1.0f)
             oldSector = sector
         }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     private fun writePrefs() {
@@ -125,20 +125,20 @@ class GoesActivity : VideoRecordActivity() {
     }
 
     private fun readPrefs() {
-        if (activityArguments.isNotEmpty() && activityArguments[0] == "") {
+        if (arguments.isNotEmpty() && arguments[0] == "") {
             sector = Utility.readPref(this, "GOES16_SECTOR", sector)
             objectNavDrawer.index = Utility.readPref(this, "GOES16_IMG_FAV_IDX", 0)
-        } else if (activityArguments.size > 1 && activityArguments[0].contains("http")) {
+        } else if (arguments.size > 1 && arguments[0].contains("http")) {
             // NHC floater
             goesFloater = true
-            goesFloaterUrl = activityArguments[0]
+            goesFloaterUrl = arguments[0]
             objectNavDrawer.index = 0
             sector = goesFloaterUrl
             savePrefs = false
         } else {
-            if (activityArguments.size > 1) {
-                sector = activityArguments[0]
-                objectNavDrawer.index = To.int(activityArguments[1])
+            if (arguments.size > 1) {
+                sector = arguments[0]
+                objectNavDrawer.index = To.int(arguments[1])
                 savePrefs = false
             }
         }
@@ -146,7 +146,7 @@ class GoesActivity : VideoRecordActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -209,7 +209,7 @@ class GoesActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(prefImagePosition)
+        image.imgSavePosnZoom(prefImagePosition)
         super.onStop()
     }
 
@@ -217,11 +217,11 @@ class GoesActivity : VideoRecordActivity() {
         if (!goesFloater) {
             FutureVoid(this,
                 { animDrawable = UtilityGoes.getAnimation(this, objectNavDrawer.url, sector, frameCount) })
-                { animDrawable.startAnimation(img) }
+                { animDrawable.startAnimation(image) }
         } else {
             FutureVoid(this,
                 { animDrawable = UtilityGoes.getAnimationGoesFloater(this, objectNavDrawer.url, sector, frameCount) })
-                { animDrawable.startAnimation(img) }
+                { animDrawable.startAnimation(image) }
         }
     }
 }

@@ -21,7 +21,6 @@
 
 package joshuatee.wx.notifications
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcMcdWatchShowActivity
@@ -41,7 +40,7 @@ import joshuatee.wx.settings.NotificationPreferences
 
 internal object UtilityNotificationWpc {
 
-    fun locationNeedsMpd() = (0 until Location.numLocations).any { MyApplication.locations.getOrNull(it)?.notificationWpcMpd ?: false }
+    fun locationNeedsMpd() = (0 until Location.numLocations).any { Location.locations.getOrNull(it)?.notificationWpcMpd ?: false }
 
     fun sendMpdLocationNotifications(context: Context): String {
         val textMcd = ObjectPolygonWatch.polygonDataByType[MPD]!!.latLonList.value
@@ -59,7 +58,7 @@ internal object UtilityNotificationWpc {
                 val polygon2 = poly2.build()
                 (1..Location.numLocations).forEach { n ->
                     val locNum = n.toString()
-                    if (MyApplication.locations[n - 1].notificationWpcMpd) {
+                    if (Location.locations[n - 1].notificationWpcMpd) {
                         // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                         // call secondary method to send notification if required
                         val contains = polygon2.contains(Location.getLatLon(n - 1).asPoint())
@@ -89,7 +88,7 @@ internal object UtilityNotificationWpc {
         )
         val cancelStr = "wpcmpdloc$mdNo$locNum"
         if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
-            val sound = MyApplication.locations[locNumInt].sound && !inBlackout
+            val sound = Location.locations[locNumInt].sound && !inBlackout
             val objectNotification = ObjectNotification(
                     context,
                     sound,

@@ -26,6 +26,7 @@ import android.content.Context
 import android.graphics.Color
 import android.util.TypedValue
 import android.view.View
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import joshuatee.wx.MyApplication
@@ -38,7 +39,6 @@ import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.UtilityCanvasProjection
-import joshuatee.wx.util.UtilityLog
 
 import kotlin.math.*
 
@@ -238,9 +238,9 @@ class WXGLTextObject(
                 WXGLNexradLevel3HailIndex.hailList.indices.forEach {
                     checkAndDrawText(
                             wxglSurfaceView.hailLabels,
-                            WXGLNexradLevel3HailIndex.hailList[it].lat - 0.130 / wxglRender.zoom, //move down to under HI icon
+                            WXGLNexradLevel3HailIndex.hailList[it].lat - 0.163 / wxglRender.zoom, //move down to under HI icon
                             WXGLNexradLevel3HailIndex.hailList[it].lon,
-                            WXGLNexradLevel3HailIndex.hailList[it].hailsize,
+                            WXGLNexradLevel3HailIndex.hailList[it].hailSize,
                             RadarPreferences.radarColorHiText
                     )
                 }
@@ -259,80 +259,6 @@ class WXGLTextObject(
             relativeLayout.removeView(wxglSurfaceView.hailLabels[it])
         }
     }
-
-    private fun addHail() {
-            projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
-            var foundhail: Boolean = false
-            var hailLat: Double
-            var hailLon: Double
-            wxglSurfaceView.hailTextView = mutableListOf()
-            var aa = 0
-
-            UtilityLog.d("wx", "hailList.size: "+WXGLNexradLevel3HailIndex.hailList.size)
-
-            if (WXGLNexradLevel3HailIndex.hailList.size < 0) {
-                UtilityLog.d("wx", "haillist < 0")
-                foundhail = true
-            }
-
-            while (aa < WXGLNexradLevel3HailIndex.hailList.size) {
-                aa += 1
-            }
-
-                if (foundhail) {
-                    UtilityLog.d("wx", "hail found")
-                    hailLat = WXGLNexradLevel3HailIndex.hailList[aa].lat //move down abit
-                    hailLon = WXGLNexradLevel3HailIndex.hailList[aa].lon
-
-                    scale = getScale()
-                    oglrZoom = 1.0f
-                    if (wxglRender.zoom < 1.0f) {
-                        oglrZoom = wxglRender.zoom * 0.8f
-                    }
-                    if (wxglRender.zoom > 0.5) {
-                        showHail()
-                        for (c in 0 until 1) {
-                            val drawText = checkButDoNotDrawText(
-                                    wxglSurfaceView.hailTextView,
-                                    hailLat,
-                                    hailLon, //move down abit so can read
-                                    RadarPreferences.radarColorHiText,
-                                    UIPreferences.textSizeSmall * oglrZoom * 1.5f * RadarPreferences.radarHiTextSize
-                            )
-                            if (drawText) {
-                                wxglSurfaceView.hailTextView[c].text = WXGLNexradLevel3HailIndex.hailList[aa].hailsize
-
-                            }
-                        }
-                    } else {
-                        hideHail()
-                    }
-
-                } //foundhail
-
-    }
-
-    private fun showHail() {
-            if (wxglSurfaceView.hailTextView.size > 0) {
-                var c = 0
-                while (c < 1) {
-                    wxglSurfaceView.hailTextView[c].visibility = View.VISIBLE
-                    c += 1
-                }
-            }
-    }
-
-    private fun hideHail() {
-            if (hailSingleLabelTvArrInit)
-            if (wxglSurfaceView.hailTextView.size > 0) {
-                var c = 0
-                while (c < wxglSurfaceView.hailTextView.size) {
-                    wxglSurfaceView.hailTextView[c].visibility = View.GONE
-                    c += 1
-                }
-            }
-    }
-
 
     private fun checkAndDrawText(textViews: MutableList<TextView>, lat: Double, lon: Double, text: String, color: Int) {
         val coordinates = UtilityCanvasProjection.computeMercatorNumbers(lat, lon, projectionNumbers)

@@ -36,9 +36,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import joshuatee.wx.ui.ObjectTextView
 import joshuatee.wx.util.Utility
 
-class BottomSheetFragment(private val actContext: Context, val position: Int, private val topLabel: String, private val usedForLocation: Boolean) : BottomSheetDialogFragment() {
+class BottomSheetFragment(
+        private val actContext: Context,
+        val position: Int,
+        private val topLabel: String,
+        private val usedForLocation: Boolean
+    ) : BottomSheetDialogFragment() {
 
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var label: TextView
     lateinit var functions: List<(Int) -> Unit>
     lateinit var labelList: List<String>
@@ -62,7 +67,7 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
                 label.setBackgroundColor(Color.BLACK)
             }
         }
-        linearLayout = fragmentView!!.findViewById(R.id.linearLayout)
+        box = fragmentView!!.findViewById(R.id.linearLayout)
         labelList.forEachIndexed { index, it ->
             val item = ObjectTextView(actContext, it)
             textViewList.add(item)
@@ -78,7 +83,7 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
                 functions[index](position)
                 dismiss()
             }
-            linearLayout.addView(item.get())
+            box.addView(item.get())
         }
         return fragmentView
     }

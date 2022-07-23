@@ -24,14 +24,15 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
 import joshuatee.wx.Extensions.parseMultiple
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.TextSize
+import joshuatee.wx.util.UtilityLog
 
-class ObjectCardAlertSummaryItem(context: Context) {
+class ObjectCardAlertDetail(val context: Context) {
 
     private val objectCard = ObjectCard(context)
     private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
@@ -39,26 +40,21 @@ class ObjectCardAlertSummaryItem(context: Context) {
     private val textViewStart = ObjectTextView(context, TextSize.SMALL)
     private val textViewEnd = ObjectTextView(context, TextSize.SMALL)
     private val textViewBottom = ObjectTextView(context, backgroundText = true)
-    val radarButton = ObjectButton(context,"Radar", GlobalVariables.ICON_RADAR)
-    val detailsButton = ObjectButton(context,"Details", GlobalVariables.ICON_CURRENT)
+    private val radarButton = ObjectButton(context,"Radar", GlobalVariables.ICON_RADAR)
+    private val detailsButton = ObjectButton(context,"Details", GlobalVariables.ICON_CURRENT)
 
     init {
-        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
-        objectLinearLayout.addViews(listOf(textViewTop.get(), textViewTitle.get(), textViewStart.get(), textViewEnd.get(), textViewBottom.get()))
-        val linearLayoutHorizontal = LinearLayout(context)
-        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        linearLayoutHorizontal.layoutParams = layoutParams
-        linearLayoutHorizontal.addView(radarButton.get())
-        linearLayoutHorizontal.addView(detailsButton.get())
-        objectLinearLayout.addView(linearLayoutHorizontal)
-        objectCard.addView(objectLinearLayout)
+        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
+        vbox.addViews(listOf(textViewTop.get(), textViewTitle.get(), textViewStart.get(), textViewEnd.get(), textViewBottom.get()))
+        val hbox = HBox(context)
+        hbox.wrap()
+        hbox.addWidget(radarButton.get())
+        hbox.addWidget(detailsButton.get())
+        vbox.addLayout(hbox.get())
+        objectCard.addView(vbox)
     }
 
     fun get() = objectCard.get()
-
-    fun setId(id: Int) {
-        objectCard.setId(id)
-    }
 
     fun setListener(fn: View.OnClickListener) {
         objectCard.setOnClickListener(fn)
@@ -91,5 +87,13 @@ class ObjectCardAlertSummaryItem(context: Context) {
         } else {
             textViewEnd.visibility = View.GONE
         }
+        if (capAlert.points.size < 2) {
+            UtilityLog.d("WX", "POINTS HIDE")
+            radarButton.visibility = View.GONE
+        } else {
+            UtilityLog.d("WX", "POINTS NO HIDE " + capAlert.points.size + " " + capAlert.getClosestRadarXml())
+            radarButton.setOnClickListener { ObjectIntent.showRadarBySite(context, capAlert.getClosestRadarXml()) }
+        }
+        detailsButton.setOnClickListener { ObjectIntent.showHazard(context, arrayOf(capAlert.url, "")) }
     }
 }

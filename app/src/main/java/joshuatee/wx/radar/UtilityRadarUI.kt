@@ -34,7 +34,7 @@ import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.util.*
 import kotlin.math.roundToInt
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
+import joshuatee.wx.MyApplication //elys mod //need context...
 import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
 
@@ -143,11 +143,12 @@ internal object UtilityRadarUI {
         longPressList.add("Nearest observation: " + obsSite.name + " (" + obsSite.distance.roundToInt() + " mi)")
         longPressList.add("Nearest forecast: $latLonTitle")
         longPressList.add("Nearest meteogram: " + obsSite.name)
-        if (RadarPreferences.radarSpotters || RadarPreferences.radarSpottersLabel) longPressList.add("Spotter Info")
+	//elys mod
         longPressList.add("Current radar status message: " + wxglRender.rid)
-	    val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
-	    longPressList.add("Nearest radar status message: " + getridpoint)
-	    longPressList.add("Userpoint info: " + latLonTitle)
+	val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
+	longPressList.add("Nearest radar status message: " + getridpoint)
+	        if (RadarPreferences.radarSpotters || RadarPreferences.radarSpottersLabel) longPressList.add("Spotter Info")
+	longPressList.add("Userpoint info: " + latLonTitle)
         longPressList.add("Add userpoint for: " + latLonTitle)
         longPressList.add("Delete userpoint for: " + latLonTitle)
         longPressList.add("Delete all userpoints")
@@ -305,7 +306,7 @@ internal object UtilityRadarUI {
 	//elys mod
         if (PolygonType.USERPOINTS.pref && !archiveMode) wxglRender.constructUserPoints() else wxglRender.deconstructUserPoints()
 
-        if (imageMap != null && imageMap.map.visibility != View.VISIBLE) {
+        if (imageMap != null && imageMap.visibility != View.VISIBLE) {
             paneList.forEach { wxglSurfaceViews[it].visibility = View.VISIBLE }
         }
     }

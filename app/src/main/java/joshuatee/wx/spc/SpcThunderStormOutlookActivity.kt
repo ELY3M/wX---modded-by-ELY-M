@@ -43,7 +43,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     private var bitmaps = mutableListOf<Bitmap>()
     private var urls = listOf<String>()
     private var imagesPerRow = 2
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -54,7 +54,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         if (UtilityUI.isLandScape(this)) {
             imagesPerRow = 3
         }
@@ -74,8 +74,8 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
 
     private fun getImages() {
         bitmaps = MutableList(urls.size){ UtilityImg.getBlankBitmap() }
-        linearLayout.removeAllViews()
-        objectImageSummary = ObjectImageSummary(this, linearLayout, bitmaps)
+        box.removeAllViews()
+        objectImageSummary = ObjectImageSummary(this, box, bitmaps)
         urls.indices.forEach {
             FutureVoid(this, { bitmaps[it] = urls[it].getImage() }, { updateImage(it) })
         }

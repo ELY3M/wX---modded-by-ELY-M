@@ -51,12 +51,12 @@ class NhcStormActivity : BaseActivity() {
     private var product = ""
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var objectCardText: ObjectCardText
-    private lateinit var linearLayout: LinearLayout
-    private lateinit var linearLayoutText: ObjectLinearLayout
-    private lateinit var linearLayoutImage: ObjectLinearLayout
+    private lateinit var box: LinearLayout
+    private lateinit var boxText: VBox
+    private lateinit var boxImage: VBox
     private var numberOfImages = 0
     private var imagesPerRow = 2
-    private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
+    private val horizontalLinearLayouts = mutableListOf<HBox>()
     private val imageUrls = listOf(
         "_5day_cone_with_line_and_wind_sm2.png",
         "_key_messages.png",
@@ -79,9 +79,9 @@ class NhcStormActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc_storm, false)
-        linearLayout = findViewById(R.id.linearLayout)
-        linearLayoutImage = ObjectLinearLayout(this, linearLayout)
-        linearLayoutText = ObjectLinearLayout(this, linearLayout)
+        box = findViewById(R.id.linearLayout)
+        boxImage = VBox(this, box)
+        boxText = VBox(this, box)
         stormData = intent.getSerializableExtra(URL) as ObjectNhcStormDetails
         title = stormData.name + " " + stormData.classification
         toolbar.subtitle = stormData.forTopHeader()
@@ -118,18 +118,16 @@ class NhcStormActivity : BaseActivity() {
     }
 
     fun showImages() {
-        linearLayoutImage.removeAllViews()
+        boxImage.removeAllViews()
         numberOfImages = 0
         bitmaps.forEachIndexed { index, bitmap ->
             if (bitmap.width > 100) {
-                val objectCardImage: ObjectCardImage
-                if (numberOfImages % imagesPerRow == 0) {
-                    val objectLinearLayout = ObjectLinearLayout(this, linearLayoutImage.get())
-                    objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
-                    horizontalLinearLayouts.add(objectLinearLayout)
-                    objectCardImage = ObjectCardImage(this, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
+                val objectCardImage = if (numberOfImages % imagesPerRow == 0) {
+                    val hbox = HBox(this, boxImage.get())
+                    horizontalLinearLayouts.add(hbox)
+                    ObjectCardImage(this, hbox.get(), bitmap, imagesPerRow)
                 } else {
-                    objectCardImage = ObjectCardImage(this, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
+                    ObjectCardImage(this, horizontalLinearLayouts.last().get(), bitmap, imagesPerRow)
                 }
                 numberOfImages += 1
                 objectCardImage.setOnClickListener {
@@ -145,8 +143,8 @@ class NhcStormActivity : BaseActivity() {
     }
 
     fun showText(s: String) {
-        linearLayoutText.removeAllViews()
-        objectCardText = ObjectCardText(this, linearLayoutText.get(), toolbar, toolbarBottom)
+        boxText.removeAllViews()
+        objectCardText = ObjectCardText(this, boxText.get(), toolbar, toolbarBottom)
         if (s.contains("<")) {
             objectCardText.text = Utility.fromHtml(s)
         } else {

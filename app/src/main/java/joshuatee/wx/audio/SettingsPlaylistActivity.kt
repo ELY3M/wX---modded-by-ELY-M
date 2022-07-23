@@ -105,7 +105,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         updateList()
         val recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
         adapter = PlayListAdapter(playListItems)
-        recyclerView.recyclerView.adapter = adapter
+        recyclerView.adapter = adapter
         adapter.setListener(::itemSelected)
         UtilityTts.initTts(this)
         getContent()

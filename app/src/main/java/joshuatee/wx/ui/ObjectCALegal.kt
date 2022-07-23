@@ -29,15 +29,15 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.TextSize
 
-class ObjectCALegal(context: Context, linearLayout: LinearLayout, url: String) {
+class ObjectCALegal(context: Context, box: LinearLayout, url: String) {
 
-    private val objectCardText = ObjectCardText(context)
+    private val text = ObjectCardText(context)
 
     init {
-        objectCardText.refreshTextSize(TextSize.SMALL)
-        objectCardText.center()
-        objectCardText.setOnClickListener { ObjectIntent(context, Intent.ACTION_VIEW, Uri.parse(url)) }
-        objectCardText.text = context.resources.getText(R.string.main_screen_ca_disclaimor).toString()
-        linearLayout.addView(objectCardText.get())
+        text.refreshTextSize(TextSize.SMALL)
+        text.center()
+        text.setOnClickListener { ObjectIntent(context, Intent.ACTION_VIEW, Uri.parse(url)) }
+        text.text = context.resources.getText(R.string.main_screen_ca_disclaimor).toString()
+        box.addView(text.get())
     }
 }

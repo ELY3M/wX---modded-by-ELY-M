@@ -30,15 +30,12 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.ui.ObjectCardImage
-import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.ObjectLinearLayout
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityImg
 
 class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
@@ -55,11 +52,11 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var html = ""
     private val bitmaps = MutableList(5) { UtilityImg.getBlankBitmap() }
     private var urls = listOf<String>()
-    private lateinit var activityArguments: Array<String>
+    private lateinit var arguments: Array<String>
     private var day = ""
     private var playlistProd = ""
     private lateinit var objectCardText: ObjectCardText
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: LinearLayout
     private val objectCardImageList = mutableListOf<ObjectCardImage>()
     private var imagesPerRow = 2
     private var imageLabel = ""
@@ -67,28 +64,27 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcswo)
-        linearLayout = findViewById(R.id.linearLayout)
+        box = findViewById(R.id.linearLayout)
         if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) {
             imagesPerRow = 4
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         var numberOfImages = 0
-        val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
+        val horizontalLinearLayouts = mutableListOf<HBox>()
         (0..4).forEach { index ->
             if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(this, linearLayout)
-                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
-                horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImageList.add(ObjectCardImage(this, objectLinearLayout.linearLayout))
+                val hbox = HBox(this, box)
+                horizontalLinearLayouts.add(hbox)
+                objectCardImageList.add(ObjectCardImage(this, hbox.get()))
             } else {
-                objectCardImageList.add(ObjectCardImage(this, horizontalLinearLayouts.last().linearLayout))
+                objectCardImageList.add(ObjectCardImage(this, horizontalLinearLayouts.last().get()))
             }
             objectCardImageList[index].visibility = View.GONE
             numberOfImages += 1
         }
-        objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(NUMBER)!!
-        day = activityArguments[0]
+        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
+        arguments = intent.getStringArrayExtra(NUMBER)!!
+        day = arguments[0]
         title = "Day $day Convective Outlook"
         val menu = toolbarBottom.menu
         val miTornado = menu.findItem(R.id.action_share_tornado)
@@ -146,7 +142,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun showText() {
         objectCardText.text = html
         toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
-        if (activityArguments[1] == "sound") {
+        if (arguments[1] == "sound") {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         }
     }

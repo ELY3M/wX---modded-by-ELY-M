@@ -45,7 +45,7 @@ class SpotterReportsActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         objectRecyclerViewGeneric = ObjectRecyclerViewGeneric(this, R.id.card_list)
         val adapterSpotterReports = AdapterSpotterReports(UtilitySpotter.reports)
-        objectRecyclerViewGeneric.recyclerView.adapter = adapterSpotterReports
+        objectRecyclerViewGeneric.adapter = adapterSpotterReports
         updateTitles()
         adapterSpotterReports.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {
             override fun onItemClick(position: Int) { itemSelected(position) }
@@ -53,7 +53,7 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     override fun onRestart() {
-        objectRecyclerViewGeneric.recyclerView.adapter = AdapterSpotterReports(UtilitySpotter.reports)
+        objectRecyclerViewGeneric.adapter = AdapterSpotterReports(UtilitySpotter.reports)
         updateTitles()
         super.onRestart()
     }

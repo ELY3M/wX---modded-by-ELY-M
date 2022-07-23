@@ -23,21 +23,14 @@ package joshuatee.wx.settings
 
 import android.app.NotificationManager
 import android.content.Context
-import android.util.TypedValue
 import android.view.Gravity
 import android.widget.CheckBox
 import android.widget.CompoundButton
-import android.widget.LinearLayout
-import android.widget.TextView
-import joshuatee.wx.Extensions.setPadding
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.radar.RadarGeometry
-import joshuatee.wx.ui.ObjectCard
-import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.ObjectLinearLayout
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
@@ -47,19 +40,20 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
     private val checkBox = CheckBox(context)
 
     init {
-        val textView = TextView(context)
-        ObjectCardText.textViewSetup(textView)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-        textView.setTextColor(UIPreferences.backgroundColor)
+        val textView = ObjectTextView(context)
+        textView.wrap()
+//        ObjectCardText.textViewSetup(textView)
+//        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+//        textView.setTextColor(UIPreferences.backgroundColor)
         textView.setPadding(UIPreferences.paddingSettings)
-        textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+//        textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
         textView.text = label
-        textView.gravity = Gravity.CENTER_VERTICAL
+//        textView.gravity = Gravity.CENTER_VERTICAL
         val strInner = context.resources.getString(strId)
         textView.setOnClickListener { ObjectDialogue(context, strInner) }
-        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.HORIZONTAL, Gravity.CENTER_VERTICAL)
-        objectLinearLayout.matchParent()
-        objectLinearLayout.addView(textView)
+        val hbox = HBox(context, Gravity.CENTER_VERTICAL)
+        hbox.matchParent()
+        hbox.addWidget(textView.get())
         checkBox.gravity = Gravity.CENTER_VERTICAL
         val truePrefs = listOf(
                 "COD_HW_DEFAULT",
@@ -129,8 +123,8 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
                 }
             }
         }
-        objectLinearLayout.addView(checkBox)
-        objectCard.addView(objectLinearLayout.linearLayout)
+        hbox.addWidget(checkBox)
+        objectCard.addView(hbox.get())
     }
 
     fun isChecked(value: Boolean) {

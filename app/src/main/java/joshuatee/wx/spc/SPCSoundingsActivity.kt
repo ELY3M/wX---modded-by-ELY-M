@@ -44,7 +44,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     companion object { const val URL = "" }
 
     private var imgUrl = ""
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
     private lateinit var imageMap: ObjectImageMap
     private var office = ""
     private var mapShown = false
@@ -70,9 +70,9 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
-        img = ObjectTouchImageView(this, toolbar, toolbarBottom, R.id.iv)
+        image = TouchImage(this, toolbar, toolbarBottom, R.id.iv)
         office = UtilityLocation.getNearestSoundingSite(Location.latLon)
-        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.get()))
+        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(image.get()))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToSnd)
         getContent()
     }
@@ -94,10 +94,10 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun showImage() {
-        img.visibility = View.VISIBLE
-        img.setBitmap(bitmap)
-        img.setMaxZoom(4f)
-        img.firstRunSetZoomPosn("SOUNDING")
+        image.visibility = View.VISIBLE
+        image.setBitmap(bitmap)
+        image.setMaxZoom(4f)
+        image.firstRunSetZoomPosn("SOUNDING")
         Utility.writePref(this, "SOUNDING_SECTOR", office)
     }
 
@@ -113,9 +113,9 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun showSpcPlot() {
-        img.visibility = View.VISIBLE
-        img.setBitmap(bitmap)
-        img.setMaxZoom(4f)
+        image.visibility = View.VISIBLE
+        image.setBitmap(bitmap)
+        image.setMaxZoom(4f)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -145,7 +145,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         office = location
         mapShown = false
         getContent()
-        img.resetZoom()
+        image.resetZoom()
     }
 
     private fun toggleFavorite() {
@@ -191,7 +191,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom("SOUNDING")
+        image.imgSavePosnZoom("SOUNDING")
         super.onStop()
     }
 }

@@ -23,7 +23,6 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.FutureVoid
@@ -50,7 +49,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         updateList()
         recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
         settingsLocationAdapterList = SettingsLocationAdapterList(locations)
-        recyclerView.recyclerView.adapter = settingsLocationAdapterList
+        recyclerView.adapter = settingsLocationAdapterList
         updateTitle()
         settingsLocationAdapterList.setListener(::itemSelected)
         getContent()
@@ -63,7 +62,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun download() {
-        MyApplication.locations.indices.forEach { index ->
+        Location.locations.indices.forEach { index ->
             val objectForecastPackageCurrentConditions = ObjectCurrentConditions(this, index)
             currentConditions.add(objectForecastPackageCurrentConditions)
             objectForecastPackageCurrentConditions.format()
@@ -77,14 +76,14 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     private fun updateList() {
         locations = MutableList(Location.numLocations) { "" }
-        MyApplication.locations.forEach {
+        Location.locations.forEach {
             it.updateObservation("")
         }
     }
 
     private fun updateListWithCurrentConditions() {
         locations.clear()
-        MyApplication.locations.forEachIndexed { index, location ->
+        Location.locations.forEachIndexed { index, location ->
             location.updateObservation(currentConditions[index].topLine)
             locations.add(currentConditions[index].topLine)
         }
@@ -93,7 +92,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     override fun onRestart() {
         updateList()
         settingsLocationAdapterList = SettingsLocationAdapterList(locations)
-        recyclerView.recyclerView.adapter = settingsLocationAdapterList
+        recyclerView.adapter = settingsLocationAdapterList
         updateTitle()
         Location.refreshLocationData(this)
         getContent()
@@ -122,19 +121,19 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             updateTitle()
             UtilityWXJobService.startService(this)
         } else {
-            ObjectPopupMessage(recyclerView.recyclerView, "Must have at least one location.")
+            ObjectPopupMessage(recyclerView.get(), "Must have at least one location.")
         }
     }
 
     private fun moveUp(position: Int) {
         if (position > 0) {
-            val locA = Location(this, position - 1)
-            val locB = Location(this, position)
+            val locA = ObjectLocation(this, position - 1)
+            val locB = ObjectLocation(this, position)
             locA.saveToNewSlot(position)
             locB.saveToNewSlot(position - 1)
         } else {
-            val locA = Location(this, Location.numLocations - 1)
-            val locB = Location(this, 0)
+            val locA = ObjectLocation(this, Location.numLocations - 1)
+            val locB = ObjectLocation(this, 0)
             locA.saveToNewSlot(0)
             locB.saveToNewSlot(Location.numLocations - 1)
         }
@@ -143,13 +142,13 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     private fun moveDown(position: Int) {
         if (position < Location.numLocations - 1) {
-            val locA = Location(this, position)
-            val locB = Location(this, position + 1)
+            val locA = ObjectLocation(this, position)
+            val locB = ObjectLocation(this, position + 1)
             locA.saveToNewSlot(position + 1)
             locB.saveToNewSlot(position)
         } else {
-            val locA = Location(this, position)
-            val locB = Location(this, 0)
+            val locA = ObjectLocation(this, position)
+            val locB = ObjectLocation(this, 0)
             locA.saveToNewSlot(0)
             locB.saveToNewSlot(position)
         }

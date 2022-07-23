@@ -46,7 +46,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
 
     private var animRan = false
     private var animDrawable = AnimationDrawable()
-    private lateinit var img: ObjectTouchImageView
+    private lateinit var image: TouchImage
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private val prefImagePosition = "AWCRADARMOSAIC"
@@ -64,10 +64,10 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.awcmosaic, iconsEvenlySpaced = true, bottomToolbar = false)
         objectNavDrawer = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors) { getContent(product) }
-        img = ObjectTouchImageView(this, toolbar, R.id.iv, objectNavDrawer, "")
+        image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
         toolbar.setOnClickListener { objectNavDrawer.open() }
-        img.setMaxZoom(8.0f)
-        img.setListener(objectNavDrawer) { getContent(product) }
+        image.setMaxZoom(8.0f)
+        image.setListener(objectNavDrawer) { getContent(product) }
         sector = Utility.readPref(this, prefTokenSector, sector)
         product = Utility.readPref(this, prefTokenProduct, product)
         objectNavDrawer.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)
@@ -87,9 +87,9 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     }
 
     private fun showImage() {
-        img.setBitmap(bitmap)
+        image.setBitmap(bitmap)
         animRan = false
-        img.firstRunSetZoomPosn(prefImagePosition)
+        image.firstRunSetZoomPosn(prefImagePosition)
         Utility.writePref(this, prefTokenSector, objectNavDrawer.url)
         Utility.writePref(this, prefTokenProduct, product)
     }
@@ -97,21 +97,21 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     private fun getAnimate() {
         FutureVoid(this,
             { animDrawable = UtilityAwcRadarMosaic.getAnimation(this, objectNavDrawer.url, product) })
-            { animRan = UtilityImgAnim.startAnimation(animDrawable, img) }
+            { animRan = UtilityImgAnim.startAnimation(animDrawable, image) }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.actionBarDrawerToggle.syncState()
+        objectNavDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -142,7 +142,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        img.imgSavePosnZoom(prefImagePosition)
+        image.imgSavePosnZoom(prefImagePosition)
         super.onStop()
     }
 }

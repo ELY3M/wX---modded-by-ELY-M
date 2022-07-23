@@ -23,25 +23,24 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Typeface
-import android.util.TypedValue
 import android.view.View
-import android.widget.TextView
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
 class ObjectCardHSText(context: Context, val product: String) {
 
     private val objectCard = ObjectCard(context)
-    private val textView = TextView(context)
+    private val textView = ObjectTextView(context)
     private var textShort = ""
     private var textLong = ""
     private var textShownSmall = true
 
     init {
-        ObjectCardText.textViewSetup(textView)
-        textView.setTextIsSelectable(true)
-        textView.isFocusable = false
-        objectCard.addView(textView)
+//        ObjectCardText.textViewSetup(textView)
+//        textView.setTextIsSelectable(true)
+//        textView.isFocusable = false
+        objectCard.addView(textView.get())
     }
 
     fun toggleText() {
@@ -77,7 +76,8 @@ class ObjectCardHSText(context: Context, val product: String) {
     }
 
     fun refreshTextSize() {
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+        textView.refreshTextSize(TextSize.SMALL)
+//        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
     }
 
     private fun setTextLong(text: String) {

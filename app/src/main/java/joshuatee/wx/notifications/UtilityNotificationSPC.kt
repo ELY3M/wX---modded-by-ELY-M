@@ -21,7 +21,6 @@
 
 package joshuatee.wx.notifications
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.Location
@@ -99,9 +98,9 @@ internal object UtilityNotificationSpc {
         return notifUrls
     }
 
-    fun locationNeedsMcd() = (0 until Location.numLocations).any { MyApplication.locations.getOrNull(it)?.notificationMcd ?: false }
+    fun locationNeedsMcd() = (0 until Location.numLocations).any { Location.locations.getOrNull(it)?.notificationMcd ?: false }
 
-    fun locationNeedsSwo() = (0 until Location.numLocations).any { MyApplication.locations.getOrNull(it)?.notificationSwo ?: false }
+    fun locationNeedsSwo() = (0 until Location.numLocations).any { Location.locations.getOrNull(it)?.notificationSwo ?: false }
 
     /*	... CATEGORICAL ...
 
@@ -149,7 +148,7 @@ internal object UtilityNotificationSpc {
                         val polygonShape = polygonFrame.build()
                         (1..Location.numLocations).forEach { n ->
                             val locNum = n.toString()
-                            if (MyApplication.locations[n - 1].notificationSwo) {
+                            if (Location.locations[n - 1].notificationSwo) {
                                 // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                                 // call secondary method to send notif if required
                                 if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {
@@ -178,7 +177,7 @@ internal object UtilityNotificationSpc {
                 val polygonShape = polygonFrame.build()
                 for (n in 1..Location.numLocations) {
                     val locNum = n.toString()
-                    if (MyApplication.locations[n - 1].notificationMcd) {
+                    if (Location.locations[n - 1].notificationMcd) {
                         // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                         // call secondary method to send notif if required
                         if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) notifUrls += sendMcdNotification(context, locNum, mcdNumbers.safeGet(z))
@@ -209,7 +208,7 @@ internal object UtilityNotificationSpc {
         val resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val cancelString = "spcmcdloc$mdNo$locNum"
         if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
-            val sound = MyApplication.locations[locNumInt].sound && !inBlackout
+            val sound = Location.locations[locNumInt].sound && !inBlackout
             val objectNotification = ObjectNotification(
                     context,
                     sound,
@@ -252,7 +251,7 @@ internal object UtilityNotificationSpc {
         val resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val cancelString = "spcswoloc$day$locNum$threatLevel$validTime"
         if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
-            val sound = (MyApplication.locations.getOrNull(locNumInt)?.sound ?: false) && !inBlackout
+            val sound = (Location.locations.getOrNull(locNumInt)?.sound ?: false) && !inBlackout
             val objectNotification = ObjectNotification(
                     context,
                     sound,
@@ -303,7 +302,7 @@ internal object UtilityNotificationSpc {
                         val polygonShape = polygonFrame.build()
                         (1..Location.numLocations).forEach { n ->
                             val locNum = n.toString()
-                            if (MyApplication.locations[n - 1].notificationSwo) {
+                            if (Location.locations[n - 1].notificationSwo) {
                                 // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                                 // call secondary method to send notif if required
                                 if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {
