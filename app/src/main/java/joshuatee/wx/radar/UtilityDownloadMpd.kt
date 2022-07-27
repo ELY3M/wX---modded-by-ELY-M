@@ -23,8 +23,6 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.common.RegExp
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityNotificationWpc
 import joshuatee.wx.objects.DownloadTimer
@@ -45,7 +43,8 @@ internal object UtilityDownloadMpd {
     }
 
     fun getMpd(context: Context): WatchData {
-        val html = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php".getHtml()
+//        val html = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php".getHtml()
+        val html = ObjectPolygonWatch.polygonDataByType[type]!!.getUrl().getHtml()
         if (html != "") {
             ObjectPolygonWatch.polygonDataByType[type]!!.storage.valueSet(context, html)
         }
@@ -53,9 +52,9 @@ internal object UtilityDownloadMpd {
         val htmlList = mutableListOf<String>()
         var latLonString = ""
         numberList.forEach {
-            val mcdData = getLatLon(context, it)
-            htmlList.add(mcdData[0])
-            latLonString += mcdData[1]
+            val data = getLatLon(context, it)
+            htmlList.add(data[0])
+            latLonString += data[1]
         }
         if (type.pref || UtilityNotificationWpc.locationNeedsMpd()) {
             ObjectPolygonWatch.polygonDataByType[type]!!.latLonList.valueSet(context, latLonString)
@@ -64,7 +63,9 @@ internal object UtilityDownloadMpd {
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
-        val list = UtilityString.parseColumn(ObjectPolygonWatch.polygonDataByType[type]!!.storage.value, RegExp.mpdPattern)
+        val list = UtilityString.parseColumn(
+                ObjectPolygonWatch.polygonDataByType[type]!!.storage.value,
+                ObjectPolygonWatch.regex[type]!!)
         var mpdNoList = ""
         list.forEach {
             mpdNoList += "$it:"
@@ -77,7 +78,7 @@ internal object UtilityDownloadMpd {
 
     // return the raw MPD text and the lat/lon as a list
     private fun getLatLon(context: Context, number: String): List<String> {
-        val html = UtilityDownload.getTextProduct(context, "WPCMPD$number")
+        val html = UtilityDownload.getTextProduct(context, ObjectPolygonWatch.textPrefix[type] + number)
         return listOf(html, UtilityNotification.storeWatchMcdLatLon(html))
     }
 }

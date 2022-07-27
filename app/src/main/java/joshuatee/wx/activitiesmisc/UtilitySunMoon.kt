@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp.colon
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.Location
 
 import org.shredzone.commons.suncalc.MoonTimes
@@ -110,8 +109,8 @@ object UtilitySunMoon {
         //FIXME find out if can get moon upper transit
         content += "MoonSet: " + moontimes.set + GlobalVariables.newline
 
-        content += "Moon Age: " + UtilityStringExternal.truncate(moonage.toString(), 5) + GlobalVariables.newline
-        content += "Moon Illumination: " + UtilityStringExternal.truncate(moonFracillum.toString(),5) + "%" + GlobalVariables.newline
+        content += "Moon Age: " + moonage.toString() + GlobalVariables.newline
+        content += "Moon Illumination: " + moonFracillum.toString() + "%" + GlobalVariables.newline
 
         //get current moon phase
         val getCurrentPhase = getPhase(moonage)

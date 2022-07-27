@@ -44,7 +44,8 @@ internal object UtilityDownloadWatch {
     }
 
     fun getWatch(context: Context): WatchData {
-        val html = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/".getHtml()
+//        val html = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/".getHtml()
+        val html = ObjectPolygonWatch.polygonDataByType[type]!!.getUrl().getHtml()
         if (html != "" ) {
             ObjectPolygonWatch.polygonDataByType[type]!!.storage.valueSet(context, html)
         }
@@ -73,7 +74,9 @@ internal object UtilityDownloadWatch {
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
-        val listOriginal = UtilityString.parseColumn(ObjectPolygonWatch.polygonDataByType[type]!!.storage.value, RegExp.watchPattern)
+        val listOriginal = UtilityString.parseColumn(
+                ObjectPolygonWatch.polygonDataByType[type]!!.storage.value,
+                ObjectPolygonWatch.regex[type]!!)
         val list = listOriginal.map { String.format("%4s", it).replace(' ', '0') }
         var watchNoList = ""
         list.forEach {

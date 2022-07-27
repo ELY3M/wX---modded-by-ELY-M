@@ -57,7 +57,7 @@ internal object UtilityModelSpcHrrrInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, om: ObjectModelNoSpinner, time: String, overlayImg: List<String>): Bitmap {
+    fun getImage(context: Context, om: ObjectModel, time: String, overlayImg: List<String>): Bitmap {
         val layerUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/"
         val bitmaps = mutableListOf<Bitmap>()
         val layers = mutableListOf<Drawable>()
@@ -74,7 +74,7 @@ internal object UtilityModelSpcHrrrInputOutput {
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun getAnimation(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel, overlayImg: List<String>): AnimationDrawable {
         if (om.spinnerTimeValue == -1) return AnimationDrawable()
         val bitmaps = (om.spinnerTimeValue until om.times.size).map { k ->
             getImage(context, om, om.times[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0) ?: "", overlayImg)

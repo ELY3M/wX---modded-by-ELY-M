@@ -50,7 +50,7 @@ internal object UtilityModelSpcHrefInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, om: ObjectModelNoSpinner, time: String): Bitmap {
+    fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
         var sectorIndex = if (om.sector == "") 0 else UtilityModelSpcHrefInterface.sectorsLong.indexOf(om.sector)
 //        UtilityLog.d("wx", "DEBUG: " + sectorIndex + " " + om.sector)
         if (sectorIndex == -1) sectorIndex = 0
@@ -92,8 +92,10 @@ internal object UtilityModelSpcHrefInputOutput {
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bitmaps = (om.spinnerTimeValue until om.times.size).map {
             getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "")
         }

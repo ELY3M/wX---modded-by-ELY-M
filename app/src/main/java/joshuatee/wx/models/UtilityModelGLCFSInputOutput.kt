@@ -30,17 +30,16 @@ import joshuatee.wx.util.UtilityImgAnim
 
 internal object UtilityModelGlcfsInputOutput {
 
-    fun getImage(om: ObjectModelNoSpinner, timeOriginal: String): Bitmap {
+    fun getImage(om: ObjectModel, timeOriginal: String): Bitmap {
         var time = timeOriginal.replace("00", "0")
         val timeInt = To.int(time)
         if (timeInt > 9) {
             time = time.replace(Regex("^0"), "")
         }
-        val url = "https://www.glerl.noaa.gov/res/glcfs/lakes/cur/${om.currentParam}-$time.gif"
-        return url.getImage()
+        return "https://www.glerl.noaa.gov/res/glcfs/lakes/cur/${om.currentParam}-$time.gif".getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
         if (om.spinnerTimeValue == -1) {
             return AnimationDrawable()
         }

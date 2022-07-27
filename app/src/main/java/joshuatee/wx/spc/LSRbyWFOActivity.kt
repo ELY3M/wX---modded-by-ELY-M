@@ -27,7 +27,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
@@ -36,7 +35,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 
@@ -57,12 +56,12 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var mapShown = false
     private lateinit var star: MenuItem
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private var locations = listOf<String>()
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
     private var lsrList = mutableListOf<String>()
-    private var textList = mutableListOf<ObjectCardText>()
+    private var textList = mutableListOf<CardText>()
     private var numberLSR = ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -78,8 +77,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.lsrbywfo)
+        title = "LSR"
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         val arguments = intent.getStringArrayExtra(URL)!!
@@ -87,10 +87,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (wfo == "") {
             wfo = "OUN"
         }
-        title = "LSR"
         locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
-        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
+        imageMap.connect(::mapSwitch, UtilityImageMap::mapToWfo)
         getContent()
     }
 
@@ -129,14 +128,14 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         when (item.itemId) {
-            R.id.action_sector -> genericDialog(locations) {
+            R.id.action_sector -> ObjectDialogue.generic(this, locations, ::getContent) {
                 if (locations.isNotEmpty()) {
                     when (it) {
-                        1 -> ObjectIntent.favoriteAdd(this, arrayOf("WFO"))
-                        2 -> ObjectIntent.favoriteRemove(this, arrayOf("WFO"))
+                        1 -> Route.favoriteAdd(this, arrayOf("WFO"))
+                        2 -> Route.favoriteRemove(this, arrayOf("WFO"))
                         else -> {
                             wfo = locations[it].split(" ").getOrNull(0) ?: ""
-                            getContent()
+                            //getContent()
                         }
                     }
                     if (firstTime) {
@@ -150,20 +149,6 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return true
     }
 
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            getContent()
-            dialog.dismiss()
-        }
-        objectDialogue.show()
-    }
-
     private fun getContent() {
         locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         invalidateOptionsMenu()
@@ -174,7 +159,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = UIPreferences.wfoFav
-        box.removeAllViewsInLayout()
+        box.removeChildren()
         FutureVoid(this, ::downloadFirst, ::getLsrFromWfo)
     }
 
@@ -209,7 +194,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             var i = 0
             (1..maxVersions + 1 step 2).forEach { version ->
                 lsrList.add("")
-                textList.add(ObjectCardText(this, box))
+                textList.add(CardText(this, box))
                 val iFinal = i
                 FutureVoid(this, { download(iFinal, version) }, { update(iFinal) })
                 i += 1

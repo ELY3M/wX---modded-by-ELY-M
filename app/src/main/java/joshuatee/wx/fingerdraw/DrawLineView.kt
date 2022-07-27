@@ -30,7 +30,7 @@ import android.view.MotionEvent
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.DistanceUnit
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility

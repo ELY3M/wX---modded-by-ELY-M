@@ -79,6 +79,15 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         }
     }
 
+    fun setTitle(s: String) {
+        title = s
+    }
+
+    fun setTitle(s: String, sub: String) {
+        title = s
+        toolbar.subtitle = sub
+    }
+
     private fun initBottomToolbar() {
         val menu = toolbarBottom.menu
         pause = menu.findItem(R.id.action_stop)

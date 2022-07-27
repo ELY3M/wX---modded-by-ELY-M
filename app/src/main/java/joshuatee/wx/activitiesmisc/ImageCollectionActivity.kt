@@ -73,12 +73,12 @@ class ImageCollectionActivity : VideoRecordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.imagecollection, iconsEvenlySpaced = true, bottomToolbar = false)
         val arguments = intent.getStringArrayExtra(TYPE)!!
-        imageCollection = ObjectImagesCollection.imageCollectionMap[arguments[0]]!!
-        title = imageCollection.title
+        imageCollection = ObjectImagesCollection.map[arguments[0]]!!
+        setTitle(imageCollection.title)
         objectNavDrawer = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContent)
         image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, imageCollection.prefTokenIdx)
-        image.setListener(objectNavDrawer, ::getContent)
-        objectNavDrawer.index = Utility.readPref(this, imageCollection.prefTokenIdx, 0)
+        image.connect(objectNavDrawer, ::getContent)
+        objectNavDrawer.index = Utility.readPrefInt(this, imageCollection.prefTokenIdx, 0)
         toolbar.setOnClickListener { objectNavDrawer.open() }
         getContent()
     }

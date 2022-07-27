@@ -22,7 +22,7 @@
 package joshuatee.wx.util
 
 import android.content.Context
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.radar.UtilityMetar
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences

@@ -25,6 +25,7 @@ package joshuatee.wx.radar
 import android.app.Activity
 import android.content.Context
 import android.opengl.GLSurfaceView
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.activitiesmisc.ForecastActivity
@@ -34,6 +35,7 @@ import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.util.*
 import kotlin.math.roundToInt
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.MyApplication //elys mod //need context...
 import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
@@ -71,20 +73,20 @@ internal object UtilityRadarUI {
     }
 
     private fun showNearestForecast(context: Context, wxglSurfaceView: WXGLSurfaceView) {
-        ObjectIntent(context, ForecastActivity::class.java, ForecastActivity.URL, arrayOf(wxglSurfaceView.newY.toString(), "-" + wxglSurfaceView.newX.toString()))
+        Route(context, ForecastActivity::class.java, ForecastActivity.URL, arrayOf(wxglSurfaceView.newY.toString(), "-" + wxglSurfaceView.newX.toString()))
     }
 
     private fun showNearestMeteogram(context: Context, wxglSurfaceView: WXGLSurfaceView) {
         // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
         // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
         val obsSite = UtilityMetar.findClosestObservation(context, wxglSurfaceView.latLon)
-        ObjectIntent.showImage(context, arrayOf(UtilityWXOGL.getMeteogramUrl(obsSite.name), obsSite.name + " Meteogram"))
+        Route.image(context, arrayOf(UtilityWXOGL.getMeteogramUrl(obsSite.name), obsSite.name + " Meteogram"))
     }
 
     private fun showNearestWarning(context: Context, wxglSurfaceView: WXGLSurfaceView) {
-        val polygonUrl = UtilityWXOGL.showTextProducts(wxglSurfaceView.latLon)
-        if (polygonUrl != "") {
-            ObjectIntent.showHazard(context, arrayOf(polygonUrl, ""))
+        val url = UtilityWXOGL.showTextProducts(wxglSurfaceView.latLon)
+        if (url != "") {
+            Route.hazard(context, arrayOf(url, ""))
         }
     }
 
@@ -243,7 +245,7 @@ internal object UtilityRadarUI {
         if (oldRadarSites[index] != wxglRenders[index].rid) {
             wxglRender.setChunkCount(0)
             wxglRender.setChunkCountSti(0)
-            wxglRender.setHiInit(false)
+            //wxglRender.setHiInit(false)
             wxglRender.setTvsInit(false)
             Thread {
                 wxglRender.constructStateLines()
@@ -289,14 +291,29 @@ internal object UtilityRadarUI {
         }.start()
 
         Thread {
-            if (PolygonType.TST.pref && !archiveMode) wxglRender.constructWarningLines() else wxglRender.deconstructWarningLines()
-            if (PolygonType.MCD.pref && !archiveMode) wxglRender.constructWatchMcdLines() else wxglRender.deconstructWatchMcdLines()
-            if (PolygonType.MPD.pref && !archiveMode) wxglRender.constructMpdLines() else wxglRender.deconstructMpdLines()
+            if (PolygonType.TST.pref && !archiveMode) {
+                wxglRender.constructWarningLines()
+            } else {
+                wxglRender.deconstructWarningLines()
+            }
+            if (PolygonType.MCD.pref && !archiveMode) {
+                wxglRender.constructWatchMcdLines()
+            } else {
+                wxglRender.deconstructWatchMcdLines()
+            }
+            if (PolygonType.MPD.pref && !archiveMode) {
+                wxglRender.constructMpdLines()
+            } else {
+                wxglRender.deconstructMpdLines()
+            }
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
         }.start()
-        if (RadarPreferences.locationDotFollowsGps) fnGps()
+        if (RadarPreferences.locationDotFollowsGps) {
+            fnGps()
+        }
         if (PolygonType.LOCDOT.pref || RadarPreferences.locationDotFollowsGps) {
+
             val latLon = fnGetLatLon()
             wxglRender.constructLocationDot(latLon.latString, latLon.lonString, archiveMode)
         } else {
@@ -313,7 +330,11 @@ internal object UtilityRadarUI {
 
     fun plotWarningPolygons(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, archiveMode: Boolean = false) {
         Thread {
-            if (PolygonType.TST.pref && !archiveMode) wxglRender.constructWarningLines() else wxglRender.deconstructWarningLines()
+            if (PolygonType.TST.pref && !archiveMode) {
+                wxglRender.constructWarningLines()
+            } else {
+                wxglRender.deconstructWarningLines()
+            }
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
         }.start()
@@ -321,7 +342,11 @@ internal object UtilityRadarUI {
 
     fun plotMcdWatchPolygons(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, archiveMode: Boolean = false) {
         Thread {
-            if (PolygonType.MCD.pref && !archiveMode) wxglRender.constructWatchMcdLines() else wxglRender.deconstructWatchMcdLines()
+            if (PolygonType.MCD.pref && !archiveMode) {
+                wxglRender.constructWatchMcdLines()
+            } else {
+                wxglRender.deconstructWatchMcdLines()
+            }
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
         }.start()
@@ -329,7 +354,11 @@ internal object UtilityRadarUI {
 
     fun plotMpdPolygons(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, archiveMode: Boolean = false) {
         Thread {
-            if (PolygonType.MPD.pref && !archiveMode) wxglRender.constructMpdLines() else wxglRender.deconstructMpdLines()
+            if (PolygonType.MPD.pref && !archiveMode) {
+                wxglRender.constructMpdLines()
+            } else {
+                wxglRender.deconstructMpdLines()
+            }
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
         }.start()
@@ -337,7 +366,11 @@ internal object UtilityRadarUI {
 
     fun plotWpcFronts(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, archiveMode: Boolean = false) {
         Thread {
-            if (RadarPreferences.radarShowWpcFronts && !archiveMode) wxglRender.constructWpcFronts() else wxglRender.deconstructWpcFronts()
+            if (RadarPreferences.radarShowWpcFronts && !archiveMode) {
+                wxglRender.constructWpcFronts()
+            } else {
+                wxglRender.deconstructWpcFronts()
+            }
             wxglSurfaceView.requestRender()
         }.start()
     }
@@ -352,16 +385,35 @@ internal object UtilityRadarUI {
             /* showExtras: Boolean, */ 
             archiveMode: Boolean = false
     ) {
+        // TODO FIXME break up - spotters, getStateMetarArrayForWXOGL
         wxglRender.constructPolygons("", urlString, true)
         // work-around for a bug in which raster doesn't show on first launch
         if (wxglRender.product == "NCR" || wxglRender.product == "NCZ") {
             wxglRender.constructPolygons("", urlString, true)
         }
-        if ((PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) && !archiveMode) wxglRender.constructSpotters() else wxglRender.deconstructSpotters()
-        if (PolygonType.STI.pref && !archiveMode) wxglRender.constructStiLines() else wxglRender.deconstructStiLines()
-        if (PolygonType.HI.pref && !archiveMode) wxglRender.constructHi() else wxglRender.deconstructHi()
-        if (PolygonType.TVS.pref && !archiveMode) wxglRender.constructTvs() else wxglRender.deconstructTvs()
-        if (RadarPreferences.locationDotFollowsGps && !archiveMode) fnGps()
+        if ((PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) && !archiveMode) {
+            wxglRender.constructSpotters()
+        } else {
+            wxglRender.deconstructSpotters()
+        }
+        if (PolygonType.STI.pref && !archiveMode) {
+            wxglRender.constructStiLines()
+        } else {
+            wxglRender.deconstructStiLines()
+        }
+        if (PolygonType.HI.pref && !archiveMode) {
+            wxglRender.constructHi()
+        } else {
+            wxglRender.deconstructHi()
+        }
+        if (PolygonType.TVS.pref && !archiveMode) {
+            wxglRender.constructTvs()
+        } else {
+            wxglRender.deconstructTvs()
+        }
+        if (RadarPreferences.locationDotFollowsGps && !archiveMode) {
+            fnGps()
+        }
         if (PolygonType.LOCDOT.pref || archiveMode || RadarPreferences.locationDotFollowsGps) {
             val latLon = fnGetLatLon()
             wxglRender.constructLocationDot(latLon.latString, latLon.lonString, archiveMode)
@@ -371,7 +423,11 @@ internal object UtilityRadarUI {
         if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
             UtilityMetar.getStateMetarArrayForWXOGL(context, wxglRender.rid, wxglRender.paneNumber)
         }
-        if (PolygonType.WIND_BARB.pref && !archiveMode) wxglRender.constructWBLines() else wxglRender.deconstructWBLines()
+        if (PolygonType.WIND_BARB.pref && !archiveMode) {
+            wxglRender.constructWBLines()
+        } else {
+            wxglRender.deconstructWBLines()
+        }
         //if (showExtras) {
             /*if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
                 UtilityMetar.getStateMetarArrayForWXOGL(context, wxglRender.rid, wxglRender.paneNumber)
@@ -397,18 +453,25 @@ internal object UtilityRadarUI {
     }
 
     private fun showNearestProduct(context: Context, polygonType: PolygonType, wxglSurfaceView: WXGLSurfaceView) {
-        FutureText2(
-                context,
-                { UtilityWatch.show(wxglSurfaceView.latLon, polygonType) },
-                { text ->
-                    if (text != "") {
-                        ObjectIntent.showMcd(context, arrayOf(text, "", polygonType.toString()))
-                    }
-                }
-        )
+        val text = UtilityWatch.show(wxglSurfaceView.latLon, polygonType)
+        if (text != "") {
+            Route.mcd(context, arrayOf(text, "", polygonType.toString()))
+        }
     }
+
+//        FutureText2(
+//                context,
+//                { UtilityWatch.show(wxglSurfaceView.latLon, polygonType) },
+//                { text ->
+//                    if (text != "") {
+//                        Route.mcd(context, arrayOf(text, "", polygonType.toString()))
+//                    }
+//                }
+//        )
+//    }
+
     
-      
+    //TODO remove and replace FutureText2?          
     
     
     //elys mod
@@ -441,30 +504,6 @@ internal object UtilityRadarUI {
 
 
     }
-
-
-
-    /*
-    var getrid: String = ""
-    private fun showNearestRadarStatus(context: Context, act: Activity, glview: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
-        var radarStatus = withContext(Dispatchers.IO) {
-            val pointX = glview.newY.toDouble()
-            val pointY = glview.newX * -1.0
-            getrid = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString())
-            )
-            UtilityLog.d("wx", "point: x: "+pointX+ "y: "+pointY)
-            UtilityLog.d("wx", "radar status on point: "+getrid)
-            UtilityDownload.getRadarStatusMessage(context, getrid)
-        }
-        UtilityLog.d("wx", "UtilityRadarUI radarStatus: "+radarStatus)
-        if (radarStatus == "") {
-            radarStatus = "The current radar status for " + getrid + " is not available."
-        }
-        ObjectDialogue(act, Utility.fromHtml(radarStatus))
-
-    }
-     */
-
 
     private fun showSpotterInfo(activity: Activity, glview: WXGLSurfaceView, context: Context) {
         FutureText2(

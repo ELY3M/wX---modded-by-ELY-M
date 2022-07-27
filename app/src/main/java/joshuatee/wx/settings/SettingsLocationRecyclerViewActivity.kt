@@ -26,7 +26,7 @@ import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.ObjectCurrentConditions
 
@@ -109,7 +109,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun edit(position: Int) {
-        ObjectIntent.showLocationEdit(this, arrayOf((position + 1).toString(), ""))
+        Route.locationEdit(this, arrayOf((position + 1).toString(), ""))
     }
 
     private fun delete(position: Int) {
@@ -156,6 +156,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun addLocation() {
-        ObjectIntent.showLocationEdit(this, arrayOf((locations.size + 1).toString(), ""))
+        Route.locationEdit(this, arrayOf((locations.size + 1).toString(), ""))
     }
 }

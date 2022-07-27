@@ -24,40 +24,45 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.ObjectAlertDetail
-import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 
 class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    //
+    // Displayed detailed information on severe weather alert
+    //
+    // Arguments:
+    // 1: url
+    //
+
     companion object { const val URL = "" }
 
-    private lateinit var arguments: Array<String>
+    private var alertUrl = ""
     private var capAlert = CapAlert()
     private lateinit var objectAlertDetail: ObjectAlertDetail
-    private lateinit var box: LinearLayout
-    private lateinit var radarIcon: MenuItem
-    private var radarSite = ""
+    private lateinit var box: VBox
+    private lateinit var arguments: Array<String>
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.usalerts_detail)
-        box = findViewById(R.id.linearLayout)
-        ObjectCard(this, R.id.cardView)
+        arguments = intent.getStringArrayExtra(URL)!!
+        alertUrl = arguments[0]
+        box = VBox.fromResource(this)
+        Card(this, R.id.cardView)
         toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
-        radarIcon = toolbarBottom.menu.findItem(R.id.action_radar)
         toolbarBottom.setOnMenuItemClickListener(this)
         objectAlertDetail = ObjectAlertDetail(this, box)
-        arguments = intent.getStringArrayExtra(URL)!!
         getContent()
     }
 
@@ -67,17 +72,15 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this, { capAlert = CapAlert.createFromUrl(arguments[0]) }, ::update)
+        FutureVoid(this, { capAlert = CapAlert.createFromUrl(alertUrl) }, ::update)
     }
 
     private fun update() {
-        radarSite = capAlert.getClosestRadar()
-        if (radarSite == "") {
-            radarIcon.isVisible = false
+        if (capAlert.getClosestRadar() == "") {
+            toolbarBottom.menu.findItem(R.id.action_radar).isVisible = false
         }
-        objectAlertDetail.updateContent(capAlert, arguments[0])
-        toolbar.subtitle = objectAlertDetail.wfoTitle
-        title = objectAlertDetail.title
+        objectAlertDetail.updateContent(capAlert, alertUrl)
+        setTitle(objectAlertDetail.title, objectAlertDetail.wfoTitle)
         UtilityTts.conditionalPlay(arguments, 1, applicationContext, Utility.fromHtml(capAlert.text), "alert")
     }
 
@@ -87,16 +90,9 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         when (item.itemId) {
             R.id.action_share -> UtilityShare.text(this, capAlert.title + " " + capAlert.area, capAlert.text)
-            R.id.action_radar -> radarInterface()
+            R.id.action_radar -> Route.radarBySite(this, capAlert.getClosestRadar())
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    // TODO move to util
-    private fun radarInterface() {
-        val radarLabel = Utility.getRadarSiteName(radarSite)
-        val state = radarLabel.split(",").safeGet(0)
-        ObjectIntent.showRadar(this, arrayOf(radarSite, state, "N0Q", ""))
     }
 }

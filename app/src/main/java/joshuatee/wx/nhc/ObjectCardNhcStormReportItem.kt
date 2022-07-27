@@ -25,38 +25,38 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.VBox
-import joshuatee.wx.ui.ObjectTextView
+import joshuatee.wx.ui.Text
 import java.util.*
 
 class ObjectCardNhcStormReportItem(context: Context, box: VBox, stormData: ObjectNhcStormDetails) {
 
-    private val objectCard = ObjectCard(context)
-    private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
-    private val textViewTime = ObjectTextView(context)
-    private val textViewMovement = ObjectTextView(context)
-    private val textViewPressure = ObjectTextView(context)
-    private val textViewWindSpeed = ObjectTextView(context)
-    private val textViewBottom = ObjectTextView(context, backgroundText = true)
+    private val card = Card(context)
+    private val textViewTop = Text(context, UIPreferences.textHighlightColor)
+    private val textViewTime = Text(context)
+    private val textViewMovement = Text(context)
+    private val textViewPressure = Text(context)
+    private val textViewWindSpeed = Text(context)
+    private val textViewBottom = Text(context, backgroundText = true)
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         vbox.addViews(listOf(textViewTop.get(), textViewTime.get(), textViewMovement.get()))
         vbox.addViews(listOf(textViewPressure.get(), textViewWindSpeed.get(), textViewBottom.get()))
-        objectCard.addView(vbox.get())
+        card.addView(vbox.get())
         textViewTop.text = stormData.name + " (" + stormData.classification + ") " + stormData.center
         textViewTime.text = stormData.dateTime.replace("T", " ").replace(":00.000Z", "Z")
         textViewMovement.text = "Moving: " + stormData.movement
         textViewPressure.text = "Min pressure: " + stormData.pressure
         textViewWindSpeed.text = "Max sustained: " + stormData.intensity
         textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.id.uppercase(Locale.US)
-        box.addWidget(objectCard.get())
+        box.addWidget(card.get())
     }
 
-    fun get() = objectCard.get()
+    fun get() = card.get()
 
-    fun setListener(fn: View.OnClickListener) {
-        objectCard.setOnClickListener(fn)
+    fun connect(fn: View.OnClickListener) {
+        card.connect(fn)
     }
 }

@@ -70,8 +70,8 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, iconsEvenlySpaced = true, bottomToolbar = false)
         image = TouchImage(this, R.id.img)
-        image.setOnClickListener(this)
-        image.setListener(object : OnSwipeTouchListener(this) {
+        image.connectClick(this)
+        image.connect(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
                 if (image.currentZoom < 1.01f) showNextImg()
             }
@@ -101,11 +101,10 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
 
     private fun getContent() {
         if (!calledFromHomeScreen) {
-            title = "Images"
-            toolbar.subtitle = objectNavDrawerCombo.getLabel()
+            setTitle("Images", objectNavDrawerCombo.getLabel())
         } else {
-            title = "Images"
-            toolbar.subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
+            val subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
+            setTitle("Images", subtitle)
         }
         FutureVoid(this, ::download, ::update)
     }
@@ -118,8 +117,8 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
                 else -> objectNavDrawerCombo.getUrl()
             }
             Utility.writePref(this, "WPG_IMG_FAV_URL", objectNavDrawerCombo.getUrl())
-            Utility.writePref(this, "WPG_IMG_IDX", objectNavDrawerCombo.imgIdx)
-            Utility.writePref(this, "WPG_IMG_GROUPIDX", objectNavDrawerCombo.imgGroupIdx)
+            Utility.writePrefInt(this, "WPG_IMG_IDX", objectNavDrawerCombo.imgIdx)
+            Utility.writePrefInt(this, "WPG_IMG_GROUPIDX", objectNavDrawerCombo.imgGroupIdx)
             bitmap = getUrl.getImage()
         } else {
             bitmap = UtilityDownload.getImageProduct(this, homeScreenId)

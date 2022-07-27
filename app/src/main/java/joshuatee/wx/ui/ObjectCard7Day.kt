@@ -31,10 +31,10 @@ import joshuatee.wx.objects.TextSize
 
 class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, forecasts: List<String>) {
 
-    private val objectCard = ObjectCard(context)
-    private val objectImageView = ObjectImageView(context)
-    private val topLineText = ObjectTextView(context, TextSize.MEDIUM)
-    private val bottomLineText = ObjectTextView(context, backgroundText = true)
+    private val card = Card(context)
+    private val photo = Photo(context)
+    private val topLineText = Text(context, TextSize.MEDIUM)
+    private val bottomLineText = Text(context, backgroundText = true)
 
     init {
         val hbox = HBox(context)
@@ -43,10 +43,10 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
         bottomLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
         vbox.addViews(listOf(topLineText.get(), bottomLineText.get()))
         if (!UIPreferences.locfragDontShowIcons) {
-            hbox.addWidget(objectImageView.get())
+            hbox.addWidget(photo.get())
         }
         hbox.addLayout(vbox)
-        objectCard.addView(hbox.get())
+        card.addView(hbox.get())
         val items = if (forecasts.size > day) {
             forecasts[day].split(": ")
         } else {
@@ -74,7 +74,7 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
             setBottomLine(items[1])
         }
         if (!UIPreferences.locfragDontShowIcons) {
-            objectImageView.setImage(bitmap)
+            photo.setImage(bitmap)
         }
     }
 
@@ -86,8 +86,8 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
         bottomLineText.text = text
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
-        objectCard.setOnClickListener(fn)
+    fun connect(fn: View.OnClickListener) {
+        card.connect(fn)
     }
 
     fun refreshTextSize() {
@@ -95,5 +95,5 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
         bottomLineText.refreshTextSize(TextSize.MEDIUM)
     }
 
-    fun get() = objectCard.get()
+    fun get() = card.get()
 }

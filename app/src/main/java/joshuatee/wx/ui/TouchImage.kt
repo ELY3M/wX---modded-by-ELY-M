@@ -51,15 +51,11 @@ class TouchImage {
     }
 
     constructor(activity: Activity, toolbar: Toolbar, resourceId: Int) : this(activity, resourceId) {
-        setOnClickListener {
-            UtilityToolbar.showHide(toolbar)
-        }
+        connectClick { UtilityToolbar.showHide(toolbar) }
     }
 
     constructor(activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int) : this(activity, resourceId) {
-        setOnClickListener {
-            UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
+        connectClick { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
     constructor(activity: Activity, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String) {
@@ -71,12 +67,12 @@ class TouchImage {
 
     constructor(activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
     ) : this(activity, resourceId, drw, prefTokenIdx) {
-        setOnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) }
+        connectClick { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
     constructor(activity: Activity, toolbar: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
     ) : this(activity, resourceId, drw, prefTokenIdx) {
-        setOnClickListener { UtilityToolbar.showHide(toolbar) }
+        connectClick { UtilityToolbar.showHide(toolbar) }
     }
 
     var visibility
@@ -97,11 +93,11 @@ class TouchImage {
         img.setImageBitmap(bitmap)
         imageLoaded = true
         if (prefTokenIdx != "" && drw != null) {
-            Utility.writePref(context, prefTokenIdx, drw!!.index)
+            Utility.writePrefInt(context, prefTokenIdx, drw!!.index)
         }
     }
 
-    fun setOnClickListener(listener: View.OnClickListener) {
+    fun connectClick(listener: View.OnClickListener) {
         img.setOnClickListener(listener)
     }
 
@@ -129,7 +125,7 @@ class TouchImage {
         img.setZoom(x, y, z)
     }
 
-    fun setListener(drw: ObjectNavDrawer, fn: () -> Unit) {
+    fun connect(drw: ObjectNavDrawer, fn: () -> Unit) {
         img.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
                 if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, fn)
@@ -141,11 +137,11 @@ class TouchImage {
         })
     }
 
-    fun setListener(fn: OnSwipeTouchListener) {
+    fun connect(fn: OnSwipeTouchListener) {
         img.setOnTouchListener(fn)
     }
 
-    fun setListener2(fn: () -> Unit) {
+    fun connect2(fn: () -> Unit) {
         img.setOnTouchImageViewListener { fn() }
     }
 
@@ -166,9 +162,9 @@ class TouchImage {
                 if (x.isNaN()) x = 1.0f
                 if (y.isNaN()) y = 1.0f
                 if (z.isNaN()) z = 1.0f
-                Utility.writePref(context, prefStr + "_X", x)
-                Utility.writePref(context, prefStr + "_Y", y)
-                Utility.writePref(context, prefStr + "_ZOOM", z)
+                Utility.writePrefFloat(context, prefStr + "_X", x)
+                Utility.writePrefFloat(context, prefStr + "_Y", y)
+                Utility.writePrefFloat(context, prefStr + "_ZOOM", z)
             }
         }
     }

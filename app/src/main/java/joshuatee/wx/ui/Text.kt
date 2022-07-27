@@ -32,7 +32,7 @@ import joshuatee.wx.Extensions.setPadding
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 
-class ObjectTextView(val context: Context) {
+class Text(val context: Context) {
 
     private var tv = AppCompatTextView(context)
 
@@ -134,7 +134,7 @@ class ObjectTextView(val context: Context) {
         tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
+    fun connect(fn: View.OnClickListener) {
         tv.setOnClickListener(fn)
     }
 

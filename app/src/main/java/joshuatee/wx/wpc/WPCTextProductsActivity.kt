@@ -26,7 +26,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
@@ -38,7 +37,7 @@ import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 
@@ -62,10 +61,10 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var star: MenuItem
     private lateinit var notificationToggle: MenuItem
     private var ridFavOld = ""
-    private lateinit var textCard: ObjectCardText
+    private lateinit var cardText: CardText
     private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private val prefToken = "NWS_TEXT_FAV"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -82,7 +81,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpctextproducts, R.menu.wpctext_products)
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
@@ -93,7 +92,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             product = arguments[0]
             initialProduct = product
         }
-        textCard = ObjectCardText(this, box, toolbar, toolbarBottom)
+        cardText = CardText(this, box, toolbar, toolbarBottom)
         UtilityWpcText.create()
         objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
         objectNavDrawerCombo.setListener(::changeProduct)
@@ -115,11 +114,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun showText() {
-        textCard.setTextAndTranslate(html)
+        cardText.setTextAndTranslate(html)
         if (UtilityWpcText.needsFixedWidthFont(product.uppercase(Locale.US))) {
-            textCard.typefaceMono()
+            cardText.typefaceMono()
         } else {
-            textCard.typefaceDefault()
+            cardText.typefaceDefault()
         }
         UtilityTts.conditionalPlay(arguments, 2, applicationContext, html, "wpctext")
         if (initialProduct != product) {
@@ -136,7 +135,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(this, box, product.uppercase(Locale.US))
+                UtilityNotificationTextProduct.toggle(this, box.get(), product.uppercase(Locale.US))
                 updateSubmenuNotificationText()
             }
             R.id.action_share -> UtilityShare.text(this, product, textToShare)
@@ -152,10 +151,10 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         products = UtilityFavorites.setupMenu(this, UIPreferences.nwsTextFav, product, prefToken)
         when (item.itemId) {
             R.id.action_product -> {
-                genericDialog(products) {
+                ObjectDialogue.generic(this, products, ::getContent) {
                     when (it) {
-                        1 -> ObjectIntent.favoriteAdd(this, arrayOf("NWSTEXT"))
-                        2 -> ObjectIntent.favoriteRemove(this, arrayOf("NWSTEXT"))
+                        1 -> Route.favoriteAdd(this, arrayOf("NWSTEXT"))
+                        2 -> Route.favoriteRemove(this, arrayOf("NWSTEXT"))
                         else -> {
                             product = products[it].split(" ").getOrNull(0) ?: ""
                             getContent()
@@ -166,20 +165,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            getContent()
-            dialog.dismiss()
-        }
-        objectDialogue.show()
     }
 
     private fun toggleFavorite() {

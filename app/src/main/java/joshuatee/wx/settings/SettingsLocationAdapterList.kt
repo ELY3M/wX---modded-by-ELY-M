@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import joshuatee.wx.R
 import joshuatee.wx.objects.TextSize
-import joshuatee.wx.ui.ObjectCard
-import joshuatee.wx.ui.ObjectTextView
+import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.Text
 
 internal class SettingsLocationAdapterList(private val dataSet: MutableList<String>) : RecyclerView.Adapter<SettingsLocationAdapterList.DataObjectHolder>() {
 
@@ -17,12 +17,12 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val text1 = ObjectTextView(itemView, R.id.text1, TextSize.MEDIUM)
-        val currentConditions = ObjectTextView(itemView, R.id.currentConditions, TextSize.SMALL)
-        val text2 = ObjectTextView(itemView, R.id.text2, backgroundText = true)
+        val text1 = Text(itemView, R.id.text1, TextSize.MEDIUM)
+        val currentConditions = Text(itemView, R.id.currentConditions, TextSize.SMALL)
+        val text2 = Text(itemView, R.id.text2, backgroundText = true)
 
         init {
-            ObjectCard(itemView, R.id.cv1)
+            Card(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
         }
 

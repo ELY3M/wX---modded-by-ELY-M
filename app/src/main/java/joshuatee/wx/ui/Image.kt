@@ -24,14 +24,13 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TableLayout
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.util.UtilityImg
 
-open class ObjectCardImage {
+open class Image {
 
-    protected val objectCard: ObjectCard
+    protected val card: Card
     private val context: Context
     var img: TouchImageView2
         internal set
@@ -39,86 +38,103 @@ open class ObjectCardImage {
 
     constructor(context: Context, bitmap: Bitmap) {
         this.context = context
-        objectCard = ObjectCard(context)
+        card = Card(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        objectCard.addView(img)
+        card.addView(img)
     }
 
-    constructor(context: Context, linearLayout: LinearLayout, bitmap: Bitmap, numberAcross: Int = 1) {
+    constructor(context: Context, box: VBox, bitmap: Bitmap, numberAcross: Int = 1) {
         this.context = context
-        objectCard = ObjectCard(context)
+        card = Card(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        objectCard.addView(img)
-        linearLayout.addView(get())
+        card.addView(img)
+        box.addWidget(get())
     }
 
-    constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, bitmap: Bitmap) {
+    constructor(context: Context, box: HBox, bitmap: Bitmap, numberAcross: Int = 1) {
         this.context = context
-        objectCard = ObjectCard(context)
+        card = Card(context)
+        img = TouchImageView2(context)
+        img.layoutParams = layoutParams
+        UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
+        card.addView(img)
+        box.addWidget(get())
+    }
+
+    constructor(context: Context, box: VBox, toolbar: Toolbar, bitmap: Bitmap) {
+        this.context = context
+        card = Card(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        objectCard.addView(img)
-        linearLayout.addView(get())
-        setOnClickListener { UtilityToolbar.showHide(toolbar) }
+        card.addView(img)
+        box.addWidget(get())
+        connect { UtilityToolbar.showHide(toolbar) }
     }
 
-    constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, toolbarBottom: Toolbar, bitmap: Bitmap) {
+    constructor(context: Context, box: VBox, toolbar: Toolbar, toolbarBottom: Toolbar, bitmap: Bitmap) {
         this.context = context
-        objectCard = ObjectCard(context)
+        card = Card(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        objectCard.addView(img)
-        linearLayout.addView(get())
-        setOnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) }
+        card.addView(img)
+        box.addWidget(get())
+        connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
     constructor(context: Context) {
         this.context = context
         img = TouchImageView2(context)
-        objectCard = ObjectCard(context)
+        card = Card(context)
     }
 
-    constructor(context: Context, linearLayout: LinearLayout) {
+    constructor(context: Context, box: VBox) {
         this.context = context
         img = TouchImageView2(context)
-        objectCard = ObjectCard(context)
-        linearLayout.addView(get())
+        card = Card(context)
+        box.addWidget(get())
     }
 
-    open fun setImage(bitmap: Bitmap, numberAcross: Int = 1) {
+    constructor(context: Context, box: HBox) {
+        this.context = context
+        img = TouchImageView2(context)
+        card = Card(context)
+        box.addWidget(get())
+    }
+
+    open fun set(bitmap: Bitmap, numberAcross: Int = 1) {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        objectCard.addView(img)
+        card.addView(img)
     }
 
-    open fun setImage2(bitmap: Bitmap, numberAcross: Int = 1) {
-        objectCard.get().removeAllViews()
+    open fun set2(bitmap: Bitmap, numberAcross: Int = 1) {
+        card.get().removeAllViews()
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        objectCard.addView(img)
+        card.addView(img)
     }
 
     fun resetZoom() {
         img.resetZoom()
     }
 
-    protected val card get() = objectCard.get()
+//    protected val card get() = objectCard.get()
 
-    fun get() = objectCard.get()
+    fun get() = card.get()
 
     var visibility
-        get() = objectCard.visibility
-        set(newValue) { objectCard.visibility = newValue }
+        get() = card.visibility
+        set(newValue) { card.visibility = newValue }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
+    fun connect(fn: View.OnClickListener) {
         img.setOnClickListener(fn)
     }
 }

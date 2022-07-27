@@ -23,29 +23,29 @@ package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.LinearLayout
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCALegal
-import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.VBox
 
 class CanadaHourlyActivity : BaseActivity() {
 
     companion object { const val LOC_NUM = "" }
 
     private var locationNumber = 0
-    private lateinit var text: ObjectCardText
-    private lateinit var box: LinearLayout
+    private lateinit var text: CardText
+    private lateinit var box: VBox
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
-        text = ObjectCardText(this, box, toolbar)
-        ObjectCALegal(this, box, UtilityCanadaHourly.getUrl(Location.locationIndex))
+        text = CardText(this, box, toolbar)
+        ObjectCALegal(this, box.get(), UtilityCanadaHourly.getUrl(Location.locationIndex))
         title = Location.getName(locationNumber) + " hourly forecast"
         getContent()
     }

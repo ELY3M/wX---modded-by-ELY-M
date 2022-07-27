@@ -24,26 +24,25 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.ObjectWarning
 
-class ObjectCardDashAlertItem(val context: Context, val linearLayout: LinearLayout, private val warning: ObjectWarning) {
+class ObjectCardDashAlertItem(val context: Context, val box: VBox, private val warning: ObjectWarning) {
 
-    private val objectCard = ObjectCard(context)
-    private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
-    private val textViewTitle = ObjectTextView(context)
-    private val textViewStart = ObjectTextView(context)
-    private val textViewEnd = ObjectTextView(context)
-    private val textViewBottom = ObjectTextView(context, backgroundText = true)
-    private val radarButton = ObjectButton(context,"Radar", GlobalVariables.ICON_RADAR)
-    private val detailsButton = ObjectButton(context,"Details", GlobalVariables.ICON_CURRENT)
+    private val card = Card(context)
+    private val textTop = Text(context, UIPreferences.textHighlightColor)
+    private val textTitle = Text(context)
+    private val textStart = Text(context)
+    private val textEnd = Text(context)
+    private val textBottom = Text(context, backgroundText = true)
+    private val radarButton = Button(context,"Radar", GlobalVariables.ICON_RADAR)
+    private val detailsButton = Button(context,"Details", GlobalVariables.ICON_CURRENT)
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        listOf(textViewTop, textViewTitle, textViewStart, textViewEnd, textViewBottom).forEach {
+        listOf(textTop, textTitle, textStart, textEnd, textBottom).forEach {
             vbox.addWidget(it.get())
         }
         val hbox = HBox(context)
@@ -51,22 +50,22 @@ class ObjectCardDashAlertItem(val context: Context, val linearLayout: LinearLayo
         hbox.addWidget(radarButton.get())
         hbox.addWidget(detailsButton.get())
         vbox.addLayout(hbox.get())
-        objectCard.addView(vbox)
+        card.addView(vbox)
         setTextFields()
-        linearLayout.addView(objectCard.get())
-        radarButton.setOnClickListener { ObjectIntent.showRadarBySite(context, warning.getClosestRadar()) }
-        detailsButton.setOnClickListener { ObjectIntent.showHazard(context, arrayOf(warning.url, "")) }
+        box.addWidget(card.get())
+        radarButton.connect { Route.radarBySite(context, warning.getClosestRadar()) }
+        detailsButton.connect { Route.hazard(context, arrayOf(warning.url, "")) }
     }
 
-    fun setListener(fn: View.OnClickListener) {
-        objectCard.setOnClickListener(fn)
+    fun connect(fn: View.OnClickListener) {
+        card.connect(fn)
     }
 
     private fun setTextFields() {
-        textViewTop.text = warning.sender
-        textViewTitle.text = warning.event
-        textViewStart.text = warning.effective.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
-        textViewEnd.text = warning.expires.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
-        textViewBottom.text = warning.area
+        textTop.text = warning.sender
+        textTitle.text = warning.event
+        textStart.text = warning.effective.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
+        textEnd.text = warning.expires.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
+        textBottom.text = warning.area
     }
 }

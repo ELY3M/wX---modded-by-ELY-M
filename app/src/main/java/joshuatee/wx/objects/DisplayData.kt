@@ -19,42 +19,43 @@
 
  */
 
-package joshuatee.wx.models
+package joshuatee.wx.objects
 
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.R
+import joshuatee.wx.models.ObjectModel
 import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.UtilityImg
 
-class DisplayDataNoSpinner(context: Context, activity: Activity, numPanes: Int, om: ObjectModelNoSpinner) {
+class DisplayData(context: Context, activity: Activity, numPanes: Int, om: ObjectModel) {
 
     var animDrawable = MutableList(numPanes) { AnimationDrawable() }
     var param = MutableList(numPanes) {""}
     var paramLabel = MutableList(numPanes) {""}
-    var img = MutableList(numPanes) { TouchImage(context) }
-    var bitmap = MutableList(numPanes) { UtilityImg.getBlankBitmap() }
+    var image = MutableList(numPanes) { TouchImage(context) }
+    var bitmaps = MutableList(numPanes) { UtilityImg.getBlankBitmap() }
 
     init {
         val resourceId = listOf(R.id.iv1, R.id.iv2)
         (0 until numPanes).forEach {
-            index -> img[index] = TouchImage(activity, resourceId[index])
+            index -> image[index] = TouchImage(activity, resourceId[index])
         }
         if (numPanes > 1) {
-            img[0].setListener2 { img[1].setZoom(img[0]) }
-            img[1].setListener2 { img[0].setZoom(img[1]) }
+            image[0].connect2 { image[1].setZoom(image[0]) }
+            image[1].connect2 { image[0].setZoom(image[1]) }
         }
         (0 until numPanes).forEach {
             if (om.prefModel != "") { // Don't use in SPC Meso
-                img[it].setListener(object : OnSwipeTouchListener(context) {
+                image[it].connect(object : OnSwipeTouchListener(context) {
                     override fun onSwipeLeft() {
-                        if (img[0].currentZoom < 1.01f) om.rightClick()
+                        if (image[0].currentZoom < 1.01f) om.rightClick()
                     }
 
                     override fun onSwipeRight() {
-                        if (img[0].currentZoom < 1.01f) om.leftClick()
+                        if (image[0].currentZoom < 1.01f) om.leftClick()
                     }
                 })
             }

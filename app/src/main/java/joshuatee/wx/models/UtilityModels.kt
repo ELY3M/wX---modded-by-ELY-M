@@ -41,7 +41,7 @@ import joshuatee.wx.util.UtilityTime
 
 object UtilityModels {
 
-    fun getContentNonSpinner(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>) {
+    fun getContent(context: Context, om: ObjectModel, overlayImg: List<String>) {
         om.sectorInt = om.sectors.indexOf(om.sector)
         if (om.truncateTime) {
             om.time = om.time.take(om.timeTruncate)
@@ -49,20 +49,20 @@ object UtilityModels {
         writePrefs(context, om)
         FutureVoid(
             context,
-            { (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it, overlayImg) } },
+            { (0 until om.numPanes).forEach { om.displayData.bitmaps[it] = om.getImage(it, overlayImg) } },
             {
                 (0 until om.numPanes).forEach {
                     if (om.numPanes > 1) {
-                        UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmap[it], om.displayData.img[it].get())
+                        UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmaps[it], om.displayData.image[it].get())
                     } else {
 //                        om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
-                        om.displayData.img[it].setBitmap(om.displayData.bitmap[it])
+                        om.displayData.image[it].setBitmap(om.displayData.bitmaps[it])
                     }
                 }
                 om.animRan = false
                 if (!om.firstRun) {
                     (0 until om.numPanes).forEach {
-                        UtilityImg.imgRestorePosnZoom(context, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString())
+                        UtilityImg.imgRestorePosnZoom(context, om.displayData.image[it], om.modelProvider + om.numPanes.toString() + it.toString())
                     }
                     if (UIPreferences.fabInModels && om.numPanes < 2) {
                         om.fab1?.visibility = View.VISIBLE
@@ -76,10 +76,10 @@ object UtilityModels {
         )
     }
 
-    private fun updateToolbarLabels(om: ObjectModelNoSpinner) {
+    private fun updateToolbarLabels(om: ObjectModel) {
         if (om.numPanes > 1) {
             setSubtitleRestoreIMGXYZOOM(
-                    om.displayData.img,
+                    om.displayData.image,
                     om.toolbar,
                     "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
             )
@@ -91,18 +91,18 @@ object UtilityModels {
         }
     }
 
-    fun getAnimate(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>) {
+    fun getAnimate(context: Context, om: ObjectModel, overlayImg: List<String>) {
         FutureVoid(
             context,
             { (0 until om.numPanes).forEach { om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg) } },
             {
-                (0 until om.numPanes).forEach { om.displayData.animDrawable[it].startAnimation(om.displayData.img[it]) }
+                (0 until om.numPanes).forEach { om.displayData.animDrawable[it].startAnimation(om.displayData.image[it]) }
                 om.animRan = true
             }
         )
     }
 
-    private fun writePrefs(context: Context, om: ObjectModelNoSpinner) {
+    private fun writePrefs(context: Context, om: ObjectModel) {
         Utility.writePref(context, om.prefSector, om.sector)
         (0 until om.numPanes).forEach {
             Utility.writePref(context, om.prefParam + it.toString(), om.displayData.param[it])
@@ -110,7 +110,7 @@ object UtilityModels {
         }
     }
 
-    fun legacyShare(activity: Activity, animRan: Boolean, om: ObjectModelNoSpinner) {
+    fun legacyShare(activity: Activity, animRan: Boolean, om: ObjectModel) {
 //        if (animRan)
 //            UtilityShare.animGif(
 //                    activity,
@@ -121,7 +121,7 @@ object UtilityModels {
             UtilityShare.bitmap(
                     activity,
                     om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
-                    om.displayData.bitmap[0]
+                    om.displayData.bitmaps[0]
             )
     }
 

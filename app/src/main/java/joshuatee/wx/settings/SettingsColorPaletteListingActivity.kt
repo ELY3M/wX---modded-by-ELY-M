@@ -23,33 +23,33 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.LinearLayout
 import joshuatee.wx.R
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.VBox
 
 class SettingsColorPaletteListingActivity : BaseActivity() {
 
-    private var cardColorPalettes = mutableListOf<ObjectCardText>()
-    private lateinit var box: LinearLayout
+    private var cardColorPalettes = mutableListOf<CardText>()
+    private lateinit var box: VBox
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         WXGLNexrad.colorPaletteProducts.forEach { product ->
-            val card = ObjectCardText(
+            val card = CardText(
                     this,
-                    box,
+                    box.get(),
                     WXGLNexrad.productCodeStringToName[product] + ": " + ObjectColorPalette.radarColorPalette[product],
                     UIPreferences.textSizeNormal,
                     UIPreferences.paddingSettings
             )
-            card.setOnClickListener {
-                ObjectIntent(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString()))
+            card.connect {
+                Route(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString()))
             }
             cardColorPalettes.add(card)
         }

@@ -43,10 +43,11 @@ internal object WXGLNexradLevel3HailIndex {
     private val pattern4: Pattern = Pattern.compile("[0-9]*\\.?[0-9]+")
     private val pattern5: Pattern = Pattern.compile("\\d+")
 
+
+    var hailSizeDbl = 0.0
     var hailSizeNumber = 0.0
     var hailSizeText = "Unknown"
     var hailSizeIcon = "hailunknown.png"
-
 
     fun decodeAndPlot(context: Context, radarSite: String, fnSuffix: String): List<Double> {
         val fileName = hiBaseFn + fnSuffix
@@ -90,17 +91,16 @@ internal object WXGLNexradLevel3HailIndex {
         if (posnNumbers.size == hailPercentNumbers.size && posnNumbers.size > 1 && hailSizeNumbers.isNotEmpty()) {
             var k = 0 // k is used to track hail size which is /2 of other 2 arrays
             for (s in posnNumbers.indices step 2) {
-                val hailSizeDbl = hailSizeNumbers[k].toDoubleOrNull() ?: 0.0
+                hailSizeDbl = hailSizeNumbers[k].toDoubleOrNull() ?: 0.0
                 //var hailSizeText = "Unknown"
                 //var hailSizeIcon = "hailunknown.png"
                 //UtilityLog.d("hailindex", "hailSizeNumbers: "+hailSizeDbl)
                 //UtilityLog.d("hailindex", "hailPercentNumbers: "+hailPercentNumbers[s].toIntOrNull())
                 if (hailSizeDbl > 0.24 && ((hailPercentNumbers[s].toIntOrNull() ?: 0) > 60 || (hailPercentNumbers[s + 1].toDoubleOrNull() ?: 0.0) > 60)) {
-                    val ecc = ExternalGeodeticCalculator()
                     val degree = posnNumbers[s].toDoubleOrNull() ?: 0.0
                     val nm = posnNumbers[s + 1].toDoubleOrNull() ?: 0.0
                     val start = ExternalGlobalCoordinates(location)
-                    val ec = ecc.calculateEndingGlobalCoordinates(start, degree, nm * 1852.0)
+                    val ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree, nm * 1852.0)
                     stormList.add(ec.latitude)
                     stormList.add(ec.longitude * -1.0)
 
@@ -127,73 +127,33 @@ internal object WXGLNexradLevel3HailIndex {
 
 
                     hailSizeText = hailSizeDbl.toString()
+                    hailSizeNumber = hailSizeDbl
                     
-                    if (hailSizeDbl > 0.24) {
-                        hailSizeNumber = 0.25
-                        hailSizeText = "0.25"
+                    if (hailSizeDbl in 0.0..0.24) {
                         hailSizeIcon = "hail05.png"
                     }
-
-                    if (hailSizeDbl > 0.49) {
-                        hailSizeNumber = 0.50
-                        hailSizeText = "0.50"
+                    if (hailSizeDbl in 0.49..0.98) {
                         hailSizeIcon = "hail0.png"
                     }
-                    if (hailSizeDbl > 0.74) {
-                        hailSizeNumber = 0.75
-                        hailSizeText = "0.75"
-                        hailSizeIcon = "hail0.png"
-                    }
-                    if (hailSizeDbl > 0.99) {
-                        hailSizeNumber = 1.00
-                        hailSizeText = "1.00"
+                    if (hailSizeDbl in 0.99..1.98) {
                         hailSizeIcon = "hail1.png"
                     }
-                    if (hailSizeDbl > 1.49) {
-                        hailSizeNumber = 1.50
-                        hailSizeText = "1.50"
-                        hailSizeIcon = "hail1.png"
-                    }
-                    if (hailSizeDbl > 1.99) {
-                        hailSizeNumber = 2.00
-                        hailSizeText = "2.00"
+                    if (hailSizeDbl in 1.99..2.98) {
                         hailSizeIcon = "hail2.png"
                     }
-                    if (hailSizeDbl > 2.49) {
-                        hailSizeNumber = 2.50
-                        hailSizeText = "2.50"
-                        hailSizeIcon = "hail2.png"
-                    }
-                    if (hailSizeDbl > 2.99) {
-                        hailSizeNumber = 3.00
-                        hailSizeText = "3.00"
+                    if (hailSizeDbl in 2.99..3.98) {
                         hailSizeIcon = "hail3.png"
                     }
-                    if (hailSizeDbl > 3.49) {
-                        hailSizeNumber = 3.50
-                        hailSizeText = "3.50"
-                        hailSizeIcon = "hail3.png"
-                    }
-                    if (hailSizeDbl > 3.99) {
-                        hailSizeNumber = 4.00
-                        hailSizeText = "4.00"
-                        hailSizeIcon = "hail4.png"
-                    }
-                    if (hailSizeDbl > 4.49) {
-                        hailSizeNumber = 4.50
-                        hailSizeText = "4.50"
+                    if (hailSizeDbl in 3.99..4.98) {
                         hailSizeIcon = "hail4.png"
                     }
                     //big hail --- only use 1 icon for any hail over 5 inch
-                    if (hailSizeDbl > 4.99) {
-                        hailSizeNumber = 5.00
-                        hailSizeText = "Big Hail!"
+                    if (hailSizeDbl in 4.99..99.99) {
                         hailSizeIcon = "hailbig.png"
                     }
 
 
                     hailList.add(Hail(hailSizeIcon, hailSizeText, hailSizeNumber, ec.latitude, ec.longitude * -1.0))
-
 
                     UtilityLog.d("hailindex", "hailSizeIcon: "+hailSizeIcon)
                     UtilityLog.d("hailindex", "hailSizeText: "+hailSizeText)
@@ -208,6 +168,7 @@ internal object WXGLNexradLevel3HailIndex {
         }
 
         return stormList
+        //return hailList
     }
 
 

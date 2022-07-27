@@ -23,7 +23,7 @@ package joshuatee.wx.settings
 
 import android.content.Context
 import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.Utility
 import java.util.*
 import joshuatee.wx.Extensions.*
@@ -57,13 +57,13 @@ object Location {
     }
 
     private fun initNumLocations(context: Context) {
-        val numberOfLocations = Utility.readPref(context, "LOC_NUM_INT", 1)
+        val numberOfLocations = Utility.readPrefInt(context, "LOC_NUM_INT", 1)
         setNumLocations(context, numberOfLocations)
     }
 
     private fun setNumLocations(context: Context, numLocations: Int) {
         Location.numLocations = numLocations
-        Utility.writePref(context, "LOC_NUM_INT", numLocations)
+        Utility.writePrefInt(context, "LOC_NUM_INT", numLocations)
     }
 
     var currentLocationStr: String

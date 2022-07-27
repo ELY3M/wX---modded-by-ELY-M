@@ -54,4 +54,13 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         UtilityToolbar.fullScreenMode(toolbar, false)
     }
+
+    fun setTitle(s: String) {
+        title = s
+    }
+
+    fun setTitle(s: String, sub: String) {
+        title = s
+        toolbar.subtitle = sub
+    }
 }

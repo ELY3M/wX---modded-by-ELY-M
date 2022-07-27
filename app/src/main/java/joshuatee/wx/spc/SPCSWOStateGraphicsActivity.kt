@@ -93,33 +93,18 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_sector -> genericDialog(GlobalArrays.states) {
+            R.id.action_sector -> ObjectDialogue.generic(this, GlobalArrays.states, ::getContent) {
                 if (firstTime) {
                     UtilityToolbar.fullScreenMode(this)
                     firstTime = false
                 }
                 image.setZoom(1.0f)
                 state = GlobalArrays.states[it].split(":")[0]
-                getContent()
             }
             R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            getContent()
-            dialog.dismiss()
-        }
-        objectDialogue.show()
     }
 
     override fun onStop() {

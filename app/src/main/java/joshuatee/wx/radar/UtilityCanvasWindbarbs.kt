@@ -32,7 +32,6 @@ import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.UtilityCanvasMain
-import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.ProjectionNumbers
 
@@ -79,7 +78,6 @@ object UtilityCanvasWindbarbs {
             val barbLength = 15.0
             val barbOffset = 0.0
             arrWb.forEach { s ->
-                val ecc = ExternalGeodeticCalculator()
                 val metarArr = s.split(":").dropLastWhile { it.isEmpty() }
                 var angle = 0
                 var length = 0
@@ -95,10 +93,10 @@ object UtilityCanvasWindbarbs {
                     val degree2 = angle.toDouble()
                     val startLength = 0.0
                     var start = ExternalGlobalCoordinates(locXDbl, locYDbl)
-                    var ec = ecc.calculateEndingGlobalCoordinates(start, 0.0, startLength)
+                    var ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, 0.0, startLength)
                     stormList += UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, projectionNumbers).toList()
                     start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                    ec = ecc.calculateEndingGlobalCoordinates(start, degree2 + degreeShift, barbLength * nmScaleFactor * barbLengthScaleFactor)
+                    ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree2 + degreeShift, barbLength * nmScaleFactor * barbLengthScaleFactor)
                     val end = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
                     stormList += UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, projectionNumbers).toList()
                     val barbCount = length / 10
@@ -109,18 +107,18 @@ object UtilityCanvasWindbarbs {
                     }
                     if (length in 5..9) oneHalfBarb = true
                     (0 until barbCount).forEach { j ->
-                        ec = ecc.calculateEndingGlobalCoordinates(end, degree2, barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
-                        stormList += WXGLNexradLevel3Common.drawLine(ec, ecc, projectionNumbers, degree2 - arrowBend * 2.0, startLength + arrowLength * nmScaleFactor)
+                        ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(end, degree2, barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
+                        stormList += WXGLNexradLevel3Common.drawLine(ec, projectionNumbers, degree2 - arrowBend * 2.0, startLength + arrowLength * nmScaleFactor)
                     }
                     var halfBarbOffsetFudge = 0.0
                     if (oneHalfBarb) halfBarbOffsetFudge = nmScaleFactor * 1.0
                     if (halfBarb) {
-                        ec = ecc.calculateEndingGlobalCoordinates(
+                        ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                                 end,
                                 degree2,
                                 barbOffset + halfBarbOffsetFudge + startLength + (barbCount - 1).toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                         )
-                        stormList += WXGLNexradLevel3Common.drawLine(ec, ecc, projectionNumbers, degree2 - arrowBend * 2.0, startLength + arrowLength / 2.0 * nmScaleFactor)
+                        stormList += WXGLNexradLevel3Common.drawLine(ec, projectionNumbers, degree2 - arrowBend * 2.0, startLength + arrowLength / 2.0 * nmScaleFactor)
                     }
                 } // if length greater then 4
             } // loop over wind barbs

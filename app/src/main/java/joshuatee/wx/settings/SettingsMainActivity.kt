@@ -24,55 +24,52 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.LinearLayout
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityWXJobService
-import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityTheme
+import joshuatee.wx.objects.Route
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 
 class SettingsMainActivity : BaseActivity() {
 
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        box = findViewById(R.id.linearLayout)
+        val version = Utility.getVersion(this)
+        setTitle("Settings", "$version, tap on text for additional help.")
+        box = VBox.fromResource(this)
         UtilityTheme.setPrimaryColor(this)
         val backuprestore = UtilityBackupRestore()
-        val version = Utility.getVersion(this)
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
         toolbar.subtitle = "$version, tap on text for additional help."
-        val cardAbout = ObjectCardText(this, "About wX", textSize, padding)
-        val cardLocations = ObjectCardText(this, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding)
-        val cardsn = ObjectCardText(this, "Spotter Network Settings", textSize, SettingsSpotterNetwork::class.java, padding)
-        val cardNotif = ObjectCardText(this, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
-        val cardWidgets = ObjectCardText(this, "Widgets", textSize, SettingsWidgetsActivity::class.java, padding)
-        val cardColors = ObjectCardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding)
-        val cardPL = ObjectCardText(this, "PlayList", textSize, SettingsPlaylistActivity::class.java, padding)
-        val cardRadar = ObjectCardText(this, "Radar", textSize, SettingsRadarActivity::class.java, padding)
-        val cardHS = ObjectCardText(this, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding)
-        val cardUI = ObjectCardText(this, "User Interface", textSize, SettingsUIActivity::class.java, padding)
-        val cardCtoF = ObjectCardText(this, "Celsius to fahrenheit table", textSize, padding)
-        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", textSize, padding)
-        val cardbackuppref = ObjectCardText(this, "Backup Settings", textSize, padding)
-        val cardrestorepref = ObjectCardText(this, "Restore Settings", textSize, padding)
-        cardCtoF.setOnClickListener {
-            ObjectIntent.showText(this, arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table"))
+        val cardAbout = CardText(this, "About wX", textSize, padding)
+        val cardLocations = CardText(this, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding)
+        val cardsn = CardText(this, "Spotter Network Settings", textSize, SettingsSpotterNetwork::class.java, padding)
+        val cardNotif = CardText(this, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
+        val cardWidgets = CardText(this, "Widgets", textSize, SettingsWidgetsActivity::class.java, padding)
+        val cardColors = CardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding)
+        val cardPL = CardText(this, "PlayList", textSize, SettingsPlaylistActivity::class.java, padding)
+        val cardRadar = CardText(this, "Radar", textSize, SettingsRadarActivity::class.java, padding)
+        val cardHS = CardText(this, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding)
+        val cardUI = CardText(this, "User Interface", textSize, SettingsUIActivity::class.java, padding)
+        val cardCtoF = CardText(this, "Celsius to fahrenheit table", textSize, padding)
+        val cardDeleteFiles = CardText(this, "Delete old radar files", textSize, padding)
+        val cardbackuppref = CardText(this, "Backup Settings", textSize, padding)
+        val cardrestorepref = CardText(this, "Restore Settings", textSize, padding)
+        cardCtoF.connect {
+            Route.text(this, arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table"))
         }
-        cardbackuppref.setOnClickListener { backuprestore.backupPrefs(this) }
-        cardrestorepref.setOnClickListener { backuprestore.restorePrefs(this) }
-        cardDeleteFiles.setOnClickListener {
-            ObjectIntent.showText(this, arrayOf(UtilityFileManagement.deleteCacheFiles(this), "Deleted old radar files"))
+        cardbackuppref.connect { backuprestore.backupPrefs(this) }
+        cardrestorepref.connect { backuprestore.restorePrefs(this) }
+        cardDeleteFiles.connect {
+            Route.text(this, arrayOf(UtilityFileManagement.deleteCacheFiles(this), "Deleted old radar files"))
         }
-        cardAbout.setOnClickListener { ObjectIntent(this, SettingsAboutActivity::class.java) }
+        cardAbout.connect { Route(this, SettingsAboutActivity::class.java) }
         listOf(
                 cardAbout.get(),
                 cardCtoF.get(),
@@ -89,12 +86,12 @@ class SettingsMainActivity : BaseActivity() {
 		cardbackuppref.get(),
 		cardrestorepref.get()
         ).forEach {
-            box.addView(it)
+            box.addWidget(it)
         }
 	
-	//elys mod
-        box.addView(
-                ObjectSettingsCheckBox(
+	    //elys mod
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Check for Internet on startup",
                         "CHECKINTERNET",

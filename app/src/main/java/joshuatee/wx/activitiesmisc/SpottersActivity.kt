@@ -32,10 +32,10 @@ import android.widget.TextView
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.radar.UtilitySpotter
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
@@ -87,15 +87,14 @@ class SpottersActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab, null, false)
-        title = titleString
-        toolbar.subtitle = "Tap on name for actions."
+        setTitle(titleString, "Tap on name for actions.")
         ObjectFab(this, R.id.fab, R.drawable.ic_info_outline_24dp_white) { reportFAB() }
         recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
         getContent()
     }
 
     private fun reportFAB() {
-        ObjectIntent(this, SpotterReportsActivity::class.java)
+        Route(this, SpotterReportsActivity::class.java)
     }
 
     private fun getContent() {
@@ -182,14 +181,14 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun showItemOnMap(position: Int) {
-        ObjectIntent.showWebView(this, arrayOf(UtilityMap.getUrl(spotterList[position].lat, spotterList[position].lon, "9"),
+        Route.webView(this, arrayOf(UtilityMap.getUrl(spotterList[position].lat, spotterList[position].lon, "9"),
                 spotterList[position].lastName + ", " + spotterList[position].firstName)
         )
     }
 
     private fun showItemOnRadar(position: Int) {
         val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(spotterList[position].lat, spotterList[position].lon))
-        ObjectIntent.showRadar(this, arrayOf(radarSite, "", "N0Q", "", spotterList[position].unique))
+        Route.radar(this, arrayOf(radarSite, "", "N0Q", "", spotterList[position].unique))
     }
 
     private fun toggleFavorite(position: Int) { checkFavorite(position) }

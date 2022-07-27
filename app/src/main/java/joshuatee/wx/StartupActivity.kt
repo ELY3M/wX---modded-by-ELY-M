@@ -17,7 +17,7 @@ import com.intentfilter.androidpermissions.PermissionManager
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UIPreferences
@@ -147,12 +147,12 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         ColorPalettes.initialize(applicationContext)
 
         if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
-            ObjectIntent(this, WX::class.java)
+            Route(this, WX::class.java)
         } else {
             val wfo = Location.wfo
             val state = Utility.getWfoSiteName(wfo).split(",")[0]
             val radarSite = Location.getRid(this, Location.currentLocationStr)
-            ObjectIntent.showRadar(this, arrayOf(radarSite, state))
+            Route.radar(this, arrayOf(radarSite, state))
         }
 
     }

@@ -35,7 +35,7 @@ import java.util.Locale
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.UtilityWpcText
@@ -57,6 +57,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
+        setTitle("PlayList", "Tap item to play, view, delete or move.")
         toolbarBottom.setOnMenuItemClickListener(this)
         ObjectFab(this, R.id.fab) { playAll() }
         fabPause = ObjectFab(this, R.id.fab3) { playItemFab() }
@@ -65,7 +66,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         } else {
             GlobalVariables.ICON_PAUSE_WHITE
         }
-        fabPause.fabSetResDrawable(icon)
+        fabPause.setResDrawable(icon)
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.setSingleChoiceItems { dialog, which ->
             val name = diaAfd.getItem(which)
@@ -100,7 +101,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 ObjectPopupMessage(rootView, "$product already in playlist")
             }
         }
-        toolbar.subtitle = "Tap item to play, view, delete or move."
         ridFav = Utility.readPref(this, prefToken, "")
         updateList()
         val recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
@@ -112,8 +112,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(
-                this,
+        FutureVoid(this,
                 { UtilityPlayList.downloadAll(this) })
                 { updateListNoInit(); adapter.notifyDataSetChanged() }
     }
@@ -185,14 +184,14 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         } else {
             GlobalVariables.ICON_PAUSE
         }
-        fabPause.fabSetResDrawable(icon)
+        fabPause.setResDrawable(icon)
         if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
             UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
     }
 
     private fun playAll() {
-        fabPause.fabSetResDrawable(GlobalVariables.ICON_PAUSE)
+        fabPause.setResDrawable(GlobalVariables.ICON_PAUSE)
         if (isStoragePermissionGranted) {
             UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
         }
@@ -228,7 +227,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun viewItem(position: Int) {
-        ObjectIntent.showWpcText(this, arrayOf(playListItems[position].split(";")[0].lowercase(Locale.US)))
+        Route.wpcText(this, arrayOf(playListItems[position].split(";")[0].lowercase(Locale.US)))
     }
 
     private fun playItem(position: Int) {

@@ -26,7 +26,7 @@ import android.content.Context
 import joshuatee.wx.Extensions.getHtmlSep
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.DistanceUnit
-import joshuatee.wx.util.Utility
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.UtilityLog
 
 object UtilitySpotter {

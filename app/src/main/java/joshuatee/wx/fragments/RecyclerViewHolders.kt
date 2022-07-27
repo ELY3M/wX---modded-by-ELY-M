@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import joshuatee.wx.R
-import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.Card
 
 // thanks http://inducesmile.com/android/android-gridlayoutmanager-with-recyclerview-in-material-design/
 
@@ -18,7 +18,7 @@ internal class RecyclerViewHolders(itemView: View, private val itemList: List<Ti
 
     init {
         itemView.setOnClickListener(this)
-        ObjectCard(itemView, R.color.primary_blue, R.id.card_view)
+        Card(itemView, R.color.primary_blue, R.id.card_view)
         imageView = itemView.findViewById(R.id.iv)
         itemView.setOnClickListener(this)
     }

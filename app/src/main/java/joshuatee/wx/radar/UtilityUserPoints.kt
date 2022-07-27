@@ -26,6 +26,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.DistanceUnit
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import java.util.regex.Pattern
@@ -83,11 +84,11 @@ object UtilityUserPoints {
                                     latAl.indices.forEach {
                                         x[it] = latAl[it].toDoubleOrNull() ?: 0.0
                                         y[it] = -1.0 * (lonAl[it].toDoubleOrNull() ?: 0.0)
-                                        UtilityLog.d("userpoint", "haillist latlon: x: " + x[it] + " y: " + x[it])
+                                        UtilityLog.d("userpoint", "latlon: x: " + x[it] + " y: " + x[it])
                                     }
 
                                 } else {
-                                    UtilityLog.d("userpoint", "haillist latlon: set to 0.0 :(")
+                                    UtilityLog.d("userpoint", "latlon: set to 0.0 :(")
                                     x = DoubleArray(1)
                                     y = DoubleArray(1)
                                     x[0] = 0.0

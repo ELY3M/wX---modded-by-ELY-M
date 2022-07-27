@@ -26,6 +26,7 @@ import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.util.*
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.UtilityLocation
 import java.util.*
 import java.util.regex.Pattern
@@ -70,23 +71,22 @@ internal object WXGLNexradLevel3StormInfo {
         val sti15IncrementLength = 0.40
         if (posnNumbers.size == motNumbers.size && posnNumbers.size > 1) {
             for (s in posnNumbers.indices step 2) {
-                val externalGeodeticCalculator = ExternalGeodeticCalculator()
                 val degree = posnNumbers[s].toDouble()
                 val nm = posnNumbers[s + 1].toDouble()
                 val degree2 = motNumbers[s].toDouble()
                 val nm2 = motNumbers[s + 1].toDouble()
                 var start = ExternalGlobalCoordinates(location)
-                var ec = externalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree, nm * 1852.0)
+                var ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree, nm * 1852.0)
                 stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers).toList()
                 start = ExternalGlobalCoordinates(ec)
-                ec = externalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree2 + degreeShift, nm2 * 1852.0)
+                ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree2 + degreeShift, nm2 * 1852.0)
                 // mercator expects lat/lon to both be positive as many products have this
                 val coordinates = UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers)
                 stormList += coordinates.toList()
                 val ecArr = mutableListOf<ExternalGlobalCoordinates>()
                 val latLons = mutableListOf<LatLon>()
                 (0..3).forEach { z ->
-                    ecArr.add(externalGeodeticCalculator.calculateEndingGlobalCoordinates(
+                    ecArr.add(ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                             start,
                             degree2 + degreeShift,
                             nm2 * 1852.0 * z.toDouble() * 0.25
@@ -99,7 +99,6 @@ internal object WXGLNexradLevel3StormInfo {
                     listOf(degree2 + arrowBend, degree2 - arrowBend).forEach { startBearing ->
                         stormList += WXGLNexradLevel3Common.drawLine(
                                 coordinates,
-                                externalGeodeticCalculator,
                                 projectionNumbers,
                                 start,
                                 startBearing,
@@ -117,7 +116,6 @@ internal object WXGLNexradLevel3StormInfo {
                         ).forEach {startBearing ->
                             stormList += WXGLNexradLevel3Common.drawTickMarks(
                                     latLons[z],
-                                    externalGeodeticCalculator,
                                     projectionNumbers,
                                     ecArr[z],
                                     startBearing,

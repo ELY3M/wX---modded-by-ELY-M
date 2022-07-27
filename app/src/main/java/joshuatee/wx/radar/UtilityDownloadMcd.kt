@@ -23,8 +23,6 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.common.RegExp
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityNotificationSpc
 import joshuatee.wx.objects.DownloadTimer
@@ -44,7 +42,8 @@ internal object UtilityDownloadMcd {
     }
 
     fun getMcd(context: Context): WatchData {
-        val html = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/".getHtml()
+//        val html = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/".getHtml()
+        val html = ObjectPolygonWatch.polygonDataByType[type]!!.getUrl().getHtml()
         if (html != "" ) {
             ObjectPolygonWatch.polygonDataByType[type]!!.storage.valueSet(context, html)
         }
@@ -52,9 +51,9 @@ internal object UtilityDownloadMcd {
         val htmlList = mutableListOf<String>()
         var latLonString = ""
         numberList.forEach {
-            val mcdData = getLatLon(context, it)
-            htmlList.add(mcdData[0])
-            latLonString += mcdData[1]
+            val data = getLatLon(context, it)
+            htmlList.add(data[0])
+            latLonString += data[1]
         }
         if (type.pref || UtilityNotificationSpc.locationNeedsMcd()) {
             ObjectPolygonWatch.polygonDataByType[type]!!.latLonList.valueSet(context, latLonString)
@@ -63,7 +62,9 @@ internal object UtilityDownloadMcd {
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
-        val list = UtilityString.parseColumn(ObjectPolygonWatch.polygonDataByType[type]!!.storage.value, RegExp.mcdPatternAlerts)
+        val list = UtilityString.parseColumn(
+                ObjectPolygonWatch.polygonDataByType[type]!!.storage.value,
+                ObjectPolygonWatch.regex[type]!!)
         var mcdNoList = ""
         list.forEach {
             mcdNoList += "$it:"
@@ -76,7 +77,7 @@ internal object UtilityDownloadMcd {
 
     // return the raw MCD text and the lat/lon as a list
     private fun getLatLon(context: Context, number: String): List<String> {
-        val html = UtilityDownload.getTextProduct(context, "SPCMCD$number")
+        val html = UtilityDownload.getTextProduct(context, ObjectPolygonWatch.textPrefix[UtilityDownloadMpd.type] + number)
         return listOf(html, UtilityNotification.storeWatchMcdLatLon(html))
     }
 }

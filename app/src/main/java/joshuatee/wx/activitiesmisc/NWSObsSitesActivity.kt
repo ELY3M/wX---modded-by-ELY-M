@@ -30,7 +30,7 @@ import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.common.GlobalArrays
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.UtilityMetar
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.ObjectRecyclerView
@@ -94,7 +94,7 @@ class NwsObsSitesActivity : BaseActivity() {
     private fun showObsSite(obsSite: String) {
         Utility.writePref(prefToken, obsSite)
         updateButton()
-        ObjectIntent.showWebView(this, arrayOf("https://www.weather.gov/wrh/timeseries?site=$obsSite", obsSite))
+        Route.webView(this, arrayOf("https://www.weather.gov/wrh/timeseries?site=$obsSite", obsSite))
     }
 
     private fun stateSelected() {
@@ -125,7 +125,7 @@ class NwsObsSitesActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_lastused -> showObsSite(Utility.readPref(this, prefToken, UtilityMetar.findClosestObservation(this, Location.latLon).name))
-            R.id.action_map -> ObjectIntent.showWebView(this,
+            R.id.action_map -> Route.webView(this,
                         arrayOf("https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
                                 "Observations near " + Location.wfo))
             else -> return super.onOptionsItemSelected(item)

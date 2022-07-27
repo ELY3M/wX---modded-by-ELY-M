@@ -39,7 +39,7 @@ import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.audio.UtilityVoiceCommand
 import joshuatee.wx.canada.*
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.settings.UtilityHomeScreen
@@ -64,7 +64,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
 	    //elys mod - not removing this - ELY M. 
-            R.id.action_forecast_webpage -> ObjectIntent(
+            R.id.action_forecast_webpage -> Route(
                 this,
                 WebView::class.java,
                 WebView.URL,
@@ -75,24 +75,24 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
             )
             R.id.action_alert -> {
                 if (Location.isUS) {
-                    ObjectIntent.showUsAlerts(this)
+                    Route.usAlerts(this)
                 } else {
-                    ObjectIntent(this, CanadaAlertsActivity::class.java)
+                    Route(this, CanadaAlertsActivity::class.java)
                 }
             }
-            R.id.action_observations -> ObjectIntent.showObservations(this)
-            R.id.action_playlist -> ObjectIntent(this, SettingsPlaylistActivity::class.java)
+            R.id.action_observations -> Route.observations(this)
+            R.id.action_playlist -> Route(this, SettingsPlaylistActivity::class.java)
             R.id.action_soundings -> if (Location.isUS) {
-                ObjectIntent.showSounding(this)
+                Route.sounding(this)
             }
             R.id.action_cloud -> openVis()
             R.id.action_radar -> openNexradRadar(this)
             R.id.action_forecast -> openHourly()
             R.id.action_afd -> openAfd()
             R.id.action_dashboard -> openDashboard()
-            R.id.action_spotters -> ObjectIntent(this, SpottersActivity::class.java)
+            R.id.action_spotters -> Route(this, SpottersActivity::class.java)
             R.id.action_settings -> openSettings()
-            R.id.action_radar_mosaic -> ObjectIntent.showRadarMosaic(this)
+            R.id.action_radar_mosaic -> Route.radarMosaic(this)
             R.id.action_vr -> {
                 if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying) {
                     UtilityTts.mediaPlayer!!.stop()
@@ -107,7 +107,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 }
             }
             //elys mod - not removing about - ELY M.
-            R.id.action_about -> ObjectIntent(this, SettingsAboutActivity::class.java)
+            R.id.action_about -> Route(this, SettingsAboutActivity::class.java)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -125,35 +125,35 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     fun openNexradRadar(context: Context) {
         if (!UIPreferences.dualpaneRadarIcon) {
-            ObjectIntent.showRadar(context, arrayOf(Location.rid, ""))
+            Route.radar(context, arrayOf(Location.rid, ""))
         } else {
-            ObjectIntent.showRadarMultiPane(context, arrayOf(Location.rid, "", "2"))
+            Route.radarMultiPane(context, arrayOf(Location.rid, "", "2"))
         }
     }
 
     fun openAfd() {
-        ObjectIntent.showWfoText(this)
+        Route.wfoText(this)
     }
 
-    fun openSettings() = ObjectIntent(this, SettingsMainActivity::class.java)
+    fun openSettings() = Route(this, SettingsMainActivity::class.java)
 
     fun openVis() {
-        ObjectIntent.showVis(this)
+        Route.vis(this)
     }
 
     fun openDashboard() {
         if (Location.isUS) {
-            ObjectIntent(this, SevereDashboardActivity::class.java)
+            Route(this, SevereDashboardActivity::class.java)
         } else {
-            ObjectIntent(this, CanadaAlertsActivity::class.java)
+            Route(this, CanadaAlertsActivity::class.java)
         }
     }
 
     fun openHourly() {
-        ObjectIntent.showHourly(this)
+        Route.hourly(this)
     }
 
     fun openActivity(context: Context, activityName: String) {
-        ObjectIntent(context, UtilityHomeScreen.HM_CLASS[activityName]!!, UtilityHomeScreen.HM_CLASS_ID[activityName]!!, UtilityHomeScreen.HM_CLASS_ARGS[activityName]!!)
+        Route(context, UtilityHomeScreen.HM_CLASS[activityName]!!, UtilityHomeScreen.HM_CLASS_ID[activityName]!!, UtilityHomeScreen.HM_CLASS_ARGS[activityName]!!)
     }
 }

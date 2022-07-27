@@ -33,7 +33,7 @@ import androidx.core.app.NotificationCompat
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.NotificationPreferences
 
 internal object UtilityNotificationSpcFireWeather {

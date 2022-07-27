@@ -25,11 +25,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -41,8 +40,7 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     //
 
     private val bitmaps = MutableList(UtilitySpcFireOutlook.urls.size) { UtilityImg.getBlankBitmap() }
-    private var imagesPerRow = 2
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,12 +51,8 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
-        box = findViewById(R.id.linearLayout)
-        if (UtilityUI.isLandScape(this)) {
-            imagesPerRow = 3
-        }
-        toolbar.subtitle = "SPC"
-        title = "Fire Weather Outlooks"
+        setTitle("Fire Weather Outlooks", "SPC")
+        box = VBox.fromResource(this)
         objectImageSummary = ObjectImageSummary(this, box, bitmaps)
         getContent()
     }
@@ -75,17 +69,17 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     }
 
     private fun updateImage(index: Int) {
-        objectImageSummary.setImage(index, bitmaps[index])
-        objectImageSummary.setOnClickListener(index) {
+        objectImageSummary.set(index, bitmaps[index])
+        objectImageSummary.connect(index) {
             val textProduct = UtilitySpcFireOutlook.textProducts[index]
             val imageUrl = UtilitySpcFireOutlook.urls[index]
-            ObjectIntent(this@SpcFireOutlookSummaryActivity, SpcFireOutlookActivity::class.java, SpcFireOutlookActivity.NUMBER, arrayOf(textProduct, imageUrl))
+            Route(this, SpcFireOutlookActivity::class.java, SpcFireOutlookActivity.NUMBER, arrayOf(textProduct, imageUrl))
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, getString(UtilitySpcFireOutlook.activityTitle), "", bitmaps)
+            R.id.action_share -> UtilityShare.text(this, "SPC Fire Weather Outlooks", "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

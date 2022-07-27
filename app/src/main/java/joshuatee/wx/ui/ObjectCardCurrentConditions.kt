@@ -24,7 +24,6 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.view.Gravity
-import android.widget.LinearLayout
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.Location
@@ -32,58 +31,58 @@ import joshuatee.wx.util.ObjectCurrentConditions
 
 class ObjectCardCurrentConditions(context: Context, version: Int) {
 
-    private val objectCard = ObjectCard(context)
-    private val objectImageView = ObjectImageView(context)
-    private val textViewTop = ObjectTextView(context, TextSize.MEDIUM)
-    private val textViewBottom = ObjectTextView(context, backgroundText = true)
-    private val textViewMiddle = ObjectTextView(context, backgroundText = true)
+    private val card = Card(context)
+    private val photo = Photo(context)
+    private val text1 = Text(context, TextSize.MEDIUM)
+    private val text2 = Text(context, backgroundText = true)
+    private val text3 = Text(context, backgroundText = true)
 
     init {
         val hbox = HBox(context)
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         if (version == 2) {
-            textViewTop.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
-            textViewMiddle.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
-            textViewBottom.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, UIPreferences.paddingSmall)
-            vbox.addViews(listOf(textViewTop.get(), textViewMiddle.get(), textViewBottom.get()))
-            hbox.addViews(listOf(objectImageView.get(), vbox.get()))
+            text1.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
+            text2.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
+            text3.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, UIPreferences.paddingSmall)
+            vbox.addViews(listOf(text1.get(), text2.get(), text3.get()))
+            hbox.addViews(listOf(photo.get(), vbox.get()))
         } else {
             // legacy code
-            textViewTop.gravity = Gravity.CENTER
-            textViewBottom.gravity = Gravity.CENTER
-            textViewMiddle.gravity = Gravity.CENTER
-            textViewTop.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
-            textViewBottom.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 2)
-            textViewMiddle.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
-            hbox.orientation = LinearLayout.VERTICAL
-            hbox.addWidget(textViewTop.get())
-            hbox.addWidget(textViewBottom.get())
+            text1.gravity = Gravity.CENTER
+            text3.gravity = Gravity.CENTER
+            text2.gravity = Gravity.CENTER
+            text1.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
+            text3.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 2)
+            text2.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
+            hbox.makeVertical()
+            hbox.addWidget(text1.get())
+            hbox.addWidget(text3.get())
         }
-        objectCard.addView(hbox.get())
+        card.addView(hbox.get())
     }
 
-    fun get() = objectCard.get()
+    fun get() = card.get()
 
     fun refreshTextSize() {
-        textViewTop.refreshTextSize(TextSize.MEDIUM)
-        textViewMiddle.refreshTextSize(TextSize.SMALL)
-        textViewBottom.refreshTextSize(TextSize.SMALL)
+        text1.refreshTextSize(TextSize.MEDIUM)
+        text2.refreshTextSize(TextSize.SMALL)
+        text3.refreshTextSize(TextSize.SMALL)
     }
 
     fun setStatus(text: String) {
-        textViewBottom.text = text
+        text3.text = text
     }
 
     fun setTopLine(text: String) {
-        textViewTop.text = text
+        text1.text = text
     }
 
     private fun setMiddleLine(text: String) {
-        textViewMiddle.text = text
+        text2.text = text
     }
 
-    fun setListener(alertDialogStatus: ObjectDialogue?, alertDialogStatusAl: MutableList<String>, radarTimestamps: () -> List<String>) {
-        objectImageView.setOnClickListener {
+    fun connect(alertDialogStatus: ObjectDialogue?, alertDialogStatusAl: MutableList<String>, radarTimestamps: () -> List<String>) {
+        photo.connect {
             alertDialogStatusAl.clear()
             alertDialogStatusAl.add("Edit Location...")
             alertDialogStatusAl.add("Force Data Refresh...")
@@ -98,7 +97,7 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
     }
 
     fun updateContent(bitmap: Bitmap, objCc: ObjectCurrentConditions, isUS: Boolean, time: String, radarTime: String) {
-        objectImageView.setImage(bitmap)
+        photo.setImage(bitmap)
         val sep = " - "
         val conditionTokens = objCc.data.split(sep).dropLastWhile { it.isEmpty() }
         if (conditionTokens.size > 4 && isUS) {

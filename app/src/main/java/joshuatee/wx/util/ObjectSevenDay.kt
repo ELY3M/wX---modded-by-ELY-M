@@ -26,7 +26,7 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 
 class ObjectSevenDay {
 

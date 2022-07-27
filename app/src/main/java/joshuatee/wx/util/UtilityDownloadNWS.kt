@@ -26,7 +26,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.Locale
 import joshuatee.wx.MyApplication
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import okhttp3.Request
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences

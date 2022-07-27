@@ -23,7 +23,6 @@ package joshuatee.wx.ui
 
 import android.app.Activity
 import androidx.appcompat.widget.Toolbar
-import android.widget.LinearLayout
 import java.util.Locale
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.util.Utility
@@ -31,9 +30,9 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureText2
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 
-class ObjectCanadaWarnings(private val activity: Activity, private val linearLayout: LinearLayout, private val toolbar: Toolbar) {
+class ObjectCanadaWarnings(private val activity: Activity, private val box: VBox, private val toolbar: Toolbar) {
 
     private var listLocUrl = mutableListOf<String>()
     private var listLocName = mutableListOf<String>()
@@ -67,8 +66,8 @@ class ObjectCanadaWarnings(private val activity: Activity, private val linearLay
     }
 
     fun showData() {
-        linearLayout.removeAllViews()
-        ObjectCardImage(activity, linearLayout, toolbar, bitmap)
+        box.removeChildrenAndLayout()
+        Image(activity, box, toolbar, bitmap)
         var locWarning: String
         var locWatch: String
         var locStatement: String
@@ -92,19 +91,19 @@ class ObjectCanadaWarnings(private val activity: Activity, private val linearLay
                 locStatement = locStatement.replace("<.*?>".toRegex(), "")
             }
             val province = listLocUrl[index].parse("report_e.html.([a-z]{2}).*?")
-            val objectCardText = ObjectCardText(activity, linearLayout)
-            objectCardText.text = Utility.fromHtml(province.uppercase(Locale.US) + ": " + locWarning + " " + locWatch + " " + locStatement)
+            val cardText = CardText(activity, box)
+            cardText.text = Utility.fromHtml(province.uppercase(Locale.US) + ": " + locWarning + " " + locWatch + " " + locStatement)
             val url = GlobalVariables.canadaEcSitePrefix + listLocUrl[index]
             val location = listLocName[index]
-            objectCardText.setOnClickListener { getWarningDetail(url, location) }
+            cardText.connect { getWarningDetail(url, location) }
         }
-        ObjectCALegal(activity, linearLayout, GlobalVariables.canadaEcSitePrefix + "/warnings/index_e.html")
+        ObjectCALegal(activity, box.get(), GlobalVariables.canadaEcSitePrefix + "/warnings/index_e.html")
     }
 
     val title get() = provinceToLabel[province] + " (" + listLocUrl.size + ")"
 
     private fun getWarningDetail(url: String, location: String) {
-        FutureText2(activity, { UtilityCanada.getHazardsFromUrl(url) }) { data -> ObjectIntent.showText(activity, arrayOf(data, location)) }
+        FutureText2(activity, { UtilityCanada.getHazardsFromUrl(url) }) { data -> Route.text(activity, arrayOf(data, location)) }
     }
 
     companion object {

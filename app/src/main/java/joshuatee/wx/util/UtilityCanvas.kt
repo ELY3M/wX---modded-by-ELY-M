@@ -32,7 +32,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.*
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.radar.UtilityCanvasProjection
 import joshuatee.wx.settings.RadarPreferences
 
 internal object UtilityCanvas {

@@ -31,7 +31,7 @@ class ObjectImagesCollection(val title: String, val urls: List<String>, val labe
 
     companion object {
 
-        val imageCollectionMap = mapOf(
+        val map = mapOf(
             "OPC" to ObjectImagesCollection(
                     "OPC",
                     UtilityOpcImages.urls,

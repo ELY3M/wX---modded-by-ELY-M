@@ -40,21 +40,21 @@ class ObjectFab {
         fab = activity.findViewById(resId)
         context = activity
         setupFab(activity)
-        setOnClickListener(fn)
+        connect(fn)
     }
 
     constructor(activity: Activity, resId: Int, iconID: Int, fn: View.OnClickListener) {
         fab = activity.findViewById(resId)
         context = activity
         setupFab(iconID)
-        setOnClickListener(fn)
+        connect(fn)
     }
 
-    fun setImageDrawable(drawable: Drawable?) {
+    fun setDrawable(drawable: Drawable?) {
         fab.setImageDrawable(drawable)
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
+    fun connect(fn: View.OnClickListener) {
         fab.setOnClickListener(fn)
     }
 
@@ -67,7 +67,7 @@ class ObjectFab {
             }
         }
 
-    fun fabSetResDrawable(resourceDrawable: Int) {
+    fun setResDrawable(resourceDrawable: Int) {
         val drawable = ContextCompat.getDrawable(context, resourceDrawable)
         fab.setImageDrawable(drawable)
     }
@@ -76,7 +76,7 @@ class ObjectFab {
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         }
-        fabSetResDrawable(icon)
+        setResDrawable(icon)
         fab.elevation = UIPreferences.fabElevation
         fab.translationZ = UIPreferences.fabElevationDepressed
     }

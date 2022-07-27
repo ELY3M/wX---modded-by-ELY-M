@@ -26,11 +26,10 @@ import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -42,8 +41,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     //
     private var bitmaps = mutableListOf<Bitmap>()
     private var urls = listOf<String>()
-    private var imagesPerRow = 2
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -54,12 +52,8 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
-        box = findViewById(R.id.linearLayout)
-        if (UtilityUI.isLandScape(this)) {
-            imagesPerRow = 3
-        }
-        toolbar.subtitle = "SPC"
-        title = "Thunderstorm Outlooks"
+        setTitle("Thunderstorm Outlooks", "SPC")
+        box = VBox.fromResource(this)
         getContent()
     }
 
@@ -73,19 +67,17 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     }
 
     private fun getImages() {
-        bitmaps = MutableList(urls.size){ UtilityImg.getBlankBitmap() }
-        box.removeAllViews()
+        bitmaps = MutableList(urls.size) { UtilityImg.getBlankBitmap() }
+        box.removeChildrenAndLayout()
         objectImageSummary = ObjectImageSummary(this, box, bitmaps)
         urls.indices.forEach {
-            FutureVoid(this, { bitmaps[it] = urls[it].getImage() }, { updateImage(it) })
+            FutureVoid(this, { bitmaps[it] = urls[it].getImage() }, { update(it) })
         }
     }
 
-    private fun updateImage(index: Int) {
-        objectImageSummary.setImage(index, bitmaps[index])
-        objectImageSummary.setOnClickListener(index) {
-            ObjectIntent.showImage(this, arrayOf(urls[index], ""))
-        }
+    private fun update(index: Int) {
+        objectImageSummary.set(index, bitmaps[index])
+        objectImageSummary.connect(index) { Route.image(this, arrayOf(urls[index], "")) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -32,6 +32,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.LatLon
 import java.util.regex.Pattern
 
 internal object UtilityMetar {
@@ -193,9 +194,13 @@ internal object UtilityMetar {
             metarDataList[paneNumber].obsArrExt = obsAlExt.toList()
             metarDataList[paneNumber].obsArrWb = obsAlWb.toList()
             metarDataList[paneNumber].x = DoubleArray(obsAlX.size)
-            obsAlX.indices.forEach { metarDataList[paneNumber].x[it] = obsAlX[it] }
+            obsAlX.indices.forEach {
+                metarDataList[paneNumber].x[it] = obsAlX[it]
+            }
             metarDataList[paneNumber].y = DoubleArray(obsAlY.size)
-            obsAlY.indices.forEach { metarDataList[paneNumber].y[it] = obsAlY[it] }
+            obsAlY.indices.forEach {
+                metarDataList[paneNumber].y[it] = obsAlY[it]
+            }
             metarDataList[paneNumber].obsArrWbGust = obsAlWbGust.toList()
             metarDataList[paneNumber].obsArrAviationColor = obsAlAviationColor.toList()
         }

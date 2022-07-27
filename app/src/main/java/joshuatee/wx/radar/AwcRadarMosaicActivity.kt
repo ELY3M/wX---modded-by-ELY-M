@@ -67,7 +67,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
         image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
         toolbar.setOnClickListener { objectNavDrawer.open() }
         image.setMaxZoom(8.0f)
-        image.setListener(objectNavDrawer) { getContent(product) }
+        image.connect(objectNavDrawer) { getContent(product) }
         sector = Utility.readPref(this, prefTokenSector, sector)
         product = Utility.readPref(this, prefTokenProduct, product)
         objectNavDrawer.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)

@@ -27,14 +27,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.cardview.widget.CardView
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCard
-import joshuatee.wx.ui.ObjectCardVerticalText
+import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.CardVerticalText
 import joshuatee.wx.util.UtilityShare
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
@@ -43,7 +42,8 @@ import com.jjoe64.graphview.GraphView
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
+import joshuatee.wx.ui.VBox
 
 class HourlyActivity : BaseActivity() {
 
@@ -56,13 +56,13 @@ class HourlyActivity : BaseActivity() {
     companion object { const val LOC_NUM = "" }
 
     private var htmlShare = listOf<String>()
-    private lateinit var objectCard: ObjectCard
-    private lateinit var objectCardVerticalText: ObjectCardVerticalText
+    private lateinit var card: Card
+    private lateinit var cardVerticalText: CardVerticalText
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private lateinit var graphCard: CardView
     private lateinit var graph: GraphView
-    private var hourlyData = ObjectHourly()
+    private var objectHourly = ObjectHourly()
     private var locationNumber = 0
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -73,17 +73,16 @@ class HourlyActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, false)
+        locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
+        setTitle("Hourly Forecast", Location.getName(locationNumber))
+        card = Card(this, R.color.black, R.id.graphCard)
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         graphCard = findViewById(R.id.graphCard)
         graph = findViewById(R.id.graph)
-        locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
-        objectCard = ObjectCard(this, R.color.black, R.id.graphCard)
         graphCard.visibility = View.GONE
-        objectCardVerticalText = ObjectCardVerticalText(this, 5, box, toolbar)
-        objectCardVerticalText.setOnClickListener { scrollView.scrollTo(0, 0) }
-        title = "Hourly Forecast"
-        toolbar.subtitle = Location.getName(locationNumber)
+        cardVerticalText = CardVerticalText(this, 5, box, toolbar)
+        cardVerticalText.connect { scrollView.scrollTo(0, 0) }
         getContent()
     }
 
@@ -97,27 +96,33 @@ class HourlyActivity : BaseActivity() {
     }
 
     private fun update() {
-        hourlyData = if (UIPreferences.useNwsApiForHourly) {
+        objectHourly = if (UIPreferences.useNwsApiForHourly) {
             UtilityUSHourly.getStringForActivity(htmlShare[1])
         } else {
             UtilityUSHourly.getStringForActivityFromOldApi(htmlShare[1])
         }
         graphCard.visibility = View.VISIBLE
-        objectCardVerticalText.setText(listOf(hourlyData.time, hourlyData.temp, hourlyData.windSpeed, hourlyData.windDir, hourlyData.conditions))
+        cardVerticalText.set(listOf(
+                objectHourly.time,
+                objectHourly.temp,
+                objectHourly.windSpeed,
+                objectHourly.windDir,
+                objectHourly.conditions))
         plotData()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> if (htmlShare.size > 1) UtilityShare.text(this, "Hourly", htmlShare[1])
-            R.id.action_settings -> ObjectIntent.showSettings(this)
+            R.id.action_settings -> Route.settings(this)
+            R.id.action_radar -> Route.radarNew(this, arrayOf(Location.rid, ""))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
     private fun plotData() {
-        val linesOfData = hourlyData.temp.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
+        val linesOfData = objectHourly.temp.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
         val dataPoints = mutableListOf<DataPoint>()
         (1 until linesOfData.lastIndex).forEach {
             val temp = linesOfData[it].toIntOrNull() ?: 0

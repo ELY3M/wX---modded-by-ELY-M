@@ -26,17 +26,17 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.LinearLayout
 import joshuatee.wx.R
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.TextSize
 
 class ObjectCALegal(context: Context, box: LinearLayout, url: String) {
 
-    private val text = ObjectCardText(context)
+    private val text = CardText(context)
 
     init {
         text.refreshTextSize(TextSize.SMALL)
         text.center()
-        text.setOnClickListener { ObjectIntent(context, Intent.ACTION_VIEW, Uri.parse(url)) }
+        text.connect { Route(context, Intent.ACTION_VIEW, Uri.parse(url)) }
         text.text = context.resources.getText(R.string.main_screen_ca_disclaimor).toString()
         box.addView(text.get())
     }

@@ -14,7 +14,6 @@ class Hail internal constructor(hailIcon: String, hailSize: String, hailSizeNumb
     var lat: Double = 0.0
     var lon: Double = 0.0
 
-
     init {
         this.hailIcon = hailIcon
         this.hailSize = hailSize

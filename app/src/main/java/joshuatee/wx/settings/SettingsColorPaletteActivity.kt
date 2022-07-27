@@ -18,7 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-//modded by ELY M.
+//modded by ELY M. //own color tables added in
 
 package joshuatee.wx.settings
 
@@ -32,10 +32,9 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
-import joshuatee.wx.radarcolorpalettes.UtilityColorPaletteGeneric
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectFab
@@ -127,7 +126,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 if (ObjectColorPalette.radarColorPalette[typeAsInt] == it.colorMapLabel && it.builtin) {
                     builtinStr = "true"
                     fab2.visibility = View.GONE
-                    fab1.setImageDrawable(ContextCompat.getDrawable(this, GlobalVariables.ICON_ADD2))
+                    fab1.setDrawable(ContextCompat.getDrawable(this, GlobalVariables.ICON_ADD2))
                 }
             }
             return allItems
@@ -138,7 +137,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
         tileAdapterColorPalette = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
         cardList.adapter = tileAdapterColorPalette
         title = ObjectColorPalette.radarColorPalette[typeAsInt]
-        UtilityColorPaletteGeneric.loadColorMap(this, typeAsInt)
+        ObjectColorPalette.loadColorMap(this, typeAsInt)
         super.onRestart()
     }
 
@@ -151,7 +150,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
     }
 
     private fun addPalFab() {
-        ObjectIntent(this, SettingsColorPaletteEditor::class.java, SettingsColorPaletteEditor.URL, arrayOf(type, ObjectColorPalette.radarColorPalette[typeAsInt]!!, builtinStr))
+        Route(this, SettingsColorPaletteEditor::class.java, SettingsColorPaletteEditor.URL, arrayOf(type, ObjectColorPalette.radarColorPalette[typeAsInt]!!, builtinStr))
     }
 
     @SuppressLint("ApplySharedPref")
@@ -168,7 +167,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 Utility.writePrefWithNull(this, rowListItem[globalPosition].prefToken, ObjectColorPalette.radarColorPalette[typeAsInt])
                 Utility.commitPref(this)
                 rowListItem[globalPosition].toolbar.title = ObjectColorPalette.radarColorPalette[typeAsInt]
-                UtilityColorPaletteGeneric.loadColorMap(this, typeAsInt)
+                ObjectColorPalette.loadColorMap(this, typeAsInt)
                 rowListItem = allItemList
                 tileAdapterColorPalette = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
                 cardList.adapter = tileAdapterColorPalette
@@ -183,22 +182,22 @@ class SettingsColorPaletteActivity : BaseActivity() {
         if (rowListItem[position].builtin) {
             builtinStr = "true"
             fab2.visibility = View.GONE
-            fab1.setImageDrawable(ContextCompat.getDrawable(this, GlobalVariables.ICON_ADD2))
+            fab1.setDrawable(ContextCompat.getDrawable(this, GlobalVariables.ICON_ADD2))
         } else {
             builtinStr = "false"
             fab2.visibility = View.VISIBLE
-            fab1.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_reorder_24dp))
+            fab1.setDrawable(ContextCompat.getDrawable(this, R.drawable.ic_reorder_24dp))
         }
         if (rowListItem[position].prefToken == "RADAR_COLOR_PALETTE_$type") {
             ObjectColorPalette.radarColorPalette[typeAsInt] = rowListItem[position].colorMapLabel
             Utility.writePrefWithNull(this, rowListItem[position].prefToken, ObjectColorPalette.radarColorPalette[typeAsInt])
             rowListItem[position].toolbar.title = ObjectColorPalette.radarColorPalette[typeAsInt]
-            UtilityColorPaletteGeneric.loadColorMap(this, typeAsInt)
+            ObjectColorPalette.loadColorMap(this, typeAsInt)
         } else {
             ObjectColorPalette.radarColorPalette[typeAsInt] = rowListItem[position].colorMapLabel
             Utility.writePrefWithNull(this, rowListItem[position].prefToken, ObjectColorPalette.radarColorPalette[typeAsInt])
             rowListItem[position].toolbar.title = ObjectColorPalette.radarColorPalette[typeAsInt]
-            UtilityColorPaletteGeneric.loadColorMap(this, typeAsInt)
+            ObjectColorPalette.loadColorMap(this, typeAsInt)
         }
     }
 }

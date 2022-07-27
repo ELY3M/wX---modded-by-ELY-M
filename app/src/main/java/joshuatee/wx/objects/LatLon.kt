@@ -19,10 +19,9 @@
 
 */
 
-package joshuatee.wx.radar
+package joshuatee.wx.objects
 
 import joshuatee.wx.external.ExternalPoint
-import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.util.UtilityString
 import kotlin.math.acos
@@ -31,7 +30,7 @@ import kotlin.math.sin
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
-import joshuatee.wx.util.UtilityCanvasProjection
+import joshuatee.wx.radar.UtilityCanvasProjection
 
 class LatLon() {
 

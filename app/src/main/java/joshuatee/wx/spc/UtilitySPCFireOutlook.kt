@@ -21,7 +21,6 @@
 
 package joshuatee.wx.spc
 
-import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 
 internal object UtilitySpcFireOutlook {
@@ -37,6 +36,4 @@ internal object UtilitySpcFireOutlook {
         "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/day2otlk_fire.gif",
         "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/fire_wx/imgs/day38otlk_fire.gif"
     )
-
-    const val activityTitle = R.string.title_activity_spcfire_outlook
 }

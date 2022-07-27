@@ -71,7 +71,7 @@ object UtilityTts {
                     }
                 }
                 ttsInit = true
-                ttobjGlobal!!.setSpeechRate(Utility.readPref(context, "TTS_SPEED_PREF", 10) / 10f)
+                ttobjGlobal!!.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10f)
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
@@ -87,7 +87,7 @@ object UtilityTts {
 
     internal fun playAgainTts(context: Context) {
         if (!ttsInit) initTts(context)
-        ttobjGlobal!!.setSpeechRate(Utility.readPref(context, "TTS_SPEED_PREF", 10) / 10f)
+        ttobjGlobal!!.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10f)
         splitInChunks(Utility.fromHtml(TEXT_OLD), 1000).forEach {
             ttobjGlobal!!.speak(it, TextToSpeech.QUEUE_ADD, null)
         }

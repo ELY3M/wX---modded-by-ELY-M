@@ -29,18 +29,18 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.radar.Spotter
-import joshuatee.wx.ui.ObjectCard
-import joshuatee.wx.ui.ObjectTextView
+import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.Text
 
 internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) : RecyclerView.Adapter<AdapterSpotter.DataObjectHolder>() {
 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val name = ObjectTextView(itemView, R.id.name, UIPreferences.textHighlightColor, TextSize.MEDIUM)
-        val time = ObjectTextView(itemView, R.id.time, backgroundText = true)
+        val name = Text(itemView, R.id.name, UIPreferences.textHighlightColor, TextSize.MEDIUM)
+        val time = Text(itemView, R.id.time, backgroundText = true)
 
         init {
-            ObjectCard(itemView, R.id.cv1)
+            Card(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
         }
 

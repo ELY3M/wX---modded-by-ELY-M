@@ -24,7 +24,6 @@ package joshuatee.wx.canada
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.R
@@ -32,6 +31,7 @@ import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCanadaWarnings
 import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 
 class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
@@ -39,13 +39,13 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private var firstTime = true
     private lateinit var objectCanadaWarnings: ObjectCanadaWarnings
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.caalerts, true)
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
         objectCanadaWarnings = ObjectCanadaWarnings(this, box, toolbar)
         objectCanadaWarnings.province = Utility.readPref(this, "CA_ALERTS_PROV", objectCanadaWarnings.province)

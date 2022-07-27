@@ -24,26 +24,26 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ObjectSwitch
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityAlertDialog
 
 class SettingsNavDrawerActivity : BaseActivity() {
 
     private var tokenList = ""
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_navdrawer, null, false)
-        box = findViewById(R.id.linearLayout)
+        setTitle("Navigation Drawer", "Turn items off or on for the main screen nav drawer.")
+        box = VBox.fromResource(this)
         tokenList = UtilityNavDrawer.getNavDrawerTokenList(this)
-        title = "Navigation Drawer"
-        toolbar.subtitle = "Turn items off or on for the main screen nav drawer."
         UtilityNavDrawer.labels.forEach {
-            box.addView(
-                    ObjectSettingsCheckBox(
+            box.addWidget(
+                    ObjectSwitch(
                             this,
                             it,
                             UtilityNavDrawer.getPrefVar(UtilityNavDrawer.labelToTokenMap[it] ?: ""),

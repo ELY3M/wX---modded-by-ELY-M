@@ -12,10 +12,10 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
 
     class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val label = ObjectTextView(itemView, R.id.singletext, TextSize.MEDIUM)
+        val label = Text(itemView, R.id.singletext, TextSize.MEDIUM)
 
         init {
-            ObjectCard(itemView, R.id.cv1)
+            Card(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
             label.setPadding(UIPreferences.paddingSettings)
         }

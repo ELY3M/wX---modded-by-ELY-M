@@ -28,6 +28,7 @@ import android.graphics.Path
 import android.graphics.Paint.Style
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ProjectionType
+import joshuatee.wx.radar.UtilityCanvasProjection
 import java.nio.ByteBuffer
 
 internal object UtilityCanvasGeneric {

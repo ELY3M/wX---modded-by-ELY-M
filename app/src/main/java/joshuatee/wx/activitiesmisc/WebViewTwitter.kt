@@ -33,7 +33,7 @@ import android.webkit.WebViewClient
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
@@ -116,7 +116,7 @@ class WebViewTwitter : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_sector -> genericDialog(sectorList) { getContent(it) }
+            R.id.action_sector -> ObjectDialogue.generic(this, sectorList, {}) { getContent(it) }
             R.id.action_browser -> {
                 var tail = "wx"
                 var stateTmp = sector.lowercase(Locale.US)
@@ -126,23 +126,23 @@ class WebViewTwitter : BaseActivity() {
                         stateTmp = stateTmp.replace("wx", "")
                     }
                 }
-                ObjectIntent(this, Intent.ACTION_VIEW, Uri.parse("http://twitter.com/hashtag/$stateTmp$tail"))
+                Route(this, Intent.ACTION_VIEW, Uri.parse("http://twitter.com/hashtag/$stateTmp$tail"))
             }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            dialog.dismiss()
-        }
-        objectDialogue.show()
-    }
+//    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
+//        val objectDialogue = ObjectDialogue(this, list)
+//        objectDialogue.setNegativeButton { dialog, _ ->
+//            dialog.dismiss()
+//            UtilityUI.immersiveMode(this)
+//        }
+//        objectDialogue.setSingleChoiceItems { dialog, which ->
+//            fn(which)
+//            dialog.dismiss()
+//        }
+//        objectDialogue.show()
+//    }
 }

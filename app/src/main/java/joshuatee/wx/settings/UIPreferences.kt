@@ -144,23 +144,23 @@ object UIPreferences {
 
 
 
-        useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
-        useNwsApiForHourly = Utility.readPref("USE_NWS_API_HOURLY", "true").startsWith("t")
-        lightningUseGoes = Utility.readPref("LIGHTNING_USE_GOES", "true").startsWith("t")
-        useAwcMosaic = Utility.readPref("USE_AWC_MOSAIC", "true").startsWith("t")
-        navDrawerMainScreen = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
-        navDrawerMainScreenOnRight = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
+        useNwsApi = Utility.readPref(context,"USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
+        useNwsApiForHourly = Utility.readPref(context,"USE_NWS_API_HOURLY", "true").startsWith("t")
+        lightningUseGoes = Utility.readPref(context,"LIGHTNING_USE_GOES", "true").startsWith("t")
+        useAwcMosaic = Utility.readPref(context,"USE_AWC_MOSAIC", "true").startsWith("t")
+        navDrawerMainScreen = Utility.readPref(context,"NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
+        navDrawerMainScreenOnRight = Utility.readPref(context,"NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
         if (UtilityUI.isTablet()) {
             normalTextSizeDefault = 18
         }
-        normalTextSize = Utility.readPref(context, "TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
+        normalTextSize = Utility.readPrefInt(context,"TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
         textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, context)
         textSizeNormal = UtilityUI.spToPx(normalTextSize, context)
         textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, context)
         locfragDontShowIcons = Utility.readPref(context, "UI_LOCFRAG_NO_ICONS", "false").startsWith("t")
         mainScreenRadarFab = Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "true").startsWith("t")
-        homescreenTextLength = Utility.readPref(context, "HOMESCREEN_TEXT_LENGTH_PREF", 500)
-        refreshLocMin = Utility.readPref(context, "REFRESH_LOC_MIN", 10)
+        homescreenTextLength = Utility.readPrefInt(context, "HOMESCREEN_TEXT_LENGTH_PREF", 500)
+        refreshLocMin = Utility.readPrefInt(context, "REFRESH_LOC_MIN", 10)
         translateText = Utility.readPref(context, "TRANSLATE_TEXT", "false").startsWith("t")
         nwsTextRemovelinebreaks = Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
         recordScreenShare = Utility.readPref(context, "RECORD_SCREEN_SHARE", "true").startsWith("t")
@@ -178,7 +178,7 @@ object UIPreferences {
         if (UtilityUI.isTablet()) {
             tilesPerRowDefault = 5
         }
-        tilesPerRow = Utility.readPref(context, "UI_TILES_PER_ROW", tilesPerRowDefault)
+        tilesPerRow = Utility.readPrefInt(context, "UI_TILES_PER_ROW", tilesPerRowDefault)
         themeStr = Utility.readPref(context, "THEME_BLUE", "whiteNew")
         themeInt = Utility.theme(themeStr)
         if (themeInt == R.style.MyCustomTheme_white_NOAB || themeInt == R.style.MyCustomTheme_whiter_NOAB || themeInt == R.style.MyCustomTheme_whitest_NOAB) {
@@ -193,9 +193,9 @@ object UIPreferences {
             themeIsWhite = false
         }
 
-        tabHeaders[0] = Utility.readPref("TAB1_HEADER", "LOCAL")
-        tabHeaders[1] = Utility.readPref("TAB2_HEADER", "SPC")
-        tabHeaders[2] = Utility.readPref("TAB3_HEADER", "MISC")
+        tabHeaders[0] = Utility.readPref(context,"TAB1_HEADER", "LOCAL")
+        tabHeaders[1] = Utility.readPref(context,"TAB2_HEADER", "SPC")
+        tabHeaders[2] = Utility.readPref(context,"TAB3_HEADER", "MISC")
 
         widgetPreventTap = getInitialPreference("UI_WIDGET_PREVENT_TAP", "")
         fullscreenMode = getInitialPreference("FULLSCREEN_MODE", "false")

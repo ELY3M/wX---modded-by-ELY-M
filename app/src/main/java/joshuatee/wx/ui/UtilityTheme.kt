@@ -48,7 +48,7 @@ object UtilityTheme {
         } else {
             UIPreferences.primaryColor = ta.getColor(2, Color.BLACK) //1 index for primaryColorDark
         }
-        Utility.writePref(context, "MYAPP_PRIMARY_COLOR", UIPreferences.primaryColor)
+        Utility.writePrefInt(context, "MYAPP_PRIMARY_COLOR", UIPreferences.primaryColor)
         ta.recycle()
     }
 }

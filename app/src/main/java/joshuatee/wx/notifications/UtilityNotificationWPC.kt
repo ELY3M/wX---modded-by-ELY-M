@@ -35,7 +35,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType.MPD
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.NotificationPreferences
 
 internal object UtilityNotificationWpc {

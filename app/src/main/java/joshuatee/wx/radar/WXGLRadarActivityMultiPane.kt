@@ -48,7 +48,8 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.SettingsRadarActivity
@@ -305,7 +306,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 toolbarBottom,
                 relativeLayouts.toList() as List<View> + wxglSurfaceViews.toList() as List<View>
         )
-        objectImageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToRid)
+        objectImageMap.connect(::ridMapSwitch, UtilityImageMap::mapToRid)
         oglInView = true
         panesList.forEach {
             var initialRadarSite = arguments[0]
@@ -334,27 +335,27 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             xPref = "_X"
             yPref = "_Y"
         }
-        wxglSurfaceViews[0].scaleFactor = Utility.readPref(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f)
+        wxglSurfaceViews[0].scaleFactor = Utility.readPrefFloat(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f)
         wxglRenders[0].setViewInitial(
-                Utility.readPref(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
-                Utility.readPref(this, prefPrefix + xPref, 0.0f),
-                Utility.readPref(this, prefPrefix + yPref, 0.0f)
+                Utility.readPrefFloat(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
+                Utility.readPrefFloat(this, prefPrefix + xPref, 0.0f),
+                Utility.readPrefFloat(this, prefPrefix + yPref, 0.0f)
         )
         if (RadarPreferences.dualpaneshareposn) {
             (1 until numberOfPanes).forEach {
                 wxglSurfaceViews[it].scaleFactor = wxglSurfaceViews[0].scaleFactor
                 wxglRenders[it].setViewInitial(
-                        Utility.readPref(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
+                        Utility.readPrefFloat(this, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
                         wxglRenders[0].x, wxglRenders[0].y
                 )
             }
         } else {
             (1 until numberOfPanes).forEach {
-                wxglSurfaceViews[it].scaleFactor = Utility.readPref(this, prefPrefix + "_ZOOM" + (it + 1).toString(), RadarPreferences.wxoglSize.toFloat() / 10.0f)
+                wxglSurfaceViews[it].scaleFactor = Utility.readPrefFloat(this, prefPrefix + "_ZOOM" + (it + 1).toString(), RadarPreferences.wxoglSize.toFloat() / 10.0f)
                 wxglRenders[it].setViewInitial(
-                        Utility.readPref(this, prefPrefix + "_ZOOM" + (it + 1).toString(), RadarPreferences.wxoglSize.toFloat() / 10.0f),
-                        Utility.readPref(this, prefPrefix + "_X" + (it + 1).toString(), 0.0f),
-                        Utility.readPref(this, prefPrefix + "_Y" + (it + 1).toString(), 0.0f)
+                        Utility.readPrefFloat(this, prefPrefix + "_ZOOM" + (it + 1).toString(), RadarPreferences.wxoglSize.toFloat() / 10.0f),
+                        Utility.readPrefFloat(this, prefPrefix + "_X" + (it + 1).toString(), 0.0f),
+                        Utility.readPrefFloat(this, prefPrefix + "_Y" + (it + 1).toString(), 0.0f)
                 )
             }
         }
@@ -374,7 +375,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     // TODO method for ContextCompat
     private fun checkForAutoRefresh() {
         if (RadarPreferences.wxoglRadarAutoRefresh || RadarPreferences.locationDotFollowsGps) {
-            mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
+            mInterval = 60000 * Utility.readPrefInt(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -710,9 +711,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
             }
             R.id.action_settings -> startActivity(Intent(this, SettingsRadarActivity::class.java))
-            R.id.action_radar_markers -> ObjectIntent.showImage(this, arrayOf("raw:radar_legend", "Radar Markers", "false"))
-            R.id.action_radar_site_status_l3 -> ObjectIntent.showWebView(this, arrayOf("http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended"))
-            R.id.action_radar_site_status_l2 -> ObjectIntent.showWebView(this, arrayOf("http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended"))
+            R.id.action_radar_markers -> Route.image(this, arrayOf("raw:radar_legend", "Radar Markers", "false"))
+            R.id.action_radar_site_status_l3 -> Route.webView(this, arrayOf("http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended"))
+            R.id.action_radar_site_status_l2 -> Route.webView(this, arrayOf("http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended"))
             R.id.action_radar1 -> switchRadar(0)
             R.id.action_radar2 -> switchRadar(1)
             R.id.action_radar3 -> switchRadar(2)
@@ -781,7 +782,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 } else {
                     panesList.forEach { WXGLNexrad.saveProductPrefs(this, prefPrefix, it + 1, wxglRenders[it]) }
                 }
-                ObjectIntent.showRadarMultiPane(this, arrayOf(joshuatee.wx.settings.Location.rid, "", "4", "true"))
+                Route.radarMultiPane(this, arrayOf(joshuatee.wx.settings.Location.rid, "", "4", "true"))
             }
             R.id.action_TDWR -> alertDialogTdwr()
             R.id.action_ridmap -> {

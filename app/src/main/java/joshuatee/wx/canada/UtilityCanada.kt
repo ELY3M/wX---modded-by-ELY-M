@@ -26,7 +26,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 
 object UtilityCanada {
 

@@ -35,7 +35,7 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
 
     init {
         storage.update(context)
-        color = Utility.readPref(context, prefTokenColor, type.initialColor)
+        color = Utility.readPrefInt(context, prefTokenColor, type.initialColor)
         isEnabled = Utility.readPref(context, prefTokenEnabled, "false").startsWith("t")
         timer = DownloadTimer("WARNINGS_" + getTypeName())
     }

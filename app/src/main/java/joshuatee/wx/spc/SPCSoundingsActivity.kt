@@ -34,7 +34,7 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.*
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
@@ -73,7 +73,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         image = TouchImage(this, toolbar, toolbarBottom, R.id.iv)
         office = UtilityLocation.getNearestSoundingSite(Location.latLon)
         imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(image.get()))
-        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToSnd)
+        imageMap.connect(::mapSwitch, UtilityImageMap::mapToSnd)
         getContent()
     }
 
@@ -130,7 +130,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
             R.id.action_sfc -> setPlotAndGet("sfc")
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_fav -> toggleFavorite()
-            R.id.action_spc_help -> ObjectIntent.showWebView(this, arrayOf("${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", office))
+            R.id.action_spc_help -> Route.webView(this, arrayOf("${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", office))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -155,18 +155,18 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         locations = UtilityFavorites.setupMenu(this, UIPreferences.sndFav, office, prefToken)
         when (item.itemId) {
-            R.id.action_sector -> genericDialog(locations) {
+            R.id.action_sector -> ObjectDialogue.generic(this, locations, ::getContent) {
                 if (locations.isNotEmpty()) {
                     if (firstTime) {
                         UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
                         firstTime = false
                     }
                     when (it) {
-                        1 -> ObjectIntent.favoriteAdd(this, arrayOf("SND"))
-                        2 -> ObjectIntent.favoriteRemove(this, arrayOf("SND"))
+                        1 -> Route.favoriteAdd(this, arrayOf("SND"))
+                        2 -> Route.favoriteRemove(this, arrayOf("SND"))
                         else -> {
                             office = locations[it].split(" ").getOrNull(0) ?: ""
-                            getContent()
+                            //getContent()
                         }
                     }
                 }
@@ -174,20 +174,6 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            getContent()
-            dialog.dismiss()
-        }
-        objectDialogue.show()
     }
 
     override fun onStop() {

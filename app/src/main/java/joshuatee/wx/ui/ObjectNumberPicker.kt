@@ -21,7 +21,7 @@
 //modded by ELY M.
 //hail text size 
 
-package joshuatee.wx.settings
+package joshuatee.wx.ui
 
 import android.content.Context
 import android.util.TypedValue
@@ -29,10 +29,11 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.SeekBar
-import joshuatee.wx.ui.*
+import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
-internal class ObjectSettingsSeekBar(
+internal class ObjectNumberPicker(
         context: Context,
         val label: String,
         pref: String,
@@ -42,22 +43,22 @@ internal class ObjectSettingsSeekBar(
         highValue: Int
 ) {
 
-    private val objectCard = ObjectCard(context)
+    private val card = Card(context)
     private val initValue = when (pref) {
-        "RADAR_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
-        "RADAR_HI_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
+        "RADAR_TEXT_SIZE" -> (Utility.readPrefFloat(context, pref, defValue.toFloat()) * 10).toInt()
+        "RADAR_HI_TEXT_SIZE" -> (Utility.readPrefFloat(context, pref, defValue.toFloat()) * 10).toInt()
         "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(context, pref, RadarPreferences.uiAnimIconFrames)).toIntOrNull() ?: 0
-        "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 0))
-        else -> Utility.readPref(context, pref, defValue)
+        "CARD_CORNER_RADIUS" -> Utility.readPrefInt(context, pref, 0)
+        else -> Utility.readPrefInt(context, pref, defValue)
     }
-    private val text = ObjectTextView(context)
+    private val text = Text(context)
     private val seekBar = SeekBar(context)
 
     init {
         text.setPadding(UIPreferences.padding)
         text.wrap()
         text.gravity = Gravity.TOP
-        text.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
+        text.connect { ObjectDialogue(context, context.resources.getString(strId)) }
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         vbox.matchParent()
         vbox.addWidget(text.get())
@@ -68,7 +69,7 @@ internal class ObjectSettingsSeekBar(
         layoutParams.setMargins(padding, padding, padding, padding)
         seekBar.layoutParams = layoutParams
         vbox.addWidget(seekBar)
-        objectCard.addView(vbox.get())
+        card.addView(vbox.get())
         updateLabel()
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -85,10 +86,10 @@ internal class ObjectSettingsSeekBar(
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 val newVal = convertForSave(seekBar.progress)
                 when (pref) {
-                    "RADAR_TEXT_SIZE" -> Utility.writePref(context, pref, newVal / 10.0f)
-                    "RADAR_HI_TEXT_SIZE" -> Utility.writePref(context, pref, newVal / 10.0f)
+                    "RADAR_TEXT_SIZE" -> Utility.writePrefFloat(context, pref, newVal / 10.0f)
+                    "RADAR_HI_TEXT_SIZE" -> Utility.readPrefFloat(context, pref, newVal / 10.0f)
                     "UI_ANIM_ICON_FRAMES" -> Utility.writePref(context, pref, newVal.toString())
-                    else -> Utility.writePref(context, pref, newVal)
+                    else -> Utility.writePrefInt(context, pref, newVal)
                 }
                 Utility.writePref(context, "RESTART_NOTIF", "true")
             }
@@ -103,5 +104,5 @@ internal class ObjectSettingsSeekBar(
         text.text = label + " (default is " + defValue.toString() + "): " + convertForSave(seekBar.progress).toString()
     }
 
-    val card get() = objectCard.get()
+    fun get() = card.get()
 }

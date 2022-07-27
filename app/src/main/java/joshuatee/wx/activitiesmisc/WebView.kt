@@ -31,7 +31,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.UtilityUI
 
@@ -92,7 +92,7 @@ class WebView : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_browser -> {
-            ObjectIntent(this, Intent.ACTION_VIEW, Uri.parse(url))
+            Route(this, Intent.ACTION_VIEW, Uri.parse(url))
             true
         }
         else -> super.onOptionsItemSelected(item)

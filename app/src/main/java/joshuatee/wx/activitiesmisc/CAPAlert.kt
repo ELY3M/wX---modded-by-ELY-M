@@ -27,7 +27,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ObjectWarning
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityString
 

@@ -24,7 +24,6 @@ package joshuatee.wx.canada
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
@@ -33,7 +32,8 @@ import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.ObjectCALegal
-import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
@@ -44,18 +44,18 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private var product = "focn45"
     private var html = ""
-    private lateinit var objectCardText: ObjectCardText
+    private lateinit var cardText: CardText
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.canada_text)
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
-        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
-        ObjectCALegal(this, box, GlobalVariables.canadaEcSitePrefix)
+        cardText = CardText(this, box, toolbar, toolbarBottom)
+        ObjectCALegal(this, box.get(), GlobalVariables.canadaEcSitePrefix)
         product = Utility.readPref(this, "CA_TEXT_LASTUSED", product)
         getContent()
     }
@@ -81,7 +81,7 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun update() {
-        objectCardText.setTextAndTranslate(Utility.fromHtml(html))
+        cardText.setTextAndTranslate(Utility.fromHtml(html))
         Utility.writePref(this@CanadaTextActivity, "CA_TEXT_LASTUSED", product)
     }
 

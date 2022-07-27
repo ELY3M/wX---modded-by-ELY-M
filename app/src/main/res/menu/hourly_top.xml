@@ -29,5 +29,8 @@
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings_24dp_white"
         android:title="@string/label_settings" />
+    <item
+        android:id="@+id/action_radar"
+        android:title="Test Radar" />
 </menu>
 

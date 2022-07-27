@@ -27,7 +27,7 @@ import androidx.cardview.widget.CardView
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
 
-class ObjectCard {
+class Card {
 
     companion object { private const val padding = 2 }
 
@@ -81,7 +81,7 @@ class ObjectCard {
         card.addView(objectLinearLayout.get())
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
+    fun connect(fn: View.OnClickListener) {
         card.setOnClickListener(fn)
     }
 

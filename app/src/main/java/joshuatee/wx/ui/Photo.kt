@@ -23,17 +23,29 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Bitmap
-import joshuatee.wx.util.UtilityImg
+import android.view.View
+import android.widget.ImageView
+import joshuatee.wx.Extensions.setPadding
+import joshuatee.wx.fragments.UtilityLocationFragment
+import joshuatee.wx.settings.UIPreferences
 
-class ObjectCardHSImage(context: Context, val product: String) : ObjectCardImage(context) {
+class Photo(context: Context) {
 
-    init {
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        card.addView(img)
-    }
+    private val imageView = ImageView(context)
 
     fun setImage(bitmap: Bitmap) {
-        UtilityImg.resizeViewSetImgInCard(bitmap, img)
+        imageView.setImageBitmap(bitmap)
+        imageView.setPadding(UIPreferences.paddingSmall)
+        val layoutParams = imageView.layoutParams
+        val imageSize = UtilityLocationFragment.setNwsIconSize()
+        layoutParams.width = imageSize
+        layoutParams.height = imageSize
+        imageView.layoutParams = layoutParams
     }
+
+    fun connect(fn: View.OnClickListener) {
+        imageView.setOnClickListener(fn)
+    }
+
+    fun get() = imageView
 }

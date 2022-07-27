@@ -30,7 +30,6 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.view.GravityCompat
@@ -45,14 +44,9 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.ui.ObjectImageMap
-import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.ShortcutType
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShortcut
@@ -91,10 +85,10 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var oldWfo = ""
     private val wfoListPerState = mutableListOf<String>()
     private val cardList = mutableListOf<CardView>()
-    private lateinit var objectCardText: ObjectCardText
+    private lateinit var cardText: CardText
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private var originalWfo = ""
     private val fixedWidthProducts = listOf("RTP", "RWR", "CLI", "RVA")
     private var wfoProd = mutableListOf<String>()
@@ -113,11 +107,11 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.afd)
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
         objectNavDrawer = ObjectNavDrawer(this, UtilityWfoText.labels, UtilityWfoText.codes, ::getContentFixThis)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
+        cardText = CardText(this, box, toolbar, toolbarBottom)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         arguments = intent.getStringArrayExtra(URL)!!
@@ -138,8 +132,8 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             product = "RTP$state"
         }
         title = product
-        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(objectCardText.get(), scrollView))
-        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
+        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(cardText.get(), scrollView))
+        imageMap.connect(::mapSwitch, UtilityImageMap::mapToWfo)
         getContent()
     }
 
@@ -204,16 +198,16 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cardList.forEach {
             box.removeView(it)
         }
-        objectCardText.visibility = View.VISIBLE
+        cardText.visibility = View.VISIBLE
         scrollView.visibility = View.VISIBLE
         if (html == "") {
             html = "None issued by this office recently."
         }
-        objectCardText.setTextAndTranslate(html)
+        cardText.setTextAndTranslate(html)
         if (fixedWidthProducts.contains(product) || product.startsWith("RTP")) {
-            objectCardText.typefaceMono()
+            cardText.typefaceMono()
         } else {
-            objectCardText.typefaceDefault()
+            cardText.typefaceDefault()
         }
         UtilityTts.conditionalPlay(arguments, 2, applicationContext, html, product)
         if (arguments[1] == "") {
@@ -245,7 +239,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(this, box, product + wfo)
+                UtilityNotificationTextProduct.toggle(this, box.get(), product + wfo)
                 updateSubmenuNotificationText()
             }
             R.id.action_prod_by_state -> {
@@ -254,8 +248,8 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.AFD)
-            R.id.action_website -> ObjectIntent.showWebView(this, arrayOf("https://www.weather.gov/" + wfo.lowercase(Locale.US), wfo, "extended"))
-            R.id.action_hazards -> ObjectIntent.showImage(this, arrayOf("https://www.weather.gov/wwamap/png/" + wfo.lowercase(Locale.US) + ".png", "$wfo WWA Map"))
+            R.id.action_website -> Route.webView(this, arrayOf("https://www.weather.gov/" + wfo.lowercase(Locale.US), wfo, "extended"))
+            R.id.action_hazards -> Route.image(this, arrayOf("https://www.weather.gov/wwamap/png/" + wfo.lowercase(Locale.US) + ".png", "$wfo WWA Map"))
             R.id.action_share -> UtilityShare.text(this, product + wfo, textToShare)
             else -> return super.onOptionsItemSelected(item)
         }
@@ -322,10 +316,10 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun updateState() {
-        objectCardText.visibility = View.GONE
+        cardText.visibility = View.GONE
         cardList.clear()
         wfoProd.forEach {
-            val textCard = ObjectCardText(this, box)
+            val textCard = CardText(this, box)
             textCard.setTextAndTranslate(it)
             cardList.add(textCard.get())
         }
@@ -337,11 +331,11 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         locationList = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         when (item.itemId) {
-            R.id.action_sector -> genericDialog(locationList) {
+            R.id.action_sector -> ObjectDialogue.generic(this, locationList, ::getContent) {
                 if (locationList.isNotEmpty()) {
                     when (it) {
-                        1 -> ObjectIntent.favoriteAdd(this, arrayOf("WFO"))
-                        2 -> ObjectIntent.favoriteRemove(this, arrayOf("WFO"))
+                        1 -> Route.favoriteAdd(this, arrayOf("WFO"))
+                        2 -> Route.favoriteRemove(this, arrayOf("WFO"))
                         else -> {
                             wfo = locationList[it].split(" ").getOrNull(0) ?: ""
                             originalWfo = wfo
@@ -349,7 +343,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                                 val state = Utility.getWfoSiteName(wfo).split(",")[0]
                                 product = "RTP$state"
                             }
-                            getContent()
                         }
                     }
                     if (firstTime) {
@@ -361,20 +354,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            getContent()
-            dialog.dismiss()
-        }
-        objectDialogue.show()
     }
 
     // For navigation drawer

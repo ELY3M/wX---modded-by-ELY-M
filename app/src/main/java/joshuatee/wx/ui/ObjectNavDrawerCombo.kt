@@ -63,8 +63,8 @@ class ObjectNavDrawerCombo(
         )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         if (prefPrefix != "") {
-            imgIdx = Utility.readPref(activity, "${prefPrefix}_IDX", 0)
-            imgGroupIdx = Utility.readPref(activity, "${prefPrefix}_GROUPIDX", 0)
+            imgIdx = Utility.readPrefInt(activity, "${prefPrefix}_IDX", 0)
+            imgGroupIdx = Utility.readPrefInt(activity, "${prefPrefix}_GROUPIDX", 0)
         } else {
             imgIdx = 0
             imgGroupIdx = 0

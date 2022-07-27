@@ -29,7 +29,7 @@ import joshuatee.wx.Extensions.parse
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.radar.UtilityDownloadWatch
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityDownload

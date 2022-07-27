@@ -27,13 +27,18 @@ import android.graphics.Color
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.radar.UtilityUSImgWX
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
-import joshuatee.wx.radarcolorpalettes.UtilityColorPaletteGeneric
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 
-internal class TileObjectColorPalette(val colorMapLabel: String, val toolbar: Toolbar, val prefToken: String, context: Context, product: String, val builtin: Boolean) {
+internal class TileObjectColorPalette(
+        val colorMapLabel: String,
+        val toolbar: Toolbar,
+        val prefToken: String,
+        context: Context,
+        product: String, val builtin: Boolean
+) {
 
     internal val bitmapWithText: Bitmap
 
@@ -48,7 +53,7 @@ internal class TileObjectColorPalette(val colorMapLabel: String, val toolbar: To
             oldMap = ObjectColorPalette.radarColorPalette[productAsInt]!!
             ObjectColorPalette.radarColorPalette[productAsInt] = colorMapLabel
             try {
-                UtilityColorPaletteGeneric.loadColorMap(context, productAsInt)
+                ObjectColorPalette.loadColorMap(context, productAsInt)
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }

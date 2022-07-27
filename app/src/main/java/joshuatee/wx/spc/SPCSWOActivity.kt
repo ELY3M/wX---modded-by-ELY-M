@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
@@ -34,7 +33,7 @@ import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityImg
 
@@ -55,37 +54,37 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var arguments: Array<String>
     private var day = ""
     private var playlistProd = ""
-    private lateinit var objectCardText: ObjectCardText
-    private lateinit var box: LinearLayout
-    private val objectCardImageList = mutableListOf<ObjectCardImage>()
+    private lateinit var cardText: CardText
+    private lateinit var box: VBox
+    private val images = mutableListOf<Image>()
     private var imagesPerRow = 2
     private var imageLabel = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcswo)
-        box = findViewById(R.id.linearLayout)
+        arguments = intent.getStringArrayExtra(NUMBER)!!
+        day = arguments[0]
+        title = "Day $day Convective Outlook"
+        box = VBox.fromResource(this)
         if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) {
             imagesPerRow = 4
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        var numberOfImages = 0
-        val horizontalLinearLayouts = mutableListOf<HBox>()
-        (0..4).forEach { index ->
-            if (numberOfImages % imagesPerRow == 0) {
-                val hbox = HBox(this, box)
-                horizontalLinearLayouts.add(hbox)
-                objectCardImageList.add(ObjectCardImage(this, hbox.get()))
-            } else {
-                objectCardImageList.add(ObjectCardImage(this, horizontalLinearLayouts.last().get()))
+        val boxRows = mutableListOf<HBox>()
+        (0..4).forEach {
+            if (it % imagesPerRow == 0) {
+                boxRows.add(HBox(this, box.get()))
             }
-            objectCardImageList[index].visibility = View.GONE
-            numberOfImages += 1
+            images.add(Image(this, boxRows.last()))
+            images[it].visibility = View.GONE
         }
-        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
-        arguments = intent.getStringArrayExtra(NUMBER)!!
-        day = arguments[0]
-        title = "Day $day Convective Outlook"
+        cardText = CardText(this, box, toolbar, toolbarBottom)
+        setupShareMenu()
+        getContent()
+    }
+
+    private fun setupShareMenu() {
         val menu = toolbarBottom.menu
         val miTornado = menu.findItem(R.id.action_share_tornado)
         val miHail = menu.findItem(R.id.action_share_hail)
@@ -121,7 +120,6 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 it.isVisible = true
             }
         }
-        getContent()
     }
 
     override fun onRestart() {
@@ -135,12 +133,12 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (day == "4-8") {
             textUrl = "SWOD48"
         }
-        FutureVoid(this, ::downloadImages, ::showImages)
+        FutureVoid(this, ::downloadImages) {}
         FutureVoid(this, { html = UtilityDownload.getTextProduct(this, textUrl) }, ::showText)
     }
 
     private fun showText() {
-        objectCardText.text = html
+        cardText.text = html
         toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
         if (arguments[1] == "sound") {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
@@ -154,22 +152,14 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
     }
 
-    private fun showImage(i: Int) {
-        setImageAndClickAction(i)
-    }
-
-    private fun showImages() {
-        // do nothing
-    }
-
     private fun showImageProduct(imageUrl: String, title: String) {
-        ObjectIntent.showImage(this, arrayOf(imageUrl, title))
+        Route.image(this, arrayOf(imageUrl, title))
     }
 
-    private fun setImageAndClickAction(index: Int) {
-        objectCardImageList[index].visibility = View.VISIBLE
-        objectCardImageList[index].setImage(bitmaps[index], imagesPerRow)
-        objectCardImageList[index].setOnClickListener { showImageProduct(urls[index], imageLabel) }
+    private fun showImage(index: Int) {
+        images[index].visibility = View.VISIBLE
+        images[index].set(bitmaps[index], imagesPerRow)
+        images[index].connect { showImageProduct(urls[index], imageLabel) }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -190,7 +180,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_share_d6 -> if (bitmaps.size > 2) UtilityShare.bitmap(this, "Day " + "6" + " Convective Outlook - Image", bitmaps[2])
             R.id.action_share_d7 -> if (bitmaps.size > 3) UtilityShare.bitmap(this, "Day " + "7" + " Convective Outlook - Image", bitmaps[3])
             R.id.action_share_d8 -> if (bitmaps.size > 4) UtilityShare.bitmap(this, "Day " + "8" + " Convective Outlook - Image", bitmaps[4])
-            R.id.action_state_graphics -> ObjectIntent(this, SpcSwoStateGraphicsActivity::class.java, SpcSwoStateGraphicsActivity.NO, arrayOf(day, ""))
+            R.id.action_state_graphics -> Route(this, SpcSwoStateGraphicsActivity::class.java, SpcSwoStateGraphicsActivity.NO, arrayOf(day, ""))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

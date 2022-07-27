@@ -94,14 +94,14 @@ class SpcFragment : Fragment() {
             hm["spcstormrpt1"] = TileObject(
                     R.drawable.report_today,
                     SpcStormReportsActivity::class.java,
-                    SpcStormReportsActivity.NO,
+                    SpcStormReportsActivity.DAY,
                     arrayOf("today"),
                     "spcstormrpt1", "Storm reports today"
             )
             hm["spcstormrpt2"] = TileObject(
                     R.drawable.report_yesterday,
                     SpcStormReportsActivity::class.java,
-                    SpcStormReportsActivity.NO,
+                    SpcStormReportsActivity.DAY,
                     arrayOf("yesterday"),
                     "spcstormrpt2", "Storm reports yesterday"
             )

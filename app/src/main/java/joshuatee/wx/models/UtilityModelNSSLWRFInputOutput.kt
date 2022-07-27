@@ -49,7 +49,7 @@ internal object UtilityModelNsslWrfInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, om: ObjectModelNoSpinner, timeOriginal: String): Bitmap {
+    fun getImage(context: Context, om: ObjectModel, timeOriginal: String): Bitmap {
         val time = timeOriginal.split(" ")[0]
         val sectorIndex = if (om.sector == "") 0 else UtilityModelNsslWrfInterface.sectorsLong.indexOf(om.sector)
         val sector = UtilityModelNsslWrfInterface.sectors[sectorIndex]
@@ -77,7 +77,7 @@ internal object UtilityModelNsslWrfInputOutput {
         }
     }
 
-    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
         if (om.spinnerTimeValue == -1) return AnimationDrawable()
         val bitmaps = (om.spinnerTimeValue until om.times.size).map { getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "") }
         return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)

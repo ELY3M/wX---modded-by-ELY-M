@@ -29,19 +29,16 @@ import android.view.Menu
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import java.util.Locale
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.DisplayData
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.ObjectFab
-import joshuatee.wx.ui.ObjectNavDrawerCombo
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 
 class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
@@ -64,7 +61,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
     private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
-    private lateinit var om: ObjectModelNoSpinner
+    private lateinit var om: ObjectModel
     private lateinit var timeMenuItem: MenuItem
     private lateinit var runMenuItem: MenuItem
     private val prefToken = "SPCSREF_FAV"
@@ -82,14 +79,14 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         arguments = intent.getStringArrayExtra(INFO)!!
-        om = ObjectModelNoSpinner(this, arguments[1], arguments[0])
+        om = ObjectModel(this, arguments[1], arguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_spcsref, R.menu.models_spcsref, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_spcsrefmultipane, R.menu.models_spcsref, iconsEvenlySpaced = false, bottomToolbar = true)
-            val box: LinearLayout = findViewById(R.id.linearLayout)
+            val box = VBox.fromResource(this)
             if (UtilityUI.isLandScape(this)) {
-                box.orientation = LinearLayout.HORIZONTAL
+                box.makeHorizontal()
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -124,7 +121,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         miStatus = menu.findItem(R.id.action_status)
         miStatus.title = "in through"
-        om.displayData = DisplayDataNoSpinner(this, this, om.numPanes, om)
+        om.displayData = DisplayData(this, this, om.numPanes, om)
         setupModel()
         favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
         UtilityModelSpcSrefInterface.createData()
@@ -166,7 +163,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
         om.run = om.rtd.listRun.safeGet(0)
-        om.setTimeIdx(Utility.readPref(this, om.prefRunPosn, 1))
+        om.setTimeIdx(Utility.readPrefInt(this, om.prefRunPosn, 1))
         getContent()
     }
 
@@ -174,7 +171,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
         updateMenuTitles()
         updateStarIcon()
-        UtilityModels.getContentNonSpinner(this, om, listOf(""))
+        UtilityModels.getContent(this, om, listOf(""))
     }
 
     private fun updateMenuTitles() {
@@ -199,7 +196,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_img1 -> {
                 om.curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                        om.displayData.img,
+                        om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
@@ -207,15 +204,15 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_img2 -> {
                 om.curImg = 1
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                        om.displayData.img,
+                        om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
-            R.id.action_multipane -> ObjectIntent(this, ModelsSpcSrefActivity::class.java, INFO, arrayOf("2", arguments[1], arguments[2]))
+            R.id.action_multipane -> Route(this, ModelsSpcSrefActivity::class.java, INFO, arrayOf("2", arguments[1], arguments[2]))
             R.id.action_fav -> toggleFavorite()
-            R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
-            R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
+            R.id.action_time -> ObjectDialogue.generic(this, om.times, ::getContent) { om.setTimeIdx(it) }
+            R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) { om.run = om.rtd.listRun[it] }
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
@@ -236,10 +233,10 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
         when (item.itemId) {
-            R.id.action_param -> genericDialog(favList) {
+            R.id.action_param -> ObjectDialogue.generic(this, favList, ::getContent) {
                 when (it) {
-                    1 -> ObjectIntent.favoriteAdd(this, arrayOf("SREF"))
-                    2 -> ObjectIntent.favoriteRemove(this, arrayOf("SREF"))
+                    1 -> Route.favoriteAdd(this, arrayOf("SREF"))
+                    2 -> Route.favoriteRemove(this, arrayOf("SREF"))
                     else -> {
                         om.displayData.param[om.curImg] = favList[it].split(" ").safeGet(0)
                         getContent()
@@ -278,9 +275,9 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     override fun onStop() {
         if (om.imageLoaded) {
             (0 until om.numPanes).forEach {
-                UtilityImg.imgSavePosnZoom(this, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString())
+                UtilityImg.imgSavePosnZoom(this, om.displayData.image[it], om.modelProvider + om.numPanes.toString() + it.toString())
             }
-            Utility.writePref(this, om.prefRunPosn, om.timeIndex)
+            Utility.writePrefInt(this, om.prefRunPosn, om.timeIndex)
         }
         super.onStop()
     }
@@ -291,20 +288,6 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), "SREF_H5__")
             om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), "[MN]:500MB Height~Wind~Temp~Isotach")
         }
-    }
-
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            getContent()
-            dialog.dismiss()
-        }
-        objectDialogue.show()
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {

@@ -25,7 +25,7 @@ import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.WXGLRender
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.To
@@ -294,7 +294,7 @@ object UtilityLocationFragment {
 
     fun handleIconTap(stringName: String, wxglRender: WXGLRender?, activityReference: Context, fnRefresh: () -> Unit, fnResetRadarView: () -> Unit, fnGetRadars: () -> Unit) {
         when {
-            stringName.contains("Edit Location..") -> ObjectIntent.showLocationEdit(activityReference, arrayOf(Location.currentLocationStr, ""))
+            stringName.contains("Edit Location..") -> Route.locationEdit(activityReference, arrayOf(Location.currentLocationStr, ""))
             stringName.contains("Force Data Refresh") -> fnRefresh()
             stringName.contains("Radar type: Reflectivity") -> {
                 wxglRender?.product = "N0Q"
@@ -308,7 +308,7 @@ object UtilityLocationFragment {
             else -> {
                 val radarSite = stringName.split(":")[0]
                 val state = Utility.getRadarSiteName(radarSite).split(",")[0]
-                ObjectIntent.showRadar(activityReference, arrayOf(radarSite, state, wxglRender!!.product, ""))
+                Route.radar(activityReference, arrayOf(radarSite, state, wxglRender!!.product, ""))
             }
         }
     }

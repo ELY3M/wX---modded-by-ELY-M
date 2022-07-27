@@ -25,111 +25,111 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.widget.CompoundButton
-import android.widget.LinearLayout
 import androidx.appcompat.widget.SwitchCompat
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.WidgetFile
-import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.*
+import joshuatee.wx.ui.ObjectNumberPicker
 import joshuatee.wx.util.Utility
 
 class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
     private val sectors = listOf("regional", "usa")
     private val nexradCenterList = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private lateinit var abSwitch: SwitchCompat
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
-        box = findViewById(R.id.linearLayout)
+        setTitle("Widgets", "Please tap on text for additional help.")
+        box = VBox.fromResource(this)
         abSwitch = findViewById(R.id.abSwitch)
-        toolbar.subtitle = "Please tap on text for additional help."
         val locations = (1 until Location.numLocations + 1).map {
             "$it: " + Utility.readPref(this, "LOC" + it + "_LABEL", "").take(20)
         }
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Do not show 7day in CC widget",
                         "WIDGET_CC_DONOTSHOW_7_DAY",
                         R.string.cc_widget_show_sevenday
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Download AFD",
                         WidgetFile.AFD.prefString,
                         R.string.loc1_txt_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Download HWO",
                         WidgetFile.HWO.prefString,
                         R.string.loc1_txt_hwo_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Download mosaics",
                         WidgetFile.VIS.prefString,
                         R.string.loc1_mosaics_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Download nexrad radar",
                         WidgetFile.NEXRAD_RADAR.prefString,
                         R.string.loc1_radar_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Download radar mosaic",
                         WidgetFile.MOSAIC_RADAR.prefString,
                         R.string.loc1_mosaics_rad_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsSpinner(
+        box.addWidget(
+                ObjectSpinner(
                         this,
                         "Radar mosaic level",
                         "WIDGET_RADAR_LEVEL",
                         "1km",
                         R.string.widget_nexrad_size_label,
                         sectors
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSpinner(
+        box.addWidget(
+                ObjectSpinner(
                         this,
                         "Location",
                         "WIDGET_LOCATION",
                         "",
                         R.string.spinner_location_label,
                         locations
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSpinner(
+        box.addWidget(
+                ObjectSpinner(
                         this,
                         "Nexrad centered at:",
                         "WIDGET_NEXRAD_CENTER",
                         "",
                         R.string.nexrad_center_label,
                         nexradCenterList
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Widget check interval in minutes",
                         "CC_NOTIFICATION_INTERVAL",
@@ -137,10 +137,10 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         30,
                         1,
                         120
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Widget nexrad size",
                         "WIDGET_NEXRAD_SIZE",
@@ -148,7 +148,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         10,
                         1,
                         15
-                ).card
+                ).get()
         )
         abSwitch.setOnCheckedChangeListener(this)
         abSwitch.isChecked = Utility.readPref(this, "WIDGETS_ENABLED", "false").startsWith("t")

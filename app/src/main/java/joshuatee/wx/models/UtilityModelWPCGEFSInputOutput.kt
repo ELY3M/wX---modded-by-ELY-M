@@ -48,14 +48,16 @@ internal object UtilityModelWpcGefsInputOutput {
             return runData
         }
 
-    fun getImage(om: ObjectModelNoSpinner, time: String): Bitmap {
+    fun getImage(om: ObjectModel, time: String): Bitmap {
         val sectorAdd = if (om.sector == "AK") "_ak" else ""
         val url = "${GlobalVariables.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
         return url.getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bitmaps = (om.spinnerTimeValue until om.times.size).map {
             getImage(om, om.times[it].split(" ").getOrNull(0) ?: "")
         }

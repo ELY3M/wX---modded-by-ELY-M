@@ -54,7 +54,7 @@ internal object UtilityModelNcepInputOutput {
         return runData
     }
 
-    fun getImage(om: ObjectModelNoSpinner, time: String): Bitmap {
+    fun getImage(om: ObjectModel, time: String): Bitmap {
         val modifiedTime = if (om.model == "HRRR" && time.length == 3) {
             time + "00"
         } else {
@@ -72,7 +72,7 @@ internal object UtilityModelNcepInputOutput {
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
         if (om.spinnerTimeValue == -1) {
             return AnimationDrawable()
         }

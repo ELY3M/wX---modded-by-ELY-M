@@ -20,7 +20,7 @@ https://github.com/sromku/polygon-contains-point
 
 */
 
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 
 /**
  * Point on 2D landscape

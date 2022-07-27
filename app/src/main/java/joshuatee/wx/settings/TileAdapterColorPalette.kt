@@ -28,7 +28,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.Card
 
 internal class TileAdapterColorPalette(private val itemList: List<TileObjectColorPalette>, private val tilesPerRow: Int) : RecyclerView.Adapter<TileAdapterColorPalette.RecyclerViewHoldersColorPalette>() {
 
@@ -56,7 +56,7 @@ internal class TileAdapterColorPalette(private val itemList: List<TileObjectColo
         init {
             itemView.setOnClickListener(this)
             imageView = itemView.findViewById(R.id.iv)
-            ObjectCard(itemView, R.color.primary_blue, R.id.card_view)
+            Card(itemView, R.color.primary_blue, R.id.card_view)
             itemView.setOnClickListener(this)
         }
 

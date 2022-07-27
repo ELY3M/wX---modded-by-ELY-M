@@ -8,8 +8,8 @@ import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
-import joshuatee.wx.ui.ObjectCard
-import joshuatee.wx.ui.ObjectTextView
+import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.Text
 import joshuatee.wx.util.Utility
 
 internal class PlayListAdapter(private val dataSet: MutableList<String>) : RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
@@ -18,12 +18,12 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) : Recyc
 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val label = ObjectTextView(itemView, R.id.singletext, UIPreferences.textHighlightColor, TextSize.MEDIUM)
-        val contentPreview = ObjectTextView(itemView, R.id.text2, backgroundText = true)
-        val timeAndSize = ObjectTextView(itemView, R.id.timeandsize, TextSize.SMALL)
+        val label = Text(itemView, R.id.singletext, UIPreferences.textHighlightColor, TextSize.MEDIUM)
+        val contentPreview = Text(itemView, R.id.text2, backgroundText = true)
+        val timeAndSize = Text(itemView, R.id.timeandsize, TextSize.SMALL)
 
         init {
-            ObjectCard(itemView, R.id.cv1)
+            Card(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
         }
 

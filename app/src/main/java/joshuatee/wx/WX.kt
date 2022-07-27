@@ -22,7 +22,6 @@
 
 package joshuatee.wx
 
-import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -30,8 +29,6 @@ import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -56,20 +53,17 @@ import joshuatee.wx.models.ModelsSpcHrefActivity
 import joshuatee.wx.models.ModelsSpcHrrrActivity
 import joshuatee.wx.models.ModelsSpcSrefActivity
 import joshuatee.wx.nhc.NhcActivity
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.spc.*
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.wpc.WpcImagesActivity
 import joshuatee.wx.wpc.WpcRainfallForecastSummaryActivity
 import joshuatee.wx.wpc.WpcTextProductsActivity
-import kotlin.system.exitProcess
 
 class WX : CommonActionBarFragment() {
 
@@ -159,7 +153,7 @@ class WX : CommonActionBarFragment() {
                 headerLayout.setBackgroundColor(colorForWhite)
                 tint = ColorStateList.valueOf(colorForWhite)
             }
-            // TODO chunk below needs a lot of refactor , create static objectIntent and pass drawer to close as optional
+            // TODO chunk below needs a lot of refactor , create static Route and pass drawer to close as optional
             val statusText = headerLayout.findViewById<TextView>(R.id.statusText)
             statusText.visibility = View.GONE
             val severeDashboardButton = headerLayout.findViewById<ImageButton>(R.id.severeDashboardButton)
@@ -181,98 +175,98 @@ class WX : CommonActionBarFragment() {
                 GravityCompat.START
             }
             severeDashboardButton.setOnClickListener {
-                ObjectIntent(this, SevereDashboardActivity::class.java)
+                Route(this, SevereDashboardActivity::class.java)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             severeDashboardText.setOnClickListener {
-                ObjectIntent(this, SevereDashboardActivity::class.java)
+                Route(this, SevereDashboardActivity::class.java)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             visButton.setOnClickListener {
-                ObjectIntent.showVis(this)
+                Route.vis(this)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             visText.setOnClickListener {
-                ObjectIntent.showVis(this)
+                Route.vis(this)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             wfoButton.setOnClickListener {
-                ObjectIntent.showWfoText(this)
+                Route.wfoText(this)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             wfoText.setOnClickListener {
-                ObjectIntent.showWfoText(this)
+                Route.wfoText(this)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             hourlyButton.setOnClickListener {
-                ObjectIntent.showHourly(this)
+                Route.hourly(this)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             hourlyText.setOnClickListener {
-                ObjectIntent.showHourly(this)
+                Route.hourly(this)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             settingsButton.setOnClickListener{
-                ObjectIntent.showSettings(this)
+                Route.settings(this)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             settingsText.setOnClickListener{
-                ObjectIntent.showSettings(this)
+                Route.settings(this)
                 drawerLayout.closeDrawer(gravityForDrawer)
             }
             UtilityNavDrawer.hideItems(this, navigationView)
             navigationView.setNavigationItemSelectedListener{ item ->
                 when (item.itemId) {
-                    R.id.esrl -> ObjectIntent.showModel(this, arrayOf("1", "ESRL", "ESRL"))
-                    R.id.rainfall_outlook -> ObjectIntent(this, WpcRainfallForecastSummaryActivity::class.java)
-                    R.id.glcfs -> ObjectIntent.showModel(this, arrayOf("1", "GLCFS", "GLCFS"))
-                    R.id.goes_conus_wv -> ObjectIntent(this, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
-                    R.id.goes_global -> ObjectIntent(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("GOESFD"))
+                    R.id.esrl -> Route.model(this, arrayOf("1", "ESRL", "ESRL"))
+                    R.id.rainfall_outlook -> Route(this, WpcRainfallForecastSummaryActivity::class.java)
+                    R.id.glcfs -> Route.model(this, arrayOf("1", "GLCFS", "GLCFS"))
+                    R.id.goes_conus_wv -> Route(this, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
+                    R.id.goes_global -> Route(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("GOESFD"))
                     R.id.lightning -> {
                         if (UIPreferences.lightningUseGoes) {
-                            ObjectIntent(this, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "23"))
+                            Route(this, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "23"))
                         } else {
-                            ObjectIntent(this, LightningActivity::class.java)
+                            Route(this, LightningActivity::class.java)
                         }
                     }
-                    R.id.national_images -> ObjectIntent(this, WpcImagesActivity::class.java, "", arrayOf())
-                    R.id.national_text -> ObjectIntent(this, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"))
-                    R.id.ncep_models -> ObjectIntent.showModel(this, arrayOf("1", "NCEP", "NCEP"))
-                    R.id.nhc -> ObjectIntent(this, NhcActivity::class.java)
-                    R.id.nssl_wrf -> ObjectIntent.showModel(this, arrayOf("1", "NSSL", "NSSL"))
-                    R.id.observations -> ObjectIntent.showObservations(this)
-                    R.id.observation_sites -> ObjectIntent(this, NwsObsSitesActivity::class.java)
-                    R.id.opc -> ObjectIntent(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OPC"))
-                    R.id.radar_mosaic -> ObjectIntent.showRadarMosaic(this)
-                    R.id.radar_dual_pane -> ObjectIntent.showRadarMultiPane(this, arrayOf(Location.rid, "", "2"))
-                    R.id.radar_quad_pane -> ObjectIntent.showRadarMultiPane(this, arrayOf(Location.rid, "", "4"))
-                    R.id.spc_comp_map -> ObjectIntent(this, SpcCompmapActivity::class.java)
-                    R.id.spc_convective_outlooks -> ObjectIntent(this, SpcSwoSummaryActivity::class.java )
-                    R.id.spc_day_1 -> ObjectIntent.showSpcSwo(this, arrayOf("1", ""))
-                    R.id.spc_day_2 -> ObjectIntent.showSpcSwo(this, arrayOf("2", ""))
-                    R.id.spc_day_3 -> ObjectIntent.showSpcSwo(this, arrayOf("3", ""))
-                    R.id.spc_day_4_8 -> ObjectIntent.showSpcSwo(this, arrayOf("4-8", ""))
-                    R.id.spc_fire_outlooks -> ObjectIntent(this, SpcFireOutlookSummaryActivity::class.java)
-                    R.id.spc_href -> ObjectIntent(this, ModelsSpcHrefActivity::class.java, "", arrayOf("1", "SPCHREF", "SPC HREF"))
-                    R.id.spc_hrrr -> ObjectIntent(this, ModelsSpcHrrrActivity::class.java, "", arrayOf("1", "SPCHRRR", "SPC HRRR"))
-                    R.id.spc_mesoanalysis -> ObjectIntent(this,SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "1", "SPCMESO"))
-                    R.id.spc_soundings -> ObjectIntent.showSounding(this)
-                    R.id.spc_sref -> ObjectIntent(this, ModelsSpcSrefActivity::class.java, ModelsSpcSrefActivity.INFO, arrayOf("1", "SPCSREF", "SPCSREF"))
-                    R.id.spc_storm_reports -> ObjectIntent.showSpcStormReports(this)
-                    R.id.spc_thunderstorm_outlooks -> ObjectIntent(this, SpcThunderStormOutlookActivity::class.java)
-                    R.id.spotters -> ObjectIntent(this, SpottersActivity::class.java)
-                    R.id.twitter_states -> ObjectIntent(this, WebViewTwitter::class.java)
-                    R.id.twitter_tornado -> ObjectIntent.showWebView(this, arrayOf("https://mobile.twitter.com/hashtag/tornado", "#tornado"))
+                    R.id.national_images -> Route(this, WpcImagesActivity::class.java, "", arrayOf())
+                    R.id.national_text -> Route(this, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"))
+                    R.id.ncep_models -> Route.model(this, arrayOf("1", "NCEP", "NCEP"))
+                    R.id.nhc -> Route(this, NhcActivity::class.java)
+                    R.id.nssl_wrf -> Route.model(this, arrayOf("1", "NSSL", "NSSL"))
+                    R.id.observations -> Route.observations(this)
+                    R.id.observation_sites -> Route(this, NwsObsSitesActivity::class.java)
+                    R.id.opc -> Route(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OPC"))
+                    R.id.radar_mosaic -> Route.radarMosaic(this)
+                    R.id.radar_dual_pane -> Route.radarMultiPane(this, arrayOf(Location.rid, "", "2"))
+                    R.id.radar_quad_pane -> Route.radarMultiPane(this, arrayOf(Location.rid, "", "4"))
+                    R.id.spc_comp_map -> Route(this, SpcCompmapActivity::class.java)
+                    R.id.spc_convective_outlooks -> Route(this, SpcSwoSummaryActivity::class.java )
+                    R.id.spc_day_1 -> Route.spcSwo(this, arrayOf("1", ""))
+                    R.id.spc_day_2 -> Route.spcSwo(this, arrayOf("2", ""))
+                    R.id.spc_day_3 -> Route.spcSwo(this, arrayOf("3", ""))
+                    R.id.spc_day_4_8 -> Route.spcSwo(this, arrayOf("4-8", ""))
+                    R.id.spc_fire_outlooks -> Route(this, SpcFireOutlookSummaryActivity::class.java)
+                    R.id.spc_href -> Route(this, ModelsSpcHrefActivity::class.java, "", arrayOf("1", "SPCHREF", "SPC HREF"))
+                    R.id.spc_hrrr -> Route(this, ModelsSpcHrrrActivity::class.java, "", arrayOf("1", "SPCHRRR", "SPC HRRR"))
+                    R.id.spc_mesoanalysis -> Route(this,SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "1", "SPCMESO"))
+                    R.id.spc_soundings -> Route.sounding(this)
+                    R.id.spc_sref -> Route(this, ModelsSpcSrefActivity::class.java, ModelsSpcSrefActivity.INFO, arrayOf("1", "SPCSREF", "SPCSREF"))
+                    R.id.spc_storm_reports -> Route.spcStormReports(this)
+                    R.id.spc_thunderstorm_outlooks -> Route(this, SpcThunderStormOutlookActivity::class.java)
+                    R.id.spotters -> Route(this, SpottersActivity::class.java)
+                    R.id.twitter_states -> Route(this, WebViewTwitter::class.java)
+                    R.id.twitter_tornado -> Route.webView(this, arrayOf("https://mobile.twitter.com/hashtag/tornado", "#tornado"))
                     R.id.us_alerts -> {
                         if (Location.isUS) {
-                            ObjectIntent.showUsAlerts(this)
+                            Route.usAlerts(this)
                         } else {
-                            ObjectIntent(this, CanadaAlertsActivity::class.java)
+                            Route(this, CanadaAlertsActivity::class.java)
                         }
                     }
-                    R.id.wpc_gefs -> ObjectIntent.showModel(this, arrayOf("1", "WPCGEFS", "WPC"))
+                    R.id.wpc_gefs -> Route.model(this, arrayOf("1", "WPCGEFS", "WPC"))
 		    //elys mod
-                    R.id.aurora -> ObjectIntent(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("AURORA"))
+                    R.id.aurora -> Route(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("AURORA"))
                 }
                 if (UIPreferences.navDrawerMainScreenOnRight) {
                     drawerLayout.closeDrawer(GravityCompat.END)

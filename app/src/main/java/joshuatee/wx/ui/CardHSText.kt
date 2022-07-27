@@ -28,10 +28,10 @@ import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
-class ObjectCardHSText(context: Context, val product: String) {
+class CardHSText(context: Context, val product: String) {
 
-    private val objectCard = ObjectCard(context)
-    private val textView = ObjectTextView(context)
+    private val card = Card(context)
+    private val text = Text(context)
     private var textShort = ""
     private var textLong = ""
     private var textShownSmall = true
@@ -40,7 +40,7 @@ class ObjectCardHSText(context: Context, val product: String) {
 //        ObjectCardText.textViewSetup(textView)
 //        textView.setTextIsSelectable(true)
 //        textView.isFocusable = false
-        objectCard.addView(textView.get())
+        card.addView(text.get())
     }
 
     fun toggleText() {
@@ -53,11 +53,11 @@ class ObjectCardHSText(context: Context, val product: String) {
         }
     }
 
-    fun setText(text: String) {
-        if (text.contains("<br>") || text.contains("<BR>")) {
-            textView.text = Utility.fromHtml(text)
+    fun setText(s: String) {
+        if (s.contains("<br>") || s.contains("<BR>")) {
+            text.text = Utility.fromHtml(s)
         } else {
-            textView.text = text
+            text.text = s
         }
     }
 
@@ -76,7 +76,7 @@ class ObjectCardHSText(context: Context, val product: String) {
     }
 
     fun refreshTextSize() {
-        textView.refreshTextSize(TextSize.SMALL)
+        text.refreshTextSize(TextSize.SMALL)
 //        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
     }
 
@@ -88,13 +88,13 @@ class ObjectCardHSText(context: Context, val product: String) {
         textShort = text
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
-        textView.setOnClickListener(fn)
+    fun connect(fn: View.OnClickListener) {
+        text.connect(fn)
     }
 
     private fun typefaceMono() {
-        textView.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
+        text.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
     }
 
-    fun get() = objectCard.get()
+    fun get() = card.get()
 }

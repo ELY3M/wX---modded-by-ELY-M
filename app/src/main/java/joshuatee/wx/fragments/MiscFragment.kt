@@ -85,10 +85,7 @@ class MiscFragment : Fragment() {
                     R.drawable.uswarn,
                     USWarningsWithRadarActivity::class.java,
                     USWarningsWithRadarActivity.URL,
-                    arrayOf(
-                            ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
-                            "us"
-                    ),
+                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us"),
                     "uswarn", "US Warnings"
             )
             hm["wpctext"] = TileObject(

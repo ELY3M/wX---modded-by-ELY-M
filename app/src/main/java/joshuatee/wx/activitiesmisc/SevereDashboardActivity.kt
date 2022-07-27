@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.radar.*
 import joshuatee.wx.spc.UtilitySpc
@@ -45,12 +44,14 @@ class SevereDashboardActivity : BaseActivity() {
     //
 
     private val bitmaps = mutableListOf<Bitmap>()
-    private var numberOfImages = 0
+    private val numbers = mutableListOf<String>()
+    private val types = mutableListOf<String>()
     private val boxRows = mutableListOf<HBox>()
     private var imagesPerRow = 2
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private lateinit var boxImages: VBox
     private lateinit var boxWarnings: VBox
+    private var downloadTimer = DownloadTimer("SEVERE_DASHBOARD_ACTIVITY")
     private val watchesByType = mapOf(
             PolygonType.WATCH to SevereNotice(PolygonType.WATCH),
             PolygonType.MCD to SevereNotice(PolygonType.MCD),
@@ -71,9 +72,9 @@ class SevereDashboardActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        box = findViewById(R.id.linearLayout)
-        boxImages = VBox(this, box)
-        boxWarnings = VBox(this, box)
+        box = VBox.fromResource(this)
+        boxImages = VBox(this, box.get())
+        boxWarnings = VBox(this, box.get())
         if (UtilityUI.isLandScape(this)) {
             imagesPerRow = 3
         }
@@ -86,14 +87,20 @@ class SevereDashboardActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        bitmaps.clear()
-        FutureVoid(this, ::downloadWatch, ::updateWatch)
-        FutureVoid(this, ::downloadWarnings, ::updateWarnings)
+        if (downloadTimer.isRefreshNeeded(this)) {
+            bitmaps.clear()
+            FutureVoid(this, ::downloadWatch, ::updateWatch)
+            FutureVoid(this, ::downloadWarnings, ::updateWarnings)
+        }
     }
 
     private fun downloadWatch() {
         bitmaps.add(UtilityDownload.getImageProduct(this, "USWARN"))
         bitmaps.add(UtilitySpc.getStormReportsTodayUrl().getImage())
+        numbers.add("USWARN")
+        numbers.add("STORM_REPORTS")
+        types.add("")
+        types.add("")
         // TODO FIXME refactor
         UtilityDownloadWatch.get(this)
         watchesByType[PolygonType.WATCH]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.storage.value)
@@ -111,44 +118,41 @@ class SevereDashboardActivity : BaseActivity() {
     }
 
     private fun updateWatch() {
-        boxImages.removeAllViews()
+        boxImages.removeChildrenAndLayout()
         boxRows.clear()
-        numberOfImages = 0
-        listOf(0, 1).forEach {
-            val card = if (numberOfImages % imagesPerRow == 0) {
-                val hbox = HBox(this, boxImages.get())
-                boxRows.add(hbox)
-                ObjectCardImage(this, hbox.get(), bitmaps[it], imagesPerRow)
-            } else {
-                ObjectCardImage(this, boxRows.last().get(), bitmaps[it], imagesPerRow)
+//        listOf(0, 1).forEach {
+//            if (it % imagesPerRow == 0) {
+//                boxRows.add(HBox(this, boxImages.get()))
+//            }
+//            val card = Image(this, boxRows.last(), bitmaps[it], imagesPerRow)
+//            if (it == 0) {
+//                card.connect { ObjectIntent.showUsAlerts(this) }
+//            } else {
+//                card.connect { ObjectIntent.showSpcStormReports(this) }
+//            }
+//        }
+        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach { type ->
+//            showItems(watchesByType[it]!!)
+            bitmaps.addAll(watchesByType[type]!!.bitmaps)
+            numbers.addAll(watchesByType[type]!!.numbers)
+            repeat(watchesByType[type]!!.bitmaps.size) {
+                types.add(watchesByType[type]!!.toString())
             }
-            if (it == 0) {
-                card.setOnClickListener { ObjectIntent.showUsAlerts(this) }
-            } else {
-                card.setOnClickListener { ObjectIntent.showSpcStormReports(this) }
-            }
-            numberOfImages += 1
         }
-        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
-            showItems(watchesByType[it]!!)
-        }
-        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
-            bitmaps.addAll(watchesByType[it]!!.bitmaps)
-        }
-        bitmaps.addAll(bitmaps)
+        showItems()
         toolbar.subtitle = getSubTitle()
     }
 
     private fun updateWarnings() {
-        boxWarnings.removeAllViews()
+        boxWarnings.removeChildrenAndLayout()
         listOf(PolygonType.TOR, PolygonType.TST, PolygonType.FFW).forEach {
             val severeWarning = warningsByType[it]!!
             if (severeWarning.getCount() > 0) {
-                ObjectCardBlackHeaderText(this, boxWarnings.get(), "(" + severeWarning.getCount() + ") " + severeWarning.getName())
+                ObjectCardBlackHeaderText(this, boxWarnings, "(" + severeWarning.getCount() + ") " + severeWarning.getName())
                 severeWarning.warningList.forEach { w ->
                     if (w.isCurrent) {
-                        val objectCardDashAlertItem = ObjectCardDashAlertItem(this, boxWarnings.get(), w)
-                        objectCardDashAlertItem.setListener { ObjectIntent.showHazard(this, arrayOf(w.url, ""))  }
+                        val objectCardDashAlertItem = ObjectCardDashAlertItem(this, boxWarnings, w)
+                        objectCardDashAlertItem.connect { Route.hazard(this, arrayOf(w.url, ""))  }
                     }
                 }
             }
@@ -176,22 +180,25 @@ class SevereDashboardActivity : BaseActivity() {
         return subTitle
     }
 
-    private fun showItems(sn: SevereNotice) {
-        sn.bitmaps.indices.forEach { j ->
-            val card = if (numberOfImages % imagesPerRow == 0) {
-                val hbox = HBox(this, boxImages.get())
-                boxRows.add(hbox)
-                ObjectCardImage(this, hbox.get(), sn.bitmaps[j], imagesPerRow)
-            } else {
-                ObjectCardImage(this, boxRows.last().get(), sn.bitmaps[j], imagesPerRow)
+    private fun showItems() {
+        bitmaps.indices.forEach {
+            if (it % imagesPerRow == 0) {
+                boxRows.add(HBox(this, boxImages.get()))
             }
-            if (j < sn.numbers.size) {
-                val number = sn.numbers[j]
-                card.setOnClickListener {
-                    ObjectIntent.showMcd(this, arrayOf(number, "", sn.toString()))
+            val card = Image(this, boxRows.last(), bitmaps[it], imagesPerRow)
+            if (it < 2) {
+                if (it == 0) {
+                    card.connect { Route.usAlerts(this) }
+                } else {
+                    card.connect { Route.spcStormReports(this) }
+                }
+            } else {
+                if (it < numbers.size) {
+                    val number = numbers[it]
+                    val type = types[it]
+                    card.connect { Route.mcd(this, arrayOf(number, "", type)) }
                 }
             }
-            numberOfImages += 1
         }
     }
 

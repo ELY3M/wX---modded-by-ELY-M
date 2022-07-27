@@ -24,26 +24,20 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
-import android.view.View
-import android.widget.LinearLayout
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 
-class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout, val title: String) {
+class ObjectCardBlackHeaderText(context: Context, val box: VBox, val title: String) {
 
-    private val objectCard = ObjectCard(context)
-    private val text = ObjectTextView(context, UIPreferences.textHighlightColor)
+    private val card = Card(context)
+    private val text = Text(context, UIPreferences.textHighlightColor)
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         vbox.addWidget(text.get())
-        objectCard.addView(vbox)
-        linearLayout.addView(objectCard.get())
+        card.addView(vbox)
+        box.addWidget(card.get())
         setTextHeader()
-    }
-
-    fun setListener(fn: View.OnClickListener) {
-        objectCard.setOnClickListener(fn)
     }
 
     private fun setTextHeader() {

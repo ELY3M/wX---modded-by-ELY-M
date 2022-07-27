@@ -25,11 +25,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityImg
@@ -38,9 +37,8 @@ import joshuatee.wx.util.UtilityShortcut
 
 class SpcSwoSummaryActivity : BaseActivity() {
 
-    private val bitmaps = MutableList(8){ UtilityImg.getBlankBitmap() }
-    private var imagesPerRow = 2
-    private lateinit var box: LinearLayout
+    private val bitmaps = MutableList(8) { UtilityImg.getBlankBitmap() }
+    private lateinit var box: VBox
     private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -52,12 +50,8 @@ class SpcSwoSummaryActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.spc_swo_summary, false)
-        box = findViewById(R.id.linearLayout)
-        if (UtilityUI.isLandScape(this)) {
-            imagesPerRow = 3
-        }
-        toolbar.subtitle = "SPC"
-        title = "Convective Outlooks"
+        setTitle("Convective Outlooks", "SPC")
+        box = VBox.fromResource(this)
         objectImageSummary = ObjectImageSummary(this, box, bitmaps)
         getContent()
     }
@@ -69,21 +63,21 @@ class SpcSwoSummaryActivity : BaseActivity() {
 
     private fun getContent() {
         (0..2).forEach {
-            FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage() }) { updateImage(it) }
+            FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage() }) { update(it) }
         }
         (3..7).forEach {
-            FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage() }) { updateImage(it) }
+            FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage() }) { update(it) }
         }
     }
 
-    private fun updateImage(index: Int) {
+    private fun update(index: Int) {
         val day = if (index < 3) {
             (index + 1).toString()
         } else {
             "4-8"
         }
-        objectImageSummary.setImage(index, bitmaps[index])
-        objectImageSummary.setOnClickListener(index) { ObjectIntent.showSpcSwo(this, arrayOf(day, "")) }
+        objectImageSummary.set(index, bitmaps[index])
+        objectImageSummary.connect(index) { Route.spcSwo(this, arrayOf(day, "")) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

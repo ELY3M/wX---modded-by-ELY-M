@@ -24,7 +24,7 @@ import kotlin.math.*
  *
  * @author Mike Gavaghan
  */
-class ExternalGeodeticCalculator {
+object ExternalGeodeticCalculator {
 
     /**
      * Calculate the destination and final bearing after traveling a specified

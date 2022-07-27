@@ -21,4 +21,6 @@
 
 package joshuatee.wx.radar
 
+import joshuatee.wx.objects.LatLon
+
 class RID(val name: String, val location: LatLon, var distance: Double = 0.0)

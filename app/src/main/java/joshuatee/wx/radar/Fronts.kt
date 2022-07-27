@@ -21,6 +21,8 @@
 
 package joshuatee.wx.radar
 
+import joshuatee.wx.objects.LatLon
+
 class Fronts(val type: FrontTypeEnum) {
 
     val coordinates = mutableListOf<LatLon>()

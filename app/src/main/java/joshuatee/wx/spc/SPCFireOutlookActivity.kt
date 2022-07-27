@@ -25,16 +25,16 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.ObjectCardImage
-import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.objects.Route
+import joshuatee.wx.ui.Image
+import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -55,9 +55,9 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var imageUrl = ""
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var arguments: Array<String>
-    private lateinit var objectCardImage: ObjectCardImage
-    private lateinit var objectCardText: ObjectCardText
-    private lateinit var box: LinearLayout
+    private lateinit var image: Image
+    private lateinit var cardText: CardText
+    private lateinit var box: VBox
     private var tabletInLandscape = false
     private var html = ""
 
@@ -67,18 +67,17 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
         arguments = intent.getStringArrayExtra(NUMBER)!!
         textProduct = arguments[0]
         imageUrl = arguments[1]
-        title = "Fire Weather Outlook"
-        toolbar.subtitle = "SPC $textProduct"
-        box = findViewById(R.id.linearLayout)
+        setTitle("Fire Weather Outlook", "SPC $textProduct")
+        box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
-        if (tabletInLandscape) {
-            box.orientation = LinearLayout.HORIZONTAL
-            objectCardImage = ObjectCardImage(this, box, UtilityImg.getBlankBitmap(), 2)
+        image = if (tabletInLandscape) {
+            box.makeHorizontal()
+            Image(this, box, UtilityImg.getBlankBitmap(), 2)
         } else {
-            objectCardImage = ObjectCardImage(this, box)
+            Image(this, box)
         }
-        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
+        cardText = CardText(this, box, toolbar, toolbarBottom)
         getContent()
     }
 
@@ -89,27 +88,25 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun showImage() {
         if (tabletInLandscape) {
-            objectCardImage.setImage(bitmap, 2)
+            image.set(bitmap, 2)
         } else {
-            objectCardImage.setImage(bitmap)
+            image.set(bitmap)
         }
-        objectCardImage.setOnClickListener {
-            ObjectIntent.showImage(this, arrayOf(imageUrl, textProduct, "true"))
-        }
+        image.connect { Route.image(this, arrayOf(imageUrl, textProduct, "true")) }
     }
 
     private fun showText() {
-        objectCardText.text = html
-        UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectCardText.text, textProduct)
+        cardText.text = html
+        UtilityTts.conditionalPlay(arguments, 1, applicationContext, cardText.text, textProduct)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, objectCardText.text, textProduct, textProduct)) {
+        if (audioPlayMenu(item.itemId, cardText.text, textProduct, textProduct)) {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, textProduct, bitmap, objectCardText.text)
-            R.id.action_share_text -> UtilityShare.text(this, textProduct, objectCardText.text)
+            R.id.action_share_all -> UtilityShare.bitmap(this, textProduct, bitmap, cardText.text)
+            R.id.action_share_text -> UtilityShare.text(this, textProduct, cardText.text)
             R.id.action_share_url -> UtilityShare.text(this, textProduct, textProduct)
             R.id.action_share_image -> UtilityShare.bitmap(this, textProduct, bitmap)
             else -> return super.onOptionsItemSelected(item)

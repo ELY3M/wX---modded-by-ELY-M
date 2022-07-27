@@ -26,7 +26,7 @@ import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 
 class ObjectCurrentConditions {
 

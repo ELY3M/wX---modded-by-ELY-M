@@ -25,22 +25,23 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ObjectColorLabel
+import joshuatee.wx.ui.VBox
 
 class SettingsColorsActivity : BaseActivity() {
 
-    private var objectSettingsColorLabels = listOf<ObjectSettingsColorLabel>()
-    private lateinit var box: LinearLayout
+    private var objectSettingsColorLabels = listOf<ObjectColorLabel>()
+    private lateinit var box: VBox
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         box.setBackgroundColor(Color.BLACK)
         val mapColorToPref = mutableMapOf(
             "Highway color" to "RADAR_COLOR_HW",
@@ -75,9 +76,11 @@ class SettingsColorsActivity : BaseActivity() {
         RadarPreferences.radarWarningPolygons.forEach {
             mapColorToPref[it.name + " color"] = it.prefTokenColor
         }
-        objectSettingsColorLabels = mapColorToPref.keys.sorted().map { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
+        objectSettingsColorLabels = mapColorToPref.keys.sorted().map {
+            ObjectColorLabel(this, it, mapColorToPref[it]!!)
+        }
         objectSettingsColorLabels.forEach {
-            box.addView(it.get())
+            box.addWidget(it.get())
         }
     }
 

@@ -27,7 +27,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import java.util.Locale
 import joshuatee.wx.R
@@ -41,8 +40,8 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityTimeSunMoon
 import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.Route
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.ui.*
 
 class ForecastActivity : BaseActivity() {
@@ -62,12 +61,12 @@ class ForecastActivity : BaseActivity() {
     private var currentConditionsTime = ""
     private var radarTime = ""
     private lateinit var objectCardCurrentConditions: ObjectCardCurrentConditions
-    private lateinit var linearLayoutForecast: VBox
-    private lateinit var linearLayoutHazards: VBox
-    private val hazardCards = mutableListOf<ObjectCardText>()
+    private lateinit var boxForecast: VBox
+    private lateinit var boxHazards: VBox
+    private val hazardCards = mutableListOf<CardText>()
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
-    private var bitmapForCurrentCondition = UtilityImg.getBlankBitmap()
+    private lateinit var box: VBox
+    private var bitmap = UtilityImg.getBlankBitmap()
     private var bitmaps = listOf<Bitmap>()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -79,15 +78,15 @@ class ForecastActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         val arguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(arguments[0], arguments[1])
         title = "Forecast for"
         toolbar.subtitle = latLon.latString + "," + latLon.lonString
         objectCardCurrentConditions = ObjectCardCurrentConditions(this, 2)
-        box.addView(objectCardCurrentConditions.get())
-        linearLayoutHazards = VBox(this, box)
-        linearLayoutForecast = VBox(this, box)
+        box.addWidget(objectCardCurrentConditions.get())
+        boxHazards = VBox(this, box.get())
+        boxForecast = VBox(this, box.get())
         getContent()
     }
 
@@ -105,12 +104,12 @@ class ForecastActivity : BaseActivity() {
     private fun downloadCc() {
         objectCurrentConditions = ObjectCurrentConditions(this, latLon)
         objectCurrentConditions.timeCheck(this)
-        bitmapForCurrentCondition = UtilityForecastIcon.getIcon(this, objectCurrentConditions.iconUrl)
+        bitmap = UtilityForecastIcon.getIcon(this, objectCurrentConditions.iconUrl)
     }
 
     private fun updateCc() {
         currentConditionsTime = objectCurrentConditions.status
-        objectCardCurrentConditions.updateContent(bitmapForCurrentCondition, objectCurrentConditions, true, currentConditionsTime, radarTime)
+        objectCardCurrentConditions.updateContent(bitmap, objectCurrentConditions, true, currentConditionsTime, radarTime)
     }
 
     private fun downloadHazards() {
@@ -119,10 +118,10 @@ class ForecastActivity : BaseActivity() {
 
     private fun updateHazards() {
         if (objectHazards.titles.isEmpty()) {
-            linearLayoutHazards.removeAllViews()
-            linearLayoutHazards.visibility = View.GONE
+            boxHazards.removeChildrenAndLayout()
+            boxHazards.visibility = View.GONE
         } else {
-            linearLayoutHazards.visibility = View.VISIBLE
+            boxHazards.visibility = View.VISIBLE
             setupHazardCards()
         }
     }
@@ -133,28 +132,28 @@ class ForecastActivity : BaseActivity() {
     }
 
     private fun update7Day() {
-        linearLayoutForecast.removeAllViewsInLayout()
+        boxForecast.removeChildrenAndLayout()
         bitmaps.forEachIndexed { index, bitmap ->
             val objectCard7Day = ObjectCard7Day(this, bitmap, true, index, objectSevenDay.forecastList)
-            objectCard7Day.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
-            linearLayoutForecast.addWidget(objectCard7Day.get())
+            objectCard7Day.connect { scrollView.smoothScrollTo(0, 0) }
+            boxForecast.addWidget(objectCard7Day.get())
         }
         // sunrise card
-        val objectCardText = ObjectCardText(this)
-        objectCardText.center()
-        objectCardText.text = (UtilityTimeSunMoon.getSunriseSunset(this, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime())
-        linearLayoutForecast.addWidget(objectCardText.get())
+        val sunriseCard = CardText(this)
+        sunriseCard.center()
+        sunriseCard.text = UtilityTimeSunMoon.getSunriseSunset(this, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime()
+        boxForecast.addWidget(sunriseCard.get())
     }
 
     private fun setupHazardCards() {
-        linearLayoutHazards.removeAllViews()
+        boxHazards.removeChildrenAndLayout()
         hazardCards.clear()
         objectHazards.titles.indices.forEach { z ->
-            hazardCards.add(ObjectCardText(this))
+            hazardCards.add(CardText(this))
             hazardCards[z].setupHazard()
             hazardCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
-            hazardCards[z].setOnClickListener { ObjectIntent.showHazard(this, arrayOf(objectHazards.urls[z])) }
-            linearLayoutHazards.addWidget(hazardCards[z].get())
+            hazardCards[z].connect { Route.hazard(this, arrayOf(objectHazards.urls[z])) }
+            boxHazards.addWidget(hazardCards[z].get())
         }
     }
 
@@ -168,6 +167,6 @@ class ForecastActivity : BaseActivity() {
 
     private fun saveLocation() {
         val message = Location.save(this, latLon)
-        ObjectPopupMessage(box, message)
+        ObjectPopupMessage(box.get(), message)
     }
 }

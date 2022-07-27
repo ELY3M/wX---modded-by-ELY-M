@@ -32,41 +32,41 @@ import java.util.*
 
 class ObjectCardStormReportItem(context: Context) {
 
-    private val objectCard = ObjectCard(context)
-    private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
-    private val textViewTitle = ObjectTextView(context)
-    private val textViewBottom = ObjectTextView(context, backgroundText = true)
+    private val card = Card(context)
+    private val textTop = Text(context, UIPreferences.textHighlightColor)
+    private val textTitle = Text(context)
+    private val textBottom = Text(context, backgroundText = true)
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        vbox.addViews(listOf(textViewTop.get(), textViewTitle.get(), textViewBottom.get()))
-        objectCard.addView(vbox)
+        vbox.addViews(listOf(textTop.get(), textTitle.get(), textBottom.get()))
+        card.addView(vbox)
     }
 
-    fun get() = objectCard.get()
+    fun get() = card.get()
 
     // This is needed for long press on the card for archived L2 radar (unreliable feature which should be removed)
     fun setId(id: Int) {
-        objectCard.setId(id)
+        card.setId(id)
     }
 
-    fun setListener(fn: View.OnClickListener) {
-        objectCard.setOnClickListener(fn)
+    fun connect(fn: View.OnClickListener) {
+        card.connect(fn)
     }
 
     fun setTextFields(stormReport: StormReport) {
-        textViewTop.text = stormReport.state + ", " + stormReport.city + " " + stormReport.time
-        textViewTitle.text = stormReport.address
-        textViewBottom.text = stormReport.magnitude + " - " + stormReport.description
+        textTop.text = stormReport.state + ", " + stormReport.city + " " + stormReport.time
+        textTitle.text = stormReport.address
+        textBottom.text = stormReport.magnitude + " - " + stormReport.description
     }
 
     fun setTextHeader(stormReport: StormReport) {
-        textViewTop.text = stormReport.title.uppercase(Locale.US)
-        textViewTop.setTextSize(TextSize.LARGE)
-        textViewTop.setPadding(20)
-        textViewTitle.visibility = View.GONE
-        textViewBottom.visibility = View.GONE
-        textViewTop.setBackgroundColor(Color.BLACK)
-        textViewTop.setTextColor(Color.WHITE)
+        textTop.text = stormReport.title.uppercase(Locale.US)
+        textTop.setTextSize(TextSize.LARGE)
+        textTop.setPadding(20)
+        textTitle.visibility = View.GONE
+        textBottom.visibility = View.GONE
+        textTop.setBackgroundColor(Color.BLACK)
+        textTop.setTextColor(Color.WHITE)
     }
 }

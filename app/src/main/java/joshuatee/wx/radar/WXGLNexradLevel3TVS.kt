@@ -54,13 +54,12 @@ internal object WXGLNexradLevel3TVS {
             return listOf()
         }
         tvs.forEach {
-            val ecc = ExternalGeodeticCalculator()
             val string = it.parse(pattern2)
             val items = RegExp.slash.split(string)
             val degree = items[0].replace(" ", "").toIntOrNull() ?: 0
             val nm = items[1].replace(" ", "").toIntOrNull() ?: 0
             val start = ExternalGlobalCoordinates(location)
-            val externalGlobalCoordinates = ecc.calculateEndingGlobalCoordinates(start, degree.toDouble(), nm * 1852.0)
+            val externalGlobalCoordinates = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree.toDouble(), nm * 1852.0)
             stormList.add(externalGlobalCoordinates.latitude)
             stormList.add(externalGlobalCoordinates.longitude * -1.0)
         }

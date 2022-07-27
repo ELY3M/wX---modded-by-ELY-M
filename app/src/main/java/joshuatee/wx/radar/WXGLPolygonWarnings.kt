@@ -21,11 +21,8 @@
 
 package joshuatee.wx.radar
 
-import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.*
 import joshuatee.wx.util.ProjectionNumbers
-import joshuatee.wx.objects.ObjectPolygonWarning
-import joshuatee.wx.objects.ObjectWarning
-import joshuatee.wx.objects.PolygonWarningType
 
 internal object WXGLPolygonWarnings {
 
@@ -46,7 +43,7 @@ internal object WXGLPolygonWarnings {
         val html = ObjectWarning.getBulkData(polygonType)
         val warnings = ObjectWarning.parseJson(html)
         val warningList = mutableListOf<Double>()
-        for ( w in warnings) {
+        for (w in warnings) {
             if (w.isCurrent) {
                 val latLons = w.getPolygonAsLatLons(-1)
                 warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)

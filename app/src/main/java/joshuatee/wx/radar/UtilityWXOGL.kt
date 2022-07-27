@@ -30,6 +30,7 @@ import joshuatee.wx.util.UCARRandomAccessFile
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.settings.RadarPreferences

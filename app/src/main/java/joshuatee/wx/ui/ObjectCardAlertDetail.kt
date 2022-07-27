@@ -28,20 +28,19 @@ import joshuatee.wx.Extensions.parseMultiple
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.TextSize
-import joshuatee.wx.util.UtilityLog
 
 class ObjectCardAlertDetail(val context: Context) {
 
-    private val objectCard = ObjectCard(context)
-    private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
-    private val textViewTitle = ObjectTextView(context)
-    private val textViewStart = ObjectTextView(context, TextSize.SMALL)
-    private val textViewEnd = ObjectTextView(context, TextSize.SMALL)
-    private val textViewBottom = ObjectTextView(context, backgroundText = true)
-    private val radarButton = ObjectButton(context,"Radar", GlobalVariables.ICON_RADAR)
-    private val detailsButton = ObjectButton(context,"Details", GlobalVariables.ICON_CURRENT)
+    private val card = Card(context)
+    private val textViewTop = Text(context, UIPreferences.textHighlightColor)
+    private val textViewTitle = Text(context)
+    private val textViewStart = Text(context, TextSize.SMALL)
+    private val textViewEnd = Text(context, TextSize.SMALL)
+    private val textViewBottom = Text(context, backgroundText = true)
+    private val radarButton = Button(context,"Radar", GlobalVariables.ICON_RADAR)
+    private val detailsButton = Button(context,"Details", GlobalVariables.ICON_CURRENT)
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
@@ -51,13 +50,13 @@ class ObjectCardAlertDetail(val context: Context) {
         hbox.addWidget(radarButton.get())
         hbox.addWidget(detailsButton.get())
         vbox.addLayout(hbox.get())
-        objectCard.addView(vbox)
+        card.addView(vbox)
     }
 
-    fun get() = objectCard.get()
+    fun get() = card.get()
 
-    fun setListener(fn: View.OnClickListener) {
-        objectCard.setOnClickListener(fn)
+    fun connect(fn: View.OnClickListener) {
+        card.connect(fn)
     }
 
     fun setTextFields(office: String, location: String, capAlert: CapAlert) {
@@ -88,12 +87,10 @@ class ObjectCardAlertDetail(val context: Context) {
             textViewEnd.visibility = View.GONE
         }
         if (capAlert.points.size < 2) {
-            UtilityLog.d("WX", "POINTS HIDE")
             radarButton.visibility = View.GONE
         } else {
-            UtilityLog.d("WX", "POINTS NO HIDE " + capAlert.points.size + " " + capAlert.getClosestRadarXml())
-            radarButton.setOnClickListener { ObjectIntent.showRadarBySite(context, capAlert.getClosestRadarXml()) }
+            radarButton.connect { Route.radarBySite(context, capAlert.getClosestRadarXml()) }
         }
-        detailsButton.setOnClickListener { ObjectIntent.showHazard(context, arrayOf(capAlert.url, "")) }
+        detailsButton.connect { Route.hazard(context, arrayOf(capAlert.url, "")) }
     }
 }

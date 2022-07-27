@@ -21,6 +21,7 @@
 
 package joshuatee.wx.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
@@ -38,6 +39,20 @@ class ObjectDialogue {
 
     companion object {
         private const val checkedItem = -1
+
+        fun generic(context: Activity, list: List<String>, getContent: () -> Unit, fn: (Int) -> Unit) {
+            val objectDialogue = ObjectDialogue(context, list)
+            objectDialogue.setNegativeButton { dialog, _ ->
+                dialog.dismiss()
+                UtilityUI.immersiveMode(context)
+            }
+            objectDialogue.setSingleChoiceItems { dialog, which ->
+                fn(which)
+                getContent()
+                dialog.dismiss()
+            }
+            objectDialogue.show()
+        }
     }
 
     private val alertDialog: AlertDialog.Builder

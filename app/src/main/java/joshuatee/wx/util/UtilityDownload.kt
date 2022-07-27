@@ -73,7 +73,7 @@ object UtilityDownload {
         when (product) {
             "GOES16" -> {
                 needsBitmap = false
-                val index = Utility.readPref(context, "GOES16_IMG_FAV_IDX", 0)
+                val index = Utility.readPrefInt(context, "GOES16_IMG_FAV_IDX", 0)
                 bitmap = UtilityGoes.getImage(UtilityGoes.codes[index], Utility.readPref(context, "GOES16_SECTOR", "cgl"))
             }
             "VIS_1KM", "VIS_MAIN" -> needsBitmap = false

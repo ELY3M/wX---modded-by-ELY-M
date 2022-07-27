@@ -13,7 +13,8 @@ which was ported from:
 
 package joshuatee.wx.external
 
-import joshuatee.wx.radar.LatLon
+
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.UtilityLog
 import java.util.*
 import kotlin.math.*

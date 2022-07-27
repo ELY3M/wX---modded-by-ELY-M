@@ -19,11 +19,13 @@
 
 */
 
-package joshuatee.wx.util
+package joshuatee.wx.radar
 
 import java.nio.ByteBuffer
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.util.ProjectionNumbers
+import joshuatee.wx.util.UtilityLog
 import kotlin.math.*
 
 object UtilityCanvasProjection {

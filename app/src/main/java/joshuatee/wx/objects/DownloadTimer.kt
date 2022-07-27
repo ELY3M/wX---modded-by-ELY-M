@@ -36,9 +36,11 @@ class DownloadTimer(private val identifier: String) {
     private var lastRefresh = 0.toLong()
 
     fun isRefreshNeeded(context: Context): Boolean {
-        var refreshDataInMinutes: Int = maxOf(Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3), 6)
+        var refreshDataInMinutes: Int = maxOf(Utility.readPrefInt(context, "RADAR_REFRESH_INTERVAL", 3), 6)
         if (identifier.contains("WARNINGS"))
-            refreshDataInMinutes = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
+            refreshDataInMinutes = Utility.readPrefInt(context, "RADAR_REFRESH_INTERVAL", 3)
+        if (identifier == "SEVERE_DASHBOARD_ACTIVITY")
+            refreshDataInMinutes = 3
         var refreshNeeded = false
         val currentTime = UtilityTime.currentTimeMillis()
         val currentTimeSeconds = currentTime / 1000

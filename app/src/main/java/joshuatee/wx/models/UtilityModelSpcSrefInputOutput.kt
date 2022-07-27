@@ -53,13 +53,13 @@ internal object UtilityModelSpcSrefInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, om: ObjectModelNoSpinner, time: String): Bitmap {
+    fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
         val run = om.run.replace("z", "")
         val url = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
         return UtilityImg.getBitmapAddWhiteBackground(context, url)
     }
 
-    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
         if (om.spinnerTimeValue == -1) {
             return AnimationDrawable()
         }

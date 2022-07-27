@@ -81,7 +81,7 @@ class GoesActivity : VideoRecordActivity() {
         image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
         toolbar.setOnClickListener { objectNavDrawer.open() }
         image.setMaxZoom(8.0f)
-        image.setListener(objectNavDrawer) { getContent(sector) }
+        image.connect(objectNavDrawer) { getContent(sector) }
         readPrefs()
         getContent(sector)
     }
@@ -120,14 +120,14 @@ class GoesActivity : VideoRecordActivity() {
     private fun writePrefs() {
         if (savePrefs) {
             Utility.writePref(this, "GOES16_SECTOR", sector)
-            Utility.writePref(this, "GOES16_IMG_FAV_IDX", objectNavDrawer.index)
+            Utility.writePrefInt(this, "GOES16_IMG_FAV_IDX", objectNavDrawer.index)
         }
     }
 
     private fun readPrefs() {
         if (arguments.isNotEmpty() && arguments[0] == "") {
             sector = Utility.readPref(this, "GOES16_SECTOR", sector)
-            objectNavDrawer.index = Utility.readPref(this, "GOES16_IMG_FAV_IDX", 0)
+            objectNavDrawer.index = Utility.readPrefInt(this, "GOES16_IMG_FAV_IDX", 0)
         } else if (arguments.size > 1 && arguments[0].contains("http")) {
             // NHC floater
             goesFloater = true

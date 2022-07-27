@@ -100,7 +100,7 @@ internal object UtilityModelEsrlInputOutput {
         return runData
     }
 
-    fun getImage(om: ObjectModelNoSpinner, time: String): Bitmap {
+    fun getImage(om: ObjectModel, time: String): Bitmap {
         var parentModel = ""
         when (om.model) {
             "RAP_NCEP" -> parentModel = "RAP"
@@ -141,7 +141,7 @@ internal object UtilityModelEsrlInputOutput {
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
         if (om.spinnerTimeValue == -1) {
             return AnimationDrawable()
         }

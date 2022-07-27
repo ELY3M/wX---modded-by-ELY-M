@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55633"
-    android:versionName="55633-elys"
+    android:versionCode="55640"
+    android:versionName="55640-elys"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -111,11 +111,6 @@
   <activity
       android:name=".activitiesmisc.TextScreenActivity"
       android:label="@string/title_activity_text_screen"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
-      android:name=".activitiesmisc.SunMoonActivity"
-      android:label=""
       android:parentActivityName="WX" >
   </activity>
 
@@ -554,6 +549,10 @@
   </activity>
   <activity
       android:name=".radar.WXGLRadarActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".radar.WXGLRadarActivityNew"
       android:parentActivityName="WX" >
   </activity>
   <activity

@@ -23,18 +23,17 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import java.util.Locale
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
-class ObjectAlertSummary(private val context: Context, private val linearLayout: LinearLayout, private val scrollView: ScrollView) {
+class ObjectAlertSummary(private val context: Context, private val box: VBox, private val scrollView: ScrollView) {
 
     private var totalAlertsCnt = 0
     var navList = listOf<String>()
@@ -42,27 +41,26 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
     var filterArray = listOf<String>()
         private set
     var bitmap = UtilityImg.getBlankBitmap()
-    private var objectCardImageView = ObjectCardImage(context, bitmap)
-    private val cardText = ObjectCardText(context)
+    private var image = Image(context, bitmap)
+    private val cardText = CardText(context)
 
     init {
-        linearLayout.addView(cardText.get())
-        linearLayout.addView(objectCardImageView.get())
+        box.addWidget(cardText.get())
+        box.addWidget(image.get())
     }
 
     fun updateImage(bitmap: Bitmap) {
         this.bitmap = bitmap
-        objectCardImageView.setImage(bitmap)
+        image.set(bitmap)
     }
 
     fun updateContent(data: String, filterOriginal: String, firstRun: Boolean) {
-        linearLayout.removeAllViews()
+        box.removeChildrenAndLayout()
         scrollView.smoothScrollTo(0, 0)
-        linearLayout.addView(cardText.get())
-        objectCardImageView = ObjectCardImage(context, bitmap)
-        objectCardImageView.setOnClickListener { ObjectIntent.showImage(context, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")) }
-        linearLayout.addView(objectCardImageView.get())
-        totalAlertsCnt = 0
+        box.addWidget(cardText.get())
+        image = Image(context, bitmap)
+        image.connect { Route.image(context, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")) }
+        box.addWidget(image.get())
         val mapEvent = mutableMapOf<String, Int>()
         val mapState = mutableMapOf<String, Int>()
         val map = mutableMapOf<String, Int>()
@@ -70,10 +68,12 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         try {
             val capAlerts = mutableListOf<CapAlert>()
             val alerts = UtilityString.parseColumnMutable(data, "<entry>(.*?)</entry>")
-            alerts.forEach { alert -> capAlerts.add(CapAlert.initializeFromCap(alert)) }
+            alerts.forEach {
+                alert -> capAlerts.add(CapAlert.initializeFromCap(alert))
+            }
+            totalAlertsCnt = capAlerts.size
             capAlerts.forEach { capAlert ->
                 val zones = capAlert.zones.split(" ")
-                totalAlertsCnt += 1
                 val tmpStateList = zones.asSequence().filter { it.length > 1 }.map { it.substring(0, 2) }
                 val uniqueStates = tmpStateList.toSet()
                 uniqueStates.forEach {
@@ -100,8 +100,8 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
                     }
                     val objectCardAlertSummaryItem = ObjectCardAlertDetail(context)
                     objectCardAlertSummaryItem.setTextFields(nwsOffice, nwsLoc, capAlert)
-                    objectCardAlertSummaryItem.setListener { ObjectIntent.showHazard(context, arrayOf(capAlert.url, "")) }
-                    linearLayout.addView(objectCardAlertSummaryItem.get())
+                    objectCardAlertSummaryItem.connect { Route.hazard(context, arrayOf(capAlert.url, "")) }
+                    box.addWidget(objectCardAlertSummaryItem.get())
                     i += 1
                 }
             }

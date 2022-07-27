@@ -59,21 +59,20 @@ class SpcCompmapActivity : BaseActivity() {
             if (paramList[position].contains("(on)")) {
                 paramList[position] = paramList[position].replace("\\(on\\) ".toRegex(), "")
                 layerStr = layerStr.replace("a$positionStr:", "")
-                getContent()
             } else {
                 paramList[position] = "(on) " + paramList[position]
                 layerStr = layerStr + "a" + positionStr + ":"
-                getContent()
             }
+            getContent()
         }
         toolbar.setOnClickListener { objectNavDrawer.open() }
         image = TouchImage(this, R.id.iv)
         layerStr = Utility.readPref(this, "SPCCOMPMAP_LAYERSTR", "a7:a19:") // mslp, hpc fronts
-        setupInitLayerString()
+        setupLayerString()
         getContent()
     }
 
-    private fun setupInitLayerString() {
+    private fun setupLayerString() {
         val items = layerStr.split(":").dropLastWhile { it.isEmpty() }
         items.forEach {
             selectItemNoGet(it.replace("a", "").toIntOrNull() ?: 0)

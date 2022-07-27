@@ -37,7 +37,7 @@ import joshuatee.wx.util.Utility
 class AlertService : IntentService("AlertService") {
 
     override fun onHandleIntent(intent: Intent?) {
-        val alertNotificationIntervalCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_INTERVAL", -1)
+        val alertNotificationIntervalCurrent = Utility.readPrefInt(this, "ALERT_NOTIFICATION_INTERVAL", -1)
         if (alertNotificationIntervalCurrent < 121) {
             val service = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val cal = Calendar.getInstance()

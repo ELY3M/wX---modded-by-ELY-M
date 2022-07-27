@@ -19,7 +19,7 @@
 
 */
 
-package joshuatee.wx.settings
+package joshuatee.wx.ui
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -29,21 +29,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import joshuatee.wx.R
-import joshuatee.wx.ui.*
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
-class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefInit: String, strId: Int, spinnerArr: List<String>) {
+class ObjectSpinner(context: Context, label: String, pref: String, prefInit: String, strId: Int, spinnerArr: List<String>) {
 
-    private val objectCard = ObjectCard(context)
+    private val card = Card(context)
 
     init {
-        val text = ObjectTextView(context)
+        val text = Text(context)
         text.setPadding(UIPreferences.paddingSettings)
         text.wrap()
         text.text = label
         text.gravity = Gravity.CENTER_VERTICAL
-        text.setOnClickListener { ObjectDialogue(context, context.resources.getString(strId)) }
+        text.connect { ObjectDialogue(context, context.resources.getString(strId)) }
         val hbox = HBox(context, Gravity.CENTER_VERTICAL)
         hbox.matchParent()
         hbox.addWidget(text.get())
@@ -77,10 +77,10 @@ class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefI
         }
         spinner.setSelection(dataAdapter.getPosition(value))
         hbox.addWidget(spinner)
-        objectCard.addView(hbox.get())
+        card.addView(hbox.get())
     }
 
-    val card get() = objectCard.get()
+    fun get() = card.get()
 
     companion object {
 

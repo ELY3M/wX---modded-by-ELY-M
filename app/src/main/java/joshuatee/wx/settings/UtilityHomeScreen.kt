@@ -48,7 +48,6 @@ internal object UtilityHomeScreen {
             "AFDLOC: Area Forecast Discussion",
             "HWOLOC: Hazardous Weather Outlook",
             "VFDLOC: Aviation only Area Forecast Discussion",
-            "SUNMOON: Sun/Moon Data",
             "HOURLY: Hourly Forecast",
             "CTOF: Celsius to Fahrenheit table",
 	    "AURORA: Aurora Forecast"
@@ -109,7 +108,7 @@ internal object UtilityHomeScreen {
 
         HM_CLASS["STRPT"] = SpcStormReportsActivity::class.java
         HM_CLASS_ARGS["STRPT"] = arrayOf("today")
-        HM_CLASS_ID["STRPT"] = SpcStormReportsActivity.NO
+        HM_CLASS_ID["STRPT"] = SpcStormReportsActivity.DAY
 
         if (UIPreferences.lightningUseGoes) {
             HM_CLASS["LTG"] = GoesActivity::class.java

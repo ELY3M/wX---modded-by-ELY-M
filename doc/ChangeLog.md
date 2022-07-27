@@ -4,19 +4,15 @@
 // TODO [FIX] storm reports - having location follow gps breaks the location marker
 // TODO [REF] WXGLRender rename rid to radarSite
 // TODO [FIX] NSSL WRF needs better runtime detection (reference C++ code)
-// TODO [ADD] 'IntentService' is deprecated. Deprecated in Jav
-    https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
 // TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
 // TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
 // TODO [FIX] code cleanup in utilDownloadMcd/w/mpd
-// TODO [REF] migrate all to Future* (models/radar/LocationFragment)
+// TODO [REF] migrate all to Future* (radar/LocationFragment)
 // TODO [ADD] have nexrad long press verbiage match iOS version
-// TODO [REF] replace String.format with stuff in to.
+// TODO [REF] replace String.format with stuff in to.kt
 // TODO [FIX] review multipane data usage
-// TODO [FIX] snow squall warning enabled - no way to long press
 // TODO [ADD] user request for metar homescreen widget
 // TODO [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
-// TODO [REF] ExternalGeodeticCalculator -> convert from class to object since all static
 // TODO [ADD] look to replace AWC radar mosaics with normal NWS (looks like AWC website redesign might obsolete)
 // [FIX] SPC HREF radar stuff
 // [FIX] when animating in vis/mosaic, show stop button, etc
@@ -29,21 +25,51 @@
 // [REF] unecessary try in locfrag
 // [ADD] handle deprecations in UtilityUI https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
 // [FIX] settings color pal editor shows "null"
-// [REF] ImageCollection         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-// [REF] shorten name of some objects , etc, ObjectTextView
 // [FIX] nexrad invoked from alert will not keep site when jump to multipane
-// [ADD] Class for star icon
 // [FIX] USAlerts state count is not accurate
-// [REF] scan for and refactor: val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-// [REF] Look for LinearLayout that should be ObjectLinearLayout
-// [REF] Use ObjectTextView in ObjectCardVerticalText and ObjectSettings*
-// [REF] XML based LinearLayout should be used to initialize ObjectLinearLayout
-// [REF] scan for android.widget.TextView, have ObjectTextView accept layout id
-// [REF] move Spinner, SeekBar, CheckBox, ColorLabel to UI - rename to match desktop if needed
+// [REF] VBox removeChildren* - https://stackoverflow.com/questions/11952598/whats-difference-between-removeallviews-and-removeallviewsinlayout
+// [REF] rationalize multiple model activities
+// [ADD] onrestart for MCD
+// [REF] rationalize multiple MCD activities
+// [REF] ObjectDateTime migration
 ```
 [[_TOC_]]
 
+## 55640 2022_07_26
+* [REF] misc refactor
+* [REF] readPref -> readPrefInt
+
+## 55639 2022_07_26
+* [REF] misc refactor
+* [REF] ExternalGeodeticCalculator -> convert from class to object since all static
+* [REF] writePref -> writePrefInt
+* [REF] writePref -> writePrefFloat
+* [REF] writePref -> writePrefLong
+* [REF] readPref -> readPrefFloat
+* [REF] readPref -> readPrefLong
+* [REF] re-org colorpal* to match desktop ports
+
+## 55638 2022_07_25
+* [REF] misc refactor
+* [ADD] @Synchronized to 2 methods in WXGLRender.kt
+
+## 55637 2022_07_25
+* [REF] misc refactor
+* [ADD] If device is in landscape some activities will show 3 images across instead of just 2 (SPC Convective outlook, fire, wpc rainfall, etc)
+
+## 55636 2022_07_25
+* [REF] misc refactor
+
+## 55635 2022_07_25
+* [REF] misc refactor
+* [ADD] ObjectDatePicker for SpcStormReportsActivity
+* [ADD] SpcStormReportsActivity - add subtitle indicating you can tape the image to open a date picker
+
+## 55634 2022_07_24
+* [REF] misc refactor
+
 ## 55633 2022_07_23
+* [REF] misc refactor
 
 ## 55632 2022_07_23
 * [REF] misc refactor

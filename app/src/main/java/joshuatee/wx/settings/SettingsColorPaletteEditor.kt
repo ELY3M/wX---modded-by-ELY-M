@@ -39,7 +39,7 @@ import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.radarcolorpalettes.UtilityColorPalette
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.util.*
@@ -67,7 +67,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         palContent = findViewById(R.id.palContent)
         toolbarBottom.setOnMenuItemClickListener(this)
         ObjectFab(this, R.id.fab) { fabSavePalette(this) }
-        ObjectCard(this, R.id.cv1)
+        Card(this, R.id.cv1)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             listOf(palTitle, palContent).forEach {
                 it.setTextColor(Color.BLACK)

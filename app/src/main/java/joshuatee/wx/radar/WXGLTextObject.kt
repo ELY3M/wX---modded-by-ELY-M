@@ -83,9 +83,19 @@ class WXGLTextObject(
     init {
         this.maxCitiesPerGlview = maxCitiesPerGlview / numberOfPanes
         // locfrag should show fewer then full screen wxogl
-        if (numberOfPanes == 1 && !wxglSurfaceView.fullScreen) this.maxCitiesPerGlview = (maxCitiesPerGlview * 0.60).toInt()
-        if (numberOfPanes != 1) this.glviewWidth = MyApplication.dm.widthPixels / (numberOfPanes / 2) else this.glviewWidth = MyApplication.dm.widthPixels
-        if (numberOfPanes != 1) this.glviewHeight = MyApplication.dm.heightPixels / 2 else this.glviewHeight = MyApplication.dm.heightPixels
+        if (numberOfPanes == 1 && !wxglSurfaceView.fullScreen) {
+            this.maxCitiesPerGlview = (maxCitiesPerGlview * 0.60).toInt()
+        }
+        if (numberOfPanes != 1) {
+            this.glviewWidth = MyApplication.dm.widthPixels / (numberOfPanes / 2)
+        } else {
+            this.glviewWidth = MyApplication.dm.widthPixels
+        }
+        if (numberOfPanes != 1) {
+            this.glviewHeight = MyApplication.dm.heightPixels / 2
+        } else {
+            this.glviewHeight = MyApplication.dm.heightPixels
+        }
         projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
         layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
@@ -99,7 +109,9 @@ class WXGLTextObject(
             wxglSurfaceView.cities.clear()
             scale = getScale()
             oglrZoom = 1.0f
-            if (wxglRender.zoom < 1.00f) oglrZoom = wxglRender.zoom * 0.8f
+            if (wxglRender.zoom < 1.00f) {
+                oglrZoom = wxglRender.zoom * 0.8f
+            }
             textSize = UIPreferences.textSizeSmall * oglrZoom * 0.75f * RadarPreferences.radarTextSize
             val cityMinZoom = 0.50
             if (wxglRender.zoom > cityMinZoom) {
@@ -155,7 +167,9 @@ class WXGLTextObject(
             wxglSurfaceView.countyLabels.clear()
             scale = getScale()
             oglrZoom = 1.0f
-            if (wxglRender.zoom < 1.00f) oglrZoom = wxglRender.zoom * 0.8f
+            if (wxglRender.zoom < 1.00f) {
+                oglrZoom = wxglRender.zoom * 0.8f
+            }
             textSize = UIPreferences.textSizeSmall * oglrZoom * 0.65f * RadarPreferences.radarTextSize
             if (wxglRender.zoom > 1.50) {
                 UtilityCountyLabels.countyName.indices.forEach {
@@ -191,7 +205,9 @@ class WXGLTextObject(
             wxglSurfaceView.spotterLabels.clear()
             scale = getScale()
             oglrZoom = 1.0f
-            if (wxglRender.zoom < 1.00f) oglrZoom = wxglRender.zoom * 0.8f
+            if (wxglRender.zoom < 1.00f) {
+                oglrZoom = wxglRender.zoom * 0.8f
+            }
             textSize = UIPreferences.textSizeSmall * oglrZoom * RadarPreferences.radarTextSize * 0.75f
             if (wxglRender.zoom > 0.5) {
                 // spotter list make copy first
@@ -353,7 +369,9 @@ class WXGLTextObject(
             wxglSurfaceView.spotterTextView.clear()
             var indexSpotter = 0
             while (indexSpotter < UtilitySpotter.spotterList.size) {
-                if (UtilitySpotter.spotterList[indexSpotter].unique == WXGLRadarActivity.spotterId) break
+                if (UtilitySpotter.spotterList[indexSpotter].unique == WXGLRadarActivity.spotterId) {
+                    break
+                }
                 indexSpotter += 1
             }
             var indexSpotterReport = 0
@@ -373,7 +391,9 @@ class WXGLTextObject(
             }
             scale = getScale()
             oglrZoom = 1.0f
-            if (wxglRender.zoom < 1.0f) oglrZoom = wxglRender.zoom * 0.8f
+            if (wxglRender.zoom < 1.0f) {
+                oglrZoom = wxglRender.zoom * 0.8f
+            }
             if (wxglRender.zoom > 0.5) {
                 for (c in 0 until 1) {
                    val drawText = checkButDoNotDrawText(
@@ -453,7 +473,9 @@ class WXGLTextObject(
             wxglSurfaceView.pressureCenterLabels.clear()
             scale = getScale()
             oglrZoom = 1.0f
-            if (wxglRender.zoom < 1.00f) oglrZoom = wxglRender.zoom * 0.8f
+            if (wxglRender.zoom < 1.00f) {
+                oglrZoom = wxglRender.zoom * 0.8f
+            }
             textSize = UIPreferences.textSizeNormal * RadarPreferences.radarTextSize
             if (wxglRender.zoom < (0.5 / wxglRender.zoomScreenScaleFactor)) {
                 UtilityWpcFronts.pressureCenters.indices.forEach {

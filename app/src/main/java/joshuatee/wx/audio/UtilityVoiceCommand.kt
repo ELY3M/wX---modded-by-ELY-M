@@ -27,7 +27,7 @@ import android.view.View
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.WpcTextProductsActivity
 
@@ -47,45 +47,47 @@ object UtilityVoiceCommand {
                     validRid = false
                 }
             }
-            if (validRid) ObjectIntent.showRadar(context, arrayOf(radarSite, state))
+            if (validRid) {
+                Route.radar(context, arrayOf(radarSite, state))
+            }
         } else if (vrString.contains("AFD") || vrString.contains("text")) {
             if (tokens.size > 1) {
                 wfo = tokens[1].uppercase(Locale.US)
             }
             if (wfo == "WPC") {
-                ObjectIntent(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
+                Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
             } else {
-                ObjectIntent.showWfoText(context, arrayOf(wfo, "AFD", "sound"))
+                Route.wfoText(context, arrayOf(wfo, "AFD", "sound"))
             }
         } else if (vrString.contains("cloud")) {
-            ObjectIntent.showVis(context)
+            Route.vis(context)
         } else if (vrString.uppercase(Locale.US).contains("SPC")) {
             if (tokens.size > 1) {
                 when {
-                    vrString.contains("1") -> ObjectIntent.showSpcSwo(context, arrayOf("1", "sound"))
-                    vrString.contains("2") -> ObjectIntent.showSpcSwo(context, arrayOf("2", "sound"))
-                    vrString.contains("3") -> ObjectIntent.showSpcSwo(context, arrayOf("3", "sound"))
-                    else -> ObjectIntent.showSpcSwo(context, arrayOf("4-8", "sound"))
+                    vrString.contains("1") -> Route.spcSwo(context, arrayOf("1", "sound"))
+                    vrString.contains("2") -> Route.spcSwo(context, arrayOf("2", "sound"))
+                    vrString.contains("3") -> Route.spcSwo(context, arrayOf("3", "sound"))
+                    else -> Route.spcSwo(context, arrayOf("4-8", "sound"))
                 }
             } else {
-                ObjectIntent.showSpcSwo(context, arrayOf("1", "sound"))
+                Route.spcSwo(context, arrayOf("1", "sound"))
             }
         } else if (vrString.contains("day one")) {
-            ObjectIntent.showSpcSwo(context, arrayOf("1", "sound"))
+            Route.spcSwo(context, arrayOf("1", "sound"))
         } else if (vrString.contains("day 2")) {
-            ObjectIntent.showSpcSwo(context, arrayOf("2", "sound"))
+            Route.spcSwo(context, arrayOf("2", "sound"))
         } else if (vrString.contains("day 3")) {
-            ObjectIntent.showSpcSwo(context, arrayOf("3", "sound"))
+            Route.spcSwo(context, arrayOf("3", "sound"))
         } else if (vrString.contains("day 4")) {
-            ObjectIntent.showSpcSwo(context, arrayOf("4-8", "sound"))
+            Route.spcSwo(context, arrayOf("4-8", "sound"))
         } else if (vrString.contains("add")) {
             vrString = vrString.replace("add location", "")
-            ObjectIntent.showLocationEdit(context, arrayOf((Location.numLocations + 1).toString(), vrString))
+            Route.locationEdit(context, arrayOf((Location.numLocations + 1).toString(), vrString))
         } else if (vrString.contains("edit")) {
             vrString = vrString.replace("edit location", "")
-            ObjectIntent.showLocationEdit(context, arrayOf(Location.currentLocationStr, vrString))
+            Route.locationEdit(context, arrayOf(Location.currentLocationStr, vrString))
         } else if (vrString.contains("mosaic")) {
-            ObjectIntent.showRadarMosaic(context)
+            Route.radarMosaic(context)
         } else if (vrString.contains("map")) {
             if (tokens.size > 1) {
                 when (tokens[1]) {
@@ -115,7 +117,7 @@ object UtilityVoiceCommand {
                     }
                 }
             }
-            ObjectIntent(context, SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "1", "SPCMESO"))
+            Route(context, SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "1", "SPCMESO"))
         } else if (vrString.contains("forecast")) {
             val forecast = Utility.readPref(context, "FCST", "")
             UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")

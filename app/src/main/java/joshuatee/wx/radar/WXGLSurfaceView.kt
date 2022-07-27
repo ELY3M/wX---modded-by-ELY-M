@@ -33,6 +33,7 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.TextView
 import joshuatee.wx.MyApplication
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
@@ -174,13 +175,13 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             mScaleFactor *= detector.scaleFactor
             if (RadarPreferences.dualpaneshareposn) {
                 (0 until numPanes).forEach {
-                    wxglRenders[it].x *= (mScaleFactor / oldScaleFactor)
-                    wxglRenders[it].y *= (mScaleFactor / oldScaleFactor)
+                    wxglRenders[it].x *= mScaleFactor / oldScaleFactor
+                    wxglRenders[it].y *= mScaleFactor / oldScaleFactor
                     wxglRenders[it].zoom = mScaleFactor
                 }
             } else {
-                wxglRender.x *= (mScaleFactor / oldScaleFactor)
-                wxglRender.y *= (mScaleFactor / oldScaleFactor)
+                wxglRender.x *= mScaleFactor / oldScaleFactor
+                wxglRender.y *= mScaleFactor / oldScaleFactor
                 wxglRender.zoom = mScaleFactor
             }
             if (RadarPreferences.dualpaneshareposn) {
@@ -232,7 +233,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         if (!locationFragment && !RadarPreferences.wxoglCenterOnLocation) {
             if (distanceX != 0f) {
                 if (RadarPreferences.dualpaneshareposn) {
-                    (0 until numPanes).forEach { wxglRenders[it].x += -1.0f * distanceX }
+                    (0 until numPanes).forEach {
+                        wxglRenders[it].x += -1.0f * distanceX
+                    }
                 } else {
                     wxglRender.x += -1.0f * distanceX
                 }
@@ -240,7 +243,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             }
             if (distanceY != 0f) {
                 if (RadarPreferences.dualpaneshareposn) {
-                    (0 until numPanes).forEach { wxglRenders[it].y += distanceY }
+                    (0 until numPanes).forEach {
+                        wxglRenders[it].y += distanceY
+                    }
                 } else {
                     wxglRender.y += distanceY
                 }
@@ -248,7 +253,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             }
             if (panned) {
                 if (RadarPreferences.dualpaneshareposn) {
-                    (0 until numPanes).forEach { wxglSurfaceViews[it].requestRender() }
+                    (0 until numPanes).forEach {
+                        wxglSurfaceViews[it].requestRender()
+                    }
                 } else {
                     requestRender()
                 }
@@ -269,7 +276,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         if (!locationFragment) {
             if (distanceX != 0f) {
                 if (RadarPreferences.dualpaneshareposn) {
-                    (0 until numPanes).forEach { wxglRenders[it].x += -1.0f * distanceX }
+                    (0 until numPanes).forEach {
+                        wxglRenders[it].x += -1.0f * distanceX
+                    }
                 } else {
                     wxglRender.x += -1.0f * distanceX
                 }
@@ -277,7 +286,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             }
             if (distanceY != 0f) {
                 if (RadarPreferences.dualpaneshareposn) {
-                    (0 until numPanes).forEach { wxglRenders[it].y += distanceY }
+                    (0 until numPanes).forEach {
+                        wxglRenders[it].y += distanceY
+                    }
                 } else {
                     wxglRender.y += distanceY
                 }
@@ -285,7 +296,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             }
             if (panned) {
                 if (RadarPreferences.dualpaneshareposn) {
-                    (0 until numPanes).forEach { wxglSurfaceViews[it].requestRender() }
+                    (0 until numPanes).forEach {
+                        wxglSurfaceViews[it].requestRender()
+                    }
                 } else {
                     requestRender()
                 }
@@ -391,7 +404,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
 
     fun zoomInByKey(paneScaleFactor: Float = 1.0f) {
         density = (wxglRender.ortInt * 2).toFloat() / width
-        mScaleFactor *= ( 2.0f * (1.0f * paneScaleFactor))
+        mScaleFactor *= 2.0f * paneScaleFactor
         if (RadarPreferences.dualpaneshareposn && !locationFragment) {
             (0 until numPanes).forEach {
                 wxglRenders[it].setViewInitial(mScaleFactor, wxglRenders[it].x * 2.0f, wxglRenders[it].y * 2.0f)
@@ -439,7 +452,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     }
 
     fun zoomOutByKey(paneScaleFactor: Float = 1.0f) {
-        mScaleFactor /= (2.0f / (1.0f * paneScaleFactor))
+        mScaleFactor /= 2.0f / paneScaleFactor
         if (RadarPreferences.dualpaneshareposn && !locationFragment) {
             (0 until numPanes).forEach {
                 wxglRenders[it].setViewInitial(mScaleFactor, wxglRenders[it].x / 2.0f, wxglRenders[it].y / 2.0f)
@@ -460,7 +473,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         }
     }
 
-    fun setOnProgressChangeListener(l: OnProgressChangeListener) { listener = l }
+    fun setOnProgressChangeListener(l: OnProgressChangeListener) {
+        listener = l
+    }
 
     interface OnProgressChangeListener {
         fun onProgressChanged(progress: Int, idx: Int, idxInt: Int)

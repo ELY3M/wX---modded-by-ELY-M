@@ -43,7 +43,6 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImage
-import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.ui.UtilityUI
 
 object UtilityImg {
@@ -73,9 +72,9 @@ object UtilityImg {
 
     fun imgRestorePosnZoom(context: Context, img: TouchImage, prefStr: String) {
         img.setZoom(
-                Utility.readPref(context, prefStr + "_ZOOM", 1.0f),
-                Utility.readPref(context, prefStr + "_X", 0.5f),
-                Utility.readPref(context, prefStr + "_Y", 0.5f)
+                Utility.readPrefFloat(context, prefStr + "_ZOOM", 1.0f),
+                Utility.readPrefFloat(context, prefStr + "_X", 0.5f),
+                Utility.readPrefFloat(context, prefStr + "_Y", 0.5f)
         )
     }
 
@@ -88,9 +87,9 @@ object UtilityImg {
             if (x.isNaN()) x = 1.0f
             if (y.isNaN()) y = 1.0f
             if (z.isNaN()) z = 1.0f
-            Utility.writePref(context, prefStr + "_X", x)
-            Utility.writePref(context, prefStr + "_Y", y)
-            Utility.writePref(context, prefStr + "_ZOOM", z)
+            Utility.writePrefFloat(context, prefStr + "_X", x)
+            Utility.writePrefFloat(context, prefStr + "_Y", y)
+            Utility.writePrefFloat(context, prefStr + "_ZOOM", z)
         }
     }
 
@@ -119,7 +118,7 @@ object UtilityImg {
         }
     }
 
-    fun animInterval(context: Context) = 50 * Utility.readPref(context, "ANIM_INTERVAL", UIPreferences.animationIntervalDefault)
+    fun animInterval(context: Context) = 50 * Utility.readPrefInt(context, "ANIM_INTERVAL", UIPreferences.animationIntervalDefault)
 
     fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap) = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 

@@ -17,28 +17,23 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
- */
+*/
 
-package joshuatee.wx.radarcolorpalettes
+package joshuatee.wx.ui
 
 import android.content.Context
-import joshuatee.wx.R
-import joshuatee.wx.util.UtilityIO
+import android.graphics.Bitmap
+import joshuatee.wx.util.UtilityImg
 
-internal object UtilityColorPalette4bitGeneric {
+class CardHSImage(context: Context, val product: String) : Image(context) {
 
-    fun generate(context: Context, product: Int) {
-        ObjectColorPalette.colorMap[product]!!.position(0)
-        val fileId = when (product) {
-            19 -> R.raw.colormap19
-            30 -> R.raw.colormap30
-            56 -> R.raw.colormap56
-            else -> R.raw.colormap19
-        }
-        UtilityIO.readTextFileFromRaw(context.resources, fileId).split("\n").forEach { line ->
-            if (line.contains(",")) {
-                ObjectColorPalette.colorMap[product]!!.putLine(line)
-            }
-        }
+    init {
+        img = TouchImageView2(context)
+        img.layoutParams = layoutParams
+        card.addView(img)
+    }
+
+    fun set(bitmap: Bitmap) {
+        UtilityImg.resizeViewSetImgInCard(bitmap, img)
     }
 }

@@ -26,6 +26,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.objects.DistanceUnit
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityImgAnim
 

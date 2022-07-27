@@ -28,7 +28,7 @@ import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import joshuatee.wx.common.GlobalArrays
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.radar.RID
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.util.To

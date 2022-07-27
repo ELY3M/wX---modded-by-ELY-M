@@ -61,7 +61,7 @@ class LocationFragment : Fragment() {
     private val uiDispatcher = Dispatchers.Main
     private lateinit var scrollView: ScrollView
     private lateinit var locationDialogue: ObjectDialogue
-    private lateinit var locationLabel: ObjectCardText
+    private lateinit var locationLabel: CardText
     private var lastRefresh = 0.toLong()
     private var currentConditionsTime = ""
     private var radarTime = ""
@@ -73,9 +73,9 @@ class LocationFragment : Fragment() {
     private lateinit var linearLayout: LinearLayout
     private var homescreenFavLocal = ""
     private val sevenDayCards = mutableListOf<ObjectCard7Day>()
-    private val homeScreenTextCards = mutableListOf<ObjectCardHSText>()
-    private val homeScreenImageCards = mutableListOf<ObjectCardHSImage>()
-    private val homeScreenWebCards = mutableListOf<ObjectCard>()
+    private val homeScreenTextCards = mutableListOf<CardHSText>()
+    private val homeScreenImageCards = mutableListOf<CardHSImage>()
+    private val homeScreenWebCards = mutableListOf<Card>()
     private val homeScreenWebViews = mutableListOf<WebView>()
     private val wxglRenders = mutableListOf<WXGLRender>()
     private val wxglSurfaceViews = mutableListOf<WXGLSurfaceView>()
@@ -88,10 +88,10 @@ class LocationFragment : Fragment() {
     // total # of wxogl
     private var oglrCount = 0
     private var needForecastData = false
-    private var linearLayoutForecast: LinearLayout? = null
+    private var boxForecast: VBox? = null
     // hazards
-    private var linearLayoutHazards: LinearLayout? = null
-    private val hazardsCards = mutableListOf<ObjectCardText>()
+    private var boxHazards: VBox? = null
+    private val hazardsCards = mutableListOf<CardText>()
     private val hazardsExpandedAl = mutableListOf<Boolean>()
     private var dataNotInitialized = true
     private var alertDialogStatus: ObjectDialogue? = null
@@ -128,19 +128,18 @@ class LocationFragment : Fragment() {
                     currentConditionsAdded = true
                 }
             } else if (token == "TXT-HAZ") {
-                linearLayoutHazards = LinearLayout(activityReference)
-                linearLayoutHazards?.orientation = LinearLayout.VERTICAL
-                linearLayout.addView(linearLayoutHazards)
+                boxHazards = VBox(activityReference)
+                linearLayout.addView(boxHazards!!.get())
             } else if (token == "TXT-7DAY" || token == "TXT-7DAY2") {
                 if (!sevenDayAdded) {
-                    linearLayout.addView(linearLayoutForecast)
+                    linearLayout.addView(boxForecast?.get())
                     sevenDayAdded = true
                 }
             } else if (token == "OGL-RADAR") {
                 wxglRenders.add(WXGLRender(activityReference, 4))
                 oglrIdx = oglrCount
                 oglrCount += 1
-                cardViews.add(ObjectCard(activityReference).get())
+                cardViews.add(Card(activityReference).get())
                 wxglSurfaceViews.add(WXGLSurfaceView(activityReference, widthDivider, numPanes, 1))
                 wxglRenders[index].rid = ""
                 oldRadarSites[index] = ""
@@ -157,19 +156,19 @@ class LocationFragment : Fragment() {
                 linearLayout.addView(cardViews.last())
                 index += 1
             } else if (token.contains("TXT-")) {
-                val hsTextTmp = ObjectCardHSText(activityReference, token.replace("TXT-", ""))
+                val hsTextTmp = CardHSText(activityReference, token.replace("TXT-", ""))
                 linearLayout.addView(hsTextTmp.get())
                 homeScreenTextCards.add(hsTextTmp)
-                hsTextTmp.setOnClickListener { hsTextTmp.toggleText() }
+                hsTextTmp.connect { hsTextTmp.toggleText() }
             } else if (token.contains("IMG-")) {
-                val hsImageTmp = ObjectCardHSImage(activityReference, token.replace("IMG-", ""))
+                val hsImageTmp = CardHSImage(activityReference, token.replace("IMG-", ""))
                 linearLayout.addView(hsImageTmp.get())
                 homeScreenImageCards.add(hsImageTmp)
                 setImageOnClick()
             } else if (token.contains("NXRD-")) {
                 wxglRenders.add(WXGLRender(activityReference, 4))
                 oglrCount += 1
-                cardViews.add(ObjectCard(activityReference).get())
+                cardViews.add(Card(activityReference).get())
                 wxglSurfaceViews.add(WXGLSurfaceView(activityReference, widthDivider, numPanes, 1))
                 wxglSurfaceViews[index].index = index
                 wxglRenders[index].rid = token.replace("NXRD-", "")
@@ -191,7 +190,7 @@ class LocationFragment : Fragment() {
             } else if (token.contains("WEB-")) {
                 if (token == "WEB-7DAY") {
                     val wv = WebView(activityReference)
-                    homeScreenWebCards.add(ObjectCard(activityReference))
+                    homeScreenWebCards.add(Card(activityReference))
                     homeScreenWebViews.add(wv)
                     homeScreenWebCards.last().addView(homeScreenWebViews.last())
                     linearLayout.addView(homeScreenWebCards.last().get())
@@ -220,22 +219,21 @@ class LocationFragment : Fragment() {
             dialog.dismiss()
         }
         // The main LL that holds all content
-        linearLayout = view.findViewById(R.id.ll)
+        linearLayout = view.findViewById(R.id.linearLayout)
         // The button the user will tape so change location
-        locationLabel = ObjectCardText(activityReference, linearLayout, Location.name, TextSize.MEDIUM)
+        locationLabel = CardText(activityReference, linearLayout, Location.name, TextSize.MEDIUM)
         val locationLabelPadding = if (UtilityUI.isTablet()) 10 else 20
         locationLabel.setPaddingAmount(locationLabelPadding)
         locationLabel.setTextColor(UIPreferences.textHighlightColor)
-        locationLabel.setOnClickListener { locationDialogue.show() }
+        locationLabel.connect { locationDialogue.show() }
         if (homescreenFavLocal.contains("TXT-CC2")) {
             objectCardCurrentConditions = ObjectCardCurrentConditions(activityReference, 2)
-            objectCardCurrentConditions?.setListener(alertDialogStatus, alertDialogStatusList, ::radarTimestamps)
+            objectCardCurrentConditions?.connect(alertDialogStatus, alertDialogStatusList, ::radarTimestamps)
         } else {
             objectCardCurrentConditions = ObjectCardCurrentConditions(activityReference, 1)
         }
         if (homescreenFavLocal.contains("TXT-7DAY")) {
-            linearLayoutForecast = LinearLayout(activityReference)
-            linearLayoutForecast?.orientation = LinearLayout.VERTICAL
+            boxForecast = VBox(activityReference)
         }
         addDynamicCards()
         getContent()
@@ -267,7 +265,7 @@ class LocationFragment : Fragment() {
             setImageOnClick()
             getContent()
         } else {
-            ObjectIntent.showLocationEdit(activityReference, arrayOf((position + 1).toString(), ""))
+            Route.locationEdit(activityReference, arrayOf((position + 1).toString(), ""))
         }
         locationLabel.text = Location.name
     }
@@ -288,7 +286,8 @@ class LocationFragment : Fragment() {
         }
         val currentTime = UtilityTime.currentTimeMillis()
         lastRefresh = currentTime / 1000
-        Utility.writePref(activityReference, "LOC_LAST_UPDATE", lastRefresh)
+        // TODO FIXME what is this for?
+        Utility.writePrefLong(activityReference, "LOC_LAST_UPDATE", lastRefresh)
     }
 
     override fun onResume() {
@@ -301,7 +300,9 @@ class LocationFragment : Fragment() {
         locationLabel.text = Location.name
         sevenDayCards.forEach { it.refreshTextSize() }
         homeScreenTextCards.forEach { it.refreshTextSize() }
-        hazardsCards.forEach { it.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal) }
+        hazardsCards.forEach {
+            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+        }
         // TODO use a Timer class to handle the data refresh stuff
         val currentTime = UtilityTime.currentTimeMillis()
         val currentTimeSec = currentTime / 1000
@@ -462,7 +463,7 @@ class LocationFragment : Fragment() {
         val productIndex = To.int(productString)
         FutureBytes2(MyApplication.appContext,
                 { UtilityDownload.getImageProduct(MyApplication.appContext, homeScreenImageCards[productIndex].product) },
-                homeScreenImageCards[productIndex]::setImage
+                homeScreenImageCards[productIndex]::set
         )
     }
 
@@ -515,7 +516,7 @@ class LocationFragment : Fragment() {
             val cl = UtilityHomeScreen.HM_CLASS[homeScreenImageCards[ii].product]
             val id = UtilityHomeScreen.HM_CLASS_ID[homeScreenImageCards[ii].product]
             val argsOrig = UtilityHomeScreen.HM_CLASS_ARGS[homeScreenImageCards[ii].product]
-            homeScreenImageCards[ii].setOnClickListener {
+            homeScreenImageCards[ii].connect {
                 if (argsOrig != null) {
                     val args = arrayOfNulls<String>(argsOrig.size)
                     System.arraycopy(argsOrig, 0, args, 0, argsOrig.size)
@@ -537,7 +538,7 @@ class LocationFragment : Fragment() {
                         startActivity(intent)
                     }
                 } else {
-                    ObjectIntent.showVis(activityReference)
+                    Route.vis(activityReference)
                 }
             }
         }
@@ -565,17 +566,17 @@ class LocationFragment : Fragment() {
     }
 
     private fun setupHazardCardsCA(hazUrl: String) {
-        linearLayoutHazards?.removeAllViews()
+        boxHazards?.removeChildrenAndLayout()
         hazardsExpandedAl.clear()
         hazardsCards.clear()
         hazardsExpandedAl.add(false)
-        hazardsCards.add(ObjectCardText(activityReference))
+        hazardsCards.add(CardText(activityReference))
         hazardsCards[0].setupHazard()
         hazardsCards[0].text = hazUrl
         val hazUrlCa = objectHazards.hazards
-        hazardsCards[0].setOnClickListener { ObjectIntent.showText(activityReference, arrayOf(Utility.fromHtml(hazUrlCa), hazUrl)) }
+        hazardsCards[0].connect { Route.text(activityReference, arrayOf(Utility.fromHtml(hazUrlCa), hazUrl)) }
         if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) {
-            linearLayoutHazards?.addView(hazardsCards[0].get())
+            boxHazards?.addWidget(hazardsCards[0].get())
         }
     }
 
@@ -646,20 +647,20 @@ class LocationFragment : Fragment() {
     }
 
     private fun setupHazardCards() {
-        linearLayoutHazards?.removeAllViews()
+        boxHazards?.removeChildrenAndLayout()
         hazardsExpandedAl.clear()
         hazardsCards.clear()
         objectHazards.titles.indices.forEach { z ->
             if (UtilityNotificationTools.nwsLocalAlertNotFiltered(activityReference, objectHazards.titles[z])) {
                 hazardsExpandedAl.add(false)
-                hazardsCards.add(ObjectCardText(activityReference))
+                hazardsCards.add(CardText(activityReference))
                 hazardsCards[z].setupHazard()
                 hazardsCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
-                hazardsCards[z].setOnClickListener { ObjectIntent.showHazard(activityReference, arrayOf(objectHazards.urls[z])) }
-                linearLayoutHazards?.addView(hazardsCards[z].get())
+                hazardsCards[z].connect { Route.hazard(activityReference, arrayOf(objectHazards.urls[z])) }
+                boxHazards?.addWidget(hazardsCards[z].get())
             } else {
                 hazardsExpandedAl.add(false)
-                hazardsCards.add(ObjectCardText(activityReference))
+                hazardsCards.add(CardText(activityReference))
             }
         }
     }
@@ -667,13 +668,13 @@ class LocationFragment : Fragment() {
     private fun getForecastData() {
         FutureVoid(MyApplication.appContext, ::getCc, ::updateCc)
         if (locationChangedSevenDay) {
-            linearLayoutForecast?.removeAllViewsInLayout()
+            boxForecast?.removeChildren()
             locationChangedSevenDay = false
         }
         FutureVoid(MyApplication.appContext, ::get7day, ::update7day)
         if (locationChangedHazards) {
-            linearLayoutHazards?.removeAllViewsInLayout()
-            linearLayoutHazards?.visibility = View.GONE
+            boxHazards?.removeChildren()
+            boxHazards?.visibility = View.GONE
             locationChangedHazards = false
         }
         FutureVoid(MyApplication.appContext, ::getHazards, ::updateHazards)
@@ -732,31 +733,31 @@ class LocationFragment : Fragment() {
     private fun update7day() {
         if (isAdded) {
             if (homescreenFavLocal.contains("TXT-7DAY")) {
-                linearLayoutForecast?.removeAllViewsInLayout()
+                boxForecast?.removeChildren()
                 sevenDayCards.clear()
                 val day7Arr = objectSevenDay.forecastList
                 bitmaps.forEachIndexed { index, bitmap ->
                     val objectCard7Day = ObjectCard7Day(activityReference, bitmap, Location.isUS, index, day7Arr)
-                    objectCard7Day.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
-                    linearLayoutForecast?.addView(objectCard7Day.get())
+                    objectCard7Day.connect { scrollView.smoothScrollTo(0, 0) }
+                    boxForecast?.addWidget(objectCard7Day.get())
                     sevenDayCards.add(objectCard7Day)
                 }
                 // sunrise card
-                val cardSunrise = ObjectCardText(activityReference)
+                val cardSunrise = CardText(activityReference)
                 cardSunrise.center()
-                cardSunrise.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
+                cardSunrise.connect { scrollView.smoothScrollTo(0, 0) }
                 try {
                     cardSunrise.text = UtilityTimeSunMoon.getForHomeScreen(activityReference)
                 } catch (e: Exception) {
                     UtilityLog.handleException(e)
                 }
-                linearLayoutForecast?.addView(cardSunrise.get())
+                boxForecast?.addWidget(cardSunrise.get())
             }
             //
             // Canada legal card
             //
             if (!Location.isUS && homescreenFavLocal.contains("TXT-7DAY2")) {
-                ObjectCALegal(activityReference, linearLayoutForecast!!, UtilityCanada.getLocationUrl(Location.x, Location.y))
+                ObjectCALegal(activityReference, boxForecast!!.get(), UtilityCanada.getLocationUrl(Location.x, Location.y))
             }
         }
     }
@@ -779,12 +780,12 @@ class LocationFragment : Fragment() {
             if (Location.isUS) {
                 if (objectHazards.titles.isEmpty()) {
                     if (homescreenFavLocal.contains("TXT-HAZ")) {
-                        linearLayoutHazards?.removeAllViews()
-                        linearLayoutHazards?.visibility = View.GONE
+                        boxHazards?.removeChildrenAndLayout()
+                        boxHazards?.visibility = View.GONE
                     }
                 } else {
                     if (homescreenFavLocal.contains("TXT-HAZ")) {
-                        linearLayoutHazards?.visibility = View.VISIBLE
+                        boxHazards?.visibility = View.VISIBLE
                         setupHazardCards()
                     }
                 }
@@ -792,7 +793,7 @@ class LocationFragment : Fragment() {
                 if (objectHazards.getHazardsShort() != "") {
                     val hazardsSum = objectHazards.getHazardsShort().uppercase(Locale.US)
                     if (homescreenFavLocal.contains("TXT-HAZ")) {
-                        linearLayoutHazards?.visibility = View.VISIBLE
+                        boxHazards?.visibility = View.VISIBLE
                         setupHazardCardsCA(hazardsSum)
                     }
                 }

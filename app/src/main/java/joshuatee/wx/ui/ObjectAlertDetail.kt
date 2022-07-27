@@ -22,16 +22,15 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.widget.LinearLayout
 import joshuatee.wx.Extensions.parseMultiple
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.objects.TextSize
 
-class ObjectAlertDetail(val context: Context, linearLayout: LinearLayout) {
+class ObjectAlertDetail(val context: Context, box: VBox) {
 
-    private val objectTextViews = mutableListOf<ObjectTextView>()
+    private val objectTextViews = mutableListOf<Text>()
     var title = ""
         private set
     var wfoTitle = ""
@@ -39,8 +38,8 @@ class ObjectAlertDetail(val context: Context, linearLayout: LinearLayout) {
 
     init {
         repeat(6) {
-            objectTextViews.add(ObjectTextView(context))
-            linearLayout.addView(objectTextViews.last().get())
+            objectTextViews.add(Text(context))
+            box.addWidget(objectTextViews.last().get())
         }
         objectTextViews[0].setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
         objectTextViews[1].setPadding(UIPreferences.padding, 0, UIPreferences.padding, UIPreferences.padding)

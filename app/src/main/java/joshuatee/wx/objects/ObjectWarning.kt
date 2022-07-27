@@ -22,7 +22,6 @@
 package joshuatee.wx.objects
 
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.radar.LatLon
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityString

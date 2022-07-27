@@ -157,7 +157,7 @@ object UtilityNotification {
         var notifUrls = ""
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
         val widgetsEnabled = Utility.readPref(context, "WIDGETS_ENABLED", "false").startsWith("t")
-        val ccUpdateInterval = Utility.readPref(context, "CC_NOTIFICATION_INTERVAL", 30)
+        val ccUpdateInterval = Utility.readPrefInt(context, "CC_NOTIFICATION_INTERVAL", 30)
         val locLabel: String
         var noMain: String
         var noBody: String
@@ -174,7 +174,7 @@ object UtilityNotification {
             // https://api.weather.gov/gridpoints/DTX/x,y/forecast
             // problem is if network is down it will be a non deterministic value so we need something different
             val currentUpdateTime = UtilityTime.currentTimeMillis()
-            val lastUpdateTime = Utility.readPref(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
+            val lastUpdateTime = Utility.readPrefLong(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
             if (Location.locations[locNumInt].ccNotification) {
                 notifUrls += url + "CC" + NotificationPreferences.notificationStrSep
             }
@@ -186,7 +186,7 @@ object UtilityNotification {
                 val objHazards = ObjectHazards(locNumInt)
                 val objSevenDay = ObjectSevenDay(locNumInt)
                 val updateTime = UtilityTime.currentTimeMillis()
-                Utility.writePref(context, "CC" + locNum + "_LAST_UPDATE", updateTime)
+                Utility.writePrefLong(context, "CC" + locNum + "_LAST_UPDATE", updateTime)
                 if (locNum == widgetLocNum && widgetsEnabled) {
                     UtilityWidget.widgetDownloadData(context, objCc, objSevenDay, objHazards)
                 }

@@ -24,9 +24,9 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.UtilitySpotter
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
@@ -59,12 +59,11 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     private fun updateTitles() {
-        title = UtilitySpotter.reports.size.toString() + " Spotter reports"
-        toolbar.subtitle = UtilityTime.gmtTime("HH:mm") + " UTC"
+        setTitle(UtilitySpotter.reports.size.toString() + " Spotter reports", UtilityTime.gmtTime("HH:mm") + " UTC")
     }
 
     private fun itemSelected(position: Int) {
         val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(UtilitySpotter.reports[position].lat, UtilitySpotter.reports[position].lon))
-        ObjectIntent.showRadar(this, arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.reports[position].uniq))
+        Route.radar(this, arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.reports[position].uniq))
     }
 }

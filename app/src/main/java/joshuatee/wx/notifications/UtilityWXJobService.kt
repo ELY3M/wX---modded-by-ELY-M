@@ -34,7 +34,7 @@ object UtilityWXJobService {
     private var kJobId = 0
 
     fun startService(context: Context) {
-        val alertNotificationIntervalCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_INTERVAL", -1)
+        val alertNotificationIntervalCurrent = Utility.readPrefInt(context, "ALERT_NOTIFICATION_INTERVAL", -1)
         //if (alertNotificationIntervalCurrent < 121) {
             if (android.os.Build.VERSION.SDK_INT > 23) {
                 if (alertNotificationIntervalCurrent < 121) {
@@ -51,7 +51,7 @@ object UtilityWXJobService {
     }
 
     fun start(context: Context) {
-        val alertNotificationIntervalCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_INTERVAL", -1)
+        val alertNotificationIntervalCurrent = Utility.readPrefInt(context, "ALERT_NOTIFICATION_INTERVAL", -1)
         if (android.os.Build.VERSION.SDK_INT > 23) {
             val serviceName = ComponentName(context, WXJobService::class.java)
             val jobInfo = JobInfo.Builder(kJobId++, serviceName)

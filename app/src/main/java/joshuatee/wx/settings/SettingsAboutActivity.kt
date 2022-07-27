@@ -27,12 +27,12 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.R
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.ObjectPopupMessage
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityShare
@@ -40,12 +40,11 @@ import joshuatee.wx.util.UtilityShare
 class SettingsAboutActivity : BaseActivity() {
 
     private var html = ""
-    private lateinit var textCard: ObjectCardText
+    private lateinit var cardText: CardText
     private val faqUrl = "https://gitlab.com/joshua.tee/wxl23/-/tree/master/doc/FAQ.md"
-    private val iOSUrl = "https://apps.apple.com/us/app/wxl23/id1171250052"
     //private val releaseNotesUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vT-YfH9yH_qmxLHe25UGlJvHHj_25qmTHJoeWPBbNWlvS4nm0YBmFeAnEpeel3GTL3OYKnvXkMNbnOX/pub"
     private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.generic_about, menu)
@@ -55,36 +54,36 @@ class SettingsAboutActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.generic_about, false)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         val version = Utility.getVersion(this)
         toolbar.subtitle = "version: $version"
 
-        val faqButton = ObjectCardText(this, box, toolbar, toolbarBottom)
+        val faqButton = CardText(this, box, toolbar, toolbarBottom)
         faqButton.setTextColor(UIPreferences.textHighlightColor)
         faqButton.text = "View FAQ (current app issues listed at top)"
-        faqButton.setOnClickListener { ObjectIntent.showWeb(this, faqUrl) }
+        faqButton.connect { Route.web(this, faqUrl) }
 
-        val releaseNotesButton = ObjectCardText(this, box, toolbar, toolbarBottom)
+        val releaseNotesButton = CardText(this, box, toolbar, toolbarBottom)
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
         releaseNotesButton.text = "View release notes"
-        releaseNotesButton.setOnClickListener { ObjectIntent.showWeb(this, releaseNotesUrl) }
+        releaseNotesButton.connect { Route.web(this, releaseNotesUrl) }
 
-        textCard = ObjectCardText(this, box, toolbar, toolbarBottom)
-        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files (should not be needed)", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
-        cardDeleteFiles.setOnClickListener {
-            ObjectPopupMessage(box, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
+        cardText = CardText(this, box, toolbar, toolbarBottom)
+        val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
+        cardDeleteFiles.connect {
+            ObjectPopupMessage(box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         }
-        box.addView(cardDeleteFiles.get())
+        box.addWidget(cardDeleteFiles.get())
         displayContent()
     }
 
     private fun displayContent() {
-        textCard.text = Utility.showVersion(this)
+        cardText.text = Utility.showVersion(this)
         html = Utility.showVersion(this)
     }
 
     override fun onRestart() {
-        textCard.text = Utility.showVersion(this)
+        cardText.text = Utility.showVersion(this)
         html = Utility.showVersion(this)
         super.onRestart()
     }
@@ -98,7 +97,7 @@ class SettingsAboutActivity : BaseActivity() {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        textCard.text = keyCode.toString() + " " + Utility.showVersion(this)
+        cardText.text = keyCode.toString() + " " + Utility.showVersion(this)
         return when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT -> true
             KeyEvent.KEYCODE_DPAD_RIGHT -> true

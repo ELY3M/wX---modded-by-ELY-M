@@ -41,7 +41,7 @@ import joshuatee.wx.R
 import joshuatee.wx.canada.UtilityCitiesCanada
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.FutureText2
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.UtilityCitiesExtended
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
@@ -66,20 +66,20 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private var locLabelCurrent = ""
     private var locNum = ""
     private var locNumToSaveStr = ""
-    private lateinit var alertRadar1Sw: ObjectSettingsCheckBox
-    private lateinit var alertSoundSw: ObjectSettingsCheckBox
-    private lateinit var alert7Day1Sw: ObjectSettingsCheckBox
-    private lateinit var alertCcSw: ObjectSettingsCheckBox
-    private lateinit var alertSw: ObjectSettingsCheckBox
-    private lateinit var alertMcdSw: ObjectSettingsCheckBox
-    private lateinit var alertSwoSw: ObjectSettingsCheckBox
-    private lateinit var alertSpcfwSw: ObjectSettingsCheckBox
-    private lateinit var alertWpcmpdSw: ObjectSettingsCheckBox
+    private lateinit var alertRadar1Sw: ObjectSwitch
+    private lateinit var alertSoundSw: ObjectSwitch
+    private lateinit var alert7Day1Sw: ObjectSwitch
+    private lateinit var alertCcSw: ObjectSwitch
+    private lateinit var alertSw: ObjectSwitch
+    private lateinit var alertMcdSw: ObjectSwitch
+    private lateinit var alertSwoSw: ObjectSwitch
+    private lateinit var alertSpcfwSw: ObjectSwitch
+    private lateinit var alertWpcmpdSw: ObjectSwitch
     private var menuLocal: Menu? = null
     private lateinit var locLabelEt: EditText
     private lateinit var locXEt: EditText
     private lateinit var locYEt: EditText
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private lateinit var rl: RelativeLayout
 
     @SuppressLint("MissingSuperCall")
@@ -88,7 +88,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         locLabelEt = findViewById(R.id.locLabelEt)
         locXEt = findViewById(R.id.locXEt)
         locYEt = findViewById(R.id.locYEt)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         rl = findViewById(R.id.rl)
 
         UtilityCitiesExtended.create(this)
@@ -100,7 +100,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         Utility.writePref(this, "LOCATION_CANADA_ID", "")
         ObjectFab(this, R.id.fab) { fabSaveLocation() }
         val me = toolbarBottom.menu
-        ObjectCard(this, R.id.cv1)
+        Card(this, R.id.cv1)
         val locNumArr = intent.getStringArrayExtra(LOC_NUM)
         locNum = locNumArr!![0]
         val locNumInt = locNum.toIntOrNull() ?: 0
@@ -151,63 +151,63 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             locXEt.setHintTextColor(Color.GRAY)
             locYEt.setHintTextColor(Color.GRAY)
         }
-        alertSw = ObjectSettingsCheckBox(
+        alertSw = ObjectSwitch(
                 this,
                 "Alert",
                 "ALERT" + locNum + "_NOTIFICATION",
                 R.string.alert_switch_text
         )
         alertSw.isChecked(alertNotificationCurrent == "true")
-        alertCcSw = ObjectSettingsCheckBox(
+        alertCcSw = ObjectSwitch(
                 this,
                 "Conditions",
                 "ALERT_CC" + locNum + "_NOTIFICATION",
                 R.string.alert_cc_switch_text
         )
         alertCcSw.isChecked(alertCcNotificationCurrent == "true")
-        alert7Day1Sw = ObjectSettingsCheckBox(
+        alert7Day1Sw = ObjectSwitch(
                 this,
                 "7day",
                 "ALERT_7DAY_" + locNum + "_NOTIFICATION",
                 R.string.alert_7day_1_switch_text
         )
         alert7Day1Sw.isChecked(alert7Day1NotificationCurrent == "true")
-        alertSoundSw = ObjectSettingsCheckBox(
+        alertSoundSw = ObjectSwitch(
                 this,
                 "Sound",
                 "ALERT_NOTIFICATION_SOUND$locNum",
                 R.string.alert_sound_switch_text
         )
         alertSoundSw.isChecked(alertNotificationSoundCurrent == "true")
-        alertRadar1Sw = ObjectSettingsCheckBox(
+        alertRadar1Sw = ObjectSwitch(
                 this,
                 "Radar",
                 "ALERT_NOTIFICATION_RADAR$locNum",
                 R.string.alert_radar1_switch_text
         )
         alertRadar1Sw.isChecked(alertNotificationRadarCurrent == "true")
-        alertMcdSw = ObjectSettingsCheckBox(
+        alertMcdSw = ObjectSwitch(
                 this,
                 "SPC MCD",
                 "ALERT_NOTIFICATION_MCD$locNum",
                 R.string.alert_mcd_switch_text
         )
         alertMcdSw.isChecked(alertNotificationMcdCurrent == "true")
-        alertSwoSw = ObjectSettingsCheckBox(
+        alertSwoSw = ObjectSwitch(
                 this,
                 "SPC SWO",
                 "ALERT_NOTIFICATION_SWO$locNum",
                 R.string.alert_swo_switch_text
         )
         alertSwoSw.isChecked(alertNotificationSwoCurrent == "true")
-        alertSpcfwSw = ObjectSettingsCheckBox(
+        alertSpcfwSw = ObjectSwitch(
                 this,
                 "SPC FW",
                 "ALERT_NOTIFICATION_SPCFW$locNum",
                 R.string.alert_spcfw_switch_text
         )
         alertSpcfwSw.isChecked(alertNotificationSpcfwCurrent == "true")
-        alertWpcmpdSw = ObjectSettingsCheckBox(
+        alertWpcmpdSw = ObjectSwitch(
                 this,
                 "WPC MPD",
                 "ALERT_NOTIFICATION_WPCMPD$locNum",
@@ -225,7 +225,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 alertSpcfwSw,
                 alertWpcmpdSw
         ).forEach{
-            box.addView(it.get())
+            box.addWidget(it.get())
         }
         hideNonUSNotifications()
     }
@@ -401,10 +401,10 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         val yStr = locYEt.text.toString()
         if (xStr.isNotEmpty() && yStr.isNotEmpty()) {
             if (Location.us(xStr)) {
-                ObjectIntent.showWebView(this, arrayOf(UtilityMap.getUrl(xStr, yStr, "9"), Location.name))
+                Route.webView(this, arrayOf(UtilityMap.getUrl(xStr, yStr, "9"), Location.name))
             } else {
                 val addressForMap = locLabelEt.text.toString()
-                ObjectIntent.showWebView(this, arrayOf(UtilityMap.getUrlFromAddress(addressForMap), Location.name))
+                Route.webView(this, arrayOf(UtilityMap.getUrlFromAddress(addressForMap), Location.name))
             }
         }
     }
@@ -413,7 +413,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         when (item.itemId) {
             R.id.action_delete -> delete()
             R.id.action_map -> showMap()
-            R.id.action_ca -> ObjectIntent(this, SettingsLocationCanadaActivity::class.java)
+            R.id.action_ca -> Route(this, SettingsLocationCanadaActivity::class.java)
             R.id.action_ab -> openCanadaMap("ab")
             R.id.action_bc -> openCanadaMap("bc")
             R.id.action_mb -> openCanadaMap("mb")
@@ -540,7 +540,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun openCanadaMap(s: String) {
-        ObjectIntent(this, SettingsLocationCanadaMapActivity::class.java, SettingsLocationCanadaMapActivity.URL, arrayOf(s))
+        Route(this, SettingsLocationCanadaMapActivity::class.java, SettingsLocationCanadaMapActivity.URL, arrayOf(s))
     }
 
     private fun showMessage(string: String) = ObjectPopupMessage(rl, string)

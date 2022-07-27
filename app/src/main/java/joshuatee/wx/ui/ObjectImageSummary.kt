@@ -24,40 +24,36 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
-import android.widget.LinearLayout
 
-class ObjectImageSummary(context: Context, val linearLayout: LinearLayout, val bitmaps: List<Bitmap>) {
+class ObjectImageSummary(context: Context, box: VBox, bitmaps: List<Bitmap>) {
 
     //
     // used by:
     // SPC Swo summary, SPC Tstorm, WPC Rainfall summary, SPC Fire outlook summary
     //
 
-    private val objectCardImages = mutableListOf<ObjectCardImage>()
+    private val images = mutableListOf<Image>()
+    private var imagesPerRow = 2
 
     init {
-        val imagesPerRow = 2
-        linearLayout.removeAllViews()
-        var numberOfImages = 0
-        val horizontalLinearLayouts = mutableListOf<HBox>()
-        bitmaps.forEach { bitmap ->
-            val objectCardImage = if (numberOfImages % imagesPerRow == 0) {
-                val hbox = HBox(context, linearLayout)
-                horizontalLinearLayouts.add(hbox)
-                ObjectCardImage(context, hbox.get(), bitmap, imagesPerRow)
-            } else {
-                ObjectCardImage(context, horizontalLinearLayouts.last().get(), bitmap, imagesPerRow)
+        if (UtilityUI.isLandScape(context)) {
+            imagesPerRow = 3
+        }
+        box.removeChildrenAndLayout()
+        val boxRows = mutableListOf<HBox>()
+        bitmaps.forEachIndexed { index, bitmap ->
+            if (index % imagesPerRow == 0) {
+                boxRows.add(HBox(context, box.get()))
             }
-            objectCardImages.add(objectCardImage)
-            numberOfImages += 1
+            images.add(Image(context, boxRows.last(), bitmap, imagesPerRow))
         }
     }
 
-    fun setOnClickListener(index: Int, fn: View.OnClickListener) {
-        objectCardImages[index].setOnClickListener(fn)
+    fun connect(index: Int, fn: View.OnClickListener) {
+        images[index].connect(fn)
     }
 
-    fun setImage(index: Int, bitmap: Bitmap) {
-        objectCardImages[index].setImage2(bitmap, 2)
+    fun set(index: Int, bitmap: Bitmap) {
+        images[index].set2(bitmap, imagesPerRow)
     }
 }

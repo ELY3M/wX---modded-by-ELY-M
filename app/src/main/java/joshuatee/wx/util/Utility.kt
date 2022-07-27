@@ -29,10 +29,8 @@ import androidx.preference.PreferenceManager
 import android.text.Html
 import android.content.Context
 import android.content.res.Configuration
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.UIPreferences
@@ -114,21 +112,21 @@ object Utility {
         editor.apply()
     }
 
-    fun writePref(context: Context, key: String, value: Int) {
+    fun writePrefInt(context: Context, key: String, value: Int) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
         editor.putInt(key, value)
         editor.apply()
     }
 
-    fun writePref(context: Context, key: String, value: Float) {
+    fun writePrefFloat(context: Context, key: String, value: Float) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
         editor.putFloat(key, value)
         editor.apply()
     }
 
-    fun writePref(context: Context, key: String, value: Long) {
+    fun writePrefLong(context: Context, key: String, value: Long) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
         editor.putLong(key, value)
@@ -145,17 +143,17 @@ object Utility {
         return preferences.getString(key, value)!!
     }
 
-    fun readPref(context: Context, key: String, value: Int): Int {
+    fun readPrefInt(context: Context, key: String, value: Int): Int {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getInt(key, value)
     }
 
-    fun readPref(context: Context, key: String, value: Float): Float {
+    fun readPrefFloat(context: Context, key: String, value: Float): Float {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getFloat(key, value)
     }
 
-    fun readPref(context: Context, key: String, value: Long): Long {
+    fun readPrefLong(context: Context, key: String, value: Long): Long {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getLong(key, value)
     }

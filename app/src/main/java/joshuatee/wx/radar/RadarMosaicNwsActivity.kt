@@ -76,7 +76,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
         image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
         toolbar.setOnClickListener { objectNavDrawer.open() }
         image.setMaxZoom(8.0f)
-        image.setListener(objectNavDrawer) { getContent() }
+        image.connect(objectNavDrawer) { getContent() }
         if (arguments.isNotEmpty() && arguments[0] != "") {
             sector = arguments[0]
         }

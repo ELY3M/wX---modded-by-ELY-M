@@ -22,6 +22,8 @@
 package joshuatee.wx.objects
 
 import android.content.Context
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.common.RegExp
 import joshuatee.wx.util.*
 
 class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
@@ -34,7 +36,7 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
 //    var colorInt: Int
 
     init {
-        isEnabled = Utility.readPref(prefTokenEnabled(), "false").startsWith("t")
+        isEnabled = Utility.readPref(context, prefTokenEnabled(), "false").startsWith("t")
         storage = DataStorage(prefTokenStorage())
         storage.update(context)
         latLonList = DataStorage(prefTokenLatLon())
@@ -74,16 +76,16 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
 
     private fun getTypeName() = type.toString().replace("PolygonType.", "")
 
-//    private fun getUrl() = when (type) {
-//        PolygonType.MCD -> GlobalVariables.nwsSPCwebsitePrefix + "/products/md/"
-//        PolygonType.WATCH -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
-//        PolygonType.WATCH_TORNADO -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
-//        PolygonType.MPD -> GlobalVariables.nwsWPCwebsitePrefix + "/metwatch/metwatch_mpd.php"
-//        else -> ""
-//    }
+    fun getUrl() = when (type) {
+        PolygonType.MCD -> GlobalVariables.nwsSPCwebsitePrefix + "/products/md/"
+        PolygonType.WATCH -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
+        PolygonType.WATCH_TORNADO -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
+        PolygonType.MPD -> GlobalVariables.nwsWPCwebsitePrefix + "/metwatch/metwatch_mpd.php"
+        else -> ""
+    }
 
     private fun update() {
-        isEnabled = Utility.readPref(prefTokenEnabled(), "false").startsWith("t")
+        isEnabled = Utility.readPref(context, prefTokenEnabled(), "false").startsWith("t")
 //        colorInt = Utility.readPrefInt(colorPrefByType[type]!!, colorDefaultByType[type]!!)
     }
 
@@ -111,6 +113,20 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
 //                PolygonType.Watch to "RADAR_COLOR_TSTORM_WATCH",
 //                PolygonType.WatchTornado to "RADAR_COLOR_TOR_WATCH",
 //        )
+
+        val textPrefix = mapOf(
+            PolygonType.MCD to "SPCMCD",
+            PolygonType.MPD to "WPCMPD",
+//            PolygonType.WATCH to "RADAR_COLOR_TSTORM_WATCH",
+//            PolygonType.WatchTornado to "RADAR_COLOR_TOR_WATCH",
+        )
+
+        val regex = mapOf(
+                PolygonType.MCD to RegExp.mcdPatternAlerts,
+                PolygonType.MPD to RegExp.mpdPattern,
+                PolygonType.WATCH to RegExp.watchPattern,
+//            PolygonType.WatchTornado to "RADAR_COLOR_TOR_WATCH",
+        )
 
         fun load(context: Context) {
             polygonList.forEach {

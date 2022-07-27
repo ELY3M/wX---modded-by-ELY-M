@@ -28,6 +28,7 @@ import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.LatLon
 
 // Data file - https://www.wpc.ncep.noaa.gov/basicwx/coded_srp.txt
 // Decoder - https://www.wpc.ncep.noaa.gov/basicwx/read_coded_fcst_bull.shtml

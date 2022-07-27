@@ -73,7 +73,7 @@ object UtilityFavorites {
         favorites[2] = MODIFY_STR
         val returnList = MutableList(favorites.size) { "" }
         favorites.indices.forEach { k ->
-            UtilityLog.d("wx", "DEBUG: " + favorites[k])
+//            UtilityLog.d("wx", "DEBUG: " + favorites[k])
             val name = when (prefToken) {
                 "RID_FAV" -> Utility.getRadarSiteName(favorites[k])
                 "WFO_FAV" -> Utility.getWfoSiteName(favorites[k])

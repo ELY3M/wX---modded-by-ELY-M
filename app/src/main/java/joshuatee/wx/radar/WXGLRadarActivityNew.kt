@@ -51,10 +51,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.Route
-import joshuatee.wx.objects.ObjectPolygonWarning
-import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
@@ -62,8 +59,7 @@ import kotlinx.coroutines.*
 
 //elys mod
 import joshuatee.wx.activitiesmisc.WebView
-
-class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
+class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
 
     //
     // This activity is a general purpose viewer of nexrad and mosaic content
@@ -108,7 +104,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var archiveMode = false
     private var ridChanged = true
     private var restartedZoom = false
-    private lateinit var img: TouchImageView2
+    private lateinit var touchImage: TouchImageView2
     private var firstTime = true
     private var inOglAnim = false
     private var inOglAnimPaused = false
@@ -149,7 +145,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var paneList = listOf<Int>()
     private var wxglTextObjects = mutableListOf<WXGLTextObject>()
     private var dialogRadarLongPress: ObjectDialogue? = null
-    private var isGetContentInProgress = false
     private val animateButtonPlayString = "Animate Frames"
     private val animateButtonStopString = "Stop animation"
     private val pauseButtonString = "Pause animation"
@@ -175,6 +170,26 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { Route(this, SevereDashboardActivity::class.java) }
+        val arguments = intent.getStringArrayExtra(RID)!!
+        if (arguments.size > 6) {
+            urlStr = arguments[4]
+            locXCurrent = arguments[5]
+            locYCurrent = arguments[6]
+            archiveMode = true
+        } else if (arguments.size > 4) {
+            spotterId = arguments[4]
+            spotterShowSelected = true
+        }
+        if (arguments.size > 3) {
+            fixedSite = true
+        }
+        if (arguments.size < 7) {
+            archiveMode = false
+        }	
+    	//elys mod
+        if (UIPreferences.checkinternet) {
+            Utility.checkInternet(this)
+        }	
         UtilityUI.immersiveMode(this)
         if (UIPreferences.radarStatusBarTransparent) {
 //            This constant was deprecated in API level 30.
@@ -183,35 +198,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             window.statusBarColor = Color.TRANSPARENT
         }
         spotterShowSelected = false
-        isGetContentInProgress = false
         locXCurrent = joshuatee.wx.settings.Location.x
         locYCurrent = joshuatee.wx.settings.Location.y
-        val arguments = intent.getStringArrayExtra(RID)
         paneList = (0 until numberOfPanes).toList()
         UtilityFileManagement.deleteCacheFiles(this)
-        // for L2 archive called from storm reports
-        if (arguments != null) {
-            if (arguments.size > 6) {
-                urlStr = arguments[4]
-                locXCurrent = arguments[5]
-                locYCurrent = arguments[6]
-                archiveMode = true
-            } else if (arguments.size > 4) {
-                spotterId = arguments[4]
-                spotterShowSelected = true
-            }
-            if (arguments.size > 3) {
-                fixedSite = true
-            }
-            if (arguments.size < 7) {
-                archiveMode = false
-		}
-            }
-	    
-    	//elys mod
-        if (UIPreferences.checkinternet) {
-            Utility.checkInternet(this)
-        }
         setupAlertDialogRadarLongPress()
         UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
         toolbar.setTitleTextColor(Color.WHITE)
@@ -221,34 +211,13 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         val latLonArrD = UtilityLocation.getGps(this)
         latD = latLonArrD[0]
         lonD = latLonArrD[1]
-        val menu = toolbarBottom.menu
-        starButton = menu.findItem(R.id.action_fav)
-        animateButton = menu.findItem(R.id.action_a)
-        tiltMenu = menu.findItem(R.id.action_tilt)
-        tiltMenuOption4 = menu.findItem(R.id.action_tilt4)
-        l3Menu = menu.findItem(R.id.action_l3)
-        l2Menu = menu.findItem(R.id.action_l2)
-        tdwrMenu = menu.findItem(R.id.action_tdwr)
-        if (!UIPreferences.radarImmersiveMode) {
-            menu.findItem(R.id.action_blank).isVisible = false
-            menu.findItem(R.id.action_level3_blank).isVisible = false
-            menu.findItem(R.id.action_level2_blank).isVisible = false
-            menu.findItem(R.id.action_animate_blank).isVisible = false
-            menu.findItem(R.id.action_tilt_blank).isVisible = false
-            menu.findItem(R.id.action_tools_blank).isVisible = false
-        }
-        menu.findItem(R.id.action_jellybean_drawtools).isVisible = false
-
-        // disable new Level3 super-res until NWS is past deployment phase
-	//elys mod - I enabled those menus 
-        menu.findItem(R.id.action_n0b).isVisible = true
-        menu.findItem(R.id.action_n0g).isVisible = true
+        setupMenu()
 
         delay = UtilityImg.animInterval(this)
-        img = findViewById(R.id.iv)
-        img.maxZoom = 6.0f
+        touchImage = findViewById(R.id.iv)
+        touchImage.maxZoom = 6.0f
         wxglSurfaceView = WXGLSurfaceView(this, 1, numberOfPanes, 1)
-        objectImageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf(img, wxglSurfaceView))
+        objectImageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf(touchImage, wxglSurfaceView))
         objectImageMap.connect(::mapSwitch, UtilityImageMap::mapToRid)
         rl = findViewById(R.id.rl)
         rl.addView(wxglSurfaceView)
@@ -269,16 +238,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         )
         wxglRender.product = "N0Q"
         oglInView = true
-        if (arguments == null) {
-            wxglRender.rid = joshuatee.wx.settings.Location.rid
-        } else {
-            wxglRender.rid = arguments[0]
-        }
+        wxglRender.rid = arguments[0]
         // hack, in rare cases a user will save a location that doesn't pick up RID
         if (wxglRender.rid == "") {
             wxglRender.rid = "TLX"
         }
-        if (arguments != null && arguments.size > 2) {
+        if (arguments.size > 2) {
             wxglRender.product = arguments[2]
             if (wxglRender.product == "N0R") {
                 wxglRender.product = "N0Q"
@@ -306,6 +271,30 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         title = wxglRender.product
         checkForAutoRefresh()
         getContent()
+    }
+
+    fun setupMenu() {
+        val menu = toolbarBottom.menu
+        starButton = menu.findItem(R.id.action_fav)
+        animateButton = menu.findItem(R.id.action_a)
+        tiltMenu = menu.findItem(R.id.action_tilt)
+        tiltMenuOption4 = menu.findItem(R.id.action_tilt4)
+        l3Menu = menu.findItem(R.id.action_l3)
+        l2Menu = menu.findItem(R.id.action_l2)
+        tdwrMenu = menu.findItem(R.id.action_tdwr)
+        if (!UIPreferences.radarImmersiveMode) {
+            menu.findItem(R.id.action_blank).isVisible = false
+            menu.findItem(R.id.action_level3_blank).isVisible = false
+            menu.findItem(R.id.action_level2_blank).isVisible = false
+            menu.findItem(R.id.action_animate_blank).isVisible = false
+            menu.findItem(R.id.action_tilt_blank).isVisible = false
+            menu.findItem(R.id.action_tools_blank).isVisible = false
+        }
+        menu.findItem(R.id.action_jellybean_drawtools).isVisible = false
+        // disable new Level3 super-res until NWS is past deployment phase
+	//elys mod - enabled those menus
+        menu.findItem(R.id.action_n0b).isVisible = true
+        menu.findItem(R.id.action_n0g).isVisible = true
     }
 
     private fun adjustTiltMenu() {
@@ -385,150 +374,153 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         //super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        radarSitesForFavorites = UtilityFavorites.setupMenu(this@WXGLRadarActivity, UIPreferences.ridFav, wxglRender.rid, prefToken)
+    @Synchronized private fun getContent() {
+        radarSitesForFavorites = UtilityFavorites.setupMenu(this, UIPreferences.ridFav, wxglRender.rid, prefToken)
         invalidateOptionsMenu()
-        if (!isGetContentInProgress) {
-            isGetContentInProgress = true
-            val ridIsTdwr = WXGLNexrad.isRidTdwr(wxglRender.rid)
-            if (ridIsTdwr) {
-                l3Menu.isVisible = false
-                l2Menu.isVisible = false
-                tdwrMenu.isVisible = true
-            } else {
-                l3Menu.isVisible = true
-                l2Menu.isVisible = true
-                tdwrMenu.isVisible = false
+        val ridIsTdwr = WXGLNexrad.isRidTdwr(wxglRender.rid)
+        if (ridIsTdwr) {
+            l3Menu.isVisible = false
+            l2Menu.isVisible = false
+            tdwrMenu.isVisible = true
+        } else {
+            l3Menu.isVisible = true
+            l2Menu.isVisible = true
+            tdwrMenu.isVisible = false
+        }
+        if ((wxglRender.product.matches(Regex("N[0-3]Q")) || wxglRender.product == "L2REF") && ridIsTdwr) {
+            if (tilt == "3") {
+                tilt = "2"
             }
-            if ((wxglRender.product.matches(Regex("N[0-3]Q")) || wxglRender.product == "L2REF") && ridIsTdwr) {
-                if (tilt == "3") {
-                    tilt = "2"
+            wxglRender.product = "TZL"
+        }
+        if ((wxglRender.product == "TZL" || wxglRender.product.startsWith("TZ")) && !ridIsTdwr) {
+            wxglRender.product = "N" + tilt + "Q"
+        }
+        if ((wxglRender.product.matches(Regex("N[0-3]U")) || wxglRender.product == "L2VEL") && ridIsTdwr) {
+            if (tilt == "3") {
+                tilt = "2"
+            }
+            wxglRender.product = "TV$tilt"
+        }
+        if (wxglRender.product.startsWith("TV") && !ridIsTdwr) {
+            wxglRender.product = "N" + tilt + "U"
+        }
+        title = wxglRender.product
+        adjustTiltMenu()
+        setStarButton()
+        toolbar.subtitle = ""
+        if (!wxglRender.product.startsWith("2")) {
+            UtilityRadarUI.initWxOglGeom(
+                    wxglSurfaceView,
+                    wxglRender,
+                    0,
+                    oldRadarSites, // was oldRidArr
+                    wxglRenders,
+                    wxglTextObjects,
+                    paneList,
+                    objectImageMap,
+                    wxglSurfaceViews,
+                    ::getGPSFromDouble,
+                    ::getLatLon,
+                    archiveMode
+            )
+        }
+        FutureVoid(this, {
+            UtilityRadarUI.plotRadar(
+                    wxglRender,
+                    urlStr,
+                    this,
+                    ::getGPSFromDouble,
+                    ::getLatLon,
+		    //elys mod
+                    //true,
+                    archiveMode
+            )
+        }, {
+                if (!oglInView) {
+                    touchImage.visibility = View.GONE
+                    wxglSurfaceView.visibility = View.VISIBLE
+                    oglInView = true
                 }
-                wxglRender.product = "TZL"
-            }
-            if ((wxglRender.product == "TZL" || wxglRender.product.startsWith("TZ")) && !ridIsTdwr) {
-                wxglRender.product = "N" + tilt + "Q"
-            }
-            if ((wxglRender.product.matches(Regex("N[0-3]U")) || wxglRender.product == "L2VEL") && ridIsTdwr) {
-                if (tilt == "3") {
-                    tilt = "2"
+                if (ridChanged && !restartedZoom) {
+                    ridChanged = false
                 }
-                wxglRender.product = "TV$tilt"
-            }
-            if (wxglRender.product.startsWith("TV") && !ridIsTdwr) {
-                wxglRender.product = "N" + tilt + "U"
-            }
-            title = wxglRender.product
-            adjustTiltMenu()
-            setStarButton()
-            toolbar.subtitle = ""
-            if (!wxglRender.product.startsWith("2")) {
-                UtilityRadarUI.initWxOglGeom(
-                        wxglSurfaceView,
-                        wxglRender,
-                        0,
-                        oldRadarSites, // was oldRidArr
-                        wxglRenders,
-                        wxglTextObjects,
-                        paneList,
-                        objectImageMap,
-                        wxglSurfaceViews,
-                        ::getGPSFromDouble,
-                        ::getLatLon,
-                        archiveMode
-                )
-            }
-            withContext(Dispatchers.IO) {
-                UtilityRadarUI.plotRadar(
-                        wxglRender,
-                        urlStr,
-                        this@WXGLRadarActivity,
-                        ::getGPSFromDouble,
-                        ::getLatLon,
-			//elys mod
-                        //true,
-                        archiveMode
-                )
-            }
-            if (!oglInView) {
-                img.visibility = View.GONE
-                wxglSurfaceView.visibility = View.VISIBLE
-                oglInView = true
-            }
-            if (ridChanged && !restartedZoom) {
-                ridChanged = false
-            }
-            if (restartedZoom) {
-                restartedZoom = false
-                ridChanged = false
-            }
-            if (PolygonType.SPOTTER_LABELS.pref && !archiveMode) {
-                UtilityWXGLTextObject.updateSpotterLabels(numberOfPanes, wxglTextObjects)
-            }
-	    
-	    
-	    //elys mod
-	    if (PolygonType.HAIL_LABELS.pref && !archiveMode) {
-            UtilityWXGLTextObject.updateHailLabels(numberOfPanes, wxglTextObjects)
-            }
-            if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
-                UtilityWXGLTextObject.updateObservations(numberOfPanes, wxglTextObjects)
-            }
-            wxglSurfaceView.requestRender()
-            if (legendShown && wxglRender.product != oldProd && wxglRender.product != "DSA" && wxglRender.product != "DAA") {
-                updateLegend()
-            }
-            if (legendShown && (wxglRender.product == "DSA" || wxglRender.product == "DAA" || wxglRender.product == "N0U")) {
-                dspLegendMax = (255.0f / wxglRender.wxglNexradLevel3.halfword3132) * 0.01f
-                velMax = wxglRender.wxglNexradLevel3.halfword48
-                velMin = wxglRender.wxglNexradLevel3.halfword47
-                updateLegend()
-            }
-            oldProd = wxglRender.product
-            setSubTitle()
-            animRan = false
-            firstRun = false
-            withContext(Dispatchers.IO) { UtilityDownloadWarnings.get(this@WXGLRadarActivity) }
-            if (!wxglRender.product.startsWith("2")) {
-                UtilityRadarUI.plotWarningPolygons(wxglSurfaceView, wxglRender, archiveMode)
-            }
-            // FIXME move to method
-            val tstCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
-            val torCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
-            val ffwCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
-            if (RadarPreferences.radarWarnings) {
-                title = wxglRender.product + " (" + tstCount.toString() + "," + torCount.toString() + "," + ffwCount.toString() + ")"
-            }
-            if (PolygonType.MCD.pref && !archiveMode) {
-                withContext(Dispatchers.IO) {
-                    UtilityDownloadMcd.get(this@WXGLRadarActivity)
-                    UtilityDownloadWatch.get(this@WXGLRadarActivity)
+                if (restartedZoom) {
+                    restartedZoom = false
+                    ridChanged = false
                 }
+	  	//elys mod
+	    	if (PolygonType.HAIL_LABELS.pref && !archiveMode) {
+            	UtilityWXGLTextObject.updateHailLabels(numberOfPanes, wxglTextObjects)
+            	}
+                if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
+                    UtilityWXGLTextObject.updateObservations(numberOfPanes, wxglTextObjects)
+                }
+                if (PolygonType.SPOTTER_LABELS.pref && !archiveMode) {
+                    UtilityWXGLTextObject.updateSpotterLabels(numberOfPanes, wxglTextObjects)
+                }
+                wxglSurfaceView.requestRender()
+                UtilityRadarUI.updateLastRadarTime(this)
+                setSubTitle()
+        })
+        if (legendShown && wxglRender.product != oldProd && wxglRender.product != "DSA" && wxglRender.product != "DAA") {
+            updateLegend()
+        }
+        if (legendShown && (wxglRender.product == "DSA" || wxglRender.product == "DAA" || wxglRender.product == "N0U")) {
+            dspLegendMax = (255.0f / wxglRender.wxglNexradLevel3.halfword3132) * 0.01f
+            velMax = wxglRender.wxglNexradLevel3.halfword48
+            velMin = wxglRender.wxglNexradLevel3.halfword47
+            updateLegend()
+        }
+        oldProd = wxglRender.product
+        setSubTitle()
+        animRan = false
+        firstRun = false
+        FutureVoid(this, { UtilityDownloadWarnings.get(this) },
+                {
+                    if (!wxglRender.product.startsWith("2")) {
+                        UtilityRadarUI.plotWarningPolygons(wxglSurfaceView, wxglRender, archiveMode)
+                    }
+                    // FIXME move to method
+                    val tstCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
+                    val torCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
+                    val ffwCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
+                    if (RadarPreferences.radarWarnings) {
+                        title = wxglRender.product + " (" + tstCount.toString() + "," + torCount.toString() + "," + ffwCount.toString() + ")"
+                    }
+                })
+        // FIXME TODO break up
+        if (PolygonType.MCD.pref && !archiveMode) {
+            FutureVoid(this, {
+                UtilityDownloadMcd.get(this)
+                UtilityDownloadWatch.get(this)
+            }, {
                 if (!wxglRender.product.startsWith("2")) {
                     UtilityRadarUI.plotMcdWatchPolygons(wxglSurfaceView, wxglRender, archiveMode)
                 }
-            }
-            if (PolygonType.MPD.pref && !archiveMode) {
-                withContext(Dispatchers.IO) { UtilityDownloadMpd.get(this@WXGLRadarActivity) }
+            })
+        }
+        if (PolygonType.MPD.pref && !archiveMode) {
+            FutureVoid(this, { UtilityDownloadMpd.get(this) }, {
                 if (!wxglRender.product.startsWith("2")) {
                     UtilityRadarUI.plotMpdPolygons(wxglSurfaceView, wxglRender, archiveMode)
                 }
-            }
-            if (RadarPreferences.radarShowWpcFronts && !archiveMode) {
-                withContext(Dispatchers.IO) { UtilityWpcFronts.get(this@WXGLRadarActivity) }
+            })
+        }
+        if (RadarPreferences.radarShowWpcFronts && !archiveMode) {
+            FutureVoid(this, { UtilityWpcFronts.get(this) }, {
                 if (!wxglRender.product.startsWith("2")) {
                     UtilityRadarUI.plotWpcFronts(wxglSurfaceView, wxglRender, archiveMode)
                 }
                 UtilityWXGLTextObject.updateWpcFronts(numberOfPanes, wxglTextObjects)
-            }
-            UtilityRadarUI.updateLastRadarTime(this@WXGLRadarActivity)
-            isGetContentInProgress = false
-        } // end check is get content in progress
+            })
+        }
+//            UtilityRadarUI.updateLastRadarTime(this@WXGLRadarActivityNew)
     }
 
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
         if (!oglInView) {
-            img.visibility = View.GONE
+            touchImage.visibility = View.GONE
             wxglSurfaceView.visibility = View.VISIBLE
             oglInView = true
         }
@@ -536,15 +528,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         animRan = true
         withContext(Dispatchers.IO) {
             frameCountGlobal = frameCount
-            var animArray = WXGLDownload.getRadarFilesForAnimation(this@WXGLRadarActivity, frameCount, wxglRender.rid, wxglRender.product)
+            var animArray = WXGLDownload.getRadarFilesForAnimation(this@WXGLRadarActivityNew, frameCount, wxglRender.rid, wxglRender.product)
             var file: File
             var timeMilli: Long
             var priorTime: Long
             try {
                 animArray.indices.forEach {
-                    file = File(this@WXGLRadarActivity.filesDir, animArray[it])
-                    this@WXGLRadarActivity.deleteFile("nexrad_anim$it")
-                    if (!file.renameTo(File(this@WXGLRadarActivity.filesDir, "nexrad_anim$it")))
+                    file = File(this@WXGLRadarActivityNew.filesDir, animArray[it])
+                    this@WXGLRadarActivityNew.deleteFile("nexrad_anim$it")
+                    if (!file.renameTo(File(this@WXGLRadarActivityNew.filesDir, "nexrad_anim$it")))
                         UtilityLog.d("wx", "Problem moving to nexrad_anim$it")
                 }
             } catch (e: Exception) {
@@ -554,12 +546,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             while (inOglAnim) {
                 if (animTriggerDownloads) {
                     // TODO pass wxglRender only
-                    animArray = WXGLDownload.getRadarFilesForAnimation(this@WXGLRadarActivity, frameCount, wxglRender.rid, wxglRender.product)
+                    animArray = WXGLDownload.getRadarFilesForAnimation(this@WXGLRadarActivityNew, frameCount, wxglRender.rid, wxglRender.product)
                     try {
                         animArray.indices.forEach {
-                            file = File(this@WXGLRadarActivity.filesDir, animArray[it])
-                            this@WXGLRadarActivity.deleteFile("nexrad_anim$it")
-                            if (!file.renameTo(File(this@WXGLRadarActivity.filesDir, "nexrad_anim$it")))
+                            file = File(this@WXGLRadarActivityNew.filesDir, animArray[it])
+                            this@WXGLRadarActivityNew.deleteFile("nexrad_anim$it")
+                            if (!file.renameTo(File(this@WXGLRadarActivityNew.filesDir, "nexrad_anim$it")))
                                 UtilityLog.d("wx", "Problem moving to nexrad_anim$it")
                         }
                     } catch (e: Exception) {
@@ -679,7 +671,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 //                    }
                 }
             }
-            R.id.action_settings -> startActivity(Intent(this, SettingsRadarActivity::class.java))
+            R.id.action_settings -> Route(this, SettingsRadarActivity::class.java)
             R.id.action_radar_markers -> Route.image(this, arrayOf("raw:radar_legend", "Radar Markers", "false"))
             R.id.action_radar_2 -> showMultipaneRadar("2")
             R.id.action_radar_4 -> showMultipaneRadar("4")
@@ -737,14 +729,14 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun getImageForShare() = GlobalScope.launch(uiDispatcher) {
         val bitmapForShare = withContext(Dispatchers.IO) { UtilityUSImgWX.layeredImgFromFile(
-                this@WXGLRadarActivity,
+                this@WXGLRadarActivityNew,
                 wxglRender.rid,
                 wxglRender.product,
                 "0",
                 true
         ) }
         UtilityShare.bitmap(
-                this@WXGLRadarActivity,
+                this@WXGLRadarActivityNew,
                 wxglRender.rid + " (" + Utility.getRadarSiteName(wxglRender.rid) + ") " + wxglRender.product,
                 bitmapForShare
         )
@@ -798,20 +790,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         ObjectDialogue(this, WXGLNexrad.getRadarInfo(this,""))
     }
 
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            getContent()
-            dialog.dismiss()
-        }
-        objectDialogue.show()
-    }
-
     override fun onStop() {
         super.onStop()
         if (!archiveMode && !fixedSite) {
@@ -838,13 +816,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                         dialogStatusList,
                         locXCurrent,
                         locYCurrent,
-                        this@WXGLRadarActivity,
+                        this@WXGLRadarActivityNew,
                         wxglSurfaceView,
                         wxglRender,
                         dialogRadarLongPress!!
                 )
             } else {
-                paneList.forEach { wxglTextObjects[it].addLabels() }
+                paneList.forEach {
+                    wxglTextObjects[it].addLabels()
+                }
             }
         }
     }
@@ -855,7 +835,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         override fun run() {
             if (mHandler != null) {
                 if (loopCount > 0) {
-                    if (inOglAnim) animTriggerDownloads = true else getContent()
+                    if (inOglAnim) {
+                        animTriggerDownloads = true
+                    } else {
+                        getContent()
+                    }
                 }
                 loopCount += 1
                 handler.postDelayed(this, mInterval.toLong())
@@ -1064,7 +1048,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                                     wxglRender.rid = radarSitesForFavorites[it].split(" ").getOrNull(0) ?: ""
                                 }
                                 mapSwitch(wxglRender.rid)
-                                //getContent()
                             }
                         }
                         if (firstTime) {
@@ -1096,14 +1079,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
     }
 
+/* orinigal 
+    private fun getContentVwp() {
+//        val data = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(this@WXGLRadarActivityNew, wxglRender.rid) }
+//        Route.text(this@WXGLRadarActivityNew, arrayOf(data, wxglRender.rid + " VAD Wind Profile"))
 
-    /* orinigal
-    private fun getContentVwp() = GlobalScope.launch(uiDispatcher) {
-        val data = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(this@WXGLRadarActivity, wxglRender.rid) }
-        Route.text(this@WXGLRadarActivity, arrayOf(data, wxglRender.rid + " VAD Wind Profile"))
+        FutureText2(this, { UtilityWXOGL.getVwp(this, wxglRender.rid) })
+                { data -> Route.text(this, arrayOf(data, wxglRender.rid + " VAD Wind Profile")) }
     }
-    */
-    
+*/    
+
     //elys mod
     private fun getContentVwp() = GlobalScope.launch(uiDispatcher) {
         //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(this, oglr.rid) }
@@ -1111,7 +1096,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+wxglRender.rid+"-NVW"
         Route(applicationContext, WebView::class.java, WebView.URL, arrayOf(vmpurl, wxglRender.rid + " VAD Wind Profile"))
 
-    }
+    }    
+    
 
     private fun getReflectivity() {
         if (RadarPreferences.radarIconsLevel2 && wxglRender.product.matches("N[0-3]Q".toRegex())) {

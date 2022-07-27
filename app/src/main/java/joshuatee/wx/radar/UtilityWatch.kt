@@ -24,6 +24,7 @@ package joshuatee.wx.radar
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.external.ExternalPolygon
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectPolygonWatch
 
 internal object UtilityWatch {
@@ -31,13 +32,6 @@ internal object UtilityWatch {
     fun add(projectionNumbers: ProjectionNumbers, polygonType: PolygonType): List<Double> {
         val warningList = mutableListOf<Double>()
         val prefToken = ObjectPolygonWatch.polygonDataByType[polygonType]!!.latLonList.value
-//        val prefToken = when (polygonType) {
-//            PolygonType.MCD -> ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.latLonList.value
-//            PolygonType.WATCH -> ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.latLonList.value
-//            PolygonType.WATCH_TORNADO -> ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH_TORNADO]!!.latLonList.value
-//            PolygonType.MPD -> ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.latLonList.value
-//            else -> ""
-//        }
         if (prefToken != "") {
             val polygons = prefToken.split(":").dropLastWhile { it.isEmpty() }
             polygons.forEach { polygon ->
@@ -58,24 +52,6 @@ internal object UtilityWatch {
             numberList = ObjectPolygonWatch.polygonDataByType[type]!!.numberList.value.split(":")
             watchLatLon= ObjectPolygonWatch.polygonDataByType[type]!!.latLonList.value
         }
-//        when (type) {
-//            PolygonType.WATCH -> {
-//                numberList = ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.numberList.value.split(":").dropLastWhile { it.isEmpty() }
-//                watchLatLon = ObjectPolygonWatch.watchLatlonCombined.value
-//            }
-//            PolygonType.MCD -> {
-//                numberList = ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.numberList.value.split(":").dropLastWhile { it.isEmpty() }
-//                watchLatLon = ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.latLonList.value
-//            }
-//            PolygonType.MPD -> {
-//                numberList = ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.numberList.value.split(":").dropLastWhile { it.isEmpty() }
-//                watchLatLon = ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.latLonList.value
-//            }
-//            else -> {
-//                numberList = ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.numberList.value.split(":").dropLastWhile { it.isEmpty() }
-//                watchLatLon = ObjectPolygonWatch.watchLatlonCombined.value
-//            }
-//        }
         val polygons = watchLatLon.split(":").dropLastWhile { it.isEmpty() }
         var notFound = true
         var text = ""

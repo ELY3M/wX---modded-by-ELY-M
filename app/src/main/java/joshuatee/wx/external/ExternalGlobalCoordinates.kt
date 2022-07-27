@@ -9,7 +9,7 @@
  */
 package joshuatee.wx.external
 
-import joshuatee.wx.radar.LatLon
+import joshuatee.wx.objects.LatLon
 
 /**
  *

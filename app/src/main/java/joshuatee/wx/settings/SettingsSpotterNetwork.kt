@@ -13,7 +13,8 @@ import android.widget.LinearLayout
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.ObjectSwitch
 import joshuatee.wx.util.Utility
 
 
@@ -27,11 +28,11 @@ class SettingsSpotterNetwork : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_spotternetwork, null, false)
-        ObjectCard(this, R.id.cv_sn_label)
+        Card(this, R.id.cv_sn_label)
         setupEditText()
 
         val ll: LinearLayout = findViewById(R.id.sn_settings)
-        ll.addView(ObjectSettingsCheckBox(this, "Spotter Network Location Report", "SN_LOCATIONREPORT", R.string.sn_locationreport).get())
+        ll.addView(ObjectSwitch(this, "Spotter Network Location Report", "SN_LOCATIONREPORT", R.string.sn_locationreport).get())
 
 
     }

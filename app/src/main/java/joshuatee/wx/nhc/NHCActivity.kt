@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import java.util.Locale
 import joshuatee.wx.R
@@ -33,15 +32,16 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.wpc.WpcTextProductsActivity
 
 class NhcActivity : BaseActivity() {
 
     private lateinit var objectNhc: ObjectNhc
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.nhc, menu)
@@ -52,7 +52,7 @@ class NhcActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc, false)
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         objectNhc = ObjectNhc(this, box)
         getContent()
     }
@@ -67,11 +67,11 @@ class NhcActivity : BaseActivity() {
     }
 
     private fun showTextProduct(prod: String) {
-        ObjectIntent(this, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(prod.lowercase(Locale.US), ""))
+        Route(this, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(prod.lowercase(Locale.US), ""))
     }
 
     private fun showImageProduct(imageUrl: String, title: String, needWhiteBackground: String) {
-        ObjectIntent.showImage(this, arrayOf(imageUrl, title, needWhiteBackground))
+        Route.image(this, arrayOf(imageUrl, title, needWhiteBackground))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -90,7 +90,7 @@ class NhcActivity : BaseActivity() {
             R.id.action_atl_7daily -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
             R.id.action_epac_sst_anomaly -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
             R.id.action_atl_sst_anomaly -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
-            R.id.action_glcfs -> ObjectIntent.showModel(this, arrayOf("1", "GLCFS", "GLCFS"))
+            R.id.action_glcfs -> Route.model(this, arrayOf("1", "GLCFS", "GLCFS"))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

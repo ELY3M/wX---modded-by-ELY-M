@@ -24,25 +24,24 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.objects.TextSize
 
-class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
+class CardVerticalText(context: Context, numberOfColumns: Int) {
 
-    private val objectCard = ObjectCard(context)
-    private val textViews = mutableListOf<ObjectTextView>()
+    private val card = Card(context)
+    private val textViews = mutableListOf<Text>()
 
     init {
-        val objectLinearLayout = HBox(context, Gravity.CENTER)
-        objectLinearLayout.matchParent()
-        objectLinearLayout.isBaselineAligned = false
-        objectCard.addView(objectLinearLayout.get())
+        val box = HBox(context, Gravity.CENTER)
+        box.matchParent()
+        box.isBaselineAligned = false
+        card.addView(box.get())
         repeat(numberOfColumns) {
             val hbox = HBox(context)
             hbox.wrap()
-            objectLinearLayout.addWidget(hbox.get())
-            val textView = ObjectTextView(context)
+            box.addWidget(hbox.get())
+            val textView = Text(context)
             textViews.add(textView)
             textView.gravity = Gravity.START
             textView.wrap()
@@ -50,12 +49,12 @@ class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
         }
     }
 
-    constructor(context: Context, numberOfColumns: Int, linearLayout: LinearLayout, toolbar: Toolbar) : this(context, numberOfColumns) {
-        linearLayout.addView(get())
-        setOnClickListener { UtilityToolbar.showHide(toolbar) }
+    constructor(context: Context, numberOfColumns: Int, box: VBox, toolbar: Toolbar) : this(context, numberOfColumns) {
+        box.addWidget(get())
+        connect { UtilityToolbar.showHide(toolbar) }
     }
 
-    fun setText(list: List<String>) {
+    fun set(list: List<String>) {
         if (list.size == textViews.size) {
             list.indices.forEach {
                 textViews[it].text = list[it]
@@ -64,9 +63,9 @@ class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
         }
     }
 
-    private fun get() = objectCard.get()
+    private fun get() = card.get()
 
-    fun setOnClickListener(fn: View.OnClickListener) {
-        objectCard.setOnClickListener(fn)
+    fun connect(fn: View.OnClickListener) {
+        card.connect(fn)
     }
 }

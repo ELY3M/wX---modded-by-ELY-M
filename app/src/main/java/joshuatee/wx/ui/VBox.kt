@@ -21,14 +21,16 @@
 
 package joshuatee.wx.ui
 
+import android.app.Activity
 import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import joshuatee.wx.R
 
 class VBox(val context: Context) {
 
-    private val linearLayout = LinearLayout(context)
+    private var linearLayout = LinearLayout(context)
 
     init {
         linearLayout.orientation = LinearLayout.VERTICAL
@@ -44,20 +46,22 @@ class VBox(val context: Context) {
         parentView.addView(linearLayout)
     }
 
-//    constructor(context: Context, orientation: Int) : this(context) {
-//        this.orientation = orientation
-//    }
-//
-//    constructor(context: Context, orientation: Int, gravity: Int) : this(context, orientation) {
-//        this.gravity = gravity
-//    }
+    companion object {
+        fun fromResource(activity: Activity): VBox {
+            val box = VBox(activity)
+            box.linearLayout = activity.findViewById(R.id.linearLayout)
+            return box
+        }
+    }
 
     constructor(context: Context, gravity: Int) : this(context) {
         linearLayout.orientation = LinearLayout.VERTICAL
         this.gravity = gravity
     }
 
-    fun removeAllViewsInLayout() {
+    // assumes you are doing this in onLayout and thus does not call requestLayout
+    // removeAllViews does call requestLayout
+    fun removeChildren() {
         linearLayout.removeAllViewsInLayout()
     }
 
@@ -75,8 +79,20 @@ class VBox(val context: Context) {
         }
     }
 
-    fun removeAllViews() {
+    fun removeChildrenAndLayout() {
         linearLayout.removeAllViews()
+    }
+
+    fun removeView(view: View) {
+        linearLayout.removeView(view)
+    }
+
+    fun setBackgroundColor(color: Int) {
+        linearLayout.setBackgroundColor(color)
+    }
+
+    fun makeHorizontal() {
+        linearLayout.orientation = LinearLayout.HORIZONTAL
     }
 
     fun matchParent() {

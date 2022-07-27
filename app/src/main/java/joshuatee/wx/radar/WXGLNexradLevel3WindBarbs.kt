@@ -22,7 +22,6 @@
 package joshuatee.wx.radar
 
 import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.util.ProjectionNumbers
@@ -32,7 +31,11 @@ internal object WXGLNexradLevel3WindBarbs {
     fun decodeAndPlot(radarSite: String, projectionType: ProjectionType, isGust: Boolean, dataSetIndex: Int): List<Double> {
         val stormList = mutableListOf<Double>()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
-        val arrWb = if (!isGust) UtilityMetar.metarDataList[dataSetIndex].obsArrWb else UtilityMetar.metarDataList[dataSetIndex].obsArrWbGust
+        val arrWb = if (!isGust) {
+            UtilityMetar.metarDataList[dataSetIndex].obsArrWb
+        } else {
+            UtilityMetar.metarDataList[dataSetIndex].obsArrWbGust
+        }
         val degreeShift = 180.00
         val arrowLength = 2.5
         val arrowSpacing = 3.0
@@ -42,7 +45,6 @@ internal object WXGLNexradLevel3WindBarbs {
         val barbLength = 15.0
         val barbOffset = 0.0
         arrWb.forEach { line ->
-            val ecc = ExternalGeodeticCalculator()
             val metarArr = line.split(":").dropLastWhile { it.isEmpty() }
             var angle = 0
             var length = 0
@@ -58,10 +60,10 @@ internal object WXGLNexradLevel3WindBarbs {
                 val degree2 = angle.toDouble()
                 val startLength = 0.0
                 var start = ExternalGlobalCoordinates(locXDbl, locYDbl)
-                var ec = ecc.calculateEndingGlobalCoordinates(start, 0.0, startLength)
+                var ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, 0.0, startLength)
                 stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers).toList()
                 start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                ec = ecc.calculateEndingGlobalCoordinates(
+                ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                     start,
                     degree2 + degreeShift,
                     barbLength * nmScaleFactor * barbLengthScaleFactor
@@ -87,41 +89,37 @@ internal object WXGLNexradLevel3WindBarbs {
                 var index = 0
                 if (above50) {
                     // initial angled line
-                    ec = ecc.calculateEndingGlobalCoordinates(
+                    ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
                         barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
-                    // FIXME create class to handle items that don't change much
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
-                        ecc,
                         projectionNumbers,
                         degree2 - arrowBend * 2.0,
                         startLength + arrowLength * nmScaleFactor
                     )
                     // perpendicular line from main barb
-                    ec = ecc.calculateEndingGlobalCoordinates(
+                    ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
                         barbOffset + startLength + -1.0 * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
-                        ecc,
                         projectionNumbers,
                         degree2 - 90.0,
                         startLength + 0.80 * arrowLength * nmScaleFactor
                     )
                     // connecting line parallel to main barb
-                    ec = ecc.calculateEndingGlobalCoordinates(
+                    ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
                         barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
-                        ecc,
                         projectionNumbers,
                         degree2 - 180.0,
                         startLength + 0.5 * arrowLength * nmScaleFactor
@@ -129,14 +127,13 @@ internal object WXGLNexradLevel3WindBarbs {
                     index += 1
                 }
                 (index until barbCount).forEach { _ ->
-                    ec = ecc.calculateEndingGlobalCoordinates(
+                    ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
                         barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
-                        ecc,
                         projectionNumbers,
                         degree2 - arrowBend * 2.0,
                         startLength + arrowLength * nmScaleFactor
@@ -148,14 +145,13 @@ internal object WXGLNexradLevel3WindBarbs {
                     halfBarbOffsetFudge = nmScaleFactor * 1.0
                 }
                 if (halfBarb) {
-                    ec = ecc.calculateEndingGlobalCoordinates(
+                    ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
                         barbOffset + halfBarbOffsetFudge + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
-                        ecc,
                         projectionNumbers,
                         degree2 - arrowBend * 2.0,
                         startLength + arrowLength / 2.0 * nmScaleFactor

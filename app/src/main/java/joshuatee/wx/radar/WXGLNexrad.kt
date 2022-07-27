@@ -194,9 +194,9 @@ object WXGLNexrad {
     fun savePrefs(context: Context, prefPrefix: String, wxglRender: WXGLRender) {
         Utility.writePref(context, prefPrefix + "_RID", wxglRender.rid)
         Utility.writePref(context, prefPrefix + "_PROD", wxglRender.product)
-        Utility.writePref(context, prefPrefix + "_ZOOM", wxglRender.zoom)
-        Utility.writePref(context, prefPrefix + "_X", wxglRender.x)
-        Utility.writePref(context, prefPrefix + "_Y", wxglRender.y)
+        Utility.writePrefFloat(context, prefPrefix + "_ZOOM", wxglRender.zoom)
+        Utility.writePrefFloat(context, prefPrefix + "_X", wxglRender.x)
+        Utility.writePrefFloat(context, prefPrefix + "_Y", wxglRender.y)
         RadarPreferences.wxoglRid = wxglRender.rid
         RadarPreferences.wxoglProd = wxglRender.product
         RadarPreferences.wxoglZoom = wxglRender.zoom
@@ -207,9 +207,9 @@ object WXGLNexrad {
     fun savePrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {
         Utility.writePref(context, prefPrefix + "_RID" + idx.toString(), wxglRender.rid)
         Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
-        Utility.writePref(context, prefPrefix + "_ZOOM" + idx.toString(), wxglRender.zoom)
-        Utility.writePref(context, prefPrefix + "_X" + idx.toString(), wxglRender.x)
-        Utility.writePref(context, prefPrefix + "_Y" + idx.toString(), wxglRender.y)
+        Utility.writePrefFloat(context, prefPrefix + "_ZOOM" + idx.toString(), wxglRender.zoom)
+        Utility.writePrefFloat(context, prefPrefix + "_X" + idx.toString(), wxglRender.x)
+        Utility.writePrefFloat(context, prefPrefix + "_Y" + idx.toString(), wxglRender.y)
     }
 
     fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {

@@ -28,13 +28,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.core.app.NavUtils
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCard
-import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.*
+import joshuatee.wx.ui.ObjectNumberPicker
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityLog
@@ -60,7 +58,7 @@ class SettingsUIActivity : BaseActivity() {
     private var tilesPerRowStart = 0
     private var navDrawerMainScreen = false
     private var navDrawerMainScreenOnRight = true
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private lateinit var et1: EditText
     private lateinit var et2: EditText
     private lateinit var et3: EditText
@@ -68,268 +66,269 @@ class SettingsUIActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_ui, null, false)
-        box = findViewById(R.id.linearLayout)
+        setTitle("User Interface", "Please tap on text for additional help.")
+        box = VBox.fromResource(this)
         et1 = findViewById(R.id.et1)
         et2 = findViewById(R.id.et2)
         et3 = findViewById(R.id.et3)
-
-        toolbar.subtitle = "Please tap on text for additional help."
         tilesPerRowStart = UIPreferences.tilesPerRow
         navDrawerMainScreen = UIPreferences.navDrawerMainScreen
         navDrawerMainScreenOnRight = UIPreferences.navDrawerMainScreenOnRight
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
         if (UIPreferences.navDrawerMainScreen) {
-            val cardNavDrawer = ObjectCardText(this, "Navigation Drawer Configuration", textSize, SettingsNavDrawerActivity::class.java, padding)
-            box.addView(cardNavDrawer.get())
+            val cardNavDrawer = CardText(this, "Navigation Drawer Configuration", textSize, SettingsNavDrawerActivity::class.java, padding)
+            box.addWidget(cardNavDrawer.get())
         }
-        ObjectCard(this, R.id.cv_tab_labels)
+        Card(this, R.id.cv_tab_labels)
         setupEditText()
-        (0 until 20).forEach { textSizeArr.add(((it + 1) * 50).toString()) }
-        box.addView(
-                ObjectSettingsSpinner(
+        (0 until 20).forEach {
+            textSizeArr.add(((it + 1) * 50).toString())
+        }
+        box.addWidget(
+                ObjectSpinner(
                         this,
                         "Theme (restarts app)",
                         "THEME_BLUE",
                         "BlackAqua",
                         R.string.spinner_theme_label,
                         colorArr
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Check for SPC MCD/Watches",
                         "CHECKSPC",
                         R.string.checkspc_switch_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Check for WPC MPDs",
                         "CHECKWPC",
                         R.string.checkwpc_switch_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Check for TOR,TST,FFW",
                         "CHECKTOR",
                         R.string.checktor_switch_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Dual-pane radar from main screen",
                         "DUALPANE_RADAR_ICON",
                         R.string.dualpane_radar_icon_tv
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Fahrenheit in current conditions/7day",
                         "UNITS_F",
                         R.string.units_f_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Fullscreen mode",
                         "FULLSCREEN_MODE",
                         R.string.fullscreen_mode_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "GOES GLM for lightning (requires restart)",
                         "LIGHTNING_USE_GOES",
                         R.string.use_goes_for_lightning
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Hide top toolbar (restarts app)",
                         "HIDE_TOP_TOOLBAR",
                         R.string.hide_top_toolbar_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Icons evenly spaced",
                         "UI_ICONS_EVENLY_SPACED",
                         R.string.icons_spacing_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Lock toolbars",
                         "LOCK_TOOLBARS",
                         R.string.lock_toolbars_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Main screen radar button (requires restart)",
                         "UI_MAIN_SCREEN_RADAR_FAB",
                         R.string.mainscreen_radar_button
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Media control notification",
                         "MEDIA_CONTROL_NOTIF",
                         R.string.media_control_notif_tv
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Millibars in current conditions",
                         "UNITS_M",
                         R.string.units_m_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Models: use FAB",
                         "FAB_IN_MODELS",
                         R.string.fab_in_models_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Navigation drawer on main screen",
                         "NAV_DRAWER_MAIN_SCREEN",
                         R.string.nav_drawer_main_screen_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Navigation drawer on main screen is on right side",
                         "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
                         R.string.nav_drawer_main_screen_on_right_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "NWS Text: remove line breaks",
                         "NWS_TEXT_REMOVELINEBREAKS",
                         R.string.nws_text_removelinebreak_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Prevent accidental exit",
                         "PREF_PREVENT_ACCIDENTAL_EXIT",
                         R.string.prevent_accidental_exit_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Simple mode (restarts app)",
                         "SIMPLE_MODE",
                         R.string.simple_mode_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Radar: immersive mode",
                         "RADAR_IMMERSIVE_MODE",
                         R.string.radar_immersive_mode_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Radar: transparent status bar",
                         "RADAR_STATUSBAR_TRANSPARENT",
                         R.string.radar_statusbar_transparent_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Radar: transparent toolbars",
                         "RADAR_TOOLBAR_TRANSPARENT",
                         R.string.radar_toolbar_transparent_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Record screen for sharing",
                         "RECORD_SCREEN_SHARE",
                         R.string.record_screen_share_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Translate abbreviations",
                         "TRANSLATE_TEXT",
                         R.string.translate_text_label
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Use AWC Radar Mosaic",
                         "USE_AWC_MOSAIC",
                         R.string.use_awc_mosaic,
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Use new NWS API for 7 day",
                         "USE_NWS_API_SEVEN_DAY",
                         R.string.use_nws_api
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Use new NWS API for Hourly",
                         "USE_NWS_API_HOURLY",
                         R.string.use_nws_api_hourly
                 ).get()
         )
-//        box.addView(
-//                ObjectSettingsCheckBox(
+//        box.addWidget(
+//                ObjectSwitch(
 //                        this,
 //                        "Show VR button on main screen",
 //                        "VR_BUTTON",
 //                        R.string.vr_button_label
 //                ).card
 //        )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "WFO: remember location",
                         "WFO_REMEMBER_LOCATION",
                         R.string.wfo_remember
                 ).get()
         )
-        box.addView(
-                ObjectSettingsCheckBox(
+        box.addWidget(
+                ObjectSwitch(
                         this,
                         "Widgets: prevent opening app on tap",
                         "UI_WIDGET_PREVENT_TAP",
@@ -339,8 +338,8 @@ class SettingsUIActivity : BaseActivity() {
         //
         // sliders
         //
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Animation - frames for toolbar icon",
                         "UI_ANIM_ICON_FRAMES",
@@ -348,10 +347,10 @@ class SettingsUIActivity : BaseActivity() {
                         10,
                         2,
                         40
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Card corner radius",
                         "CARD_CORNER_RADIUS",
@@ -359,10 +358,10 @@ class SettingsUIActivity : BaseActivity() {
                         0,
                         0,
                         10
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Home screen text length",
                         "HOMESCREEN_TEXT_LENGTH_PREF",
@@ -370,10 +369,10 @@ class SettingsUIActivity : BaseActivity() {
                         500,
                         50,
                         1000
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Image tiles per row",
                         "UI_TILES_PER_ROW",
@@ -381,10 +380,10 @@ class SettingsUIActivity : BaseActivity() {
                         UIPreferences.tilesPerRowDefault,
                         3,
                         10
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "NWS icon size",
                         "NWS_ICON_SIZE_PREF",
@@ -392,10 +391,10 @@ class SettingsUIActivity : BaseActivity() {
                         UIPreferences.nwsIconSizeDefault,
                         1,
                         50
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Refresh interval for location in minutes",
                         "REFRESH_LOC_MIN",
@@ -403,10 +402,10 @@ class SettingsUIActivity : BaseActivity() {
                         10,
                         0,
                         120
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Text size",
                         "TEXTVIEW_FONT_SIZE",
@@ -414,10 +413,10 @@ class SettingsUIActivity : BaseActivity() {
                         UIPreferences.normalTextSizeDefault,
                         12,
                         25
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "Text to speech speed, requires app restart",
                         "TTS_SPEED_PREF",
@@ -425,10 +424,10 @@ class SettingsUIActivity : BaseActivity() {
                         10,
                         1,
                         20
-                ).card
+                ).get()
         )
-        box.addView(
-                ObjectSettingsSeekBar(
+        box.addWidget(
+                ObjectNumberPicker(
                         this,
                         "UI elevation height",
                         "ELEVATION_PREF",
@@ -436,7 +435,7 @@ class SettingsUIActivity : BaseActivity() {
                         UIPreferences.elevationPrefDefault,
                         0,
                         30
-                ).card
+                ).get()
         )
     }
 
@@ -449,7 +448,6 @@ class SettingsUIActivity : BaseActivity() {
         Utility.writePref(this, "TAB2_HEADER", et2.text.toString())
         Utility.writePref(this, "TAB3_HEADER", et3.text.toString())
         MyApplication.initPreferences(this)
-        //UtilityLog.d("Wx", "ONSTOP")
     }
 
     private fun setupEditText() {

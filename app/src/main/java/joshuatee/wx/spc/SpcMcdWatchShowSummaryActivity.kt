@@ -26,19 +26,19 @@ import android.os.Bundle
 import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.ui.ObjectCardImage
-import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.Image
+import joshuatee.wx.ui.CardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
+import joshuatee.wx.ui.VBox
 
 class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -69,13 +69,13 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
     private lateinit var miUrl: MenuItem
     private lateinit var miImage: MenuItem
     private lateinit var polygonType: PolygonType
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private var mcdList = listOf<String>()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         miAll = menu.findItem(R.id.action_share_all)
@@ -144,15 +144,15 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
 
     private fun update() {
         mcdList.indices.forEach { mcdIndex ->
-            val objectCardImage = ObjectCardImage(this, box, bitmaps[mcdIndex])
-            objectCardImage.setOnClickListener {
-                ObjectIntent.showMcd(this, arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString()))
+            val image = Image(this, box, bitmaps[mcdIndex])
+            image.connect {
+                Route.mcd(this, arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString()))
             }
         }
         if (mcdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)... ")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-            ObjectCardText(this, box, toolbar, toolbarBottom, Utility.fromHtml(text))
+            CardText(this, box, toolbar, toolbarBottom, Utility.fromHtml(text))
             title = titleString
             if (!number.contains("at")) {
                 toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
@@ -167,7 +167,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
             title = titleString
         }
         if (mcdList.isEmpty()) {
-            ObjectCardText(this, box, toolbar, toolbarBottom, nothingPresentStr)
+            CardText(this, box, toolbar, toolbarBottom, nothingPresentStr)
         }
     }
 

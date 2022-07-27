@@ -28,9 +28,10 @@ import android.graphics.drawable.AnimationDrawable
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.objects.DisplayData
 import joshuatee.wx.ui.ObjectFab
 
-class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanesStr: String) {
+class ObjectModel(val context: Context, var prefModel: String, numPanesStr: String) {
 
     var run = "00Z"
     var time = "00"
@@ -56,7 +57,7 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
     var prefModelIndex = "MODEL_$prefModel${numPanesStr}_INDEX"
     private var modelIndex = 0
     var rtd = RunTimeData()
-    lateinit var displayData: DisplayDataNoSpinner
+    lateinit var displayData: DisplayData
     var sectors = listOf("")
     var labels = listOf("")
     var params = listOf("")
@@ -150,7 +151,7 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
         prefRunPosn = "MODEL_" + prefModel + numPanesStr + "_RUN_POSN"
         modelProvider = "MODEL_$prefModel"
         prefModelIndex = "MODEL_$prefModel${numPanesStr}_INDEX"
-        modelIndex = Utility.readPref(context, prefModelIndex, 0)
+        modelIndex = Utility.readPrefInt(context, prefModelIndex, 0)
         setParams(modelIndex)
         sector = Utility.readPref(context, prefSector, sectors[0])
     }
@@ -196,7 +197,7 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
 
     fun setParams(selectedItemPosition: Int) {
         modelIndex = selectedItemPosition
-        Utility.writePref(context, prefModelIndex, modelIndex)
+        Utility.writePrefInt(context, prefModelIndex, modelIndex)
         when (modelType) {
             ModelType.SPCHRRR -> {
                 when (selectedItemPosition) {

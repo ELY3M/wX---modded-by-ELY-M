@@ -25,16 +25,16 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import android.widget.LinearLayout
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.ui.ObjectCardImage
-import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.Image
+import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -53,25 +53,25 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private var number = ""
     private lateinit var arguments: Array<String>
-    private lateinit var objectCardImage: ObjectCardImage
-    private lateinit var objectCardText: ObjectCardText
+    private lateinit var image: Image
+    private lateinit var cardText: CardText
     private lateinit var objectWatchProduct: ObjectWatchProduct
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
     private var tabletInLandscape = false
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
-        if (tabletInLandscape) {
-            box.orientation = LinearLayout.HORIZONTAL
-            objectCardImage = ObjectCardImage(this, box, UtilityImg.getBlankBitmap(), 2)
+        image = if (tabletInLandscape) {
+            box.makeHorizontal()
+            Image(this, box, UtilityImg.getBlankBitmap(), 2)
         } else {
-            objectCardImage = ObjectCardImage(this, box)
+            Image(this, box)
         }
-        objectCardText = ObjectCardText(this, box, toolbar, toolbarBottom)
+        cardText = CardText(this, box, toolbar, toolbarBottom)
         arguments = intent.getStringArrayExtra(NUMBER)!!
         number = arguments[0]
         when (arguments[2]) {
@@ -93,15 +93,15 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun update() {
-        objectCardText.text = Utility.fromHtml(objectWatchProduct.text)
+        cardText.text = Utility.fromHtml(objectWatchProduct.text)
         toolbar.subtitle = objectWatchProduct.textForSubtitle
         if (tabletInLandscape) {
-            objectCardImage.setImage(objectWatchProduct.bitmap, 2)
+            image.set(objectWatchProduct.bitmap, 2)
         } else {
-            objectCardImage.setImage(objectWatchProduct.bitmap)
+            image.set(objectWatchProduct.bitmap)
         }
-        objectCardImage.setOnClickListener {
-            ObjectIntent.showImage(this@SpcMcdWatchShowActivity, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
+        image.connect {
+            Route.image(this, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
         }
         UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
@@ -111,7 +111,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_radar -> ObjectIntent.showRadarBySite(this, objectWatchProduct.getClosestRadar())
+            R.id.action_radar -> Route.radarBySite(this, objectWatchProduct.getClosestRadar())
             R.id.action_share_all -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap, Utility.fromHtml(objectWatchProduct.text))
             R.id.action_share_text -> UtilityShare.text(this, objectWatchProduct.title, Utility.fromHtml(objectWatchProduct.text))
             R.id.action_share_url -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.textUrl)

@@ -44,7 +44,7 @@ class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
                 WPCIMG -> UtilityWidget.setupIntent(context, remoteViews, WpcImagesActivity::class.java, R.id.iv, WpcImagesActivity.URL, arrayOf(""), type.action)
                 SPCMESO -> UtilityWidget.setupIntent(context, remoteViews, SpcMesoActivity::class.java, R.id.iv, SpcMesoActivity.INFO, arrayOf("SPCMESO1", "1", "SPCMESO"), type.action)
                 CONUSWV -> UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.iv, GoesActivity.RID, arrayOf("CONUS", "09"), type.action)
-                STRPT -> UtilityWidget.setupIntent(context, remoteViews, SpcStormReportsActivity::class.java, R.id.iv, SpcStormReportsActivity.NO, arrayOf("today"), type.action)
+                STRPT -> UtilityWidget.setupIntent(context, remoteViews, SpcStormReportsActivity::class.java, R.id.iv, SpcStormReportsActivity.DAY, arrayOf("today"), type.action)
                 else -> {}
             }
         }

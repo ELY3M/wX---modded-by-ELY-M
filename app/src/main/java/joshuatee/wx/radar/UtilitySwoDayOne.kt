@@ -28,6 +28,7 @@ import joshuatee.wx.Extensions.parseColumn
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.LatLon
 
 internal object UtilitySwoDayOne {
 

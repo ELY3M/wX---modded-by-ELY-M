@@ -29,7 +29,7 @@ import com.google.android.material.button.MaterialButton
 import joshuatee.wx.Extensions.setPadding
 import joshuatee.wx.util.Utility
 
-class ObjectButton(context: Context, title: String, icon: Int) {
+class Button(context: Context, title: String, icon: Int) {
 
     companion object {
         private const val padding = 15
@@ -50,7 +50,7 @@ class ObjectButton(context: Context, title: String, icon: Int) {
         }
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
+    fun connect(fn: View.OnClickListener) {
         button.setOnClickListener(fn)
     }
 

@@ -56,9 +56,9 @@ class HBox(val context: Context) {
         }
     }
 
-    fun removeAllViews() {
-        linearLayout.removeAllViews()
-    }
+//    fun removeAllViews() {
+//        linearLayout.removeAllViews()
+//    }
 
     fun matchParent() {
         linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
@@ -66,6 +66,10 @@ class HBox(val context: Context) {
 
     fun wrap() {
         linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+    }
+
+    fun makeVertical() {
+        linearLayout.orientation = LinearLayout.VERTICAL
     }
 
     fun get() = linearLayout

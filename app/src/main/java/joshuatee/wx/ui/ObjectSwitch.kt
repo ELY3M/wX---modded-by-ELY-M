@@ -19,7 +19,7 @@
 
 */
 
-package joshuatee.wx.settings
+package joshuatee.wx.ui
 
 import android.app.NotificationManager
 import android.content.Context
@@ -30,30 +30,26 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.radar.RadarGeometry
-import joshuatee.wx.ui.*
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
-class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strId: Int) {
+class ObjectSwitch(context: Context, label: String, pref: String, strId: Int) {
 
-    private val objectCard = ObjectCard(context)
+    private val card = Card(context)
     private val checkBox = CheckBox(context)
 
     init {
-        val textView = ObjectTextView(context)
-        textView.wrap()
-//        ObjectCardText.textViewSetup(textView)
-//        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-//        textView.setTextColor(UIPreferences.backgroundColor)
-        textView.setPadding(UIPreferences.paddingSettings)
-//        textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
-        textView.text = label
-//        textView.gravity = Gravity.CENTER_VERTICAL
+        val text = Text(context)
+        text.wrap()
+        text.setPadding(UIPreferences.paddingSettings)
+        text.text = label
         val strInner = context.resources.getString(strId)
-        textView.setOnClickListener { ObjectDialogue(context, strInner) }
+        text.connect { ObjectDialogue(context, strInner) }
         val hbox = HBox(context, Gravity.CENTER_VERTICAL)
         hbox.matchParent()
-        hbox.addWidget(textView.get())
+        hbox.addWidget(text.get())
         checkBox.gravity = Gravity.CENTER_VERTICAL
         val truePrefs = listOf(
                 "COD_HW_DEFAULT",
@@ -124,14 +120,14 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
             }
         }
         hbox.addWidget(checkBox)
-        objectCard.addView(hbox.get())
+        card.addView(hbox.get())
     }
 
     fun isChecked(value: Boolean) {
         checkBox.isChecked = value
     }
 
-    fun get() = objectCard.get()
+    fun get() = card.get()
 
     internal fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener) {
         checkBox.setOnCheckedChangeListener(listener)

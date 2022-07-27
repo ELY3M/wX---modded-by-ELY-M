@@ -27,15 +27,15 @@ import android.os.Bundle
 import android.view.Menu
 import java.util.Locale
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectAlertSummary
 import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImg
 
@@ -54,14 +54,14 @@ class USWarningsWithRadarActivity : BaseActivity() {
     private var html = ""
     private var usDownloaded = false
     private var usDataStr = ""
-    // TODO refactor var naming
-    private val turlLocal = Array(3) { "" }
+    private var filter = ""
+    private var region = ""
     private var firstRun = true
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var objectAlertSummary: ObjectAlertSummary
     private lateinit var scrollView: ScrollView
-    private lateinit var box: LinearLayout
+    private lateinit var box: VBox
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.uswarn, menu)
@@ -72,21 +72,21 @@ class USWarningsWithRadarActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer, R.menu.uswarn, false)
         scrollView = findViewById(R.id.scrollView)
-        box = findViewById(R.id.linearLayout)
+        box = VBox.fromResource(this)
         val arguments = intent.getStringArrayExtra(URL)!!
-        turlLocal[0] = arguments[0]
-        turlLocal[1] = arguments[1]
+        filter = arguments[0]
+        region = arguments[1]
         objectAlertSummary = ObjectAlertSummary(this, box, scrollView)
         objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())
         objectNavDrawer.setListener2 { _, _, position, _ ->
             objectNavDrawer.setItemChecked(position, false)
             objectNavDrawer.close()
             if (objectAlertSummary.filterArray[position].length != 2) {
-                turlLocal[0] = "^" + objectAlertSummary.filterArray[position]
-                turlLocal[1] = "us"
+                filter = "^" + objectAlertSummary.filterArray[position]
+                region = "us"
             } else {
-                turlLocal[0] = ".*?"
-                turlLocal[1] = objectAlertSummary.filterArray[position].lowercase(Locale.US)
+                filter = ".*?"
+                region = objectAlertSummary.filterArray[position].lowercase(Locale.US)
             }
             getContent()
         }
@@ -101,23 +101,16 @@ class USWarningsWithRadarActivity : BaseActivity() {
 
     private fun getContent() {
         FutureVoid(this, ::downloadText, ::updateText)
-        FutureVoid(this, ::downloadImage, ::updateImage)
-    }
-
-    private fun downloadImage() {
-        bitmap = "https://forecast.weather.gov/wwamap/png/US.png".getImage()
-    }
-
-    private fun updateImage() {
-        objectAlertSummary.updateImage(bitmap)
+        FutureVoid(this, { bitmap = "https://forecast.weather.gov/wwamap/png/US.png".getImage() })
+            { objectAlertSummary.updateImage(bitmap) }
     }
 
     private fun downloadText() {
-        if (turlLocal[1] == "us" && usDownloaded) {
+        if (region == "us" && usDownloaded) {
             html = usDataStr
         } else {
-            html = UtilityDownloadNws.getCap(turlLocal[1])
-            if (turlLocal[1] == "us") {
+            html = UtilityDownloadNws.getCap(region)
+            if (region == "us") {
                 usDataStr = html
                 usDownloaded = true
             }
@@ -125,8 +118,8 @@ class USWarningsWithRadarActivity : BaseActivity() {
     }
 
     private fun updateText() {
-        objectAlertSummary.updateContent(html, turlLocal[0], firstRun)
-        title = objectAlertSummary.getTitle(turlLocal[1])
+        objectAlertSummary.updateContent(html, filter, firstRun)
+        title = objectAlertSummary.getTitle(region)
         if (firstRun) {
             objectNavDrawer.updateLists(objectAlertSummary.navList.toList())
             firstRun = false
@@ -148,9 +141,9 @@ class USWarningsWithRadarActivity : BaseActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_warnmap -> ObjectIntent.showImage(this, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
-            R.id.action_warnmapAK -> ObjectIntent.showImage(this, arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))
-            R.id.action_warnmapHI -> ObjectIntent.showImage(this, arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map"))
+            R.id.action_warnmap -> Route.image(this, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
+            R.id.action_warnmapAK -> Route.image(this, arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))
+            R.id.action_warnmapHI -> Route.image(this, arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map"))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
