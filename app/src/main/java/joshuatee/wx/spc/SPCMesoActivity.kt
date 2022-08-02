@@ -21,7 +21,6 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -30,7 +29,6 @@ import android.view.MenuItem
 import android.widget.ImageView
 import joshuatee.wx.Extensions.getHtml
 import joshuatee.wx.Extensions.safeGet
-import joshuatee.wx.Extensions.startAnimation
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
@@ -41,11 +39,9 @@ import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.VideoRecordActivity
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.*
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityFavorites
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.*
 
 class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
@@ -58,7 +54,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     companion object { var INFO = "" }
 
-    private var animRan = false
     private var showRadar = true
     private var showOutlook = true
     private var showWatwarn = true
@@ -78,7 +73,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private val on = "(on) "
     private var curImg = 0
     private var imageLoaded = false
-    private var firstRun = false
     private var numPanes = 0
     private var favListParm = listOf<String>()
     private lateinit var star: MenuItem
@@ -97,15 +91,17 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         menu.findItem(R.id.action_product).title = favListParm.safeGet(0).split(" ").safeGet(0)
+        displayData.objectAnimates[0].setButton(menu)
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val arguments = intent.getStringArrayExtra(INFO)!!
-//        if (arguments == null) {
-//            arguments = arrayOf("", "1", "SPCMESO")
-//        }
+        title = "SPC Meso"
+        var arguments = intent.getStringArrayExtra(INFO)
+        // Keep for static pinned shortcuts
+        if (arguments == null) {
+            arguments = arrayOf("", "1", "SPCMESO")
+        }
         val numPanesAsString = arguments[1]
         numPanes = numPanesAsString.toIntOrNull() ?: 0
         if (numPanes == 1) {
@@ -118,7 +114,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = "SPC Meso"
         prefModel = arguments[2]
         prefSector = prefModel + numPanesAsString + "_SECTOR_LAST_USED"
         prefParam = prefModel + numPanesAsString + "_PARAM_LAST_USED"
@@ -206,6 +201,9 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
+        displayData.objectAnimates.forEach {
+            it.stop()
+        }
         favListParm = UtilityFavorites.setupMenu(this, UIPreferences.spcMesoFav, displayData.param[curImg], prefToken)
         invalidateOptionsMenu()
         if (UIPreferences.spcMesoFav.contains(":" + displayData.param[curImg] + ":"))
@@ -223,22 +221,12 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     if (numPanes > 1) {
                         UtilityImg.resizeViewAndSetImage(this, displayData.bitmaps[it], displayData.image[it].get() as ImageView)
                     } else {
-//                        displayData.img[it].setImageBitmap(displayData.bitmap[it])
-                        displayData.image[it].setBitmap(displayData.bitmaps[it])
+                        displayData.image[it].set(displayData.bitmaps[it])
                     }
                     displayData.image[it].setMaxZoom(4.0f)
-                    animRan = false
             }
-            // TODO FIXME why not imgRestorePosnZoom ?
-            if (!firstRun) {
-                (0 until numPanes).forEach {
-                    displayData.image[it].setZoom(
-                            Utility.readPrefFloat(this, prefModel + numPanes + it.toString() + "_ZOOM", 1.0f),
-                            Utility.readPrefFloat(this, prefModel + numPanes + it.toString() + "_X", 0.5f),
-                            Utility.readPrefFloat(this, prefModel + numPanes + it.toString() + "_Y", 0.5f)
-                    )
-                }
-                firstRun = true
+            displayData.image.forEachIndexed { index, touchImage ->
+                touchImage.firstRun(prefModel + numPanes.toString() + index.toString())
             }
             imageLoaded = true
             Utility.writePref(this, prefParam + curImg, displayData.param[curImg])
@@ -248,23 +236,12 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getAnimate(frames: Int) {
-        FutureVoid(
-                this,
-                {
-                    (0 until numPanes).forEach {
-                        displayData.animDrawable[it] = UtilitySpcMesoInputOutput.getAnimation(
-                                this,
-                                displayData.param[it],
-                                sector,
-                                frames
-                        )
-                    }
-                },
-                {
-                    (0 until numPanes).forEach { displayData.animDrawable[it].startAnimation(displayData.image[it]) }
-                    animRan = true
-                }
-        )
+        displayData.objectAnimates.forEachIndexed { index, objectAnimate ->
+            objectAnimate.animateClicked({}) { UtilitySpcMesoInputOutput.getAnimation(
+                    displayData.param[index],
+                    sector,
+                    frames)}
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -386,7 +363,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun setTitle() {
         if (numPanes > 1)
-            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.image, toolbar, "(" + (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
+            UtilityModels.setSubtitleRestoreZoom(displayData.image, toolbar, "(" + (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
         else
             toolbar.subtitle = displayData.paramLabel[0]
     }
@@ -412,24 +389,30 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     else -> showProductInFavList(it)
                 }
             }
+            R.id.action_animate -> {
+                if (displayData.objectAnimates[0].isRunning()) {
+                    displayData.objectAnimates.forEach {
+                        it.stop()
+                    }
+                } else {
+                    getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
+                }
+            }
             R.id.action_a6 -> getAnimate(6)
             R.id.action_a12 -> getAnimate(12)
             R.id.action_a18 -> getAnimate(18)
+            R.id.action_pause -> displayData.objectAnimates[0].pause()
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
                     var title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[0]
-//                    if (animRan) {
-//                        UtilityShare.animGif(this, title, displayData.animDrawable[0])
-//                    } else {
-                        if (numPanes == 1) {
-                            UtilityShare.bitmap(this, title, displayData.bitmaps[0])
-                        } else {
-                            title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
-                            UtilityShare.bitmap(this, title, displayData.bitmaps[curImg])
-                        }
-//                    }
+                    if (numPanes == 1) {
+                        UtilityShare.bitmap(this, title, displayData.bitmaps[0])
+                    } else {
+                        title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
+                        UtilityShare.bitmap(this, title, displayData.bitmaps[curImg])
+                    }
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -478,10 +461,8 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onStop() {
-        if (imageLoaded) {
-            (0 until numPanes).forEach {
-                UtilityImg.imgSavePosnZoom(this, displayData.image[it], prefModel + numPanes.toString() + it.toString())
-            }
+        displayData.image.forEachIndexed { index, touchImage ->
+            touchImage.imgSavePosnZoom(prefModel + numPanes.toString() + index.toString())
         }
         super.onStop()
     }

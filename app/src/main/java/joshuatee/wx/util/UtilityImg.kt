@@ -39,25 +39,13 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
+import joshuatee.wx.radar.UtilityUSImgWX
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.WXGLNexrad
-import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.ui.UtilityUI
 
 object UtilityImg {
-
-    fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
-        drw.index += 1
-        if (drw.index == drw.getUrlCount()) drw.index = 0
-        fn()
-    }
-
-    fun showPrevImg(drw: ObjectNavDrawer, fn: () -> Unit) {
-        drw.index -= 1
-        if (drw.index == -1) drw.index = drw.getUrlCount() - 1
-        fn()
-    }
 
     fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap) =
             layerDrawableToBitmap(listOf(BitmapDrawable(context.resources, imageA), BitmapDrawable(context.resources, imageB)))
@@ -142,24 +130,6 @@ object UtilityImg {
         return bitmap
     }
 
-//    fun drawableToBitmap(drawable: Drawable): Bitmap {
-//        val width = drawable.intrinsicWidth
-//        val height = drawable.intrinsicHeight
-//        val bitmap: Bitmap
-//        if (width > 0 && height > 0) {
-//            bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
-//            val canvas = Canvas(bitmap)
-//            drawable.setBounds(0, 0, canvas.width, canvas.height)
-//            drawable.draw(canvas)
-//        } else {
-//            bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
-//            val canvas = Canvas(bitmap)
-//            drawable.setBounds(0, 0, canvas.width, canvas.height)
-//            drawable.draw(canvas)
-//        }
-//        return bitmap
-//    }
-
     fun eraseBackground(src: Bitmap, color: Int): Bitmap {
         val width = src.width
         val height = src.height
@@ -169,7 +139,9 @@ object UtilityImg {
             val size = width * height
             val pixels = IntArray(size)
             src.getPixels(pixels, 0, width, 0, 0, width, height)
-            (0 until size).filter { pixels[it] == color }.forEach { pixels[it] = 0 }
+            (0 until size).filter { pixels[it] == color }.forEach {
+                pixels[it] = 0
+            }
             b.setPixels(pixels, 0, width, 0, 0, width, height)
             b
         } catch (e: OutOfMemoryError) {
@@ -186,7 +158,11 @@ object UtilityImg {
     }
 
     fun resizeViewAndSetImage(context: Context, bitmap: Bitmap, imageView: ImageView) {
-        if (UtilityUI.isLandScape(context)) resizeViewSetImgByWidth(bitmap, imageView) else resizeViewSetImgByHeight(bitmap, imageView)
+        if (UtilityUI.isLandScape(context)) {
+            resizeViewSetImgByWidth(bitmap, imageView)
+        } else {
+            resizeViewSetImgByHeight(bitmap, imageView)
+        }
     }
 
     private fun resizeViewSetImgByHeight(bitmap: Bitmap, imageView: ImageView) {
@@ -220,8 +196,8 @@ object UtilityImg {
             val canvas = Canvas(bitmap)
             val paint = Paint(Paint.ANTI_ALIAS_FLAG)
             paint.color = textColor
-            paint.textSize = (12 * scale).toInt().toFloat()
-            paint.setShadowLayer(1f, 0f, 1f, Color.DKGRAY)
+            paint.textSize = 12 * scale
+            paint.setShadowLayer(1.0f, 0.0f, 1.0f, Color.DKGRAY)
             val bounds = Rect()
             paint.getTextBounds(text, 0, text.length, bounds)
             val x = (bitmap.width - bounds.width()) / 6
@@ -271,9 +247,13 @@ object UtilityImg {
         var height = 0
         images.forEach {
             height += it.height
-            if (it.width > width) { width = it.width }
+            if (it.width > width) {
+                width = it.width
+            }
         }
-        if ( width == 0 || height == 0 ) return getBlankBitmap()
+        if ( width == 0 || height == 0 ) {
+            return getBlankBitmap()
+        }
         combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
         val comboImage = Canvas(combinedImage!!)
         var workingHeight = 0f
@@ -283,4 +263,7 @@ object UtilityImg {
         }
         return combinedImage
     }
+
+    fun getNexradRefBitmap(context: Context, radarSite: String, isInteractive: Boolean) =
+            UtilityUSImgWX.layeredImg(context, radarSite, "N0Q", isInteractive)
 }

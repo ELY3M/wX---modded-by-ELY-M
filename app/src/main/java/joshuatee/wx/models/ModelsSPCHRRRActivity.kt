@@ -21,7 +21,6 @@
 
 package joshuatee.wx.models
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -43,6 +42,16 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityString
 
 class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { // OnItemSelectedListener
+
+    //
+    // This code provides a native android interface to SPC HRRR
+    //
+    // arg1 - number of panes, 1 or 2
+    // arg2 - pref model token and hash lookup
+    // arg3 - title string
+    //
+    // arrayOf("1", "SPCHRRR", "SPC HRRR")
+    //
 
     companion object { const val INFO = "" }
 
@@ -72,9 +81,9 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         arguments = intent.getStringArrayExtra(INFO)!!
+        title = arguments[2]
         om = ObjectModel(this, arguments[1], arguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_nospinner, R.menu.models_spchrrr, iconsEvenlySpaced = false, bottomToolbar = true)
@@ -86,7 +95,6 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = arguments[2]
         overlayImg.addAll(listOf(*TextUtils.split(Utility.readPref(this, "SPCHRRR_OVERLAY", ""), ":")))
         val menu = toolbarBottom.menu
         timeMenuItem = menu.findItem(R.id.action_time)
@@ -132,7 +140,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         when (item.itemId) {
             R.id.action_img1 -> {
                 om.curImg = 0
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                UtilityModels.setSubtitleRestoreZoom(
                         om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
@@ -140,7 +148,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
             }
             R.id.action_img2 -> {
                 om.curImg = 1
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                UtilityModels.setSubtitleRestoreZoom(
                         om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
@@ -191,7 +199,11 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     }
 
     private fun overlaySelected(overlay: String) {
-        if (overlayImg.contains(overlay)) overlayImg.remove(overlay) else overlayImg.add(overlay)
+        if (overlayImg.contains(overlay)) {
+            overlayImg.remove(overlay)
+        } else {
+            overlayImg.add(overlay)
+        }
         getContent()
     }
 
@@ -206,7 +218,9 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     private fun getRunStatusUpdate() {
         miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
         om.run = om.rtd.mostRecentRun
-        (om.startStep until om.endStep).forEach { om.times.add(String.format(Locale.US, "%02d", it)) }
+        (om.startStep until om.endStep).forEach {
+            om.times.add(String.format(Locale.US, "%02d", it))
+        }
         UtilityModels.updateTime(UtilityString.getLastXChars(om.run, 2), om.rtd.mostRecentRun, om.times, "", false)
         om.setTimeIdx(Utility.readPrefInt(this, om.prefRunPosn, 1))
         getContent()
@@ -229,7 +243,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
             om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
             om.displayData.paramLabel[it] = om.labels[0]
             om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
-            if (!UtilityModels.parameterInList(om.params, om.displayData.param[it])) {
+            if (!om.params.contains(om.displayData.param[it])) {
                 om.displayData.param[it] = om.params[0]
                 om.displayData.paramLabel[it] = om.labels[0]
             }
@@ -260,11 +274,15 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         return when (keyCode) {
             KeyEvent.KEYCODE_J -> {
-                if (event.isCtrlPressed) om.leftClick()
+                if (event.isCtrlPressed) {
+                    om.leftClick()
+                }
                 true
             }
             KeyEvent.KEYCODE_K -> {
-                if (event.isCtrlPressed) om.rightClick()
+                if (event.isCtrlPressed) {
+                    om.rightClick()
+                }
                 true
             }
             else -> super.onKeyUp(keyCode, event)

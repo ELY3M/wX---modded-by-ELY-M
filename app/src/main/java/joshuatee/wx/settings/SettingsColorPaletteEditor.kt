@@ -22,16 +22,19 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.TypedValue
 import android.view.MenuItem
 import android.widget.EditText
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
@@ -60,7 +63,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     private lateinit var palTitle: EditText
     private lateinit var palContent: EditText
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_color_palette_editor, R.menu.settings_color_palette_editor, true)
         palTitle = findViewById(R.id.palTitle)
@@ -204,6 +206,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     /**
      * Fires an intent to spin up the "file chooser" UI and select an image.
      */
+    // TODO FIXME deprecation
     private fun performFileSearch() {
         // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser.
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -216,14 +219,26 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         // it would be "*/*".
         intent.type = "*/*"
         startActivityForResult(intent, READ_REQUEST_CODE)
+//        startForResult.launch(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+//    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+//        result: ActivityResult ->
+//        if (result.resultCode == Activity.RESULT_OK) {
+////            val uri = result.data
+////            displaySettings(readTextFromUri(uri!!))
+//            result?.let {
+//                val uri = it.data
+//                displaySettings(readTextFromUri(uri!!))
+//            }
+//        }
+//    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, resultData)
         // The ACTION_OPEN_DOCUMENT intent was sent with the request code
         // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
         // response to some other intent, and the code below shouldn't run at all.
-
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             // The document selected by the user won't be returned in the intent.
             // Instead, a URI to that document will be contained in the return intent

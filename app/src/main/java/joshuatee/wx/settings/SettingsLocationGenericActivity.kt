@@ -22,14 +22,10 @@
 package joshuatee.wx.settings
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.speech.RecognizerIntent
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.SearchView
@@ -55,13 +51,10 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     // arg1 location number
     //
 
-    companion object {
-        const val LOC_NUM = ""
-    }
+    companion object { const val LOC_NUM = "" }
 
     private var locXStr = ""
     private var locYStr = ""
-    private val requestOk = 1
     private var updateTitle = true
     private var locLabelCurrent = ""
     private var locNum = ""
@@ -82,9 +75,13 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private lateinit var box: VBox
     private lateinit var rl: RelativeLayout
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_generic, R.menu.settings_location_generic_bottom, true)
+        val locNumArr = intent.getStringArrayExtra(LOC_NUM)
+        locNum = locNumArr!![0]
+        val locNumInt = locNum.toIntOrNull() ?: 0
+        title = "Location $locNum"
+
         locLabelEt = findViewById(R.id.locLabelEt)
         locXEt = findViewById(R.id.locXEt)
         locYEt = findViewById(R.id.locYEt)
@@ -101,10 +98,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         ObjectFab(this, R.id.fab) { fabSaveLocation() }
         val me = toolbarBottom.menu
         Card(this, R.id.cv1)
-        val locNumArr = intent.getStringArrayExtra(LOC_NUM)
-        locNum = locNumArr!![0]
-        val locNumInt = locNum.toIntOrNull() ?: 0
-        title = "Location $locNum"
         locXStr = Utility.readPref(this, "LOC" + locNum + "_X", "")
         locYStr = Utility.readPref(this, "LOC" + locNum + "_Y", "")
         var alertNotificationCurrent = Utility.readPref(this, "ALERT" + locNum + "_NOTIFICATION", "false")
@@ -138,8 +131,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             alertNotificationWpcmpdCurrent = "false"
         }
         updateSubTitle()
-        val deleteButton = me.findItem(R.id.action_delete)
-        deleteButton.isVisible = Location.numLocations > 1
+        me.findItem(R.id.action_delete).isVisible = Location.numLocations > 1
         locLabelEt.setText(locLabelCurrent)
         locXEt.setText(locXStr)
         locYEt.setText(locYStr)
@@ -151,61 +143,45 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             locXEt.setHintTextColor(Color.GRAY)
             locYEt.setHintTextColor(Color.GRAY)
         }
-        alertSw = ObjectSwitch(
-                this,
+        alertSw = ObjectSwitch(this,
                 "Alert",
                 "ALERT" + locNum + "_NOTIFICATION",
-                R.string.alert_switch_text
-        )
+                R.string.alert_switch_text)
         alertSw.isChecked(alertNotificationCurrent == "true")
-        alertCcSw = ObjectSwitch(
-                this,
+        alertCcSw = ObjectSwitch(this,
                 "Conditions",
                 "ALERT_CC" + locNum + "_NOTIFICATION",
-                R.string.alert_cc_switch_text
-        )
+                R.string.alert_cc_switch_text)
         alertCcSw.isChecked(alertCcNotificationCurrent == "true")
-        alert7Day1Sw = ObjectSwitch(
-                this,
+        alert7Day1Sw = ObjectSwitch(this,
                 "7day",
                 "ALERT_7DAY_" + locNum + "_NOTIFICATION",
-                R.string.alert_7day_1_switch_text
-        )
+                R.string.alert_7day_1_switch_text)
         alert7Day1Sw.isChecked(alert7Day1NotificationCurrent == "true")
-        alertSoundSw = ObjectSwitch(
-                this,
+        alertSoundSw = ObjectSwitch(this,
                 "Sound",
                 "ALERT_NOTIFICATION_SOUND$locNum",
-                R.string.alert_sound_switch_text
-        )
+                R.string.alert_sound_switch_text)
         alertSoundSw.isChecked(alertNotificationSoundCurrent == "true")
-        alertRadar1Sw = ObjectSwitch(
-                this,
+        alertRadar1Sw = ObjectSwitch(this,
                 "Radar",
                 "ALERT_NOTIFICATION_RADAR$locNum",
-                R.string.alert_radar1_switch_text
-        )
+                R.string.alert_radar1_switch_text)
         alertRadar1Sw.isChecked(alertNotificationRadarCurrent == "true")
-        alertMcdSw = ObjectSwitch(
-                this,
+        alertMcdSw = ObjectSwitch(this,
                 "SPC MCD",
                 "ALERT_NOTIFICATION_MCD$locNum",
-                R.string.alert_mcd_switch_text
-        )
+                R.string.alert_mcd_switch_text)
         alertMcdSw.isChecked(alertNotificationMcdCurrent == "true")
-        alertSwoSw = ObjectSwitch(
-                this,
+        alertSwoSw = ObjectSwitch(this,
                 "SPC SWO",
                 "ALERT_NOTIFICATION_SWO$locNum",
-                R.string.alert_swo_switch_text
-        )
+                R.string.alert_swo_switch_text)
         alertSwoSw.isChecked(alertNotificationSwoCurrent == "true")
-        alertSpcfwSw = ObjectSwitch(
-                this,
+        alertSpcfwSw = ObjectSwitch(this,
                 "SPC FW",
                 "ALERT_NOTIFICATION_SPCFW$locNum",
-                R.string.alert_spcfw_switch_text
-        )
+                R.string.alert_spcfw_switch_text)
         alertSpcfwSw.isChecked(alertNotificationSpcfwCurrent == "true")
         alertWpcmpdSw = ObjectSwitch(
                 this,
@@ -237,8 +213,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         if (caProv != "" || caCity != "" || caId != "") {
             locXEt.setText(resources.getString(R.string.settings_loc_generic_ca_x, caProv))
             locYEt.setText(caId)
-            val locationLabel = "$caCity, $caProv"
-            locLabelEt.setText(locationLabel)
+            val caLabel = "$caCity, $caProv"
+            locLabelEt.setText(caLabel)
             notificationsCanada(true)
             fabSaveLocation()
         }
@@ -427,15 +403,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             R.id.action_qc -> openCanadaMap("qc")
             R.id.action_sk -> openCanadaMap("sk")
             R.id.action_yt -> openCanadaMap("yt")
-            R.id.action_vr -> {
-                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
-                try {
-                    startActivityForResult(intent, requestOk)
-                } catch (e: Exception) {
-                    Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show()
-                }
-            }
             R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.activity_settings_generic_help))
             else -> return super.onOptionsItemSelected(item)
         }
@@ -476,6 +443,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private val myPermissionAccessFineLocation = 5001
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             myPermissionAccessFineLocation -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val xy = UtilityLocation.getGps(this)
@@ -485,19 +453,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == requestOk && resultCode == Activity.RESULT_OK) {
-            val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            showMessage(thingsYouSaid!![0])
-            val addressStrTmp = thingsYouSaid[0]
-            locLabelEt.setText(addressStrTmp)
-        }
-    }
-
     private fun notificationsCanada(hide: Boolean) {
         var visibility = View.VISIBLE
-        if (hide) visibility = View.GONE
+        if (hide) {
+            visibility = View.GONE
+        }
         listOf(alertMcdSw,
                 alertSwoSw,
                 alertSpcfwSw,
@@ -509,7 +469,9 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     private fun hideNonUSNotifications() {
         val label = locXEt.text.toString()
-        if (label.contains("CANADA")) notificationsCanada(true)
+        if (label.contains("CANADA")) {
+            notificationsCanada(true)
+        }
     }
 
     private fun updateSubTitle() {

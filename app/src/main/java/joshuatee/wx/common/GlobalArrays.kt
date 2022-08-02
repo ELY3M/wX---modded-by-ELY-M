@@ -537,46 +537,6 @@ object GlobalArrays {
             "TMKE: WI, Milwaukee"
     )
 
-    val canadaRadars = listOf(
-            "WUJ: Aldergrove, BC (near Vancouver)",
-            "XPG: Prince George, BC",
-            "XSS: Silver Star Mountain, BC (near Vernon)",
-            "XSI: Victoria, BC",
-            "XBE: Bethune, SK (near Regina)",
-            "WHK: Carvel, AB (near Edmonton)",
-            "XFW: Foxwarren, MB (near Brandon)",
-            "XRA: Radisson, SK (near Saskatoon)",
-            "XBU: Schuler, AB (near Medicine Hat)",
-            "WWW: Spirit River, AB (near Grande Prairie)",
-            "XSM: Strathmore, AB (near Calgary)",
-            "XWL: Woodlands, MB (near Winnipeg)",
-            "WHN: Jimmy Lake, AB (near Cold Lake)",
-            "WBI: Britt, ON (near Sudbury)",
-            "XDR: Dryden, ON",
-            "WSO: Exeter, ON (near London)",
-            "XFT: Franktown, ON (near Ottawa)",
-            "WKR: King City, ON (near Toronto)",
-            "WGJ: Montreal River, ON (near Sault Ste Marie)",
-            "XTI: Northeast Ontario, ON (near Timmins)",
-            "XNI: Superior West, ON (near Thunder Bay)",
-            "XLA: Landrienne, QC (near Rouyn-Noranda)",
-            "WMN: McGill, QC (near Montréal)",
-            "XAM: Val d'Irène, QC (near Mont Joli)",
-            "WVY: Villeroy, QC (near Trois-Rivières)",
-            "WMB: Lac Castor, QC (near Saguenay)",
-            "XNC: Chipman, NB (near Fredericton)",
-            "XGO: Halifax, NS",
-            "WTP: Holyrood, NL (near St. John's)",
-            "XME: Marble Mountain, NL",
-            "XMB: Marion Bridge, NS (near Sydney)",
-            "CAN",
-            "PAC",
-            "WRN",
-            "ONT",
-            "QUE",
-            "ERN"
-    )
-
     val states = listOf(
             "AL: Alabama",
             "AK: Alaska",

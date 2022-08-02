@@ -56,9 +56,16 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
     private lateinit var sBar: SaturationBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) setTheme(R.style.MyCustomTheme_NOAB) else setTheme(UIPreferences.themeInt)
+        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
+            setTheme(R.style.MyCustomTheme_NOAB)
+        } else {
+            setTheme(UIPreferences.themeInt)
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_color_picker)
+        val arguments = intent.getStringArrayExtra(INFO)!!
+        prefVal = arguments[0]
+        title = arguments[1]
         colorPicker = findViewById(R.id.colorPicker)
         vBar = findViewById(R.id.vBar)
         sBar = findViewById(R.id.sBar)
@@ -67,9 +74,6 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         UtilityToolbar.fullScreenMode(toolbar, false)
-        val arguments = intent.getStringArrayExtra(INFO)!!
-        prefVal = arguments[0]
-        title = arguments[1]
         color = UtilityColor.setColor(prefVal)
         val currentColor = Utility.readPrefInt(this, prefVal, color)
         buttonDefault.setTextColor(color)

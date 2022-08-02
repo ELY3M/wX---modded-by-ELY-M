@@ -77,7 +77,7 @@ class ObjectSpinner(context: Context, label: String, pref: String, prefInit: Str
         }
         spinner.setSelection(dataAdapter.getPosition(value))
         hbox.addWidget(spinner)
-        card.addView(hbox.get())
+        card.addLayout(hbox)
     }
 
     fun get() = card.get()

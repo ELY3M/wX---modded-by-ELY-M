@@ -108,11 +108,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                 models = UtilityModelNcepInterface.models
                 defaultModel = "GFS"
             }
-            "GLCFS" -> {
-                modelType = ModelType.GLCFS
-                models = UtilityModelGlcfsInterface.models
-                defaultModel = "GLCFS"
-            }
             "SPCSREF" -> {
                 modelType = ModelType.SPCSREF
                 models = UtilityModelSpcSrefInterface.models
@@ -162,7 +157,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.getImage(this, time)
             ModelType.ESRL -> UtilityModelEsrlInputOutput.getImage(this, time)
             ModelType.NSSL -> UtilityModelNsslWrfInputOutput.getImage(context, this, time)
-            ModelType.GLCFS -> UtilityModelGlcfsInputOutput.getImage(this, time)
             ModelType.NCEP -> UtilityModelNcepInputOutput.getImage(this, time)
             ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.getImage(context, this, time)
             ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.getImage(context, this, time)
@@ -176,7 +170,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.getAnimation(context, this)
             ModelType.ESRL -> UtilityModelEsrlInputOutput.getAnimation(context, this)
             ModelType.NSSL -> UtilityModelNsslWrfInputOutput.getAnimation(context, this)
-            ModelType.GLCFS -> UtilityModelGlcfsInputOutput.getAnimation(context, this)
             ModelType.NCEP -> UtilityModelNcepInputOutput.getAnimation(context, this)
             ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.getAnimation(context, this)
             ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.getAnimation(context, this)
@@ -192,7 +185,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.runTime
             ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.runTime
             ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.runTime
-            else -> RunTimeData()
         }
 
     fun setParams(selectedItemPosition: Int) {
@@ -397,21 +389,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         numberRuns = 4
                     }
 
-                }
-            }
-            ModelType.GLCFS -> {
-                when (selectedItemPosition) {
-                    0 -> {
-                        model = "GLCFS"
-                        labels = UtilityModelGlcfsInterface.labels
-                        params = UtilityModelGlcfsInterface.params
-                        sectors = UtilityModelGlcfsInterface.sectors
-                        startStep = 1
-                        endStep = 48
-                        stepAmount = 1
-                        numberRuns = 0
-                        timeTruncate = 3
-                    }
                 }
             }
             ModelType.WPCGEFS -> {

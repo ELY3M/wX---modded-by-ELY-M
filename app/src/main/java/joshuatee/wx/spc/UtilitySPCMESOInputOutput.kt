@@ -24,12 +24,10 @@ package joshuatee.wx.spc
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.Utility
@@ -80,15 +78,16 @@ object UtilitySpcMesoInputOutput {
         return UtilityImg.layerDrawableToBitmap(drawables)
     }
 
-    fun getAnimation(context: Context, product: String, sector: String, frameCount: Int): AnimationDrawable {
+    fun getAnimation(product: String, sector: String, frameCount: Int): List<String> {
         var urls = listOf<String>()
         val timeList = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
-        val delay = UtilityImg.animInterval(context)
+//        val delay = UtilityImg.animInterval(context)
         if (timeList.size > frameCount) {
             urls = (frameCount - 1 downTo 0).map {
                 "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + product + "/" + product + "_" + timeList[it] + ".gif"
             }
         }
-        return UtilityImgAnim.getAnimationDrawableFromUrlListWhiteBackground(context, urls, delay)
+        return urls
+        //return UtilityImgAnim.getAnimationDrawableFromUrlListWhiteBackground(context, urls, delay)
     }
 }

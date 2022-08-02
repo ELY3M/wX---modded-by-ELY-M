@@ -21,11 +21,11 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
 import java.util.Calendar
 import java.util.Locale
 import android.os.Bundle
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.ContextMenu
 import android.view.MenuItem
@@ -37,12 +37,9 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.*
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.radar.WXGLNexrad
-import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.Route
-import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
@@ -77,7 +74,6 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var firstRun = true
     private var filter = "All"
     private var text = ""
-    private var bitmap = UtilityImg.getBlankBitmap()
     private val textForShare = StringBuilder(5000)
     private var stormReports = mutableListOf<StormReport>()
     private lateinit var objectNavDrawer: ObjectNavDrawer
@@ -89,7 +85,6 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var objectDatePicker: ObjectDatePicker
     private val helpTitle = " - tap image for date picker"
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer_bottom_toolbar, R.menu.spc_stormreports)
         val arguments = intent.getStringArrayExtra(DAY)!!
@@ -134,23 +129,19 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() {
         scrollView.smoothScrollTo(0, 0)
         FutureVoid(this, ::download, ::displayData)
-        FutureVoid(this, ::downloadImage, ::updateImage)
+        FutureBytes2(this, ::downloadImage, ::updateImage)
     }
 
-//    private fun addListener() {
-//        image.connect { objectDatePicker = ObjectDatePicker(this, year, month, day, ::updateDisplay) }
-//    }
-
-    private fun downloadImage() {
+    private fun downloadImage(): Bitmap {
         if (firstRun) {
-            bitmap = imgUrl.getImage()
+            return imgUrl.getImage()
         }
+        return image.bitmap
     }
 
-    private fun updateImage() {
+    private fun updateImage(bitmap: Bitmap) {
         image.set2(bitmap)
         image.connect { objectDatePicker = ObjectDatePicker(this, year, month, day, ::updateDisplay) }
-//        addListener()
     }
 
     private fun download() {
@@ -164,7 +155,6 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val linesOfData = text.split("<br>").dropLastWhile { it.isEmpty() }
         mapState.clear()
         boxText.removeChildrenAndLayout()
-//        addListener()
         image.resetZoom()
         val cardText = CardText(this, boxText)
         cardText.visibility = View.GONE
@@ -314,9 +304,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", bitmap, textForShare.toString())
+            R.id.action_share_all -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", image.bitmap, textForShare.toString())
             R.id.action_share_text -> UtilityShare.text(this, "Storm Reports - $dayArgument", textForShare.toString())
-            R.id.action_share_image -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", bitmap)
+            R.id.action_share_image -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", image.bitmap)
             R.id.action_lsrbywfo -> Route(this, LsrByWfoActivity::class.java, LsrByWfoActivity.URL, arrayOf(Location.wfo, "LSR"))
             else -> return super.onOptionsItemSelected(item)
         }

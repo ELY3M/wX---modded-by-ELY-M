@@ -44,13 +44,13 @@ class ObjectCardAlertDetail(val context: Context) {
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        vbox.addViews(listOf(textViewTop.get(), textViewTitle.get(), textViewStart.get(), textViewEnd.get(), textViewBottom.get()))
+        vbox.addWidgets(listOf(textViewTop.get(), textViewTitle.get(), textViewStart.get(), textViewEnd.get(), textViewBottom.get()))
         val hbox = HBox(context)
         hbox.wrap()
         hbox.addWidget(radarButton.get())
         hbox.addWidget(detailsButton.get())
         vbox.addLayout(hbox.get())
-        card.addView(vbox)
+        card.addLayout(vbox)
     }
 
     fun get() = card.get()

@@ -21,45 +21,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_animateMenu"
+        android:id="@+id/action_animate"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/animate_icon"
-        app:showAsAction="always">
-        <menu>
-            <item
-                android:id="@+id/action_a12"
-                android:title="@string/label_a12"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_a24"
-                android:title="@string/label_a24"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_a36"
-                android:title="@string/label_a36"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_a48"
-                android:title="@string/label_a48"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_a60"
-                android:title="@string/label_a60"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_a72"
-                android:title="@string/label_a72"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_a84"
-                android:title="@string/label_a84"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_a96"
-                android:title="@string/label_a96"
-                app:showAsAction="never" />
-        </menu>
-    </item>
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_pause"
+        android:icon="@drawable/ic_pause_24dp"
+        android:title="@string/label_pause"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
@@ -93,46 +63,6 @@
             app:showAsAction="never">
             <menu>
                 <item
-                    android:id="@+id/action_pnw"
-                    android:title="@string/pacific_northwest"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_nr"
-                    android:title="@string/northern_rockies"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_umv"
-                    android:title="@string/upper_mississippi_valley"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_cgl"
-                    android:title="@string/central_great_lakes"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_ne"
-                    android:title="@string/northeast"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_psw"
-                    android:title="@string/pacific_southwest"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_sr"
-                    android:title="@string/southern_rockies"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_sp"
-                    android:title="@string/southern_plains"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_smv"
-                    android:title="@string/southern_mississippi_valley"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_se"
-                    android:title="@string/southeast"
-                    app:showAsAction="never" />
-                <item
                     android:id="@+id/action_ak"
                     android:title="@string/alaska"
                     app:showAsAction="never" />
@@ -145,9 +75,59 @@
                     android:title="@string/southeastern_alaska"
                     app:showAsAction="never" />
                 <item
+                    android:id="@+id/action_cgl"
+                    android:title="@string/central_great_lakes"
+                    app:showAsAction="never" />
+                <item
                     android:id="@+id/action_hi"
                     android:title="@string/hawaii"
                     app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_ne"
+                    android:title="@string/northeast"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_nr"
+                    android:title="@string/northern_rockies"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_pnw"
+                    android:title="@string/pacific_northwest"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_psw"
+                    android:title="@string/pacific_southwest"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_se"
+                    android:title="@string/southeast"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_smv"
+                    android:title="@string/southern_mississippi_valley"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_sp"
+                    android:title="@string/southern_plains"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_sr"
+                    android:title="@string/southern_rockies"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_umv"
+                    android:title="@string/upper_mississippi_valley"
+                    app:showAsAction="never" />
+
+
+
+            </menu>
+        </item>
+        <item
+            android:id="@+id/action_americas"
+            android:title="@string/north_south_america"
+            app:showAsAction="never">
+            <menu>
                 <item
                     android:id="@+id/action_can"
                     android:title="@string/canada"
@@ -176,42 +156,89 @@
             app:showAsAction="never">
             <menu>
                 <item
-                    android:id="@+id/action_gm"
-                    android:title="@string/gulf_of_mexico"
-                    app:showAsAction="never" />
-                <item
                     android:id="@+id/action_car"
                     android:title="@string/caribbean"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_eus"
-                    android:title="@string/u_s_atlantic_coast"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_pr"
-                    android:title="@string/puerto_rico"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_taw"
-                    android:title="@string/tropical_atlantic_wide_view"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_wus"
-                    android:title="@string/us_pacific_coast"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_tpw"
-                    android:title="@string/tropical_pacific"
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/action_eep"
                     android:title="@string/eastern_pacific"
                     app:showAsAction="never" />
                 <item
+                    android:id="@+id/action_gm"
+                    android:title="@string/gulf_of_mexico"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_pr"
+                    android:title="@string/puerto_rico"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_na"
+                    android:title="@string/northern_atlantic"
+                    app:showAsAction="never" />
+                <item
                     android:id="@+id/action_np"
                     android:title="@string/northern_pacific"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_tsp"
+                    android:title="@string/south_pacific"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_taw"
+                    android:title="@string/tropical_atlantic_wide_view"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_tpw"
+                    android:title="@string/tropical_pacific"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_eus"
+                    android:title="@string/u_s_atlantic_coast"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_wus"
+                    android:title="@string/us_pacific_coast"
                     app:showAsAction="never" />
             </menu>
         </item>
     </group>
+    <item
+            android:id="@+id/action_animate_submenu"
+            android:title="@string/animate_icon"
+            app:showAsAction="never">
+            <menu>
+                <item
+                    android:id="@+id/action_a12"
+                    android:title="@string/label_a12"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_a24"
+                    android:title="@string/label_a24"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_a36"
+                    android:title="@string/label_a36"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_a48"
+                    android:title="@string/label_a48"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_a60"
+                    android:title="@string/label_a60"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_a72"
+                    android:title="@string/label_a72"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_a84"
+                    android:title="@string/label_a84"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_a96"
+                    android:title="@string/label_a96"
+                    app:showAsAction="never" />
+            </menu>
+        </item>
 </menu>

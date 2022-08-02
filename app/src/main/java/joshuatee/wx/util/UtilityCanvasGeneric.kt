@@ -46,7 +46,9 @@ internal object UtilityCanvasGeneric {
         paint.style = Style.STROKE
         paint.strokeWidth = lineWidth.toFloat()
         paint.color = geographyType.color
-        if (projectionType.needsCanvasShift) canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        if (projectionType.needsCanvasShift) {
+            canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        }
         val path = Path()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         genericByteBuffer.position(0)

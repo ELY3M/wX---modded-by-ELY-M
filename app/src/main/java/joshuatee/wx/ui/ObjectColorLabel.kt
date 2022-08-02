@@ -32,7 +32,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityColor
 import joshuatee.wx.util.Utility
 
-internal class ObjectColorLabel(val context: Context, label: String, private val pref: String) {
+internal class ObjectColorLabel(val context: Context, box: VBox, label: String, private val pref: String) {
 
     private val card = Card(context, R.color.black)
     private val text = Text(context)
@@ -45,11 +45,12 @@ internal class ObjectColorLabel(val context: Context, label: String, private val
         text.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
         card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.black))
         text.gravity = Gravity.CENTER_VERTICAL
-        card.addView(text.get())
+        card.addWidget(text.get())
         val prefInner = pref
         card.connect {
             Route(context, SettingsColorPickerActivity::class.java, SettingsColorPickerActivity.INFO, arrayOf(prefInner, label))
         }
+        box.addWidget(get())
     }
 
     fun refreshColor() {

@@ -23,7 +23,6 @@ package joshuatee.wx.audio
 
 import java.util.Locale
 import android.content.Context
-import android.view.View
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.common.RegExp
@@ -33,7 +32,7 @@ import joshuatee.wx.wpc.WpcTextProductsActivity
 
 object UtilityVoiceCommand {
 
-    fun processCommand(context: Context, view: View, vrStringOriginal: String, radarSiteArg: String, wfoOriginal: String, state: String): Boolean {
+    fun processCommand(context: Context, vrStringOriginal: String, radarSiteArg: String, wfoOriginal: String, state: String): Boolean {
         var vrString = vrStringOriginal
         var radarSite = radarSiteArg
         var wfo = wfoOriginal

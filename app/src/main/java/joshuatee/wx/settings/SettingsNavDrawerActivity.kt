@@ -21,7 +21,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import joshuatee.wx.R
@@ -35,7 +34,6 @@ class SettingsNavDrawerActivity : BaseActivity() {
     private var tokenList = ""
     private lateinit var box: VBox
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_navdrawer, null, false)
         setTitle("Navigation Drawer", "Turn items off or on for the main screen nav drawer.")

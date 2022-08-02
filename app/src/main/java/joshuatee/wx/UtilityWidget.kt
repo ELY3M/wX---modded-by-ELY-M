@@ -98,13 +98,21 @@ object UtilityWidget {
         val hazardRaw = objHazards.hazards
         Utility.writePref(context, "HAZARD_WIDGET", objHazards.getHazardsShort())
         Utility.writePref(context, "7DAY_WIDGET", objSevenDay.sevenDayShort)
-        if (objCc.data != "") Utility.writePref(context, "CC_WIDGET", objCc.data)
-        if (objCc.iconUrl != "") Utility.writePref(context, "CC_WIDGET_ICON_URL", objCc.iconUrl)
+        if (objCc.data != "") {
+            Utility.writePref(context, "CC_WIDGET", objCc.data)
+        }
+        if (objCc.iconUrl != "") {
+            Utility.writePref(context, "CC_WIDGET_ICON_URL", objCc.iconUrl)
+        }
         Utility.writePref(context, "UPDTIME_WIDGET", objCc.status)
-        if (objSevenDay.sevenDayLong != "") Utility.writePref(context, "7DAY_EXT_WIDGET", objSevenDay.sevenDayLong)
+        if (objSevenDay.sevenDayLong != "") {
+            Utility.writePref(context, "7DAY_EXT_WIDGET", objSevenDay.sevenDayLong)
+        }
         Utility.writePref(context, "HAZARD_URL_WIDGET", objHazards.hazards)
         Utility.writePref(context, "HAZARD_RAW_WIDGET", hazardRaw)
-        if (objSevenDay.iconsAsString != "") Utility.writePref(context, "7DAY_ICONS_WIDGET", objSevenDay.iconsAsString)
+        if (objSevenDay.iconsAsString != "") {
+            Utility.writePref(context, "7DAY_ICONS_WIDGET", objSevenDay.iconsAsString)
+        }
         Utility.commitPref(context)
         update(context, CCLegacy)
         update(context, CC)
@@ -189,7 +197,9 @@ object UtilityWidget {
         val preferences = context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
         val sevenDay = preferences.getString("7DAY_EXT_WIDGET", "No data")!!
         val forecasts = sevenDay.split("\n\n").dropLastWhile { it.isEmpty() }.toMutableList()
-        if (forecasts.isNotEmpty()) forecasts[0] = preferences.getString("CC_WIDGET", "No data")!!
+        if (forecasts.isNotEmpty()) {
+            forecasts[0] = preferences.getString("CC_WIDGET", "No data")!!
+        }
         forecasts.indices.forEach {
             val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
             val values = ContentValues()

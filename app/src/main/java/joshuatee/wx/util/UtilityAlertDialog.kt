@@ -41,7 +41,6 @@ object UtilityAlertDialog {
         val wv = WebView(activity)
         wv.loadUrl(help)
         wv.webViewClient = object : WebViewClient() {
-            @SuppressWarnings("deprecation")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 view.loadUrl(url)
                 return true
@@ -57,9 +56,12 @@ object UtilityAlertDialog {
             }
         }
         alert.setView(wv)
-        alert.setNegativeButton("Close") { dialog, _ -> dialog.dismiss() }
+        alert.setNegativeButton("Close") { dialog, _ ->
+            dialog.dismiss()
+        }
         alert.show()
     }
+
 
     fun showDialogueWithContext(str: String, context: Context) {
         val alertDialogBuilder = AlertDialog.Builder(context)

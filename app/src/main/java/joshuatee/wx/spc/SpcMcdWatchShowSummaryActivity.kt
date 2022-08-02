@@ -21,7 +21,6 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -72,7 +71,6 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
     private lateinit var box: VBox
     private var mcdList = listOf<String>()
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         box = VBox.fromResource(this)
@@ -176,6 +174,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
             return true
         }
         when (item.itemId) {
+//            R.id.action_radar -> Route.radarBySite(this, objectWatchProduct.getClosestRadar())
             R.id.action_share_all -> {
                 if (bitmaps.size > 1)
                     UtilityShare.text(this, titleString, "", bitmaps)

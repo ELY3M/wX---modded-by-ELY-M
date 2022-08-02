@@ -39,6 +39,7 @@ class TouchImage {
     private var firstRun = false
     private var prefTokenIdx = ""
     private var drw: ObjectNavDrawer? = null
+    var bitmap = UtilityImg.getBlankBitmap()
 
     constructor(context: Context) {
         img = TouchImageView2(context)
@@ -89,12 +90,13 @@ class TouchImage {
     val scrollPosition: PointF?
         get() = img.scrollPosition
 
-    fun setBitmap(bitmap: Bitmap) {
+    fun set(bitmap: Bitmap) {
         img.setImageBitmap(bitmap)
         imageLoaded = true
         if (prefTokenIdx != "" && drw != null) {
             Utility.writePrefInt(context, prefTokenIdx, drw!!.index)
         }
+        this.bitmap = bitmap
     }
 
     fun connectClick(listener: View.OnClickListener) {
@@ -128,13 +130,29 @@ class TouchImage {
     fun connect(drw: ObjectNavDrawer, fn: () -> Unit) {
         img.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, fn)
+                if (img.currentZoom < 1.01f) showNextImg(drw, fn)
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, fn)
+                if (img.currentZoom < 1.01f) showPrevImg(drw, fn)
             }
         })
+    }
+
+    fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
+        drw.index += 1
+        if (drw.index == drw.getUrlCount()) {
+            drw.index = 0
+        }
+        fn()
+    }
+
+    fun showPrevImg(drw: ObjectNavDrawer, fn: () -> Unit) {
+        drw.index -= 1
+        if (drw.index == -1) {
+            drw.index = drw.getUrlCount() - 1
+        }
+        fn()
     }
 
     fun connect(fn: OnSwipeTouchListener) {
@@ -145,7 +163,7 @@ class TouchImage {
         img.setOnTouchImageViewListener { fn() }
     }
 
-    fun firstRunSetZoomPosn(pref: String) {
+    fun firstRun(pref: String) {
         if (!firstRun) {
             img.setZoom(pref)
             firstRun = true

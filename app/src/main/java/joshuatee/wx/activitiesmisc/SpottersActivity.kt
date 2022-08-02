@@ -21,7 +21,6 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
@@ -84,7 +83,6 @@ class SpottersActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab, null, false)
         setTitle(titleString, "Tap on name for actions.")
@@ -162,7 +160,9 @@ class SpottersActivity : BaseActivity() {
         // spotterList = spotterList.sortedWith(compareBy({ it.lastName.lowercase() }, { it.firstName.lowercase() })).toMutableList()
         if (firstTime) {
             spotterList2 = mutableListOf()
-            spotterList.indices.forEach { spotterList2.add(spotterList[it]) }
+            spotterList.indices.forEach {
+                spotterList2.add(spotterList[it])
+            }
             firstTime = false
         }
         Collections.sort(spotterList2, Comparator { p1, p2 ->

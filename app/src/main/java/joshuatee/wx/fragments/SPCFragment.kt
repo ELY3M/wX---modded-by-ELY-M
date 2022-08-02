@@ -153,7 +153,7 @@ class SpcFragment : Fragment() {
                     "spchref", "HREF"
             )
             val tileOrder = "spcsref:spcsummary:spcswod1:spcswod2:spcswod3:spcswod48:spcstormrpt1:spcstormrpt2:spcmcd:spcwat:spcmeso:spcfire:spctstorm:spccompmap:"
-            var spcPref: String = Utility.readPref("FRAGMENT_SPC_ORDER", tileOrder)
+            var spcPref = Utility.readPref("FRAGMENT_SPC_ORDER", tileOrder)
             if (!spcPref.contains("spchrrr")) {
                 spcPref += "spchrrr:"
                 Utility.writePref("FRAGMENT_SPC_ORDER", spcPref)
@@ -166,9 +166,9 @@ class SpcFragment : Fragment() {
                 spcPref += "spchref:"
                 Utility.writePref("FRAGMENT_SPC_ORDER", spcPref)
             }
-            val tileOrderArr = spcPref.split(":").dropLastWhile { it.isEmpty() }
-            return tileOrderArr
+            val tiles = spcPref.split(":").dropLastWhile { it.isEmpty() }
+            return tiles
                     .filterNot { it.contains("modeltt") }.filterNot { it.contains("spcsseo") }
-                    .mapTo(mutableListOf()) { hm[it]!! }
+                    .map { hm[it]!! }.toMutableList()
         }
 }

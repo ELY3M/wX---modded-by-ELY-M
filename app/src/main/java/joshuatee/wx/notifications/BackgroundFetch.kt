@@ -39,10 +39,7 @@ import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.objects.PolygonType.MCD
 import joshuatee.wx.objects.PolygonType.MPD
 import joshuatee.wx.objects.PolygonType.WATCH
-import joshuatee.wx.radar.UtilityDownloadMcd
-import joshuatee.wx.radar.UtilityDownloadMpd
 import joshuatee.wx.radar.UtilityDownloadWarnings
-import joshuatee.wx.radar.UtilityDownloadWatch
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
@@ -89,7 +86,8 @@ class BackgroundFetch(val context: Context) {
         }
         if (NotificationPreferences.alertSpcMcdNotification || UIPreferences.checkspc || MCD.pref || locationNeedsMcd) {
             try {
-                val mcdData = UtilityDownloadMcd.getMcd(context)
+//                val mcdData = UtilityDownloadMcd.getMcd(context)
+                val mcdData = ObjectPolygonWatch.polygonDataByType[MCD]!!.getImmediate(context)
                 mcdData.numberList.forEachIndexed { index, mcdNumber ->
                     if (NotificationPreferences.alertSpcMcdNotification) {
                         val noMain = "SPC MCD #$mcdNumber"
@@ -134,7 +132,7 @@ class BackgroundFetch(val context: Context) {
         }
         if (NotificationPreferences.alertWpcMpdNotification || UIPreferences.checkwpc || MPD.pref || locationNeedsWpcMpd) {
             try {
-                val mpdData = UtilityDownloadMpd.getMpd(context)
+                val mpdData = ObjectPolygonWatch.polygonDataByType[MPD]!!.getImmediate(context)
                 mpdData.numberList.forEachIndexed { index, mpdNumber ->
                     if (NotificationPreferences.alertWpcMpdNotification) {
                         val noMain = "WPC MPD #$mpdNumber"
@@ -180,7 +178,8 @@ class BackgroundFetch(val context: Context) {
         }
         if (NotificationPreferences.alertSpcWatchNotification || UIPreferences.checkspc || MCD.pref) {
             try {
-                val watchData = UtilityDownloadWatch.getWatch(context)
+//                val watchData = UtilityDownloadWatch.getWatch(context)
+                val watchData = ObjectPolygonWatch.polygonDataByType[WATCH]!!.getImmediate(context)
                 watchData.numberList.forEachIndexed { index, watchNumber ->
                     if (NotificationPreferences.alertSpcWatchNotification) {
                         val noMain = "SPC Watch #$watchNumber"

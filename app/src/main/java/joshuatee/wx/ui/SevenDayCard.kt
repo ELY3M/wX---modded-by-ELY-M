@@ -22,14 +22,14 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.fragments.UtilityLocationFragment
 import joshuatee.wx.objects.TextSize
+import joshuatee.wx.util.UtilityForecastIcon
 
-class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, forecasts: List<String>) {
+class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, day: Int, forecasts: List<String>) {
 
     private val card = Card(context)
     private val photo = Photo(context)
@@ -41,12 +41,12 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
         val vbox = VBox(context)
         topLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
         bottomLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
-        vbox.addViews(listOf(topLineText.get(), bottomLineText.get()))
+        vbox.addWidgets(listOf(topLineText.get(), bottomLineText.get()))
         if (!UIPreferences.locfragDontShowIcons) {
             hbox.addWidget(photo.get())
         }
         hbox.addLayout(vbox)
-        card.addView(hbox.get())
+        card.addLayout(hbox)
         val items = if (forecasts.size > day) {
             forecasts[day].split(": ")
         } else {
@@ -74,7 +74,7 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
             setBottomLine(items[1])
         }
         if (!UIPreferences.locfragDontShowIcons) {
-            photo.setImage(bitmap)
+            photo.setImage(UtilityForecastIcon.getIcon(context, iconUrl))
         }
     }
 

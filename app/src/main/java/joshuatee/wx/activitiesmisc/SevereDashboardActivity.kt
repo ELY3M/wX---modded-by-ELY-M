@@ -21,7 +21,6 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
@@ -69,7 +68,6 @@ class SevereDashboardActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         box = VBox.fromResource(this)
@@ -101,13 +99,10 @@ class SevereDashboardActivity : BaseActivity() {
         numbers.add("STORM_REPORTS")
         types.add("")
         types.add("")
-        // TODO FIXME refactor
-        UtilityDownloadWatch.get(this)
-        watchesByType[PolygonType.WATCH]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.storage.value)
-        UtilityDownloadMcd.get(this)
-        watchesByType[PolygonType.MCD]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.storage.value)
-        UtilityDownloadMpd.get(this)
-        watchesByType[PolygonType.MPD]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.storage.value)
+        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
+            ObjectPolygonWatch.polygonDataByType[it]!!.get(this)
+            watchesByType[it]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[it]!!.storage.value)
+        }
     }
 
     private fun downloadWarnings() {
@@ -120,19 +115,7 @@ class SevereDashboardActivity : BaseActivity() {
     private fun updateWatch() {
         boxImages.removeChildrenAndLayout()
         boxRows.clear()
-//        listOf(0, 1).forEach {
-//            if (it % imagesPerRow == 0) {
-//                boxRows.add(HBox(this, boxImages.get()))
-//            }
-//            val card = Image(this, boxRows.last(), bitmaps[it], imagesPerRow)
-//            if (it == 0) {
-//                card.connect { ObjectIntent.showUsAlerts(this) }
-//            } else {
-//                card.connect { ObjectIntent.showSpcStormReports(this) }
-//            }
-//        }
         listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach { type ->
-//            showItems(watchesByType[it]!!)
             bitmaps.addAll(watchesByType[type]!!.bitmaps)
             numbers.addAll(watchesByType[type]!!.numbers)
             repeat(watchesByType[type]!!.bitmaps.size) {

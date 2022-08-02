@@ -29,6 +29,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.radar.RID
 import java.util.*
+import kotlin.math.roundToInt
 
 internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
 
@@ -122,12 +123,20 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         var newValue = "NA"
         if (value != "") {
             val tempD = value.toDoubleOrNull() ?: 0.0
-            newValue = if (UIPreferences.unitsF) UtilityMath.roundToString(tempD) else UtilityMath.fahrenheitToCelsius(tempD)
+            newValue = if (UIPreferences.unitsF) {
+                tempD.roundToInt().toString()
+            } else {
+                UtilityMath.fahrenheitToCelsius(tempD)
+            }
         }
         return newValue
     }
 
-    private fun changePressureUnits(value: String) = if (!UIPreferences.unitsM) UtilityMath.pressureMBtoIn(value) else "$value mb"
+    private fun changePressureUnits(value: String) = if (!UIPreferences.unitsM) {
+        UtilityMath.pressureMBtoIn(value)
+    } else {
+        "$value mb"
+    }
 
     private fun decodeIconFromMetar(condition: String, obs: RID): String {
         // https://api.weather.gov/icons/land/day/ovc?size=medium

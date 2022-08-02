@@ -21,7 +21,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
@@ -47,15 +46,13 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private lateinit var dialogueAfd: ObjectDialogue
     private lateinit var dialogueRadar: ObjectDialogue
     private lateinit var dialogueWeb: ObjectDialogue
-    private val homeScreenCanadaDefault = "TXT-CC2:TXT-HAZ:IMG-CARAIN:TXT-7DAY2"
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_homescreen, R.menu.settings_homescreen, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         favoriteString = UIPreferences.homescreenFav
         homeScreenFavOrig = favoriteString
-        toolbar.subtitle = "Tap item to delete or move."
+        setTitle("Manage Home Screen", "Tap item to delete or move.")
         UtilityToolbar.fullScreenMode(toolbar, false)
         ObjectFab(this, R.id.fab, GlobalVariables.ICON_ADD) { dialogueMain.show() }
         updateList(true)
@@ -136,12 +133,6 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.homescreen_help_label))
             R.id.action_reset -> {
                 UIPreferences.homescreenFav = UIPreferences.HOMESCREEN_FAV_DEFAULT
-                favoriteString = UIPreferences.homescreenFav
-                updateList(true)
-                recyclerView.refreshList(labels)
-            }
-            R.id.action_reset_ca -> {
-                UIPreferences.homescreenFav = homeScreenCanadaDefault
                 favoriteString = UIPreferences.homescreenFav
                 updateList(true)
                 recyclerView.refreshList(labels)

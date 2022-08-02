@@ -21,7 +21,6 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -35,7 +34,6 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.VBox
 
-// TODO rename to TextViewer
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     //
@@ -52,15 +50,14 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var cardText: CardText
     private lateinit var box: VBox
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
-        box = VBox.fromResource(this)
-        toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
-        toolbarBottom.setOnMenuItemClickListener(this)
         arguments = intent.getStringArrayExtra(URL)!!
         url = arguments[0]
         title = arguments[1]
+        box = VBox.fromResource(this)
+        toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
+        toolbarBottom.setOnMenuItemClickListener(this)
         cardText = CardText(this, box, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
             if (url.contains("<")) cardText.text = Utility.fromHtml(url) else cardText.text = url

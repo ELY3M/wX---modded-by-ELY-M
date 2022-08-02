@@ -21,7 +21,7 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -33,7 +33,7 @@ import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.*
 import joshuatee.wx.ui.*
@@ -53,7 +53,6 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     private var locations = listOf<String>()
     private val prefToken = "SND_FAV"
     private var upperAir = ""
-    private var bitmap = UtilityImg.getBlankBitmap()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spcsoundings_top, menu)
@@ -65,7 +64,6 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -90,37 +88,37 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         } else {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
-        FutureVoid(this, { bitmap = UtilitySpcSoundings.getImage(this, office) }, ::showImage)
+        FutureBytes2(this, { UtilitySpcSoundings.getImage(this, office) }, ::showImage)
     }
 
-    private fun showImage() {
+    private fun showImage(bitmap: Bitmap) {
         image.visibility = View.VISIBLE
-        image.setBitmap(bitmap)
+        image.set(bitmap)
         image.setMaxZoom(4f)
-        image.firstRunSetZoomPosn("SOUNDING")
+        image.firstRun("SOUNDING")
         Utility.writePref(this, "SOUNDING_SECTOR", office)
     }
 
     private fun getContentSPCPlot() {
-        FutureVoid(this, ::downloadSpcPlot, ::showSpcPlot)
+        FutureBytes2(this, ::downloadSpcPlot, ::showSpcPlot)
     }
 
-    private fun downloadSpcPlot() {
+    private fun downloadSpcPlot(): Bitmap {
         imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
         val html = "${GlobalVariables.nwsSPCwebsitePrefix}/obswx/maps/".getHtml()
         val date = html.parse("/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
-        bitmap = UtilityImg.getBitmapAddWhiteBackground(this, imgUrl + "_" + date + ".gif")
+        return UtilityImg.getBitmapAddWhiteBackground(this, imgUrl + "_" + date + ".gif")
     }
 
-    private fun showSpcPlot() {
+    private fun showSpcPlot(bitmap: Bitmap) {
         image.visibility = View.VISIBLE
-        image.setBitmap(bitmap)
+        image.set(bitmap)
         image.setMaxZoom(4f)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, "$office sounding", bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "$office sounding", image.bitmap)
             R.id.action_250mb -> setPlotAndGet("250")
             R.id.action_300mb -> setPlotAndGet("300")
             R.id.action_500mb -> setPlotAndGet("500")

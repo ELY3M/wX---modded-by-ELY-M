@@ -58,7 +58,8 @@ object UtilityShare {
                 }
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val intentBuilder = IntentBuilder.from(activity)
+//        val intentBuilder = IntentBuilder.from(activity)
+        val intentBuilder = IntentBuilder(activity)
         intentBuilder.setSubject("$subject $formattedDate")
         intentBuilder.addEmailTo("")
         intentBuilder.setText(text)
@@ -96,7 +97,7 @@ object UtilityShare {
             UtilityLog.handleException(e)
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val intentBuilder = IntentBuilder.from(activity)
+        val intentBuilder = IntentBuilder(activity)
         intentBuilder.setSubject("$subject $formattedDate")
         intentBuilder.addEmailTo("")
         intentBuilder.setText(text)
@@ -109,15 +110,4 @@ object UtilityShare {
             activity.startActivity(Intent.createChooser(sharingIntent, "Share via"))
         }
     }
-
-//    internal var animDrawablePublic: AnimationDrawable? = null
-//    internal var subjectPublic: String? = null
-
-//    fun animGif(context: Context, subject: String, animDrawable: AnimationDrawable) {
-//        UtilityUI.makeToastLegacy(context, "Creating animated gif")
-//        animDrawablePublic = animDrawable
-//        subjectPublic = subject
-//        val intent = Intent(context, CreateAnimatedGifService::class.java)
-//        context.startService(intent)
-//    }
 }

@@ -21,7 +21,6 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
@@ -54,7 +53,6 @@ class LightningActivity : VideoRecordActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.lightning_activity, iconsEvenlySpaced = true, bottomToolbar = false)
         objectNavDrawer = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls, ::getContent)
@@ -77,8 +75,8 @@ class LightningActivity : VideoRecordActivity() {
     }
 
     private fun showImage() {
-        image.setBitmap(bitmap)
-        image.firstRunSetZoomPosn("LIGHTNING")
+        image.set(bitmap)
+        image.firstRun("LIGHTNING")
         Utility.writePref(this@LightningActivity, "LIGHTNING_PERIOD", period)
     }
 

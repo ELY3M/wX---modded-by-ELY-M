@@ -21,10 +21,6 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
-import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
 
 object UtilityAwcRadarMosaic {
@@ -108,18 +104,17 @@ object UtilityAwcRadarMosaic {
     // https://www.aviationweather.gov/data/obs/radar/rad_tops-18_alb.gif
     // https://www.aviationweather.gov/data/obs/radar/rad_cref_bwi.gif
 
-    fun get(sector: String, product: String): Bitmap {
+    fun get(sector: String, product: String): String {
         var baseAddOn = "radar/"
         var imageType = ".gif"
         if (product.contains("sat_")) {
             baseAddOn = "sat/us/"
             imageType = ".jpg"
         }
-        val url = baseUrl + baseAddOn + product + "_" + sector + imageType
-        return url.getImage()
+        return baseUrl + baseAddOn + product + "_" + sector + imageType
     }
 
-    fun getAnimation(context: Context, sector: String, product: String): AnimationDrawable {
+    fun getAnimation(sector: String, product: String): List<String> {
         // image_url[14] = "/data/obs/radar/20190131/22/20190131_2216_rad_rala_dtw.gif";
         // https://www.aviationweather.gov/satellite/plot?region=us&type=wv
         var baseAddOn = "radar/"
@@ -144,7 +139,6 @@ object UtilityAwcRadarMosaic {
                         + sector
                         + imageType + ")."
         )
-        val bitmaps = urls.map { (baseUrl + baseAddOn + it).getImage() }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
+        return urls.map { (baseUrl + baseAddOn + it) }
     }
 }

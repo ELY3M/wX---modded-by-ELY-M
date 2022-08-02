@@ -22,7 +22,6 @@
 package joshuatee.wx.settings
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
@@ -34,6 +33,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
 import android.content.Intent
+import androidx.activity.result.ActivityResult
+//import androidx.activity.result.ActivityResultCallback
+//import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.common.RegExp
@@ -47,231 +50,52 @@ class SettingsNotificationsActivity : BaseActivity() {
 
     private lateinit var box: VBox
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Notifications", "Please tap on text for additional help.")
         box = VBox.fromResource(this)
-        val cardSound = CardText(this, box.get(), "Notification sound chooser", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
-        val cardWFOFilter = CardText(this, box.get(), "WFO notification filter", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
-        CardText(
-                this,
-                box.get(),
+        CardText(this, box, "Notification sound chooser", UIPreferences.textSizeNormal, { notifSoundPicker() }, UIPreferences.paddingSettings)
+        CardText(this, box, "WFO notification filter", UIPreferences.textSizeNormal, { showWFONotificationFilterDialogue() }, UIPreferences.paddingSettings)
+        CardText(this, box,
                 "Text product notifications: " + UtilityNotificationTextProduct.showAll(),
                 UIPreferences.textSizeNormal,
                 UIPreferences.paddingSettings
         )
-        cardSound.connect { notifSoundPicker() }
-        cardWFOFilter.connect { showWFONotificationFilterDialogue() }
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "NHC Advisories EPAC",
-                        "ALERT_NHC_EPAC_NOTIFICATION",
-                        R.string.b_nhc_epac
-                ).get()
+        val configs = listOf(
+            ObjectSwitch(this, "NHC Advisories EPAC", "ALERT_NHC_EPAC_NOTIFICATION", R.string.b_nhc_epac),
+            ObjectSwitch(this, "NHC Advisories ATL", "ALERT_NHC_ATL_NOTIFICATION", R.string.b_nhc_atl),
+            ObjectSwitch(this, "SPC MCD", "ALERT_SPCMCD_NOTIFICATION", R.string.b_mcd),
+            ObjectSwitch(this, "SPC SWO", "ALERT_SPCSWO_NOTIFICATION", R.string.b_swo),
+            ObjectSwitch(this, "SPC SWO include slight", "ALERT_SPCSWO_SLIGHT_NOTIFICATION", R.string.b_swo2),
+            ObjectSwitch(this, "SPC Watch", "ALERT_SPCWAT_NOTIFICATION", R.string.b_wat),
+            ObjectSwitch(this, "US Tornado", "ALERT_TORNADO_NOTIFICATION", R.string.b_tornado),
+            ObjectSwitch(this, "WPC MPD", "ALERT_WPCMPD_NOTIFICATION", R.string.b_mpd),
+            ObjectSwitch(this, "Sound: NHC Advisories EPAC", "ALERT_NOTIFICATION_SOUND_NHC_EPAC", R.string.alert_sound_nhc_epac_label),
+            ObjectSwitch(this, "Sound: NHC Advisories ATL", "ALERT_NOTIFICATION_SOUND_NHC_ATL", R.string.alert_sound_nhc_atl_label),
+            ObjectSwitch(this, "Sound: SPC MCD", "ALERT_NOTIFICATION_SOUND_SPCMCD", R.string.alert_sound_spcmcd_label),
+            ObjectSwitch(this, "Sound: SPC SWO", "ALERT_NOTIFICATION_SOUND_SPCSWO", R.string.alert_sound_spcswo_label),
+            ObjectSwitch(this, "Sound: SPC Watch", "ALERT_NOTIFICATION_SOUND_SPCWAT", R.string.alert_sound_spcwat_label),
+            ObjectSwitch(this, "Sound: Text products", "ALERT_NOTIFICATION_SOUND_TEXT_PROD", R.string.alert_sound_text_prod_label),
+            ObjectSwitch(this, "Sound: US Tornado", "ALERT_NOTIFICATION_SOUND_TORNADO", R.string.alert_sound_tornado_label),
+            ObjectSwitch(this, "Sound: WPC MPD Sound", "ALERT_NOTIFICATION_SOUND_WPCMPD", R.string.alert_sound_wpcmpd_label),
+            ObjectSwitch(this, "Alert only once", "ALERT_ONLYONCE", R.string.alert_onlyonce_label),
+            ObjectSwitch(this, "Auto cancel notifs", "ALERT_AUTOCANCEL", R.string.alert_autocancel_label),
+            ObjectSwitch(this, "Blackout alert sounds", "ALERT_BLACKOUT", R.string.alert_blackout_label),
+            ObjectSwitch(this, "Notif text to speech", "NOTIF_TTS", R.string.tv_notif_tts_label),
+            ObjectSwitch(this, "Play sound repeatedly", "NOTIF_SOUND_REPEAT", R.string.tv_notif_sound_repeat_label),
+            ObjectSwitch(this, "Tor warn override blackout", "ALERT_BLACKOUT_TORNADO", R.string.alert_blackout_tornado_label),
         )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "NHC Advisories ATL",
-                        "ALERT_NHC_ATL_NOTIFICATION",
-                        R.string.b_nhc_atl
-                ).get()
+        configs.forEach {
+            box.addWidget(it.get())
+        }
+        val numberPickers = listOf(
+            ObjectNumberPicker(this, "Notification check interval in minutes", "ALERT_NOTIFICATION_INTERVAL", R.string.alert_interval_np_label, 12, 1, 121),
+            ObjectNumberPicker(this, "Notification blackout - AM(h)", "ALERT_BLACKOUT_AM", R.string.alert_blackout_am_np_label, 7, 0, 23),
+            ObjectNumberPicker(this, "Notification blackout - PM(h)", "ALERT_BLACKOUT_PM", R.string.alert_blackout_pm_np_label, 22, 0, 23),
         )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "SPC MCD",
-                        "ALERT_SPCMCD_NOTIFICATION",
-                        R.string.b_mcd
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "SPC SWO",
-                        "ALERT_SPCSWO_NOTIFICATION",
-                        R.string.b_swo
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "SPC SWO include slight",
-                        "ALERT_SPCSWO_SLIGHT_NOTIFICATION",
-                        R.string.b_swo2
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "SPC Watch",
-                        "ALERT_SPCWAT_NOTIFICATION",
-                        R.string.b_wat
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "US Tornado",
-                        "ALERT_TORNADO_NOTIFICATION",
-                        R.string.b_tornado
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "WPC MPD",
-                        "ALERT_WPCMPD_NOTIFICATION",
-                        R.string.b_mpd
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Sound: NHC Advisories EPAC",
-                        "ALERT_NOTIFICATION_SOUND_NHC_EPAC",
-                        R.string.alert_sound_nhc_epac_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Sound: NHC Advisories ATL",
-                        "ALERT_NOTIFICATION_SOUND_NHC_ATL",
-                        R.string.alert_sound_nhc_atl_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Sound: SPC MCD",
-                        "ALERT_NOTIFICATION_SOUND_SPCMCD",
-                        R.string.alert_sound_spcmcd_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Sound: SPC SWO",
-                        "ALERT_NOTIFICATION_SOUND_SPCSWO",
-                        R.string.alert_sound_spcswo_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Sound: SPC Watch",
-                        "ALERT_NOTIFICATION_SOUND_SPCWAT",
-                        R.string.alert_sound_spcwat_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Sound: Text products",
-                        "ALERT_NOTIFICATION_SOUND_TEXT_PROD",
-                        R.string.alert_sound_text_prod_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Sound: US Tornado",
-                        "ALERT_NOTIFICATION_SOUND_TORNADO",
-                        R.string.alert_sound_tornado_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Sound: WPC MPD Sound",
-                        "ALERT_NOTIFICATION_SOUND_WPCMPD",
-                        R.string.alert_sound_wpcmpd_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Alert only once",
-                        "ALERT_ONLYONCE",
-                        R.string.alert_onlyonce_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Auto cancel notifs",
-                        "ALERT_AUTOCANCEL",
-                        R.string.alert_autocancel_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Blackout alert sounds",
-                        "ALERT_BLACKOUT",
-                        R.string.alert_blackout_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Notif text to speech",
-                        "NOTIF_TTS",
-                        R.string.tv_notif_tts_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Play sound repeatedly",
-                        "NOTIF_SOUND_REPEAT",
-                        R.string.tv_notif_sound_repeat_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Tor warn override blackout",
-                        "ALERT_BLACKOUT_TORNADO",
-                        R.string.alert_blackout_tornado_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectNumberPicker(
-                        this,
-                        "Notification check interval in minutes",
-                        "ALERT_NOTIFICATION_INTERVAL",
-                        R.string.alert_interval_np_label,
-                        12,
-                        1,
-                        121
-                ).get()
-        )
-        box.addWidget(
-                ObjectNumberPicker(
-                        this,
-                        "Notification blackout - AM(h)",
-                        "ALERT_BLACKOUT_AM",
-                        R.string.alert_blackout_am_np_label,
-                        7,
-                        0,
-                        23
-                ).get()
-        )
-        box.addWidget(
-                ObjectNumberPicker(
-                        this,
-                        "Notification blackout - PM(h)",
-                        "ALERT_BLACKOUT_PM",
-                        R.string.alert_blackout_pm_np_label,
-                        22,
-                        0,
-                        23
-                ).get()
-        )
+        numberPickers.forEach {
+            box.addWidget(it.get())
+        }
     }
 
     override fun onStop() {
@@ -297,11 +121,28 @@ class SettingsNotificationsActivity : BaseActivity() {
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone")
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, uri)
-        startActivityForResult(intent, 1)
+//        startActivityForResult(intent, 1)
+        startForResult.launch(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+//            val uri = data!!.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+//            if (uri != null) {
+//                NotificationPreferences.notifSoundUri = uri.toString()
+//                Utility.writePref(this, "NOTIF_SOUND_URI", NotificationPreferences.notifSoundUri)
+//            } else {
+//                NotificationPreferences.notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
+//                Utility.writePrefWithNull(this, "NOTIF_SOUND_URI", null)
+//            }
+//        }
+//    }
+
+    // https://developer.android.com/training/basics/intents/result#register
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
             val uri = data!!.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             if (uri != null) {
                 NotificationPreferences.notifSoundUri = uri.toString()
@@ -362,8 +203,8 @@ class SettingsNotificationsActivity : BaseActivity() {
 
     private val fileWritePerm = 5002
 
-    // FIXME TODO decide what to do with this
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 //        when (requestCode) {
 //            fileWritePerm -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //            }

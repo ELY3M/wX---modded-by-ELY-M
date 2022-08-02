@@ -25,11 +25,26 @@
         android:title=""
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_test"
+        android:id="@+id/action_animate"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/label_animate"
-        app:showAsAction="always">
-        <menu>
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_pause"
+        android:icon="@drawable/ic_pause_24dp"
+        android:title="@string/label_pause"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="@string/label_share"
+        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/action_animate_submenu"-->
+<!--        android:icon="@drawable/ic_play_arrow_24dp"-->
+<!--        android:title="@string/label_animate"-->
+<!--        app:showAsAction="never">-->
+<!--        <menu>-->
             <item
                 android:id="@+id/action_a6"
                 android:title="@string/label_a6"
@@ -42,12 +57,8 @@
                 android:id="@+id/action_a18"
                 android:title="@string/label_a18"
                 app:showAsAction="never" />
-        </menu>
-    </item>
-    <item
-        android:id="@+id/action_share"
-        android:icon="@drawable/ic_share_24dp"
-        android:title="@string/label_share"
-        app:showAsAction="always" />
+<!--        </menu>-->
+<!--    </item>-->
+
 </menu>
 

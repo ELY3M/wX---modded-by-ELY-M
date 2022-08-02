@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.graphics.Bitmap
-import java.util.regex.Pattern
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.common.GlobalVariables
@@ -37,7 +36,6 @@ internal class SevereNotice(val type: PolygonType) {
 
     val bitmaps = mutableListOf<Bitmap>()
     var numbers = mutableListOf<String>()
-    var pattern: Pattern = Pattern.compile("")
     var typeAsString = when (type) {
         PolygonType.MCD -> "MCD"
         PolygonType.WATCH -> "WATCH"
@@ -55,11 +53,11 @@ internal class SevereNotice(val type: PolygonType) {
             else -> ""
         }
         if (!html.contains(zeroString)) {
-            when (type) {
-                PolygonType.MCD -> pattern = RegExp.mcdPatternUtilSpc
-                PolygonType.WATCH -> pattern = RegExp.watchPattern
-                PolygonType.MPD -> pattern = RegExp.mpdPattern
-                else -> {}
+            val pattern = when (type) {
+                PolygonType.MCD -> RegExp.mcdPatternUtilSpc
+                PolygonType.WATCH -> RegExp.watchPattern
+                PolygonType.MPD -> RegExp.mpdPattern
+                else -> RegExp.mcdPatternUtilSpc
             }
             numbers = UtilityString.parseColumnAl(html, pattern)
         }

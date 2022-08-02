@@ -104,7 +104,9 @@ internal object UtilityNotificationSpcFireWeather {
                     //
                     if (latLons.isNotEmpty()) {
                         val polygonFrame = ExternalPolygon.Builder()
-                        latLons.forEach { latLon -> polygonFrame.addVertex(ExternalPoint(latLon)) }
+                        latLons.forEach { latLon ->
+                            polygonFrame.addVertex(ExternalPoint(latLon))
+                        }
                         val polygonShape = polygonFrame.build()
                         (1..Location.numLocations).forEach { n ->
                             val locNum = n.toString()
@@ -112,7 +114,9 @@ internal object UtilityNotificationSpcFireWeather {
                                 // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                                 // call secondary method to send notif if required
                                 if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {
-                                    if (!notifUrls.contains("spcfwloc$day$locNum")) notifUrls += sendSpcFireWeatherNotification(context, locNum, day, threat, validTime)
+                                    if (!notifUrls.contains("spcfwloc$day$locNum")) {
+                                        notifUrls += sendSpcFireWeatherNotification(context, locNum, day, threat, validTime)
+                                    }
                                 }
                             }
                         }

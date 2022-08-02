@@ -69,7 +69,7 @@ internal class ObjectNumberPicker(
         layoutParams.setMargins(padding, padding, padding, padding)
         seekBar.layoutParams = layoutParams
         vbox.addWidget(seekBar)
-        card.addView(vbox.get())
+        card.addLayout(vbox)
         updateLabel()
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {

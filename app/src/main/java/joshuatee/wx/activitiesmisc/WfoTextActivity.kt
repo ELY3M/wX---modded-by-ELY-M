@@ -21,7 +21,6 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import java.util.Locale
 import androidx.cardview.widget.CardView
@@ -103,9 +102,10 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.afd)
+        arguments = intent.getStringArrayExtra(URL)!!
+        wfo = arguments[0]
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -114,8 +114,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cardText = CardText(this, box, toolbar, toolbarBottom)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
-        arguments = intent.getStringArrayExtra(URL)!!
-        wfo = arguments[0]
         if (Utility.readPref(this, "WFO_REMEMBER_LOCATION", "") == "true") {
             wfo = Utility.readPref(this, "WFO_LAST_USED", Location.wfo)
         }

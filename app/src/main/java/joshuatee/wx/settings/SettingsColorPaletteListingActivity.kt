@@ -21,7 +21,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.objects.Route
@@ -36,21 +35,16 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
     private var cardColorPalettes = mutableListOf<CardText>()
     private lateinit var box: VBox
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         box = VBox.fromResource(this)
-        WXGLNexrad.colorPaletteProducts.forEach { product ->
-            val card = CardText(
-                    this,
-                    box.get(),
+        WXGLNexrad.colorPaletteProducts.filter { it != 165 }.forEach { product ->
+            val card = CardText(this, box,
                     WXGLNexrad.productCodeStringToName[product] + ": " + ObjectColorPalette.radarColorPalette[product],
                     UIPreferences.textSizeNormal,
+                    { Route(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString())) },
                     UIPreferences.paddingSettings
             )
-            card.connect {
-                Route(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString()))
-            }
             cardColorPalettes.add(card)
         }
     }

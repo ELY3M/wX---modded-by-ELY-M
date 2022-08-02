@@ -213,7 +213,7 @@ object Utility {
             UtilityLog.handleException(e)
         }
         var string = activity.resources.getString(R.string.about_wx) +
-                GlobalVariables.newline + version + GlobalVariables.newline + GlobalVariables.newline +
+                GlobalVariables.newline + "Version " + version + GlobalVariables.newline + GlobalVariables.newline +
                 "Use alt-? on the main screen and in nexrad radar to show keyboard shortcuts"
         string += GlobalVariables.newline + GlobalVariables.newline + "Diagnostics information:" + GlobalVariables.newline
         string += readPref(activity, "JOBSERVICE_TIME_LAST_RAN", "") + "  Last background update" + GlobalVariables.newline

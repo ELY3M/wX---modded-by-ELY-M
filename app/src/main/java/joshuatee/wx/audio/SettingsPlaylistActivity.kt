@@ -22,7 +22,6 @@
 package joshuatee.wx.audio
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
@@ -54,7 +53,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
         setTitle("PlayList", "Tap item to play, view, delete or move.")

@@ -78,8 +78,8 @@ tokens.indices.forEach { index ->
 
 Kotlin:
 (100 downTo -1 step 1).forEach {
-(0 until 256).forEach {
-(0..159).forEach {
+(0 until 256).forEach { // does not include 256
+(0..256).forEach {      // DOES include 256
 for (index in startIndex until tokens.size step indexIncrement) {
 for (index in startIndex..tokens.size step indexIncrement) {
 

@@ -131,8 +131,7 @@ class ObjectWarning() {
         }
 
         fun parseJson(htmlF: String): List<ObjectWarning> {
-            var html = htmlF
-            html = html.replace("\"geometry\": null,", "\"geometry\": null, \"coordinates\":[[]]}")
+            val html = htmlF.replace("\"geometry\": null,", "\"geometry\": null, \"coordinates\":[[]]}")
             val warnings = mutableListOf<ObjectWarning>()
             val urlList = UtilityString.parseColumn(html, "\"id\": \"(https://api.weather.gov/alerts/urn.*?)\"")
             val titleList = UtilityString.parseColumn(html, "\"description\": \"(.*?)\"")

@@ -113,6 +113,10 @@ class Route() {
             Route(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, array)
         }
 
+        fun forecast(context: Context, array: Array<String>) {
+            Route(context, ForecastActivity::class.java, ForecastActivity.URL, array)
+        }
+
         fun vis(context: Context) {
             Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf(""))
         }
@@ -163,6 +167,10 @@ class Route() {
             Route(context, SettingsMainActivity::class.java)
         }
 
+        fun settingsRadar(context: Context) {
+            Route(context, SettingsRadarActivity::class.java)
+        }
+
         fun web(context: Context, url: String) {
             Route(context, Intent.ACTION_VIEW, Uri.parse(url))
         }
@@ -207,6 +215,10 @@ class Route() {
 
         fun locationEdit(context: Context, array: Array<String>) {
             Route(context, SettingsLocationGenericActivity::class.java, SettingsLocationGenericActivity.LOC_NUM, array)
+        }
+
+        fun severeDash(context: Context) {
+            Route(context, SevereDashboardActivity::class.java)
         }
     }
 }

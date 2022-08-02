@@ -18,6 +18,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.Route
+import joshuatee.wx.radar.UtilityConusRadar
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UIPreferences
@@ -145,6 +146,11 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         checkpalfiles(R.raw.colormapownenhvel, "colormapownenhvel.txt")
         //need to run it again
         ColorPalettes.initialize(applicationContext)
+
+        //make to download new conus everytime the app start...
+        UtilityLog.d("wx", "downloading conus on start....")
+        UtilityConusRadar.getConusImage()
+
 
         if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
             Route(this, WX::class.java)

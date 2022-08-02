@@ -21,7 +21,6 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -53,7 +52,6 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var box: VBox
     private lateinit var arguments: Array<String>
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.usalerts_detail)
         arguments = intent.getStringArrayExtra(URL)!!

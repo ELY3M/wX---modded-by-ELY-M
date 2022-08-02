@@ -53,12 +53,12 @@ internal object UtilityWXOGLPerfRaster {
                 radarBuffers.floatBuffer.putFloat((rowNumber - halfPoint).toFloat() * scaleFactor * -1.0f)
 
                 radarBuffers.floatBuffer.putFloat((bin - halfPoint).toFloat() * scaleFactor)
-                radarBuffers.floatBuffer.putFloat((rowNumber + 1 - halfPoint).toFloat() * scaleFactor * -1.0f)
+                radarBuffers.floatBuffer.putFloat((rowNumber + 1.0f - halfPoint) * scaleFactor * -1.0f)
 
-                radarBuffers.floatBuffer.putFloat((bin + 1 - halfPoint).toFloat() * scaleFactor)
-                radarBuffers.floatBuffer.putFloat((rowNumber + 1 - halfPoint).toFloat() * scaleFactor * -1.0f)
+                radarBuffers.floatBuffer.putFloat((bin + 1.0f - halfPoint) * scaleFactor)
+                radarBuffers.floatBuffer.putFloat((rowNumber + 1.0f - halfPoint) * scaleFactor * -1.0f)
 
-                radarBuffers.floatBuffer.putFloat((bin + 1 - halfPoint).toFloat() * scaleFactor)
+                radarBuffers.floatBuffer.putFloat((bin + 1.0f - halfPoint) * scaleFactor)
                 radarBuffers.floatBuffer.putFloat((rowNumber  - halfPoint).toFloat() * scaleFactor * -1.0f)
                 repeat(4) {
                     radarBuffers.colorBuffer.put(radarBuffers.colormap.redValues.get(curLevel and 0xFF))

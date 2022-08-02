@@ -120,7 +120,7 @@ class ObjectSwitch(context: Context, label: String, pref: String, strId: Int) {
             }
         }
         hbox.addWidget(checkBox)
-        card.addView(hbox.get())
+        card.addLayout(hbox)
     }
 
     fun isChecked(value: Boolean) {

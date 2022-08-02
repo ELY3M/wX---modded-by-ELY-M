@@ -26,7 +26,6 @@ import java.util.Locale
 import android.content.Context
 import android.graphics.Bitmap
 import joshuatee.wx.activitiesmisc.UtilityLightning
-import joshuatee.wx.activitiesmisc.UtilitySunMoon
 import joshuatee.wx.activitiesmisc.UtilityUSHourly
 import joshuatee.wx.audio.UtilityPlayList
 import joshuatee.wx.common.GlobalVariables
@@ -53,12 +52,12 @@ object UtilityDownload {
                 var sector = "us"
                 sector = Utility.readPref(context, prefTokenSector, sector)
                 product = Utility.readPref(context, prefTokenProduct, product)
-                UtilityAwcRadarMosaic.get(sector, product)
+                UtilityAwcRadarMosaic.get(sector, product).getImage()
             } else {
                 val prefTokenSector = "REMEMBER_NWSMOSAIC_SECTOR"
                 var sector = UtilityNwsRadarMosaic.getNearestMosaic(Location.latLon)
                 sector = Utility.readPref(context, prefTokenSector, sector)
-                UtilityNwsRadarMosaic.get(sector)
+                UtilityNwsRadarMosaic.get(sector).getImage()
             }
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -74,13 +73,9 @@ object UtilityDownload {
             "GOES16" -> {
                 needsBitmap = false
                 val index = Utility.readPrefInt(context, "GOES16_IMG_FAV_IDX", 0)
-                bitmap = UtilityGoes.getImage(UtilityGoes.codes[index], Utility.readPref(context, "GOES16_SECTOR", "cgl"))
+                bitmap = UtilityGoes.getImage(UtilityGoes.codes[index], Utility.readPref(context, "GOES16_SECTOR", "cgl")).getImage()
             }
             "VIS_1KM", "VIS_MAIN" -> needsBitmap = false
-            "CARAIN" -> if (Location.x.contains("CANADA")) {
-                needsBitmap = false
-                bitmap = UtilityImg.getBlankBitmap()
-            }
             "RAD_2KM" -> {
                 needsBitmap = false
                 bitmap = getRadarMosaic(context)
@@ -88,7 +83,7 @@ object UtilityDownload {
             "IR_2KM", "WV_2KM", "VIS_2KM" -> needsBitmap = false
             "VIS_CONUS" -> {
                 needsBitmap = false
-                bitmap = UtilityGoes.getImage("02", "CONUS")
+                bitmap = UtilityGoes.getImage("02", "CONUS").getImage()
             }
             "USWARN" -> url = "https://forecast.weather.gov/wwamap/png/US.png"
             "AKWARN" -> url = "https://forecast.weather.gov/wwamap/png/ak.png"
@@ -222,12 +217,12 @@ object UtilityDownload {
             }
             "CONUSWV" -> {
                 needsBitmap = false
-                bitmap = UtilityGoes.getImage("09", "CONUS")
+                bitmap = UtilityGoes.getImage("09", "CONUS").getImage()
             }
             "LTG" -> {
                 if (UIPreferences.lightningUseGoes) {
                     needsBitmap = false
-                    bitmap = UtilityGoes.getImage("GLM", "CONUS")
+                    bitmap = UtilityGoes.getImage("GLM", "CONUS").getImage()
                 } else {
                     needsBitmap = false
                     bitmap = UtilityLightning.getImage(
@@ -254,7 +249,7 @@ object UtilityDownload {
             prod == "HWOLOC" -> text = getTextProduct(context, "hwo" + Location.wfo.lowercase(Locale.US))
             prod == "VFDLOC" -> text = getTextProduct(context, "vfd" + Location.wfo.lowercase(Locale.US))
             //elys mod
-	    prod == "SUNMOON" -> text = UtilitySunMoon.getData(Location.locationIndex)
+	        prod == "SUNMOON" -> text = UtilityTimeSunMoon.getData(Location.locationIndex)
             prod == "HOURLY" -> text = UtilityUSHourly.get(Location.currentLocation)[0]
             prod == "QPF94E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "1"

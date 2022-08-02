@@ -47,7 +47,6 @@ object UIPreferences {
     var lLpadding = 0.0f
     var actionBarHeight = 0
 
-    //
     var refreshLocMin = 0
     var translateText = false
     var nwsTextRemovelinebreaks = false
@@ -123,7 +122,6 @@ object UIPreferences {
     var sndFav = ""
     var srefFav = ""
     var spcMesoFav = ""
-    var caRidFav = ""
     var nwsTextFav = ""
     var wfoTextFav = ""
     var wpcTextFav = ""
@@ -237,7 +235,6 @@ object UIPreferences {
         sndFav = getInitialPreferenceString("SND_FAV", GlobalVariables.prefSeparator)
         srefFav = getInitialPreferenceString("SREF_FAV", GlobalVariables.prefSeparator)
         spcMesoFav = getInitialPreferenceString("SPCMESO_FAV", GlobalVariables.prefSeparator)
-        caRidFav = getInitialPreferenceString("RID_CA_FAV", GlobalVariables.prefSeparator)
         nwsTextFav = getInitialPreferenceString("NWS_TEXT_FAV", GlobalVariables.prefSeparator)
         spotterFav = getInitialPreferenceString("SPOTTER_FAV", "")
         wfoTextFav = getInitialPreferenceString("WFO_TEXT_FAV", "AFD")

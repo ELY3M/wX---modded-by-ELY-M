@@ -25,7 +25,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.util.TypedValue
-import android.view.View
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import kotlin.math.sqrt
 import kotlin.math.pow
 import joshuatee.wx.MyApplication
@@ -34,12 +36,19 @@ import joshuatee.wx.util.Utility
 
 object UtilityUI {
 
+    // https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
     fun immersiveMode(activity: Activity) {
         if (UIPreferences.radarImmersiveMode) {
-            activity.window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//            activity.window.decorView.systemUiVisibility =
+//                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+//                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or
+//                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+
+            WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+            WindowInsetsControllerCompat(activity.window,  activity.window.decorView).let { controller ->
+                controller.hide(WindowInsetsCompat.Type.systemBars())
+                controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
         }
     }
 
@@ -81,12 +90,20 @@ object UtilityUI {
 
     fun statusBarHeight(context: Context): Int {
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-        return if (resourceId > 0) context.resources.getDimensionPixelSize(resourceId) else 0
+        return if (resourceId > 0) {
+            context.resources.getDimensionPixelSize(resourceId)
+        } else {
+            0
+        }
     }
 
     fun navigationBarHeight(context: Context): Int {
         val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return if (resourceId > 0) context.resources.getDimensionPixelSize(resourceId) else 0
+        return if (resourceId > 0) {
+            context.resources.getDimensionPixelSize(resourceId)
+        } else {
+            0
+        }
     }
 
     fun spToPx(sp: Int, context: Context) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)

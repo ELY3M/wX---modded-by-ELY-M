@@ -21,7 +21,6 @@
 
 package joshuatee.wx.models
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
 import android.view.KeyEvent
@@ -52,7 +51,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var miStatusParam2: MenuItem
     private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var om: ObjectModel
-    private lateinit var arguments: Array<String>
+    private var arguments: Array<String>? = arrayOf()
     private lateinit var timeMenuItem: MenuItem
     private lateinit var runMenuItem: MenuItem
 
@@ -66,10 +65,13 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        arguments = intent.getStringArrayExtra(INFO)!!
-        om = ObjectModel(this, arguments[1], arguments[0])
+        arguments = intent.getStringArrayExtra(INFO)
+        // Keep for static pinned shortcuts
+        if (arguments == null) {
+            arguments = arrayOf("1", "SPCHREF", "SPC HREF")
+        }
+        om = ObjectModel(this, arguments!![1], arguments!![0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_spchref, R.menu.models_spchref, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
@@ -80,7 +82,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = arguments[2]
+        title = arguments!![2]
         val menu = toolbarBottom.menu
         timeMenuItem = menu.findItem(R.id.action_time)
         runMenuItem = menu.findItem(R.id.action_run)
@@ -134,7 +136,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_forward -> om.rightClick()
             R.id.action_img1 -> {
                 om.curImg = 0
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                UtilityModels.setSubtitleRestoreZoom(
                         om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
@@ -142,7 +144,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
             R.id.action_img2 -> {
                 om.curImg = 1
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                UtilityModels.setSubtitleRestoreZoom(
                         om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
@@ -151,7 +153,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_animate -> UtilityModels.getAnimate(this, om, listOf(""))
             R.id.action_time -> ObjectDialogue.generic(this, om.times, ::getContent) { om.setTimeIdx(it) }
             R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) { om.run = om.rtd.listRun[it] }
-            R.id.action_multipane -> Route(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", arguments[1], arguments[2]))
+            R.id.action_multipane -> Route(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", arguments!![1], arguments!![2]))
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
@@ -211,7 +213,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
             om.displayData.paramLabel[it] = "500 mb Height/Wind"
             om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
-            if (!UtilityModels.parameterInList(UtilityModelSpcHrefInterface.params, om.displayData.param[it])) {
+            if (!UtilityModelSpcHrefInterface.params.contains(om.displayData.param[it])) {
                 om.displayData.param[it] = "500w_mean,500h_mean"
                 om.displayData.paramLabel[it] = "500 mb Height/Wind"
             }

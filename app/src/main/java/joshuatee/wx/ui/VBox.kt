@@ -73,7 +73,7 @@ class VBox(val context: Context) {
         linearLayout.addView(child)
     }
 
-    fun addViews(children: List<View>) {
+    fun addWidgets(children: List<View>) {
         children.forEach {
             linearLayout.addView(it)
         }

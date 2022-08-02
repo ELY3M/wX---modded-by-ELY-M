@@ -73,11 +73,15 @@ class Card {
         get() = card.visibility
         set(newValue) { card.visibility = newValue }
 
-    fun addView(view: View) {
+    fun addWidget(view: View) {
         card.addView(view)
     }
 
-    fun addView(objectLinearLayout: VBox) {
+    fun addLayout(objectLinearLayout: VBox) {
+        card.addView(objectLinearLayout.get())
+    }
+
+    fun addLayout(objectLinearLayout: HBox) {
         card.addView(objectLinearLayout.get())
     }
 

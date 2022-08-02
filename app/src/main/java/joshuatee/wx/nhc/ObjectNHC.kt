@@ -35,7 +35,7 @@ class ObjectNhc(val context: Context, box: VBox) {
     private var notificationCard: CardText? = null
     private val cardNotificationHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
     private var numberOfImages = 0
-    var imagesPerRow = 2
+    private var imagesPerRow = 2
     private val boxRows = mutableListOf<HBox>()
     private val regionMap = mutableMapOf<NhcOceanEnum, ObjectNhcRegionSummary>()
     private var stormDataList = mutableListOf<ObjectNhcStormDetails>()
@@ -51,7 +51,6 @@ class ObjectNhc(val context: Context, box: VBox) {
     private var movementSpeeds = listOf<String>()
     private var lastUpdates = listOf<String>()
     private var statusList = mutableListOf<String>()
-
     private var publicAdvisoriesChunk = listOf<String>()
     private var forecastAdvisoriesChunk = listOf<String>()
     private var forecastDiscussionsChunk = listOf<String>()
@@ -60,7 +59,6 @@ class ObjectNhc(val context: Context, box: VBox) {
     private var forecastAdvisories = mutableListOf<String>()
     private var forecastDiscussions = mutableListOf<String>()
     private var windSpeedProbabilities = mutableListOf<String>()
-
     val bitmaps = mutableListOf<Bitmap>()
     private val images = mutableListOf<Image>()
     val urls = mutableListOf<String>()
@@ -118,27 +116,22 @@ class ObjectNhc(val context: Context, box: VBox) {
         forecastAdvisoriesChunk = UtilityString.parseColumn(html, "\"forecastAdvisory\": \\{(.*?)\\}")
         forecastDiscussionsChunk = UtilityString.parseColumn(html, "\"forecastDiscussion\": \\{(.*?)\\}")
         windSpeedProbabilitiesChunk = UtilityString.parseColumn(html, "\"windSpeedProbabilities\": \\{(.*?)\\}")
-
         for (chunk in publicAdvisoriesChunk) {
             val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
             publicAdvisories.add(token)
         }
-
         for (chunk in forecastAdvisoriesChunk) {
             val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
             forecastAdvisories.add(token)
         }
-
         for (chunk in forecastDiscussionsChunk) {
             val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
             forecastDiscussions.add(token)
         }
-
         for (chunk in windSpeedProbabilitiesChunk) {
             val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
             windSpeedProbabilities.add(token)
         }
-
         for (adv in publicAdvisories) {
 //            UtilityLog.d("wxNHC", adv)
             val productToken = adv.split("/").last().replace(".shtml", "")

@@ -33,7 +33,6 @@ import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -124,7 +123,6 @@ class WX : CommonActionBarFragment() {
         vpa = ViewPagerAdapter(this)
         viewPager.adapter = vpa
         slidingTabLayout.tabGravity = TabLayout.GRAVITY_FILL
-//        slidingTabLayout.setupWithViewPager(viewPager)
         TabLayoutMediator(slidingTabLayout, viewPager) { tab, position ->
             tab.text = "OBJECT ${(position + 1)}"
         }.attach()
@@ -156,70 +154,32 @@ class WX : CommonActionBarFragment() {
             // TODO chunk below needs a lot of refactor , create static Route and pass drawer to close as optional
             val statusText = headerLayout.findViewById<TextView>(R.id.statusText)
             statusText.visibility = View.GONE
-            val severeDashboardButton = headerLayout.findViewById<ImageButton>(R.id.severeDashboardButton)
-            val severeDashboardText = headerLayout.findViewById<TextView>(R.id.severeDashboardText)
-            val visButton = headerLayout.findViewById<ImageButton>(R.id.visibleSatelliteButton)
-            val visText = headerLayout.findViewById<TextView>(R.id.visibleSatelliteText)
-            val wfoButton = headerLayout.findViewById<ImageButton>(R.id.wfoButton)
-            val wfoText = headerLayout.findViewById<TextView>(R.id.wfoText)
-            val hourlyButton = headerLayout.findViewById<ImageButton>(R.id.hourlyButton)
-            val hourlyText = headerLayout.findViewById<TextView>(R.id.hourlyText)
-            val settingsButton = headerLayout.findViewById<ImageButton>(R.id.settingsButton)
-            val settingsText = headerLayout.findViewById<TextView>(R.id.settingsText)
-            listOf(severeDashboardButton, visButton, wfoButton, hourlyButton, settingsButton).forEach {
-                it.backgroundTintList = tint
-            }
+
             val gravityForDrawer = if (UIPreferences.navDrawerMainScreenOnRight) {
                 GravityCompat.END
             } else {
                 GravityCompat.START
             }
-            severeDashboardButton.setOnClickListener {
-                Route(this, SevereDashboardActivity::class.java)
-                drawerLayout.closeDrawer(gravityForDrawer)
+            DrawerHeaderItem(drawerLayout, headerLayout, R.id.severeDashboardButton, R.id.severeDashboardText, tint, gravityForDrawer) {
+                Route.severeDash(this)
             }
-            severeDashboardText.setOnClickListener {
-                Route(this, SevereDashboardActivity::class.java)
-                drawerLayout.closeDrawer(gravityForDrawer)
-            }
-            visButton.setOnClickListener {
+            DrawerHeaderItem(drawerLayout, headerLayout, R.id.visibleSatelliteButton, R.id.visibleSatelliteText, tint, gravityForDrawer) {
                 Route.vis(this)
-                drawerLayout.closeDrawer(gravityForDrawer)
             }
-            visText.setOnClickListener {
-                Route.vis(this)
-                drawerLayout.closeDrawer(gravityForDrawer)
-            }
-            wfoButton.setOnClickListener {
+            DrawerHeaderItem(drawerLayout, headerLayout, R.id.wfoButton, R.id.wfoText, tint, gravityForDrawer) {
                 Route.wfoText(this)
-                drawerLayout.closeDrawer(gravityForDrawer)
             }
-            wfoText.setOnClickListener {
-                Route.wfoText(this)
-                drawerLayout.closeDrawer(gravityForDrawer)
-            }
-            hourlyButton.setOnClickListener {
+            DrawerHeaderItem(drawerLayout, headerLayout, R.id.hourlyButton, R.id.hourlyText, tint, gravityForDrawer) {
                 Route.hourly(this)
-                drawerLayout.closeDrawer(gravityForDrawer)
             }
-            hourlyText.setOnClickListener {
-                Route.hourly(this)
-                drawerLayout.closeDrawer(gravityForDrawer)
-            }
-            settingsButton.setOnClickListener{
+            DrawerHeaderItem(drawerLayout, headerLayout, R.id.settingsButton, R.id.settingsText, tint, gravityForDrawer) {
                 Route.settings(this)
-                drawerLayout.closeDrawer(gravityForDrawer)
-            }
-            settingsText.setOnClickListener{
-                Route.settings(this)
-                drawerLayout.closeDrawer(gravityForDrawer)
             }
             UtilityNavDrawer.hideItems(this, navigationView)
             navigationView.setNavigationItemSelectedListener{ item ->
                 when (item.itemId) {
                     R.id.esrl -> Route.model(this, arrayOf("1", "ESRL", "ESRL"))
                     R.id.rainfall_outlook -> Route(this, WpcRainfallForecastSummaryActivity::class.java)
-                    R.id.glcfs -> Route.model(this, arrayOf("1", "GLCFS", "GLCFS"))
                     R.id.goes_conus_wv -> Route(this, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
                     R.id.goes_global -> Route(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("GOESFD"))
                     R.id.lightning -> {

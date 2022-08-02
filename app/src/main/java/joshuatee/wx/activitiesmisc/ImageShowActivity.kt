@@ -21,14 +21,13 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.UtilityIO
@@ -50,7 +49,6 @@ class ImageShowActivity : BaseActivity() {
 
     private var url = ""
     private var urls = listOf<String>()
-    private var bitmap = UtilityImg.getBlankBitmap()
     private var shareTitle = ""
     private var needsWhiteBackground = false
     private lateinit var image: TouchImage
@@ -60,17 +58,16 @@ class ImageShowActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show, R.menu.image_show_activity, false)
-        image = TouchImage(this, toolbar, R.id.iv)
         val arguments = intent.getStringArrayExtra(URL)!!
         url = arguments[0]
-        setTitle("Image Viewer", arguments[1])
         shareTitle = arguments[1]
         if (arguments.size > 2) {
             needsWhiteBackground = arguments[2] == "true"
         }
+        setTitle("Image Viewer", shareTitle)
+        image = TouchImage(this, toolbar, R.id.iv)
         when {
             url.contains("file:") -> {
                 urls = url.split(":")
@@ -85,8 +82,8 @@ class ImageShowActivity : BaseActivity() {
     }
 
     private fun loadRawBitmap() {
-        bitmap = UtilityImg.loadBitmap(this, R.drawable.radar_legend, false)
-        image.setBitmap(bitmap)
+        val bitmap = UtilityImg.loadBitmap(this, R.drawable.radar_legend, false)
+        image.set(bitmap)
     }
 
     override fun onRestart() {
@@ -95,23 +92,24 @@ class ImageShowActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, { bitmap = url.getImage() }, ::showImage)
+        FutureBytes(this, url, ::showImage)
     }
 
-    private fun showImage() {
+    private fun showImage(bitmap2: Bitmap) {
+        var bitmap = bitmap2
         if (needsWhiteBackground) {
             bitmap = UtilityImg.addColorBackground(this, bitmap, Color.WHITE)
         }
-        image.setBitmap(bitmap)
+        image.set(bitmap)
     }
 
     private fun getContentFromStorage() {
-        image.setBitmap(UtilityIO.bitmapFromInternalStorage(this, urls[1]))
+        image.set(UtilityIO.bitmapFromInternalStorage(this, urls[1]))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, shareTitle, bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, shareTitle, image.bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -33,6 +33,7 @@ import java.util.*
 class ObjectCardNhcStormReportItem(context: Context, box: VBox, stormData: ObjectNhcStormDetails) {
 
     private val card = Card(context)
+    private val vbox = VBox(context, Gravity.CENTER_VERTICAL)
     private val textViewTop = Text(context, UIPreferences.textHighlightColor)
     private val textViewTime = Text(context)
     private val textViewMovement = Text(context)
@@ -41,10 +42,9 @@ class ObjectCardNhcStormReportItem(context: Context, box: VBox, stormData: Objec
     private val textViewBottom = Text(context, backgroundText = true)
 
     init {
-        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        vbox.addViews(listOf(textViewTop.get(), textViewTime.get(), textViewMovement.get()))
-        vbox.addViews(listOf(textViewPressure.get(), textViewWindSpeed.get(), textViewBottom.get()))
-        card.addView(vbox.get())
+        vbox.addWidgets(listOf(textViewTop.get(), textViewTime.get(), textViewMovement.get()))
+        vbox.addWidgets(listOf(textViewPressure.get(), textViewWindSpeed.get(), textViewBottom.get()))
+        card.addLayout(vbox)
         textViewTop.text = stormData.name + " (" + stormData.classification + ") " + stormData.center
         textViewTime.text = stormData.dateTime.replace("T", " ").replace(":00.000Z", "Z")
         textViewMovement.text = "Moving: " + stormData.movement

@@ -49,8 +49,7 @@ class WidgetWPCIMG : AppWidgetProvider() {
     private fun getContent(context: Context) {
         FutureVoid(
                 context,
-                { UtilityWidgetDownload.download(context, type) },
+                { UtilityWidgetDownload.download(context, type) })
                 { UtilityWidget.update(context, type) }
-        )
     }
 }

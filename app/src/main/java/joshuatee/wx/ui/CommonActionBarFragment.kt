@@ -30,20 +30,19 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.audio.UtilityVoiceCommand
 import joshuatee.wx.canada.*
 import joshuatee.wx.objects.Route
-import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.SettingsMainActivity
+import joshuatee.wx.settings.*
 import joshuatee.wx.settings.UtilityHomeScreen
-import joshuatee.wx.settings.SettingsAboutActivity //for about
 
 open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListener {
 
@@ -53,7 +52,6 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     // settings, and about
     //
 
-    private val requestOk = 1
     protected lateinit var view: View
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -63,6 +61,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
+	    /*
 	    //elys mod - not removing this - ELY M. 
             R.id.action_forecast_webpage -> Route(
                 this,
@@ -73,6 +72,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     "Local forecast"
                 )
             )
+	    */
             R.id.action_alert -> {
                 if (Location.isUS) {
                     Route.usAlerts(this)
@@ -101,7 +101,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
                 try {
-                    startActivityForResult(intent, requestOk)
+                    startForResult.launch(intent)
                 } catch (e: Exception) {
                     Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show()
                 }
@@ -113,13 +113,14 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         return true
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == requestOk && resultCode == Activity.RESULT_OK) {
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             ObjectPopupMessage(view, thingsYouSaid!![0])
             val string = thingsYouSaid[0]
-            UtilityVoiceCommand.processCommand(this, view, string, Location.rid, Location.wfo, Location.state)
+            UtilityVoiceCommand.processCommand(this, string, Location.rid, Location.wfo, Location.state)
         }
     }
 
@@ -135,7 +136,9 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         Route.wfoText(this)
     }
 
-    fun openSettings() = Route(this, SettingsMainActivity::class.java)
+    fun openSettings() {
+        Route.settings(this)
+    }
 
     fun openVis() {
         Route.vis(this)
@@ -143,7 +146,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     fun openDashboard() {
         if (Location.isUS) {
-            Route(this, SevereDashboardActivity::class.java)
+            Route.severeDash(this)
         } else {
             Route(this, CanadaAlertsActivity::class.java)
         }
@@ -154,6 +157,9 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     }
 
     fun openActivity(context: Context, activityName: String) {
-        Route(context, UtilityHomeScreen.HM_CLASS[activityName]!!, UtilityHomeScreen.HM_CLASS_ID[activityName]!!, UtilityHomeScreen.HM_CLASS_ARGS[activityName]!!)
+        Route(context,
+                UtilityHomeScreen.HM_CLASS[activityName]!!,
+                UtilityHomeScreen.HM_CLASS_ID[activityName]!!,
+                UtilityHomeScreen.HM_CLASS_ARGS[activityName]!!)
     }
 }

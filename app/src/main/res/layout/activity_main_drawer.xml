@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
@@ -19,6 +18,8 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  -->
+
+<!-- activity_main_drawer_right.xml also needs to be changed if user selects a left side presentation -->
 
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -92,12 +93,13 @@
             android:contentDescription="@string/todo" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+<!--    android:fitsSystemWindows="true"-->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false"
         app:headerLayout="@layout/nav_header_main"
         app:itemTextColor="@color/black"
         app:menu="@menu/activity_main_drawer" />

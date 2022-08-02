@@ -49,6 +49,7 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.RadarPreferences
@@ -491,15 +492,17 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
                 if (PolygonType.MCD.pref) {
                     withContext(Dispatchers.IO) {
-                        UtilityDownloadMcd.get(this@WXGLRadarActivityMultiPane)
-                        UtilityDownloadWatch.get(this@WXGLRadarActivityMultiPane)
+                        ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.get(this@WXGLRadarActivityMultiPane)
+//                        UtilityDownloadMcd.get(this@WXGLRadarActivityMultiPane)
+                        ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.get(this@WXGLRadarActivityMultiPane)
+//                        UtilityDownloadWatch.get(this@WXGLRadarActivityMultiPane)
                     }
                     if (!oglr.product.startsWith("2")) {
                         UtilityRadarUI.plotMcdWatchPolygons(glview, oglr, false)
                     }
                 }
                 if (PolygonType.MPD.pref) {
-                    withContext(Dispatchers.IO) { UtilityDownloadMpd.get(this@WXGLRadarActivityMultiPane) }
+                    withContext(Dispatchers.IO) { ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.get(this@WXGLRadarActivityMultiPane) }
                     if (!oglr.product.startsWith("2")) {
                         UtilityRadarUI.plotMpdPolygons(glview, oglr, false)
                     }

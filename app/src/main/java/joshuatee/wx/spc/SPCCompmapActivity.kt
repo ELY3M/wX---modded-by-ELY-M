@@ -21,25 +21,23 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.R
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
 class SpcCompmapActivity : BaseActivity() {
 
     private var layerStr = ""
     private lateinit var image: TouchImage
-    private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private val paramList = UtilitySpcCompmap.labels.toMutableList()
 
@@ -48,7 +46,6 @@ class SpcCompmapActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
         objectNavDrawer = ObjectNavDrawer(this, paramList)
@@ -100,12 +97,12 @@ class SpcCompmapActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, { bitmap = UtilitySpcCompmap.getImage(this@SpcCompmapActivity, layerStr) }, ::showImage)
+        FutureBytes2(this, { UtilitySpcCompmap.getImage(this@SpcCompmapActivity, layerStr) }, ::showImage)
     }
 
-    private fun showImage() {
-        image.setBitmap(bitmap)
-        image.firstRunSetZoomPosn("SPCCOMPMAP")
+    private fun showImage(bitmap: Bitmap) {
+        image.set(bitmap)
+        image.firstRun("SPCCOMPMAP")
         Utility.writePref(this, "SPCCOMPMAP_LAYERSTR", layerStr)
     }
 
@@ -124,7 +121,7 @@ class SpcCompmapActivity : BaseActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, "SPC Compmap", bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "SPC Compmap", image.bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

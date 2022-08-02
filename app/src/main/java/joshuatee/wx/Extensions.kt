@@ -82,7 +82,9 @@ fun String.parseMultiple(match: Pattern, count: Int) = UtilityString.parseMultip
 
 fun String.getInputStream() = UtilityNetworkIO.getInputStreamFromUrl(this)
 
-fun View.setPadding(padding: Int) { this.setPadding(padding, padding, padding, padding) }
+fun View.setPadding(padding: Int) {
+    this.setPadding(padding, padding, padding, padding)
+}
 
 fun Int.isEven() = this and 1 == 0
 

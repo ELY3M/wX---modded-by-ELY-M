@@ -21,7 +21,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
@@ -42,7 +41,6 @@ class FavAddActivity : BaseActivity() {
     private var dataTokens = listOf<String>()
     private var type = ""
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         type = intent.getStringArrayExtra(TYPE)!![0]
@@ -50,15 +48,8 @@ class FavAddActivity : BaseActivity() {
         when (type) {
             "SND" -> {
                 prefToken = "SND_FAV"
-                val list = mutableListOf<String>()
-                GlobalArrays.soundingSites.forEach { list.add("$it " + Utility.getSoundingSiteName(it)) }
-                data = list.toList()
+                data = GlobalArrays.soundingSites.map { "$it " + Utility.getSoundingSiteName(it) }
                 verboseTitle = "sounding site"
-            }
-            "RIDCA" -> {
-                prefToken = "RID_CA_FAV"
-                data = GlobalArrays.canadaRadars
-                verboseTitle = "radar site"
             }
             "WFO" -> {
                 prefToken = "WFO_FAV"
@@ -87,7 +78,7 @@ class FavAddActivity : BaseActivity() {
                 verboseTitle = "parameter"
             }
         }
-        title = "Add $verboseTitle"
+        setTitle("Add Favorite", verboseTitle)
         ObjectRecyclerView(this, R.id.card_list, data.toMutableList(), ::itemClicked)
     }
 
@@ -138,7 +129,6 @@ class FavAddActivity : BaseActivity() {
             "NWSTEXT" -> UIPreferences.nwsTextFav = favorite
             "SREF" -> UIPreferences.srefFav = favorite
             "SPCMESO" -> UIPreferences.spcMesoFav = favorite
-            "RIDCA" -> UIPreferences.caRidFav = favorite
         }
     }
 }

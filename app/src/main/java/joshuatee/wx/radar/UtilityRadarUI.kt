@@ -65,15 +65,14 @@ internal object UtilityRadarUI {
     }
 
     private fun getMetar(wxglSurfaceView: WXGLSurfaceView, activity: Activity) {
-        FutureText2(
-                activity,
+        FutureText2(activity,
                 { UtilityMetar.findClosestMetar(activity, wxglSurfaceView.latLon) },
                 { s -> ObjectDialogue(activity, s) }
         )
     }
 
     private fun showNearestForecast(context: Context, wxglSurfaceView: WXGLSurfaceView) {
-        Route(context, ForecastActivity::class.java, ForecastActivity.URL, arrayOf(wxglSurfaceView.newY.toString(), "-" + wxglSurfaceView.newX.toString()))
+        Route.forecast(context, arrayOf(wxglSurfaceView.newY.toString(), "-" + wxglSurfaceView.newX.toString()))
     }
 
     private fun showNearestMeteogram(context: Context, wxglSurfaceView: WXGLSurfaceView) {
@@ -113,7 +112,7 @@ internal object UtilityRadarUI {
         longPressDialogue.setTitle(latLonTitle)
         longPressList.add(dist.toString().take(6) + " miles from location")
         longPressList.add(distRid.toString().take(6) + " miles from " + wxglRender.rid)
-        val heightAgl = UtilityMath.getRadarBeamHeight(wxglRender.wxglNexradLevel3.degree, distRidKm)
+        val heightAgl = UtilityMath.getRadarBeamHeight(wxglRender.wxglNexradLevel3.degree.toDouble(), distRidKm)
         val heightMsl = wxglRender.wxglNexradLevel3.radarHeight + heightAgl
         longPressList.add("Beam Height MSL: " + heightMsl.roundToInt().toString() + " ft, AGL: " + heightAgl.roundToInt().toString() + " ft")
         if (RadarPreferences.radarShowWpcFronts) {
@@ -279,12 +278,16 @@ internal object UtilityRadarUI {
             oldRadarSites[index] = wxglRenders[index].rid
         }
 
-	//elys mod
+	    //elys mod
         //conus radar
         Thread {
             if (RadarPreferences.radarConusRadar && !archiveMode) {
-                wxglRender.constructConusRadar()
-                wxglSurfaceView.requestRender()
+                try {
+                    wxglRender.constructConusRadar()
+                    wxglSurfaceView.requestRender()
+                } catch (e: Exception) {
+                    UtilityLog.handleException(e)
+                }
             } else {
                 wxglRender.deconstructConusRadar()
             }
@@ -307,7 +310,11 @@ internal object UtilityRadarUI {
                 wxglRender.deconstructMpdLines()
             }
             wxglRender.constructGenericWarningLines()
-            wxglSurfaceView.requestRender()
+            try {
+                wxglSurfaceView.requestRender()
+            } catch (e: Exception) {
+                UtilityLog.handleException(e)
+            }
         }.start()
         if (RadarPreferences.locationDotFollowsGps) {
             fnGps()
@@ -459,18 +466,6 @@ internal object UtilityRadarUI {
         }
     }
 
-//        FutureText2(
-//                context,
-//                { UtilityWatch.show(wxglSurfaceView.latLon, polygonType) },
-//                { text ->
-//                    if (text != "") {
-//                        Route.mcd(context, arrayOf(text, "", polygonType.toString()))
-//                    }
-//                }
-//        )
-//    }
-
-    
     //TODO remove and replace FutureText2?          
     
     

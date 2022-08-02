@@ -92,6 +92,8 @@ object UtilityToolbar {
      * menu/menu_main.xml and distribute them across your devices screen
      * evenly using a Toolbar. Enjoy
      */
+    // FIXME TODO https://stackoverflow.com/questions/63276134/getter-for-defaultdisplay-display-is-deprecated-deprecated-in-java
+    // FIXME TODO this feature needs to be deprecated, it has caused issues for users and is not aligned at all with platform standards
     fun setupEvenlyDistributedToolbar(activity: Activity, toolbarBottom: Toolbar, menuRes: Int) {
         // Use Display metrics to get Screen Dimensions
         val display = activity.windowManager.defaultDisplay

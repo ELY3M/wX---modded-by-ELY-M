@@ -35,13 +35,15 @@ class DisplayData(context: Context, activity: Activity, numPanes: Int, om: Objec
     var animDrawable = MutableList(numPanes) { AnimationDrawable() }
     var param = MutableList(numPanes) {""}
     var paramLabel = MutableList(numPanes) {""}
-    var image = MutableList(numPanes) { TouchImage(context) }
+    val image = mutableListOf<TouchImage>()
+    val objectAnimates = mutableListOf<ObjectAnimate>()
     var bitmaps = MutableList(numPanes) { UtilityImg.getBlankBitmap() }
 
     init {
         val resourceId = listOf(R.id.iv1, R.id.iv2)
-        (0 until numPanes).forEach {
-            index -> image[index] = TouchImage(activity, resourceId[index])
+        (0 until numPanes).forEach { index ->
+            image.add(TouchImage(activity, resourceId[index]))
+            objectAnimates.add(ObjectAnimate(context, image.last()))
         }
         if (numPanes > 1) {
             image[0].connect2 { image[1].setZoom(image[0]) }

@@ -21,7 +21,6 @@
 
 package joshuatee.wx.nhc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -35,7 +34,6 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.VBox
-import joshuatee.wx.wpc.WpcTextProductsActivity
 
 class NhcActivity : BaseActivity() {
 
@@ -48,7 +46,6 @@ class NhcActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc, false)
         scrollView = findViewById(R.id.scrollView)
@@ -67,7 +64,7 @@ class NhcActivity : BaseActivity() {
     }
 
     private fun showTextProduct(prod: String) {
-        Route(this, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(prod.lowercase(Locale.US), ""))
+        Route.wpcText(this, arrayOf(prod.lowercase(Locale.US), ""))
     }
 
     private fun showImageProduct(imageUrl: String, title: String, needWhiteBackground: String) {
@@ -90,7 +87,6 @@ class NhcActivity : BaseActivity() {
             R.id.action_atl_7daily -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
             R.id.action_epac_sst_anomaly -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
             R.id.action_atl_sst_anomaly -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
-            R.id.action_glcfs -> Route.model(this, arrayOf("1", "GLCFS", "GLCFS"))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

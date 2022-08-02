@@ -26,11 +26,6 @@ class ViewPagerAdapter(activity: FragmentActivity?) : FragmentStateAdapter(activ
             }
         }
 
-//    override fun getPageTitle(position: Int): CharSequence {
-//        tabTitles[0] = UIPreferences.tabHeaders[0]
-//        return tabTitles[position]
-//    }
-
     fun setTabTitles(index: Int, title: String) {
         tabTitles[index] = title
     }

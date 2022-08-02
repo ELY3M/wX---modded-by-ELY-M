@@ -24,7 +24,6 @@ package joshuatee.wx.util
 import android.content.Context
 import android.view.MenuItem
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.wpc.UtilityWpcText
@@ -37,7 +36,6 @@ object UtilityFavorites {
     const val initialValue = " : : :"
 
     // TODO refactor method/var names
-
     private fun checkAndCorrect(context: Context, value: String, prefToken: String) {
         if (value.contains("::")) {
             val newFav = value.replace(":{2,}".toRegex(), ":")
@@ -58,7 +56,6 @@ object UtilityFavorites {
             "SREF_FAV" -> UIPreferences.srefFav = value
             "NWS_TEXT_FAV" -> UIPreferences.nwsTextFav = value
             "SPCMESO_FAV" -> UIPreferences.spcMesoFav = value
-            "RID_CA_FAV" -> UIPreferences.caRidFav = value
         }
     }
 
@@ -73,18 +70,20 @@ object UtilityFavorites {
         favorites[2] = MODIFY_STR
         val returnList = MutableList(favorites.size) { "" }
         favorites.indices.forEach { k ->
-//            UtilityLog.d("wx", "DEBUG: " + favorites[k])
             val name = when (prefToken) {
                 "RID_FAV" -> Utility.getRadarSiteName(favorites[k])
                 "WFO_FAV" -> Utility.getWfoSiteName(favorites[k])
                 "SND_FAV" -> Utility.getSoundingSiteName(favorites[k])
                 "NWS_TEXT_FAV" -> UtilityWpcText.getLabel(favorites[k])
                 "SPCMESO_FAV" -> UtilitySpcMeso.getLabelFromParam(favorites[k])
-                "RID_CA_FAV" -> UtilityCanada.getRadarLabel(favorites[k])
                 "SPCSREF_FAV" -> ""
                 else -> "FIXME"
             }
-            if (k == 1 || k == 2) returnList[k] = favorites[k] else returnList[k] = favorites[k] + DELIM_TOKEN + name
+            if (k == 1 || k == 2) {
+                returnList[k] = favorites[k]
+            } else {
+                returnList[k] = favorites[k] + DELIM_TOKEN + name
+            }
         }
         return returnList.toList()
     }
@@ -106,7 +105,6 @@ object UtilityFavorites {
             "SREF_FAV" -> UIPreferences.srefFav = favoriteString
             "NWS_TEXT_FAV" -> UIPreferences.nwsTextFav = favoriteString
             "SPCMESO_FAV" -> UIPreferences.spcMesoFav = favoriteString
-            "RID_CA_FAV" -> UIPreferences.caRidFav = favoriteString
         }
     }
 }

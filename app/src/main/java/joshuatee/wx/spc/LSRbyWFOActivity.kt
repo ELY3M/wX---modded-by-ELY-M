@@ -21,7 +21,6 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
 import java.util.Locale
 import android.os.Bundle
 import android.view.Menu
@@ -74,19 +73,18 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.lsrbywfo)
-        title = "LSR"
-        scrollView = findViewById(R.id.scrollView)
-        box = VBox.fromResource(this)
-        toolbarBottom.setOnMenuItemClickListener(this)
-        star = toolbarBottom.menu.findItem(R.id.action_fav)
         val arguments = intent.getStringArrayExtra(URL)!!
         wfo = arguments[0]
         if (wfo == "") {
             wfo = "OUN"
         }
+        title = "LSR"
+        scrollView = findViewById(R.id.scrollView)
+        box = VBox.fromResource(this)
+        toolbarBottom.setOnMenuItemClickListener(this)
+        star = toolbarBottom.menu.findItem(R.id.action_fav)
         locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
         imageMap.connect(::mapSwitch, UtilityImageMap::mapToWfo)
@@ -133,10 +131,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     when (it) {
                         1 -> Route.favoriteAdd(this, arrayOf("WFO"))
                         2 -> Route.favoriteRemove(this, arrayOf("WFO"))
-                        else -> {
-                            wfo = locations[it].split(" ").getOrNull(0) ?: ""
-                            //getContent()
-                        }
+                        else -> wfo = locations[it].split(" ").getOrNull(0) ?: ""
                     }
                     if (firstTime) {
                         UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)

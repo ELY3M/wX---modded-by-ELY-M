@@ -46,12 +46,14 @@ internal object UtilityWXOGLPerfL3FourBit {
             var numOfBins: Int
             for (r in 0..359) {
                 numberOfRleHalfWords[r] = dataInputStream.readUnsignedShort()
-                radialStart.putFloat((450 - dataInputStream.readUnsignedShort() / 10).toFloat())
+                radialStart.putFloat(450.0f - dataInputStream.readUnsignedShort() / 10.0f)
                 dataInputStream.skipBytes(2)
                 for (s in 0 until numberOfRleHalfWords[r] * 2) {
                     bin = dataInputStream.readUnsignedByte().toShort()
                     numOfBins = bin.toInt() shr 4
-                    for (u in 0 until numOfBins) { binWord.put((bin % 16).toByte()) }
+                    for (u in 0 until numOfBins) {
+                        binWord.put((bin % 16).toByte())
+                    }
                 }
             }
             dataInputStream.close()

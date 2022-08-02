@@ -99,71 +99,87 @@ object UtilityCanvasMain {
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         val highwayProvider = projectionType.isCanvas
         val stateLinesProvider = projectionType.isCanvas
-        val countyProvider = projectionType === ProjectionType.WX_RENDER_48 || projectionType === ProjectionType.WX_RENDER
+        val countyProvider =
+            projectionType === ProjectionType.WX_RENDER_48 || projectionType === ProjectionType.WX_RENDER
         val cityProvider = true
         val windBarbProvider = projectionType.isMercator
         val stormMotionProvider = projectionType.isMercator
         // if a widget or notification load the GEOM data in real-time
         val geometryData = if (isInteractive) {
             GeometryData(
-                    GeographyType.HIGHWAYS.relativeBuffer, GeographyType.COUNTY_LINES.relativeBuffer,
-                    GeographyType.STATE_LINES.relativeBuffer, GeographyType.LAKES.relativeBuffer
+                GeographyType.HIGHWAYS.relativeBuffer, GeographyType.COUNTY_LINES.relativeBuffer,
+                GeographyType.STATE_LINES.relativeBuffer, GeographyType.LAKES.relativeBuffer
             )
         } else {
             getLocalGeometryData(context)
         }
-        if (PolygonType.TST.pref) { UtilityCanvas.addWarnings(projectionType, bitmapCanvas, projectionNumbers) }
+        if (PolygonType.TST.pref) {
+            UtilityCanvas.addWarnings(projectionType, bitmapCanvas, projectionNumbers)
+        }
         if (GeographyType.HIGHWAYS.pref && highwayProvider) {
             UtilityCanvasGeneric.draw(
+                projectionType,
+                bitmapCanvas,
+                radarSite,
+                hwLineWidth,
+                GeographyType.HIGHWAYS,
+                geometryData.highways
+            )
+        }
+        if (GeographyType.CITIES.pref && cityProvider) {
+            UtilityCanvas.drawCitiesUS(projectionType, bitmapCanvas, projectionNumbers, citySize)
+        }
+        if (stateLinesProvider) {
+            UtilityCanvasGeneric.draw(
+                projectionType,
+                bitmapCanvas,
+                radarSite,
+                1,
+                GeographyType.STATE_LINES,
+                geometryData.stateLines
+            )
+            if (GeographyType.LAKES.pref) {
+                UtilityCanvasGeneric.draw(
                     projectionType,
                     bitmapCanvas,
                     radarSite,
                     hwLineWidth,
-                    GeographyType.HIGHWAYS,
-                    geometryData.highways
-            )
-        }
-        if (GeographyType.CITIES.pref && cityProvider) UtilityCanvas.drawCitiesUS(projectionType, bitmapCanvas, projectionNumbers, citySize)
-        if (stateLinesProvider) {
-            UtilityCanvasGeneric.draw(
-                    projectionType,
-                    bitmapCanvas,
-                    radarSite,
-                    1,
-                    GeographyType.STATE_LINES,
-                    geometryData.stateLines
-            )
-            if (GeographyType.LAKES.pref) {
-                UtilityCanvasGeneric.draw(
-                        projectionType,
-                        bitmapCanvas,
-                        radarSite,
-                        hwLineWidth,
-                        GeographyType.LAKES,
-                        geometryData.lakes
+                    GeographyType.LAKES,
+                    geometryData.lakes
                 )
             }
         }
         if (countyProvider) {
             if (GeographyType.COUNTY_LINES.pref) {
                 UtilityCanvasGeneric.draw(
-                        projectionType,
-                        bitmapCanvas,
-                        radarSite,
-                        hwLineWidth,
-                        GeographyType.COUNTY_LINES,
-                        geometryData.counties
+                    projectionType,
+                    bitmapCanvas,
+                    radarSite,
+                    hwLineWidth,
+                    GeographyType.COUNTY_LINES,
+                    geometryData.counties
                 )
             }
         }
-        if (PolygonType.LOCDOT.pref) UtilityCanvas.addLocationDotForCurrentLocation(projectionType, bitmapCanvas, projectionNumbers)
+        if (PolygonType.LOCDOT.pref) {
+            UtilityCanvas.addLocationDotForCurrentLocation(
+                projectionType,
+                bitmapCanvas,
+                projectionNumbers
+            )
+        }
         if (PolygonType.WIND_BARB.pref && windBarbProvider) {
             UtilityCanvasWindbarbs.draw(context, projectionType, bitmapCanvas, radarSite, true, 5)
             UtilityCanvasWindbarbs.draw(context, projectionType, bitmapCanvas, radarSite, false, 5)
         }
         if (PolygonType.STI.pref && stormMotionProvider) {
             try {
-                UtilityCanvasStormInfo.drawNexRadStormMotion(context, projectionType, bitmapCanvas, radarSite)
+                UtilityCanvasStormInfo.drawNexRadStormMotion(
+                    context,
+                    projectionType,
+                    bitmapCanvas,
+                    radarSite
+                )
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
@@ -173,9 +189,11 @@ object UtilityCanvasMain {
                 UtilityCanvas.addMcd(projectionType, bitmapCanvas, projectionNumbers, it)
             }
         }
-        if (PolygonType.MPD.pref) UtilityCanvas.addMcd(projectionType, bitmapCanvas, projectionNumbers, PolygonType.MPD)
+        if (PolygonType.MPD.pref) {
+            UtilityCanvas.addMcd(projectionType, bitmapCanvas, projectionNumbers, PolygonType.MPD)
+        }
     }
- 
+
     //elys mod    
     //for Conus Radar
     fun addCanvasConus(
@@ -186,14 +204,14 @@ object UtilityCanvasMain {
             hwLineWidth: Int
     ) {
 
-        val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
+        //val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         val stateLinesProvider = projectionType.isCanvas
 
         // if a widget or notification load the GEOM data in real-time
         val geometryData = getLocalGeometryData(context)
 
         //FIXME!!!!!!!  TEST ME!!!!!!//
-        if (PolygonType.TST.pref) { UtilityCanvas.addWarnings(projectionType, bitmapCanvas, projectionNumbers) }
+        //if (PolygonType.TST.pref) { UtilityCanvas.addWarnings(projectionType, bitmapCanvas, projectionNumbers) }
 
         if (stateLinesProvider) {
             UtilityCanvasGeneric.draw(
@@ -215,15 +233,6 @@ object UtilityCanvasMain {
                 )
             }
         }
-
-        if (PolygonType.LOCDOT.pref) UtilityCanvas.addLocationDotForCurrentLocation(projectionType, bitmapCanvas, projectionNumbers)
-
-        if (PolygonType.MCD.pref) {
-            arrayOf(PolygonType.MCD, PolygonType.WATCH, PolygonType.WATCH_TORNADO).forEach {
-                UtilityCanvas.addMcd(projectionType, bitmapCanvas, projectionNumbers, it)
-            }
-        }
-        if (PolygonType.MPD.pref) UtilityCanvas.addMcd(projectionType, bitmapCanvas, projectionNumbers, PolygonType.MPD)
 
     }
 
@@ -307,7 +316,9 @@ object UtilityCanvasMain {
         try {
             val inputStream = resources.openRawResource(fileId)
             val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
-            (0 until count).forEach { _ -> byteBuffer.putFloat(dataInputStream.readFloat()) }
+            repeat(count) {
+                byteBuffer.putFloat(dataInputStream.readFloat())
+            }
             dataInputStream.close()
             inputStream.close()
         } catch (e: IOException) {

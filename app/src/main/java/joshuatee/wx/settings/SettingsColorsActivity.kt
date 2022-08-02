@@ -22,7 +22,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import joshuatee.wx.MyApplication
@@ -38,7 +37,6 @@ class SettingsColorsActivity : BaseActivity() {
     private var objectSettingsColorLabels = listOf<ObjectColorLabel>()
     private lateinit var box: VBox
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         box = VBox.fromResource(this)
@@ -77,10 +75,7 @@ class SettingsColorsActivity : BaseActivity() {
             mapColorToPref[it.name + " color"] = it.prefTokenColor
         }
         objectSettingsColorLabels = mapColorToPref.keys.sorted().map {
-            ObjectColorLabel(this, it, mapColorToPref[it]!!)
-        }
-        objectSettingsColorLabels.forEach {
-            box.addWidget(it.get())
+            ObjectColorLabel(this, box, it, mapColorToPref[it]!!)
         }
     }
 

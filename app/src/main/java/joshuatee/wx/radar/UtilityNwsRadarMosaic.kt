@@ -21,14 +21,9 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
-import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.To
-import joshuatee.wx.util.UtilityImgAnim
 
 object UtilityNwsRadarMosaic {
 
@@ -44,14 +39,14 @@ object UtilityNwsRadarMosaic {
         return sites[0].name
     }
 
-    fun get(sector: String): Bitmap {
+    fun get(sector: String): String {
         if (sector == "CONUS") {
-            return "https://radar.weather.gov/ridge/lite/CONUS-LARGE_0.gif".getImage()
+            return "https://radar.weather.gov/ridge/lite/CONUS-LARGE_0.gif"
         }
-        return (baseUrl + sector + "_0.gif").getImage()
+        return baseUrl + sector + "_0.gif"
     }
 
-    fun getAnimation(context: Context, sector: String): AnimationDrawable {
+    fun getAnimation(sector: String): List<String> {
         val urls = mutableListOf<String>()
         var add = ""
         if (sector == "CONUS") {
@@ -60,8 +55,7 @@ object UtilityNwsRadarMosaic {
         for (index in 9 downTo 0) {
             urls.add(baseUrl + sector + add + "_" + To.string(index) + ".gif")
         }
-        val bitmaps = urls.map { it.getImage() }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
+        return urls
     }
 
     val sectors = listOf(

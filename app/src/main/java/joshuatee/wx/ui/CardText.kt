@@ -45,7 +45,7 @@ class CardText(context: Context) {
         textViewSetup(this)
         tv.setTextIsSelectable(true)
         tv.isFocusable = false
-        card.addView(tv)
+        card.addWidget(tv)
     }
 
     constructor(context: Context, box: VBox) : this(context) {
@@ -112,7 +112,8 @@ class CardText(context: Context) {
         box.addView(get())
     }
 
-    constructor(context: Context, box: LinearLayout, text: String, textSize: Float, padding: Int) : this(
+    // used in SettingsNotificationsActivity
+    constructor(context: Context, box: VBox, text: String, textSize: Float, padding: Int) : this(
             context,
             text,
             textSize
@@ -122,10 +123,25 @@ class CardText(context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        box.addView(get())
+        box.addWidget(get())
     }
 
-    constructor(context: Context, text: String, textSize: Float, clazz: Class<*>, padding: Int) : this(
+    constructor(context: Context, box: VBox, text: String, textSize: Float, fn: () -> Unit, padding: Int) : this(
+            context,
+            text,
+            textSize
+    ) {
+        this.padding = padding
+        tv.setPadding(padding)
+        tv.text = text
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        tv.isFocusable = false
+        box.addWidget(get())
+        connect { fn() }
+    }
+
+    // used in settings main
+    constructor(context: Context, box: VBox, text: String, textSize: Float, clazz: Class<*>, padding: Int) : this(
             context,
             text
     ) {
@@ -134,6 +150,7 @@ class CardText(context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
+        box.addWidget(get())
         connect { Route(context, clazz) }
     }
 

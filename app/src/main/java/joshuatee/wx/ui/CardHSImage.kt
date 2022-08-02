@@ -30,7 +30,7 @@ class CardHSImage(context: Context, val product: String) : Image(context) {
     init {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
-        card.addView(img)
+        card.addWidget(img)
     }
 
     fun set(bitmap: Bitmap) {

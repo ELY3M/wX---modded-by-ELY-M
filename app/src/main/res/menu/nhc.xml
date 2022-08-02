@@ -84,8 +84,4 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-    <item
-        android:id="@+id/action_glcfs"
-        android:title="@string/glcfs"
-        app:showAsAction="never" />
 </menu>

@@ -24,21 +24,10 @@ package joshuatee.wx.canada
 import java.util.Locale
 import joshuatee.wx.util.Utility
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.LatLon
 
 object UtilityCanada {
-
-    fun getRadarLabel(radarSite: String): String {
-        val label = GlobalArrays.canadaRadars.findLast { it.startsWith(radarSite) }
-        return if (label == null) {
-            radarSite
-        } else {
-            val items = label.split(":")
-            items.safeGet(1)
-        }
-    }
 
     fun getIcons7Day(html: String): String {
         var iconList = ""

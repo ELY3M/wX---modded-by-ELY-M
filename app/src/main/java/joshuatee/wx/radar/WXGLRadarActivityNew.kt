@@ -22,7 +22,6 @@
 
 package joshuatee.wx.radar
 
-import android.annotation.SuppressLint
 import java.io.File
 import android.content.Context
 import android.content.Intent
@@ -31,16 +30,14 @@ import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
-import android.os.SystemClock
+import android.os.*
 import androidx.core.app.NavUtils
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import android.os.Handler
-import android.os.Looper
 import android.view.*
+import androidx.core.view.WindowCompat
 import joshuatee.wx.R
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.telecine.TelecineService
@@ -49,7 +46,6 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalArrays
-import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
@@ -161,7 +157,6 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         if (Utility.isThemeAllWhite()) {
             super.onCreate(savedInstanceState, R.layout.activity_uswxogl_white, R.menu.uswxoglradar, iconsEvenlySpaced = true, bottomToolbar = true)
@@ -169,7 +164,7 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
             super.onCreate(savedInstanceState, R.layout.activity_uswxogl, R.menu.uswxoglradar, iconsEvenlySpaced = true, bottomToolbar = true)
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        toolbar.setOnClickListener { Route(this, SevereDashboardActivity::class.java) }
+        toolbar.setOnClickListener { Route.severeDash(this) }
         val arguments = intent.getStringArrayExtra(RID)!!
         if (arguments.size > 6) {
             urlStr = arguments[4]
@@ -194,8 +189,15 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
         if (UIPreferences.radarStatusBarTransparent) {
 //            This constant was deprecated in API level 30.
 //            Use Window#setStatusBarColor(int) with a half-translucent color instead.
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.statusBarColor = Color.TRANSPARENT
+//            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//            window.statusBarColor = Color.TRANSPARENT
+
+            if (Build.VERSION.SDK_INT >= 30) {
+                window.statusBarColor = Color.TRANSPARENT
+                WindowCompat.setDecorFitsSystemWindows(window, false)
+            } else {
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            }
         }
         spotterShowSelected = false
         locXCurrent = joshuatee.wx.settings.Location.x
@@ -476,24 +478,19 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
         setSubTitle()
         animRan = false
         firstRun = false
-        FutureVoid(this, { UtilityDownloadWarnings.get(this) },
+        FutureVoid(this,
+                { UtilityDownloadWarnings.get(this) },
                 {
                     if (!wxglRender.product.startsWith("2")) {
                         UtilityRadarUI.plotWarningPolygons(wxglSurfaceView, wxglRender, archiveMode)
                     }
-                    // FIXME move to method
-                    val tstCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
-                    val torCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
-                    val ffwCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
-                    if (RadarPreferences.radarWarnings) {
-                        title = wxglRender.product + " (" + tstCount.toString() + "," + torCount.toString() + "," + ffwCount.toString() + ")"
-                    }
+                    setTitleWithWarningCounts()
                 })
         // FIXME TODO break up
         if (PolygonType.MCD.pref && !archiveMode) {
             FutureVoid(this, {
-                UtilityDownloadMcd.get(this)
-                UtilityDownloadWatch.get(this)
+                ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.get(this)
+                ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.get(this)
             }, {
                 if (!wxglRender.product.startsWith("2")) {
                     UtilityRadarUI.plotMcdWatchPolygons(wxglSurfaceView, wxglRender, archiveMode)
@@ -501,7 +498,7 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
             })
         }
         if (PolygonType.MPD.pref && !archiveMode) {
-            FutureVoid(this, { UtilityDownloadMpd.get(this) }, {
+            FutureVoid(this, { ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.get(this) }, {
                 if (!wxglRender.product.startsWith("2")) {
                     UtilityRadarUI.plotMpdPolygons(wxglSurfaceView, wxglRender, archiveMode)
                 }
@@ -518,6 +515,15 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
 //            UtilityRadarUI.updateLastRadarTime(this@WXGLRadarActivityNew)
     }
 
+    private fun setTitleWithWarningCounts() {
+        val tstCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
+        val torCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
+        val ffwCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
+        if (RadarPreferences.radarWarnings) {
+            title = wxglRender.product + " (" + tstCount.toString() + "," + torCount.toString() + "," + ffwCount.toString() + ")"
+        }
+    }
+
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
         if (!oglInView) {
             touchImage.visibility = View.GONE
@@ -526,6 +532,7 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
         }
         inOglAnim = true
         animRan = true
+        // TODO FIXME
         withContext(Dispatchers.IO) {
             frameCountGlobal = frameCount
             var animArray = WXGLDownload.getRadarFilesForAnimation(this@WXGLRadarActivityNew, frameCount, wxglRender.rid, wxglRender.product)
@@ -659,19 +666,10 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
                     showDistanceTool = "true"
                     checkOverlayPerms()
                 } else {
-//                    if (animRan) {
-//                        val animDrawable = UtilityUSImgWX.animationFromFiles(this, wxglRender.rid, wxglRender.product, frameCountGlobal, "", true)
-//                        UtilityShare.animGif(
-//                                this,
-//                                wxglRender.rid + " (" + Utility.getRadarSiteName(wxglRender.rid) + ") " + wxglRender.product,
-//                                animDrawable
-//                        )
-//                    } else {
-                        getImageForShare()
-//                    }
+                    getImageForShare()
                 }
             }
-            R.id.action_settings -> Route(this, SettingsRadarActivity::class.java)
+            R.id.action_settings -> Route.settingsRadar(this)
             R.id.action_radar_markers -> Route.image(this, arrayOf("raw:radar_legend", "Radar Markers", "false"))
             R.id.action_radar_2 -> showMultipaneRadar("2")
             R.id.action_radar_4 -> showMultipaneRadar("4")
@@ -1081,10 +1079,8 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
 
 /* orinigal 
     private fun getContentVwp() {
-//        val data = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(this@WXGLRadarActivityNew, wxglRender.rid) }
-//        Route.text(this@WXGLRadarActivityNew, arrayOf(data, wxglRender.rid + " VAD Wind Profile"))
-
-        FutureText2(this, { UtilityWXOGL.getVwp(this, wxglRender.rid) })
+        FutureText2(this,
+                { UtilityWXOGL.getVwp(this, wxglRender.rid) })
                 { data -> Route.text(this, arrayOf(data, wxglRender.rid + " VAD Wind Profile")) }
     }
 */    

@@ -36,7 +36,7 @@ class CardVerticalText(context: Context, numberOfColumns: Int) {
         val box = HBox(context, Gravity.CENTER)
         box.matchParent()
         box.isBaselineAligned = false
-        card.addView(box.get())
+        card.addLayout(box)
         repeat(numberOfColumns) {
             val hbox = HBox(context)
             hbox.wrap()

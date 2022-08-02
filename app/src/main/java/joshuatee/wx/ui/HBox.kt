@@ -50,15 +50,11 @@ class HBox(val context: Context) {
         linearLayout.addView(objectLinearLayout.get())
     }
 
-    fun addViews(children: List<View>) {
+    fun addWidgets(children: List<View>) {
         children.forEach {
             linearLayout.addView(it)
         }
     }
-
-//    fun removeAllViews() {
-//        linearLayout.removeAllViews()
-//    }
 
     fun matchParent() {
         linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)

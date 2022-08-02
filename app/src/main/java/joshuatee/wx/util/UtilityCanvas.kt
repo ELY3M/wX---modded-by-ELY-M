@@ -44,7 +44,9 @@ internal object UtilityCanvas {
         val path = Path()
         val paintList = listOf(RadarPreferences.radarColorFfw, RadarPreferences.radarColorTstorm, RadarPreferences.radarColorTor)
         val dataList = listOf(ObjectPolygonWarning.severeDashboardFfw.value, ObjectPolygonWarning.severeDashboardTst.value, ObjectPolygonWarning.severeDashboardTor.value)
-        if (projectionType.needsCanvasShift) canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        if (projectionType.needsCanvasShift) {
+            canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        }
         paint.strokeWidth = projectionNumbers.polygonWidth.toFloat()
         dataList.forEachIndexed { index, it ->
             paint.color = paintList[index]
@@ -68,8 +70,12 @@ internal object UtilityCanvas {
         paint.style = Style.FILL
         paint.strokeWidth = 1.0f
         paint.color = GeographyType.CITIES.color
-        if (projectionType.needsCanvasShift) canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
-        if (projectionType.needsBlackPaint) paint.color = Color.rgb(0, 0, 0)
+        if (projectionType.needsCanvasShift) {
+            canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        }
+        if (projectionType.needsBlackPaint) {
+            paint.color = Color.rgb(0, 0, 0)
+        }
         paint.textSize = textSize.toFloat()
         UtilityCities.list.indices.forEach {
             val coordinates = if (projectionType.isMercator) {
@@ -97,7 +103,9 @@ internal object UtilityCanvas {
         paint.style = Style.FILL
         paint.strokeWidth = 1.0f
         paint.color = RadarPreferences.radarColorLocdot
-        if (projectionType.needsCanvasShift) canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        if (projectionType.needsCanvasShift) {
+            canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        }
         val x = Location.x.toDoubleOrNull() ?: 0.0
         val y = Location.y.replace("-", "").toDoubleOrNull() ?: 0.0
         val coordinates = if (projectionType.isMercator) {
@@ -126,7 +134,9 @@ internal object UtilityCanvas {
         paint.style = Style.STROKE
         paint.color = Color.rgb(255, 0, 0)
         val path = Path()
-        if (projectionType.needsCanvasShift) canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        if (projectionType.needsCanvasShift) {
+            canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        }
         paint.strokeWidth = projectionNumbers.polygonWidth.toFloat()
         paint.color = polygonType.color
         // TODO FIXME refactor

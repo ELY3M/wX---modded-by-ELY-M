@@ -32,7 +32,7 @@ internal object UtilityNavDrawer {
     val labels = listOf(
         "ESRL HRRR/RAP",
         "Excessive Rainfall Outlook",
-        "GLCFS",
+//        "GLCFS",
         "Global Satellite",
         "GOES Conus Water Vapor",
         "Lightning",
@@ -72,7 +72,7 @@ internal object UtilityNavDrawer {
     val labelToTokenMap = mapOf(
         "ESRL HRRR/RAP" to "model_hrrr",
         "Excessive Rainfall Outlook" to "wpc_rainfall",
-        "GLCFS" to "model_glcfs",
+//        "GLCFS" to "model_glcfs",
         "Global Satellite" to "goesfulldisk",
         "GOES Conus Water Vapor" to "goes",
         "Lightning" to "lightning",
@@ -112,7 +112,7 @@ internal object UtilityNavDrawer {
     private val navDrawerIdToToken = mapOf(
         R.id.esrl to "model_hrrr",
         R.id.rainfall_outlook to "wpc_rainfall",
-        R.id.glcfs to "model_glcfs",
+//        R.id.glcfs to "model_glcfs",
         R.id.goes_global to "goesfulldisk",
         R.id.goes_conus_wv to "goes",
         R.id.lightning to "lightning",

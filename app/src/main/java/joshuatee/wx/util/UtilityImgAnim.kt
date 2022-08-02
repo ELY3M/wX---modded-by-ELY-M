@@ -46,35 +46,6 @@ object UtilityImgAnim {
         return animationDrawable
     }
 
-    fun getAnimationDrawableFromUrlListWhiteBackground(context: Context, urls: List<String>, delayOriginal: Int): AnimationDrawable {
-        var delay = delayOriginal
-        val animationDrawable = AnimationDrawable()
-        val bitmaps = urls.map { UtilityImg.getBitmapAddWhiteBackground(context, it) }
-        bitmaps.forEachIndexed { index, bitmap ->
-            if (bitmap.width > 10) {
-                if (index == bitmaps.lastIndex) {
-                    delay *= 3
-                }
-                animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
-            }
-        }
-        return animationDrawable
-    }
-
-    fun getAnimationDrawableFromBitmapList(context: Context, bitmaps: List<Bitmap>, delayOriginal: Int): AnimationDrawable {
-        var delay = delayOriginal
-        val animationDrawable = AnimationDrawable()
-        bitmaps.forEachIndexed { index, bitmap ->
-            if (bitmap.width > 10) {
-                if (index == bitmaps.lastIndex) {
-                    delay *= 3
-                }
-                animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
-            }
-        }
-        return animationDrawable
-    }
-
     fun getAnimationDrawableFromBitmapList(context: Context, bitmaps: List<Bitmap>): AnimationDrawable {
         val animationDrawable = AnimationDrawable()
         var delay = UtilityImg.animInterval(context) * 2

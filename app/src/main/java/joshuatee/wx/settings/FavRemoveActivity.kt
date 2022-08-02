@@ -21,12 +21,10 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityFavorites
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
@@ -41,8 +39,6 @@ class FavRemoveActivity : BaseActivity() {
     // arg1: type such as SND WFO RID
     //
 
-    // FIXME this is nasty, works but has not been touched in years
-
     companion object { const val TYPE = "" }
 
     private var favorites = mutableListOf<String>()
@@ -55,7 +51,6 @@ class FavRemoveActivity : BaseActivity() {
     private val initialValue = " : : "
     private val startIndex = 3
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         val arguments = intent.getStringArrayExtra(TYPE)!!
@@ -85,10 +80,6 @@ class FavRemoveActivity : BaseActivity() {
                 prefToken = "SREF_FAV"
                 verboseTitle = "parameters"
             }
-            "RIDCA" -> {
-                prefToken = "RID_CA_FAV"
-                verboseTitle = "radar sites"
-            }
             "SPCMESO" -> {
                 prefToken = "SPCMESO_FAV"
                 verboseTitle = "parameters"
@@ -104,20 +95,19 @@ class FavRemoveActivity : BaseActivity() {
     private fun updateList() {
         val tempList = favoriteString.split(":").dropLastWhile { it.isEmpty() }
         favorites.clear()
-        favorites = (startIndex until tempList.size).map{ tempList[it] }.toMutableList()
-        labels = mutableListOf()
+        // TODO FIXME use slice or subList
+        favorites = (startIndex until tempList.size).map { tempList[it] }.toMutableList()
+        labels.clear()
         favorites.forEach {
             when (type) {
                 "NWSTEXT" -> labels.add(getFullString(it))
                 "SREF" -> labels.add(it)
-                "RIDCA" -> labels.add(findCanadaRadarSiteLabel(it))
                 "SPCMESO" -> labels.add(findSpcMesoLabel(it))
                 else -> labels.add(getFullString(it))
             }
         }
     }
 
-    // FIXME this needs to be redone with consolidation of homescreen, settings-location activity as well
     private fun moveUp(position: Int) {
         favoriteString = Utility.readPref(this, prefToken, "")
         val tempList = favoriteString.split(":").dropLastWhile { it.isEmpty() }
@@ -127,20 +117,20 @@ class FavRemoveActivity : BaseActivity() {
             val tmp = favorites[position - 1]
             val tmp2 = favorites[position]
             favorites[position - 1] = tmp2
-            objectRecyclerView.setItem(position - 1, objectRecyclerView.getItem(position))
             favorites[position] = tmp
-            objectRecyclerView.setItem(position, getFullString(tmp))
         } else {
             val tmp = favorites.last()
             val tmp2 = favorites[position]
             favorites[favorites.lastIndex] = tmp2
-            objectRecyclerView.setItem(favorites.lastIndex, objectRecyclerView.getItem(position))
             favorites[0] = tmp
-            objectRecyclerView.setItem(0, getFullString(tmp))
         }
         favoriteString = initialValue
-        favorites.forEach { favoriteString += ":$it" }
+        favorites.forEach {
+            favoriteString += ":$it"
+        }
         Utility.writePref(this, prefToken, "$favoriteString:")
+        updateList()
+        objectRecyclerView.notifyDataSetChanged()
     }
 
     private fun moveDown(pos: Int) {
@@ -152,19 +142,17 @@ class FavRemoveActivity : BaseActivity() {
             val tmp = favorites[pos + 1]
             val tmp2 = favorites[pos]
             favorites[pos + 1] = tmp2
-            objectRecyclerView.setItem(pos + 1, objectRecyclerView.getItem(pos))
             favorites[pos] = tmp
-            objectRecyclerView.setItem(pos, getFullString(tmp))
         } else {
             val tmp = favorites[0]
             favorites[0] = favorites[pos]
-            objectRecyclerView.setItem(0, objectRecyclerView.getItem(pos))
             favorites[favorites.lastIndex] = tmp
-            objectRecyclerView.setItem(favorites.lastIndex, getFullString(tmp))
         }
         favoriteString = initialValue
         favorites.forEach { favoriteString += ":$it" }
         Utility.writePref(this, prefToken, "$favoriteString:")
+        updateList()
+        objectRecyclerView.notifyDataSetChanged()
     }
 
     private fun getFullString(shortCode: String): String {
@@ -174,7 +162,6 @@ class FavRemoveActivity : BaseActivity() {
             "RID" -> shortCode + ": " + Utility.getRadarSiteName(shortCode)
             "NWSTEXT" -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
             "SREF" -> shortCode
-            "RIDCA" -> findCanadaRadarSiteLabel(shortCode)
             "SPCMESO" -> findSpcMesoLabel(shortCode)
             else -> ""
         }
@@ -188,18 +175,16 @@ class FavRemoveActivity : BaseActivity() {
             "NWSTEXT" -> UIPreferences.nwsTextFav = favorite
             "SREF" -> UIPreferences.srefFav = favorite
             "SPCMESO" -> UIPreferences.spcMesoFav = favorite
-            "RIDCA" -> UIPreferences.caRidFav = favorite
         }
     }
 
-    private fun findCanadaRadarSiteLabel(rid: String) =
-            (GlobalArrays.canadaRadars.indices).firstOrNull {
-                        GlobalArrays.canadaRadars[it].contains(rid)
-                    }?.let { GlobalArrays.canadaRadars[it].replace(":", "") } ?: rid
-
     private fun findSpcMesoLabel(rid: String): String {
         val index = UtilitySpcMeso.params.indexOf(rid)
-        return if (index == -1) UtilitySpcMeso.labels[0] else UtilitySpcMeso.labels[index]
+        return if (index == -1) {
+            UtilitySpcMeso.labels[0]
+        } else {
+            UtilitySpcMeso.labels[index]
+        }
     }
 
     private fun itemClicked(position: Int) {

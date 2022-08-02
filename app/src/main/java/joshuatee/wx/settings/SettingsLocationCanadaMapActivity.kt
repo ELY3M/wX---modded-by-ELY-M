@@ -21,7 +21,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
@@ -45,7 +44,6 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 
     private var url = ""
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_canada_map, null, false)
         val arguments = intent.getStringArrayExtra(URL)!!

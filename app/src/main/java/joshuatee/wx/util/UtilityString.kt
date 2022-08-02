@@ -236,8 +236,6 @@ object UtilityString {
         return i
     }
 
-    //fun getNwsPre(url: String) = url.getHtmlSep().parse(RegExp.pre2Pattern)
-
     fun getLastXChars(s: String, x: Int) = when {
         s.length == x -> s
         s.length > x -> s.substring(s.length - x)
@@ -279,7 +277,6 @@ object UtilityString {
     fun parseXmlExt (regexpList: Array<String>, html: String): Array<String> {
         val items = Array(regexpList.size) {""}
         var p: Pattern
-        // var m: Matcher
         for (i in regexpList.indices) {
             try {
                 p = Pattern.compile(regexpList[i], Pattern.DOTALL)

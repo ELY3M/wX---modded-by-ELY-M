@@ -31,9 +31,7 @@ import joshuatee.wx.util.Utility
 
 class Button(context: Context, title: String, icon: Int) {
 
-    companion object {
-        private const val padding = 15
-    }
+    companion object { private const val padding = 15 }
 
     private val button = MaterialButton(context)
 

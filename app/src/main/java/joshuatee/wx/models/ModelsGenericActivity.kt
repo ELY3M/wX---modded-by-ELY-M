@@ -21,7 +21,6 @@
 
 package joshuatee.wx.models
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
 import android.view.KeyEvent
@@ -56,7 +55,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private var fab1: ObjectFab? = null
     private var fab2: ObjectFab? = null
-    private var arguments: Array<String> = arrayOf()
+    private var arguments: Array<String>? = arrayOf()
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
@@ -77,11 +76,14 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        arguments = intent.getStringArrayExtra(INFO)!!
-        title = arguments[2]
-        om = ObjectModel(this, arguments[1], arguments[0])
+        arguments = intent.getStringArrayExtra(INFO)
+        // Keep for static pinned shortcuts
+        if (arguments == null) {
+            arguments = arrayOf("1", "NCEP", "NCEP")
+        }
+        title = arguments!![2]
+        om = ObjectModel(this, arguments!![1], arguments!![0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_nospinner, R.menu.models_generic, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
@@ -142,7 +144,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_animate -> UtilityModels.getAnimate(this ,om, listOf(""))
             R.id.action_img1 -> {
                 om.curImg = 0
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                UtilityModels.setSubtitleRestoreZoom(
                         om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
@@ -150,13 +152,13 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
             R.id.action_img2 -> {
                 om.curImg = 1
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                UtilityModels.setSubtitleRestoreZoom(
                         om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
-            R.id.action_multipane -> Route.model(this, arrayOf("2", arguments[1], arguments[2]))
+            R.id.action_multipane -> Route.model(this, arrayOf("2", arguments!![1], arguments!![2]))
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
@@ -272,12 +274,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             om.displayData.paramLabel[it] = om.params[0]
             om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[0])
         }
-        if (!UtilityModels.parameterInList(om.params, om.displayData.param[0])) {
+        if (!om.params.contains(om.displayData.param[0])) {
             om.displayData.param[0] = om.params[0]
             om.displayData.paramLabel[0] = om.labels[0]
         }
         if (om.numPanes > 1)
-            if (!UtilityModels.parameterInList(om.params, om.displayData.param[1])) {
+            if (!om.params.contains(om.displayData.param[1])) {
                 om.displayData.param[1] = om.params[0]
                 om.displayData.paramLabel[1] = om.labels[0]
             }
@@ -291,12 +293,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         om.times.clear()
         when (om.modelType) {
-            ModelType.GLCFS -> {
-                (om.startStep..om.endStep step om.stepAmount).forEach {
-                    om.times.add(String.format(Locale.US, om.format, it))
-                }
-                (51..121 step 3).forEach { om.times.add(String.format(Locale.US, om.format, it)) }
-            }
             ModelType.NCEP -> {
                 when (om.model) {
                     "HRRR" -> {

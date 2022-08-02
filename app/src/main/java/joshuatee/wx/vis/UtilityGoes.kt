@@ -21,11 +21,6 @@
 
 package joshuatee.wx.vis
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityString
@@ -38,12 +33,11 @@ object UtilityGoes {
         return "$size.jpg"
     }
 
-    fun getImageGoesFloater(url: String, product: String): Bitmap {
-        val urlFinal = url.replace("GEOCOLOR", product)
-        return urlFinal.getImage()
+    fun getImageGoesFloater(url: String, product: String): String {
+        return url.replace("GEOCOLOR", product)
     }
 
-    fun getImage(product: String, sector: String): Bitmap {
+    fun getImage(product: String, sector: String): String {
         var sectorLocal = if (sector == "FD" || sector == "CONUS" || sector == "CONUS-G17") {
             sector
         } else {
@@ -68,12 +62,12 @@ object UtilityGoes {
             url = url.replace("ABI", "GLM")
             url = url.replace("$sectorLocal/GLM", "$sectorLocal/EXTENT3")
         }
-        return url.getImage()
+        return url
     }
 
     // https://www.star.nesdis.noaa.gov/GOES/sector_band.php?sat=G17&sector=ak&band=GEOCOLOR&length=12
     // https://www.star.nesdis.noaa.gov/GOES/sector_band.php?sat=G16&sector=cgl&band=GEOCOLOR&length=12
-    fun getAnimation(context: Context, product: String, sector: String, frameCount: Int): AnimationDrawable {
+    fun getAnimation(product: String, sector: String, frameCount: Int): List<String> {
         val frameCountString = frameCount.toString()
         val satellite = if (sectorsInGoes17.contains(sector)) "G17" else "G16"
         val productLocal = product.replace("GLM", "EXTENT3")
@@ -85,12 +79,10 @@ object UtilityGoes {
         }
         val html = url.getHtml().replace("\n", "").replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")
-        val imageUrls = imageHtml.parseColumn("'(https.*?jpg)'")
-        val bitmaps = imageUrls.map { it.getImage() }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps, UtilityImg.animInterval(context))
+        return imageHtml.parseColumn("'(https.*?jpg)'")
     }
 
-    fun getAnimationGoesFloater(context: Context, product: String, url: String, frameCount: Int): AnimationDrawable {
+    fun getAnimationGoesFloater(product: String, url: String, frameCount: Int): List<String> {
         val baseUrl = url.replace("GEOCOLOR", product).replace("latest.jpg", "")
         val html = baseUrl.getHtml()
         val urlList = UtilityString.parseColumn(html.replace("\r\n", " "), "<a href=\"([^\\s]*?1000x1000.jpg)\">")
@@ -100,8 +92,7 @@ object UtilityGoes {
                 returnList.add(baseUrl + urlList[it])
             }
         }
-        val bitmaps = returnList.map { it.getImage() }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps, UtilityImg.animInterval(context))
+        return returnList
     }
 
     val labels = listOf(
@@ -161,75 +152,80 @@ object UtilityGoes {
     )
 
     private val sectorsInGoes17 = listOf(
-        "CONUS-G17",
-        "FD-G17",
-        "ak",
-        "cak",
-        "sea",
-        "hi",
-        "pnw",
-        "psw",
-        "tpw",
-        "wus",
-        "np"
+            "CONUS-G17",
+            "FD-G17",
+            "ak",
+            "cak",
+            "sea",
+            "hi",
+            "pnw",
+            "psw",
+            "tpw",
+            "tsp",
+            "wus",
+            "np"
     )
 
     val sectorToName = mapOf(
-        "FD" to "Full Disk: GOES-EAST",
-        "FD-G17" to " Full Disk: GOES-WEST",
-        "CONUS" to "CONUS: GOES-EAST",
-        "CONUS-G17" to "PACUS: GOES-WEST",
-        "pnw" to "Pacific Northwest",
-        "nr" to "Northern Rockies",
-        "umv" to "Upper Mississippi Valley",
-        "cgl" to "Central Great Lakes",
-        "ne" to "Northeast",
-        "psw" to "Pacific Southwest",
-        "sr" to "Southern Rockies",
-        "sp" to "Southern Plains",
-        "smv" to "Southern Mississippi Valley",
-        "se" to "Southeast",
-        "gm" to "Gulf of Mexico",
-        "car" to "Caribbean",
-        "eus" to "U.S. Atlantic Coast",
-        "pr" to "Puerto Rico",
-        "cam" to "Central America",
-        "taw" to "Tropical Atlantic",
-        "ak" to "Alaska",
-        "cak" to "Central Alaska",
-        "sea" to "Southeastern Alaska",
-        "hi" to "Hawaii",
-        "wus" to "US Pacific Coast",
-        "tpw" to "Tropical Pacific",
-        "eep" to "Eastern Pacific",
-        "np" to "Northern Pacific",
-        "can" to "Canada",
-        "mex" to "Mexico",
-        "nsa" to "South America (north)",
-        "ssa" to "South America (south)"
+            "FD" to "Full Disk: GOES-EAST",
+            "FD-G17" to " Full Disk: GOES-WEST",
+            "CONUS" to "CONUS: GOES-EAST",
+            "CONUS-G17" to "PACUS: GOES-WEST",
+            "pnw" to "Pacific Northwest",
+            "nr" to "Northern Rockies",
+            "umv" to "Upper Mississippi Valley",
+            "cgl" to "Central Great Lakes",
+            "ne" to "Northeast",
+            "psw" to "Pacific Southwest",
+            "sr" to "Southern Rockies",
+            "sp" to "Southern Plains",
+            "smv" to "Southern Mississippi Valley",
+            "se" to "Southeast",
+            "gm" to "Gulf of Mexico",
+            "car" to "Caribbean",
+            "eus" to "U.S. Atlantic Coast",
+            "pr" to "Puerto Rico",
+            "cam" to "Central America",
+            "taw" to "Tropical Atlantic",
+            "ak" to "Alaska",
+            "cak" to "Central Alaska",
+            "sea" to "Southeastern Alaska",
+            "hi" to "Hawaii",
+            "wus" to "US Pacific Coast",
+            "tpw" to "Tropical Pacific",
+            "tsp" to "South Pacific",
+            "eep" to "Eastern Pacific",
+            "np" to "Northern Pacific",
+            "na" to "Northern Atlantic",
+            "can" to "Canada",
+            "mex" to "Mexico",
+            "nsa" to "South America (north)",
+            "ssa" to "South America (south)"
     )
 
     private val sizeMap = mapOf(
-        "CONUS-G17" to "1250x750",
-        "CONUS" to "1250x750",
-        "FD" to "1808x1808",
-        "FD-G17" to "1808x1808",
-        "gm" to "1000x1000",
-        "car" to "1000x1000",
-        "eus" to "1000x1000",
-        "taw" to "1800x1080",
-        "tpw" to "1800x1080",
-        "can" to "1125x560",
-        "mex" to "1000x1000",
-        "cam" to "1000x1000",
-        "eep" to "1800x1080",
-        "wus" to "1000x1000",
-        "nsa" to "1800x1080",
-        "ssa" to "1800x1080",
-        "np" to "1800x1080",
-        "ak" to "1000x1000",
-        "cak" to "1200x1200",
-        "sea" to "1200x1200",
-        "hi" to "1200x1200"
+            "CONUS-G17" to "1250x750",
+            "CONUS" to "1250x750",
+            "FD" to "1808x1808",
+            "FD-G17" to "1808x1808",
+            "gm" to "1000x1000",
+            "car" to "1000x1000",
+            "eus" to "1000x1000",
+            "taw" to "1800x1080",
+            "tpw" to "1800x1080",
+            "tsp" to "1800x1080",
+            "can" to "1125x560",
+            "mex" to "1000x1000",
+            "cam" to "1000x1000",
+            "eep" to "1800x1080",
+            "wus" to "1000x1000",
+            "nsa" to "1800x1080",
+            "ssa" to "1800x1080",
+            "np" to "1800x1080",
+            "na" to "1800x1080",
+            "ak" to "1000x1000",
+            "cak" to "1200x1200",
+            "sea" to "1200x1200",
+            "hi" to "1200x1200"
     )
 }

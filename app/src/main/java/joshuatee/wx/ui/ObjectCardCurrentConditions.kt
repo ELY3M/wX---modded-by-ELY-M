@@ -22,14 +22,15 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.view.Gravity
+import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.ObjectCurrentConditions
+import joshuatee.wx.util.UtilityForecastIcon
 
-class ObjectCardCurrentConditions(context: Context, version: Int) {
+class ObjectCardCurrentConditions(val context: Context, version: Int) {
 
     private val card = Card(context)
     private val photo = Photo(context)
@@ -44,8 +45,8 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
             text1.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
             text2.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
             text3.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, UIPreferences.paddingSmall)
-            vbox.addViews(listOf(text1.get(), text2.get(), text3.get()))
-            hbox.addViews(listOf(photo.get(), vbox.get()))
+            vbox.addWidgets(listOf(text1.get(), text2.get(), text3.get()))
+            hbox.addWidgets(listOf(photo.get(), vbox.get()))
         } else {
             // legacy code
             text1.gravity = Gravity.CENTER
@@ -58,7 +59,7 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
             hbox.addWidget(text1.get())
             hbox.addWidget(text3.get())
         }
-        card.addView(hbox.get())
+        card.addLayout(hbox)
     }
 
     fun get() = card.get()
@@ -96,20 +97,24 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
         }
     }
 
-    fun updateContent(bitmap: Bitmap, objCc: ObjectCurrentConditions, isUS: Boolean, time: String, radarTime: String) {
-        photo.setImage(bitmap)
+    fun update(objCc: ObjectCurrentConditions, isUS: Boolean, radarTime: String = "") {
+        if (isUS) {
+            photo.setImage(UtilityForecastIcon.getIcon(context, objCc.iconUrl))
+        } else {
+            photo.setImage(UtilityForecastIcon.getIcon(context, UtilityCanada.translateIconNameCurrentConditions(objCc.data, objCc.status)))
+        }
         val sep = " - "
         val conditionTokens = objCc.data.split(sep).dropLastWhile { it.isEmpty() }
         if (conditionTokens.size > 4 && isUS) {
             val items = conditionTokens[0].split("/").dropLastWhile { it.isEmpty() }
             setTopLine(conditionTokens[4].replace("^ ".toRegex(), "") + " " + items[0] + conditionTokens[2])
             setMiddleLine(items[1].replace("^ ".toRegex(), "") + sep + conditionTokens[1] + sep + conditionTokens[3])
-            setStatus(time + radarTime)
+            setStatus(objCc.status + radarTime)
         } else {
             val items = conditionTokens[0].split("/").dropLastWhile { it.isEmpty() }
             setTopLine(conditionTokens[4] + "" + items[0] + conditionTokens[2])
             setMiddleLine(items[1].replace("^ ".toRegex(), "") + sep + conditionTokens[1] + sep + conditionTokens[3])
-            setStatus(time.replace("^ ".toRegex(), "") + radarTime)
+            setStatus(objCc.status.replace("^ ".toRegex(), "") + radarTime)
         }
     }
 }

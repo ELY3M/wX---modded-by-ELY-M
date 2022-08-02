@@ -49,6 +49,11 @@ object UtilityWXGLTextObject {
         }
     }
 
+    fun updateObservationsSinglePane(paneNumber: Int, textObjects: List<WXGLTextObject>) {
+        textObjects[paneNumber].initializeObservations()
+        textObjects[paneNumber].addObservations()
+    }
+
     fun updateWpcFronts(numPanes: Int, textObjects: List<WXGLTextObject>) {
         (0 until numPanes).forEach {
             textObjects[it].addWpcPressureCenters()

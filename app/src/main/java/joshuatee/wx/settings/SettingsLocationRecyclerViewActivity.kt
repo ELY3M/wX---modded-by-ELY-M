@@ -21,7 +21,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityWXJobService
@@ -41,7 +40,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     private lateinit var settingsLocationAdapterList: SettingsLocationAdapterList
     private var currentConditions = mutableListOf<ObjectCurrentConditions>()
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
         ObjectFab(this, R.id.fab_add) { addLocation() }
@@ -58,7 +56,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     private fun getContent() {
         currentConditions.clear()
         FutureVoid(this, ::download, ::update)
-
     }
 
     private fun download() {
@@ -99,7 +96,9 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun updateTitle() { title = "Locations" }
+    private fun updateTitle() {
+        title = "Locations"
+    }
 
     private fun itemSelected(position: Int) {
         val bottomSheetFragment = BottomSheetFragment(this, position, Location.getName(position), true)
@@ -116,7 +115,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         if (settingsLocationAdapterList.itemCount > 1) {
             Location.delete(this, (position + 1).toString())
             settingsLocationAdapterList.deleteItem(position)
-//            settingsLocationAdapterList.notifyDataSetChanged()
             settingsLocationAdapterList.notifyItemRemoved(position)
             updateTitle()
             UtilityWXJobService.startService(this)

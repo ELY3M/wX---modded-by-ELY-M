@@ -83,12 +83,15 @@ internal object UtilityWXOGLPerf {
                 levelCount = 0
                 binStart = radarBuffers.binSize
                 if (radialNumber == 0) angle0 = angle
-                angleV = if (radialNumber < numberOfRadials - 1) angleNext else angle0
-
-                angleVCos = cos((angleV / M_180_div_PI).toDouble()).toFloat()
-                angleVSin = sin((angleV / M_180_div_PI).toDouble()).toFloat()
-                angleCos = cos((angle / M_180_div_PI).toDouble()).toFloat()
-                angleSin = sin((angle / M_180_div_PI).toDouble()).toFloat()
+                angleV = if (radialNumber < numberOfRadials - 1) {
+                    angleNext
+                } else {
+                    angle0
+                }
+                angleVCos = cos(angleV / M_180_div_PI)
+                angleVSin = sin(angleV / M_180_div_PI)
+                angleCos = cos(angle / M_180_div_PI)
+                angleSin = sin(angle / M_180_div_PI)
 
                 for (bin in 0 until numberOfRleHalfWords) {
                     try {
@@ -96,7 +99,9 @@ internal object UtilityWXOGLPerf {
                     } catch (e: Exception) {
                         UtilityLog.handleException(e)
                     }
-                    if (bin == 0) level = curLevel
+                    if (bin == 0) {
+                        level = curLevel
+                    }
                     if (curLevel == level) {
                         levelCount += 1
                     } else {
@@ -181,10 +186,10 @@ internal object UtilityWXOGLPerf {
             } else {
                 radialStart.getFloat(0)
             }
-            angleVCos = cos((angleV / M_180_div_PI).toDouble()).toFloat()
-            angleVSin = sin((angleV / M_180_div_PI).toDouble()).toFloat()
-            angleCos = cos((angle / M_180_div_PI).toDouble()).toFloat()
-            angleSin = sin((angle / M_180_div_PI).toDouble()).toFloat()
+            angleVCos = cos(angleV / M_180_div_PI)
+            angleVSin = sin(angleV / M_180_div_PI)
+            angleCos = cos(angle / M_180_div_PI)
+            angleSin = sin(angle / M_180_div_PI)
             for (bin in 0 until radarBuffers.numRangeBins) {
                 curLevel = binBuff.get(binIndex).toInt()
                 binIndex += 1

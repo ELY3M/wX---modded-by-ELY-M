@@ -67,7 +67,7 @@ object UtilityMath {
     }
 
     // convert polar cords to rect
-    fun toRect(r: Float, t: Float) = floatArrayOf((r * cos(t / (180.00f / PI))).toFloat(), (r * sin(t / (180.00f / PI))).toFloat())
+    fun toRect(r: Float, t: Float) = floatArrayOf((r * cos(t / (180.0f / PI))).toFloat(), (r * sin(t / (180.0f / PI))).toFloat())
 
     fun unitsPressure(value: String): String {
         var num = value.toDoubleOrNull() ?: 0.0
@@ -80,15 +80,15 @@ object UtilityMath {
     }
 
     fun celsiusToFahrenheit(value: String) = if (UIPreferences.unitsF) {
-            round(((value.toDoubleOrNull() ?: 0.0) * 9.0 / 5.0 + 32.0)).toInt().toString()
+            ((value.toDoubleOrNull() ?: 0.0) * 9.0 / 5.0 + 32.0).roundToInt().toString()
         } else {
             value
         }
 
-    internal fun fahrenheitToCelsius(value: Double) = round(((value - 32.0) * 5.0 / 9.0)).toInt().toString()
+    internal fun fahrenheitToCelsius(value: Double) = ((value - 32.0) * 5.0 / 9.0).roundToInt().toString()
 
     // used by celsiusToFahrenheitTable only
-    private fun celsiusToFahrenheitAsInt(value: Int) = round((value * 9.0 / 5.0 + 32.0).toFloat()).toString()
+    private fun celsiusToFahrenheitAsInt(value: Int) = (value * 9.0 / 5.0 + 32.0).roundToInt().toString()
 
     fun celsiusToFahrenheitTable(): String {
         var table = ""
@@ -98,8 +98,6 @@ object UtilityMath {
         }
         return table
     }
-
-    internal fun roundToString(value: Double) = round(value.toFloat()).toInt().toString()
 
     internal fun pressureMBtoIn(value: String) = String.format(Locale.US, "%.2f", ((value.toDoubleOrNull()
             ?: 0.0) / 33.8637526)) + " in"
@@ -116,17 +114,17 @@ object UtilityMath {
     fun convertWindDir(direction: Double): String {
         val windDirections = listOf("N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N")
         val normalizedDirection = direction.toInt() % 360
-        val listIndex = round((normalizedDirection.toDouble() / 22.5)).toInt()
+        val listIndex = (normalizedDirection.toDouble() / 22.5).roundToInt()
         return windDirections[listIndex]
     }
 
     // https://training.weather.gov/wdtd/tools/misc/beamwidth/index.htm
-    fun getRadarBeamHeight(degree: Float, distance: Double) = 3.281 * (sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
+    fun getRadarBeamHeight(degree: Double, distance: Double) = 3.281 * (sin(Math.toRadians(degree)) * distance + distance * distance / 15417.82) * 1000.0
 
     fun heatIndex(temp: String, rh: String): String {
         val t = temp.toDoubleOrNull() ?: 0.0
         val r = rh.toDoubleOrNull() ?: 0.0
-        return if ( t > 80.0 && r > 40.0 ) {
+        return if (t > 80.0 && r > 40.0) {
             val s1 = -42.379
             val s2 = 2.04901523 * t
             val s3 = 10.14333127 * r
@@ -145,17 +143,10 @@ object UtilityMath {
     //
     // legacy forecast
     //
-    fun unitsTemp(valueF: String): String {
-        var value = valueF
-        var tmpNum = 0.0
+    fun unitsTemp(value: String): String {
         if (!UIPreferences.unitsF) {
-            // Deduct 32, then multiply by 5, then divide by 9
-            try {
-                tmpNum = value.toDouble()
-            } catch (e: java.lang.Exception) {
-            }
-            tmpNum = (tmpNum - 32.0) * 5.0 / 9.0
-            value = tmpNum.roundToInt().toString()
+            val tmpNum = value.toDoubleOrNull() ?: 0.0
+            fahrenheitToCelsius(tmpNum)
         }
         return value
     }

@@ -107,6 +107,7 @@
     <string name="label_t4">Tilt 4</string>
     <string name="label_change_tilt">Change Tilt</string>
     <string name="label_animate">Animate</string>
+    <string name="label_pause">Pause</string>
     <string name="label_other">Level 3</string>
     <string name="label_l2">Level 2</string>
     <string name="label_n0x">N0X: Differential Reflectivity</string>
@@ -261,6 +262,7 @@
     <string name="conus_goes_east">CONUS: GOES-East</string>
     <string name="pacus_goes_west">PACUS: GOES-West</string>
     <string name="regional_views">Regional Views</string>
+    <string name="north_south_america">North/South America</string>
     <string name="pacific_northwest">Pacific Northwest</string>
     <string name="northern_rockies">Northern Rockies</string>
     <string name="upper_mississippi_valley">Upper Mississippi Valley</string>
@@ -272,8 +274,8 @@
     <string name="southern_mississippi_valley">Southern Mississippi Valley</string>
     <string name="southeast">Southeast</string>
     <string name="alaska">Alaska</string>
-    <string name="central_alaska">Central Alaska</string>
-    <string name="southeastern_alaska">Southeastern Alaska</string>
+    <string name="central_alaska">Alaska - Central </string>
+    <string name="southeastern_alaska">Alaska - Southeastern</string>
     <string name="hawaii">Hawaii</string>
     <string name="canada">Canada</string>
     <string name="mexico">Mexico</string>
@@ -286,10 +288,12 @@
     <string name="u_s_atlantic_coast">U.S. Atlantic Coast</string>
     <string name="puerto_rico">Puerto Rico</string>
     <string name="tropical_atlantic_wide_view">Tropical Atlantic: wide view</string>
-    <string name="us_pacific_coast">US Pacific Coast</string>
+    <string name="us_pacific_coast">U.S. Pacific Coast</string>
     <string name="tropical_pacific">Tropical Pacific</string>
+    <string name="south_pacific">South Pacific</string>
     <string name="eastern_pacific">Eastern Pacific</string>
     <string name="northern_pacific">Northern Pacific</string>
+    <string name="northern_atlantic">Northern Atlantic</string>
     <string name="wx_logo">wX Logo</string>
     <string name="visible_sat">Visible Sat</string>
     <string name="area_forecast_discussion">Area Forecast Discussion</string>

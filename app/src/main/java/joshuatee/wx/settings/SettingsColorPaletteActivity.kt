@@ -22,7 +22,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -63,14 +62,12 @@ class SettingsColorPaletteActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_twofab, null, false)
-        cardList = findViewById(R.id.cardList)
         type = intent.getStringArrayExtra(TYPE)!![0]
         typeAsInt = type.toIntOrNull() ?: 94
-        toolbar.subtitle = WXGLNexrad.productCodeStringToName[typeAsInt]
-        title = ObjectColorPalette.radarColorPalette[typeAsInt]
+        cardList = findViewById(R.id.cardList)
+        setTitle(ObjectColorPalette.radarColorPalette[typeAsInt]!!, WXGLNexrad.productCodeStringToName[typeAsInt]!!)
         prefToken = "RADAR_COLOR_PALETTE_$type"
         fab1 = ObjectFab(this, R.id.fab1, R.drawable.ic_reorder_24dp) { addPalFab() }
         fab2 = ObjectFab(this, R.id.fab2, GlobalVariables.ICON_DELETE_WHITE) { editPalFab() }
@@ -153,7 +150,6 @@ class SettingsColorPaletteActivity : BaseActivity() {
         Route(this, SettingsColorPaletteEditor::class.java, SettingsColorPaletteEditor.URL, arrayOf(type, ObjectColorPalette.radarColorPalette[typeAsInt]!!, builtinStr))
     }
 
-    @SuppressLint("ApplySharedPref")
     private fun editPalFab() {
         val builtInHelpMsg = "Built-in color palettes can not be deleted."
         if (rowListItem[globalPosition].prefToken == "RADAR_COLOR_PALETTE_$type") {

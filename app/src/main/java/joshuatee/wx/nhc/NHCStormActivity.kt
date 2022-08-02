@@ -21,7 +21,6 @@
 
 package joshuatee.wx.nhc
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
@@ -54,7 +53,6 @@ class NhcStormActivity : BaseActivity() {
     private lateinit var box: VBox
     private lateinit var boxText: VBox
     private lateinit var boxImage: VBox
-    private var numberOfImages = 0
     private var imagesPerRow = 2
     private val boxRows = mutableListOf<HBox>()
     private val imageUrls = listOf(
@@ -76,7 +74,6 @@ class NhcStormActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc_storm, false)
         stormData = intent.getSerializableExtra(URL) as ObjectNhcStormDetails
@@ -118,24 +115,18 @@ class NhcStormActivity : BaseActivity() {
 
     fun showImages() {
         boxImage.removeChildrenAndLayout()
-        numberOfImages = 0
-        // FIXME TODO use filter() and then remove numberOfImages
-        bitmaps.forEachIndexed { index, bitmap ->
-            if (bitmap.width > 100) {
-                if (numberOfImages % imagesPerRow == 0) {
-                    boxRows.add(HBox(this, boxImage.get()))
-                    Image(this, boxRows.last(), bitmap, imagesPerRow)
+        bitmaps.filter { it.width > 100 }.forEachIndexed { index, bitmap ->
+            if (index % imagesPerRow == 0) {
+                boxRows.add(HBox(this, boxImage.get()))
+            }
+            val image = Image(this, boxRows.last(), bitmap, imagesPerRow)
+            image.connect {
+                var url = stormData.baseUrl
+                if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") {
+                    url = url.dropLast(2)
                 }
-                val image = Image(this, boxRows.last(), bitmap, imagesPerRow)
-                numberOfImages += 1
-                image.connect {
-                    var url = stormData.baseUrl
-                    if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") {
-                        url = url.dropLast(2)
-                    }
-                    val fullUrl = url + imageUrls[index]
-                    Route.image(this, arrayOf(fullUrl, ""))
-                }
+                val fullUrl = url + imageUrls[index]
+                Route.image(this, arrayOf(fullUrl, ""))
             }
         }
     }

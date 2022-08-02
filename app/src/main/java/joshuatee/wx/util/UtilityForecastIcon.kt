@@ -33,9 +33,7 @@ object UtilityForecastIcon {
     //  https://api.weather.gov/icons/land/night/bkn?size=medium
     //  https://api.weather.gov/icons/land/day/tsra_hi,40?size=medium
     fun getIcon(context: Context, url: String): Bitmap {
-        // UtilityLog.d("wx", url)
         if (url == "NULL" || url == "") {
-//            return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
             return ForecastIcon.blankBitmap()
         }
         val fileName = getFilename(url)
@@ -112,7 +110,6 @@ object UtilityForecastIcon {
             leftWeatherCondition = ""
             rightWeatherCondition = ""
         }
-
         // legacy add
         if (!iconLeftString.contains(",") && !iconRightString.contains(",")) {
             leftNumber = UtilityString.parse(iconLeftString, ".*?([0-9]+)")
@@ -125,57 +122,6 @@ object UtilityForecastIcon {
         forecastIcon.drawLeftText(leftNumber)
         forecastIcon.drawRightText(rightNumber)
         return forecastIcon.get()
-
-//        val halfWidth = 41
-//        val middlePoint = 45
-//        val leftCropA = if (leftWeatherCondition.contains("fg")) {
-//            middlePoint
-//        } else {
-//            4
-//        }
-//        val leftCropB = if (rightWeatherCondition.contains("fg")) {
-//            middlePoint
-//        } else {
-//            4
-//        }
-//        val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
-//        val canvas = Canvas(bitmap)
-//        canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
-//        val fileNameLeft = UtilityNwsIcon.iconMap["$leftWeatherCondition.png"]
-//        val fileNameRight = UtilityNwsIcon.iconMap["$rightWeatherCondition.png"]
-//        if (fileNameLeft == null || fileNameRight == null) {
-//            return bitmap
-//        }
-//        val bitmap1 = UtilityImg.loadBitmap(context, fileNameLeft, false)
-//        val bitmap2 = Bitmap.createBitmap(bitmap1, leftCropA, 0, halfWidth, dimensions)
-//        canvas.drawBitmap(bitmap2, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
-
-
-//        val paint = ObjectPaint()
-//        val yText = 84
-//        val xTextLeft = 2
-//        val xText = if (rightNumber == "100") {
-//            50
-//        } else {
-//            58
-//        }
-//        val paintStripe = ObjectPaintStripe()
-//
-//        // legacy add - 2nd conditional
-//        if (leftNumber != "" && leftNumber != "0") {
-//            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), halfWidth.toFloat(), dimensions.toFloat(), paintStripe.paint)
-//            canvas.drawText("$leftNumber%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
-//        }
-//        val bitmap3 = UtilityImg.loadBitmap(context, fileNameRight, false)
-//        val bitmap4 = Bitmap.createBitmap(bitmap3, leftCropB, 0, halfWidth, dimensions)
-//        canvas.drawBitmap(bitmap4, middlePoint.toFloat(), 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
-//
-//        // legacy add - 2nd conditional
-//        if (rightNumber != "" && rightNumber != "0") {
-//            canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
-//            canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.paint)
-//        }
-//        return bitmap
     }
 
     // Given one string return a custom bitmap with numeric label
@@ -194,7 +140,6 @@ object UtilityForecastIcon {
         } else {
             ""
         }
-
         // legacy add
         if (!iconString.contains(",")) {
             number = UtilityString.parse(iconString, ".*?([0-9]+)")
@@ -204,27 +149,6 @@ object UtilityForecastIcon {
         val forecastIcon = ForecastIcon(context, weatherCondition)
         forecastIcon.drawSingleText(number)
         return forecastIcon.get()
-
-//        val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
-//        val canvas = Canvas(bitmap)
-//        canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
-//        val fileName = UtilityNwsIcon.iconMap["$weatherCondition.png"] ?: return bitmap
-//        val bitmap1 = UtilityImg.loadBitmap(context, fileName, false)
-//        val bitmap2 = Bitmap.createBitmap(bitmap1, 0, 0, dimensions, dimensions)
-//        canvas.drawBitmap(bitmap2, 0.0f, 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
-//        val paint = ObjectPaint()
-//        val yText = 84
-//        val xText = if (number == "100") {
-//            50
-//        } else {
-//            58
-//        }
-//        val paintStripe = ObjectPaintStripe()
-//        if (number != "" && number != "0") {
-//            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
-//            canvas.drawText("$number%", xText.toFloat(), yText.toFloat(), paint.paint)
-//        }
-//        return bitmap
     }
 
     private fun getFilename(url: String): String {
@@ -234,7 +158,6 @@ object UtilityForecastIcon {
         fileName = fileName.replace("http://api.weather.gov/icons/land/", "")
         fileName = fileName.replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
         fileName = fileName.replace("day/", "")
-
         // legacy add
         fileName = fileName.replace("http://forecast.weather.gov/newimages/medium/", "")
         fileName = fileName.replace("https://forecast.weather.gov/newimages/medium/", "")
@@ -243,7 +166,6 @@ object UtilityForecastIcon {
         fileName = fileName.replace("https://forecast.weather.gov/DualImage.php?", "")
         fileName = fileName.replace("&amp", "")
         // legacy add end
-
         if (fileName.contains("night")) {
             fileName = fileName.replace("night/", "n").replace("/", "/n")
         }

@@ -21,14 +21,14 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.R
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
@@ -36,7 +36,6 @@ import joshuatee.wx.ui.ObjectImagesCollection
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.vis.UtilityGoesFullDisk
@@ -49,7 +48,6 @@ class ImageCollectionActivity : VideoRecordActivity() {
 
     companion object { const val TYPE = "" }
 
-    private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var image: TouchImage
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var imageCollection: ObjectImagesCollection
@@ -69,12 +67,10 @@ class ImageCollectionActivity : VideoRecordActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.imagecollection, iconsEvenlySpaced = true, bottomToolbar = false)
         val arguments = intent.getStringArrayExtra(TYPE)!!
         imageCollection = ObjectImagesCollection.map[arguments[0]]!!
-        setTitle(imageCollection.title)
         objectNavDrawer = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContent)
         image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, imageCollection.prefTokenIdx)
         image.connect(objectNavDrawer, ::getContent)
@@ -89,18 +85,18 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     private fun getContent() {
-        toolbar.subtitle = objectNavDrawer.getLabel()
-        FutureVoid(this, { bitmap = objectNavDrawer.url.getImage() }, ::showImage)
+        setTitle(imageCollection.title, objectNavDrawer.getLabel())
+        FutureBytes(this, objectNavDrawer.url, ::showImage)
     }
 
-    private fun showImage() {
+    private fun showImage(bitmap: Bitmap) {
         if (objectNavDrawer.url.contains("large_latestsfc.gif")) {
             image.setMaxZoom(16.0f)
         } else {
             image.setMaxZoom(4.0f)
         }
-        image.setBitmap(bitmap)
-        image.firstRunSetZoomPosn(imageCollection.prefImagePosition)
+        image.set(bitmap)
+        image.firstRun(imageCollection.prefImagePosition)
         invalidateOptionsMenu()
     }
 
@@ -124,7 +120,7 @@ class ImageCollectionActivity : VideoRecordActivity() {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.bitmap(this, imageCollection.title, bitmap)
+                    UtilityShare.bitmap(this, imageCollection.title, image.bitmap)
                 }
             }
             else -> return super.onOptionsItemSelected(item)

@@ -130,7 +130,6 @@ public class ImageMapTestActivity extends Activity {
 Don't hesitate to ask if you have any other questions.
  */
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;

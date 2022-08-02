@@ -47,8 +47,4 @@
         android:id="@+id/action_reset"
         android:title="@string/set_to_default"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_reset_ca"
-        android:title="@string/set_to_default_canada"
-        app:showAsAction="never" />
 </menu>

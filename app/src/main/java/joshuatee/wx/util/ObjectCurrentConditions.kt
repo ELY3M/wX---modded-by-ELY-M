@@ -48,10 +48,6 @@ class ObjectCurrentConditions {
         if (Location.isUS(locationNumber)) {
             latLon = Location.getLatLon(locationNumber)
             process(context, Location.getLatLon(locationNumber))
-            // 62° / 54°(74%) - 1013 mb - ESE 7 mph - 8 mi - Partly Cloudy
-//            data = tmpArr[0]
-//            iconUrl = tmpArr[1]
-//            status = UtilityUS.getStatusViaMetar(context, time)
         } else {
             isUS = false
             val html = UtilityCanada.getLocationHtml(Location.getLatLon(locationNumber))
@@ -63,9 +59,6 @@ class ObjectCurrentConditions {
     constructor(context: Context, latLon: LatLon) {
         this.latLon = latLon
         process(context, latLon)
-//        data = items[0]
-//        iconUrl = items[1]
-//        status = UtilityUS.getStatusViaMetar(context, time)
     }
 
     private fun process(context: Context, latLon: LatLon, index: Int = 0) {
@@ -83,21 +76,21 @@ class ObjectCurrentConditions {
         val visibility = objectMetar.visibility
         val condition = objectMetar.condition
         timeStringUtc = objectMetar.timeStringUtc
-        var string = temperature
+        var sb = temperature
         if (objectMetar.windChill != "NA") {
-            string += "($windChill)"
+            sb += "($windChill)"
         } else if (objectMetar.heatIndex != "NA") {
-            string += "($heatIndex)"
+            sb += "($heatIndex)"
         }
-        string += " / $dewPoint($relativeHumidity) - "
-        string += "$seaLevelPressure - $windDirection $windSpeed"
-        if (windGust != "") string += " G "
-        string += "$windGust mph - $visibility mi - $condition"
-        // return listOf(string, objectMetar.icon)
-        data = string
+        sb += " / $dewPoint($relativeHumidity) - "
+        sb += "$seaLevelPressure - $windDirection $windSpeed"
+        if (windGust != "") {
+            sb += " G "
+        }
+        sb += "$windGust mph - $visibility mi - $condition"
+        data = sb
         iconUrl = objectMetar.icon
         status = UtilityUS.getStatusViaMetar(context, time)
-        // "NA° / 22°(NA%) - 1016 mb - W 13 mph - 10 mi - Mostly Cloudy"
     }
 
     fun format() {

@@ -244,6 +244,7 @@ class MiscFragment : Fragment() {
                     arrayOf("AURORA"),
                     "aurora", "Aurora Forecast"
             )
+	    //end
             val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:"
             var miscPref = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wxoglquad")) {
@@ -281,9 +282,10 @@ class MiscFragment : Fragment() {
                 miscPref += "aurora:"
                 Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)
             }
-            val tileOrderArr = miscPref.split(":").dropLastWhile { it.isEmpty() }
-            return tileOrderArr
+	    //end
+            val tiles = miscPref.split(":").dropLastWhile { it.isEmpty() }
+            return tiles
                     .filterNot { it.contains("model_cod") || it.contains("model_wrf") || it.contains("model_ncar_ensemble") }
-                    .mapTo(mutableListOf()) { hm[it]!! }
+                    .map { hm[it]!! }.toMutableList()
         }
 }

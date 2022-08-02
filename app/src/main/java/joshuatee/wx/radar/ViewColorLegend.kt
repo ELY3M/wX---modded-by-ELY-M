@@ -82,13 +82,13 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         //if (!RadarPreferences.blackBg) paintText.color = Color.BLACK
         val startHeight = UIPreferences.actionBarHeight.toFloat()
         val width = RadarPreferences.radarShowLegendWidth.toFloat() //was 50f
-        val widthStarting = 0f
-        val textFromLegend = 10f
-        val heightFudge = 30f
+        val widthStarting = 0.0f
+        val textFromLegend = 10.0f
+        val heightFudge = 30.0f
         val screenHeight = MyApplication.dm.heightPixels.toFloat()
-        var scaledHeight = (screenHeight - 2 * startHeight) / 256f
-        val scaledHeightText = (screenHeight - 2 * startHeight) / (95f + 32f) // 95- -32
-        val scaledHeightVel = (screenHeight - 2 * startHeight) / (127 * 2f) // 95- -32
+        var scaledHeight = (screenHeight - 2.0f * startHeight) / 256.0f
+        val scaledHeightText = (screenHeight - 2.0f * startHeight) / (95.0f + 32.0f) // 95- -32
+        val scaledHeightVel = (screenHeight - 2.0f * startHeight) / (127.0f * 2.0f) // 95- -32
         var unitsDrawn = false
         when (product) {
             "N0Q", "L2REF", "TZL" -> {
@@ -228,7 +228,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     canvas.drawText(
                         it.toString() + units,
                         widthStarting + width + textFromLegend,
-                        16f * scaledHeightVel * (8 - it).toFloat() + heightFudge + startHeight,
+                        16.0f * scaledHeightVel * (8 - it).toFloat() + heightFudge + startHeight,
                         paintText
                     )
                     if (!unitsDrawn) {
@@ -254,7 +254,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         canvas.drawText(
                             (it / 100.0).toString().take(4) + units,
                             widthStarting + width + textFromLegend,
-                            3f * scaledHeightVel * (100 - it).toFloat() + heightFudge + startHeight,
+                            3.0f * scaledHeightVel * (100 - it).toFloat() + heightFudge + startHeight,
                             paintText
                         )
                         if (!unitsDrawn) {
@@ -280,7 +280,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     canvas.drawText(
                         it.toString() + units,
                         widthStarting + width + textFromLegend,
-                        20f * scaledHeightVel * (10 - it).toFloat() + heightFudge + startHeight,
+                        20.0f * scaledHeightVel * (10 - it).toFloat() + heightFudge + startHeight,
                         paintText
                     )
                     if (!unitsDrawn) {

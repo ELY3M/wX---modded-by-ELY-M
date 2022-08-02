@@ -39,8 +39,8 @@ class ObjectCardStormReportItem(context: Context) {
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        vbox.addViews(listOf(textTop.get(), textTitle.get(), textBottom.get()))
-        card.addView(vbox)
+        vbox.addWidgets(listOf(textTop.get(), textTitle.get(), textBottom.get()))
+        card.addLayout(vbox)
     }
 
     fun get() = card.get()

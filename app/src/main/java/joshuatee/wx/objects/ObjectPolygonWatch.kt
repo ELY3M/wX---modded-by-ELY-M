@@ -22,8 +22,13 @@
 package joshuatee.wx.objects
 
 import android.content.Context
+import joshuatee.wx.Extensions.getHtml
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.notifications.UtilityNotification
+import joshuatee.wx.notifications.UtilityNotificationSpc
+import joshuatee.wx.notifications.UtilityNotificationWpc
+import joshuatee.wx.radar.WatchData
 import joshuatee.wx.util.*
 
 class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
@@ -32,7 +37,7 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
     val latLonList: DataStorage
     val numberList: DataStorage
     var isEnabled: Boolean
-    private val timer: DownloadTimer
+    val timer: DownloadTimer
 //    var colorInt: Int
 
     init {
@@ -45,6 +50,103 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
         numberList.update(context)
         timer = DownloadTimer("WATCH_" + getTypeName())
 //        colorInt = Utility.readPrefInt(colorPrefByType[type]!!, colorDefaultByType[type]!!)
+    }
+
+    fun get(context: Context) {
+        if (timer.isRefreshNeeded(context)) {
+            getImmediate(context)
+        }
+    }
+
+    fun getImmediate(context: Context): WatchData {
+//        val html = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php".getHtml()
+        val html = getUrl().getHtml()
+        if (html != "") {
+            storage.valueSet(context, html)
+        }
+        val numberList = if (type == PolygonType.WATCH) {
+            getListOfNumbersWatch(context)
+        } else {
+            getListOfNumbers(context)
+        }
+        val htmlList = mutableListOf<String>()
+        if (type == PolygonType.WATCH) {
+            var watchLatLonList = ""
+            var watchLatLon = ""
+            var watchLatLonTor = ""
+            numberList.forEach {
+                val watchHtml = UtilityDownload.getTextProduct(context, "SPCWAT$it")
+                htmlList.add(watchHtml)
+                val latLonHtml = getLatLonWatch(it)
+                watchLatLonList += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
+                if (!watchHtml.contains("Tornado Watch")) {
+                    watchLatLon += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
+                } else {
+                    watchLatLonTor += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
+                }
+            }
+            if (PolygonType.MCD.pref) {
+                watchLatlonCombined.valueSet(context, watchLatLonList)
+//                polygonDataByType[UtilityDownloadWatch.type]!!.latLonList.valueSet(context, watchLatLon)
+                UtilityLog.d("wxjosh", watchLatLon)
+                polygonDataByType[PolygonType.WATCH]!!.latLonList.valueSet(context, watchLatLon)
+                polygonDataByType[PolygonType.WATCH_TORNADO]!!.latLonList.valueSet(context, watchLatLonTor)
+            }
+        } else {
+            var latLonString = ""
+            numberList.forEach {
+                val data = getLatLon(context, it)
+                htmlList.add(data[0])
+                latLonString += data[1]
+            }
+            if (type.pref || locationNotification()) {
+                latLonList.valueSet(context, latLonString)
+            }
+        }
+        return WatchData(numberList, htmlList)
+    }
+
+    private fun getListOfNumbers(context: Context): List<String> {
+        val listOfNumbers = UtilityString.parseColumn(
+                storage.value,
+                regex[type]!!)
+        var numbersAsString = ""
+        listOfNumbers.forEach {
+            numbersAsString += "$it:"
+        }
+        if (type.pref || locationNotification()) {
+            numberList.valueSet(context, numbersAsString)
+        }
+        return listOfNumbers
+    }
+
+    private fun getListOfNumbersWatch(context: Context): List<String> {
+        val listOriginal = UtilityString.parseColumn(
+                polygonDataByType[type]!!.storage.value,
+                regex[type]!!)
+        val listOfNumbers = listOriginal.map { String.format("%4s", it).replace(' ', '0') }
+        var numbersAsString = ""
+        listOfNumbers.forEach {
+            numbersAsString += "$it:"
+        }
+        if (PolygonType.MCD.pref) {
+            numberList.valueSet(context, numbersAsString)
+        }
+        return listOfNumbers
+    }
+
+    // return the raw MPD text and the lat/lon as a list
+    private fun getLatLon(context: Context, number: String): List<String> {
+        val html = UtilityDownload.getTextProduct(context, textPrefix[type] + number)
+        return listOf(html, UtilityNotification.storeWatchMcdLatLon(html))
+    }
+
+    private fun locationNotification(): Boolean {
+        return when(type) {
+            PolygonType.MCD -> UtilityNotificationSpc.locationNeedsMcd()
+            PolygonType.MPD -> UtilityNotificationWpc.locationNeedsMpd()
+            else -> false
+        }
     }
 
 //    private fun download(ignoreTimer: Boolean = false) {
@@ -138,6 +240,8 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
             }
             polygonDataByType[PolygonType.WATCH_TORNADO]!!.isEnabled = polygonDataByType[PolygonType.WATCH]!!.isEnabled
         }
+
+        fun getLatLonWatch(number: String) = UtilityString.getHtmlAndParseLastMatch("${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
 
 //        fun getLatLon(number: String): String {
 //            val html = UtilityIO.getHtml(GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/wou" + number + ".html")

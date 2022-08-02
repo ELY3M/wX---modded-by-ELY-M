@@ -31,16 +31,14 @@ import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
-import android.os.SystemClock
+import android.os.*
 import androidx.core.app.NavUtils
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import android.os.Handler
-import android.os.Looper
 import android.view.*
+import androidx.core.view.WindowCompat
 import joshuatee.wx.R
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.telecine.TelecineService
@@ -49,12 +47,8 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalArrays
-import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.Route
-import joshuatee.wx.objects.ObjectPolygonWarning
-import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
@@ -174,13 +168,18 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             super.onCreate(savedInstanceState, R.layout.activity_uswxogl, R.menu.uswxoglradar, iconsEvenlySpaced = true, bottomToolbar = true)
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        toolbar.setOnClickListener { Route(this, SevereDashboardActivity::class.java) }
+        toolbar.setOnClickListener { Route.severeDash(this) }
         UtilityUI.immersiveMode(this)
         if (UIPreferences.radarStatusBarTransparent) {
 //            This constant was deprecated in API level 30.
 //            Use Window#setStatusBarColor(int) with a half-translucent color instead.
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.statusBarColor = Color.TRANSPARENT
+//            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            if (Build.VERSION.SDK_INT >= 30) {
+                window.statusBarColor = Color.TRANSPARENT
+                WindowCompat.setDecorFitsSystemWindows(window, false)
+            } else {
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            }
         }
         spotterShowSelected = false
         isGetContentInProgress = false
@@ -501,15 +500,17 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
             if (PolygonType.MCD.pref && !archiveMode) {
                 withContext(Dispatchers.IO) {
-                    UtilityDownloadMcd.get(this@WXGLRadarActivity)
-                    UtilityDownloadWatch.get(this@WXGLRadarActivity)
+//                    UtilityDownloadMcd.get(this@WXGLRadarActivity)
+                    ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.get(this@WXGLRadarActivity)
+//                    UtilityDownloadWatch.get(this@WXGLRadarActivity)
+                    ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.get(this@WXGLRadarActivity)
                 }
                 if (!wxglRender.product.startsWith("2")) {
                     UtilityRadarUI.plotMcdWatchPolygons(wxglSurfaceView, wxglRender, archiveMode)
                 }
             }
             if (PolygonType.MPD.pref && !archiveMode) {
-                withContext(Dispatchers.IO) { UtilityDownloadMpd.get(this@WXGLRadarActivity) }
+                withContext(Dispatchers.IO) { ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.get(this@WXGLRadarActivity) }
                 if (!wxglRender.product.startsWith("2")) {
                     UtilityRadarUI.plotMpdPolygons(wxglSurfaceView, wxglRender, archiveMode)
                 }
@@ -679,7 +680,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 //                    }
                 }
             }
-            R.id.action_settings -> startActivity(Intent(this, SettingsRadarActivity::class.java))
+            R.id.action_settings -> Route.settingsRadar(this)
             R.id.action_radar_markers -> Route.image(this, arrayOf("raw:radar_legend", "Radar Markers", "false"))
             R.id.action_radar_2 -> showMultipaneRadar("2")
             R.id.action_radar_4 -> showMultipaneRadar("4")
@@ -796,20 +797,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun showRadarScanInfo() {
         ObjectDialogue(this, WXGLNexrad.getRadarInfo(this,""))
-    }
-
-    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-        val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.setSingleChoiceItems { dialog, which ->
-            fn(which)
-            getContent()
-            dialog.dismiss()
-        }
-        objectDialogue.show()
     }
 
     override fun onStop() {

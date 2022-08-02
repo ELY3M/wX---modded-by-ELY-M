@@ -116,7 +116,6 @@ class MyApplication : Application() {
             Location.currentLocationStr = getInitialPreferenceString("CURRENT_LOC_FRAGMENT", "1")
 
             ObjectPolygonWatch.load(context)
-            println("ObjectPolygonWatch loaded")
         }
 
         fun loadGeomAndColorBuffers(context: Context) {

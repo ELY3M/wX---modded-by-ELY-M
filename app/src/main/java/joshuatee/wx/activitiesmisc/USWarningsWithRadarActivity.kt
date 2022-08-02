@@ -21,15 +21,14 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import java.util.Locale
 import android.view.MenuItem
 import android.widget.ScrollView
-import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
@@ -37,7 +36,6 @@ import joshuatee.wx.ui.ObjectAlertSummary
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityDownloadNws
-import joshuatee.wx.util.UtilityImg
 
 class USWarningsWithRadarActivity : BaseActivity() {
 
@@ -57,7 +55,6 @@ class USWarningsWithRadarActivity : BaseActivity() {
     private var filter = ""
     private var region = ""
     private var firstRun = true
-    private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var objectAlertSummary: ObjectAlertSummary
     private lateinit var scrollView: ScrollView
@@ -68,14 +65,13 @@ class USWarningsWithRadarActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer, R.menu.uswarn, false)
-        scrollView = findViewById(R.id.scrollView)
-        box = VBox.fromResource(this)
         val arguments = intent.getStringArrayExtra(URL)!!
         filter = arguments[0]
         region = arguments[1]
+        scrollView = findViewById(R.id.scrollView)
+        box = VBox.fromResource(this)
         objectAlertSummary = ObjectAlertSummary(this, box, scrollView)
         objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())
         objectNavDrawer.setListener2 { _, _, position, _ ->
@@ -101,8 +97,7 @@ class USWarningsWithRadarActivity : BaseActivity() {
 
     private fun getContent() {
         FutureVoid(this, ::downloadText, ::updateText)
-        FutureVoid(this, { bitmap = "https://forecast.weather.gov/wwamap/png/US.png".getImage() })
-            { objectAlertSummary.updateImage(bitmap) }
+        FutureBytes(this, "https://forecast.weather.gov/wwamap/png/US.png", objectAlertSummary::updateImage)
     }
 
     private fun downloadText() {

@@ -35,7 +35,7 @@ class ObjectCardBlackHeaderText(context: Context, val box: VBox, val title: Stri
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         vbox.addWidget(text.get())
-        card.addView(vbox)
+        card.addLayout(vbox)
         box.addWidget(card.get())
         setTextHeader()
     }

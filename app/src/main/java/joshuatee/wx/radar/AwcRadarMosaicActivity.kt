@@ -21,15 +21,15 @@
 
 package joshuatee.wx.radar
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
-import android.graphics.drawable.AnimationDrawable
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.ObjectAnimate
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 
@@ -44,10 +44,8 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
 
     companion object { const val URL = "" }
 
-    private var animRan = false
-    private var animDrawable = AnimationDrawable()
+    private lateinit var objectAnimate: ObjectAnimate
     private lateinit var image: TouchImage
-    private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private val prefImagePosition = "AWCRADARMOSAIC"
     private var product = "rad_rala"
@@ -60,11 +58,16 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        objectAnimate.setButton(menu)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.awcmosaic, iconsEvenlySpaced = true, bottomToolbar = false)
         objectNavDrawer = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors) { getContent(product) }
         image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
+        objectAnimate = ObjectAnimate(this, image)
         toolbar.setOnClickListener { objectNavDrawer.open() }
         image.setMaxZoom(8.0f)
         image.connect(objectNavDrawer) { getContent(product) }
@@ -79,25 +82,19 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
         super.onRestart()
     }
 
-    private fun getContent(productLocal: String) {
+    private fun getContent(productLocal: String = product) {
+        objectAnimate.stop()
         product = productLocal
         toolbar.subtitle = objectNavDrawer.getLabel()
         title = product
-        FutureVoid(this, { bitmap = UtilityAwcRadarMosaic.get(objectNavDrawer.url, product) }, ::showImage)
+        FutureBytes(this, UtilityAwcRadarMosaic.get(objectNavDrawer.url, product), ::showImage)
     }
 
-    private fun showImage() {
-        image.setBitmap(bitmap)
-        animRan = false
-        image.firstRunSetZoomPosn(prefImagePosition)
+    private fun showImage(bitmap: Bitmap) {
+        image.set(bitmap)
+        image.firstRun(prefImagePosition)
         Utility.writePref(this, prefTokenSector, objectNavDrawer.url)
         Utility.writePref(this, prefTokenProduct, product)
-    }
-
-    private fun getAnimate() {
-        FutureVoid(this,
-            { animDrawable = UtilityAwcRadarMosaic.getAnimation(this, objectNavDrawer.url, product) })
-            { animRan = UtilityImgAnim.startAnimation(animDrawable, image) }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -115,8 +112,9 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_animate -> getAnimate()
-            R.id.action_stop -> animDrawable.stop()
+            R.id.action_animate -> objectAnimate.animateClicked(::getContent) { UtilityAwcRadarMosaic.getAnimation(objectNavDrawer.url, product) }
+            R.id.action_stop -> objectAnimate.stop()
+            R.id.action_pause -> objectAnimate.pause()
             R.id.action_rad_rala -> getContent("rad_rala")
             R.id.action_rad_cref -> getContent("rad_cref")
             R.id.action_rad_tops18 -> getContent("rad_tops-18")
@@ -129,11 +127,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    if (animRan) {
-                        //UtilityShare.animGif(this, "NWS mosaic", animDrawable)
-                    } else {
-                        UtilityShare.bitmap(this, "NWS mosaic", bitmap)
-                    }
+                    UtilityShare.bitmap(this, "NWS mosaic", image.bitmap)
                 }
             }
             else -> return super.onOptionsItemSelected(item)

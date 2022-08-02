@@ -21,21 +21,20 @@
 
 package joshuatee.wx.wpc
 
-import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.FutureBytes
+import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
-import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
@@ -53,15 +52,12 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
 
     private var textProduct = ""
     private var imageUrl = ""
-    private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var arguments: Array<String>
     private lateinit var image: Image
     private lateinit var cardText: CardText
     private lateinit var box: VBox
     private var tabletInLandscape = false
-    private var html = ""
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         arguments = intent.getStringArrayExtra(NUMBER)!!
@@ -82,16 +78,16 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     }
 
     private fun getContent() {
-        FutureVoid(this, { html = UtilityDownload.getTextProduct(this, textProduct) }, ::showText)
-        FutureVoid(this, { bitmap = imageUrl.getImage()}, ::showImage)
+        FutureText(this, textProduct, ::showText)
+        FutureBytes(this, imageUrl, ::showImage)
     }
 
-    private fun showText() {
+    private fun showText(html: String) {
         cardText.text = html
         UtilityTts.conditionalPlay(arguments, 1, applicationContext, cardText.text, textProduct)
     }
 
-    private fun showImage() {
+    private fun showImage(bitmap: Bitmap) {
         if (tabletInLandscape) {
             image.set(bitmap, 2)
         } else {
@@ -105,10 +101,10 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, textProduct, bitmap, cardText.text)
+            R.id.action_share_all -> UtilityShare.bitmap(this, textProduct, image.bitmap, cardText.text)
             R.id.action_share_text -> UtilityShare.text(this, textProduct, cardText.text)
             R.id.action_share_url -> UtilityShare.text(this, textProduct, textProduct)
-            R.id.action_share_image -> UtilityShare.bitmap(this, textProduct, bitmap)
+            R.id.action_share_image -> UtilityShare.bitmap(this, textProduct, image.bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

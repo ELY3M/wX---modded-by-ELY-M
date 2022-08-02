@@ -54,7 +54,6 @@ internal object UtilityHomeScreen {
     )
     val localChoicesImg = listOf(
             "RADAR: Local NEXRAD Radar",
-            "CARAIN: Local CA Radar",
             "WEATHERSTORY: Local NWS Weather Story",
             "WFOWARNINGS: Local NWS Office Warnings"
     )
@@ -139,11 +138,6 @@ internal object UtilityHomeScreen {
         HM_CLASS["OBS"] = SpcSoundingsActivity::class.java
         HM_CLASS_ARGS["OBS"] = arrayOf("STATE_LOWER", "")
         HM_CLASS_ID["OBS"] = SpcSoundingsActivity.URL
-
-        // FIXME this one should be removed
-        HM_CLASS["RAD_1KM"] = SpcSoundingsActivity::class.java
-        HM_CLASS_ARGS["RAD_1KM"] = arrayOf("1km", "rad", "ONEK", "STATE_UPPER")
-        HM_CLASS_ID["RAD_1KM"] = SpcSoundingsActivity.URL
 
         if (UIPreferences.useAwcMosaic) {
             HM_CLASS["RAD_2KM"] = AwcRadarMosaicActivity::class.java

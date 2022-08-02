@@ -21,8 +21,7 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.annotation.SuppressLint
-import android.graphics.Bitmap
+//import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -35,8 +34,6 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.util.ObjectCurrentConditions
 import joshuatee.wx.util.ObjectHazards
 import joshuatee.wx.util.ObjectSevenDay
-import joshuatee.wx.util.UtilityForecastIcon
-import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityTimeSunMoon
 import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.objects.FutureVoid
@@ -58,31 +55,26 @@ class ForecastActivity : BaseActivity() {
     private var objectCurrentConditions = ObjectCurrentConditions()
     private var objectHazards = ObjectHazards()
     private var objectSevenDay = ObjectSevenDay()
-    private var currentConditionsTime = ""
-    private var radarTime = ""
     private lateinit var objectCardCurrentConditions: ObjectCardCurrentConditions
     private lateinit var boxForecast: VBox
     private lateinit var boxHazards: VBox
     private val hazardCards = mutableListOf<CardText>()
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
-    private var bitmap = UtilityImg.getBlankBitmap()
-    private var bitmaps = listOf<Bitmap>()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.adhoc_forecast, menu)
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
+//    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        scrollView = findViewById(R.id.scrollView)
-        box = VBox.fromResource(this)
         val arguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(arguments[0], arguments[1])
-        title = "Forecast for"
-        toolbar.subtitle = latLon.latString + "," + latLon.lonString
+        setTitle("Forecast for", latLon.latString + "," + latLon.lonString)
+        scrollView = findViewById(R.id.scrollView)
+        box = VBox.fromResource(this)
         objectCardCurrentConditions = ObjectCardCurrentConditions(this, 2)
         box.addWidget(objectCardCurrentConditions.get())
         boxHazards = VBox(this, box.get())
@@ -104,12 +96,10 @@ class ForecastActivity : BaseActivity() {
     private fun downloadCc() {
         objectCurrentConditions = ObjectCurrentConditions(this, latLon)
         objectCurrentConditions.timeCheck(this)
-        bitmap = UtilityForecastIcon.getIcon(this, objectCurrentConditions.iconUrl)
     }
 
     private fun updateCc() {
-        currentConditionsTime = objectCurrentConditions.status
-        objectCardCurrentConditions.updateContent(bitmap, objectCurrentConditions, true, currentConditionsTime, radarTime)
+        objectCardCurrentConditions.update(objectCurrentConditions, true)
     }
 
     private fun downloadHazards() {
@@ -128,17 +118,15 @@ class ForecastActivity : BaseActivity() {
 
     private fun download7Day() {
         objectSevenDay = ObjectSevenDay(latLon)
-        bitmaps = objectSevenDay.icons.map { UtilityForecastIcon.getIcon(this, it) }
     }
 
     private fun update7Day() {
         boxForecast.removeChildrenAndLayout()
-        bitmaps.forEachIndexed { index, bitmap ->
-            val objectCard7Day = ObjectCard7Day(this, bitmap, true, index, objectSevenDay.forecastList)
+        objectSevenDay.icons.forEachIndexed { index, iconUrl ->
+            val objectCard7Day = SevenDayCard(this, iconUrl, true, index, objectSevenDay.forecastList)
             objectCard7Day.connect { scrollView.smoothScrollTo(0, 0) }
             boxForecast.addWidget(objectCard7Day.get())
         }
-        // sunrise card
         val sunriseCard = CardText(this)
         sunriseCard.center()
         sunriseCard.text = UtilityTimeSunMoon.getSunriseSunset(this, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime()

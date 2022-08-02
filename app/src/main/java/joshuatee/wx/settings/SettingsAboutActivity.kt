@@ -22,7 +22,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
@@ -51,12 +50,10 @@ class SettingsAboutActivity : BaseActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.generic_about, false)
         box = VBox.fromResource(this)
-        val version = Utility.getVersion(this)
-        toolbar.subtitle = "version: $version"
+        setTitle("About wX", "version " + Utility.getVersion(this))
 
         val faqButton = CardText(this, box, toolbar, toolbarBottom)
         faqButton.setTextColor(UIPreferences.textHighlightColor)

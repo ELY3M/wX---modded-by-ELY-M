@@ -138,7 +138,8 @@ object RadarGeometry {
             try {
                 val inputStream = context.resources.openRawResource(fileID)
                 val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
-                for (index in 0 until count) {
+                // for (index in 0 until count) {
+                repeat(count) {
                     byteBuffer.putFloat(dataInputStream.readFloat())
                 }
                 dataInputStream.close()

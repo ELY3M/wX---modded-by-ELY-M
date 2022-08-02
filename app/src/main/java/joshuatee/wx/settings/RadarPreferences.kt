@@ -25,12 +25,11 @@ import android.content.Context
 import android.graphics.Color
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectPolygonWarning
+import joshuatee.wx.objects.ObjectPolygonWatch
+import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.radar.*
-import joshuatee.wx.radar.UtilityDownloadMcd
-import joshuatee.wx.radar.UtilityDownloadMpd
 import joshuatee.wx.radar.UtilityDownloadWarnings
-import joshuatee.wx.radar.UtilityDownloadWatch
 import joshuatee.wx.radar.UtilityMetar
 import joshuatee.wx.radar.UtilitySwoDayOne
 import joshuatee.wx.ui.UtilityUI
@@ -38,7 +37,7 @@ import joshuatee.wx.ui.UtilityUI
 object RadarPreferences {
 
 	
-	//elys mod
+    //elys mod
     var sn_key = ""
     var sn_locationreport = false
 		
@@ -159,7 +158,7 @@ object RadarPreferences {
 
     fun initRadarPreferences() {
 	
-		//elys mod
+	//elys mod
         sn_key = getInitialPreferenceString("SN_KEY", "")
         sn_locationreport = getInitialPreference("SN_LOCATIONREPORT", "")
 			
@@ -288,11 +287,13 @@ object RadarPreferences {
     }
 
     private fun resetTimerOnRadarPolygons() {
-        UtilityDownloadMcd.timer.resetTimer()
-        UtilityDownloadMpd.timer.resetTimer()
+//        UtilityDownloadMcd.timer.resetTimer()
+        ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]?.timer?.resetTimer()
+        ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]?.timer?.resetTimer()
+        ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]?.timer?.resetTimer()
         UtilityDownloadWarnings.timer.resetTimer()
         UtilityDownloadWarnings.timerSevereDashboard.resetTimer()
-        UtilityDownloadWatch.timer.resetTimer()
+//        UtilityDownloadWatch.timer.resetTimer()
         UtilityMetar.timer.resetTimer()
         UtilitySpotter.timer.resetTimer()
         UtilitySwoDayOne.timer.resetTimer()

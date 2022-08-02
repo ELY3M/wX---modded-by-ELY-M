@@ -49,14 +49,17 @@ object UtilityModels {
         writePrefs(context, om)
         FutureVoid(
             context,
-            { (0 until om.numPanes).forEach { om.displayData.bitmaps[it] = om.getImage(it, overlayImg) } },
+            {
+                (0 until om.numPanes).forEach {
+                    om.displayData.bitmaps[it] = om.getImage(it, overlayImg)
+                }
+            },
             {
                 (0 until om.numPanes).forEach {
                     if (om.numPanes > 1) {
                         UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmaps[it], om.displayData.image[it].get())
                     } else {
-//                        om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
-                        om.displayData.image[it].setBitmap(om.displayData.bitmaps[it])
+                        om.displayData.image[it].set(om.displayData.bitmaps[it])
                     }
                 }
                 om.animRan = false
@@ -78,7 +81,7 @@ object UtilityModels {
 
     private fun updateToolbarLabels(om: ObjectModel) {
         if (om.numPanes > 1) {
-            setSubtitleRestoreIMGXYZOOM(
+            setSubtitleRestoreZoom(
                     om.displayData.image,
                     om.toolbar,
                     "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
@@ -94,9 +97,14 @@ object UtilityModels {
     fun getAnimate(context: Context, om: ObjectModel, overlayImg: List<String>) {
         FutureVoid(
             context,
-            { (0 until om.numPanes).forEach { om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg) } },
+            { (0 until om.numPanes).forEach {
+                    om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg)
+                }
+            },
             {
-                (0 until om.numPanes).forEach { om.displayData.animDrawable[it].startAnimation(om.displayData.image[it]) }
+                (0 until om.numPanes).forEach {
+                    om.displayData.animDrawable[it].startAnimation(om.displayData.image[it])
+                }
                 om.animRan = true
             }
         )
@@ -124,9 +132,6 @@ object UtilityModels {
                     om.displayData.bitmaps[0]
             )
     }
-
-    // FIXME don't need this - to simple
-    fun parameterInList(list: List<String>, parameter: String) = list.contains(parameter)
 
     fun convertTimeRunToTimeString(runStr: String, timeStringOriginal: String, showDate: Boolean): String {
         var timeStr = timeStringOriginal
@@ -211,7 +216,7 @@ object UtilityModels {
         }
     }
 
-    fun setSubtitleRestoreIMGXYZOOM(img: MutableList<TouchImage>, toolbar: Toolbar, s: String) {
+    fun setSubtitleRestoreZoom(img: MutableList<TouchImage>, toolbar: Toolbar, s: String) {
         val x = FloatArray(img.size)
         val y = FloatArray(img.size)
         val z = FloatArray(img.size)

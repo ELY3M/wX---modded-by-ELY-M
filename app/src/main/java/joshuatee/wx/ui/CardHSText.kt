@@ -37,10 +37,7 @@ class CardHSText(context: Context, val product: String) {
     private var textShownSmall = true
 
     init {
-//        ObjectCardText.textViewSetup(textView)
-//        textView.setTextIsSelectable(true)
-//        textView.isFocusable = false
-        card.addView(text.get())
+        card.addWidget(text.get())
     }
 
     fun toggleText() {
@@ -77,7 +74,6 @@ class CardHSText(context: Context, val product: String) {
 
     fun refreshTextSize() {
         text.refreshTextSize(TextSize.SMALL)
-//        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
     }
 
     private fun setTextLong(text: String) {

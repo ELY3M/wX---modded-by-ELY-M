@@ -80,7 +80,7 @@ class WebViewTwitter : BaseActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("SetJavaScriptEnabled", "MissingSuperCall")
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_webview_toolbar_state, null, false)
         webView = findViewById(R.id.webView)
@@ -132,17 +132,4 @@ class WebViewTwitter : BaseActivity() {
         }
         return true
     }
-
-//    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
-//        val objectDialogue = ObjectDialogue(this, list)
-//        objectDialogue.setNegativeButton { dialog, _ ->
-//            dialog.dismiss()
-//            UtilityUI.immersiveMode(this)
-//        }
-//        objectDialogue.setSingleChoiceItems { dialog, which ->
-//            fn(which)
-//            dialog.dismiss()
-//        }
-//        objectDialogue.show()
-//    }
 }

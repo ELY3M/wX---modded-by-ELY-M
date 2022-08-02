@@ -35,6 +35,7 @@ open class Image {
     var img: TouchImageView2
         internal set
     internal val layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
+    var bitmap = UtilityImg.getBlankBitmap()
 
     constructor(context: Context, bitmap: Bitmap) {
         this.context = context
@@ -42,7 +43,7 @@ open class Image {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        card.addView(img)
+        card.addWidget(img)
     }
 
     constructor(context: Context, box: VBox, bitmap: Bitmap, numberAcross: Int = 1) {
@@ -51,7 +52,7 @@ open class Image {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        card.addView(img)
+        card.addWidget(img)
         box.addWidget(get())
     }
 
@@ -61,7 +62,7 @@ open class Image {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        card.addView(img)
+        card.addWidget(img)
         box.addWidget(get())
     }
 
@@ -71,7 +72,7 @@ open class Image {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        card.addView(img)
+        card.addWidget(img)
         box.addWidget(get())
         connect { UtilityToolbar.showHide(toolbar) }
     }
@@ -82,7 +83,7 @@ open class Image {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        card.addView(img)
+        card.addWidget(img)
         box.addWidget(get())
         connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
@@ -111,7 +112,8 @@ open class Image {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        card.addView(img)
+        card.addWidget(img)
+        this.bitmap = bitmap
     }
 
     open fun set2(bitmap: Bitmap, numberAcross: Int = 1) {
@@ -119,14 +121,13 @@ open class Image {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        card.addView(img)
+        card.addWidget(img)
+        this.bitmap = bitmap
     }
 
     fun resetZoom() {
         img.resetZoom()
     }
-
-//    protected val card get() = objectCard.get()
 
     fun get() = card.get()
 

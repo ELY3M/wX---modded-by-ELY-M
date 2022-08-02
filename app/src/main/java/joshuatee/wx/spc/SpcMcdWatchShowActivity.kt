@@ -21,7 +21,6 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
@@ -59,7 +58,6 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var box: VBox
     private var tabletInLandscape = false
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         box = VBox.fromResource(this)
@@ -85,16 +83,40 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this, ::download, ::update)
+//        FutureVoid(this, ::download, ::update)
+        FutureVoid(this, ::downloadText, ::updateText)
+        FutureVoid(this, ::downloadImage, ::updateImage)
     }
 
-    private fun download() {
-        objectWatchProduct.getData(this@SpcMcdWatchShowActivity)
+//    private fun download() {
+//        objectWatchProduct.getData(this)
+//    }
+
+    private fun downloadText() {
+        objectWatchProduct.getText(this)
     }
 
-    private fun update() {
+    private fun downloadImage() {
+        objectWatchProduct.getImage()
+    }
+
+    private fun updateText() {
         cardText.text = Utility.fromHtml(objectWatchProduct.text)
         toolbar.subtitle = objectWatchProduct.textForSubtitle
+//        if (tabletInLandscape) {
+//            image.set(objectWatchProduct.bitmap, 2)
+//        } else {
+//            image.set(objectWatchProduct.bitmap)
+//        }
+//        image.connect {
+//            Route.image(this, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
+//        }
+        UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
+    }
+
+    private fun updateImage() {
+//        cardText.text = Utility.fromHtml(objectWatchProduct.text)
+//        toolbar.subtitle = objectWatchProduct.textForSubtitle
         if (tabletInLandscape) {
             image.set(objectWatchProduct.bitmap, 2)
         } else {
@@ -103,7 +125,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         image.connect {
             Route.image(this, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
         }
-        UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
+//        UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

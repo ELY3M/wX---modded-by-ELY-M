@@ -61,7 +61,7 @@ internal object UtilityWidgetDownload {
         val rid = Location.getRid(context, widgetLocationNumber)
         try {
             val bitmap = if (Location.isUS(widgetLocationNumber)) {
-                UtilityUSImg.getPreferredLayeredImg(context, rid, false)
+                UtilityImg.getNexradRefBitmap(context, rid, false)
             } else {
                 UtilityImg.getBlankBitmap()
             }
@@ -145,7 +145,9 @@ internal object UtilityWidgetDownload {
         var fileOutputStream: FileOutputStream? = null
         try {
             val dir = File(context.filesDir.toString() + "/shared")
-            if (!dir.mkdirs()) UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+            if (!dir.mkdirs()) {
+                UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+            }
             val file = File(dir, fileName)
             fileOutputStream = FileOutputStream(file)
         } catch (e: Exception) {

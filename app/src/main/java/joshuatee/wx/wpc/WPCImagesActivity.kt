@@ -21,17 +21,17 @@
 
 package joshuatee.wx.wpc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
@@ -40,7 +40,6 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
 
     companion object { const val URL = "" }
 
-    private var bitmap = UtilityImg.getBlankBitmap()
     private var timePeriod = 1
     private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var arguments: Array<String>
@@ -66,7 +65,6 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, iconsEvenlySpaced = true, bottomToolbar = false)
         image = TouchImage(this, R.id.img)
@@ -106,11 +104,11 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
             val subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
             setTitle("Images", subtitle)
         }
-        FutureVoid(this, ::download, ::update)
+        FutureBytes2(this, ::download, ::update)
     }
 
-    private fun download() {
-        if (!calledFromHomeScreen) {
+    private fun download(): Bitmap {
+        return if (!calledFromHomeScreen) {
             val getUrl = when {
                 objectNavDrawerCombo.getUrl().contains("https://graphical.weather.gov/images/conus/") -> objectNavDrawerCombo.getUrl() + timePeriod + "_conus.png"
                 objectNavDrawerCombo.getUrl().contains("aviationweather") -> objectNavDrawerCombo.getUrl()
@@ -119,16 +117,16 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
             Utility.writePref(this, "WPG_IMG_FAV_URL", objectNavDrawerCombo.getUrl())
             Utility.writePrefInt(this, "WPG_IMG_IDX", objectNavDrawerCombo.imgIdx)
             Utility.writePrefInt(this, "WPG_IMG_GROUPIDX", objectNavDrawerCombo.imgGroupIdx)
-            bitmap = getUrl.getImage()
+            getUrl.getImage()
         } else {
-            bitmap = UtilityDownload.getImageProduct(this, homeScreenId)
             calledFromHomeScreen = false
+            UtilityDownload.getImageProduct(this, homeScreenId)
         }
     }
 
-    private fun update() {
-        image.setBitmap(bitmap)
-        image.firstRunSetZoomPosn(prefImagePosition)
+    private fun update(bitmap: Bitmap) {
+        image.set(bitmap)
+        image.firstRun(prefImagePosition)
         invalidateOptionsMenu()
     }
 
@@ -159,7 +157,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else
-                    UtilityShare.bitmap(this, objectNavDrawerCombo.getLabel(), bitmap)
+                    UtilityShare.bitmap(this, objectNavDrawerCombo.getLabel(), image.bitmap)
             }
             else -> return super.onOptionsItemSelected(item)
         }

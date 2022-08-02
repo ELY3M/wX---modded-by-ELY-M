@@ -21,18 +21,18 @@
 
 package joshuatee.wx.vis
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
-import android.graphics.drawable.AnimationDrawable
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.startAnimation
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.ObjectAnimate
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.radar.VideoRecordActivity
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import joshuatee.wx.util.To
@@ -51,9 +51,8 @@ class GoesActivity : VideoRecordActivity() {
 
     companion object { const val RID = "" }
 
-    private var bitmap = UtilityImg.getBlankBitmap()
+    private lateinit var objectAnimate: ObjectAnimate
     private lateinit var image: TouchImage
-    private var animDrawable = AnimationDrawable()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private var sector = "cgl"
     private var oldSector = "cgl"
@@ -72,13 +71,18 @@ class GoesActivity : VideoRecordActivity() {
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        objectAnimate.setButton(menu)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.goes16, iconsEvenlySpaced = true, bottomToolbar = false)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         arguments = intent.getStringArrayExtra(RID)!!
         objectNavDrawer = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes) { getContent(sector) }
         image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
+        objectAnimate = ObjectAnimate(this, image)
         toolbar.setOnClickListener { objectNavDrawer.open() }
         image.setMaxZoom(8.0f)
         image.connect(objectNavDrawer) { getContent(sector) }
@@ -92,15 +96,15 @@ class GoesActivity : VideoRecordActivity() {
         toolbar.title = UtilityGoes.sectorToName[sector] ?: ""
         toolbar.subtitle = objectNavDrawer.getLabel()
         if (!goesFloater) {
-            FutureVoid(this, { bitmap = UtilityGoes.getImage(objectNavDrawer.url, sector) }, ::display)
+            FutureBytes(this, UtilityGoes.getImage(objectNavDrawer.url, sector), ::display)
         } else {
-            FutureVoid(this, { bitmap = UtilityGoes.getImageGoesFloater(goesFloaterUrl, objectNavDrawer.url) }, ::display)
+            FutureBytes(this, UtilityGoes.getImageGoesFloater(goesFloaterUrl, objectNavDrawer.url), ::display)
         }
     }
 
-    private fun display() {
-        image.setBitmap(bitmap)
-        image.firstRunSetZoomPosn(prefImagePosition)
+    private fun display(bitmap: Bitmap) {
+        image.set(bitmap)
+        image.firstRun(prefImagePosition)
         if (oldSector != sector) {
             image.setZoom(1.0f)
             oldSector = sector
@@ -151,6 +155,13 @@ class GoesActivity : VideoRecordActivity() {
         }
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.GOES16)
+            R.id.action_animate -> {
+                if (objectAnimate.isRunning()) {
+                    objectAnimate.stop()
+                } else {
+                    getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
+                }
+            }
             R.id.action_a12 -> getAnimate(12)
             R.id.action_a24 -> getAnimate(24)
             R.id.action_a36 -> getAnimate(36)
@@ -159,6 +170,7 @@ class GoesActivity : VideoRecordActivity() {
             R.id.action_a72 -> getAnimate(72)
             R.id.action_a84 -> getAnimate(84)
             R.id.action_a96 -> getAnimate(96)
+            R.id.action_pause -> objectAnimate.pause()
             R.id.action_FD -> getContent("FD")
             R.id.action_FD_G17 -> getContent("FD-G17")
             R.id.action_CONUS -> getContent("CONUS")
@@ -188,14 +200,16 @@ class GoesActivity : VideoRecordActivity() {
             R.id.action_cam -> getContent("cam")
             R.id.action_taw -> getContent("taw")
             R.id.action_tpw -> getContent("tpw")
+            R.id.action_tsp -> getContent("tsp")
             R.id.action_wus -> getContent("wus")
             R.id.action_eep -> getContent("eep")
             R.id.action_np -> getContent("np")
+            R.id.action_na -> getContent("na")
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.bitmap(this, objectNavDrawer.getLabel(), bitmap)
+                    UtilityShare.bitmap(this, objectNavDrawer.getLabel(), image.bitmap)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -215,13 +229,9 @@ class GoesActivity : VideoRecordActivity() {
 
     private fun getAnimate(frameCount: Int) {
         if (!goesFloater) {
-            FutureVoid(this,
-                { animDrawable = UtilityGoes.getAnimation(this, objectNavDrawer.url, sector, frameCount) })
-                { animDrawable.startAnimation(image) }
+            objectAnimate.animateClicked({}) { UtilityGoes.getAnimation(objectNavDrawer.url, sector, frameCount) }
         } else {
-            FutureVoid(this,
-                { animDrawable = UtilityGoes.getAnimationGoesFloater(this, objectNavDrawer.url, sector, frameCount) })
-                { animDrawable.startAnimation(image) }
+            objectAnimate.animateClicked({}) { UtilityGoes.getAnimationGoesFloater(objectNavDrawer.url, sector, frameCount) }
         }
     }
 }

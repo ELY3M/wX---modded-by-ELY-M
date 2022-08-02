@@ -21,17 +21,15 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
-import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.common.GlobalArrays
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
@@ -51,7 +49,6 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     private var imgUrl = ""
     private lateinit var image: TouchImage
     private var state = ""
-    private var bitmap = UtilityImg.getBlankBitmap()
     private var firstTime = true
     private val imgPrefToken = "SWO_STATE"
 
@@ -65,7 +62,6 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, iconsEvenlySpaced = true, bottomToolbar = false)
         day = intent.getStringArrayExtra(NO)!![0]
@@ -83,12 +79,12 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         title = "SWO D$day"
         invalidateOptionsMenu()
         imgUrl = UtilitySpcSwo.getSwoStateUrl(state, day)
-        FutureVoid(this, { bitmap = imgUrl.getImage() }, ::showImage)
+        FutureBytes(this, imgUrl, ::showImage)
     }
 
-    private fun showImage() {
-        image.setBitmap(bitmap)
-        image.firstRunSetZoomPosn(imgPrefToken)
+    private fun showImage(bitmap: Bitmap) {
+        image.set(bitmap)
+        image.firstRun(imgPrefToken)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -101,7 +97,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
                 image.setZoom(1.0f)
                 state = GlobalArrays.states[it].split(":")[0]
             }
-            R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", image.bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

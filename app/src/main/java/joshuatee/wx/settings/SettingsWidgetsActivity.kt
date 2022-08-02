@@ -21,7 +21,6 @@
 
 package joshuatee.wx.settings
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.widget.CompoundButton
@@ -41,115 +40,40 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
     private lateinit var box: VBox
     private lateinit var abSwitch: SwitchCompat
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
         setTitle("Widgets", "Please tap on text for additional help.")
         box = VBox.fromResource(this)
         abSwitch = findViewById(R.id.abSwitch)
-        val locations = (1 until Location.numLocations + 1).map {
+        val locations = (1..Location.numLocations).map {
             "$it: " + Utility.readPref(this, "LOC" + it + "_LABEL", "").take(20)
         }
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Do not show 7day in CC widget",
-                        "WIDGET_CC_DONOTSHOW_7_DAY",
-                        R.string.cc_widget_show_sevenday
-                ).get()
+        val configs = listOf(
+            ObjectSwitch(this, "Do not show 7day in CC widget", "WIDGET_CC_DONOTSHOW_7_DAY", R.string.cc_widget_show_sevenday),
+            ObjectSwitch(this, "Download AFD", WidgetFile.AFD.prefString, R.string.loc1_txt_label),
+            ObjectSwitch(this, "Download HWO", WidgetFile.HWO.prefString, R.string.loc1_txt_hwo_label),
+            ObjectSwitch(this, "Download mosaics", WidgetFile.VIS.prefString, R.string.loc1_mosaics_label),
+            ObjectSwitch(this, "Download nexrad radar", WidgetFile.NEXRAD_RADAR.prefString, R.string.loc1_radar_label),
+            ObjectSwitch(this, "Download radar mosaic", WidgetFile.MOSAIC_RADAR.prefString, R.string.loc1_mosaics_rad_label),
         )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Download AFD",
-                        WidgetFile.AFD.prefString,
-                        R.string.loc1_txt_label
-                ).get()
+        configs.forEach {
+            box.addWidget(it.get())
+        }
+        val spinners = listOf(
+            ObjectSpinner(this, "Radar mosaic level", "WIDGET_RADAR_LEVEL", "1km", R.string.widget_nexrad_size_label, sectors),
+            ObjectSpinner(this, "Location", "WIDGET_LOCATION", "", R.string.spinner_location_label, locations),
+            ObjectSpinner(this, "Nexrad centered at:", "WIDGET_NEXRAD_CENTER", "", R.string.nexrad_center_label, nexradCenterList),
         )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Download HWO",
-                        WidgetFile.HWO.prefString,
-                        R.string.loc1_txt_hwo_label
-                ).get()
+        spinners.forEach {
+            box.addWidget(it.get())
+        }
+        val numberPickers = listOf(
+            ObjectNumberPicker(this,"Widget check interval in minutes", "CC_NOTIFICATION_INTERVAL", R.string.cc_interval_np_label, 30, 1, 120),
+            ObjectNumberPicker(this, "Widget nexrad size", "WIDGET_NEXRAD_SIZE", R.string.widget_nexrad_size_label, 10, 1, 15)
         )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Download mosaics",
-                        WidgetFile.VIS.prefString,
-                        R.string.loc1_mosaics_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Download nexrad radar",
-                        WidgetFile.NEXRAD_RADAR.prefString,
-                        R.string.loc1_radar_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSwitch(
-                        this,
-                        "Download radar mosaic",
-                        WidgetFile.MOSAIC_RADAR.prefString,
-                        R.string.loc1_mosaics_rad_label
-                ).get()
-        )
-        box.addWidget(
-                ObjectSpinner(
-                        this,
-                        "Radar mosaic level",
-                        "WIDGET_RADAR_LEVEL",
-                        "1km",
-                        R.string.widget_nexrad_size_label,
-                        sectors
-                ).get()
-        )
-        box.addWidget(
-                ObjectSpinner(
-                        this,
-                        "Location",
-                        "WIDGET_LOCATION",
-                        "",
-                        R.string.spinner_location_label,
-                        locations
-                ).get()
-        )
-        box.addWidget(
-                ObjectSpinner(
-                        this,
-                        "Nexrad centered at:",
-                        "WIDGET_NEXRAD_CENTER",
-                        "",
-                        R.string.nexrad_center_label,
-                        nexradCenterList
-                ).get()
-        )
-        box.addWidget(
-                ObjectNumberPicker(
-                        this,
-                        "Widget check interval in minutes",
-                        "CC_NOTIFICATION_INTERVAL",
-                        R.string.cc_interval_np_label,
-                        30,
-                        1,
-                        120
-                ).get()
-        )
-        box.addWidget(
-                ObjectNumberPicker(
-                        this,
-                        "Widget nexrad size",
-                        "WIDGET_NEXRAD_SIZE",
-                        R.string.widget_nexrad_size_label,
-                        10,
-                        1,
-                        15
-                ).get()
-        )
+        numberPickers.forEach {
+            box.addWidget(it.get())
+        }
         abSwitch.setOnCheckedChangeListener(this)
         abSwitch.isChecked = Utility.readPref(this, "WIDGETS_ENABLED", "false").startsWith("t")
     }

@@ -40,7 +40,11 @@ import java.util.Random
 /**
  * Our data observer just notifies an update for all weather widgets when it detects a change.
  */
-class WeatherDataProviderObserver(private val mAppWidgetManager: AppWidgetManager, private val mComponentName: ComponentName, handler: Handler) : ContentObserver(handler) {
+class WeatherDataProviderObserver(
+        private val mAppWidgetManager: AppWidgetManager,
+        private val mComponentName: ComponentName,
+        handler: Handler
+) : ContentObserver(handler) {
 
     override fun onChange(selfChange: Boolean) {
         // The data has changed, so notify the widget that the collection view needs to be updated.

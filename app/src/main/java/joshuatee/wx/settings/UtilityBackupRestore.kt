@@ -14,36 +14,33 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.xml.sax.SAXException
 import androidx.core.content.ContextCompat
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityAlertDialog
 import java.io.*
-import java.nio.file.Files
 
 
-class UtilityBackupRestore {
+object UtilityBackupRestore {
 
 
-        private val TAG = "joshuatee BackupRestore"
         val backupFilePath = File(GlobalVariables.BackupFilesPath)
         //BACKUP
         fun backupPrefs(context: Context) {
             val error: String?
-            Log.i(TAG, "File: " + context.filesDir.path)
+            Log.i("backuprestore", "File: " + context.filesDir.path)
 
             //checking for perms before check dir//
             if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "storage perms are good!")
+                Log.i("backuprestore", "storage perms are good!")
                 val dir = File(GlobalVariables.BackupFilesPath)
                 if (!dir.exists()) {
-                    Log.i(TAG, "making backup dir")
+                    Log.i("backuprestore", "making backup dir")
                     dir.mkdirs()
                 }
 
                 val paldir = File(GlobalVariables.BackupPalFilesPath)
                 if (!paldir.exists()) {
-                    Log.i(TAG, "making backup pal dir")
+                    Log.i("backuprestore", "making backup pal dir")
                     paldir.mkdirs()
                 }
 
@@ -58,25 +55,25 @@ class UtilityBackupRestore {
 
             val fileCopiedTo = File(GlobalVariables.BackupFilesPath + "preferenceBackup.xml")
             var fileCopiedFrom = File(context.filesDir.absolutePath + "/../shared_prefs/" + context.packageName + "_preferences.xml")
-            Log.d(TAG, "First Trying  " + fileCopiedFrom.absolutePath)
+            Log.d("backuprestore", "First Trying  " + fileCopiedFrom.absolutePath)
             if (!fileCopiedFrom.exists()) {
                 fileCopiedFrom = File("/dbdata/databases/" + context.packageName + "/../shared_prefs/" + context.packageName + "_preferences.xml")
-                Log.d(TAG, "Next Trying  " + fileCopiedFrom.absolutePath)
+                Log.d("backuprestore", "Next Trying  " + fileCopiedFrom.absolutePath)
                 if (!fileCopiedFrom.exists()) {
                     UtilityAlertDialog.showDialogBox("Backup failed", R.drawable.wx,"wX was unable to detect the location of your preferences on your device", context)
                     return
                 }
             }
-            Log.d(TAG, "Android Preference File " + fileCopiedTo.absolutePath)
-            Log.d(TAG, "Where prefs copied to " + fileCopiedFrom.absolutePath)
+            Log.d("backuprestore", "Android Preference File " + fileCopiedTo.absolutePath)
+            Log.d("backuprestore", "Where prefs copied to " + fileCopiedFrom.absolutePath)
             try {
                 val src = FileInputStream(fileCopiedFrom).channel
                 val dst = FileOutputStream(fileCopiedTo).channel
                 dst.transferFrom(src, 0, src.size())
                 src.close()
                 dst.close()
-                Log.d(TAG, "wXPATH=${GlobalVariables.BackupFilesPath}")
-                Log.d(TAG, "where backup files are written to " + backupFilePath.absolutePath)
+                Log.d("backuprestore", "wXPATH=${GlobalVariables.BackupFilesPath}")
+                Log.d("backuprestore", "where backup files are written to " + backupFilePath.absolutePath)
                 UtilityAlertDialog.showDialogBox("Backup Done", R.drawable.wx, "Backed up user preferences and files to " + GlobalVariables.BackupFilesPath, context)
                 return
             } catch (e: FileNotFoundException) {
@@ -169,9 +166,9 @@ class UtilityBackupRestore {
         val s = File(GlobalVariables.FilesPath)
         val d = File(GlobalVariables.BackupFilesPath)
         s.listFiles().forEach {
-            Log.i(TAG, "backing up: "+it.name+" to "+File(d.absolutePath).path+ '/' +it.name)
+            Log.i("backuprestore", "backing up: "+it.name+" to "+File(d.absolutePath).path+ '/' +it.name)
             if (it.exists()) {
-                Log.i(TAG, "File Exists: "+File(d.absolutePath).path+ '/' +it.name)
+                Log.i("backuprestore", "File Exists: "+File(d.absolutePath).path+ '/' +it.name)
             } else {
                 it.copyRecursively(File(File(d.absolutePath).path + '/' + it.name), true)
             }
@@ -185,7 +182,7 @@ class UtilityBackupRestore {
         val s = File(GlobalVariables.BackupFilesPath)
         val d = File(GlobalVariables.FilesPath)
         s.listFiles().forEach {
-            Log.i(TAG, "backing up: "+it.name+" to "+File(d.absolutePath).path+ '/' +it.name)
+            Log.i("backuprestore", "backing up: "+it.name+" to "+File(d.absolutePath).path+ '/' +it.name)
             it.copyRecursively(File(File(d.absolutePath).path + '/' + it.name), true)
         }
 

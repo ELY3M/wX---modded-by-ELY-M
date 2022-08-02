@@ -56,7 +56,11 @@ object UtilityUS {
         val lines = text.split("\n").dropLastWhile { it.isEmpty() }
         val list = lines.lastOrNull { it.contains(",$obsShortCode") } ?: ""
         val items = list.split(",")
-        return if (items.size > 2) items[0] + ", " + items[1] else ""
+        return if (items.size > 2) {
+            items[0] + ", " + items[1]
+        } else {
+            ""
+        }
     }
 
     fun checkForNotifications(context: Context, currentLoc: Int, inBlackout: Boolean, tornadoWarningString: String): String {

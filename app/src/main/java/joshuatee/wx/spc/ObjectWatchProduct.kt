@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.content.Context
-import android.graphics.Bitmap
 import joshuatee.wx.Extensions.condenseSpace
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.Extensions.parse
@@ -30,7 +29,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.LatLon
-import joshuatee.wx.radar.UtilityDownloadWatch
+import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityImg
@@ -45,7 +44,7 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         private set
     var prod = ""
         private set
-    var bitmap: Bitmap = UtilityImg.getBlankBitmap()
+    var bitmap = UtilityImg.getBlankBitmap()
         private set
     var text = ""
         private set
@@ -78,17 +77,34 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         }
     }
 
-    fun getData(context: Context) {
+//    fun getData(context: Context) {
+//        text = UtilityDownload.getTextProduct(context, prod)
+//        var textWithLatLon = text
+//        if (type == PolygonType.WATCH || type == PolygonType.WATCH_TORNADO) {
+//            textWithLatLon = ObjectPolygonWatch.getLatLonWatch(productNumber)
+//        }
+//        stringOfLatLon = UtilityNotification.storeWatchMcdLatLon(textWithLatLon).replace(":", "")
+//        latLons = stringOfLatLon.split(" ")
+//        bitmap = imgUrl.getImage()
+//        val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
+//        wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
+//    }
+
+    fun getText(context: Context) {
         text = UtilityDownload.getTextProduct(context, prod)
         var textWithLatLon = text
         if (type == PolygonType.WATCH || type == PolygonType.WATCH_TORNADO) {
-            textWithLatLon = UtilityDownloadWatch.getLatLon(productNumber)
+            textWithLatLon = ObjectPolygonWatch.getLatLonWatch(productNumber)
         }
         stringOfLatLon = UtilityNotification.storeWatchMcdLatLon(textWithLatLon).replace(":", "")
         latLons = stringOfLatLon.split(" ")
-        bitmap = imgUrl.getImage()
+//        bitmap = imgUrl.getImage()
         val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
         wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
+    }
+
+    fun getImage() {
+        bitmap = imgUrl.getImage()
     }
 
     private fun getCenterOfPolygon(latLons: List<LatLon>): LatLon {

@@ -24,7 +24,10 @@ package joshuatee.wx.audio
 import android.app.IntentService
 import android.content.Intent
 
+// TODO FIXME https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
 class PlayAudioService : IntentService("PlayAudioService") {
 
-    override fun onHandleIntent(intent: Intent?) { UtilityTts.playAgainTts(this) }
+    override fun onHandleIntent(intent: Intent?) {
+        UtilityTts.playAgainTts(this)
+    }
 }

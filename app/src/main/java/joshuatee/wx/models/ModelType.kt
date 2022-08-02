@@ -28,6 +28,5 @@ enum class ModelType {
     NCEP,
     SPCHREF,
     SPCHRRR,
-    GLCFS,
     SPCSREF,
 }

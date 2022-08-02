@@ -1,13 +1,11 @@
 ```
-// TODO [FIX] dual/quad pane radar don't take up the entire screen on chromeOS
 // TODO [FIX] chromeOS: text size for observations in nexrad
 // TODO [FIX] storm reports - having location follow gps breaks the location marker
 // TODO [REF] WXGLRender rename rid to radarSite
 // TODO [FIX] NSSL WRF needs better runtime detection (reference C++ code)
 // TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
 // TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
-// TODO [FIX] code cleanup in utilDownloadMcd/w/mpd
-// TODO [REF] migrate all to Future* (radar/LocationFragment)
+// TODO [REF] migrate all to Future* (BackgroundFetch, Nexrad)
 // TODO [ADD] have nexrad long press verbiage match iOS version
 // TODO [REF] replace String.format with stuff in to.kt
 // TODO [FIX] review multipane data usage
@@ -15,29 +13,88 @@
 // TODO [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
 // TODO [ADD] look to replace AWC radar mosaics with normal NWS (looks like AWC website redesign might obsolete)
 // [FIX] SPC HREF radar stuff
-// [FIX] when animating in vis/mosaic, show stop button, etc
-// [REF] ObjectPolygonWatch ?
-// [REF] PolygonType rename MCD -> Mcd, etc
 // [REF] IntentService is deprecated (AudioService* and others) https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
-// [REF] After Oct 2022 - raise minSDK to Android 6	Level 23	Marshmallow
-// [FIX] common verbiage between nexrad long press ios and android
+// [REF] After Oct 2022 - raise minSDK to Android 6	API 23	Marshmallow
+// [REF] After Oct 2023 - raise minSDK to Android 7.1 API 25 Nougat (update upcoming changes)
 // [REF] WXGLRender should show elements based on pref not buffer size (ca/mx statelines ex.)
-// [REF] unecessary try in locfrag
 // [ADD] handle deprecations in UtilityUI https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
-// [FIX] settings color pal editor shows "null"
+// [FIX] SpcMcdWatchShowSummaryActivity - radar icon does not work
 // [FIX] nexrad invoked from alert will not keep site when jump to multipane
 // [FIX] USAlerts state count is not accurate
 // [REF] VBox removeChildren* - https://stackoverflow.com/questions/11952598/whats-difference-between-removeallviews-and-removeallviewsinlayout
-// [REF] rationalize multiple model activities
-// [ADD] onrestart for MCD
-// [REF] rationalize multiple MCD activities
+// [REF] rationalize multiple MCD activities, onrestart for MCD
 // [REF] ObjectDateTime migration
+// [REF] deprecate ExternalDuplicateRemover used in UtilityVtec
+// [ADD] deprecate launch to radar (add to gitlab page after API25 or lower is deprecated, static pinned launchers supported in API26 Android 8.0)
+// [FIX] dual/quad pane radar don't take up the entire screen on chromeOS and pixel 6a
+// [FIX] deprecated startActivityForResult onActivityResult (see example in SettingsNotificationsActivity.kt)
+// [REF] migrate UtilityDownloadWarnings.kt -> ObjectPolygonWarning.kt
+// [REF] ImageMap.java: This custom view should extend `androidx.appcompat.widget.AppCompatImageView` instead
 ```
 [[_TOC_]]
+
+TEST: nexrad immersive mode, nexrad transparent status bar
+
+## 55647 2022_08_01
+* [REF] misc refactor
+* [FIX] deprecations in UtilityUI.immersiveMode, Nexrad related to tranparent status bar
+
+## 55646 2022_08_01
+* [REF] misc refactor
+* [ADD] In Settings -> Homescreen the menu option "Set to default (Canada)" is being removed in preparation for CA content removal by end of next year.
+* [ADD] SettingsLocationGenericActivity.kt in onRequestPermissionsResult add super call, remove unused VR code
+* [ADD] Settings -> celsius to fahrenheit table was rounding to integer but still showing with ".0" at the end - remove
+* [FIX] in response to pixel 6a having main screen nav drawer truncating top entry made these two changes:
+* [FIX] in nav_header_main.xml change the main LinearLayout from android:layout_height="@dimen/nav_header_height" to android:layout_height="match_parent"
+* [FIX] in nav_header_main.xml change the main LinearLayout from android:gravity="bottom" to android:gravity="center_vertical"
+* [FIX] in activity_main_drawer.xml and app/src/main/res/layout/activity_main_drawer_right.xml change NavigationView at bottom to android:fitsSystemWindows="false"
+* [ADD] refactor Settings* to match desktop ports
+* [ADD] restructure (MCD/MPD/Watch viewer) SpcMcdWatchShowActivity to download text and image in parallel
+* [REF] ObjectCardCurrentConditions.kt, remove time arg for updateContent, rename to  update
+* [REF] ObjectCardCurrentConditions.kt, rename "updateContent" to "update"
+* [REF] ObjectCardCurrentConditions.kt, remove "bitmap: Bitmap" as first arg to "update"
+* [REF] ObjectCard7Day taking url instead of bitmap as 2nd arg
+* [REF] rename ObjectCard7Day to SevenDayCard
+* [REF] fix deprecated startActivityForResult, onActivityResult in SettingsNotificationsActivity.kt, CommonActionBarFragment.kt
+* [ADD] new GOES sector: South Pacific
+* [ADD] new GOES sector: Northern Atlantic
+* [ADD] GOES activity - in Pac/Atl submenu - alphabetize entries
+* [ADD] GOES activity - in Regional Views - alphabetize entries
+* [ADD] GOES activity - add new submenu "North/South America" as "Regional Views" had too many entries
+* [FIX] The following model is being removed from the program due to it's experimental nature and numerous breaking changes over the years:
+        **it was accessible only via the NHC activity**: Great Lakes Coastal Forecasting System, GLCFS
+        You can access it via a web browser here: https://www.glerl.noaa.gov/res/glcfs/
+        As a reminder the best model interface in terms of stability continues to be MAG NCEP (MISC Tab - upper left)
+        I believe all other models with interfaces provided are not considered true production services, please contact me if I am wrong
+
+## 55645 2022_07_29
+* [ADD] ObjectAnimate.kt to be used in RadarMosaicNwsActivity/SPC Meso/Vis
+* [REF] cut-over WATCH to ObjectPolygonWatch
+* [ADD] Vis/SPC Meso/Radar Mosaic now have a play/stop/pause bottom for animations that is more appropriate to the circumstance and similar to Nexrad
+* [ADD] In GOES/SPC Meso animate icon now uses the number of frames (default 10 - can be change in settings->UI), similar to nexrad
+        a submenu in the main menu will allow access to the other frame count choices
+
+
+## 55644 2022_07_27
+* [FIX] locfrag continued attempts to fix crash on app launch on older versions
+
+## 55643 2022_07_27
+* [ADD] locfrag.getRadar - move to FutureVoid. (ran into issues on initial attempt, not able to replicate failures in google pre-launch but did find emulators with older APIs to replicate)
+        ended up using MyApplication.appContext instead of activityReference in several spots
+* [REF] cut-over MCD to ObjectPolygonWatch
+
+## 55642 2022_07_27
+* [REF] misc refactor
+* [FIX] revert locfrag change
+
+## 55641 2022_07_27
+* [REF] misc refactor
+* [REF] locfrag, move to FutureVoid
 
 ## 55640 2022_07_26
 * [REF] misc refactor
 * [REF] readPref -> readPrefInt
+* [REF] cut-over MPD to ObjectPolygonWatch, put framework for Mcd/Watch in place as well
 
 ## 55639 2022_07_26
 * [REF] misc refactor

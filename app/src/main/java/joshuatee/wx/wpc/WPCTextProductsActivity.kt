@@ -21,7 +21,6 @@
 
 package joshuatee.wx.wpc
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
@@ -36,7 +35,7 @@ import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
@@ -55,7 +54,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private lateinit var arguments: Array<String>
     private var product = ""
-    private var html = ""
     private var initialProduct = ""
     private var products = listOf<String>()
     private lateinit var star: MenuItem
@@ -77,14 +75,8 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpctextproducts, R.menu.wpctext_products)
-        scrollView = findViewById(R.id.scrollView)
-        box = VBox.fromResource(this)
-        toolbarBottom.setOnMenuItemClickListener(this)
-        star = toolbarBottom.menu.findItem(R.id.action_fav)
-        notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         arguments = intent.getStringArrayExtra(URL)!!
         if (arguments[0] == "pmdspd") {
             product = UIPreferences.wpcTextFav
@@ -92,6 +84,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             product = arguments[0]
             initialProduct = product
         }
+        scrollView = findViewById(R.id.scrollView)
+        box = VBox.fromResource(this)
+        toolbarBottom.setOnMenuItemClickListener(this)
+        star = toolbarBottom.menu.findItem(R.id.action_fav)
+        notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         cardText = CardText(this, box, toolbar, toolbarBottom)
         UtilityWpcText.create()
         objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
@@ -110,10 +107,10 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
         ridFavOld = UIPreferences.nwsTextFav
-        FutureVoid(this, { html = UtilityDownload.getTextProduct(this, product) }, ::showText)
+        FutureText(this, product, ::showText)
     }
 
-    private fun showText() {
+    private fun showText(html: String) {
         cardText.setTextAndTranslate(html)
         if (UtilityWpcText.needsFixedWidthFont(product.uppercase(Locale.US))) {
             cardText.typefaceMono()
@@ -128,8 +125,8 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        val textToShare = UtilityShare.prepTextForShare(html)
-        if (audioPlayMenu(item.itemId, html, product, product)) {
+        val textToShare = UtilityShare.prepTextForShare(cardText.text)
+        if (audioPlayMenu(item.itemId, cardText.text, product, product)) {
             return true
         }
         when (item.itemId) {

@@ -21,7 +21,6 @@
 
 package joshuatee.wx.models
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
 import android.view.KeyEvent
@@ -76,7 +75,6 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         arguments = intent.getStringArrayExtra(INFO)!!
         om = ObjectModel(this, arguments[1], arguments[0])
@@ -195,7 +193,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
             R.id.action_img1 -> {
                 om.curImg = 0
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                UtilityModels.setSubtitleRestoreZoom(
                         om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
@@ -203,7 +201,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
             R.id.action_img2 -> {
                 om.curImg = 1
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                UtilityModels.setSubtitleRestoreZoom(
                         om.displayData.image,
                         toolbar,
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]

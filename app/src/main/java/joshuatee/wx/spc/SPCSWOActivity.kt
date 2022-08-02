@@ -21,7 +21,6 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -29,9 +28,9 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
@@ -48,7 +47,6 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val NUMBER = "" }
 
-    private var html = ""
     private val bitmaps = MutableList(5) { UtilityImg.getBlankBitmap() }
     private var urls = listOf<String>()
     private lateinit var arguments: Array<String>
@@ -60,7 +58,6 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var imagesPerRow = 2
     private var imageLabel = ""
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcswo)
         arguments = intent.getStringArrayExtra(NUMBER)!!
@@ -134,10 +131,10 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             textUrl = "SWOD48"
         }
         FutureVoid(this, ::downloadImages) {}
-        FutureVoid(this, { html = UtilityDownload.getTextProduct(this, textUrl) }, ::showText)
+        FutureText(this, textUrl, ::showText)
     }
 
-    private fun showText() {
+    private fun showText(html: String) {
         cardText.text = html
         toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
         if (arguments[1] == "sound") {
@@ -163,8 +160,8 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        val textToShare = UtilityShare.prepTextForShare(html)
-        if (audioPlayMenu(item.itemId, html, playlistProd, playlistProd)) {
+        val textToShare = UtilityShare.prepTextForShare(cardText.text)
+        if (audioPlayMenu(item.itemId, cardText.text, playlistProd, playlistProd)) {
             return true
         }
         when (item.itemId) {

@@ -54,7 +54,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
     //
     // The is the OpenGL rendering engine that is used on the main screen and the main radar interface
-    // The goal is to be highly performant and configurable as such this module used to rely on C code accessed via JNI extensively
+    // The goal is to be highly performant and configurable as such this module *used* to rely on C code accessed via JNI extensively
     // Kotlin can also be used in set in settings->radar and has been the default since 2017 as the performance is quite good
     // and it's much easier to debug issue
     //
@@ -62,9 +62,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     companion object {
         var ridGlobal = ""
             private set
-        var positionXGlobal = 0f
+        var positionXGlobal = 0.0f
             private set
-        var positionYGlobal = 0f
+        var positionYGlobal = 0.0f
             private set
         const val ortIntGlobal = 400
         var oneDegreeScaleFactorGlobal = 0.0f
@@ -96,8 +96,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     private val matrixProjectionAndViewOrig = FloatArray(16)
     private var triangleIndexBuffer = ByteBuffer.allocate(0)
     private var lineIndexBuffer = ByteBuffer.allocate(0)
-    private var gpsX = 0.toDouble()
-    private var gpsY = 0.toDouble()
+    private var gpsX = 0.0
+    private var gpsY = 0.0
     private val zoomToHideMiscFeatures = 0.5f
     private val radarBuffers = ObjectOglRadarBuffers(context, RadarPreferences.nexradRadarBackgroundColor)
     private val spotterBuffers = ObjectOglBuffers(PolygonType.SPOTTER, zoomToHideMiscFeatures)
@@ -129,7 +129,12 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     private val genericWarningBuffers = mutableListOf<ObjectOglBuffers>()
     private var wpcFrontBuffersList = mutableListOf<ObjectOglBuffers>()
     private var wpcFrontPaints = mutableListOf<Int>()
-    private val colorSwo = intArrayOf(Color.MAGENTA, Color.RED, Color.rgb(255, 140, 0), Color.YELLOW, Color.rgb(0, 100, 0))
+    private val colorSwo = intArrayOf(
+            Color.MAGENTA,
+            Color.RED,
+            Color.rgb(255, 140, 0),
+            Color.YELLOW,
+            Color.rgb(0, 100, 0))
     private var breakSize15 = 15000
     private val breakSizeRadar = 15000
     private var positionHandle = 0
@@ -168,13 +173,13 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 UtilityWXOGLPerf.genLocdot(locIconBuffers, projectionNumbers, gpsX, gpsY)
             }
         }
-    private var surfaceRatio = 0f
-    var x = 0f
+    private var surfaceRatio = 0.0f
+    var x = 0.0f
         set(x) {
             field = x
             positionXGlobal = x
         }
-    var y = 0f
+    var y = 0.0f
         set(y) {
             field = y
             positionYGlobal = y
@@ -229,7 +234,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             Jni.genIndex(triangleIndexBuffer, breakSize15, breakSize15)
             Jni.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
         }
-        RadarPreferences.radarWarningPolygons.forEach { genericWarningBuffers.add(ObjectOglBuffers(it)) }
+        RadarPreferences.radarWarningPolygons.forEach {
+            genericWarningBuffers.add(ObjectOglBuffers(it))
+        }
         if (UtilityUI.isTablet()) {
             zoomScreenScaleFactor = 2.0
         }
@@ -1809,11 +1816,13 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     fun deconstructSwoLines() {
         swoBuffers.isInitialized = false
     }
-/*
+
+    /*
     fun setHiInit(hiInit: Boolean) {
-        hiBuffers.isInitialized = hiInit
+        hiBuffersList.isInitialized = hiInit
     }
-*/
+    */
+
     fun setTvsInit(tvsInit: Boolean) {
         tvsBuffers.isInitialized = tvsInit
     }
