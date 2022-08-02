@@ -102,7 +102,9 @@ class WXGLDownload {
             }
             var mostRecentSn = ""
             val mostRecentTime = snDates.last()
-            (0 until snDates.lastIndex).filter { snDates[it] == mostRecentTime }.forEach { mostRecentSn = snFiles[it] }
+            (0 until snDates.lastIndex).filter { snDates[it] == mostRecentTime }.forEach {
+                mostRecentSn = snFiles[it]
+            }
             try {
                 val seq = mostRecentSn.replace("sn.", "").toIntOrNull() ?: 0
                 var j = 0
@@ -142,8 +144,10 @@ class WXGLDownload {
             var additionalAdd = 0
             val fnSize = list[list.size - 2].toIntOrNull() ?: 1
             val fnPrevSize = list[list.size - 4].toIntOrNull() ?: 1
-            val ratio = fnSize.toFloat() / fnPrevSize.toFloat()
-            if (ratio < 0.75) additionalAdd = 1
+            val ratio = fnSize / fnPrevSize.toFloat()
+            if (ratio < 0.75) {
+                additionalAdd = 1
+            }
             (0 until frameCount).forEach { count ->
                 val token = list.getOrNull(arrLength - (frameCount - count + additionalAdd) * 2 + 1)
                 if (token != null) {
@@ -167,7 +171,7 @@ class WXGLDownload {
             val fnPrev = list[list.size - 3]
             val fnSize = list[list.size - 2].toIntOrNull() ?: 1
             val fnPrevSize = list[list.size - 4].toIntOrNull() ?: 1
-            val ratio = fnSize.toFloat() / fnPrevSize.toFloat()
+            val ratio = fnSize / fnPrevSize.toFloat()
             if (ratio < 0.75) {
                 fileName = fnPrev
             }
@@ -189,7 +193,7 @@ class WXGLDownload {
             }
             return try {
                 val request = Request.Builder().url(url).header("Range", "bytes=0-$byteEnd").build()
-                val response = MyApplication.httpClient.newCall(request).execute() // was client
+                val response = MyApplication.httpClient.newCall(request).execute()
                 response.body!!.byteStream()
             } catch (e: IOException) {
                 null

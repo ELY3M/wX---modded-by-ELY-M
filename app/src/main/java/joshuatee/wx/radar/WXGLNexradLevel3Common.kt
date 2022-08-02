@@ -39,8 +39,7 @@ internal object WXGLNexradLevel3Common {
         val externalGlobalCoordinates = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
             start,
             startBearing,
-            distance
-        )
+            distance)
         return startPoint.asList() + UtilityCanvasProjection.computeMercatorNumbers(externalGlobalCoordinates, projectionNumbers).toList()
     }
 
@@ -55,8 +54,7 @@ internal object WXGLNexradLevel3Common {
         val externalGlobalCoordinates = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
             start,
             startBearing,
-            distance
-        )
+            distance)
         return startPoint.toList() + UtilityCanvasProjection.computeMercatorNumbers(externalGlobalCoordinates, projectionNumbers).toList()
     }
 

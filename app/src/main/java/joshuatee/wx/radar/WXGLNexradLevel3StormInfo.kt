@@ -102,8 +102,7 @@ internal object WXGLNexradLevel3StormInfo {
                                 projectionNumbers,
                                 start,
                                 startBearing,
-                                arrowLength * 1852.0
-                        )
+                                arrowLength * 1852.0)
                     }
                     // 0,15,30,45 min ticks
                     val stormTrackTickMarkAngleOff90 = 45.0 // was 30.0

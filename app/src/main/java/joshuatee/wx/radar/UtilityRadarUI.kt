@@ -101,7 +101,7 @@ internal object UtilityRadarUI {
         longPressList.clear()
         val locX = To.double(lat)
         val locY = To.double(lon)
-        val pointX = wxglSurfaceView.newY.toDouble()
+        val pointX = wxglSurfaceView.newY
         val pointY = wxglSurfaceView.newX * -1.0
         val dist = LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
         val ridX = To.double(Utility.getRadarSiteX(wxglRender.rid))
@@ -199,8 +199,8 @@ internal object UtilityRadarUI {
         wxglSurfaceView.setRenderVar(wxglRenders[index], wxglRenders, wxglSurfaceViews)
         wxglSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
         wxglSurfaceView.setOnProgressChangeListener(changeListener)
-        wxglRenders[index].zoom = RadarPreferences.wxoglSize.toFloat() / 10.0f
-        wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize.toFloat() / 10.0f
+        wxglRenders[index].zoom = RadarPreferences.wxoglSize / 10.0f
+        wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize / 10.0f
         return true
     }
 
@@ -454,8 +454,8 @@ internal object UtilityRadarUI {
     }
 
     fun resetGlview(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender) {
-        wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize.toFloat() / 10.0f
-        wxglRender.setViewInitial(RadarPreferences.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
+        wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize / 10.0f
+        wxglRender.setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
         wxglSurfaceView.requestRender()
     }
 

@@ -53,6 +53,13 @@ class LatLon() {
         yStr = lonNum.toString()
     }
 
+    constructor(latNum: Float, lonNum: Float) : this() {
+        this.latNum = latNum.toDouble()
+        this.lonNum = lonNum.toDouble()
+        xStr = latNum.toString()
+        yStr = lonNum.toString()
+    }
+
     constructor(xStr: String, yStr: String) : this() {
         this.xStr = xStr
         this.yStr = yStr

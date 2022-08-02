@@ -55,18 +55,16 @@ class SettingsAboutActivity : BaseActivity() {
         box = VBox.fromResource(this)
         setTitle("About wX", "version " + Utility.getVersion(this))
 
-        val faqButton = CardText(this, box, toolbar, toolbarBottom)
+        val faqButton = CardText(this, box, "View FAQ (current app issues listed at top)")
         faqButton.setTextColor(UIPreferences.textHighlightColor)
-        faqButton.text = "View FAQ (current app issues listed at top)"
         faqButton.connect { Route.web(this, faqUrl) }
 
-        val releaseNotesButton = CardText(this, box, toolbar, toolbarBottom)
+        val releaseNotesButton = CardText(this, box, "View release notes")
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
-        releaseNotesButton.text = "View release notes"
         releaseNotesButton.connect { Route.web(this, releaseNotesUrl) }
 
-        cardText = CardText(this, box, toolbar, toolbarBottom)
-        val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)", UIPreferences.textSizeNormal, UIPreferences.paddingSettings)
+        cardText = CardText(this, box)
+        val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
         cardDeleteFiles.connect {
             ObjectPopupMessage(box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         }

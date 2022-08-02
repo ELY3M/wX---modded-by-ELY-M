@@ -66,8 +66,7 @@ internal object WXGLNexradLevel3WindBarbs {
                 ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                     start,
                     degree2 + degreeShift,
-                    barbLength * nmScaleFactor * barbLengthScaleFactor
-                )
+                    barbLength * nmScaleFactor * barbLengthScaleFactor)
                 val end = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
                 stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers).toList()
                 var barbCount = length / 10
@@ -92,52 +91,44 @@ internal object WXGLNexradLevel3WindBarbs {
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
-                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
-                    )
+                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         projectionNumbers,
                         degree2 - arrowBend * 2.0,
-                        startLength + arrowLength * nmScaleFactor
-                    )
+                        startLength + arrowLength * nmScaleFactor)
                     // perpendicular line from main barb
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
-                        barbOffset + startLength + -1.0 * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
-                    )
+                        barbOffset + startLength + -1.0 * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         projectionNumbers,
                         degree2 - 90.0,
-                        startLength + 0.80 * arrowLength * nmScaleFactor
-                    )
+                        startLength + 0.80 * arrowLength * nmScaleFactor)
                     // connecting line parallel to main barb
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
-                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
-                    )
+                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         projectionNumbers,
                         degree2 - 180.0,
-                        startLength + 0.5 * arrowLength * nmScaleFactor
-                    )
+                        startLength + 0.5 * arrowLength * nmScaleFactor)
                     index += 1
                 }
                 (index until barbCount).forEach { _ ->
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
-                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
-                    )
+                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         projectionNumbers,
                         degree2 - arrowBend * 2.0,
-                        startLength + arrowLength * nmScaleFactor
-                    )
+                        startLength + arrowLength * nmScaleFactor)
                     index += 1
                 }
                 var halfBarbOffsetFudge = 0.0
@@ -148,14 +139,12 @@ internal object WXGLNexradLevel3WindBarbs {
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
                         end,
                         degree2,
-                        barbOffset + halfBarbOffsetFudge + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
-                    )
+                        barbOffset + halfBarbOffsetFudge + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
                     stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         projectionNumbers,
                         degree2 - arrowBend * 2.0,
-                        startLength + arrowLength / 2.0 * nmScaleFactor
-                    )
+                        startLength + arrowLength / 2.0 * nmScaleFactor)
                 }
             } // if length greater then 4
         } // loop over wind barbs

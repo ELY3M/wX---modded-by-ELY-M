@@ -82,11 +82,11 @@ object UtilityCanvasProjection {
             xTmp = numBuffer.float
             yTmp = numBuffer.float
             x = (-((yTmp - pnYFloat) * oneDegreeScaleFactor)) + pnXCenter.toFloat()
-            y = (-((180 / PI * log(
-                tan(PI / 4 + xTmp * (PI / 180) / 2),
+            y = (-((180.0 / PI * log(
+                tan(PI / 4.0 + xTmp * (PI / 180.0) / 2.0),
                 E
-            ) - 180 / PI * log(
-                tan(PI / 4 + pnXFloat * (PI / 180) / 2),
+            ) - 180.0 / PI * log(
+                tan(PI / 4.0 + pnXFloat * (PI / 180.0) / 2.0),
                 E
             )) * oneDegreeScaleFactor)).toFloat() + pnYCenter.toFloat()
             tmpBuffer.putFloat(x)
@@ -101,11 +101,11 @@ object UtilityCanvasProjection {
     fun computeMercatorNumbers(x: Double, y: Double, pn: ProjectionNumbers) =
         doubleArrayOf(
             (-((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat(),
-            (-((180 / PI * log(
-                tan(PI / 4 + x * (PI / 180) / 2),
+            (-((180.0 / PI * log(
+                tan(PI / 4.0 + x * (PI / 180.0) / 2.0),
                 E
-            ) - 180 / PI * log(
-                tan(PI / 4 + pn.xDbl * (PI / 180) / 2),
+            ) - 180.0 / PI * log(
+                tan(PI / 4.0 + pn.xDbl * (PI / 180.0) / 2.0),
                 E
             )) * pn.oneDegreeScaleFactor)) + pn.yCenter
         )

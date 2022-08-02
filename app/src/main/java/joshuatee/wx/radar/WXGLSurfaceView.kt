@@ -42,12 +42,13 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import kotlin.math.*
 
-class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
-    GestureDetector.OnDoubleTapListener {
+class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
+    //
     // currently used in location frag and USWXOGLRadarActivity to more clearly separate touch events
     // WXGLSurfaceView is used to track and respond to user touch events when in the OpenGL based radar
     // pinch zoom, drag, double/single tap, and long press are all handled here
+    //
 
     companion object {
         var scaleFactorGlobal = 1.0f
@@ -62,9 +63,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     var archiveMode = false
     private var toolbarsHidden = false
     private var mScaleFactor = 1.0f
-    var newX = 0.0f
+    var newX = 0.0
         private set
-    var newY = 0.0f
+    var newY = 0.0
         private set
     private var centerX = 0.0f
     private var centerY = 0.0f
@@ -208,23 +209,23 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
                 toolbarBottom!!.visibility = View.VISIBLE
             }
         }
-        density = (wxglRender.ortInt * 2).toFloat() / width
+        density = (wxglRender.ortInt * 2.0f) / width
         xPos = event.x
         yPos = event.y
-        xMiddle = (width / 2).toFloat()
-        yMiddle = (height / 2).toFloat()
+        xMiddle = width / 2.0f
+        yMiddle = height / 2.0f
         val diffX = density * (xMiddle - xPos) / mScaleFactor
         val diffY = density * (yMiddle - yPos) / mScaleFactor
         val xStr = Utility.getRadarSiteX(wxglRender.rid)
         val yStr = Utility.getRadarSiteY(wxglRender.rid)
         centerX = xStr.toFloatOrNull() ?: 0.0f
         centerY = yStr.toFloatOrNull() ?: 0.0f
-        val ppd = wxglRender.oneDegreeScaleFactor
+        val ppd = wxglRender.oneDegreeScaleFactor.toDouble()
         newX = centerY + (wxglRender.x / mScaleFactor + diffX) / ppd
         val test2 = 180.0 / PI * log(tan(PI / 4.0 + centerX * (PI / 180.0) / 2.0), E)
-        newY = test2.toFloat() + (-wxglRender.y / mScaleFactor + diffY) / ppd
-        newY = (180.0 / PI * (2.0 * atan(exp(newY * PI / 180.0)) - PI / 2.0)).toFloat()
-        wxglRender.ridNewList = UtilityLocation.getNearestRadarSites(LatLon(newY.toString(), (newX * -1).toString()), 5)
+        newY = test2 + (-1.0 * wxglRender.y / mScaleFactor + diffY) / ppd
+        newY = (180.0 / PI * (2.0 * atan(exp(newY * PI / 180.0)) - PI / 2.0))
+        wxglRender.ridNewList = UtilityLocation.getNearestRadarSites(LatLon(newY, newX * -1), 5)
         listener?.onProgressChanged(index, index, idxInt)
     }
 
@@ -319,9 +320,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
 
     // used only if center on location enabled
     fun resetView() {
-        density = (wxglRender.ortInt * 2).toFloat() / width
-        xMiddle = (width / 2).toFloat()
-        yMiddle = (height / 2).toFloat()
+        density = (wxglRender.ortInt * 2.0f) / width
+        xMiddle = width / 2.0f
+        yMiddle = height / 2.0f
         val zoomFactor = 1.0f
         if (RadarPreferences.wxoglCenterOnLocation) {
             if (RadarPreferences.dualpaneshareposn && !locationFragment) {
@@ -350,11 +351,11 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     }
 
     override fun onDoubleTap(event: MotionEvent): Boolean {
-        density = (wxglRender.ortInt * 2).toFloat() / width
+        density = (wxglRender.ortInt * 2.0f) / width
         xPos = event.x
         yPos = event.y
-        xMiddle = (width / 2).toFloat()
-        yMiddle = (height / 2).toFloat()
+        xMiddle = width / 2.0f
+        yMiddle = height / 2.0f
         if (!RadarPreferences.wxoglCenterOnLocation) {
             if (RadarPreferences.dualpaneshareposn && !locationFragment) {
                 mScaleFactor *= 2.0f
@@ -403,7 +404,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     }
 
     fun zoomInByKey(paneScaleFactor: Float = 1.0f) {
-        density = (wxglRender.ortInt * 2).toFloat() / width
+        density = (wxglRender.ortInt * 2.0f) / width
         mScaleFactor *= 2.0f * paneScaleFactor
         if (RadarPreferences.dualpaneshareposn && !locationFragment) {
             (0 until numPanes).forEach {
@@ -510,7 +511,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     }
 
     val latLon: LatLon
-        get() = LatLon(newY.toDouble(), newX.toDouble() * -1.0)
+        get() = LatLon(newY, newX * -1.0)
 
     var scaleFactor: Float
         get() = mScaleFactor

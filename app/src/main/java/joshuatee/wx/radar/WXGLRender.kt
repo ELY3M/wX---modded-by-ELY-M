@@ -786,7 +786,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
             //triangle
-            val base = RectF(-conusbitmap!!.width.toFloat(), conusbitmap!!.height.toFloat(), conusbitmap!!.width.toFloat(), -conusbitmap!!.height.toFloat())
+            val base = RectF(-conusbitmap!!.width.toFloat(), conusbitmap.height.toFloat(), conusbitmap.width.toFloat(), -conusbitmap.height.toFloat())
             val scale = 3.0f //was 2.0f
 
             UtilityLog.d("wx", "left: " + base.left)
@@ -1097,25 +1097,43 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         Matrix.scaleM(matrixProjectionAndView, 0, zoom, zoom, 1.0f)
     }
 
-    private fun scaleLength(currentLength: Float) = if (zoom > 1.01f) currentLength / zoom * 2 else currentLength
+    private fun scaleLength(currentLength: Float) = if (zoom > 1.01f) currentLength / zoom * 2.0f else currentLength
 
-    fun constructStateLines() = constructGenericGeographic(stateLineBuffers)
+    fun constructStateLines() {
+        constructGenericGeographic(stateLineBuffers)
+    }
 
-    fun constructHWLines() = constructGenericGeographic(hwBuffers)
+    fun constructHWLines() {
+        constructGenericGeographic(hwBuffers)
+    }
 
-    fun deconstructHWLines() = deconstructGenericGeographic(hwBuffers)
+    fun deconstructHWLines() {
+        deconstructGenericGeographic(hwBuffers)
+    }
 
-    fun constructHWEXTLines() = constructGenericGeographic(hwExtBuffers)
+    fun constructHWEXTLines() {
+        constructGenericGeographic(hwExtBuffers)
+    }
 
-    fun deconstructHWEXTLines() = deconstructGenericGeographic(hwExtBuffers)
+    fun deconstructHWEXTLines() {
+        deconstructGenericGeographic(hwExtBuffers)
+    }
 
-    fun constructLakes() = constructGenericGeographic(lakeBuffers)
+    fun constructLakes() {
+        constructGenericGeographic(lakeBuffers)
+    }
 
-    fun deconstructLakes() = deconstructGenericGeographic(lakeBuffers)
+    fun deconstructLakes() {
+        deconstructGenericGeographic(lakeBuffers)
+    }
 
-    fun constructCounty() = constructGenericGeographic(countyLineBuffers)
+    fun constructCounty() {
+        constructGenericGeographic(countyLineBuffers)
+    }
 
-    fun deconstructCounty() = deconstructGenericGeographic(countyLineBuffers)
+    fun deconstructCounty() {
+        deconstructGenericGeographic(countyLineBuffers)
+    }
 
     // if the rectangular projection is realized.
     private fun constructGenericGeographic(buffers: ObjectOglBuffers) {
@@ -1156,7 +1174,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         buffers.setToPositionZero()
     }
 
-    private fun deconstructGenericGeographic(buffers: ObjectOglBuffers) { buffers.isInitialized = false }
+    private fun deconstructGenericGeographic(buffers: ObjectOglBuffers) {
+        buffers.isInitialized = false
+    }
 
     private fun constructGenericLinesShort(buffers: ObjectOglBuffers, list: List<Double>) {
         val remainder: Int
@@ -1199,7 +1219,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         constructGenericLinesShort(stiBuffers, WXGLNexradLevel3StormInfo.decodeAndPlot(context, indexString, projectionNumbers))
     }
 
-    fun deconstructStiLines() { deconstructGenericLines(stiBuffers) }
+    fun deconstructStiLines() {
+        deconstructGenericLines(stiBuffers)
+    }
 
     fun constructWatchMcdLines() {
         constructGenericLines(mcdBuffers)

@@ -30,14 +30,19 @@
 // [FIX] deprecated startActivityForResult onActivityResult (see example in SettingsNotificationsActivity.kt)
 // [REF] migrate UtilityDownloadWarnings.kt -> ObjectPolygonWarning.kt
 // [REF] ImageMap.java: This custom view should extend `androidx.appcompat.widget.AppCompatImageView` instead
+// [REF] remove unecessary toFloat or toDouble
 ```
 [[_TOC_]]
 
-TEST: nexrad immersive mode, nexrad transparent status bar
+TEST 55647: nexrad immersive mode, nexrad transparent status bar
+TEST 55647: nexrad and gps location dot
+TEST 55647: nexrad long press
 
-## 55647 2022_08_01
-* [REF] misc refactor
-* [FIX] deprecations in UtilityUI.immersiveMode, Nexrad related to tranparent status bar
+## 55648 2022_08_02
+
+## 55647 2022_08_02
+* [REF] misc refactor (radar incl)
+* [FIX] deprecations in UtilityUI.immersiveMode, Nexrad related to transparent status bar
 
 ## 55646 2022_08_01
 * [REF] misc refactor

@@ -76,23 +76,34 @@ object UtilityWXOGL {
             return ""
         }
         val file = File(context.filesDir, l3BaseFn + indexString + "_d")
-        if (!file.renameTo(File(context.filesDir, l3BaseFn + indexString)))
+        if (!file.renameTo(File(context.filesDir, l3BaseFn + indexString))) {
             UtilityLog.d("wx", "Problem moving file to $l3BaseFn$indexString")
+        }
         var output = ""
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, l3BaseFn + indexString))
             dis.bigEndian = true
             // ADVANCE PAST WMO HEADER
-            while (true) if (dis.readShort().toInt() == -1) break
+            while (true) {
+                if (dis.readShort().toInt() == -1) {
+                    break
+                }
+            }
             dis.skipBytes(26) // 3 int (12) + 7*2 (14)
-            while (true) if (dis.readShort().toInt() == -1) break
+            while (true) {
+                if (dis.readShort().toInt() == -1) {
+                    break
+                }
+            }
             var byte: Byte?
             var vSpotted = false
             output += "<font face=monospace><small>"
             try {
                 while (!dis.isAtEndOfFile) {
                     byte = dis.readByte()
-                    if (byte.toInt().toChar() == 'V') vSpotted = true
+                    if (byte.toInt().toChar() == 'V') {
+                        vSpotted = true
+                    }
                     if (Character.isAlphabetic(byte.toInt()) || Character.isWhitespace(byte.toInt())
                             || Character.isDigit(byte.toInt()) || Character.isISOControl(byte.toInt()) || Character.isDefined(byte.toInt())) {
                         if (vSpotted) {
