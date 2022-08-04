@@ -28,6 +28,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import android.content.Context
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 import java.util.*
@@ -144,9 +145,9 @@ class WXGLNexradLevel3 internal constructor() {
             val volumeScanNumber = dis.readUnsignedShort().toShort()
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
-            val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
-            // TODO assign directly to timestamp
-            val radarInfo = formatRadarString(d)
+            val date = ObjectDateTime.radarTime(volumeScanDate, volumeScanTime)
+            // FIXME TODO assign directly to timestamp
+            val radarInfo = formatRadarString(date)
             WXGLNexrad.writeRadarInfo(context, radarStatus, radarInfo)
             WXGLNexrad.writeRadarInfo(context, radarStatus + site.uppercase(Locale.US), radarInfo)
             timestamp = radarInfo
@@ -210,13 +211,13 @@ class WXGLNexradLevel3 internal constructor() {
             val volumeScanNumber = dis.readUnsignedShort().toShort()
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
-            val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
+            val date = ObjectDateTime.radarTime(volumeScanDate, volumeScanTime)
             val productGenerationDate = dis.readUnsignedShort().toShort()
             val productGenerationTime = dis.readInt()
             //final short        product_generation_date = (short) dis.readUnsignedShort();
             //final int        product_generation_time    = dis.readInt() ;
             //dis.skipBytes(6)
-            val radarInfo = formatRadarString(d)
+            val radarInfo = formatRadarString(date)
             WXGLNexrad.writeRadarInfo(context, radarStatus, radarInfo)
             timestamp = radarInfo
             /*final short  p1                        = (short) dis.readUnsignedShort();

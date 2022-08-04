@@ -36,7 +36,7 @@ fun String.parse(match: String) = UtilityString.parse(this, match)
 
 fun String.strip() = this.trim()
 
-fun String.ljust(padding: Int) = String.format("%-" + padding.toString() + "s", this)
+//fun String.ljust(padding: Int) = String.format("%-" + padding.toString() + "s", this)
 
 fun String.condenseSpace()= this.replace("\\s+".toRegex(), " ")
 

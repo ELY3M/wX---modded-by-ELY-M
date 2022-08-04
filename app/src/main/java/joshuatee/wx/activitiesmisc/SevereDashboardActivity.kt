@@ -160,6 +160,9 @@ class SevereDashboardActivity : BaseActivity() {
                 || warningsByType[PolygonType.FFW]!!.getCount() > 0) {
             subTitle += " (${warningsByType[PolygonType.TST]!!.getCount()},${warningsByType[PolygonType.TOR]!!.getCount()},${warningsByType[PolygonType.FFW]!!.getCount()})"
         }
+        if (subTitle == "") {
+            subTitle = "None"
+        }
         return subTitle
     }
 

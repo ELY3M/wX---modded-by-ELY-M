@@ -32,6 +32,7 @@ import android.util.TypedValue
 import android.widget.TextView
 import android.view.ViewGroup
 import android.view.View
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
@@ -59,7 +60,11 @@ class ObjectDialogue {
     private val arrayAdapter: ArrayAdapter<String>
 
     constructor(context: Context, title: String, list: List<String>) {
-        alertDialog = AlertDialog.Builder(context)
+        alertDialog = if (Utility.isThemeMaterial3()) {
+            MaterialAlertDialogBuilder(context)
+        } else {
+            AlertDialog.Builder(context)
+        }
         alertDialog.setTitle(title)
         arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -74,7 +79,11 @@ class ObjectDialogue {
     }
 
     constructor(context: Context, list: List<String>) {
-        alertDialog = AlertDialog.Builder(context)
+        alertDialog = if (Utility.isThemeMaterial3()) {
+            MaterialAlertDialogBuilder(context)
+        } else {
+            AlertDialog.Builder(context)
+        }
         arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
@@ -89,7 +98,12 @@ class ObjectDialogue {
 
     constructor(context: Context, text: String) {
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item)
-        alertDialog = AlertDialog.Builder(context)
+//        alertDialog = AlertDialog.Builder(context)
+        alertDialog = if (Utility.isThemeMaterial3()) {
+            MaterialAlertDialogBuilder(context)
+        } else {
+            AlertDialog.Builder(context)
+        }
         alertDialog.setMessage(text)
         alertDialog.setCancelable(false)
         alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }

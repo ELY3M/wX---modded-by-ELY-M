@@ -29,6 +29,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.external.ExternalSunriseLocation
 import joshuatee.wx.external.ExternalSunriseSunsetCalculator
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.radar.RID
 import joshuatee.wx.settings.Location
 import org.shredzone.commons.suncalc.MoonTimes
@@ -238,7 +239,8 @@ object UtilityTimeSunMoon {
 
 
     fun getForHomeScreen(context: Context) =
-        getSunriseSunset(context, Location.currentLocationStr, false) + GlobalVariables.newline + "Detailed Sun and Moon Times: "  + GlobalVariables.newline + getData(Location.currentLocation) + GlobalVariables.newline + UtilityTime.gmtTime()
+        getSunriseSunset(context, Location.currentLocationStr, false) + 
+	GlobalVariables.newline + "Detailed Sun and Moon Times: "  + GlobalVariables.newline + getData(Location.currentLocation) + GlobalVariables.newline + ObjectDateTime.gmtTime()
 }
 
 

@@ -24,13 +24,13 @@ package joshuatee.wx.spc
 import android.content.Context
 import android.graphics.Bitmap
 import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityVtec
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.ObjectPolygonWatch
+import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.objects.PolygonType
 
 object UtilitySpc {
@@ -61,11 +61,21 @@ object UtilitySpc {
         val marginalStr = "THERE IS A MARGINAL RISK OF"
         var returnStr = ""
         var html = UtilityDownload.getTextProduct(context, prod)
-        if (html.contains(marginalStr)) returnStr = "marginal"
-        if (html.contains(slightStr)) returnStr = "slight"
-        if (html.contains(enhStr)) returnStr = "enh"
-        if (html.contains(moderateStr)) returnStr = "modt"
-        if (html.contains(highStr)) returnStr = "high"
+        if (html.contains(marginalStr)) {
+            returnStr = "marginal"
+        }
+        if (html.contains(slightStr)) {
+            returnStr = "slight"
+        }
+        if (html.contains(enhStr)) {
+            returnStr = "enh"
+        }
+        if (html.contains(moderateStr)) {
+            returnStr = "modt"
+        }
+        if (html.contains(highStr)) {
+            returnStr = "high"
+        }
         html = html.replace("ACUS[0-9]{2} KWNS [0-9]{6}".toRegex(), "")
                 .replace("SWOD[Y4][1-3]".toRegex(), "")
                 .replace("SPC AC [0-9]{6}".toRegex(), "")
@@ -118,9 +128,15 @@ object UtilitySpc {
         var label = UIPreferences.tabHeaders[1]
         val tabStrSpc: String
         if (watchPresent || mdPresent || mpdPresent) {
-            if (watchPresent) label += " W($watchCount)"
-            if (mdPresent) label += " M($mdCount)"
-            if (mpdPresent) label += " P($mpdCount)"
+            if (watchPresent) {
+                label += " W($watchCount)"
+            }
+            if (mdPresent) {
+                label += " M($mdCount)"
+            }
+            if (mpdPresent) {
+                label += " P($mpdCount)"
+            }
             tabStrSpc = label
         } else {
             tabStrSpc = UIPreferences.tabHeaders[1]
@@ -131,10 +147,12 @@ object UtilitySpc {
         var tStormCount = 0
         var floodCount = 0
         if (UIPreferences.checktor) {
-            tStormCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
-            torCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
-            floodCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
-            if (tStormCount > 0 || torCount > 0 || floodCount > 0) usWarnPresent = true
+            tStormCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
+            torCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
+            floodCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
+            if (tStormCount > 0 || torCount > 0 || floodCount > 0) {
+                usWarnPresent = true
+            }
         }
         val tabStr = if (usWarnPresent) {
             UIPreferences.tabHeaders[2] + " W(" + tStormCount + "," + torCount + "," + floodCount + ")"

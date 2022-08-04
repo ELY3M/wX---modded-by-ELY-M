@@ -55,7 +55,7 @@ class VoiceCommandActivity : Activity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == requestOk && resultCode == RESULT_OK) {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            ObjectPopupMessage(mainView, thingsYouSaid!![0])
+            ObjectPopupMessage(this, mainView, thingsYouSaid!![0])
             val address = thingsYouSaid[0]
             val gotHit = UtilityVoiceCommand.processCommand(this, address, Location.rid, Location.wfo, Location.state)
             if (!gotHit) {

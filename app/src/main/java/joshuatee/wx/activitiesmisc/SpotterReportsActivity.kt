@@ -26,10 +26,10 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.UtilitySpotter
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
-import joshuatee.wx.util.UtilityTime
 
 class SpotterReportsActivity : BaseActivity() {
 
@@ -57,7 +57,7 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     private fun updateTitles() {
-        setTitle(UtilitySpotter.reports.size.toString() + " Spotter reports", UtilityTime.gmtTime("HH:mm") + " UTC")
+        setTitle(UtilitySpotter.reports.size.toString() + " Spotter reports", ObjectDateTime.gmtTime("HH:mm") + " UTC")
     }
 
     private fun itemSelected(position: Int) {

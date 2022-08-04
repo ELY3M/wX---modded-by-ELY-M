@@ -9,7 +9,6 @@ joshua.tee@gmail.com
 package joshuatee.wx.telecine
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -67,10 +66,9 @@ import joshuatee.wx.fingerdraw.DrawView
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.util.FileProvider
-import joshuatee.wx.util.UtilityTime
 
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 internal class RecordingSession(
     private val context: Context,
     private val listener: Listener,
@@ -412,7 +410,7 @@ internal class RecordingSession(
 
     private fun showNotification(uri: Uri?, bitmap: Bitmap?) {
         UtilityNotification.initChannels(context)
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
         val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         var shareIntent = Intent(ACTION_SEND)
@@ -430,7 +428,7 @@ internal class RecordingSession(
         builder = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
             .setContentTitle(title)
             .setContentText(subtitle)
-            .setWhen(UtilityTime.currentTimeMillis())
+            .setWhen(ObjectDateTime.currentTimeMillis())
             .setShowWhen(true)
             .setSmallIcon(R.drawable.ic_videocam_24dp)
             .setColor(UIPreferences.colorNotif)
@@ -470,7 +468,7 @@ internal class RecordingSession(
 
     private fun showScreenshotNotification(uri: Uri, bitmap: Bitmap?) {
         UtilityNotification.initChannels(context)
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
         val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         var shareIntent = Intent(ACTION_SEND)
@@ -487,7 +485,7 @@ internal class RecordingSession(
         val builder = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
             .setContentTitle(title)
             .setContentText(subtitle)
-            .setWhen(UtilityTime.currentTimeMillis())
+            .setWhen(ObjectDateTime.currentTimeMillis())
             .setShowWhen(true)
             .setSmallIcon(R.drawable.ic_photo_camera_24dp)
             .setColor(UIPreferences.colorNotif)

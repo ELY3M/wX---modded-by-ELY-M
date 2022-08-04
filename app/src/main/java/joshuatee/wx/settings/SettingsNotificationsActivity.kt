@@ -37,6 +37,7 @@ import androidx.activity.result.ActivityResult
 //import androidx.activity.result.ActivityResultCallback
 //import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.common.RegExp
@@ -173,21 +174,27 @@ class SettingsNotificationsActivity : BaseActivity() {
         if (Utility.isThemeAllBlack()) {
             theme = R.style.PickerDialogThemeDark
         }
-        val dialog = AlertDialog.Builder(this, theme)
-                .setTitle("Choose which Local NWS Alerts to not show:")
-                .setMultiChoiceItems(items.toTypedArray(), checkedItems) { _, indexSelected, isChecked ->
-                    if (isChecked) {
-                        selectedItems.add(indexSelected)
-                    } else if (selectedItems.contains(indexSelected)) {
-                        selectedItems.remove(Integer.valueOf(indexSelected))
-                    }
-                }.setPositiveButton("OK") { _, _ ->
-                    var nwsWfoFilterStrLoc = ""
-                    selectedItems.indices.forEach { nwsWfoFilterStrLoc += items[selectedItems[it]] + ":" }
-                    Utility.writePref(this, "NOTIF_WFO_FILTER", nwsWfoFilterStrLoc)
-                }.setNegativeButton("Cancel") { _, _ ->
-                }.create()
-        dialog.show()
+        val alertDialog = if (Utility.isThemeMaterial3()) {
+            MaterialAlertDialogBuilder(this)
+        } else {
+            AlertDialog.Builder(this, theme)
+        }
+        alertDialog.setTitle("Choose which Local NWS Alerts to not show:")
+        alertDialog.setMultiChoiceItems(items.toTypedArray(), checkedItems) { _, indexSelected, isChecked ->
+            if (isChecked) {
+                selectedItems.add(indexSelected)
+            } else if (selectedItems.contains(indexSelected)) {
+                selectedItems.remove(Integer.valueOf(indexSelected))
+            }
+        }
+        alertDialog.setPositiveButton("OK") { _, _ ->
+            var nwsWfoFilterStrLoc = ""
+            selectedItems.indices.forEach { nwsWfoFilterStrLoc += items[selectedItems[it]] + ":" }
+            Utility.writePref(this, "NOTIF_WFO_FILTER", nwsWfoFilterStrLoc)
+        }
+        alertDialog.setNegativeButton("Cancel") { _, _ -> }
+        alertDialog.create()
+        alertDialog.show()
     }
 
     private fun showFileWritePermsDialogue() {

@@ -33,6 +33,7 @@ import joshuatee.wx.canada.CanadaAlertsActivity
 import joshuatee.wx.canada.CanadaHourlyActivity
 import joshuatee.wx.canada.CanadaTextActivity
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcSoundingsActivity
@@ -77,7 +78,9 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         try {
             val p = Pattern.compile("<h3>(.*?)</h3>")
             val m = p.matcher(hazardRaw)
-            while (m.find()) hazardSum += GlobalVariables.newline + m.group(1)
+            while (m.find()) {
+                hazardSum += GlobalVariables.newline + m.group(1)
+            }
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -89,7 +92,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         }
         remoteViews.setTextViewText(R.id.hazard, hazardSum)
         remoteViews.setTextViewText(R.id.forecast, sd)
-        remoteViews.setTextViewText(R.id.widget_time, "Updated: " + UtilityTime.getDateAsString("h:mm a")) // "%k:%M:%S"
+        remoteViews.setTextViewText(R.id.widget_time, "Updated: " + ObjectDateTime.getDateAsString("h:mm a")) // "%k:%M:%S"
         UtilityWidget.setupIntent(context, remoteViews, SpcSoundingsActivity::class.java, R.id.cc, SpcSoundingsActivity.URL, arrayOf(wfo, ""), actionCc)
         UtilityWidget.setupIntent(context, remoteViews, TextScreenActivity::class.java, R.id.forecast, TextScreenActivity.URL, arrayOf(sdExt, locLabel), actionSd)
         var hazardsExt = Utility.getHazards(hazardRaw)

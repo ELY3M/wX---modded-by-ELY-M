@@ -40,70 +40,70 @@ class ForecastIcon {
 
     constructor(context: Context, weatherCondition: String) {
         this.context = context
-        bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
+        bitmap = Bitmap.createBitmap(dimensionsInt, dimensionsInt, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
         val fileName = UtilityNwsIcon.iconMap["$weatherCondition.png"] ?: nullImage
         val bitmap1 = UtilityImg.loadBitmap(context, fileName, false)
-        val bitmap2 = Bitmap.createBitmap(bitmap1, 0, 0, dimensions, dimensions)
+        val bitmap2 = Bitmap.createBitmap(bitmap1, 0, 0, dimensionsInt, dimensionsInt)
         canvas.drawBitmap(bitmap2, 0.0f, 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
     }
 
     constructor(context: Context, leftWeatherCondition: String, rightWeatherCondition: String) {
         this.context = context
         val leftCropA = if (leftWeatherCondition.contains("fg")) {
-            middlePoint
+            middlePointInt
         } else {
             4
         }
         val leftCropB = if (rightWeatherCondition.contains("fg")) {
-            middlePoint
+            middlePointInt
         } else {
             4
         }
-        bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
+        bitmap = Bitmap.createBitmap(dimensionsInt, dimensionsInt, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
         val fileNameLeft = UtilityNwsIcon.iconMap["$leftWeatherCondition.png"] ?: nullImage
         val fileNameRight = UtilityNwsIcon.iconMap["$rightWeatherCondition.png"] ?: nullImage
         val bitmap1 = UtilityImg.loadBitmap(context, fileNameLeft, false)
-        val bitmap2 = Bitmap.createBitmap(bitmap1, leftCropA, 0, halfWidth, dimensions)
+        val bitmap2 = Bitmap.createBitmap(bitmap1, leftCropA, 0, halfWidthInt, dimensionsInt)
         canvas.drawBitmap(bitmap2, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
         val bitmap3 = UtilityImg.loadBitmap(context, fileNameRight, false)
-        val bitmap4 = Bitmap.createBitmap(bitmap3, leftCropB, 0, halfWidth, dimensions)
-        canvas.drawBitmap(bitmap4, middlePoint.toFloat(), 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
+        val bitmap4 = Bitmap.createBitmap(bitmap3, leftCropB, 0, halfWidthInt, dimensionsInt)
+        canvas.drawBitmap(bitmap4, middlePoint, 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
     }
 
     fun drawLeftText(leftNumber: String) {
-        val xTextLeft = 2
+        val xTextLeft = 2.0f
         if (leftNumber != "" && leftNumber != "0") {
-            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), halfWidth.toFloat(), dimensions.toFloat(), paintStripe.get())
-            canvas.drawText("$leftNumber%", xTextLeft.toFloat(), yText.toFloat(), paint.get())
+            canvas.drawRect(0.0f, dimensions - numHeight, halfWidth, dimensions, paintStripe.get())
+            canvas.drawText("$leftNumber%", xTextLeft, yText, paint.get())
         }
     }
 
     fun drawRightText(rightNumber: String) {
         val xText = if (rightNumber == "100") {
-            50
+            50.0f
         } else {
-            58
+            58.0f
         }
         if (rightNumber != "" && rightNumber != "0") {
-            canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.get())
-            canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.get())
+            canvas.drawRect(middlePoint, dimensions - numHeight, dimensions, dimensions, paintStripe.get())
+            canvas.drawText("$rightNumber%", xText, yText, paint.get())
         }
     }
 
     fun drawSingleText(number: String) {
-        val yText = 84
+        val yText = 84.0f
         val xText = if (number == "100") {
-            50
+            50.0f
         } else {
-            58
+            58.0f
         }
         if (number != "" && number != "0") {
-            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.get())
-            canvas.drawText("$number%", xText.toFloat(), yText.toFloat(), paint.get())
+            canvas.drawRect(0.0f, dimensions - numHeight, dimensions, dimensions, paintStripe.get())
+            canvas.drawText("$number%", xText, yText, paint.get())
         }
     }
 
@@ -113,11 +113,14 @@ class ForecastIcon {
 
     companion object {
 
-        private const val dimensions = 86
-        private const val numHeight = 15
-        private const val halfWidth = 41
-        private const val middlePoint = 45
-        private const val yText = 84
+        private const val dimensions = 86.0f
+        private const val dimensionsInt = 86
+        private const val numHeight = 15.0f
+        private const val halfWidth = 41.0f
+        private const val halfWidthInt = 41
+        private const val middlePoint = 45.0f
+        private const val middlePointInt = 45
+        private const val yText = 84.0f
 
         fun blankBitmap() : Bitmap {
             return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)

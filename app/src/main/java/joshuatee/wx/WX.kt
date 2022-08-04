@@ -131,7 +131,13 @@ class WX : CommonActionBarFragment() {
         if (UIPreferences.simpleMode || UIPreferences.hideTopToolbar || UIPreferences.navDrawerMainScreen) {
             slidingTabLayout.visibility = View.GONE
         }
+        //
+        // tab indicator color
+        //
         slidingTabLayout.setSelectedTabIndicatorColor(UtilityTheme.getPrimaryColorFromSelectedTheme(this, 0))
+        //
+        // Navigation Drawer setup (if enabled)
+        //
         if (UIPreferences.navDrawerMainScreen) {
             toolbarBottom.visibility = View.GONE
             slidingTabLayout.visibility = View.GONE
@@ -146,11 +152,23 @@ class WX : CommonActionBarFragment() {
             var tint = ColorStateList.valueOf(color)
             val headerLayout = navigationView.getHeaderView(0)
             headerLayout.setBackgroundColor(color)
-            if (UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB) {
+
+            if (UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB || UIPreferences.themeInt == R.style.MyCustomTheme_NOAB) {
                 val colorForWhite = ContextCompat.getColor(this, R.color.primary_blue)
                 headerLayout.setBackgroundColor(colorForWhite)
                 tint = ColorStateList.valueOf(colorForWhite)
             }
+            // For "Material3" based whiter them
+//            if (UIPreferences.themeInt == R.style.MyCustomTheme_whiter_NOAB) {
+//                val colorForWhite = ContextCompat.getColor(this, R.color.white)
+//                navigationView.setBackgroundColor(colorForWhite)
+//            }
+//            if (UIPreferences.themeInt == R.style.MyCustomTheme_NOAB) {
+//                val colorForWhite = ContextCompat.getColor(this, R.color.primary_dark_blue)
+//                navigationView.setBackgroundColor(colorForWhite)
+//            }
+
+
             // TODO chunk below needs a lot of refactor , create static Route and pass drawer to close as optional
             val statusText = headerLayout.findViewById<TextView>(R.id.statusText)
             statusText.visibility = View.GONE
@@ -160,6 +178,9 @@ class WX : CommonActionBarFragment() {
             } else {
                 GravityCompat.START
             }
+            //
+            // Navigation drawer routing for main items
+            //
             DrawerHeaderItem(drawerLayout, headerLayout, R.id.severeDashboardButton, R.id.severeDashboardText, tint, gravityForDrawer) {
                 Route.severeDash(this)
             }
@@ -175,6 +196,9 @@ class WX : CommonActionBarFragment() {
             DrawerHeaderItem(drawerLayout, headerLayout, R.id.settingsButton, R.id.settingsText, tint, gravityForDrawer) {
                 Route.settings(this)
             }
+            //
+            // Navigation drawer routing for secondary items
+            //
             UtilityNavDrawer.hideItems(this, navigationView)
             navigationView.setNavigationItemSelectedListener{ item ->
                 when (item.itemId) {
@@ -235,6 +259,9 @@ class WX : CommonActionBarFragment() {
                 }
                 true
             }
+            //
+            // Navigation drawer - FAB to open
+            //
             ObjectFab(this, R.id.fab2, GlobalVariables.ICON_ADD2) {
                 val headerSize: Float
                 val tabStr = UtilitySpc.checkSpc()
@@ -262,7 +289,7 @@ class WX : CommonActionBarFragment() {
     override fun onBackPressed() {
         if (UIPreferences.prefPreventAccidentalExit) {
             if (backButtonCounter < 1) {
-                ObjectPopupMessage(slidingTabLayout, "Please tap the back button one more time to close wX.")
+                ObjectPopupMessage(this, slidingTabLayout, "Please tap the back button one more time to close wX.")
                 backButtonCounter += 1
             } else {
                 finish()

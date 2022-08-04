@@ -23,9 +23,10 @@ package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
+import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityIO
-import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.util.UtilityString
 
 object UtilityHourlyOldApi {
@@ -35,7 +36,11 @@ object UtilityHourlyOldApi {
         val html = UtilityIO.getHtml("https://forecast.weather.gov/MapClick.php?lat=" +
                 latLon.latString + "&lon=" +
                 latLon.lonString + "&FcstType=digitalDWML")
-        val header = "Time".ljust(13) + " " + "Temp".ljust(5) + "Dew".ljust(5) + "Precip%".ljust(7) + "Cloud%".ljust(6) + GlobalVariables.newline
+        val header = To.stringPadLeft("Time", 16) + " " +
+                To.stringPadLeft("Temp", 8) +
+                To.stringPadLeft("Dew", 8) +
+                To.stringPadLeft("Precip%", 8) +
+                To.stringPadLeft( "Cloud%", 8) + GlobalVariables.newline
         return GlobalVariables.newline + header + parseHourly(html)
     }
 
@@ -54,7 +59,7 @@ object UtilityHourlyOldApi {
         val temp4List = UtilityString.parseXmlValue(rawData[3])
         val temp5List = UtilityString.parseXmlValue(rawData[4])
         var sb = ""
-        val year = UtilityTime.getYear()
+        val year = ObjectDateTime.getYear()
         val temp2Len = temp2List.size
         val temp3Len = temp3List.size
         val temp4Len = temp4List.size
@@ -66,9 +71,9 @@ object UtilityHourlyOldApi {
             time2List[j] = time2List[j].replace("00:00", "00")
             val timeSplit = time2List[j].split(" ")
             val timeSplit2 = timeSplit[0].split("-")
-            val month = timeSplit2[0].toIntOrNull() ?: 0
-            val day = timeSplit2[1].toIntOrNull() ?: 0
-            val dayOfTheWeek = UtilityTime.dayOfWeek(year, month, day)
+            val month = To.int(timeSplit2[0])
+            val day = To.int(timeSplit2[1])
+            val dayOfTheWeek = ObjectDateTime.dayOfWeek(year, month, day)
             var temp3Val = "."
             var temp4Val = "."
             var temp5Val = "."
@@ -83,12 +88,12 @@ object UtilityHourlyOldApi {
             }
             time2List[j] = time2List[j].replace(":00", "")
             time2List[j] = time2List[j].strip()
-            sb += (dayOfTheWeek + " " + time2List[j]).replace("\n", "").ljust(9)
+            sb += To.stringPadLeft(dayOfTheWeek + " " + time2List[j], 14)
             sb += "   "
-            sb += temp2List[j].ljust(5)
-            sb += temp3Val.ljust(5)
-            sb += temp4Val.ljust(7)
-            sb += temp5Val.ljust(6)
+            sb += To.stringPadLeft(temp2List[j], 8)
+            sb += To.stringPadLeft(temp3Val, 8)
+            sb += To.stringPadLeft(temp4Val, 8)
+            sb += To.stringPadLeft(temp5Val, 8)
             sb += GlobalVariables.newline
         }
         return sb

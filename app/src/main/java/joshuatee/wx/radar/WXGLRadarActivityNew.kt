@@ -512,13 +512,12 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
                 UtilityWXGLTextObject.updateWpcFronts(numberOfPanes, wxglTextObjects)
             })
         }
-//            UtilityRadarUI.updateLastRadarTime(this@WXGLRadarActivityNew)
     }
 
     private fun setTitleWithWarningCounts() {
-        val tstCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
-        val torCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
-        val ffwCount = UtilityVtec.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
+        val tstCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
+        val torCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
+        val ffwCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
         if (RadarPreferences.radarWarnings) {
             title = wxglRender.product + " (" + tstCount.toString() + "," + torCount.toString() + "," + ffwCount.toString() + ")"
         }
@@ -567,11 +566,15 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
                     animTriggerDownloads = false
                 }
                 for (r in animArray.indices) {
-                    while (inOglAnimPaused) SystemClock.sleep(delay.toLong())
+                    while (inOglAnimPaused) {
+                        SystemClock.sleep(delay.toLong())
+                    }
                     // formerly priorTime was set at the end but that is goofed up with pause
-                    priorTime = UtilityTime.currentTimeMillis()
+                    priorTime = ObjectDateTime.currentTimeMillis()
                     // added because if paused and then another icon life vel/ref it won't load correctly, likely timing issue
-                    if (!inOglAnim) break
+                    if (!inOglAnim) {
+                        break
+                    }
                     // if the first pass has completed, for L2 no longer uncompress, use the existing decomp files
                     if (loopCnt > 0)
                         wxglRender.constructPolygons("nexrad_anim$r", urlStr, false)
@@ -579,7 +582,7 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
                         wxglRender.constructPolygons("nexrad_anim$r", urlStr, true)
                     launch(uiDispatcher) { progressUpdate((r + 1).toString(), animArray.size.toString()) }
                     wxglSurfaceView.requestRender()
-                    timeMilli = UtilityTime.currentTimeMillis()
+                    timeMilli = ObjectDateTime.currentTimeMillis()
                     if ((timeMilli - priorTime) < delay) {
                         SystemClock.sleep(delay - ((timeMilli - priorTime)))
                     }
@@ -611,7 +614,7 @@ class WXGLRadarActivityNew : VideoRecordActivity(), OnMenuItemClickListener {
         val items = WXGLNexrad.getRadarInfo(this,"").split(" ")
         if (items.size > 3) {
             toolbar.subtitle = items[3]
-            if (UtilityTime.isRadarTimeOld(items[3]))
+            if (ObjectDateTime.isRadarTimeOld(items[3]))
                 toolbar.setSubtitleTextColor(Color.RED)
             else
                 toolbar.setSubtitleTextColor(Color.LTGRAY)

@@ -26,6 +26,8 @@ import android.content.Context
 import android.view.Gravity
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import androidx.appcompat.widget.AppCompatCheckBox
+import com.google.android.material.checkbox.MaterialCheckBox
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.GeographyType

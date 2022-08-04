@@ -26,7 +26,7 @@ import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import joshuatee.wx.nhc.ObjectNhcStormDetails
-import joshuatee.wx.util.UtilityTime
+import joshuatee.wx.objects.ObjectDateTime
 
 class ObjectPendingIntents {
 
@@ -41,7 +41,7 @@ class ObjectPendingIntents {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
@@ -54,7 +54,7 @@ class ObjectPendingIntents {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
@@ -65,7 +65,7 @@ class ObjectPendingIntents {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }

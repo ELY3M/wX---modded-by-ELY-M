@@ -32,9 +32,9 @@ import android.os.HandlerThread
 import android.widget.RemoteViews
 import android.widget.Toast
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityTime
 import java.util.Random
 
 /**
@@ -166,7 +166,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                 intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
                 remoteViews = RemoteViews(context.packageName, R.layout.widget_7day_layout)
                 remoteViews.setRemoteAdapter(R.id.weather_list, intent)
-                val requestId = UtilityTime.currentTimeMillis().toInt()
+                val requestId = ObjectDateTime.currentTimeMillis().toInt()
                 val intentWx = Intent(context, WX::class.java)
                 intentWx.action = "WX"
                 val pendingIntentWx = PendingIntent.getActivity(context, requestId, intentWx, PendingIntent.FLAG_IMMUTABLE) // was 0

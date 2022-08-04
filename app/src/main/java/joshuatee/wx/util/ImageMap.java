@@ -149,16 +149,18 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
-import android.widget.ImageView;
 import android.widget.Scroller;
+import androidx.appcompat.widget.AppCompatImageView;
 import org.xmlpull.v1.XmlPullParser;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import joshuatee.wx.R;
 
+// Best to leave in the current directory otherwise xml layout files need updating as well
+
 @SuppressLint("WrongCall")
-public class ImageMap extends ImageView {
+public class ImageMap extends AppCompatImageView {
 	// mFitImageToScreen
 	// if true - initial image resized to fit the screen, aspect ratio may be broken
 	// if false- initial image resized so that no empty screen is visible, aspect ratio maintained

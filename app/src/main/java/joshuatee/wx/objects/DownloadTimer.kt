@@ -23,7 +23,6 @@ package joshuatee.wx.objects
 
 import android.content.Context
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityTime
 
 //
 // Used as an object to determine when data should be downloaded again
@@ -42,7 +41,7 @@ class DownloadTimer(private val identifier: String) {
         if (identifier == "SEVERE_DASHBOARD_ACTIVITY")
             refreshDataInMinutes = 3
         var refreshNeeded = false
-        val currentTime = UtilityTime.currentTimeMillis()
+        val currentTime = ObjectDateTime.currentTimeMillis()
         val currentTimeSeconds = currentTime / 1000
         val refreshIntervalSeconds = refreshDataInMinutes * 60
         if ((currentTimeSeconds > (lastRefresh + refreshIntervalSeconds)) || !initialized) {

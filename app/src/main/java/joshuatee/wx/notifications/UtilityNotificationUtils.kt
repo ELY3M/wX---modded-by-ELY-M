@@ -23,14 +23,14 @@ package joshuatee.wx.notifications
 
 import android.content.Context
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityTime
 
 object UtilityNotificationUtils {
 
     fun checkBlackOut(): Boolean {
-        val hourCurrent = UtilityTime.currentHourIn24
+        val hourCurrent = ObjectDateTime.currentHourIn24
         var inBlackout = false
         if (NotificationPreferences.alertBlackout) {
             if (hourCurrent < NotificationPreferences.alertBlackoutAmCurrent || hourCurrent >= NotificationPreferences.alertBlackoutPmCurrent) {

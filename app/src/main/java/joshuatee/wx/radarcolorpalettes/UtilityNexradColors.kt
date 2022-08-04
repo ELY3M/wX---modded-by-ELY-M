@@ -56,16 +56,16 @@ internal object UtilityNexradColors {
     }
 
     // Returns an interpolated color, between `a` and `b`
-    fun interpolateColor(a: Int, b: Int, proportion: Double): Int {
+    fun interpolateColor(a: Int, b: Int, proportion: Float): Int {
         val hsvA = FloatArray(3)
         val hsvB = FloatArray(3)
         Color.colorToHSV(a, hsvA)
         Color.colorToHSV(b, hsvB)
         (0..2).forEach {
             if (it > 0) {
-                hsvB[it] = interpolate(hsvA[it], hsvB[it], proportion.toFloat())
+                hsvB[it] = interpolate(hsvA[it], hsvB[it], proportion)
             } else {
-                hsvB[it] = interpolateHue(hsvA[it], hsvB[it], proportion.toFloat())
+                hsvB[it] = interpolateHue(hsvA[it], hsvB[it], proportion)
             }
         }
         return Color.HSVToColor(hsvB)

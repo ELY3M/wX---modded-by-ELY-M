@@ -46,7 +46,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import joshuatee.wx.util.UtilityTime;
 
 
 /**
@@ -469,7 +468,7 @@ public class UncompressInputStream extends FilterInputStream
 
 	byte[] buf = new byte[100000];
 	int tot = 0;
-	long beg = UtilityTime.INSTANCE.currentTimeMillis();
+//	long beg = UtilityTime.INSTANCE.currentTimeMillis();
 
 	while (true)
 	{
@@ -479,9 +478,9 @@ public class UncompressInputStream extends FilterInputStream
 	    tot += got;
 	}
 
-	long end =  UtilityTime.INSTANCE.currentTimeMillis();
-	System.err.println("Decompressed " + tot + " bytes");
-	System.err.println("Time: " + (end-beg)/1000. + " seconds");
+//	long end =  UtilityTime.INSTANCE.currentTimeMillis();
+//	System.err.println("Decompressed " + tot + " bytes");
+//	System.err.println("Time: " + (end-beg)/1000. + " seconds");
     }
 }
 

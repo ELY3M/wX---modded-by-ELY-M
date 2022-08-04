@@ -31,6 +31,7 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType
@@ -60,7 +61,7 @@ class BackgroundFetch(val context: Context) {
         val locationNeedsSpcFw = UtilityNotificationSpcFireWeather.locationNeedsSpcFireWeather()
         val locationNeedsWpcMpd = UtilityNotificationWpc.locationNeedsMpd()
         (1..Location.numLocations).forEach {
-            val requestID = UtilityTime.currentTimeMillis().toInt()
+            val requestID = ObjectDateTime.currentTimeMillis().toInt()
             notificationUrls += UtilityNotification.send(context, it.toString(), requestID + 1)
         }
         RadarPreferences.radarWarningPolygons.forEach {
@@ -232,7 +233,7 @@ class BackgroundFetch(val context: Context) {
         }
         // send 7day and current conditions notifications for locations
         (1..Location.numLocations).forEach {
-            val requestID = UtilityTime.currentTimeMillis().toInt()
+            val requestID = ObjectDateTime.currentTimeMillis().toInt()
             notificationUrls += UtilityNotification.sendNotificationCurrentConditions(context, it.toString(), requestID, requestID + 1)
         }
         // check for any text prod notifications

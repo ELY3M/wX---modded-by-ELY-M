@@ -269,11 +269,11 @@ class ObjectColorPalette(val context: Context, private val colormapCode: Int) {
                     }
                     (1 until diff).forEach { j ->
                         if (scale == 1) {
-                            val colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, j.toDouble() / (diff * scale).toDouble())
+                            val colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, j.toFloat() / (diff * scale).toFloat())
                             objectColorPalette.putInt(colorInt)
                         } else if (scale == 2) {
-                            val colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, (j * scale - 1).toDouble() / (diff * scale).toDouble())
-                            val colorInt2 = UtilityNexradColors.interpolateColor(lowColor, highColor, (j * scale).toDouble() / (diff * scale).toDouble())
+                            val colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, (j * scale - 1).toFloat() / (diff * scale).toFloat())
+                            val colorInt2 = UtilityNexradColors.interpolateColor(lowColor, highColor, (j * scale).toFloat() / (diff * scale).toFloat())
                             objectColorPalette.putInt(colorInt)
                             objectColorPalette.putInt(colorInt2)
                         }

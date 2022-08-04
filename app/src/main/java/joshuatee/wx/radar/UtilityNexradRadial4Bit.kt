@@ -33,10 +33,10 @@ import android.graphics.Path
 import android.graphics.Paint.Style
 import androidx.core.content.ContextCompat
 import joshuatee.wx.R
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityMath
-import joshuatee.wx.util.UtilityTime
 
 internal object UtilityNexradRadial4Bit {
 
@@ -66,11 +66,11 @@ internal object UtilityNexradRadial4Bit {
                 dis.skipBytes(6)
                 val volumeScanDate = dis.readUnsignedShort().toShort()
                 val volumeScanTime = dis.readInt()
-                val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
+                val date = ObjectDateTime.radarTime(volumeScanDate, volumeScanTime)
                 dis.skipBytes(2)
                 dis.skipBytes(4)
                 val newline = System.getProperty("line.separator")
-                val radarInfo = d.toString() + newline +
+                val radarInfo = date.toString() + newline +
                         "Radar Mode: " + operationalMode.toInt().toString() + newline +
                         "Product Code: " + productCode.toInt().toString() + newline +
                         "Radar height: " + heightOfRadar.toInt().toString() + newline +

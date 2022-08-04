@@ -281,7 +281,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             updateList()
             recyclerView.notifyDataSetChanged()
         } else {
-            ObjectPopupMessage(recyclerView.get(), "$textProduct is already in home screen.")
+            ObjectPopupMessage(this, recyclerView.get(), "$textProduct is already in home screen.")
         }
     }
 }

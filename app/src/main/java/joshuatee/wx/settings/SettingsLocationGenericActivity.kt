@@ -505,7 +505,9 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         Route(this, SettingsLocationCanadaMapActivity::class.java, SettingsLocationCanadaMapActivity.URL, arrayOf(s))
     }
 
-    private fun showMessage(string: String) = ObjectPopupMessage(rl, string)
+    private fun showMessage(string: String) {
+        ObjectPopupMessage(this, rl, string)
+    }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         return when (keyCode) {

@@ -27,9 +27,9 @@ import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import java.util.Locale
 import joshuatee.wx.util.UtilityImgAnim
-import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.objects.ObjectDateTime
 
 internal object UtilityModelNsslWrfInputOutput {
 
@@ -44,14 +44,18 @@ internal object UtilityModelNsslWrfInputOutput {
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
             runData.listRunAdd(mostRecentRun)
-            runData.listRunAddAll(UtilityTime.genModelRuns(mostRecentRun, 12, "yyyyMMddHH"))
+            runData.listRunAddAll(ObjectDateTime.genModelRuns(mostRecentRun, 12, "yyyyMMddHH"))
             runData.mostRecentRun = mostRecentRun
             return runData
         }
 
     fun getImage(context: Context, om: ObjectModel, timeOriginal: String): Bitmap {
         val time = timeOriginal.split(" ")[0]
-        val sectorIndex = if (om.sector == "") 0 else UtilityModelNsslWrfInterface.sectorsLong.indexOf(om.sector)
+        val sectorIndex = if (om.sector == "") {
+            0
+        } else {
+            UtilityModelNsslWrfInterface.sectorsLong.indexOf(om.sector)
+        }
         val sector = UtilityModelNsslWrfInterface.sectors[sectorIndex]
         val baseLayerUrl = "https://cams.nssl.noaa.gov/graphics/blank_maps/spc_$sector.png"
         var modelPostfix = "_nssl"
@@ -78,8 +82,12 @@ internal object UtilityModelNsslWrfInputOutput {
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
-        val bitmaps = (om.spinnerTimeValue until om.times.size).map { getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "") }
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
+        val bitmaps = (om.spinnerTimeValue until om.times.size).map {
+            getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "")
+        }
         return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

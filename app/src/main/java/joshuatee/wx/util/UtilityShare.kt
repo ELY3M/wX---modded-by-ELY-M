@@ -29,6 +29,7 @@ import androidx.core.app.ShareCompat.IntentBuilder
 import java.io.File
 import java.io.FileOutputStream
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 
 object UtilityShare {
 
@@ -57,8 +58,7 @@ object UtilityShare {
                     UtilityLog.handleException(e)
                 }
         }
-        val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-//        val intentBuilder = IntentBuilder.from(activity)
+        val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val intentBuilder = IntentBuilder(activity)
         intentBuilder.setSubject("$subject $formattedDate")
         intentBuilder.addEmailTo("")
@@ -71,7 +71,7 @@ object UtilityShare {
     }
 
     fun text(context: Context, subject: String, text: String) {
-        val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
+        val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
@@ -96,7 +96,7 @@ object UtilityShare {
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
+        val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val intentBuilder = IntentBuilder(activity)
         intentBuilder.setSubject("$subject $formattedDate")
         intentBuilder.addEmailTo("")

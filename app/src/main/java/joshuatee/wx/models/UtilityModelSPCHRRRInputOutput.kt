@@ -65,9 +65,10 @@ internal object UtilityModelSpcHrrrInputOutput {
             val url = layerUrl + getSectorCode(om.sector).lowercase(Locale.US) + "/" + it + "/" + it + ".gif"
             bitmaps.add(UtilityImg.eraseBackground(url.getImage(), -1))
         }
-        val backgroundUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" + getSectorCode(om.sector).lowercase(Locale.US) + "/R" +
-                om.run.replace("Z", "") + "_F" + formatTime(time) + "_V" + getValidTime(om.run, time) +
-                "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
+        val backgroundUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" +
+                getSectorCode(om.sector).lowercase(Locale.US) + "/R" +
+                om.run.replace("Z", "") + "_F" + formatTime(time) + "_V" +
+                getValidTime(om.run, time) + "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
         bitmaps.add(UtilityImg.eraseBackground(backgroundUrl.getImage(), -1))
         layers.add(ColorDrawable(Color.WHITE))
         layers += bitmaps.map { BitmapDrawable(context.resources, it) }
@@ -75,7 +76,9 @@ internal object UtilityModelSpcHrrrInputOutput {
     }
 
     fun getAnimation(context: Context, om: ObjectModel, overlayImg: List<String>): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bitmaps = (om.spinnerTimeValue until om.times.size).map { k ->
             getImage(context, om, om.times[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0) ?: "", overlayImg)
         }

@@ -28,6 +28,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.appcompat.widget.AppCompatSpinner
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
@@ -47,7 +48,7 @@ class ObjectSpinner(context: Context, label: String, pref: String, prefInit: Str
         val hbox = HBox(context, Gravity.CENTER_VERTICAL)
         hbox.matchParent()
         hbox.addWidget(text.get())
-        val spinner = Spinner(context)
+        val spinner = AppCompatSpinner(context)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             setupSpinner(spinner, false)
         }

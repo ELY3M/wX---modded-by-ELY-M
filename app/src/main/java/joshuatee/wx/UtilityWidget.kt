@@ -34,6 +34,7 @@ import android.net.Uri
 import androidx.core.app.TaskStackBuilder
 import android.widget.RemoteViews
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.ui.*
@@ -137,7 +138,7 @@ object UtilityWidget {
     }
 
     fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, activityFlag: String, activityStringArr: Array<String>, actionString: String) {
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.putExtra(activityFlag, activityStringArr)
         intent.action = actionString
@@ -149,7 +150,7 @@ object UtilityWidget {
     }
 
     fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, activityFlag: String, activityString: String, actionString: String) {
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.putExtra(activityFlag, activityString)
         intent.action = actionString
@@ -161,7 +162,7 @@ object UtilityWidget {
     }
 
     fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, actionString: String) {
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.action = actionString
         val stackBuilder = TaskStackBuilder.create(context)

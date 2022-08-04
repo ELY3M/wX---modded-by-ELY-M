@@ -119,7 +119,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             updateTitle()
             UtilityWXJobService.startService(this)
         } else {
-            ObjectPopupMessage(recyclerView.get(), "Must have at least one location.")
+            ObjectPopupMessage(this, recyclerView.get(), "Must have at least one location.")
         }
     }
 

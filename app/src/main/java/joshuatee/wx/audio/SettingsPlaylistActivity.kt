@@ -79,7 +79,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             } else {
                 dialog.dismiss()
                 val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
-                ObjectPopupMessage(rootView, "$product already in playlist")
+                ObjectPopupMessage(this, rootView, "$product already in playlist")
             }
         }
         diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labels)
@@ -96,7 +96,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             } else {
                 dialog.dismiss()
                 val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
-                ObjectPopupMessage(rootView, "$product already in playlist")
+                ObjectPopupMessage(this, rootView, "$product already in playlist")
             }
         }
         ridFav = Utility.readPref(this, prefToken, "")

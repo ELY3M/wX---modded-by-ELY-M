@@ -23,9 +23,9 @@ package joshuatee.wx.notifications
 
 import android.app.job.JobParameters
 import android.app.job.JobService
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.util.UtilityTime
 import java.util.concurrent.RejectedExecutionException
 
 class WXJobService : JobService() {
@@ -38,7 +38,7 @@ class WXJobService : JobService() {
         } catch (e: RejectedExecutionException) {
             UtilityLog.handleException(e)
         }
-        Utility.writePref(this, "JOBSERVICE_TIME_LAST_RAN", UtilityTime.getCurrentLocalTimeAsString())
+        Utility.writePref(this, "JOBSERVICE_TIME_LAST_RAN", ObjectDateTime.getCurrentLocalTimeAsString())
         // below was commented out till 2018-06-02 and was causing wakelock issues
         jobFinished(params, false)
         return true

@@ -53,6 +53,7 @@ import android.media.AudioAttributes
 import androidx.core.app.NotificationManagerCompat
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences
 
@@ -173,7 +174,7 @@ object UtilityNotification {
             // url above is used as the token for notifications and currenlty looks like
             // https://api.weather.gov/gridpoints/DTX/x,y/forecast
             // problem is if network is down it will be a non deterministic value so we need something different
-            val currentUpdateTime = UtilityTime.currentTimeMillis()
+            val currentUpdateTime = ObjectDateTime.currentTimeMillis()
             val lastUpdateTime = Utility.readPrefLong(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
             if (Location.locations[locNumInt].ccNotification) {
                 notifUrls += url + "CC" + NotificationPreferences.notificationStrSep
@@ -185,7 +186,7 @@ object UtilityNotification {
                 val objCc = ObjectCurrentConditions(context, locNumInt)
                 val objHazards = ObjectHazards(locNumInt)
                 val objSevenDay = ObjectSevenDay(locNumInt)
-                val updateTime = UtilityTime.currentTimeMillis()
+                val updateTime = ObjectDateTime.currentTimeMillis()
                 Utility.writePrefLong(context, "CC" + locNum + "_LAST_UPDATE", updateTime)
                 if (locNum == widgetLocNum && widgetsEnabled) {
                     UtilityWidget.widgetDownloadData(context, objCc, objSevenDay, objHazards)
@@ -390,7 +391,7 @@ object UtilityNotification {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(WX::class.java)
         stackBuilder.addNextIntent(resultIntent)
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val resultPendingIntent2 = PendingIntent.getService(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val resultPendingIntentBack = PendingIntent.getService(context, requestID + 4, resultIntentBack, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)

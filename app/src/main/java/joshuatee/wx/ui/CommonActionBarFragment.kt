@@ -107,7 +107,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 }
             }
             //elys mod - not removing about - ELY M.
-            R.id.action_about -> Route(this, SettingsAboutActivity::class.java)
+            //R.id.action_about -> Route(this, SettingsAboutActivity::class.java)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -118,7 +118,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            ObjectPopupMessage(view, thingsYouSaid!![0])
+            ObjectPopupMessage(this, view, thingsYouSaid!![0])
             val string = thingsYouSaid[0]
             UtilityVoiceCommand.processCommand(this, string, Location.rid, Location.wfo, Location.state)
         }

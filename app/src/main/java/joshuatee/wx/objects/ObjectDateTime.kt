@@ -21,11 +21,15 @@
 
 package joshuatee.wx.objects
 
+import joshuatee.wx.Extensions.parse
+import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
+import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class ObjectDateTime {
 
@@ -63,6 +67,209 @@ class ObjectDateTime {
             val duration = Duration.between(t1, t2)
             // minutes between from and to
             return duration.toMinutes() > m * -1
+        }
+
+        //
+        // Misc
+        //
+
+        // UtilityWidget / WeatherDataProviderObserver / LocationFragment / UtilityModels
+        // BackgroundFetch / ObjectPendingIntents / UtilityNotification / UtilityNotificationSpc
+        // DownloadTimer / WXGLRadarActivity / WXGLRadarActivityMultiPane / WXGLRadarActivityNew
+        // RecordingSession / TelecineService / ObjectDatePicker / TouchImageView2
+        fun currentTimeMillis() = System.currentTimeMillis() // Long
+
+        // ForecastActivity / UtilityTimeSunMoon
+        fun gmtTime(): String {
+            val dateFormatGmt = SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.US)
+            dateFormatGmt.timeZone = TimeZone.getTimeZone("GMT")
+            return "GMT: " + dateFormatGmt.format(Date())
+        }
+
+        // SpotterReportsActivity
+        fun gmtTime(format: String): String {
+            val dateFormatGmt = SimpleDateFormat(format, Locale.US)
+            dateFormatGmt.timeZone = TimeZone.getTimeZone("GMT")
+            return dateFormatGmt.format(Date())
+        }
+
+        // UtilityPlayList / SettingsColorPaletteEditor / ObjectWidgetCCLegacy / UtilityShare
+        fun getDateAsString(format: String): String {
+            val cal = Calendar.getInstance()
+            val df = SimpleDateFormat(format, Locale.US)
+            return df.format(cal.time)
+        }
+
+        // this class / AlertReceiver / WXJobService / UtilityRadarUI
+        fun getCurrentLocalTimeAsString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
+
+
+        // hourly old / UtilityRadarUI
+        fun getYear() = Calendar.getInstance().get(Calendar.YEAR)
+
+//        fun day() = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+
+        // UtilityModelWpcGefsInputOutput
+        val currentHourInUtc: Int
+            get() = Calendar.getInstance(TimeZone.getTimeZone("GMT")).get(Calendar.HOUR_OF_DAY)
+
+        // UtilityNotificationUtils
+        val currentHourIn24: Int
+            get() {
+                val calendar = GregorianCalendar()
+                val time = Date()
+                calendar.time = time
+                return calendar.get(Calendar.HOUR_OF_DAY)
+            }
+
+        fun convertFromUtcForMetar(time: String): String {
+            var returnTime = time
+            val inputFormat = SimpleDateFormat("yyyy.MM.dd' 'HHmm", Locale.US)
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val outputFormat = SimpleDateFormat("MM-dd h:mm a", Locale.US)
+            try {
+                val date = inputFormat.parse(time)
+                returnTime = outputFormat.format(date!!)
+            } catch (e: Exception) {
+                UtilityLog.handleException(e)
+            }
+            return returnTime
+        }
+
+        //
+        // Nexrad Radar
+        //
+        fun radarTime(volumeScanDate: Short, volumeScanTime: Int): Date {
+            val sec = ((volumeScanDate - 1) * 60 * 60 * 24 + volumeScanTime).toLong()
+            val milli = sec * 1000
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = milli
+            return cal.time
+        }
+
+        fun radarTimeL2(days: Short, milliSeconds: Int): Date {
+            val sec = (days - 1).toLong() * 24 * 3600 * 1000 + milliSeconds
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = sec
+            return cal.time
+        }
+
+        fun isRadarTimeOld(radarTime: String): Boolean {
+            val radarTimeComponents = radarTime.split(":")
+            if (radarTimeComponents.size < 3) {
+                return false
+            }
+            val radarTimeHours = radarTimeComponents[0].toIntOrNull() ?: 0
+            val radarTimeMinutes = radarTimeComponents[1].toIntOrNull() ?: 0
+            val radarTimeTotalMinutes = radarTimeHours * 60 + radarTimeMinutes
+            val currentTime = getCurrentLocalTimeAsString().split(" ")[1]
+            val currentTimeComponents = currentTime.split(":")
+            if (currentTimeComponents.size < 3) {
+                return false
+            }
+            val currentTimeHours = currentTimeComponents[0].toIntOrNull() ?: 0
+            val currentTimeMinutes = currentTimeComponents[1].toIntOrNull() ?: 0
+            val currentTimeTotalMinutes = currentTimeHours * 60 + currentTimeMinutes
+            if (currentTimeTotalMinutes < 30) {
+                return false
+            }
+            if (radarTimeTotalMinutes > currentTimeTotalMinutes) {
+                return true
+            }
+            if (radarTimeTotalMinutes < (currentTimeTotalMinutes - 20)) {
+                return true
+            }
+            return false
+        }
+
+        fun isVtecCurrent(vtec: String ): Boolean {
+            // example 190512T1252Z-190512T1545Z
+            val timeRange = vtec.parse("-([0-9]{6}T[0-9]{4})Z")
+            val timeInMinutes = decodeVtecTime(timeRange)
+            val currentTimeInMinutes = decodeVtecTime(getGmtTimeForVtec())
+            return currentTimeInMinutes.before(timeInMinutes)
+        }
+
+        private fun decodeVtecTime(timeRangeOriginal: String): Calendar {
+            // Y2K issue
+            val timeRange = timeRangeOriginal.replace("T","")
+            val year = To.int("20" + timeRange.parse("([0-9]{2})[0-9]{4}[0-9]{4}"))
+            val month = To.int(timeRange.parse("[0-9]{2}([0-9]{2})[0-9]{2}[0-9]{4}"))
+            val day = To.int(timeRange.parse("[0-9]{4}([0-9]{2})[0-9]{4}"))
+            val hour = To.int(timeRange.parse("[0-9]{6}([0-9]{2})[0-9]{2}"))
+            val minute = To.int(timeRange.parse("[0-9]{6}[0-9]{2}([0-9]{2})"))
+            val cal = Calendar.getInstance()
+            cal.set(year, month - 1, day, hour, minute)
+            return cal
+        }
+
+        private fun getGmtTimeForVtec(): String {
+            val dateFormatGmt = SimpleDateFormat("yyMMddHHmm", Locale.US)
+            dateFormatGmt.timeZone = TimeZone.getTimeZone("GMT")
+            return dateFormatGmt.format(Date())
+        }
+
+        //
+        // Hourly
+        //
+        fun translateTimeForHourly(originalTime: String): String {
+            val originalTimeComponents = originalTime.replace("T", "-").split("-")
+            val year = To.int(originalTimeComponents[0])
+            val month = To.int(originalTimeComponents[1])
+            val day = To.int(originalTimeComponents[2])
+            val hour = originalTimeComponents[3].replace(":00:00", "").toIntOrNull() ?: 0
+            val hourString = hour.toString()
+            val calendar = Calendar.getInstance()
+            calendar.set(year - 1900, month - 1, day, 0, 0)
+            val dayOfTheWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
+                6 -> "Mon"
+                7 -> "Tue"
+                1 -> "Wed"
+                2 -> "Thu"
+                3 -> "Fri"
+                4 -> "Sat"
+                5 -> "Sun"
+                else -> ""
+            }
+            return "$dayOfTheWeek $hourString"
+        }
+
+        // Hourly old
+        fun dayOfWeek(year: Int, month: Int, day: Int): String {
+            val calendar = Calendar.getInstance()
+            calendar.set(year - 1900, month - 1, day, 0, 0)
+            return when (calendar.get(Calendar.DAY_OF_WEEK)) {
+                6 -> "Mon"
+                7 -> "Tue"
+                1 -> "Wed"
+                2 -> "Thu"
+                3 -> "Fri"
+                4 -> "Sat"
+                5 -> "Sun"
+                else -> ""
+            }
+        }
+
+        //
+        // Models
+        //
+        // used by SPC HREF and NSSL WRF
+        fun genModelRuns(time: String, hours: Int, timeStr: String): List<String> {
+            val listRun = mutableListOf<String>()
+            val format = SimpleDateFormat(timeStr, Locale.US)
+            var parsed: Date
+            val oneMinuteInMillis: Long = 60000
+            var t: Long = 0
+            (1 until 4).forEach {
+                try {
+                    parsed = format.parse(time)!!
+                    t = parsed.time
+                } catch (e: Exception) {
+                    UtilityLog.handleException(e)
+                }
+                listRun.add(format.format(Date(t - 60 * oneMinuteInMillis * it.toLong() * hours.toLong())))
+            }
+            return listRun
         }
     }
 }

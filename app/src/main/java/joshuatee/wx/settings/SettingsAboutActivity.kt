@@ -66,7 +66,7 @@ class SettingsAboutActivity : BaseActivity() {
         cardText = CardText(this, box)
         val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
         cardDeleteFiles.connect {
-            ObjectPopupMessage(box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
+            ObjectPopupMessage(this, box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         }
         box.addWidget(cardDeleteFiles.get())
         displayContent()

@@ -46,7 +46,7 @@ internal object UtilityRadarUI {
     private const val lastRadarTimePref = "NEXRADDOWNLOAD_TIME_LAST_RAN"
 
     fun updateLastRadarTime(context: Context) {
-        Utility.writePref(context, lastRadarTimePref, UtilityTime.getCurrentLocalTimeAsString())
+        Utility.writePref(context, lastRadarTimePref, ObjectDateTime.getCurrentLocalTimeAsString())
     }
 
     fun getLastRadarTime(context: Context) = Utility.readPref(context, lastRadarTimePref, "")
@@ -117,7 +117,7 @@ internal object UtilityRadarUI {
         longPressList.add("Beam Height MSL: " + heightMsl.roundToInt().toString() + " ft, AGL: " + heightAgl.roundToInt().toString() + " ft")
         if (RadarPreferences.radarShowWpcFronts) {
             var wpcFrontsTimeStamp = Utility.readPref(context,"WPC_FRONTS_TIMESTAMP", "")
-            wpcFrontsTimeStamp = wpcFrontsTimeStamp.replace(UtilityTime.getYear().toString(), "")
+            wpcFrontsTimeStamp = wpcFrontsTimeStamp.replace(ObjectDateTime.getYear().toString(), "")
             if (wpcFrontsTimeStamp.length > 6) {
                 wpcFrontsTimeStamp = wpcFrontsTimeStamp.insert(4, " ")
             }
@@ -475,7 +475,7 @@ internal object UtilityRadarUI {
         FutureText2(
             context,
             {
-                val pointX = glview.newY.toDouble()
+                val pointX = glview.newY
                 val pointY = glview.newX * -1.0
                 getrid = UtilityLocation.getNearestRadarSite(
                     LatLon(

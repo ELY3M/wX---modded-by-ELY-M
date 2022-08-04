@@ -48,10 +48,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.ObjectPolygonWatch
-import joshuatee.wx.objects.Route
-import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.SettingsRadarActivity
 import joshuatee.wx.settings.UtilityLocation
@@ -566,12 +563,16 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     animTriggerDownloads = false
                 }
                 for (r in animArray[0].indices) {
-                    while (inOglAnimPaused) SystemClock.sleep(delay.toLong())
+                    while (inOglAnimPaused) {
+                        SystemClock.sleep(delay.toLong())
+                    }
                     // formerly priorTime was set at the end but that is goofed up with pause
-                    priorTime = UtilityTime.currentTimeMillis()
+                    priorTime = ObjectDateTime.currentTimeMillis()
                     // added because if paused and then another icon life vel/ref it won't load correctly, likely
                     // timing issue
-                    if (!inOglAnim) break
+                    if (!inOglAnim) {
+                        break
+                    }
                     if (loopCnt > 0) {
                         panesList.forEach { z ->
                             wxglRenders[z].constructPolygons((z + 1).toString() + wxglRenders[z].product + "nexrad_anim" + r.toString(), "", false)
@@ -582,8 +583,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         }
                     }
                     launch(uiDispatcher) { progressUpdate((r + 1).toString(), (animArray[0].size).toString()) }
-                    panesList.forEach { wxglSurfaceViews[it].requestRender() }
-                    timeMilli = UtilityTime.currentTimeMillis()
+                    panesList.forEach {
+                        wxglSurfaceViews[it].requestRender()
+                    }
+                    timeMilli = ObjectDateTime.currentTimeMillis()
                     if ((timeMilli - priorTime) < delay) {
                         SystemClock.sleep(delay - ((timeMilli - priorTime)))
                     }

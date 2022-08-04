@@ -118,7 +118,6 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
-            //TODO figure out how to read pal files//
             "N0U", "L2VEL", "TV0" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(99, 255 - it)
@@ -174,7 +173,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         canvas.drawText(
                             it.toString() + units,
                             widthStarting + width + textFromLegend,
-                            3.64f * scaledHeightVel * (70 - it).toFloat() + heightFudge + startHeight,
+                            3.64f * scaledHeightVel * (70 - it) + heightFudge + startHeight,
                             paintText
                         )
                         if (!unitsDrawn) {
@@ -202,7 +201,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         canvas.drawText(
                             it.toString() + units,
                             widthStarting + width + textFromLegend,
-                            3.64f * scaledHeightVel * (70 - it).toFloat() + heightFudge + startHeight,
+                            3.64f * scaledHeightVel * (70 - it) + heightFudge + startHeight,
                             paintText
                         )
                         if (!unitsDrawn) {
@@ -228,7 +227,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     canvas.drawText(
                         it.toString() + units,
                         widthStarting + width + textFromLegend,
-                        16.0f * scaledHeightVel * (8 - it).toFloat() + heightFudge + startHeight,
+                        16.0f * scaledHeightVel * (8 - it) + heightFudge + startHeight,
                         paintText
                     )
                     if (!unitsDrawn) {
@@ -254,7 +253,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         canvas.drawText(
                             (it / 100.0).toString().take(4) + units,
                             widthStarting + width + textFromLegend,
-                            3.0f * scaledHeightVel * (100 - it).toFloat() + heightFudge + startHeight,
+                            3.0f * scaledHeightVel * (100 - it) + heightFudge + startHeight,
                             paintText
                         )
                         if (!unitsDrawn) {
@@ -280,7 +279,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     canvas.drawText(
                         it.toString() + units,
                         widthStarting + width + textFromLegend,
-                        20.0f * scaledHeightVel * (10 - it).toFloat() + heightFudge + startHeight,
+                        20.0f * scaledHeightVel * (10 - it) + heightFudge + startHeight,
                         paintText
                     )
                     if (!unitsDrawn) {

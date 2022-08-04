@@ -79,7 +79,7 @@ class ObjectCurrentConditions {
         var sb = temperature
         if (objectMetar.windChill != "NA") {
             sb += "($windChill)"
-        } else if (objectMetar.heatIndex != "NA") {
+        } else if (objectMetar.heatIndex != "NA" && (objectMetar.heatIndex + GlobalVariables.DEGREE_SYMBOL) != temperature) {
             sb += "($heatIndex)"
         }
         sb += " / $dewPoint($relativeHumidity) - "

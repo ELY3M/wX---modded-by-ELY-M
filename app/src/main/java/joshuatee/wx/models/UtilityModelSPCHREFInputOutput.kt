@@ -29,10 +29,9 @@ import android.graphics.drawable.Drawable
 import java.util.Locale
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
-import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.objects.ObjectDateTime
 
 internal object UtilityModelSpcHrefInputOutput {
 
@@ -45,17 +44,24 @@ internal object UtilityModelSpcHrefInputOutput {
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
             runData.listRunAdd(mostRecentRun)
-            runData.listRunAddAll(UtilityTime.genModelRuns(mostRecentRun, 12, "yyyyMMddHH"))
+            runData.listRunAddAll(ObjectDateTime.genModelRuns(mostRecentRun, 12, "yyyyMMddHH"))
             runData.mostRecentRun = mostRecentRun
             return runData
         }
 
     fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
-        var sectorIndex = if (om.sector == "") 0 else UtilityModelSpcHrefInterface.sectorsLong.indexOf(om.sector)
-//        UtilityLog.d("wx", "DEBUG: " + sectorIndex + " " + om.sector)
-        if (sectorIndex == -1) sectorIndex = 0
+        var sectorIndex = if (om.sector == "") {
+            0
+        } else {
+            UtilityModelSpcHrefInterface.sectorsLong.indexOf(om.sector)
+        }
+        if (sectorIndex == -1) {
+            sectorIndex = 0
+        }
         val sector = UtilityModelSpcHrefInterface.sectors.safeGet(sectorIndex)
-        if (om.run.length < 10) return UtilityImg.getBlankBitmap()
+        if (om.run.length < 10) {
+            return UtilityImg.getBlankBitmap()
+        }
         val year = om.run.substring(0, 4)
         val month = om.run.substring(4, 6)
         val day = om.run.substring(6, 8)
@@ -79,7 +85,6 @@ internal object UtilityModelSpcHrefInputOutput {
                         "." + sector.lowercase(Locale.US) + ".f0" + time + "00.png"
             }
             urls.add(url)
-            UtilityLog.d("wx", url)
         }
         urls.add("${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.png")
         urls.forEach {

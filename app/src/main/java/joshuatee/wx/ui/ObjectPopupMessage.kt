@@ -21,6 +21,7 @@
 
 package joshuatee.wx.ui
 
+import android.content.Context
 import android.graphics.Color
 import android.util.TypedValue
 import android.view.View
@@ -28,7 +29,7 @@ import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import joshuatee.wx.settings.UIPreferences
 
-class ObjectPopupMessage(view: View, message: String) {
+class ObjectPopupMessage(context: Context, view: View, message: String) {
 
     init {
         val snack = Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE)
@@ -37,10 +38,11 @@ class ObjectPopupMessage(view: View, message: String) {
         val viewSnack = snack.view
         val textView = viewSnack.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
         val fgColor = Color.WHITE
-        val bgColor = Color.BLACK
+//        val bgColor = Color.BLACK
         textView.setTextColor(fgColor)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-        viewSnack.setBackgroundColor(bgColor)
+//        viewSnack.setBackgroundColor(bgColor)
+//        viewSnack.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
         snack.show()
     }
 }

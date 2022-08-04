@@ -82,15 +82,15 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContent() {
-//        FutureVoid(this, ::download, ::update)
         FutureVoid(this, ::downloadText, ::updateText)
         FutureVoid(this, ::downloadImage, ::updateImage)
     }
-
-//    private fun download() {
-//        objectWatchProduct.getData(this)
-//    }
 
     private fun downloadText() {
         objectWatchProduct.getText(this)
@@ -103,20 +103,10 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun updateText() {
         cardText.text = Utility.fromHtml(objectWatchProduct.text)
         toolbar.subtitle = objectWatchProduct.textForSubtitle
-//        if (tabletInLandscape) {
-//            image.set(objectWatchProduct.bitmap, 2)
-//        } else {
-//            image.set(objectWatchProduct.bitmap)
-//        }
-//        image.connect {
-//            Route.image(this, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
-//        }
         UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
 
     private fun updateImage() {
-//        cardText.text = Utility.fromHtml(objectWatchProduct.text)
-//        toolbar.subtitle = objectWatchProduct.textForSubtitle
         if (tabletInLandscape) {
             image.set(objectWatchProduct.bitmap, 2)
         } else {
@@ -125,7 +115,6 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         image.connect {
             Route.image(this, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
         }
-//        UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

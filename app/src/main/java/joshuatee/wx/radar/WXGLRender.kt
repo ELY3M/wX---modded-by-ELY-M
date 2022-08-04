@@ -1084,8 +1084,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             matrixView[it] = 0.0f
             matrixProjectionAndView[it] = 0.0f
         }
-        Matrix.orthoM(matrixProjection, 0, (-1 * ortInt).toFloat(), ortInt.toFloat(), -1.0f * ortInt.toFloat() * (1 / surfaceRatio),
-                ortInt * (1 / surfaceRatio), 1.0f, -1.0f)
+        Matrix.orthoM(matrixProjection, 0, (-1.0f * ortInt), ortInt.toFloat(), -1.0f * ortInt * (1.0f / surfaceRatio),
+                ortInt * (1.0f / surfaceRatio), 1.0f, -1.0f)
         Matrix.setLookAtM(matrixView, 0, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
         Matrix.multiplyMM(matrixProjectionAndView, 0, matrixProjection, 0, matrixView, 0)
         Matrix.multiplyMM(matrixProjectionAndViewOrig, 0, matrixProjection, 0, matrixView, 0)
@@ -1206,9 +1206,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }
             for (notUsed in 0 until buffers.breakSize) {
                 buffers.putFloat(list[vList].toFloat())
-                buffers.putFloat(list[vList + 1].toFloat() * -1)
+                buffers.putFloat(list[vList + 1].toFloat() * -1.0f)
                 buffers.putFloat(list[vList + 2].toFloat())
-                buffers.putFloat(list[vList + 3].toFloat() * -1)
+                buffers.putFloat(list[vList + 3].toFloat() * -1.0f)
                 vList += 4
             }
         }
@@ -1657,9 +1657,13 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         tvsBuffers.isInitialized = false
     }
 
-    fun constructMpdLines() = constructGenericLines(mpdBuffers)
+    fun constructMpdLines() {
+        constructGenericLines(mpdBuffers)
+    }
 
-    fun deconstructMpdLines() = deconstructGenericLines(mpdBuffers)
+    fun deconstructMpdLines() {
+        deconstructGenericLines(mpdBuffers)
+    }
 
     private fun constructGenericLines(buffers: ObjectOglBuffers) {
         var list = listOf<Double>()
@@ -1667,7 +1671,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH, PolygonType.WATCH_TORNADO -> list = UtilityWatch.add(projectionNumbers, buffers.type).toList()
             PolygonType.TST, PolygonType.TOR, PolygonType.FFW -> list = WXGLPolygonWarnings.add(projectionNumbers, buffers.type).toList()
             PolygonType.STI -> list = WXGLNexradLevel3StormInfo.decodeAndPlot(context, indexString, projectionNumbers).toList()
-            else -> if (buffers.warningType != null) list = WXGLPolygonWarnings.addGeneric(projectionNumbers, buffers.warningType!!).toList()
+            else -> if (buffers.warningType != null) {
+                list = WXGLPolygonWarnings.addGeneric(projectionNumbers, buffers.warningType!!).toList()
+            }
         }
         buffers.breakSize = 15000
         buffers.chunkCount = 1

@@ -26,8 +26,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.util.UtilityImgAnim
-import joshuatee.wx.util.UtilityTime
 
 internal object UtilityModelWpcGefsInputOutput {
 
@@ -38,18 +38,30 @@ internal object UtilityModelWpcGefsInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val currentHour = UtilityTime.currentHourInUtc
+            val currentHour = ObjectDateTime.currentHourInUtc
             runData.mostRecentRun = "00"
-            if (currentHour in 12..17) runData.mostRecentRun = "06"
-            if (currentHour >= 18) runData.mostRecentRun = "12"
-            if (currentHour < 6) runData.mostRecentRun = "18"
-            listOf("00", "06", "12", "18").forEach { runData.listRunAdd(it) }
+            if (currentHour in 12..17) {
+                runData.mostRecentRun = "06"
+            }
+            if (currentHour >= 18) {
+                runData.mostRecentRun = "12"
+            }
+            if (currentHour < 6) {
+                runData.mostRecentRun = "18"
+            }
+            listOf("00", "06", "12", "18").forEach {
+                runData.listRunAdd(it)
+            }
             runData.timeStrConv = runData.mostRecentRun
             return runData
         }
 
     fun getImage(om: ObjectModel, time: String): Bitmap {
-        val sectorAdd = if (om.sector == "AK") "_ak" else ""
+        val sectorAdd = if (om.sector == "AK") {
+            "_ak"
+        } else {
+            ""
+        }
         val url = "${GlobalVariables.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
         return url.getImage()
     }

@@ -38,6 +38,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.radarcolorpalettes.UtilityColorPalette
@@ -82,8 +83,12 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         typeAsInt = type.toIntOrNull() ?: 94
         title = "Palette Editor"
         toolbar.subtitle = WXGLNexrad.productCodeStringToName[typeAsInt]
-        formattedDate = UtilityTime.getDateAsString("MMdd")
-        name = if (arguments[2].contains("false")) arguments[1] else arguments[1] + "_" + formattedDate
+        formattedDate = ObjectDateTime.getDateAsString("MMdd")
+        name = if (arguments[2].contains("false")) {
+            arguments[1]
+        } else {
+            arguments[1] + "_" + formattedDate
+        }
         palTitle.setText(name)
         palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
         palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1]))
@@ -91,7 +96,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun fabSavePalette(context: Context) {
-        val date = UtilityTime.getDateAsString("HH:mm")
+        val date = ObjectDateTime.getDateAsString("HH:mm")
         val errorCheck = checkMapForErrors()
         if (errorCheck == "") {
             var textToSave = palContent.text.toString()
@@ -123,7 +128,11 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         var lineCount = 0
         lines.forEach { line ->
             if (line.contains("olor") && !line.contains("#")) {
-                val list = if (line.contains(",")) line.split(",") else line.split(" ")
+                val list = if (line.contains(",")) {
+                    line.split(",")
+                } else {
+                    line.split(" ")
+                }
                 lineCount += 1
                 try {
                     if (list.size > 4) {

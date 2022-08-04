@@ -90,9 +90,9 @@ internal object UtilityCanvas {
                         coordinates[1].toFloat() - 4,
                         paint
                 )
-                canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2f, paint)
+                canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
             } else {
-                canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 1f, paint)
+                canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 1.0f, paint)
             }
         }
     }
@@ -123,7 +123,7 @@ internal object UtilityCanvas {
             val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, RadarPreferences.radarLocIconSize, RadarPreferences.radarLocIconSize, false)
             canvas.drawBitmap(locationiconresized, coordinates[0].toFloat(), coordinates[1].toFloat(), null)
         } else {
-        canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2f, paint)
+        canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
 
         }
 
@@ -189,9 +189,9 @@ internal object UtilityCanvas {
                     } else {
                         UtilityCanvasProjection.compute4326Numbers(latLons[0], projectionNumbers)
                     }
-                    val firstX = startCoordinates[0]
-                    val firstY = startCoordinates[1]
-                    path.moveTo(firstX.toFloat(), firstY.toFloat())
+                    val firstX = startCoordinates[0].toFloat()
+                    val firstY = startCoordinates[1].toFloat()
+                    path.moveTo(firstX, firstY)
                     (1 until latLons.size).forEach { index ->
                         val coordinates = if (isMercator) {
                             UtilityCanvasProjection.computeMercatorNumbers(latLons[index], projectionNumbers)
@@ -200,7 +200,7 @@ internal object UtilityCanvas {
                         }
                         path.lineTo(coordinates[0].toFloat(), coordinates[1].toFloat())
                     }
-                    path.lineTo(firstX.toFloat(), firstY.toFloat())
+                    path.lineTo(firstX, firstY)
                     canvas.drawPath(path, paint)
                 }
             }

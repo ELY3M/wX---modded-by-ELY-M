@@ -26,6 +26,7 @@ import java.nio.ByteOrder
 import android.content.Context
 import joshuatee.wx.Jni
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 
@@ -135,8 +136,8 @@ class WXGLNexradLevel2 {
             days.position(0)
             val days2 = days.short
             val milliSeconds = msecs.int
-            val d = UtilityTime.radarTimeL2(days2, milliSeconds)
-            val radarInfo = d.toString() + GlobalVariables.newline + "Product Code: " + productCode.toString()
+            val date = ObjectDateTime.radarTimeL2(days2, milliSeconds)
+            val radarInfo = date.toString() + GlobalVariables.newline + "Product Code: " + productCode.toString()
             WXGLNexrad.writeRadarInfo(context, radarStatusStr, radarInfo)
             binSize = WXGLNexrad.getBinSize(productCode.toInt())
         } catch (e: Exception) {

@@ -23,7 +23,7 @@ package joshuatee.wx.ui
 
 import android.app.DatePickerDialog
 import android.content.Context
-import joshuatee.wx.util.UtilityTime
+import joshuatee.wx.objects.ObjectDateTime
 import java.util.*
 
 //
@@ -47,7 +47,7 @@ class ObjectDatePicker(context: Context, var year: Int, var month: Int, var day:
         cal.set(Calendar.MONTH, 2)
         cal.set(Calendar.DAY_OF_MONTH, 23)
         stDatePicker.datePicker.minDate = cal.timeInMillis - 1000
-        stDatePicker.datePicker.maxDate = UtilityTime.currentTimeMillis()
+        stDatePicker.datePicker.maxDate = ObjectDateTime.currentTimeMillis()
         stDatePicker.setCanceledOnTouchOutside(true)
         stDatePicker.show()
     }

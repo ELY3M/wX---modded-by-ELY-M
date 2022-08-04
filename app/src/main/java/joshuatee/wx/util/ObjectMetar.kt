@@ -27,6 +27,7 @@ import joshuatee.wx.radar.UtilityMetar
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.radar.RID
 import java.util.*
 import kotlin.math.roundToInt
@@ -90,7 +91,7 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         if (metarDataList.size > 2) {
             val localStatus = metarDataList[1].split("/")
             if (localStatus.size > 1) {
-                conditionsTimeStr = UtilityTime.convertFromUtcForMetar(localStatus[1].replace(" UTC", ""))
+                conditionsTimeStr = ObjectDateTime.convertFromUtcForMetar(localStatus[1].replace(" UTC", ""))
                 timeStringUtc = localStatus[1].trim()
             }
         }

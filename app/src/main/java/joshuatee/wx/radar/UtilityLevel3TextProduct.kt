@@ -40,9 +40,17 @@ object UtilityLevel3TextProduct {
         val stringBuilder = StringBuilder(1500)
         try {
             ucarRandomAccessFile?.let {
-                while (true) if (it.readShort().toInt() == -1) break
+                while (true) {
+                    if (it.readShort().toInt() == -1) {
+                        break
+                    }
+                }
                 it.skipBytes(26)
-                while (true) if (it.readShort().toInt() == -1) break
+                while (true) {
+                    if (it.readShort().toInt() == -1) {
+                        break
+                    }
+                }
                 try {
                     while (!it.isAtEndOfFile) {
                         stringBuilder.append(String(byteArrayOf(it.readByte()), charset("ISO-8859-1")))

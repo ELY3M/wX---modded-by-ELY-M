@@ -42,9 +42,9 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityTime
 
 internal object UtilityNotificationSpc {
 
@@ -191,7 +191,7 @@ internal object UtilityNotificationSpc {
     private fun sendMcdNotification(context: Context, locNum: String, mdNo: String): String {
         val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
         val locLabel = Utility.readPref(context, "LOC" + locNum + "_LABEL", "")
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val locLabelStr = "($locLabel) "
         val mcdPre = UtilityDownload.getTextProduct(context, "SPCMCD$mdNo").replace("<.*?>".toRegex(), " ")
@@ -232,7 +232,7 @@ internal object UtilityNotificationSpc {
     private fun sendSwoNotification(context: Context, locNum: String, day: Int, threatLevel: String, validTime: String): String {
         val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
         val locLabel = Utility.readPref(context, "LOC" + locNum + "_LABEL", "")
-        val requestID = UtilityTime.currentTimeMillis().toInt()
+        val requestID = ObjectDateTime.currentTimeMillis().toInt()
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val locLabelStr = "($locLabel) "
         val dayStr = "SWODY$day"

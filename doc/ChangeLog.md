@@ -1,44 +1,66 @@
 ```
-// TODO [FIX] chromeOS: text size for observations in nexrad
-// TODO [FIX] storm reports - having location follow gps breaks the location marker
-// TODO [REF] WXGLRender rename rid to radarSite
-// TODO [FIX] NSSL WRF needs better runtime detection (reference C++ code)
-// TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
-// TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
-// TODO [REF] migrate all to Future* (BackgroundFetch, Nexrad)
-// TODO [ADD] have nexrad long press verbiage match iOS version
-// TODO [REF] replace String.format with stuff in to.kt
-// TODO [FIX] review multipane data usage
-// TODO [ADD] user request for metar homescreen widget
-// TODO [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
-// TODO [ADD] look to replace AWC radar mosaics with normal NWS (looks like AWC website redesign might obsolete)
+// [FIX] chromeOS: text size for observations in nexrad
+// [FIX] storm reports - having location follow gps breaks the location marker
+// [REF] WXGLRender rename rid to radarSite
+// [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
+// [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
+// [REF] migrate all to Future* (BackgroundFetch, Nexrad)
+// [REF] replace String.format with stuff in to.kt
+// [ADD] user request for metar homescreen widget
+// [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
 // [FIX] SPC HREF radar stuff
 // [REF] IntentService is deprecated (AudioService* and others) https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
 // [REF] After Oct 2022 - raise minSDK to Android 6	API 23	Marshmallow
-// [REF] After Oct 2023 - raise minSDK to Android 7.1 API 25 Nougat (update upcoming changes)
 // [REF] WXGLRender should show elements based on pref not buffer size (ca/mx statelines ex.)
 // [ADD] handle deprecations in UtilityUI https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
-// [FIX] SpcMcdWatchShowSummaryActivity - radar icon does not work
 // [FIX] nexrad invoked from alert will not keep site when jump to multipane
 // [FIX] USAlerts state count is not accurate
 // [REF] VBox removeChildren* - https://stackoverflow.com/questions/11952598/whats-difference-between-removeallviews-and-removeallviewsinlayout
-// [REF] rationalize multiple MCD activities, onrestart for MCD
-// [REF] ObjectDateTime migration
-// [REF] deprecate ExternalDuplicateRemover used in UtilityVtec
-// [ADD] deprecate launch to radar (add to gitlab page after API25 or lower is deprecated, static pinned launchers supported in API26 Android 8.0)
+// [ADD] explore https://github.com/material-components/material-components-android/blob/master/docs/getting-started.md 
+// [REF] deprecate ExternalDuplicateRemover used in ObjectWarning
 // [FIX] dual/quad pane radar don't take up the entire screen on chromeOS and pixel 6a
 // [FIX] deprecated startActivityForResult onActivityResult (see example in SettingsNotificationsActivity.kt)
 // [REF] migrate UtilityDownloadWarnings.kt -> ObjectPolygonWarning.kt
-// [REF] ImageMap.java: This custom view should extend `androidx.appcompat.widget.AppCompatImageView` instead
-// [REF] remove unecessary toFloat or toDouble
+// [ADD] Material3 for all themes
+// [ADD] https://m3.material.io/components/dialogs/implementation/android  https://developer.android.com/jetpack/androidx/releases/compose-material3
+// [ADD] https://developer.android.com/reference/com/google/android/material/card/MaterialCardView
+// [ADD] com.google.android.material.card.MaterialCardView
+// [FIX] blue/white theme notification exclude dialogue
 ```
 [[_TOC_]]
 
-TEST 55647: nexrad immersive mode, nexrad transparent status bar
-TEST 55647: nexrad and gps location dot
-TEST 55647: nexrad long press
+## 55653 2022_08_04
+*
 
-## 55648 2022_08_02
+## 55652 2022_08_04
+* [ADD] Material3 "You" attempt for all themes
+
+## 55651 2022_08_04
+* [ADD] change SeekBar to AppCompatSeekBar in ObjectNumberPicker
+* [ADD] change Spinner to AppCompatSpinner in ObjectSpinner
+* [ADD] change Spinner to AppCompatSpinner in ObjectSpinner
+* [ADD] change TextView to MaterialTextView in CardText
+* [FIX] how FAB color is handled
+* [ADD] Material3 "You" attempt for blue theme
+
+## 55650 2022_08_03
+* [REF] misc refactor
+* [ADD] Material3 "You" attempt for default theme
+
+## 55649 2022_08_03
+* [REF] misc refactor
+
+## 55648 2022_08_03
+* [ADD] ImageMap.java - change base class from android.widget.ImageView to androidx.appcompat.widget.AppCompatImageView
+* [FIX] ObjectCurrentConditions.kt - if the heat index and the temp (both rounded) are equal, don't show heat index
+* [ADD] SPC MCD/Watch summary icons in SPC Tab now show only images regardless of how many Watch or MCD there are. This resolves one bug
+          and makes the interface more predictable. Please note that the "Severe Dashboard" accessible on the main screen via octagon icon
+          is the preferred method to see MCD/Watch. When the Navigation drawer is configured as compared to Tabs they are not even visible.
+* [ADD] SPC MCD/Watch summary - if no watch or mcd is present use a bigger font with a "high light" color
+* [ADD] SPC MCD/Watch summary - add timer and onrestart
+* [ADD] SPC MCD/Watch single - add onrestart
+* [REF] ObjectDateTime migration
+* [ADD] In severe dashboard if no warnings/watch/mcd/mpd are present show "None" in subtitle
 
 ## 55647 2022_08_02
 * [REF] misc refactor (radar incl)

@@ -25,12 +25,14 @@ import android.app.Activity
 import android.content.Context
 import androidx.cardview.widget.CardView
 import android.view.View
+import com.google.android.material.card.MaterialCardView
 import joshuatee.wx.settings.UIPreferences
 
 class Card {
 
     companion object { private const val padding = 2 }
 
+//    private val card: MaterialCardView
     private val card: CardView
 
     constructor(context: Context) {

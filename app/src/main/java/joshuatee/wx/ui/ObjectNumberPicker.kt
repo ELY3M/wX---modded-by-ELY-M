@@ -29,6 +29,7 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import androidx.appcompat.widget.AppCompatSeekBar
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
@@ -52,7 +53,7 @@ internal class ObjectNumberPicker(
         else -> Utility.readPrefInt(context, pref, defValue)
     }
     private val text = Text(context)
-    private val seekBar = SeekBar(context)
+    private val seekBar = AppCompatSeekBar(context)
 
     init {
         text.setPadding(UIPreferences.padding)

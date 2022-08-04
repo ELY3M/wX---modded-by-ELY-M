@@ -184,9 +184,25 @@ object Utility {
         themeStr.startsWith("allWhite") -> R.style.MyCustomTheme_whitest_NOAB
         themeStr.startsWith("orange") -> R.style.MyCustomTheme_orange_NOAB
         themeStr.startsWith("BlackAqua") -> R.style.MyCustomTheme_BlackAqua_NOAB
+        themeStr.startsWith("BlackAqua3") -> R.style.MyCustomTheme_BlackAqua3	
         themeStr.startsWith("BlackNeonGreen") -> R.style.MyCustomTheme_BlackNeonGreen_NOAB
         themeStr.startsWith("WhiteToolbar") -> R.style.MyCustomTheme_white_NOAB
         else -> R.style.MyCustomTheme_NOAB
+    }
+
+    fun isThemeMaterial3() = when (UIPreferences.themeInt) {
+        R.style.MyCustomTheme_whiter_NOAB -> true
+        R.style.MyCustomTheme_NOAB -> true
+        R.style.MyCustomTheme_Green_NOAB -> true
+        R.style.MyCustomTheme_Gray_NOAB -> true
+        R.style.MyCustomTheme_orange_NOAB -> true
+        R.style.MyCustomTheme_Holo_Dark_NOAB -> true
+        R.style.MyCustomTheme_Holo_Darkest_NOAB -> true
+        R.style.MyCustomTheme_mixedBlue_NOAB -> true
+        R.style.MyCustomTheme_DarkBlue_NOAB -> true
+        R.style.MyCustomTheme_whitest_NOAB -> true
+        R.style.MyCustomTheme_BlackAqua3 -> true	
+        else -> false
     }
 
     fun isThemeAllBlack() = UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Dark_NOAB || UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Darkest_NOAB

@@ -273,8 +273,8 @@ class LocationFragment : Fragment() {
                 radarLocationChangedAl[oglrIdx] = false
             }
             if (UIPreferences.locDisplayImg && oglrIdx != -1) {
-                wxglSurfaceViews[oglrIdx].scaleFactor = RadarPreferences.wxoglSize.toFloat() / 10.0f
-                wxglRenders[oglrIdx].setViewInitial(RadarPreferences.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
+                wxglSurfaceViews[oglrIdx].scaleFactor = RadarPreferences.wxoglSize / 10.0f
+                wxglRenders[oglrIdx].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
             }
             homeScreenImageCards.forEach {
                 it.resetZoom()
@@ -312,7 +312,7 @@ class LocationFragment : Fragment() {
         if (UIPreferences.locDisplayImg) {
             getAllRadars()
         }
-        val currentTime = UtilityTime.currentTimeMillis()
+        val currentTime = ObjectDateTime.currentTimeMillis()
         lastRefresh = currentTime / 1000
         // TODO FIXME what is this for?
         Utility.writePrefLong(MyApplication.appContext, "LOC_LAST_UPDATE", lastRefresh)
@@ -338,7 +338,7 @@ class LocationFragment : Fragment() {
             it.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
         }
         // TODO use a Timer class to handle the data refresh stuff
-        val currentTime = UtilityTime.currentTimeMillis()
+        val currentTime = ObjectDateTime.currentTimeMillis()
         val currentTimeSec = currentTime / 1000
         val refreshIntervalSec = (UIPreferences.refreshLocMin * 60).toLong()
         val xOld = x
@@ -666,8 +666,8 @@ class LocationFragment : Fragment() {
             Utility.writePref(activityReference, "HOMESCREEN_FAV", UIPreferences.homescreenFav)
         }
         radarLocationChangedAl[idxIntG] = true
-        wxglSurfaceViews[idxIntG].scaleFactor = RadarPreferences.wxoglSize.toFloat() / 10.0f
-        wxglRenders[idxIntG].setViewInitial(RadarPreferences.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
+        wxglSurfaceViews[idxIntG].scaleFactor = RadarPreferences.wxoglSize / 10.0f
+        wxglRenders[idxIntG].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
         getRadar(idxIntG)
     }
 

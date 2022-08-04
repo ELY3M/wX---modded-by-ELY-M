@@ -30,6 +30,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Paint.Style
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.RadarPreferences
@@ -69,9 +70,9 @@ internal object UtilityNexradRadial8Bit {
             dis.skipBytes(6)
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
-            val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
+            val date = ObjectDateTime.radarTime(volumeScanDate, volumeScanTime)
             try {
-                WXGLNexrad.writeRadarTimeForWidget(context, d.toString())
+                WXGLNexrad.writeRadarTimeForWidget(context, date.toString())
             } catch (e: Exception) {
                 WXGLNexrad.writeRadarTimeForWidget(context, "")
                 UtilityLog.handleException(e)

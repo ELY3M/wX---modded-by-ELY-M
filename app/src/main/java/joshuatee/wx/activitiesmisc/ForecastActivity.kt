@@ -35,10 +35,10 @@ import joshuatee.wx.util.ObjectCurrentConditions
 import joshuatee.wx.util.ObjectHazards
 import joshuatee.wx.util.ObjectSevenDay
 import joshuatee.wx.util.UtilityTimeSunMoon
-import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.ui.*
 
 class ForecastActivity : BaseActivity() {
@@ -129,7 +129,8 @@ class ForecastActivity : BaseActivity() {
         }
         val sunriseCard = CardText(this)
         sunriseCard.center()
-        sunriseCard.text = UtilityTimeSunMoon.getSunriseSunset(this, Location.currentLocationStr, false) + GlobalVariables.newline + UtilityTime.gmtTime()
+        sunriseCard.text = UtilityTimeSunMoon.getSunriseSunset(this, Location.currentLocationStr, false) +
+                GlobalVariables.newline + ObjectDateTime.gmtTime()
         boxForecast.addWidget(sunriseCard.get())
     }
 
@@ -155,6 +156,6 @@ class ForecastActivity : BaseActivity() {
 
     private fun saveLocation() {
         val message = Location.save(this, latLon)
-        ObjectPopupMessage(box.get(), message)
+        ObjectPopupMessage(this, box.get(), message)
     }
 }

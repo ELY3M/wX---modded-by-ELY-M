@@ -28,7 +28,9 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.textview.MaterialTextView
 import joshuatee.wx.Extensions.setPadding
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.audio.UtilityTtsTranslations
@@ -38,7 +40,7 @@ import joshuatee.wx.objects.TextSize
 class CardText(context: Context) {
 
     private val card = Card(context)
-    private val tv = TextView(context)
+    private val tv = MaterialTextView(context)
     private var padding = UIPreferences.padding
 
     init {
