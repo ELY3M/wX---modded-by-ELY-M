@@ -32,28 +32,30 @@ http://bmx3r.com/wx/switch
 
 ## TO DO List: 
 
-1\. conus radar overlay when you zoom out like on pykl3   
-2\. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
-3\. allow custom icons! esp cities dots - hail/tvs/location image is done!.    
-4\. add warning list within radar  
-5\. add LSR reports from SN spotters/option to turn on/off LSR reports  
-6\. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
-7\. might 4th radar icon for cc  
-8\. move show color legend to bottom as a option.  there will be option to choose which side.     
-9\. rename application id and change icon color so someone can run both versions of wX   
-10\. 8-bit SRM like in pykl3  
-11\. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
-12\. android wear support. I own android wear watches and love them.      
-13\. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
-14\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
-15\. color tables for SRM and Spectrum Width  
-16\. get dbz and wind speed from point via long press - request by Mike T.      
-17\.  move flash flood warning over with other warnings?   
+* conus radar overlay when you zoom out like on pykl3   
+* add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
+* allow custom icons! esp cities dots - hail/tvs/location image is done!.    
+* add warning list within radar  
+* add LSR reports from SN spotters/option to turn on/off LSR reports  
+* as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
+* move show color legend to bottom as a option.  there will be option to choose which side.     
+* rename application id and change icon color so someone can run both versions of wX   
+* 8-bit SRM like in pykl3  
+* fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
+* android wear support. I own android wear watches and love them.      
+* would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
+* make VAD Wind Profile more better and friendly  like the one at cod.edu    
+* color tables for SRM and Spectrum Width  
+* get dbz and wind speed from point via long press - request by Mike T.      
 
 
 #
 ## DONE!
-====================================     
+====================================  
+I finally fixed how hail icons works. I know it have been long time that radar was showing wrong hail icons for hail sizes. 
+It should show correct hail icons for hail sizes from now on.  The hail icons are in wX folder on the phone memory or sd card.  
+This idea came from GRLevelx and PYKL3. this meant to allow users to change hail icons.  just have to use png and follow image names.      
+   
 as temp fix, I switched conus radar to WPC for now.   I know the radar on weather.gov is changed.   
 Added 3 fingers touch function to show conus radar from any zoom.  press and hold screen with 3 fingers to show conus radar map anytime.  
 Added in function to enable and disable showing radar.  idea/request by Mike T. - very great idea!   The radar show/hide function is in menu in tools section.    
