@@ -25,11 +25,9 @@ package joshuatee.wx.radar
 import android.content.Context
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityLog
-import java.io.File
 import java.util.regex.Pattern
 
 internal object WXGLNexradLevel3HailIndex {
@@ -49,7 +47,7 @@ internal object WXGLNexradLevel3HailIndex {
     var hailSizeText = "Unknown"
     var hailSizeIcon = "hailunknown.png"
 
-    fun decodeAndPlot(context: Context, radarSite: String, fnSuffix: String): List<Double> {
+    fun decodeAndPlot(context: Context, radarSite: String, fnSuffix: String): List<Hail> {
         val fileName = hiBaseFn + fnSuffix
         val stormList = mutableListOf<Double>()
         val location = UtilityLocation.getSiteLocation(radarSite)
@@ -167,8 +165,7 @@ internal object WXGLNexradLevel3HailIndex {
             }
         }
 
-        return stormList
-        //return hailList
+        return hailList
     }
 
 

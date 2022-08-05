@@ -254,8 +254,8 @@ class WXGLTextObject(
                 WXGLNexradLevel3HailIndex.hailList.indices.forEach {
                     checkAndDrawText(
                             wxglSurfaceView.hailLabels,
-                            WXGLNexradLevel3HailIndex.hailList[it].lat - 0.163 / wxglRender.zoom, //move down to under HI icon
-                            WXGLNexradLevel3HailIndex.hailList[it].lon,
+                            WXGLNexradLevel3HailIndex.hailList[it].latD - 0.163 / wxglRender.zoom, //move down to under HI icon
+                            WXGLNexradLevel3HailIndex.hailList[it].lonD,
                             WXGLNexradLevel3HailIndex.hailList[it].hailSize,
                             RadarPreferences.radarColorHiText
                     )

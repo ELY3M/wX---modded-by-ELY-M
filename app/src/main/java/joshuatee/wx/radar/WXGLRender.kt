@@ -470,87 +470,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }
         }
 
-        //elys mod - hailmod
 
-/*
-        //stuck to hail0.png
-        //picked one of images :(
-        listOf(hiBuffers).forEach {
-        if (zoom > it.scaleCutOff) {
-            drawHI(it)
-            Log.i("haildraw", "hail it: " +it)
-            Log.i("haildraw", "hailicon: " + it.hailIcon)
-        }
-    }
-*/
-
-
-
-
-            //listOf(hiBuffers.hailList).forEach {
-            //    Log.i("hailList it", "hail it: " +it)
-            //}
-
-/*
-            ///drawHI(hiBuffers, hiBuffers.hailIcon)
-            //layed over hail icons :(
-            hiBuffers.hailList.indices.forEach {
-                if (zoom > hiBuffers.scaleCutOff) {
-                    drawHI(hiBuffers)
-                    Log.i("haildraw", "hail it: " +it)
-                    Log.i("haildraw", "hailsize: " + hiBuffers.hailList[it].hailSize)
-                    Log.i("haildraw", "hailicon: " + hiBuffers.hailList[it].hailIcon)
-                }
-            }
-
-*/
-
-
-/*
-            //images overlaying :(
-            listOf(hiBuffers).forEach {
-                WXGLNexradLevel3HailIndex.hailList.indices.forEach { hailList ->
-                    if (zoom > it.scaleCutOff) {
-                        drawHI(it)
-                        Log.i("haildraw", "hibuffer it: " + it)
-                        Log.i("haildraw", "haillist it: " + hailList)
-                        Log.i("haildraw", "hailicon: " + WXGLNexradLevel3HailIndex.hailList[hailList].hailIcon)
-                    }
-                }
-            }
-*/
-
-
-
-/*
-            //images overlaying :(
-                listOf(hiBuffers).forEach {
-                    WXGLNexradLevel3HailIndex.hailList.indices.forEach { hailList ->
-                if (zoom > it.scaleCutOff) {
-                        drawHI(it, WXGLNexradLevel3HailIndex.hailList[hailList].hailIcon)
-                        Log.i("haildraw", "hibuffer it: " + it)
-                        Log.i("haildraw", "haillist it: " + hailList)
-                        Log.i("haildraw", "hailicon: " + WXGLNexradLevel3HailIndex.hailList[hailList].hailIcon)
-                    }
-                }
-            }
-
-*/
-
-
-/*
-
-                //stuck to hail0.png
-                WXGLNexradLevel3HailIndex.hailList.indices.forEach { hailList ->
-                    if (zoom > hiBuffers.scaleCutOff) {
-                        drawHI(hiBuffers)
-                        Log.i("haildraw", "haillist it: " + hailList)
-                        Log.i("haildraw", "hailicon: " + WXGLNexradLevel3HailIndex.hailList[hailList].hailIcon)
-                    }
-                }
-*/
-
-
+            //elys mod - hailmod
             hiBuffersList.forEach {
                 if (zoom > zoomToHideMiscFeatures) {
                     drawHI(it)
@@ -559,19 +480,6 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }
 
 
-
-/*
-
-            listOf(hiBuffers).forEach {
-                if (zoom > it.scaleCutOff) {
-                    drawHI(it)
-                    Log.i("haildraw", "hailicon: "+it.hailIcon)
-                }
-            }
-*/
-
-
-            ///drawHI(hiBuffers)
 
 
         listOf(tvsBuffers).forEach {
@@ -999,7 +907,6 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         }
     }
 
-    //FIXME need to pick a icon based on hail size//
     //elys mod - hailmod
     private fun drawHI(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
@@ -1402,119 +1309,26 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         spotterBuffers.isInitialized = false
     }
 
-    //elys mod - hailmod
-/*
-    fun constructHi() {
-        //hiBuffers.isInitialized = true
-        WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString)
-        /*
-        hiBuffers.lenInit = 0f //RadarPreferences.radarHiSize.toFloat()
-        hiBuffers.hailList = WXGLNexradLevel3HailIndex.hailList
-        //hiBuffers.hailSizeNumber = WXGLNexradLevel3HailIndex.hailSizeNumber
-        hiBuffers.hailIcon = WXGLNexradLevel3HailIndex.hailSizeIcon
-        val stormList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString)
-        hiBuffers.setXYList(stormList)
 
-        val hailSizeNumber = hiBuffers.hailSizeNumber
-        val it = 0
-
-        //hiBuffers.hailSizeNumber = WXGLNexradLevel3HailIndex.hailSizeNumber
-        //hiBuffers.hailIcon = WXGLNexradLevel3HailIndex.hailSizeIcon
-        //hiBuffers.hailList = WXGLNexradLevel3HailIndex.hailList
-        //constructMarker(hiBuffers)
-        //Log.i("hailconst", "hail size: " + WXGLNexradLevel3HailIndex.hailSizeText)
-        //Log.i("hailconst", "hail setIcon: " + WXGLNexradLevel3HailIndex.hailSizeIcon)
-        //Log.i("hailconst", "hail setDouble: " + WXGLNexradLevel3HailIndex.hailSizeNumber)
-
-
-        if (hailSizeNumber in 0.0..0.24) {
-            Log.i("hailconstif", "it: "+it+" hail05")
-        }
-        if (hailSizeNumber in 0.24..0.98) {
-            Log.i("hailconstif", "it: "+it+" hail0")
-        }
-        if (hailSizeNumber in 0.99..1.98) {
-            Log.i("hailconstif", "it: "+it+" hail1")
-        }
-        if (hailSizeNumber in 1.99..2.98) {
-            Log.i("hailconstif", "it: "+it+" hail2")
-        }
-        if (hailSizeNumber in 2.99..3.98) {
-            Log.i("hailconstif", "it: "+it+" hail3")
-        }
-        if (hailSizeNumber in 3.99..4.98) {
-            Log.i("hailconstif", "it: "+it+" hail4")
-        }
-        //big hail --- only use 1 icon for any hail over 5 inch
-        if (hailSizeNumber in 4.99..99.99) {
-            Log.i("hailconstif", "it: "+it+" hailBig")
-        }
-        //constructMarker(hiBuffers)
-        constructIcon(hiBuffers, hailIcon)
-*/
-
-
-
-        WXGLNexradLevel3HailIndex.hailList.indices.forEach {
-            //val hailIcon = WXGLNexradLevel3HailIndex.hailList[it].hailIcon
-            hiBuffers.isInitialized = true
-            hiBuffers.lenInit = 0f
-            val hailSizeNumber = WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber
-            hiBuffers.hailIcon = WXGLNexradLevel3HailIndex.hailList[it].hailIcon
-            hiBuffers.hailSizeNumber = WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber
-            //hiBuffers.setXYList(WXGLNexradLevel3HailIndex.stormList)
-            hiBuffers.xList = WXGLNexradLevel3HailIndex.hailList[it].x
-            hiBuffers.yList = WXGLNexradLevel3HailIndex.hailList[it].y
-            if (hailSizeNumber in 0.0..0.24) {
-                Log.i("hailconstloop", "it: "+it+" hail05")
-            }
-            if (hailSizeNumber in 0.24..0.98) {
-                Log.i("hailconstloop", "it: "+it+" hail0")
-            }
-            if (hailSizeNumber in 0.99..1.98) {
-                Log.i("hailconstloop", "it: "+it+" hail1")
-            }
-            if (hailSizeNumber in 1.99..2.98) {
-                Log.i("hailconstloop", "it: "+it+" hail2")
-            }
-            if (hailSizeNumber in 2.99..3.98) {
-                Log.i("hailconstloop", "it: "+it+" hail3")
-            }
-            if (hailSizeNumber in 3.99..4.98) {
-                Log.i("hailconstloop", "it: "+it+" hail4")
-            }
-            //big hail --- only use 1 icon for any hail over 5 inch
-            if (hailSizeNumber in 4.99..99.99) {
-                Log.i("hailconstloop", "it: "+it+" hailBig")
-            }
-
-
-            Log.i("hailconstloop", "hail size: " + WXGLNexradLevel3HailIndex.hailList[it].hailSize)
-            Log.i("hailconstloop", "hail setIcon: " + WXGLNexradLevel3HailIndex.hailList[it].hailIcon)
-            Log.i("hailconstloop", "hail setDouble: " + WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber)
-
-            constructIcon(hiBuffers, WXGLNexradLevel3HailIndex.hailList[it].hailIcon)
-        }
-
-    }
-*/
 
     //elys mod - hailmod
-    //hiBufferList
+    //hiBuffersList
     fun constructHi() {
-        val stormList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString)
+        val hailList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString)
+        hiBuffersList.clear()
         hiBuffersList = mutableListOf()
-        //val buff = ObjectOglBuffers()
-        //buff.setXYList(stormList)
-        //hiBuffers.isInitialized = true
-        WXGLNexradLevel3HailIndex.hailList.indices.forEach {
+        hailList.indices.forEach {
             val buff = ObjectOglBuffers()
             buff.isInitialized = true
             buff.lenInit = 0f
-            val hailSizeNumber = WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber
-            ///buff.hailIcon = WXGLNexradLevel3HailIndex.hailList[it].hailIcon
-            buff.hailSizeNumber = WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber
+            val hailSizeNumber = hailList[it].hailSizeNumber
+            buff.hailIcon = hailList[it].hailIcon
+            buff.hailSizeNumber = hailList[it].hailSizeNumber
+            val stormList = mutableListOf<Double>()
+            stormList.add(hailList[it].latD)
+            stormList.add(hailList[it].lonD)
             buff.setXYList(stormList)
+
 
             if (hailSizeNumber in 0.0..0.24) {
                 Log.i("hailconstloop", "it: "+it+" hail05")
@@ -1552,29 +1366,13 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             Log.i("hailconstloop", "hail setIcon: " + WXGLNexradLevel3HailIndex.hailList[it].hailIcon)
             Log.i("hailconstloop", "hail setDouble: " + WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber)
 
-            constructIcon(buff, WXGLNexradLevel3HailIndex.hailList[it].hailIcon)
+            constructIcon(buff, hailList[it].hailIcon)
         }
 
     }
 
 
-
-/*
-    //elys mod
-    fun constructHi() {
-        hiBuffers.isInitialized = false
-        hiBuffers.lenInit = 0f
-        hiBuffers.hailList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString)
-        hiBuffers.hailSizeNumber = WXGLNexradLevel3HailIndex.hailSizeNumber
-        hiBuffers.hailIcon = WXGLNexradLevel3HailIndex.hailSizeIcon
-        hiBuffers.xList = WXGLNexradLevel3HailIndex.x
-        hiBuffers.yList = WXGLNexradLevel3HailIndex.y
-        constructIcon(hiBuffers, hiBuffers.hailIcon)
-    }
-*/
-
     fun deconstructHi() {
-        //hiBuffers.isInitialized = false
         hiBuffersList = mutableListOf()
     }
 
