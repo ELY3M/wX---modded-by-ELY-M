@@ -95,8 +95,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         boxImages = VBox(this, box.get())
         boxText = VBox(this, box.get())
         image = Image(this, boxImages, UtilityImg.getBlankBitmap())
-        toolbarBottom.setOnMenuItemClickListener(this)
-        toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
+        objectToolbarBottom.connect(this)
+        objectToolbarBottom.hide(R.id.action_playlist)
         val cal = Calendar.getInstance()
         year = cal.get(Calendar.YEAR)
         month = cal.get(Calendar.MONTH)
@@ -112,7 +112,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.csv"
         stateArray = listOf("")
         objectNavDrawer = ObjectNavDrawer(this, stateArray)
-        objectNavDrawer.setListener2 { _, _, position, _ ->
+        objectNavDrawer.connect { _, _, position, _ ->
             objectNavDrawer.setItemChecked(position, false)
             objectNavDrawer.close()
             filter = stateArray.getOrNull(position) ?: ""

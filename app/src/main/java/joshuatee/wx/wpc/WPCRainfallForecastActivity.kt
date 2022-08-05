@@ -65,7 +65,8 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
         imageUrl = arguments[1]
         setTitle("Day " + arguments[2] + " Excessive Rainfall Discussion", textProduct)
         box = VBox.fromResource(this)
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.hideRadar()
+        objectToolbarBottom.connect(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         image = if (tabletInLandscape) {
             box.makeHorizontal()

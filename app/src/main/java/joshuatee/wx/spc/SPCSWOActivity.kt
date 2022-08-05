@@ -67,7 +67,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) {
             imagesPerRow = 4
         }
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.connect(this)
         val boxRows = mutableListOf<HBox>()
         (0..4).forEach {
             if (it % imagesPerRow == 0) {
@@ -82,6 +82,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun setupShareMenu() {
+        // FIXME TODO refactor
         val menu = toolbarBottom.menu
         val miTornado = menu.findItem(R.id.action_share_tornado)
         val miHail = menu.findItem(R.id.action_share_hail)

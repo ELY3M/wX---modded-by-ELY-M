@@ -27,8 +27,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.textview.MaterialTextView
 import joshuatee.wx.Extensions.setPadding

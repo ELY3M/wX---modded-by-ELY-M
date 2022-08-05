@@ -83,8 +83,8 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         title = "LSR"
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
-        toolbarBottom.setOnMenuItemClickListener(this)
-        star = toolbarBottom.menu.findItem(R.id.action_fav)
+        objectToolbarBottom.connect(this)
+        star = objectToolbarBottom.getFavIcon()
         locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
         imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
         imageMap.connect(::mapSwitch, UtilityImageMap::mapToWfo)

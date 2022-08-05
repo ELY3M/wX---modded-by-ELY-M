@@ -106,7 +106,7 @@ class ObjectNavDrawer(val activity: Activity, private var labels: List<String>) 
     }
 
     constructor(activity: Activity, items: List<String>, tokens: List<String>, fn: () -> Unit) : this(activity, items, tokens) {
-        setListener(fn)
+        connectInternal(fn)
     }
 
     val url: String
@@ -131,7 +131,7 @@ class ObjectNavDrawer(val activity: Activity, private var labels: List<String>) 
             return tokens[index]
         }
 
-    fun setListener(fn: () -> Unit) {
+    private fun connectInternal(fn: () -> Unit) {
         listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             listView.setItemChecked(position, false)
             drawerLayout.closeDrawer(listView)
@@ -140,7 +140,7 @@ class ObjectNavDrawer(val activity: Activity, private var labels: List<String>) 
         }
     }
 
-    fun setListener2(fn: AdapterView.OnItemClickListener) {
+    fun connect(fn: AdapterView.OnItemClickListener) {
         listView.onItemClickListener = fn
     }
 

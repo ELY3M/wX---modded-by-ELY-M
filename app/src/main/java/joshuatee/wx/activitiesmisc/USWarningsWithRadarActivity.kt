@@ -74,7 +74,7 @@ class USWarningsWithRadarActivity : BaseActivity() {
         box = VBox.fromResource(this)
         objectAlertSummary = ObjectAlertSummary(this, box, scrollView)
         objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())
-        objectNavDrawer.setListener2 { _, _, position, _ ->
+        objectNavDrawer.connect { _, _, position, _ ->
             objectNavDrawer.setItemChecked(position, false)
             objectNavDrawer.close()
             if (objectAlertSummary.filterArray[position].length != 2) {

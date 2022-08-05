@@ -65,7 +65,8 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
         imageUrl = arguments[1]
         setTitle("Fire Weather Outlook", "SPC $textProduct")
         box = VBox.fromResource(this)
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.hideRadar()
+        objectToolbarBottom.connect(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         image = if (tabletInLandscape) {
             box.makeHorizontal()

@@ -121,7 +121,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         om.displayData = DisplayData(this, this, om.numPanes, om)
         objectNavDrawer = ObjectNavDrawer(this, UtilityModelSpcHrrrInterface.labels, UtilityModelSpcHrrrInterface.params)
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        objectNavDrawer.setListener2 { _, _, position, _ ->
+        objectNavDrawer.connect { _, _, position, _ ->
             objectNavDrawer.setItemChecked(position, false)
             objectNavDrawer.close()
             om.displayData.param[om.curImg] = objectNavDrawer.tokens[position]

@@ -131,7 +131,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 UtilityModelSpcSrefInterface.shortCodes,
                 ""
         )
-        objectNavDrawerCombo.setListener(::refreshSpinner)
+        objectNavDrawerCombo.connect(::refreshSpinner)
         getRunStatus()
     }
 

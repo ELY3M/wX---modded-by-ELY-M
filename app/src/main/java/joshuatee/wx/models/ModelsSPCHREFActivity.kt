@@ -116,7 +116,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 ""
         )
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        objectNavDrawerCombo.setListener2 { _, _, groupPosition, childPosition, _ ->
+        objectNavDrawerCombo.connect2 { _, _, groupPosition, childPosition, _ ->
             objectNavDrawerCombo.close()
             om.displayData.param[om.curImg] = objectNavDrawerCombo.getToken(groupPosition, childPosition)
             om.displayData.paramLabel[om.curImg] = objectNavDrawerCombo.getLabel(groupPosition, childPosition)

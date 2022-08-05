@@ -34,6 +34,7 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
+import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
@@ -47,6 +48,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
 
     protected lateinit var toolbar: Toolbar
     protected lateinit var toolbarBottom: Toolbar
+    protected lateinit var objectToolbarBottom: ObjectToolbar
     private lateinit var pause: MenuItem
     private var ttsProd = ""
     private var ttsTxt = ""
@@ -62,6 +64,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         toolbarBottom = findViewById(R.id.toolbar_bottom)
+        objectToolbarBottom = ObjectToolbar(toolbarBottom)
         if (UIPreferences.iconsEvenSpaced) {
             UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, menuResId)
         } else {

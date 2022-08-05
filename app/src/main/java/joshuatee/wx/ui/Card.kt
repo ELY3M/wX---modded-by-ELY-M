@@ -25,7 +25,6 @@ import android.app.Activity
 import android.content.Context
 import androidx.cardview.widget.CardView
 import android.view.View
-import com.google.android.material.card.MaterialCardView
 import joshuatee.wx.settings.UIPreferences
 
 class Card {

@@ -86,13 +86,13 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
-        toolbarBottom.setOnMenuItemClickListener(this)
-        star = toolbarBottom.menu.findItem(R.id.action_fav)
-        notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
+        objectToolbarBottom.connect(this)
+        star = objectToolbarBottom.getFavIcon()
+        notificationToggle = objectToolbarBottom.find(R.id.action_notif_text_prod)
         cardText = CardText(this, box, toolbar, toolbarBottom)
         UtilityWpcText.create()
         objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
-        objectNavDrawerCombo.setListener(::changeProduct)
+        objectNavDrawerCombo.connect(::changeProduct)
         getContent()
     }
 

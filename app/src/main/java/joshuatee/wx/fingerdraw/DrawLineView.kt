@@ -129,7 +129,7 @@ class DrawLineView : View {
         ppd = oneDegreeScaleFactor
         val newX2 = (centerY + (mPositionX / mScaleFactor + diffX) / ppd)
         test2 = (180.0f / PI * log(tan(PI / 4 + centerX * (PI / 180.0f) / 2.0f), E)).toFloat()
-        var newY2 = (test2.toFloat() + (-mPositionY / mScaleFactor + diffY) / ppd)
+        var newY2 = (test2 + (-mPositionY / mScaleFactor + diffY) / ppd)
         newY2 = (180.0f / PI * (2.0f * atan(exp(newY2 * PI / 180.0f)) - PI / 2.0f)).toFloat()
         return LatLon.distance(LatLon(newY, newX * -1.0f), LatLon(newY2, newX2 * -1.0f), DistanceUnit.MILE).toFloat()
     }

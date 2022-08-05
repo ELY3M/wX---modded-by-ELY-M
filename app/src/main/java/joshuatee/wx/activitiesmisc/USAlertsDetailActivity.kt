@@ -58,8 +58,8 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         alertUrl = arguments[0]
         box = VBox.fromResource(this)
         Card(this, R.id.cardView)
-        toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.hide(R.id.action_playlist)
+        objectToolbarBottom.connect(this)
         objectAlertDetail = ObjectAlertDetail(this, box)
         getContent()
     }
@@ -75,7 +75,7 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun update() {
         if (capAlert.getClosestRadar() == "") {
-            toolbarBottom.menu.findItem(R.id.action_radar).isVisible = false
+            objectToolbarBottom.hideRadar()
         }
         objectAlertDetail.updateContent(capAlert, alertUrl)
         setTitle(objectAlertDetail.title, objectAlertDetail.wfoTitle)

@@ -21,16 +21,21 @@
 // [FIX] dual/quad pane radar don't take up the entire screen on chromeOS and pixel 6a
 // [FIX] deprecated startActivityForResult onActivityResult (see example in SettingsNotificationsActivity.kt)
 // [REF] migrate UtilityDownloadWarnings.kt -> ObjectPolygonWarning.kt
-// [ADD] Material3 for all themes
 // [ADD] https://m3.material.io/components/dialogs/implementation/android  https://developer.android.com/jetpack/androidx/releases/compose-material3
 // [ADD] https://developer.android.com/reference/com/google/android/material/card/MaterialCardView
 // [ADD] com.google.android.material.card.MaterialCardView
-// [FIX] blue/white theme notification exclude dialogue
+// [REF] use ObjectToolbar in VideoRecordActivity and BaseActivity
+// [REF] ObjectToolbar make fav(star) handling easier
+// [REF] ObjectToolbar
 ```
 [[_TOC_]]
 
-## 55653 2022_08_04
+## 55654 2022_08_05
 *
+
+## 55653 2022_08_05
+* [REF] add ObjectToolbar
+* [FIX] WPC Rainfall discussion, hide radar icon as it serves no purpose in this activity
 
 ## 55652 2022_08_04
 * [ADD] Material3 "You" attempt for all themes

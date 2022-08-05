@@ -79,7 +79,7 @@ class ObjectNavDrawerCombo(
 
     fun getLabel() = getLabel(imgGroupIdx, imgIdx)
 
-    fun setListener(fn: () -> Unit) {
+    fun connect(fn: () -> Unit) {
         listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drawerLayout.closeDrawer(listView)
             imgIdx = childPosition
@@ -89,7 +89,7 @@ class ObjectNavDrawerCombo(
         }
     }
 
-    fun setListener2(fn: ExpandableListView.OnChildClickListener) {
+    fun connect2(fn: ExpandableListView.OnChildClickListener) {
         listView.setOnChildClickListener(fn)
     }
 

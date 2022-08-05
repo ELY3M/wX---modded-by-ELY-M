@@ -49,7 +49,7 @@ class SpcCompmapActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
         objectNavDrawer = ObjectNavDrawer(this, paramList)
-        objectNavDrawer.setListener2 { _, _, position, _ ->
+        objectNavDrawer.connect { _, _, position, _ ->
             objectNavDrawer.setItemChecked(position, false)
             objectNavDrawer.close()
             val positionStr = UtilitySpcCompmap.urlIndex[position]

@@ -61,7 +61,6 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-	    /*
 	    //elys mod - not removing this - ELY M. 
             R.id.action_forecast_webpage -> Route(
                 this,
@@ -71,8 +70,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     "http://forecast.weather.gov/MapClick.php?lon=" + Location.latLon.lonString + "&lat=" + Location.latLon.latString,
                     "Local forecast"
                 )
-            )
-	    */
+            )	    
             R.id.action_alert -> {
                 if (Location.isUS) {
                     Route.usAlerts(this)
@@ -107,7 +105,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 }
             }
             //elys mod - not removing about - ELY M.
-            //R.id.action_about -> Route(this, SettingsAboutActivity::class.java)
+            R.id.action_about -> Route(this, SettingsAboutActivity::class.java)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -184,7 +184,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         UtilitySpcMeso.create()
         objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilitySpcMeso.groups, UtilitySpcMeso.longCodes, UtilitySpcMeso.shortCodes, "")
-        objectNavDrawerCombo.setListener2 { _, _, groupPosition, childPosition, _ ->
+        objectNavDrawerCombo.connect2 { _, _, groupPosition, childPosition, _ ->
             objectNavDrawerCombo.close()
             setAndLaunchParam(objectNavDrawerCombo.getToken(groupPosition, childPosition), groupPosition, childPosition)
             getContent()

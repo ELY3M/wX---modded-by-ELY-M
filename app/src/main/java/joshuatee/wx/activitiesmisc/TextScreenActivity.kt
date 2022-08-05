@@ -56,8 +56,8 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         url = arguments[0]
         title = arguments[1]
         box = VBox.fromResource(this)
-        toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.hide(R.id.action_playlist)
+        objectToolbarBottom.connect(this)
         cardText = CardText(this, box, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
             if (url.contains("<")) cardText.text = Utility.fromHtml(url) else cardText.text = url

@@ -108,11 +108,11 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         wfo = arguments[0]
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.connect(this)
         objectNavDrawer = ObjectNavDrawer(this, UtilityWfoText.labels, UtilityWfoText.codes, ::getContentFixThis)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         cardText = CardText(this, box, toolbar, toolbarBottom)
-        star = toolbarBottom.menu.findItem(R.id.action_fav)
+        star = objectToolbarBottom.getFavIcon()
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         if (Utility.readPref(this, "WFO_REMEMBER_LOCATION", "") == "true") {
             wfo = Utility.readPref(this, "WFO_LAST_USED", Location.wfo)

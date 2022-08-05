@@ -87,7 +87,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
         }
         UtilityWpcImages.create()
         objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilityWpcImages.groups, UtilityWpcImages.longCodes, UtilityWpcImages.shortCodes, "WPG_IMG")
-        objectNavDrawerCombo.setListener { getContent() }
+        objectNavDrawerCombo.connect { getContent() }
         toolbar.setOnClickListener { objectNavDrawerCombo.open() }
         getContent()
     }
