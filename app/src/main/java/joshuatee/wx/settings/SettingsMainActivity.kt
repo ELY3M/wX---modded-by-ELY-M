@@ -39,19 +39,17 @@ class SettingsMainActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Settings", Utility.getVersion(this) + ", tap on text for additional help.")
         box = VBox.fromResource(this)
-        // TODO FIXME why is this here? it's also in WX.kt
         UtilityTheme.setPrimaryColor(this)
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
-
-
         CardText(this, box, "About wX", textSize, SettingsAboutActivity::class.java, padding)
         CardText(this, box, "Celsius to fahrenheit table", textSize,
                 { Route.text(this, arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table")) }, padding)
         CardText(this, box, "Colors", textSize, SettingsColorsActivity::class.java, padding)
         CardText(this, box, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding)
         CardText(this, box, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding)
-        CardText(this, box, "Spotter Network Settings", textSize, SettingsSpotterNetwork::class.java, padding)
+        //elys mod
+	CardText(this, box, "Spotter Network Settings", textSize, SettingsSpotterNetwork::class.java, padding)
         CardText(this, box, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
         CardText(this, box, "PlayList", textSize, SettingsPlaylistActivity::class.java, padding)
         CardText(this, box, "Radar", textSize, SettingsRadarActivity::class.java, padding)

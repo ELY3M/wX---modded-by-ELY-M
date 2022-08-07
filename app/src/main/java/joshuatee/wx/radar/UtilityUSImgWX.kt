@@ -33,7 +33,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import joshuatee.wx.Extensions.getInputStream
 import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.util.UtilityCanvasMain
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
@@ -83,10 +82,12 @@ object UtilityUSImgWX {
             } else {
                 UtilityNexradL2.decodeAndPlot(context, bitmapCanvas, product)
             }
-            if (tdwr) radarSite = ridTdwr
+            if (tdwr) {
+                radarSite = ridTdwr
+            }
             val citySize = 18
             UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, hwLineWidth, citySize, isInteractive)
-            bitmapCanvas = UtilityImg.drawTextToBitmapForNexrad(context, bitmapCanvas)
+            bitmapCanvas = UtilityImg.drawText(context, bitmapCanvas)
             layers.add(colorDrawable)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         } catch (e: Exception) {
@@ -121,10 +122,12 @@ object UtilityUSImgWX {
         } else {
             UtilityNexradL2.decodeAndPlot(context, bitmapCanvas, product)
         }
-        if (tdwr) radarSite = ridTdwr
+        if (tdwr) {
+            radarSite = ridTdwr
+        }
         val citySize = 18
         UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, hwLineWidth, citySize, isInteractive)
-        bitmapCanvas = UtilityImg.drawTextToBitmapForNexrad(context, bitmapCanvas)
+        bitmapCanvas = UtilityImg.drawText(context, bitmapCanvas)
         layers.add(colorDrawable)
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         return UtilityImg.layerDrawableToBitmap(layers)
@@ -171,7 +174,9 @@ object UtilityUSImgWX {
             val layers = arrayOf(cd, BitmapDrawable(context.resources, bitmaps[it]), BitmapDrawable(context.resources, bitmapCanvas))
             animDrawable.addFrame(LayerDrawable(layers), delay)
         }
-        (0 until frameCount).forEach { context.deleteFile(fileList[it]) }
+        (0 until frameCount).forEach {
+            context.deleteFile(fileList[it])
+        }
         return animDrawable
     }
 

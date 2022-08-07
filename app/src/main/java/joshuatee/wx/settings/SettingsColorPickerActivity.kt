@@ -24,56 +24,39 @@ package joshuatee.wx.settings
 import joshuatee.wx.R
 import joshuatee.wx.ui.ColorPicker.OnColorChangedListener
 import joshuatee.wx.MyApplication
-import joshuatee.wx.ui.UtilityToolbar
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.graphics.Color
 import android.widget.Button
-import joshuatee.wx.ui.ColorPicker
-import joshuatee.wx.ui.SaturationBar
-import joshuatee.wx.ui.ValueBar
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 
-class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener {
+// was inherited from AppCompatActivity
+class SettingsColorPickerActivity : BaseActivity(), OnColorChangedListener {
 
+    //
     // Used to set a specific color for a radar/mosaic preference
     //
     // arg1: pref token
     // arg2: title
     //
 
-    companion object {
-        const val INFO = ""
-    }
+    companion object { const val INFO = "" }
 
     private var color = 0
     private var prefVal = ""
-    private lateinit var toolbar: Toolbar
     private lateinit var colorPicker: ColorPicker
     private lateinit var buttonDefault: Button
     private lateinit var vBar: ValueBar
     private lateinit var sBar: SaturationBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
-            setTheme(R.style.MyCustomTheme_NOAB)
-        } else {
-            setTheme(UIPreferences.themeInt)
-        }
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings_color_picker)
+        super.onCreate(savedInstanceState, R.layout.activity_settings_color_picker, null, false)
         val arguments = intent.getStringArrayExtra(INFO)!!
         prefVal = arguments[0]
-        title = arguments[1]
         colorPicker = findViewById(R.id.colorPicker)
         vBar = findViewById(R.id.vBar)
         sBar = findViewById(R.id.sBar)
         buttonDefault = findViewById(R.id.buttonDefault)
-        toolbar = findViewById(R.id.toolbar_top)
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        UtilityToolbar.fullScreenMode(toolbar, false)
         color = UtilityColor.setColor(prefVal)
         val currentColor = Utility.readPrefInt(this, prefVal, color)
         buttonDefault.setTextColor(color)
@@ -88,7 +71,7 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
             toolbar.subtitle = "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
         }
         val currColorViaPref = Utility.readPrefInt(this, prefVal, color)
-        toolbar.subtitle = "(" + Color.red(currColorViaPref) + "," + Color.green(currColorViaPref) + "," + Color.blue(currColorViaPref) + ")"
+        setTitle(arguments[1], "(" + Color.red(currColorViaPref) + "," + Color.green(currColorViaPref) + "," + Color.blue(currColorViaPref) + ")")
     }
 
     override fun onColorChanged(color: Int) {

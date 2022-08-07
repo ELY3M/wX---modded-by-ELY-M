@@ -212,20 +212,10 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         return txtLocal
     }
 
-    /**
-     * Fires an intent to spin up the "file chooser" UI and select an image.
-     */
     // TODO FIXME deprecation
     private fun performFileSearch() {
-        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser.
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        // Filter to only show results that can be "opened", such as a
-        // file (as opposed to a list of contacts or timezones)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
-        // Filter to show only images, using the image MIME data type.
-        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-        // To search for all documents available via installed storage providers,
-        // it would be "*/*".
         intent.type = "*/*"
         startActivityForResult(intent, READ_REQUEST_CODE)
 //        startForResult.launch(intent)
@@ -253,7 +243,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             // Instead, a URI to that document will be contained in the return intent
             // provided to this method as a parameter.
             // Pull that URI using resultData.getData().
-            //val uri: Uri
             resultData?.let {
                 val uri = it.data
                 displaySettings(readTextFromUri(uri!!))
@@ -265,7 +254,9 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         val content = UtilityIO.readTextFromUri(this, uri)
         val uriArr = uri.lastPathSegment!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var fileName = "map"
-        if (uriArr.isNotEmpty()) fileName = uriArr.last()
+        if (uriArr.isNotEmpty()) {
+            fileName = uriArr.last()
+        }
         fileName = fileName.replace(".txt", "").replace(".pal", "")
         name = fileName + "_" + formattedDate
         palTitle.setText(name)

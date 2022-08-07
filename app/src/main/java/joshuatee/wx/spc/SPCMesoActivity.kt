@@ -113,7 +113,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 box.makeHorizontal()
             }
         }
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.connect(this)
         prefModel = arguments[2]
         prefSector = prefModel + numPanesAsString + "_SECTOR_LAST_USED"
         prefParam = prefModel + numPanesAsString + "_PARAM_LAST_USED"
@@ -148,11 +148,12 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         menuTopography = menu.findItem(R.id.action_toggleTopography)
         menuCounty = menu.findItem(R.id.action_toggleCounty)
         if (numPanes < 2) {
-            menu.findItem(R.id.action_img1).isVisible = false
-            menu.findItem(R.id.action_img2).isVisible = false
-        } else
-            menu.findItem(R.id.action_multipane).isVisible = false
-        star = menu.findItem(R.id.action_fav)
+            objectToolbarBottom.hide(R.id.action_img1)
+            objectToolbarBottom.hide(R.id.action_img2)
+        } else {
+            objectToolbarBottom.hide(R.id.action_multipane)
+        }
+        star = objectToolbarBottom.getFavIcon()
         star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         if (showRadar) {
             menuRadar.title = on + menuRadarStr
@@ -362,10 +363,12 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun setTitle() {
-        if (numPanes > 1)
-            UtilityModels.setSubtitleRestoreZoom(displayData.image, toolbar, "(" + (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
-        else
+        if (numPanes > 1) {
+            UtilityModels.setSubtitleRestoreZoom(displayData.image, toolbar, "(" +
+                    (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
+        } else {
             toolbar.subtitle = displayData.paramLabel[0]
+        }
     }
 
     private fun showProductInFavList(index: Int) {

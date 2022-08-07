@@ -131,7 +131,7 @@ class MyApplication : Application() {
             ColorPalettes.initialize(context)
             RadarPreferences.initGenericRadarWarnings(context)
             GeographyType.values().forEach {
-                RadarGeometry.initRadarGeometryByType(context, it)
+                RadarGeometry.initialize(context, it)
             }
             GeographyType.refresh()
         }

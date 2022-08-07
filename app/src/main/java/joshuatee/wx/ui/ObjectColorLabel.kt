@@ -46,9 +46,8 @@ internal class ObjectColorLabel(val context: Context, box: VBox, label: String, 
         card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.black))
         text.gravity = Gravity.CENTER_VERTICAL
         card.addWidget(text.get())
-        val prefInner = pref
         card.connect {
-            Route(context, SettingsColorPickerActivity::class.java, SettingsColorPickerActivity.INFO, arrayOf(prefInner, label))
+            Route(context, SettingsColorPickerActivity::class.java, SettingsColorPickerActivity.INFO, arrayOf(pref, label))
         }
         box.addWidget(get())
     }

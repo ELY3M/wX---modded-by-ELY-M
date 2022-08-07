@@ -110,10 +110,10 @@ class ObjectSwitch(context: Context, label: String, pref: String, strId: Int) {
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
                     MyApplication.initPreferences(context)
                     when (pref) {
-                        "RADAR_STATE_HIRES" -> RadarGeometry.initRadarGeometryByType(context, GeographyType.STATE_LINES)
-                        "RADAR_COUNTY_HIRES" -> RadarGeometry.initRadarGeometryByType(context, GeographyType.COUNTY_LINES)
-                        "RADAR_HW_ENH_EXT" -> RadarGeometry.initRadarGeometryByType(context, GeographyType.HIGHWAYS_EXTENDED)
-                        "RADAR_CAMX_BORDERS" -> RadarGeometry.initRadarGeometryByType(context, GeographyType.STATE_LINES)
+                        "RADAR_STATE_HIRES" -> RadarGeometry.initialize(context, GeographyType.STATE_LINES)
+                        "RADAR_COUNTY_HIRES" -> RadarGeometry.initialize(context, GeographyType.COUNTY_LINES)
+                        "RADAR_HW_ENH_EXT" -> RadarGeometry.initialize(context, GeographyType.HIGHWAYS_EXTENDED)
+                        "RADAR_CAMX_BORDERS" -> RadarGeometry.initialize(context, GeographyType.STATE_LINES)
                     }
                     GeographyType.refresh()
                 }

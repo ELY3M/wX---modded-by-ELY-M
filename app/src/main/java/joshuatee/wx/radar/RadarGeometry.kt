@@ -34,18 +34,20 @@ import java.nio.ByteOrder
 
 object RadarGeometry {
 
+    // radar geometry files are in: ./app/src/main/res/raw/
+    // count values below are file size in bytes divided by 4 as these files contain binary packed floats
+    // TODO FIXME lots of room for improvement including how it's structured and reading file size dynamically
     const val canadaResId = R.raw.ca
     const val mexicoResId = R.raw.mx
     private const val caCnt = 161792
     private const val mxCnt = 151552
-//    var countState = 200000 // v3 205748
     private var countStateUs = 205748
     var countState = 205748
-    var countHw = 862208 // on disk size 3448832 yields  862208
-    const val countHwExt = 770048 // on disk 3080192 yields 770048
-    private const val hwExtFileResId = R.raw.hwv4ext // 2016_04_06
-    const val countLakes = 503808 // was 14336 + 489476
-    var countCounty = 212992 // file on disk is 851968, should be
+    var countHw = 862208
+    const val countHwExt = 770048
+    private const val hwExtFileResId = R.raw.hwv4ext
+    const val countLakes = 503808
+    var countCounty = 212992
     private var hwFileResId = R.raw.hwv4
     private const val lakesFileResId = R.raw.lakesv3
     private var countyFileResId = R.raw.county
@@ -56,13 +58,7 @@ object RadarGeometry {
     var lakesRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
     var countyRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
 
-    // TODO FIXME move buffer from MyApp here
-    // TODO FIXME rename to initialize
-    fun initRadarGeometryByType(context: Context, type: GeographyType) {
-//        if (!MyApplication.radarHwEnh) {
-//            MyApplication.hwFileResId = R.raw.hw
-//            MyApplication.countHw = 112640
-//        }
+    fun initialize(context: Context, type: GeographyType) {
         var stateLinesFileResId = R.raw.statev2
         countState = 205748
         if (RadarPreferences.radarStateHires) {
@@ -138,7 +134,6 @@ object RadarGeometry {
             try {
                 val inputStream = context.resources.openRawResource(fileID)
                 val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
-                // for (index in 0 until count) {
                 repeat(count) {
                     byteBuffer.putFloat(dataInputStream.readFloat())
                 }

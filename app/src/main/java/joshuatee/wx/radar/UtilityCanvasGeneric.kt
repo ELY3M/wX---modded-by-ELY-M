@@ -19,7 +19,7 @@
 
 */
 
-package joshuatee.wx.util
+package joshuatee.wx.radar
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -28,7 +28,8 @@ import android.graphics.Path
 import android.graphics.Paint.Style
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.radar.UtilityCanvasProjection
+import joshuatee.wx.util.ProjectionNumbers
+import joshuatee.wx.util.UtilityLog
 import java.nio.ByteBuffer
 
 internal object UtilityCanvasGeneric {

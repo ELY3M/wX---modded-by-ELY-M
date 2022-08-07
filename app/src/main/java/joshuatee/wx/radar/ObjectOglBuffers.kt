@@ -77,9 +77,13 @@ open class ObjectOglBuffers() {
     var hailIcon: String = "hailunknown.png"
     var hailList: List<Hail> = listOfNotNull()
 
-    constructor(type: PolygonType) : this() { this.type = type }
+    constructor(type: PolygonType) : this() {
+        this.type = type
+    }
 
-    constructor(warningType: ObjectPolygonWarning) : this() { this.warningType = warningType }
+    constructor(warningType: ObjectPolygonWarning) : this() {
+        this.warningType = warningType
+    }
 
     constructor(geotype: PolygonType, scaleCutOff: Float) : this() {
         this.type = geotype

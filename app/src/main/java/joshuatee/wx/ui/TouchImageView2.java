@@ -33,6 +33,7 @@ import joshuatee.wx.R;
 import androidx.appcompat.widget.AppCompatImageView;
 import joshuatee.wx.MyApplication;
 import joshuatee.wx.objects.ObjectDateTime;
+import joshuatee.wx.util.UtilityLog;
 
 public class TouchImageView2 extends AppCompatImageView {
 
@@ -314,7 +315,11 @@ public class TouchImageView2 extends AppCompatImageView {
             setZoom(delayedZoomVariables.scale, delayedZoomVariables.focusX, delayedZoomVariables.focusY, delayedZoomVariables.scaleType);
             delayedZoomVariables = null;
         }
-        super.onDraw(canvas);
+        try {
+            super.onDraw(canvas);
+        } catch (Exception e) {
+            UtilityLog.INSTANCE.handleException(e);
+        }
     }
 
     @Override

@@ -32,6 +32,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected lateinit var toolbar: Toolbar
     protected lateinit var toolbarBottom: Toolbar
+    protected lateinit var objectToolbarBottom: ObjectToolbar
 
     protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, bottomToolbar: Boolean) {
         setTheme(UIPreferences.themeInt)
@@ -52,6 +53,7 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             toolbarBottom = Toolbar(this as Context)
         }
+        objectToolbarBottom = ObjectToolbar(toolbarBottom)
         UtilityToolbar.fullScreenMode(toolbar, false)
     }
 

@@ -20,7 +20,7 @@
 */
 //modded by ELY M.  
 
-package joshuatee.wx.util
+package joshuatee.wx.radar
 
 //elys mod //leave it
 import android.graphics.*
@@ -32,8 +32,10 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.*
-import joshuatee.wx.radar.UtilityCanvasProjection
 import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.util.ProjectionNumbers
+import joshuatee.wx.util.UtilityCities
+import joshuatee.wx.util.UtilityString
 
 internal object UtilityCanvas {
 
@@ -118,7 +120,6 @@ internal object UtilityCanvas {
 	//elys mod
         //custom locationdot//
         if (RadarPreferences.locationDotFollowsGps) {
-            UtilityLog.d("wx", "Path to location.png: "+ GlobalVariables.FilesPath + "location.png")
             val locationicon: Bitmap = BitmapFactory.decodeFile(GlobalVariables.FilesPath + "location.png");
             val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, RadarPreferences.radarLocIconSize, RadarPreferences.radarLocIconSize, false)
             canvas.drawBitmap(locationiconresized, coordinates[0].toFloat(), coordinates[1].toFloat(), null)

@@ -31,7 +31,6 @@ import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.util.UtilityCanvasMain
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.ProjectionNumbers
 

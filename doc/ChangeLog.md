@@ -27,11 +27,21 @@
 // [REF] use ObjectToolbar in VideoRecordActivity and BaseActivity
 // [REF] ObjectToolbar make fav(star) handling easier
 // [REF] ObjectToolbar
+// [FIX] Day 8-14 Hazard Outlook is to large
+// https://stackoverflow.com/questions/40835514/android-canvas-drawing-too-large-bitmap
+// https://developer.android.com/topic/performance/graphics/load-bitmap
+// [REF] SettingsColorPaletteEditor.kt move away from deprecated file launcher technique
 ```
 [[_TOC_]]
 
+## 55656 2022_08_06
+* 
+
+## 55655 2022_08_06
+* [REF] misc refactor
+
 ## 55654 2022_08_05
-*
+* [FIX] TouchImageView2.java, add try/catch in onDraw to handle images that are to large. Show nothing but don't crash
 
 ## 55653 2022_08_05
 * [REF] add ObjectToolbar

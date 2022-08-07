@@ -38,6 +38,7 @@ import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.telecine.TelecineService
+import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -52,6 +53,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     protected var showDistanceTool = "false"
     lateinit var toolbar: Toolbar
     lateinit var toolbarBottom: Toolbar
+    protected lateinit var objectToolbarBottom: ObjectToolbar
 
     protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, iconsEvenlySpaced: Boolean, bottomToolbar: Boolean) {
         setTheme(UIPreferences.themeInt)
@@ -60,7 +62,12 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar_top)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        toolbarBottom = if (bottomToolbar) findViewById(R.id.toolbar_bottom) else Toolbar(this as Context)
+        toolbarBottom = if (bottomToolbar) {
+            findViewById(R.id.toolbar_bottom)
+        } else {
+            Toolbar(this as Context)
+        }
+        objectToolbarBottom = ObjectToolbar(toolbarBottom)
         // for model activities need to force false regardless of user setting
         if (menuResId != null && bottomToolbar) {
             if (UIPreferences.iconsEvenSpaced && iconsEvenlySpaced) {

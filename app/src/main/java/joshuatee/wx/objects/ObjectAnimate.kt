@@ -114,20 +114,5 @@ class ObjectAnimate(val context: Context, val image: TouchImage) {
             }
             return animationDrawable
         }
-
-//        fun getAnimationDrawableFromUrlListWhiteBackground(context: Context, urls: List<String>, delayOriginal: Int): AnimationDrawable {
-//            var delay = delayOriginal
-//            val animationDrawable = AnimationDrawable()
-//            val bitmaps = urls.map { UtilityImg.getBitmapAddWhiteBackground(context, it) }
-//            bitmaps.forEachIndexed { index, bitmap ->
-//                if (bitmap.width > 10) {
-//                    if (index == bitmaps.lastIndex) {
-//                        delay *= 3
-//                    }
-//                    animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
-//                }
-//            }
-//            return animationDrawable
-//        }
     }
 }

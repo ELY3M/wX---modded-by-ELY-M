@@ -61,7 +61,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         box = VBox.fromResource(this)
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.connect(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         image = if (tabletInLandscape) {
             box.makeHorizontal()
@@ -78,7 +78,6 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             "MPD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MPD, number)
             else -> {}
         }
-        title = objectWatchProduct.title
         getContent()
     }
 
@@ -102,7 +101,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun updateText() {
         cardText.text = Utility.fromHtml(objectWatchProduct.text)
-        toolbar.subtitle = objectWatchProduct.textForSubtitle
+        setTitle(objectWatchProduct.title, objectWatchProduct.textForSubtitle)
         UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
 

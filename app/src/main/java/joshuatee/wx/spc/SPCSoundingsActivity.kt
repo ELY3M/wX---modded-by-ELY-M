@@ -66,8 +66,8 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
-        toolbarBottom.setOnMenuItemClickListener(this)
-        star = toolbarBottom.menu.findItem(R.id.action_fav)
+        objectToolbarBottom.connect(this)
+        star = objectToolbarBottom.getFavIcon()
         image = TouchImage(this, toolbar, toolbarBottom, R.id.iv)
         office = UtilityLocation.getNearestSoundingSite(Location.latLon)
         imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(image.get()))

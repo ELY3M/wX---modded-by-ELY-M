@@ -210,7 +210,8 @@ object UtilityImg {
         }
     }
 
-    fun drawTextToBitmapForNexrad(context: Context, bitmap: Bitmap): Bitmap {
+    // used in UtilityUSImgWX for nexrad
+    fun drawText(context: Context, bitmap: Bitmap): Bitmap {
         val radarStatus = WXGLNexrad.readRadarTimeForWidget(context)
         try {
             val scale = context.resources.displayMetrics.density

@@ -20,7 +20,7 @@
  */
 //modded by ELY M. 
 
-package joshuatee.wx.util
+package joshuatee.wx.radar
 
 import android.content.Context
 import android.content.res.Resources
@@ -30,9 +30,9 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.radar.GeometryData
-import joshuatee.wx.radar.UtilityCanvasStormInfo
-import joshuatee.wx.radar.UtilityCanvasWindbarbs
+import joshuatee.wx.util.ProjectionNumbers
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.IOException
@@ -99,16 +99,15 @@ object UtilityCanvasMain {
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         val highwayProvider = projectionType.isCanvas
         val stateLinesProvider = projectionType.isCanvas
-        val countyProvider =
-            projectionType === ProjectionType.WX_RENDER_48 || projectionType === ProjectionType.WX_RENDER
+        val countyProvider = projectionType === ProjectionType.WX_RENDER_48 || projectionType === ProjectionType.WX_RENDER
         val cityProvider = true
         val windBarbProvider = projectionType.isMercator
         val stormMotionProvider = projectionType.isMercator
         // if a widget or notification load the GEOM data in real-time
         val geometryData = if (isInteractive) {
             GeometryData(
-                GeographyType.HIGHWAYS.relativeBuffer, GeographyType.COUNTY_LINES.relativeBuffer,
-                GeographyType.STATE_LINES.relativeBuffer, GeographyType.LAKES.relativeBuffer
+                    GeographyType.HIGHWAYS.relativeBuffer, GeographyType.COUNTY_LINES.relativeBuffer,
+                    GeographyType.STATE_LINES.relativeBuffer, GeographyType.LAKES.relativeBuffer
             )
         } else {
             getLocalGeometryData(context)
@@ -118,12 +117,12 @@ object UtilityCanvasMain {
         }
         if (GeographyType.HIGHWAYS.pref && highwayProvider) {
             UtilityCanvasGeneric.draw(
-                projectionType,
-                bitmapCanvas,
-                radarSite,
-                hwLineWidth,
-                GeographyType.HIGHWAYS,
-                geometryData.highways
+                    projectionType,
+                    bitmapCanvas,
+                    radarSite,
+                    hwLineWidth,
+                    GeographyType.HIGHWAYS,
+                    geometryData.highways
             )
         }
         if (GeographyType.CITIES.pref && cityProvider) {
@@ -131,42 +130,38 @@ object UtilityCanvasMain {
         }
         if (stateLinesProvider) {
             UtilityCanvasGeneric.draw(
-                projectionType,
-                bitmapCanvas,
-                radarSite,
-                1,
-                GeographyType.STATE_LINES,
-                geometryData.stateLines
-            )
-            if (GeographyType.LAKES.pref) {
-                UtilityCanvasGeneric.draw(
                     projectionType,
                     bitmapCanvas,
                     radarSite,
-                    hwLineWidth,
-                    GeographyType.LAKES,
-                    geometryData.lakes
+                    1,
+                    GeographyType.STATE_LINES,
+                    geometryData.stateLines
+            )
+            if (GeographyType.LAKES.pref) {
+                UtilityCanvasGeneric.draw(
+                        projectionType,
+                        bitmapCanvas,
+                        radarSite,
+                        hwLineWidth,
+                        GeographyType.LAKES,
+                        geometryData.lakes
                 )
             }
         }
         if (countyProvider) {
             if (GeographyType.COUNTY_LINES.pref) {
                 UtilityCanvasGeneric.draw(
-                    projectionType,
-                    bitmapCanvas,
-                    radarSite,
-                    hwLineWidth,
-                    GeographyType.COUNTY_LINES,
-                    geometryData.counties
+                        projectionType,
+                        bitmapCanvas,
+                        radarSite,
+                        hwLineWidth,
+                        GeographyType.COUNTY_LINES,
+                        geometryData.counties
                 )
             }
         }
         if (PolygonType.LOCDOT.pref) {
-            UtilityCanvas.addLocationDotForCurrentLocation(
-                projectionType,
-                bitmapCanvas,
-                projectionNumbers
-            )
+            UtilityCanvas.addLocationDotForCurrentLocation(projectionType, bitmapCanvas, projectionNumbers)
         }
         if (PolygonType.WIND_BARB.pref && windBarbProvider) {
             UtilityCanvasWindbarbs.draw(context, projectionType, bitmapCanvas, radarSite, true, 5)
@@ -174,12 +169,7 @@ object UtilityCanvasMain {
         }
         if (PolygonType.STI.pref && stormMotionProvider) {
             try {
-                UtilityCanvasStormInfo.drawNexRadStormMotion(
-                    context,
-                    projectionType,
-                    bitmapCanvas,
-                    radarSite
-                )
+                UtilityCanvasStormInfo.drawNexRadStormMotion(context, projectionType, bitmapCanvas, radarSite)
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }

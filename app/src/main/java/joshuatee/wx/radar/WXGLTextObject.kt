@@ -26,7 +26,6 @@ import android.content.Context
 import android.graphics.Color
 import android.util.TypedValue
 import android.view.View
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import joshuatee.wx.MyApplication
@@ -38,7 +37,6 @@ import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.ProjectionNumbers
-import joshuatee.wx.util.UtilityCanvasProjection
 
 import kotlin.math.*
 
