@@ -1098,7 +1098,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(this, oglr.rid) }
         //ObjectIntent(this, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
         var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+wxglRender.rid+"-NVW"
-        Route(applicationContext, WebView::class.java, WebView.URL, arrayOf(vmpurl, wxglRender.rid + " VAD Wind Profile"))
+        Route(this@WXGLRadarActivity, WebView::class.java, WebView.URL, arrayOf(vmpurl, wxglRender.rid + " VAD Wind Profile"))
 
     }
 
