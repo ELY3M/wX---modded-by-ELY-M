@@ -394,6 +394,16 @@
         <item name="android:background">@color/black</item>
         <item name="android:textColor">@color/aqua</item>
     </style>
+
+    <style name="MyButtonStyleBlackNeonGreen" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/lime</item>
+        <item name="iconTint">@color/black</item>
+    </style>
+    <style name="MySnackBarStyleBlackNeonGreen" parent="Widget.MaterialComponents.Snackbar">
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/lime</item>
+    </style>
+
     <style name="AppCompatAlertDialogStyleBlackAqua" parent="Theme.MaterialComponents.Light.Dialog.Alert.Bridge">
     <item name="colorAccent">@color/aqua</item>
     <item name="android:textColor">@color/aqua</item>
@@ -457,6 +467,25 @@
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>        
+
+    <style name="MyCustomTheme_BlackNeonGreen3" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:textColor">@color/lime</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="android:buttonTint">@color/lime</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/lime</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="windowActionModeOverlay">true</item>
+
+        <item name="snackbarStyle">@style/MySnackBarStyleBlackNeonGreen</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlackNeonGreen</item>
+        <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyleBlackNeonGreen</item>
+        <item name="materialButtonStyle">@style/MyButtonStyleBlackNeonGreen</item>
+        <item name="popupMenuBackground">?attr/colorPrimary</item>
+        <!-- Navigation drawer background -->
+        <item name="colorSurface">?attr/colorPrimaryDark</item>
+    </style>
+
 </resources>
 
 

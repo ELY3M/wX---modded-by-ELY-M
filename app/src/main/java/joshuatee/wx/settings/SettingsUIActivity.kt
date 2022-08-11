@@ -52,7 +52,8 @@ class SettingsUIActivity : BaseActivity() {
             "orange",
 	        "BlackAqua",
 	        "BlackAqua3",
-	        "BlackNeonGreen"
+	        "BlackNeonGreen",
+            "BlackNeonGreen3"
     )
     private var tilesPerRowStart = 0
     private var navDrawerMainScreen = false

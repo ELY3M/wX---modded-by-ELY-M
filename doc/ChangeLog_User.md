@@ -6,6 +6,38 @@ FAQ can be accessed via Settings -> About
 
 Please also review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md) impacting all or some users.
 
+## 55655 2022_08_11 (BETA)
+* [ADD] Material3 "You" partial implementation for all themes
+* [FIX] TouchImageView2.java, add try/catch in onDraw to handle images that are to large. Show nothing but don't crash
+* [FIX] WPC Rainfall discussion, hide radar icon as it serves no purpose in this activity
+* [FIX] ObjectCurrentConditions.kt - if the heat index and the temp (both rounded) are equal, don't show heat index
+* [ADD] SPC MCD/Watch summary icons in SPC Tab now show only images regardless of how many Watch or MCD there are. This resolves one bug and makes the interface more predictable. Please note that the "Severe Dashboard" accessible on the main screen via octagon icon is the preferred method to see MCD/Watch. When the Navigation drawer is configured as compared to Tabs they are not even visible.
+* [ADD] SPC MCD/Watch summary - if no watch or mcd is present use a bigger font with a "high light" color
+* [ADD] In severe dashboard if no warnings/watch/mcd/mpd are present show "None" in subtitle
+* [ADD] In Settings -> Homescreen the menu option "Set to default (Canada)" is being removed in preparation for CA content removal by end of next year.
+* [ADD] Settings -> celsius to fahrenheit table was rounding to integer but still showing with ".0" at the end - remove
+* [ADD] new GOES sector: South Pacific
+* [ADD] new GOES sector: Northern Atlantic
+* [ADD] GOES activity - in Pac/Atl submenu - alphabetize entries
+* [ADD] GOES activity - in Regional Views - alphabetize entries
+* [ADD] GOES activity - add new submenu "North/South America" as "Regional Views" had too many entries
+* [FIX] The following model is being removed from the program due to it's experimental nature and numerous breaking changes over the years:
+        **it was accessible only via the NHC activity**: Great Lakes Coastal Forecasting System, GLCFS
+        You can access it via a web browser here: https://www.glerl.noaa.gov/res/glcfs/
+        As a reminder the best model interface in terms of stability continues to be MAG NCEP (MISC Tab - upper left)
+        I believe all other models with interfaces provided are not considered true production services, please contact me if I am wrong
+
+* [ADD] Vis/SPC Meso/Radar Mosaic now have a play/stop/pause bottom for animations that is more appropriate to the circumstance and similar to Nexrad
+* [ADD] In GOES/SPC Meso animate icon now uses the number of frames (default 10 - can be change in settings->UI), similar to nexrad
+        a submenu in the main menu will allow access to the other frame count choices
+* [ADD] If device is in landscape some activities will show 3 images across instead of just 2 (SPC Convective outlook, fire, wpc rainfall, etc)
+* [ADD] SpcStormReportsActivity - add subtitle indicating you can tap the image to open a date picker
+* [FIX] 7day not honoring C/F setting
+* [FIX] slowness in LocationEdit search icon appearing by loading cities before the activity is displayed
+* [FIX] SPC HREF - some images not working, more work is needed (non-production model service)
+* [ADD] Settings->Notification: alphabetize with logical groups
+* [ADD] Settings: alphabetize
+* [FIX] In usalerts for sps (special weather statement) and other alerts - don't show radar button if no polygon data is present
 
 ## 55627 2022_07_20 (BETA)
 * [FIX] Nexrad: if non-default option to use hi-res State lines data, not all lines were showing

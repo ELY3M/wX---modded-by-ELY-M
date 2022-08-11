@@ -186,6 +186,7 @@ object Utility {
         themeStr.startsWith("BlackAqua") -> R.style.MyCustomTheme_BlackAqua_NOAB
         themeStr.startsWith("BlackAqua3") -> R.style.MyCustomTheme_BlackAqua3	
         themeStr.startsWith("BlackNeonGreen") -> R.style.MyCustomTheme_BlackNeonGreen_NOAB
+        themeStr.startsWith("BlackNeonGreen3") -> R.style.MyCustomTheme_BlackNeonGreen3
         themeStr.startsWith("WhiteToolbar") -> R.style.MyCustomTheme_white_NOAB
         else -> R.style.MyCustomTheme_NOAB
     }
@@ -201,7 +202,8 @@ object Utility {
         R.style.MyCustomTheme_mixedBlue_NOAB -> true
         R.style.MyCustomTheme_DarkBlue_NOAB -> true
         R.style.MyCustomTheme_whitest_NOAB -> true
-        R.style.MyCustomTheme_BlackAqua3 -> true	
+        R.style.MyCustomTheme_BlackAqua3 -> true
+        R.style.MyCustomTheme_BlackNeonGreen3 -> true
         else -> false
     }
 
