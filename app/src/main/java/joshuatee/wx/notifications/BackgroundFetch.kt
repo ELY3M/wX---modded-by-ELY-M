@@ -31,18 +31,13 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.objects.ObjectPolygonWarning
-import joshuatee.wx.objects.ObjectPolygonWatch
-import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.*
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.objects.PolygonType.MCD
 import joshuatee.wx.objects.PolygonType.MPD
 import joshuatee.wx.objects.PolygonType.WATCH
-import joshuatee.wx.radar.UtilityDownloadWarnings
 import joshuatee.wx.settings.NotificationPreferences
-import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
@@ -64,26 +59,31 @@ class BackgroundFetch(val context: Context) {
             val requestID = ObjectDateTime.currentTimeMillis().toInt()
             notificationUrls += UtilityNotification.send(context, it.toString(), requestID + 1)
         }
-        RadarPreferences.radarWarningPolygons.forEach {
-            if (it.isEnabled) {
-                it.storage.valueSet(context, UtilityDownloadWarnings.getVtecByType(it.type))
-            } else {
-                it.storage.valueSet(context, "")
-            }
-        }
+        // Think this is no longer needed
+//        RadarPreferences.radarWarningPolygons.forEach {
+//            if (it.isEnabled) {
+//                it.storage.valueSet(context, UtilityDownloadWarnings.getVtecByType(it.type))
+//            } else {
+//                it.storage.valueSet(context, "")
+//            }
+//        }
         if (NotificationPreferences.alertTornadoNotification || UIPreferences.checktor || PolygonType.TST.pref) {
             try {
-                UtilityDownloadWarnings.getForNotification(context)
+//                UtilityDownloadWarnings.getForNotification(context)
+                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.FlashFloodWarning]!!.download()
+                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.TornadoWarning]!!.download()
+                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.ThunderstormWarning]!!.download()
                 if (NotificationPreferences.alertTornadoNotification) {
-                    notificationUrls += UtilityNotificationTornado.checkAndSend(context, ObjectPolygonWarning.severeDashboardTor.value)
+//                    notificationUrls += UtilityNotificationTornado.checkAndSend(context, ObjectPolygonWarning.severeDashboardTor.value)
+                    notificationUrls += UtilityNotificationTornado.checkAndSend(context, ObjectPolygonWarning.polygonDataByType[PolygonWarningType.TornadoWarning]!!.getData())
                 }
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
         } else {
-            ObjectPolygonWarning.severeDashboardTor.valueSet(context, "")
-            ObjectPolygonWarning.severeDashboardTst.valueSet(context, "")
-            ObjectPolygonWarning.severeDashboardFfw.valueSet(context, "")
+//            ObjectPolygonWarning.severeDashboardTor.valueSet(context, "")
+//            ObjectPolygonWarning.severeDashboardTst.valueSet(context, "")
+//            ObjectPolygonWarning.severeDashboardFfw.valueSet(context, "")
         }
         if (NotificationPreferences.alertSpcMcdNotification || UIPreferences.checkspc || MCD.pref || locationNeedsMcd) {
             try {

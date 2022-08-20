@@ -132,7 +132,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
                 }
                 if (numPanes == 1 && fullScreen || numPanes > 1) UtilityUI.immersiveMode(activity!!)
             }
-	    //elys mod - 3 finger to show conus radar map
+	        //elys mod - 3 finger to show conus radar map
             MotionEvent.ACTION_MOVE -> {
 	        //elys mod
                 //3 fingers press to show conus

@@ -72,14 +72,14 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         }
         toolbar.setOnClickListener { toolbarBottom.showOverflowMenu() }
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
-        UtilityToolbar.fullScreenMode(toolbar, false)
-        initBottomToolbar()
-        UtilityTts.initTts(this)
+        UtilityToolbar.setElevation(toolbar)
         pausePressedIcon = if (Utility.isThemeAllWhite()) {
             GlobalVariables.ICON_PAUSE_PRESSED_BLUE
         } else {
             GlobalVariables.ICON_PAUSE_PRESSED
         }
+        initBottomToolbar()
+        UtilityTts.initTts(this)
     }
 
     fun setTitle(s: String) {
@@ -110,7 +110,9 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                 if (isStoragePermissionGranted) {
                     UtilityTts.synthesizeTextAndPlay(this, txt, prod)
                     pause.setIcon(GlobalVariables.ICON_PAUSE)
-                    if (UIPreferences.mediaControlNotif) UtilityNotification.createMediaControlNotification(applicationContext, "")
+                    if (UIPreferences.mediaControlNotif) {
+                        UtilityNotification.createMediaControlNotification(applicationContext, "")
+                    }
                 } else {
                     UtilityLog.d("wx", "perm to write to storage was not granted")
                 }
@@ -119,12 +121,14 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                 if (UtilityTts.mediaPlayer != null) {
                     UtilityTts.playMediaPlayer(1)
                 }
-                if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
+                if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
                     pause.setIcon(pausePressedIcon)
-                else
+                } else {
                     pause.setIcon(GlobalVariables.ICON_PAUSE)
-                if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif)
+                }
+                if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
                     UtilityNotification.createMediaControlNotification(applicationContext, "")
+                }
             }
             R.id.action_playlist -> UtilityPlayList.add(this, view, playlistToken, txt)
             else -> return false
@@ -133,10 +137,11 @@ abstract class AudioPlayActivity : AppCompatActivity() {
     }
 
     override fun onRestart() {
-        if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
+        if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             pause.setIcon(pausePressedIcon)
-        else
+        } else {
             pause.setIcon(GlobalVariables.ICON_PAUSE)
+        }
         super.onRestart()
     }
 

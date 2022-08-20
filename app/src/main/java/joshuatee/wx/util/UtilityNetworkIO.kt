@@ -103,7 +103,13 @@ object UtilityNetworkIO {
             UtilityLog.d("wx", "getBitmapFromUrl: $url")
             val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()))
+            if (url.contains("hazards_d8_14_contours.png")) {
+                val options = BitmapFactory.Options()
+                options.inPreferredConfig = Bitmap.Config.RGB_565
+                BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()), null, options)!!
+            } else {
+                BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()))
+            }
         } catch (e: Exception) {
             UtilityImg.getBlankBitmap()
         } catch (e: OutOfMemoryError) {

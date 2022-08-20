@@ -33,7 +33,7 @@ class Photo(context: Context) {
 
     private val imageView = ImageView(context)
 
-    fun setImage(bitmap: Bitmap) {
+    fun set(bitmap: Bitmap) {
         imageView.setImageBitmap(bitmap)
         imageView.setPadding(UIPreferences.paddingSmall)
         val layoutParams = imageView.layoutParams

@@ -19,6 +19,8 @@
 
  */
 //modded by ELY M.  
+//not removing color options for geo stuff 
+
 package joshuatee.wx.settings
 
 import android.content.Context
@@ -27,9 +29,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.radar.*
-import joshuatee.wx.radar.UtilityDownloadWarnings
 import joshuatee.wx.radar.UtilityMetar
 import joshuatee.wx.radar.UtilitySwoDayOne
 import joshuatee.wx.ui.UtilityUI
@@ -44,102 +44,102 @@ object RadarPreferences {
     //
     // Radar Preferences
     //
-    var radarConusRadar = false
-    var radarConusRadarZoom = 75 //was 173
-    var radarWarnings = false
+    var conusRadar = false
+    var conusRadarZoom = 75 //was 173
+    var showRadarWhenPan = true
+    var warnings = false
     var locationDotFollowsGps = false
     var locdotBug = false
     var dualpaneshareposn = false
-    var radarSpotters = false
-    var radarSpottersLabel = false
-    var radarHailSizeLabel = false
-    var radarObs = false
-    var radarObsWindbarbs = false
-    var radarSwo = false
-    var radarUserPoints = false
-    var radarCities = false
-    var radarHw = false
-    var radarLocDot = false
-    var radarLakes = false
-    var radarCounty = false
-    var radarCountyLabels = false
-    var radarCountyHires = false
-    var radarStateHires = false
-    var radarWatMcd = false
-    var radarMpd = false
-    var radarSti = false
-    var radarHi = false
-    var radarTvs = false
-    var radarShowRadar = true
-    var radarShowLegend = false
-    var radarShowLegendWidth = 0
-    var radarShowLegendTextSize = 0
+    var spotters = false
+    var spottersLabel = false
+    var hailSizeLabel = false
+    var obs = false
+    var obsWindbarbs = false
+    var swo = false
+    var userPoints = false
+    var cities = false
+    var hw = false
+    var locDot = false
+    var lakes = false
+    var county = false
+    var countyLabels = false
+    var countyHires = false
+    var stateHires = false
+    var watMcd = false
+    var mpd = false
+    var sti = false
+    var hi = false
+    var tvs = false
+    var showRadar = true
+    var showLegend = false
+    var showLegendWidth = 0
+    var showLegendTextSize = 0
     var drawToolSize = 0
-    var radarObsExtZoom = 0
-    var radarSpotterSize = 0
-    var radarAviationSize = 0
-    var radarTextSize = 0.0f
-    var radarTextSizeDefault = 1.0f
-    var radarUserPointSize = 0
-    var radarLocdotSize = 0
-    var radarLocIconSize = 0
-    var radarLocBugSize = 0
-    var radarHiSize = 0
-    var radarHiTextSize = 0f
-    var radarTvsSize = 0
-    var radarDefaultLinesize = 0
-    var radarWarnLineSize = 5.0f
-    const val radarWarnLineSizeDefault = 5
-    var radarWatchMcdLineSize = 4.0f
-    var radarWatchMcdLineSizeDefault = 4
-    var radarHwEnhExt = false
-    var radarCamxBorders = false
-    var radarIconsLevel2 = false
-    var radarStateLineSize = 0
-    var radarCountyLineSize = 0
-    var radarHwLineSize = 0
-    var radarHwExtLineSize = 0
-    var radarLakeLineSize = 0
-    var radarGpsCircleLineSize = 0
-    var radarStiLineSize = 0
-    var radarSwoLineSize = 0
-    var radarWbLineSize = 0
+    var obsExtZoom = 0
+    var spotterSize = 0
+    var aviationSize = 0
+    var textSize = 0.0f
+    var textSizeDefault = 1.0f
+    var userPointSize = 0
+    var locdotSize = 0
+    var locIconSize = 0
+    var locBugSize = 0
+    var hiSize = 0
+    var hiTextSize = 0f
+    var tvsSize = 0
+    var defaultLinesize = 0
+    var warnLineSize = 5.0f
+    const val warnLineSizeDefault = 5
+    var watchMcdLineSize = 4.0f
+    var watchMcdLineSizeDefault = 4
+    var hwEnhExt = false
+    var camxBorders = false
+    var iconsLevel2 = false
+    var stateLineSize = 0
+    var countyLineSize = 0
+    var hwLineSize = 0
+    var hwExtLineSize = 0
+    var lakeLineSize = 0
+    var gpsCircleLineSize = 0
+    var stiLineSize = 0
+    var swoLineSize = 0
+    var wbLineSize = 0
+    var wpcFrontLineSize = 0
     var wxoglCenterOnLocation = false
-    var radarShowWpcFronts = false
-    var radarSpotterSizeDefault = 4
-    var radarAviationSizeDefault = 7
-    var radarLocationDotSizeDefault = 8
+    var wpcFronts = false
+    var spotterSizeDefault = 4
+    var aviationSizeDefault = 7
+    var locationDotSizeDefault = 8
 
-    var radarColorHw = 0
-    var radarColorHwExt = 0
-    var radarColorState = 0
-    var radarColorTstorm = 0
-    var radarColorTstormWatch = 0
-    var radarColorTor = 0
-    var radarColorTorWatch = 0
-    var radarColorFfw = 0
-    var radarColorMcd = 0
-    var radarColorMpd = 0
-    var radarColorLocdot = 0
-    var radarColorSpotter = 0
-    var radarColorCity = 0
-    var radarColorLakes = 0
-    var radarColorCounty = 0
-    var radarColorSti = 0
-    var radarColorHi = 0
+    var colorHw = 0
+    var colorHwExt = 0
+    var colorState = 0
+    var colorTstorm = 0
+    var colorTstormWatch = 0
+    var colorTor = 0
+    var colorTorWatch = 0
+    var colorFfw = 0
+    var colorMcd = 0
+    var colorMpd = 0
+    var colorLocdot = 0
+    var colorSpotter = 0
+    var colorCity = 0
+    var colorLakes = 0
+    var colorCounty = 0
+    var colorSti = 0
+    var colorHi = 0
     //elys mod
-    var radarColorHiText = 0
-    var radarColorObs = 0
-    var radarColorObsWindbarbs = 0
-    var radarColorCountyLabels = 0
+    var colorHiText = 0
+    var colorObs = 0
+    var colorObsWindbarbs = 0
+    var colorCountyLabels = 0
     //elys mod
-    var radarShowLegendTextColor = 0
-    var nexradRadarBackgroundColor = 0
-	
-    var radarWarningPolygons = mutableListOf<ObjectPolygonWarning>()
+    var showLegendTextColor = 0
+    var nexradBackgroundColor = 0
 
     var uiAnimIconFrames = "rid"
-    var radarUseJni = false
+    var useJni = false
     var drawToolColor = 0
     var blackBg = false
 
@@ -148,7 +148,7 @@ object RadarPreferences {
     var wxoglSizeDefault = 13
     var wxoglRememberLocation = false
     var wxoglRadarAutoRefresh = false
-    var radarLocationUpdateInterval = 10
+    var locationUpdateInterval = 10
 
     var wxoglZoom = 0.0f
     var wxoglRid = ""
@@ -161,77 +161,78 @@ object RadarPreferences {
 	//elys mod
         sn_key = getInitialPreferenceString("SN_KEY", "")
         sn_locationreport = getInitialPreference("SN_LOCATIONREPORT", "")
-			
-        radarShowWpcFronts = getInitialPreference("RADAR_SHOW_WPC_FRONTS", "false")
-        radarLocationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
-        radarConusRadar = getInitialPreference("CONUS_RADAR", "false")
-        radarConusRadarZoom = getInitialPreference("CONUS_RADAR_ZOOM", 75)
-        radarWarnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
+	showRadarWhenPan = getInitialPreference("SHOW_RADAR_WHEN_PAN", "true")		
+        wpcFronts = getInitialPreference("RADAR_SHOW_WPC_FRONTS", "false")
+        locationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
+        conusRadar = getInitialPreference("CONUS_RADAR", "false")
+        conusRadarZoom = getInitialPreference("CONUS_RADAR_ZOOM", 75)
+        warnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
         locationDotFollowsGps = getInitialPreference("LOCDOT_FOLLOWS_GPS", "false")
         locdotBug = getInitialPreference("LOCDOT_BUG", "false")
         dualpaneshareposn = getInitialPreference("DUALPANE_SHARE_POSN", "true")
-        radarSpotters = getInitialPreference("WXOGL_SPOTTERS", "false")
-        radarSpottersLabel = getInitialPreference("WXOGL_SPOTTERS_LABEL", "false")
-        radarHailSizeLabel = getInitialPreference("WXOGL_HAIL_LABEL", "false")
-        radarObs = getInitialPreference("WXOGL_OBS", "false")
-        radarObsWindbarbs = getInitialPreference("WXOGL_OBS_WINDBARBS", "false")
-        radarSwo = getInitialPreference("RADAR_SHOW_SWO", "false")
-        radarUserPoints = getInitialPreference("RADAR_USERPOINTS", "false")
-        radarCities = getInitialPreference("COD_CITIES_DEFAULT", "")
-        radarHw = getInitialPreference("COD_HW_DEFAULT", "true")
-        radarLocDot = getInitialPreference("COD_LOCDOT_DEFAULT", "true")
-        radarLakes = getInitialPreference("COD_LAKES_DEFAULT", "false")
-        radarCounty = getInitialPreference("RADAR_SHOW_COUNTY", "true")
-        radarWatMcd = getInitialPreference("RADAR_SHOW_WATCH", "false")
-        radarMpd = getInitialPreference("RADAR_SHOW_MPD", "false")
-        radarSti = getInitialPreference("RADAR_SHOW_STI", "false")
-        radarHi = getInitialPreference("RADAR_SHOW_HI", "false")
-        radarTvs = getInitialPreference("RADAR_SHOW_TVS", "false")
-        radarHwEnhExt = getInitialPreference("RADAR_HW_ENH_EXT", "false")
-        radarCamxBorders = getInitialPreference("RADAR_CAMX_BORDERS", "false")
-        radarCountyLabels = getInitialPreference("RADAR_COUNTY_LABELS", "false")
-        radarCountyHires = getInitialPreference("RADAR_COUNTY_HIRES", "false")
-        radarStateHires = getInitialPreference("RADAR_STATE_HIRES", "false")
-        radarIconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
-        radarShowRadar = getInitialPreference("RADAR_SHOW_RADAR", "false")
-        radarShowLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
-        radarShowLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
-        radarShowLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)
+        spotters = getInitialPreference("WXOGL_SPOTTERS", "false")
+        spottersLabel = getInitialPreference("WXOGL_SPOTTERS_LABEL", "false")
+        hailSizeLabel = getInitialPreference("WXOGL_HAIL_LABEL", "false")
+        obs = getInitialPreference("WXOGL_OBS", "false")
+        obsWindbarbs = getInitialPreference("WXOGL_OBS_WINDBARBS", "false")
+        swo = getInitialPreference("RADAR_SHOW_SWO", "false")
+        userPoints = getInitialPreference("RADAR_USERPOINTS", "false")
+        cities = getInitialPreference("COD_CITIES_DEFAULT", "")
+        hw = getInitialPreference("COD_HW_DEFAULT", "true")
+        locDot = getInitialPreference("COD_LOCDOT_DEFAULT", "true")
+        lakes = getInitialPreference("COD_LAKES_DEFAULT", "false")
+        county = getInitialPreference("RADAR_SHOW_COUNTY", "true")
+        watMcd = getInitialPreference("RADAR_SHOW_WATCH", "false")
+        mpd = getInitialPreference("RADAR_SHOW_MPD", "false")
+        sti = getInitialPreference("RADAR_SHOW_STI", "false")
+        hi = getInitialPreference("RADAR_SHOW_HI", "false")
+        tvs = getInitialPreference("RADAR_SHOW_TVS", "false")
+        hwEnhExt = getInitialPreference("RADAR_HW_ENH_EXT", "false")
+        camxBorders = getInitialPreference("RADAR_CAMX_BORDERS", "false")
+        countyLabels = getInitialPreference("RADAR_COUNTY_LABELS", "false")
+        countyHires = getInitialPreference("RADAR_COUNTY_HIRES", "false")
+        stateHires = getInitialPreference("RADAR_STATE_HIRES", "false")
+        iconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
+        showRadar = getInitialPreference("RADAR_SHOW_RADAR", "false")
+        showLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
+        showLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
+        showLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)
         wxoglCenterOnLocation = getInitialPreference("RADAR_CENTER_ON_LOCATION", "false")
         drawToolSize = getInitialPreference("DRAWTOOL_SIZE", 4)
 
         if (UtilityUI.isTablet()) {
-            radarSpotterSizeDefault = 2
-            radarAviationSizeDefault = 3
-            radarLocationDotSizeDefault = 4
+            spotterSizeDefault = 2
+            aviationSizeDefault = 3
+            locationDotSizeDefault = 4
         }
 
-        radarObsExtZoom = getInitialPreference("RADAR_OBS_EXT_ZOOM", 7)
-        radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", radarSpotterSizeDefault)
-        radarAviationSize = getInitialPreference("RADAR_AVIATION_SIZE", radarAviationSizeDefault)
-        radarTextSize = getInitialPreference("RADAR_TEXT_SIZE", radarTextSizeDefault)
-        radarUserPointSize = getInitialPreference("RADAR_USERPOINT_SIZE", 100)
-        radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", radarLocationDotSizeDefault)
-        radarLocIconSize = getInitialPreference("RADAR_LOCICON_SIZE", 100)
-        radarLocBugSize = getInitialPreference("RADAR_LOCBUG_SIZE", 100)
-        radarHiSize = getInitialPreference("RADAR_HI_SIZE", 75)
-        radarHiTextSize = getInitialPreference("RADAR_HI_TEXT_SIZE", 1.0f)
-        radarTvsSize = getInitialPreference("RADAR_TVS_SIZE", 75)
-        radarDefaultLinesize = getInitialPreference("RADAR_DEFAULT_LINESIZE", 1)
-        radarWarnLineSize = getInitialPreference("RADAR_WARN_LINESIZE", radarWarnLineSizeDefault).toFloat()
-        radarWatchMcdLineSize = getInitialPreference("RADAR_WATMCD_LINESIZE", radarWatchMcdLineSizeDefault).toFloat()
-        radarStateLineSize = getInitialPreference("RADAR_STATE_LINESIZE", 2)
-        radarCountyLineSize = getInitialPreference("RADAR_COUNTY_LINESIZE", 2)
-        radarHwLineSize = getInitialPreference("RADAR_HW_LINESIZE", 2)
-        radarHwExtLineSize = getInitialPreference("RADAR_HWEXT_LINESIZE", 2)
-        radarLakeLineSize = getInitialPreference("RADAR_LAKE_LINESIZE", 2)
-        radarGpsCircleLineSize = getInitialPreference("RADAR_GPSCIRCLE_LINESIZE", 5)
-        radarStiLineSize = getInitialPreference("RADAR_STI_LINESIZE", 3)
-        radarSwoLineSize = getInitialPreference("RADAR_SWO_LINESIZE", 3)
-        radarWbLineSize = getInitialPreference("RADAR_WB_LINESIZE", 3)
+        obsExtZoom = getInitialPreference("RADAR_OBS_EXT_ZOOM", 7)
+        spotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", spotterSizeDefault)
+        aviationSize = getInitialPreference("RADAR_AVIATION_SIZE", aviationSizeDefault)
+        textSize = getInitialPreference("RADAR_TEXT_SIZE", textSizeDefault)
+        userPointSize = getInitialPreference("RADAR_USERPOINT_SIZE", 100)
+        locdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", locationDotSizeDefault)
+        locIconSize = getInitialPreference("RADAR_LOCICON_SIZE", 100)
+        locBugSize = getInitialPreference("RADAR_LOCBUG_SIZE", 100)
+        hiSize = getInitialPreference("RADAR_HI_SIZE", 75)
+        hiTextSize = getInitialPreference("RADAR_HI_TEXT_SIZE", 1.0f)
+        tvsSize = getInitialPreference("RADAR_TVS_SIZE", 75)
+        defaultLinesize = getInitialPreference("RADAR_DEFAULT_LINESIZE", 1)
+        warnLineSize = getInitialPreference("RADAR_WARN_LINESIZE", warnLineSizeDefault).toFloat()
+        watchMcdLineSize = getInitialPreference("RADAR_WATMCD_LINESIZE", watchMcdLineSizeDefault).toFloat()
+        stateLineSize = getInitialPreference("RADAR_STATE_LINESIZE", 2)
+        countyLineSize = getInitialPreference("RADAR_COUNTY_LINESIZE", 2)
+        hwLineSize = getInitialPreference("RADAR_HW_LINESIZE", 2)
+        hwExtLineSize = getInitialPreference("RADAR_HWEXT_LINESIZE", 2)
+        lakeLineSize = getInitialPreference("RADAR_LAKE_LINESIZE", 2)
+        gpsCircleLineSize = getInitialPreference("RADAR_GPSCIRCLE_LINESIZE", 5)
+        stiLineSize = getInitialPreference("RADAR_STI_LINESIZE", 3)
+        swoLineSize = getInitialPreference("RADAR_SWO_LINESIZE", 3)
+        wbLineSize = getInitialPreference("RADAR_WB_LINESIZE", 3)
+        wpcFrontLineSize = getInitialPreference("RADAR_WPC_FRONT_LINESIZE", 4)
 
         uiAnimIconFrames = getInitialPreferenceString("UI_ANIM_ICON_FRAMES", "10")
-        radarUseJni = getInitialPreference("RADAR_USE_JNI", "false")
+        useJni = getInitialPreference("RADAR_USE_JNI", "false")
         drawToolColor = getInitialPreference("DRAW_TOOL_COLOR", Color.rgb(255, 0, 0))
         blackBg = getInitialPreference("NWS_RADAR_BG_BLACK", "")
 
@@ -251,49 +252,43 @@ object RadarPreferences {
     }
 
     fun radarGeometrySetColors() {
-        radarColorHw = getInitialPreference("RADAR_COLOR_HW", Color.BLUE)
-        radarColorHwExt = getInitialPreference("RADAR_COLOR_HW_EXT", Color.BLUE)
-        radarColorState = getInitialPreference("RADAR_COLOR_STATE", Color.WHITE)
-        radarColorTstorm = getInitialPreference("RADAR_COLOR_TSTORM", Color.YELLOW)
-        radarColorTstormWatch = getInitialPreference("RADAR_COLOR_TSTORM_WATCH", Color.BLUE)
-        radarColorTor = getInitialPreference("RADAR_COLOR_TOR", Color.RED)
-        radarColorTorWatch = getInitialPreference("RADAR_COLOR_TOR_WATCH", Color.rgb(113, 0, 0)) //dark red for watch lines
-        radarColorFfw = getInitialPreference("RADAR_COLOR_FFW", Color.GREEN)
-        radarColorMcd = getInitialPreference("RADAR_COLOR_MCD", Color.rgb(255, 255, 163))
-        radarColorMpd = getInitialPreference("RADAR_COLOR_MPD", Color.GREEN)
-        radarColorLocdot = getInitialPreference("RADAR_COLOR_LOCDOT", Color.WHITE)
-        radarColorSpotter = getInitialPreference("RADAR_COLOR_SPOTTER", Color.GREEN)
-        radarColorCity = getInitialPreference("RADAR_COLOR_CITY", Color.WHITE)
-        radarColorLakes = getInitialPreference("RADAR_COLOR_LAKES", Color.rgb(0, 0, 163))
-        radarColorCounty = getInitialPreference("RADAR_COLOR_COUNTY", Color.rgb(75, 75, 75))
-        radarColorSti = getInitialPreference("RADAR_COLOR_STI", Color.WHITE)
-        radarColorHi = getInitialPreference("RADAR_COLOR_HI", Color.GREEN)
-        radarColorHiText = getInitialPreference("RADAR_COLOR_HI_TEXT", Color.GREEN)
-        radarColorObs = getInitialPreference("RADAR_COLOR_OBS", Color.rgb(255, 255, 255))
-        radarColorObsWindbarbs = getInitialPreference("RADAR_COLOR_OBS_WINDBARBS", Color.WHITE)
-        radarColorCountyLabels = getInitialPreference("RADAR_COLOR_COUNTY_LABELS", Color.rgb(75, 75, 75))
-        radarShowLegendTextColor = getInitialPreference("RADAR_SHOW_LEGEND_TEXTCOLOR", Color.WHITE)
-        nexradRadarBackgroundColor = getInitialPreference("NEXRAD_RADAR_BACKGROUND_COLOR", Color.rgb(0, 0, 0))
+        colorHw = getInitialPreference("RADAR_COLOR_HW", Color.BLUE)
+        colorHwExt = getInitialPreference("RADAR_COLOR_HW_EXT", Color.BLUE)
+        colorState = getInitialPreference("RADAR_COLOR_STATE", Color.WHITE)
+        colorTstorm = getInitialPreference("RADAR_COLOR_TSTORM", Color.YELLOW)
+        colorTstormWatch = getInitialPreference("RADAR_COLOR_TSTORM_WATCH", Color.BLUE)
+        colorTor = getInitialPreference("RADAR_COLOR_TOR", Color.RED)
+        colorTorWatch = getInitialPreference("RADAR_COLOR_TOR_WATCH", Color.rgb(113, 0, 0)) //dark red for watch lines
+        colorFfw = getInitialPreference("RADAR_COLOR_FFW", Color.GREEN)
+        colorMcd = getInitialPreference("RADAR_COLOR_MCD", Color.rgb(255, 255, 163))
+        colorMpd = getInitialPreference("RADAR_COLOR_MPD", Color.GREEN)
+        colorLocdot = getInitialPreference("RADAR_COLOR_LOCDOT", Color.WHITE)
+        colorSpotter = getInitialPreference("RADAR_COLOR_SPOTTER", Color.GREEN)
+        colorCity = getInitialPreference("RADAR_COLOR_CITY", Color.WHITE)
+        colorLakes = getInitialPreference("RADAR_COLOR_LAKES", Color.rgb(0, 0, 163))
+        colorCounty = getInitialPreference("RADAR_COLOR_COUNTY", Color.rgb(75, 75, 75))
+        colorSti = getInitialPreference("RADAR_COLOR_STI", Color.WHITE)
+        colorHi = getInitialPreference("RADAR_COLOR_HI", Color.GREEN)
+        colorHiText = getInitialPreference("RADAR_COLOR_HI_TEXT", Color.GREEN)
+        colorObs = getInitialPreference("RADAR_COLOR_OBS", Color.rgb(255, 255, 255))
+        colorObsWindbarbs = getInitialPreference("RADAR_COLOR_OBS_WINDBARBS", Color.WHITE)
+        colorCountyLabels = getInitialPreference("RADAR_COLOR_COUNTY_LABELS", Color.rgb(75, 75, 75))
+        showLegendTextColor = getInitialPreference("RADAR_SHOW_LEGEND_TEXTCOLOR", Color.WHITE)
+        nexradBackgroundColor = getInitialPreference("NEXRAD_RADAR_BACKGROUND_COLOR", Color.rgb(0, 0, 0))
 
     }
 
     fun initGenericRadarWarnings(context: Context) {
-        // FIXME don't need both, prefer top one shared with iOS
         ObjectPolygonWarning.load(context)
-        radarWarningPolygons.clear()
-        PolygonWarningType.values().forEach {
-            radarWarningPolygons.add(ObjectPolygonWarning(context, it))
-        }
     }
 
     private fun resetTimerOnRadarPolygons() {
-//        UtilityDownloadMcd.timer.resetTimer()
         ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]?.timer?.resetTimer()
         ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]?.timer?.resetTimer()
         ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]?.timer?.resetTimer()
-        UtilityDownloadWarnings.timer.resetTimer()
-        UtilityDownloadWarnings.timerSevereDashboard.resetTimer()
-//        UtilityDownloadWatch.timer.resetTimer()
+        ObjectPolygonWarning.polygonDataByType.values.forEach {
+            it.timer.resetTimer()
+        }
         UtilityMetar.timer.resetTimer()
         UtilitySpotter.timer.resetTimer()
         UtilitySwoDayOne.timer.resetTimer()
@@ -306,5 +301,4 @@ object RadarPreferences {
     private fun getInitialPreference(pref: String, initValue: String) = (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
 
     private fun getInitialPreferenceString(pref: String, initValue: String) = MyApplication.preferences.getString(pref, initValue) ?: initValue
-
 }

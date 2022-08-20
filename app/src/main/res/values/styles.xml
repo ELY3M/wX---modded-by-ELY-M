@@ -15,6 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
  -->
 <!-- modded by ELY M. -->
 
@@ -169,6 +170,18 @@
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="colorPrimaryDark">@color/primary_dark_blue</item>
         <item name="colorAccent">@color/blue_accent</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/Alert.Button.Negative</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/Alert.Button.Neutral</item>
+    </style>
+    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="Alert.Button.Negative" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="Alert.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="PickerDialogThemeDark" parent="Theme.MaterialComponents.Dialog.Bridge">

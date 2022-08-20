@@ -26,7 +26,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.radar.*
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.ui.*
 import joshuatee.wx.R
@@ -42,7 +41,7 @@ class SevereDashboardActivity : BaseActivity() {
     // All data items can be tapped on for further exploration
     //
 
-    private val bitmaps = mutableListOf<Bitmap>()
+    private var bitmaps = mutableListOf<Bitmap>()
     private val numbers = mutableListOf<String>()
     private val types = mutableListOf<String>()
     private val boxRows = mutableListOf<HBox>()
@@ -57,9 +56,9 @@ class SevereDashboardActivity : BaseActivity() {
             PolygonType.MPD to SevereNotice(PolygonType.MPD),
     )
     private val warningsByType = mapOf(
-            PolygonType.TOR to SevereWarning(PolygonType.TOR),
-            PolygonType.TST to SevereWarning(PolygonType.TST),
-            PolygonType.FFW to SevereWarning(PolygonType.FFW),
+            PolygonWarningType.TornadoWarning to SevereWarning(PolygonWarningType.TornadoWarning),
+            PolygonWarningType.ThunderstormWarning to SevereWarning(PolygonWarningType.ThunderstormWarning),
+            PolygonWarningType.FlashFloodWarning to SevereWarning(PolygonWarningType.FlashFloodWarning),
     )
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -87,48 +86,27 @@ class SevereDashboardActivity : BaseActivity() {
     private fun getContent() {
         if (downloadTimer.isRefreshNeeded(this)) {
             bitmaps.clear()
-            FutureVoid(this, ::downloadWatch, ::updateWatch)
-            FutureVoid(this, ::downloadWarnings, ::updateWarnings)
-        }
-    }
-
-    private fun downloadWatch() {
-        bitmaps.add(UtilityDownload.getImageProduct(this, "USWARN"))
-        bitmaps.add(UtilitySpc.getStormReportsTodayUrl().getImage())
-        numbers.add("USWARN")
-        numbers.add("STORM_REPORTS")
-        types.add("")
-        types.add("")
-        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
-            ObjectPolygonWatch.polygonDataByType[it]!!.get(this)
-            watchesByType[it]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[it]!!.storage.value)
-        }
-    }
-
-    private fun downloadWarnings() {
-        UtilityDownloadWarnings.getForSevereDashboard(this)
-        warningsByType.forEach { (_, severeWarning) ->
-            severeWarning.generateString()
-        }
-    }
-
-    private fun updateWatch() {
-        boxImages.removeChildrenAndLayout()
-        boxRows.clear()
-        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach { type ->
-            bitmaps.addAll(watchesByType[type]!!.bitmaps)
-            numbers.addAll(watchesByType[type]!!.numbers)
-            repeat(watchesByType[type]!!.bitmaps.size) {
-                types.add(watchesByType[type]!!.toString())
+            bitmaps.add(UtilityImg.getBlankBitmap())
+            bitmaps.add(UtilityImg.getBlankBitmap())
+            listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
+                FutureVoid(this, { downloadWatch(it) }, ::showItems)
+            }
+            FutureVoid(this, { bitmaps[0] = UtilityDownload.getImageProduct(this, "USWARN") }, ::showItems)
+            FutureVoid(this, { bitmaps[1] = UtilitySpc.getStormReportsTodayUrl().getImage() }, ::showItems)
+            warningsByType.forEach { (_, severeWarning) ->
+                FutureVoid(this, { severeWarning.download() }, ::updateWarnings)
             }
         }
-        showItems()
-        toolbar.subtitle = getSubTitle()
     }
 
-    private fun updateWarnings() {
+    private fun downloadWatch(type: PolygonType) {
+        ObjectPolygonWatch.polygonDataByType[type]!!.download(this)
+        watchesByType[type]!!.getBitmaps(ObjectPolygonWatch.polygonDataByType[type]!!.storage.value)
+    }
+
+    @Synchronized private fun updateWarnings() {
         boxWarnings.removeChildrenAndLayout()
-        listOf(PolygonType.TOR, PolygonType.TST, PolygonType.FFW).forEach {
+        listOf(PolygonWarningType.TornadoWarning, PolygonWarningType.ThunderstormWarning, PolygonWarningType.FlashFloodWarning).forEach {
             val severeWarning = warningsByType[it]!!
             if (severeWarning.getCount() > 0) {
                 ObjectCardBlackHeaderText(this, boxWarnings, "(" + severeWarning.getCount() + ") " + severeWarning.getName())
@@ -155,18 +133,31 @@ class SevereDashboardActivity : BaseActivity() {
                 }
             }
         }
-        if (warningsByType[PolygonType.TOR]!!.getCount() > 0
-                || warningsByType[PolygonType.TST]!!.getCount() > 0
-                || warningsByType[PolygonType.FFW]!!.getCount() > 0) {
-            subTitle += " (${warningsByType[PolygonType.TST]!!.getCount()},${warningsByType[PolygonType.TOR]!!.getCount()},${warningsByType[PolygonType.FFW]!!.getCount()})"
-        }
-        if (subTitle == "") {
-            subTitle = "None"
+        if (warningsByType[PolygonWarningType.TornadoWarning]!!.getCount() > 0
+                || warningsByType[PolygonWarningType.ThunderstormWarning]!!.getCount() > 0
+                || warningsByType[PolygonWarningType.FlashFloodWarning]!!.getCount() > 0) {
+            subTitle += " (${warningsByType[PolygonWarningType.ThunderstormWarning]!!.getCount()},${warningsByType[PolygonWarningType.TornadoWarning]!!.getCount()},${warningsByType[PolygonWarningType.FlashFloodWarning]!!.getCount()})"
         }
         return subTitle
     }
 
-    private fun showItems() {
+    @Synchronized private fun showItems() {
+        boxImages.removeChildrenAndLayout()
+        boxRows.clear()
+        numbers.clear()
+        types.clear()
+        numbers.add("USWARN")
+        numbers.add("STORM_REPORTS")
+        types.add("")
+        types.add("")
+        bitmaps = bitmaps.subList(0, 2)
+        listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach { type ->
+            bitmaps.addAll(watchesByType[type]!!.bitmaps)
+            numbers.addAll(watchesByType[type]!!.numbers)
+            repeat(watchesByType[type]!!.bitmaps.size) {
+                types.add(watchesByType[type]!!.toString())
+            }
+        }
         bitmaps.indices.forEach {
             if (it % imagesPerRow == 0) {
                 boxRows.add(HBox(this, boxImages.get()))
@@ -186,6 +177,7 @@ class SevereDashboardActivity : BaseActivity() {
                 }
             }
         }
+        toolbar.subtitle = getSubTitle()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

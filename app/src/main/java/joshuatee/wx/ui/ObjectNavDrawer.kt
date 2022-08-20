@@ -144,8 +144,8 @@ class ObjectNavDrawer(val activity: Activity, private var labels: List<String>) 
         listView.onItemClickListener = fn
     }
 
-    fun setItemChecked(position: Int, value: Boolean) {
-        listView.setItemChecked(position, value)
+    fun setItemChecked(position: Int) {
+        listView.setItemChecked(position, false)
     }
 
     fun open() {

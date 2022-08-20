@@ -131,7 +131,7 @@ object UtilityCanvasStormInfo {
         stormList.indices.forEach {
             stormLists[it] = stormList[it].toFloat()
         }
-        paint.color = RadarPreferences.radarColorSti
+        paint.color = RadarPreferences.colorSti
         canvas.drawLines(stormLists, paint)
         val wallPath = Path()
         wallPath.reset()

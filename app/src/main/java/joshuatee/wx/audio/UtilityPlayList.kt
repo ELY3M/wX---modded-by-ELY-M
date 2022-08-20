@@ -41,9 +41,9 @@ object UtilityPlayList {
         if (!UIPreferences.playlistStr.contains(productUpperCase)) {
             Utility.writePref(context, "PLAYLIST", UIPreferences.playlistStr + ":" + productUpperCase)
             UIPreferences.playlistStr = UIPreferences.playlistStr + ":" + productUpperCase
-            ObjectPopupMessage(context, view, productUpperCase + " saved to playlist: " + text.length)
+            ObjectPopupMessage(view, productUpperCase + " saved to playlist: " + text.length)
         } else {
-            ObjectPopupMessage(context, view, productUpperCase + " already in playlist: " + text.length)
+            ObjectPopupMessage(view, productUpperCase + " already in playlist: " + text.length)
         }
         val formattedDate = ObjectDateTime.getDateAsString(FORMAT_TIME_STR)
         Utility.writePref(context, "PLAYLIST_$productUpperCase", text)

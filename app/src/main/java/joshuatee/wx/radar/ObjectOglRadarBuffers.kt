@@ -54,7 +54,11 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
     }
 
     fun setProductCodeFromString(product: String) {
-        productCode = if (product == "L2REF") 153.toShort() else 154.toShort()
+        productCode = if (product == "L2REF") {
+            153.toShort()
+        } else {
+            154.toShort()
+        }
     }
 
     override fun setToPositionZero() {

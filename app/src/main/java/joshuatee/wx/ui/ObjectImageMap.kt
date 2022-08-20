@@ -27,6 +27,8 @@ import android.view.View
 import joshuatee.wx.util.ImageMap
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
+import joshuatee.wx.radar.UtilityWXGLTextObject
+import joshuatee.wx.radar.WXGLTextObject
 import joshuatee.wx.util.Utility
 
 class ObjectImageMap(
@@ -61,7 +63,9 @@ class ObjectImageMap(
             }
         } else {
             map.visibility = View.GONE
-            views.forEach { it.visibility = View.VISIBLE }
+            views.forEach {
+                it.visibility = View.VISIBLE
+            }
             if (isRadarWithTransparent) {
                 UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
             }
@@ -77,6 +81,15 @@ class ObjectImageMap(
             if (isRadarWithTransparent) {
                 UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
             }
+        }
+    }
+
+    fun showMap(numberOfPanes: Int, wxglTextObjects: List<WXGLTextObject>) {
+        toggleMap()
+        if (visibility != View.GONE) {
+            UtilityWXGLTextObject.hideLabels(numberOfPanes, wxglTextObjects)
+        } else {
+            UtilityWXGLTextObject.showLabels(numberOfPanes, wxglTextObjects)
         }
     }
 
@@ -96,7 +109,9 @@ class ObjectImageMap(
         addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
             override fun onImageMapClicked(id: Int, im2: ImageMap) {
                 im2.visibility = View.GONE
-                if (isRadarWithTransparent) UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
+                if (isRadarWithTransparent) {
+                    UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
+                }
                 fn(mapFn(id))
             }
 

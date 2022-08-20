@@ -32,7 +32,6 @@ import androidx.appcompat.widget.AppCompatSpinner
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
 
 class ObjectSpinner(context: Context, label: String, pref: String, prefInit: String, strId: Int, spinnerArr: List<String>) {
 
@@ -65,7 +64,7 @@ class ObjectSpinner(context: Context, label: String, pref: String, prefInit: Str
                 if (pref == "THEME_BLUE") {
                     if (UIPreferences.themeStr != newValue) {
                         Utility.commitPref(context)
-                        UtilityAlertDialog.restart()
+                        Utility.restart()
                     }
                 }
             }

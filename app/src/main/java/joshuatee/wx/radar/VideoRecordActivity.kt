@@ -78,7 +78,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
             toolbar.setOnClickListener { toolbarBottom.showOverflowMenu() }
             toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         }
-        UtilityToolbar.fullScreenMode(toolbar, false)
+        UtilityToolbar.setElevation(toolbar)
     }
 
     fun setTitle(s: String) {

@@ -603,7 +603,9 @@ internal object UtilityWXOGLPerf {
     }
 
     fun colorGen(colorBuff: ByteBuffer, length: Int, colors: ByteArray) {
+//        colorBuff.position(0)
         try {
+            // TODO FIXME should be just length ?
             if (length * 3 <= colorBuff.limit()) {
                 for (notUsed in 0 until length) {
                     if (colorBuff.hasRemaining()) colorBuff.put(colors[0])

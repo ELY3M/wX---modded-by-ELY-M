@@ -20,7 +20,6 @@
 */
 //modded by ELY M.
 //hail size texts
-//sunrise card - not center it...  
 
 package joshuatee.wx.fragments
 
@@ -33,21 +32,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.ScrollView
 import androidx.fragment.app.Fragment
-import androidx.cardview.widget.CardView
+import joshuatee.wx.Extensions.parse
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.util.*
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.notifications.UtilityNotificationTools
 import joshuatee.wx.objects.*
 import joshuatee.wx.radar.*
 import joshuatee.wx.settings.*
-import joshuatee.wx.settings.UtilityHomeScreen
 import joshuatee.wx.ui.*
 
 class LocationFragment : Fragment() {
@@ -68,7 +64,7 @@ class LocationFragment : Fragment() {
     private var glviewInitialized = false
     private var sevenDayExtShown = false
     private var objectCardCurrentConditions: ObjectCardCurrentConditions? = null
-    private lateinit var linearLayout: LinearLayout
+    private lateinit var box: VBox
     private var homescreenFavLocal = ""
     private val sevenDayCards = mutableListOf<SevenDayCard>()
     private val homeScreenTextCards = mutableListOf<CardHSText>()
@@ -106,7 +102,7 @@ class LocationFragment : Fragment() {
     private fun addDynamicCards() {
         var currentConditionsAdded = false
         var sevenDayAdded = false
-        val cardViews = mutableListOf<CardView>()
+        val cards = mutableListOf<Card>()
         val homeScreenTokens = homescreenFavLocal.split(":").dropLastWhile { it.isEmpty() }
         numberOfRadars = homeScreenTokens.count { it == "OGL-RADAR" || it.contains("NXRD-") }
         oldRadarSites = Array(numberOfRadars) { "" }
@@ -119,22 +115,22 @@ class LocationFragment : Fragment() {
             val numPanes = 1
             if (token == "TXT-CC" || token == "TXT-CC2") {
                 if (!currentConditionsAdded && objectCardCurrentConditions != null) {
-                    linearLayout.addView(objectCardCurrentConditions!!.get())
+                    box.addWidget(objectCardCurrentConditions!!.get())
                     currentConditionsAdded = true
                 }
             } else if (token == "TXT-HAZ") {
                 boxHazards = VBox(activityReference)
-                linearLayout.addView(boxHazards!!.get())
+                box.addWidget(boxHazards!!.get())
             } else if (token == "TXT-7DAY" || token == "TXT-7DAY2") {
                 if (!sevenDayAdded) {
-                    linearLayout.addView(boxForecast?.get())
+                    box.addLayout(boxForecast!!.get())
                     sevenDayAdded = true
                 }
             } else if (token == "OGL-RADAR") {
                 wxglRenders.add(WXGLRender(MyApplication.appContext, 4))
                 oglrIdx = oglrCount
                 oglrCount += 1
-                cardViews.add(Card(activityReference).get())
+                cards.add(Card(activityReference))
                 wxglSurfaceViews.add(WXGLSurfaceView(MyApplication.appContext, widthDivider, numPanes, 1))
                 wxglRenders[index].rid = ""
                 oldRadarSites[index] = ""
@@ -150,26 +146,26 @@ class LocationFragment : Fragment() {
                 wxglSurfaceViews[index].locationFragment = true
                 wxglTextObjects[index].initializeLabels(activityReference)
                 relativeLayouts[index].addView(wxglSurfaceViews[index])
-                cardViews.last().addView(relativeLayouts[index])
-                cardViews.last().layoutParams = RelativeLayout.LayoutParams(
+                cards.last().addWidget(relativeLayouts[index])
+                cards.last().get().layoutParams = RelativeLayout.LayoutParams(
                         MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt(),
                         MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt())
-                linearLayout.addView(cardViews.last())
+                box.addWidget(cards.last().get())
                 index += 1
             } else if (token.contains("TXT-")) {
                 val hsTextTmp = CardHSText(activityReference, token.replace("TXT-", ""))
-                linearLayout.addView(hsTextTmp.get())
+                box.addWidget(hsTextTmp.get())
                 homeScreenTextCards.add(hsTextTmp)
                 hsTextTmp.connect { hsTextTmp.toggleText() }
             } else if (token.contains("IMG-")) {
                 val hsImageTmp = CardHSImage(activityReference, token.replace("IMG-", ""))
-                linearLayout.addView(hsImageTmp.get())
+                box.addWidget(hsImageTmp.get())
                 homeScreenImageCards.add(hsImageTmp)
                 setImageOnClick()
             } else if (token.contains("NXRD-")) {
                 wxglRenders.add(WXGLRender(activityReference, 4))
                 oglrCount += 1
-                cardViews.add(Card(activityReference).get())
+                cards.add(Card(activityReference))
                 wxglSurfaceViews.add(WXGLSurfaceView(activityReference, widthDivider, numPanes, 1))
                 wxglSurfaceViews[index].index = index
                 wxglRenders[index].rid = token.replace("NXRD-", "")
@@ -185,12 +181,12 @@ class LocationFragment : Fragment() {
                 wxglSurfaceViews[index].locationFragment = true
                 wxglTextObjects[index].initializeLabels(activityReference)
                 relativeLayouts[index].addView(wxglSurfaceViews[index])
-                cardViews.last().addView(relativeLayouts[index])
-                cardViews.last().layoutParams = RelativeLayout.LayoutParams(
+                cards.last().addWidget(relativeLayouts[index])
+                cards.last().get().layoutParams = RelativeLayout.LayoutParams(
                         MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt(),
                         MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()
                 )
-                linearLayout.addView(cardViews.last())
+                box.addWidget(cards.last().get())
                 index += 1
             } else if (token.contains("WEB-")) {
                 if (token == "WEB-7DAY") {
@@ -198,7 +194,7 @@ class LocationFragment : Fragment() {
                     homeScreenWebCards.add(Card(activityReference))
                     homeScreenWebViews.add(wv)
                     homeScreenWebCards.last().addWidget(homeScreenWebViews.last())
-                    linearLayout.addView(homeScreenWebCards.last().get())
+                    box.addWidget(homeScreenWebCards.last().get())
                 }
             }
         } // end of loop over HM tokens
@@ -208,25 +204,21 @@ class LocationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupAlertDialogStatus()
         setupAlertDialogRadarLongPress()
-        val view: View =
-                if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB)
-                    inflater.inflate(R.layout.fragment_location_white, container, false)
-                else
-                    inflater.inflate(R.layout.fragment_location, container, false)
+        val view = inflater.inflate(R.layout.fragment_location, container, false)
         homescreenFavLocal = UIPreferences.homescreenFav
         if (homescreenFavLocal.contains("TXT-CC") || homescreenFavLocal.contains("TXT-HAZ") || homescreenFavLocal.contains("TXT-7DAY")) {
             needForecastData = true
         }
         // The dialogue that opens when the user wants to change location
         locationDialogue = ObjectDialogue(activityReference, "Select location:", Location.listOf)
-        locationDialogue.setSingleChoiceItems { dialog, locationIndex ->
+        locationDialogue.connect { dialog, locationIndex ->
             changeLocation(locationIndex)
             dialog.dismiss()
         }
         // The main LinearLayout that holds all content
-        linearLayout = view.findViewById(R.id.linearLayout)
+        box = VBox.fromViewResource(view) //view.findViewById(R.id.linearLayout)
         // The button the user will tap to change the current location
-        locationLabel = CardText(activityReference, linearLayout, Location.name, TextSize.MEDIUM)
+        locationLabel = CardText(activityReference, box.get(), Location.name, TextSize.MEDIUM)
         val locationLabelPadding = if (UtilityUI.isTablet()) {
             10
         } else {
@@ -248,7 +240,7 @@ class LocationFragment : Fragment() {
         getContent()
         if (UIPreferences.locDisplayImg) {
             wxglSurfaceViews.indices.forEach {
-                glviewInitialized = UtilityRadarUI.initGlviewFragment(
+                glviewInitialized = NexradDraw.initGlviewFragment(
                         wxglSurfaceViews[it],
                         it,
                         wxglRenders,
@@ -293,18 +285,15 @@ class LocationFragment : Fragment() {
         if (needForecastData) {
             getForecastData()
         }
-        homeScreenTextCards.indices.forEach {
-//            getTextProduct(it)
-            FutureText(MyApplication.appContext, homeScreenTextCards[it].product, homeScreenTextCards[it]::setup)
+        homeScreenTextCards.forEach {
+            FutureText(MyApplication.appContext, it.product, it::setup)
         }
-        homeScreenImageCards.indices.forEach {
-//            getImageProduct(it)
+        homeScreenImageCards.forEach {
             FutureBytes2(MyApplication.appContext,
-                    { UtilityDownload.getImageProduct(MyApplication.appContext, homeScreenImageCards[it].product) },
-                    homeScreenImageCards[it]::set
-            )
+                    { UtilityDownload.getImageProduct(MyApplication.appContext, it.product) },
+                    it::set)
         }
-        homeScreenWebViews.indices.forEach { _ ->
+        repeat(homeScreenWebViews.size) {
             getWebProduct()
         }
         x = Location.x
@@ -346,7 +335,7 @@ class LocationFragment : Fragment() {
         if (UIPreferences.locDisplayImg) {
             if (!glviewInitialized) {
                 wxglSurfaceViews.indices.forEach {
-                    glviewInitialized = UtilityRadarUI.initGlviewFragment(
+                    glviewInitialized = NexradDraw.initGlviewFragment(
                             wxglSurfaceViews[it],
                             it,
                             wxglRenders,
@@ -382,29 +371,26 @@ class LocationFragment : Fragment() {
         if (wxglRenders[idx].product == "TV0" && !WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
             wxglRenders[idx].product = "N0U"
         }
-        UtilityRadarUI.initWxOglGeom(
-                wxglSurfaceViews[idx],
-                wxglRenders[idx],
+        NexradDraw.initGeom(
                 idx,
                 oldRadarSites,
                 wxglRenders,
                 wxglTextObjects,
-                paneList,
                 null,
                 wxglSurfaceViews,
                 ::getGPSFromDouble,
-                ::getLatLon)
+                ::getLatLon,
+                false, false)
         FutureVoid(MyApplication.appContext, {
             // attempted bugfix for most plentiful crash
             //kotlin.KotlinNullPointerException:
             //at joshuatee.wx.fragments.LocationFragment.getActivityReference (LocationFragment.kt:783)
             //at joshuatee.wx.fragments.LocationFragment.access$getActivityReference$p (LocationFragment.kt:65)
             //at joshuatee.wx.fragments.LocationFragment$getRadar$1$3.invokeSuspend (LocationFragment.kt:440)
-            if (Location.isUS && mActivity != null ) {
-                UtilityRadarUI.plotRadar(
+            if (Location.isUS && mActivity != null) {
+                NexradDraw.plotRadar(
                         wxglRenders[idx],
                         "",
-                        MyApplication.appContext,
                         ::getGPSFromDouble,
                         ::getLatLon,
                         false)
@@ -420,11 +406,10 @@ class LocationFragment : Fragment() {
             // guess it's worth another try to see if the issue back then was fixed in the various re-writes that have
             // occurred since
 	    
-	    //elys mod
+	    //elys mod - not removing those!!!  unless crashing....   
 	    if (PolygonType.HAIL_LABELS.pref) { 
 	    	UtilityWXGLTextObject.updateHailLabels(numberOfRadars, wxglTextObjects)
-	    }
-	    	    
+	    }	    	    
             if (Location.isUS && idx == 0) {
                 if (PolygonType.SPOTTER_LABELS.pref) {
                     UtilityWXGLTextObject.updateSpotterLabels(numberOfRadars, wxglTextObjects)
@@ -442,44 +427,14 @@ class LocationFragment : Fragment() {
                 wxglSurfaceViews[idx].resetView()
             }
         }
-        // recent adds Jan 2020
-        if (RadarPreferences.radarWarnings && activityReferenceWithNull != null) {
-            FutureVoid(MyApplication.appContext, { UtilityDownloadWarnings.get(MyApplication.appContext) }) {
-                if (!wxglRenders[idx].product.startsWith("2")) {
-                    UtilityRadarUI.plotWarningPolygons(wxglSurfaceViews[idx], wxglRenders[idx], false)
-                }
-            }
-        }
-        if (PolygonType.MCD.pref && activityReferenceWithNull != null) {
-            FutureVoid(MyApplication.appContext, {
-                ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.get(MyApplication.appContext)
-                if (activityReferenceWithNull != null) {
-                    ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.get(MyApplication.appContext)
-                }
-            }) {
-                if (!wxglRenders[idx].product.startsWith("2")) {
-                    UtilityRadarUI.plotMcdWatchPolygons(wxglSurfaceViews[idx], wxglRenders[idx], false)
-                }
-            }
-        }
-        if (PolygonType.MPD.pref && activityReferenceWithNull != null) {
-            FutureVoid(MyApplication.appContext, { ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.get(MyApplication.appContext) }) {
-                if (!wxglRenders[idx].product.startsWith("2")) {
-                    UtilityRadarUI.plotMpdPolygons(wxglSurfaceViews[idx], wxglRenders[idx], false)
-                }
-            }
-        }
-        // end recent adds Jan 2020
-        // don't enable until more stable
-        /*if (MyApplication.radarShowWpcFronts) {
-            withContext(Dispatchers.IO) {
-                UtilityWpcFronts.get(activityReference)
-            }
-            if (!oglrArr[idx].product.startsWith("2")) {
-                UtilityRadarUI.plotWpcFronts(glviewArr[idx], oglrArr[idx], false)
-            }
-            UtilityWXGLTextObject.updateWpcFronts(numPanesArr.size, wxgltextArr)
-        }*/
+        NexradLayerDownload.download(
+                MyApplication.appContext,
+                1,
+                wxglRenders[idx],
+                wxglSurfaceViews[idx],
+                wxglTextObjects,
+                {},
+                false)
     }
 
     private fun getWebProduct() {
@@ -487,22 +442,18 @@ class LocationFragment : Fragment() {
         homeScreenWebViews.last().loadUrl(forecastUrl)
     }
 
-//    private fun getTextProduct(productIndex: Int) {
-//        FutureText(MyApplication.appContext, homeScreenTextCards[productIndex].product, homeScreenTextCards[productIndex]::setup)
-//    }
-
-//    private fun getImageProduct(productIndex: Int) {
-//        FutureBytes2(MyApplication.appContext,
-//                { UtilityDownload.getImageProduct(MyApplication.appContext, homeScreenImageCards[productIndex].product) },
-//                homeScreenImageCards[productIndex]::set
-//        )
-//    }
-
     private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
         override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
             if (progress != 50000) {
                 idxIntG = idx
-                UtilityRadarUI.addItemsToLongPress(radarLongPressItems, Location.x, Location.y, activityReference, wxglSurfaceViews[idx], wxglRenders[idx], dialogRadarLongPress!!)
+                UtilityRadarUI.setupContextMenu(
+                        radarLongPressItems,
+                        Location.x,
+                        Location.y,
+                        activityReference,
+                        wxglSurfaceViews[idx],
+                        wxglRenders[idx],
+                        dialogRadarLongPress!!)
             } else {
                 (0 until numberOfRadars).forEach {
                     wxglTextObjects[it].addLabels()
@@ -553,10 +504,7 @@ class LocationFragment : Fragment() {
             val argsOrig = UtilityHomeScreen.HM_CLASS_ARGS[homeScreenImageCards[ii].product]
             homeScreenImageCards[ii].connect {
                 if (argsOrig != null) {
-//                    val args = arrayOfNulls<String>(argsOrig.size)
-//                    val args = Array(argsOrig.size) {""}
                     val args = argsOrig.copyOf(argsOrig.size)
-//                    System.arraycopy(argsOrig, 0, args, 0, argsOrig.size)
                     args.indices.forEach { z ->
                         if (args[z] == "WFO_FOR_SND")
                             args[z] = UtilityLocation.getNearestSoundingSite(LatLon(Location.x, Location.y))
@@ -585,17 +533,12 @@ class LocationFragment : Fragment() {
     private fun getAllRadars() {
         wxglSurfaceViews.indices.forEach {
             getRadar(it)
-//            if (!(PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref)) {
-//                getRadar(it)
-//            } else {
-//                getRadar(it)
-//            }
         }
     }
 
     private fun resetAllGlview() {
         wxglSurfaceViews.indices.forEach {
-            UtilityRadarUI.resetGlview(wxglSurfaceViews[it], wxglRenders[it])
+            NexradDraw.resetGlview(wxglSurfaceViews[it], wxglRenders[it])
             wxglTextObjects[it].addLabels()
         }
     }
@@ -621,36 +564,27 @@ class LocationFragment : Fragment() {
 
     private fun setupAlertDialogStatus() {
         alertDialogStatus = ObjectDialogue(activityReference, alertDialogStatusList)
-        alertDialogStatus!!.setNegativeButton { dialog, _ -> dialog.dismiss() }
-        alertDialogStatus!!.setSingleChoiceItems { dialog, which ->
+        alertDialogStatus!!.connect { dialog, which ->
             val strName = alertDialogStatusList[which]
-            if (wxglRenders.size > 0) {
-                UtilityLocationFragment.handleIconTap(
-                        strName,
-                        wxglRenders[0],
-                        activityReference,
-                        ::getContent,
-                        ::resetAllGlview,
-                        ::getAllRadars)
+            val renderOrNull = if (wxglRenders.size > 0) {
+                wxglRenders[0]
             } else {
-                UtilityLocationFragment.handleIconTap(
-                        strName,
-                        null,
-                        activityReference,
-                        ::getContent,
-                        ::resetAllGlview,
-                        ::getAllRadars)
+                null
             }
+            UtilityLocationFragment.handleIconTap(
+                    strName,
+                    renderOrNull,
+                    activityReference,
+                    ::getContent,
+                    ::resetAllGlview,
+                    ::getAllRadars)
             dialog.dismiss()
         }
     }
 
     private fun setupAlertDialogRadarLongPress() {
         dialogRadarLongPress = ObjectDialogue(activityReference, radarLongPressItems)
-        dialogRadarLongPress?.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-        }
-        dialogRadarLongPress?.setSingleChoiceItems { dialog, which ->
+        dialogRadarLongPress?.connect { dialog, which ->
             val item = radarLongPressItems[which]
             UtilityRadarUI.doLongPressAction(item, activityReference, wxglSurfaceViews[idxIntG], wxglRenders[idxIntG], ::longPressRadarSiteSwitch)
             dialog.dismiss()
@@ -759,21 +693,15 @@ class LocationFragment : Fragment() {
                 boxForecast?.removeChildren()
                 sevenDayCards.clear()
                 objectSevenDay.icons.forEachIndexed { index, iconUrl ->
-                    val objectCard7Day = SevenDayCard(activityReference, iconUrl, Location.isUS, index, objectSevenDay.forecastList)
+                    val objectCard7Day = SevenDayCard(activityReference, iconUrl, Location.isUS, objectSevenDay.forecastList[index])
                     objectCard7Day.connect { scrollView.smoothScrollTo(0, 0) }
                     boxForecast?.addWidget(objectCard7Day.get())
                     sevenDayCards.add(objectCard7Day)
                 }
-                val cardSunrise = CardText(activityReference)
-		//elys mod - for full sun and moon times//
-                //cardSunrise.center()
-                cardSunrise.connect { scrollView.smoothScrollTo(0, 0) }
-                try {
-                    cardSunrise.text = UtilityTimeSunMoon.getForHomeScreen(activityReference)
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
+                if (Location.isUS) {
+                    val sunRiseCard = SunRiseCard(activityReference, Location.latLon, scrollView)
+                    boxForecast?.addWidget(sunRiseCard.get())
                 }
-                boxForecast?.addWidget(cardSunrise.get())
             }
             if (!Location.isUS && homescreenFavLocal.contains("TXT-7DAY2")) {
                 ObjectCALegal(activityReference, boxForecast!!.get(), UtilityCanada.getLocationUrl(Location.x, Location.y))
@@ -820,6 +748,7 @@ class LocationFragment : Fragment() {
         }
     }
 
+    // used in WX.kt keyboard shortcut
     fun showLocations() {
         locationDialogue.show()
     }
@@ -838,15 +767,15 @@ class LocationFragment : Fragment() {
             return mActivity!!
         }
 
-    private val activityReferenceWithNull: FragmentActivity?
-        get() {
-            if (mActivity == null) {
-                mActivity = if (android.os.Build.VERSION.SDK_INT >= 23 ) {
-                    activity
-                } else {
-                    activity
-                }
-            }
-            return mActivity
-        }
+//    private val activityReferenceWithNull: FragmentActivity?
+//        get() {
+//            if (mActivity == null) {
+//                mActivity = if (android.os.Build.VERSION.SDK_INT >= 23 ) {
+//                    activity
+//                } else {
+//                    activity
+//                }
+//            }
+//            return mActivity
+//        }
 }

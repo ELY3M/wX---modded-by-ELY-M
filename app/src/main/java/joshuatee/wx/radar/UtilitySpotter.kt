@@ -24,10 +24,13 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.Extensions.getHtmlSep
-import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.DistanceUnit
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.UtilityLog
+import okhttp3.internal.format
+import java.text.SimpleDateFormat
+import java.util.*
 
 object UtilitySpotter {
 
@@ -66,10 +69,11 @@ object UtilitySpotter {
             val lines = html.split("<br>").dropLastWhile { it.isEmpty() }
             lines.forEach { line ->
                 val items = line.split(";;").dropLastWhile { it.isEmpty() }
+
                 if (items.size > 15) {
                     spotterList.add(
                             Spotter(
-		        items[0], 
+                                items[0],
 			items[1], 
 			items[2], 
 			items[3], 
@@ -170,14 +174,16 @@ object UtilitySpotter {
         var shortestDistance = 13.0
         var currentDistance: Double
         var bestSpotter = -1
+        var idleTime = ""
 
         spotterinfo.indices.forEach {
             currentDistance = LatLon.distance(location, LatLon(spotterinfo[it].lat, spotterinfo[it].lon), DistanceUnit.MILE)
             if (currentDistance < shortestDistance) {
                 shortestDistance = currentDistance
                 bestSpotter = it
+                idleTime = countTime(spotterinfo[it].reportAt)
                 SpotterInfoString =
-                        "Name: "+spotterinfo[it].firstName +" "+spotterinfo[it].lastName+"\nLocation: "+spotterinfo[it].lat+" "+spotterinfo[it].lon+"\nReport at: "+spotterinfo[it].reportAt+"\nEmail: "+spotterinfo[it].email+"\nPhone: "+spotterinfo[it].phone+"\nCallsign: "+spotterinfo[it].callsign+"\nFreq: "+spotterinfo[it].freq+"\nNote: "+spotterinfo[it].note+"\n============================\n"
+                        "Name: "+spotterinfo[it].firstName +" "+spotterinfo[it].lastName+"\nLocation: "+spotterinfo[it].lat+" "+spotterinfo[it].lon+"\nReport at: "+spotterinfo[it].reportAt+"\nIdle Time: "+idleTime+"\nEmail: "+spotterinfo[it].email+"\nPhone: "+spotterinfo[it].phone+"\nCallsign: "+spotterinfo[it].callsign+"\nFreq: "+spotterinfo[it].freq+"\nNote: "+spotterinfo[it].note+"\n============================\n"
 
 
 
@@ -192,6 +198,29 @@ object UtilitySpotter {
 
 
     }
+
+fun countTime(reportAt: String): String {
+    //get now date in GMT zone
+    val cal: Calendar = Calendar.getInstance()
+    val format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+    format.setTimeZone(TimeZone.getTimeZone("GMT"))
+    val nowDateTime = format.format(cal.getTime())
+    UtilityLog.d("wx", "Spotter reportAt: "+reportAt)
+    UtilityLog.d("wx", "Spotter Now Time: "+nowDateTime)
+
+    val reporttime = format.parse(reportAt)
+    var now = format.parse(nowDateTime)
+
+    //in milliseconds
+    val diff = now.getTime() - reporttime.getTime()
+    val diffSeconds = diff / 1000 % 60
+    val diffMinutes = diff / (60 * 1000) % 60
+    val diffHours = diff / (60 * 60 * 1000) % 24
+    val diffDays = diff / (24 * 60 * 60 * 1000)
+    val idleDateTime = "$diffDays days, $diffHours hrs, $diffMinutes mins, $diffSeconds secs"
+    UtilityLog.d("wx", "Spotter Idle Time: "+idleDateTime)
+    return idleDateTime
+}
 
 
     val reports: List<SpotterReports>

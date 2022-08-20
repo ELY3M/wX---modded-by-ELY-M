@@ -1,7 +1,6 @@
 ```
 // [FIX] chromeOS: text size for observations in nexrad
 // [FIX] storm reports - having location follow gps breaks the location marker
-// [REF] WXGLRender rename rid to radarSite
 // [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
 // [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
 // [REF] migrate all to Future* (BackgroundFetch, Nexrad)
@@ -10,32 +9,120 @@
 // [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
 // [FIX] SPC HREF radar stuff
 // [REF] IntentService is deprecated (AudioService* and others) https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
-// [REF] After Oct 2022 - raise minSDK to Android 6	API 23	Marshmallow
-// [REF] WXGLRender should show elements based on pref not buffer size (ca/mx statelines ex.)
 // [ADD] handle deprecations in UtilityUI https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
 // [FIX] nexrad invoked from alert will not keep site when jump to multipane
 // [FIX] USAlerts state count is not accurate
-// [REF] VBox removeChildren* - https://stackoverflow.com/questions/11952598/whats-difference-between-removeallviews-and-removeallviewsinlayout
-// [ADD] explore https://github.com/material-components/material-components-android/blob/master/docs/getting-started.md 
-// [REF] deprecate ExternalDuplicateRemover used in ObjectWarning
-// [FIX] dual/quad pane radar don't take up the entire screen on chromeOS and pixel 6a
+// [FIX] dual/quad pane radar don't take up the entire screen on pixel 6a
 // [FIX] deprecated startActivityForResult onActivityResult (see example in SettingsNotificationsActivity.kt)
-// [REF] migrate UtilityDownloadWarnings.kt -> ObjectPolygonWarning.kt
-// [ADD] https://m3.material.io/components/dialogs/implementation/android  https://developer.android.com/jetpack/androidx/releases/compose-material3
-// [ADD] https://developer.android.com/reference/com/google/android/material/card/MaterialCardView
-// [ADD] com.google.android.material.card.MaterialCardView
-// [REF] use ObjectToolbar in VideoRecordActivity and BaseActivity
-// [REF] ObjectToolbar make fav(star) handling easier
-// [REF] ObjectToolbar
-// [FIX] Day 8-14 Hazard Outlook is to large
-// https://stackoverflow.com/questions/40835514/android-canvas-drawing-too-large-bitmap
-// https://developer.android.com/topic/performance/graphics/load-bitmap
-// [REF] SettingsColorPaletteEditor.kt move away from deprecated file launcher technique
+// [REF] After Oct 2022 - raise targetSdkVersion to Android 13 API 33 from API 32
+// [REF] ObjectNhc (activity) and UtilityNhc (notification) should share code
+// [REF] consolidate single and multipane as much as possible
+// [REF] nexrad single pane - remove use of wxglRender, wxglSurfaceView and rely on single element list to mimic multipane
+// [REF] NexradState class to bundle wxglrender, surfaceview, textobject, radarSite, prod, old* and methods to restore/save prefs
 ```
 [[_TOC_]]
 
-## 55656 2022_08_06
-* 
+## 55672 2022_08_19
+
+## 55671 2022_08_19
+* [REF] nexrad - migrate away from paneList
+* [FIX] tap on any NHC notification would cause a crash (user reported)
+* [FIX] NHC graphics for ATL storms
+* [FIX] wxglrender     @Synchronized fun constructWarningLines(polygonWarningType: PolygonWarningType) {
+* [REF] use NexradState in single pane Nexrad
+
+## 55670 2022_08_19
+* [REF] nexrad work, objectImageMap, getContent, remove: restartedZoom, oglInView, firstRun, mapShown, restarted, tiltOption, animRan
+
+## 55669 2022_08_19
+* [ADD] additional download threads to "Severe Dashboard"
+* [ADD] nexrad multi-pane, remove single threaded getContent, use @Synchronize for spotters if needed (or other)
+* [REF] move getImageForShare in nexrad* into utilRadarUI
+
+## 55668 2022_08_18
+* [ADD] severe dashboard - warnings/watch/mcd/mpd are downloaded in parallel
+* [REF] WXGLRender.constructStiLines - use constructLines and not constructLinesShort (and change in NexradLayerDownload)
+* [REF] WXGLRender - changes in wind barbs layout
+* [REF] Nexrad - remove some archiveMode used at granular level
+* [ADD] to meet the Oct 2022 announcement - raise minSDK to Android 6 API 23 from API 21
+* [REF] nexrad remove var touchImage: TouchImageView2
+* [ADD] NexradArguments - dedicated class to handle nexrad arguments
+
+## 55667 2022_08_17
+* [REF] remove some dependence on PolygonWarningType
+* [FIX] Day 8-14 Hazard Outlook is to large to display via default options
+* [FIX] in Color Palette Editor remove the unimplemented "help" option
+* [FIX] in Color Palette Editor remove the "load from file" option - please use copy/paste instead. It is not worth the complexity to leave this in place
+* [ADD] in settings->radar WPC Fronts line size is now a configurable item
+
+## 55666 2022_08_17
+* [REF] LocationFragment.kt: val cardViews = mutableListOf<CardView>() -> val cards = mutableListOf<Card>()
+* [ADD] Us Alerts - if in landscape do 2 columns
+* [ADD] Nexrad radar has had a large chunk of it re-written to modernize the code and to help improve performance
+*       by doing more work in parallel. Please do email me if any bugs are encountered.
+* [ADD] For new NWS radar mosaic, tile icon in MISC tab will show the last viewed location. Main submenu will continue to show nearest image.
+* [REF] add RadarGeomInfo and revamp RadarGeometry
+* [ADD] in Nexrad single pane some settings changes that previously required restarting the nexrad view no longer require (like adding CA/MX borders)
+
+## 55665 2022_08_16
+* [ADD] WPC Fronts to PolygonType
+* [ADD] wxglrender remove deconstruct stuff
+* [REF] remove checks in NexradLayerDownload: if (!wxglRender.product.startsWith("2")) {
+
+## 55664 2022_08_15
+* [REF] radarPref - remove leading "radar" in vars
+
+## 55663 2022_08_15
+* [REF] misc refactor
+* [FIX] wpc mpd as viewed in playlist has HTML tags showing (changed WpcTextProductsActivity.kt)
+* [REF] move SPC SWO, Obs, Windbarbs, tvs, hi, sti, and spotters into NexradLayerDownload
+* [ADD] wxglrender - ondraw, check if enabled before drawing
+
+## 55662 2022_08_15
+* [REF] misc refactor
+* [ADD] Nexrad on main screen and multipane nexrad now show SPC Convective Outlooks if configured to do so
+* [ADD] NexradDraw and move content from UtilityRadarUI
+* [FIX] Nexrad long press observation dialogue was not respecting the text size setting
+* [FIX] Nexrad new - wpc fronts exceptions (@Synchronized fun constructWpcFronts())
+
+## 55661 2022_08_14
+* [REF] misc refactor
+* [FIX] new radar was not launching via static shortcut
+* [FIX] nexrad - long press and select the "Beam Height" entry changed the radar site, it should do nothing
+
+## 55660 2022_08_14
+* [REF] misc refactor
+* [FIX] MCD/MPD/Watch viewer won't crash if text product is not yet available
+* [FIX] SevereDashboard will now only show "Done" in title if all downloads are done
+* [ADD] Move new Nexrad Radar file into place
+
+## 55659 2022_08_14
+* [REF] misc refactor
+* [ADD] move from UtilityDownloadWarnings to ObjectPolygonWarning for TOR/TST/FFW (will need a few weeks of testing)
+
+## 55658 2022_08_14
+* [REF] misc refactor
+* [ADD] Nexrad radar option "Show radar during a pan/drag motion" which is enabled by default to mimic historic behavior
+* [FIX] download warnings in NexradLayerDownload which is now used by LocationFragment, Multipane, and Nexrad new
+
+## 55657 2022_08_13
+* [REF] misc refactor
+* [REF] RadarPreferences - change var naming radarColor* to color*
+* [FIX] SPC SREF - remove help from submenu as it doesn't add value
+* [FIX] SPC SREF - correct formatting for status of current model run in submenu
+* [ADD] Multi-pane nexrad now shows WPC Fronts if configured
+
+## 55656 2022_08_13
+* [REF] wxglrender use maps for geo buffers
+* [REF] RID.kt takes 3 arguments with no defaults
+* [ADD] Spc Storm Reports drawer with states used to filter is now sorted
+* [FIX] date picker in spc storm reports for some themes
+* [REF] add to Route class
+* [FIX] if user chose to not use main screen radar floating action button and also chose to use a navigation drawer, the radar FAB would not show
+* [FIX] adhoc forecast via long press in nexrad was not showing correct sunrise/sunset data
+* [REF] add SunRiseCard and use in LocationFragment and ForecastActivity
+* [REF] WXGLRadarActivityMultiPane.kt refactor getContent to use FutureVoid
+* [FIX] If audio was previously paused, going into another activity with text to speech controls shows text "stop button" instead of icon
 
 ## 55655 2022_08_06
 * [REF] misc refactor

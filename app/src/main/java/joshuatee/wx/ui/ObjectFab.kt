@@ -24,7 +24,6 @@ package joshuatee.wx.ui
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -50,10 +49,6 @@ class ObjectFab {
         connect(fn)
     }
 
-    fun setDrawable(drawable: Drawable?) {
-        fab.setImageDrawable(drawable)
-    }
-
     fun connect(fn: View.OnClickListener) {
         fab.setOnClickListener(fn)
     }
@@ -67,7 +62,7 @@ class ObjectFab {
             }
         }
 
-    fun setResDrawable(resourceDrawable: Int) {
+    fun set(resourceDrawable: Int) {
         val drawable = ContextCompat.getDrawable(context, resourceDrawable)
         fab.setImageDrawable(drawable)
     }
@@ -76,10 +71,9 @@ class ObjectFab {
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         } else {
-//            fab.backgroundTintList = ColorStateList.valueOf(UtilityTheme.primaryColorFromSelectedTheme)
             fab.backgroundTintList = ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
         }
-        setResDrawable(icon)
+        set(icon)
         fab.elevation = UIPreferences.fabElevation
         fab.translationZ = UIPreferences.fabElevationDepressed
     }
@@ -88,10 +82,8 @@ class ObjectFab {
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         } else {
-//            fab.backgroundTintList = ColorStateList.valueOf(UtilityTheme.primaryColorFromSelectedTheme)
             fab.backgroundTintList = ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
         }
-
         fab.elevation = UIPreferences.fabElevation
         fab.translationZ = UIPreferences.fabElevationDepressed
     }

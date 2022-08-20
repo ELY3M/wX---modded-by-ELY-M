@@ -171,8 +171,11 @@ class SettingsUIActivity : BaseActivity() {
         if ((UIPreferences.tilesPerRow != tilesPerRowStart)
                 || (UIPreferences.navDrawerMainScreen != navDrawerMainScreen)
                 || (UIPreferences.navDrawerMainScreenOnRight != navDrawerMainScreenOnRight)
-        )
-            UtilityAlertDialog.restart() else super.onBackPressed()
+        ) {
+            Utility.restart()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -185,7 +188,7 @@ class SettingsUIActivity : BaseActivity() {
                         || (UIPreferences.navDrawerMainScreen != navDrawerMainScreen)
                         || (UIPreferences.navDrawerMainScreenOnRight != navDrawerMainScreenOnRight)
                 )
-                    UtilityAlertDialog.restart()
+                    Utility.restart()
                 else
                     NavUtils.navigateUpFromSameTask(this)
             }

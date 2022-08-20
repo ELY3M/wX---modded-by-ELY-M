@@ -21,10 +21,11 @@
 
 package joshuatee.wx.activitiesmisc
 
+import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.ObjectWarning
-import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.PolygonWarningType
 
-class SevereWarning(private val type: PolygonType) {
+class SevereWarning(private val type: PolygonWarningType) {
 
     //
     // encapsulates VTEC data and count for tst,tor, or ffw
@@ -33,19 +34,23 @@ class SevereWarning(private val type: PolygonType) {
     var warningList = listOf<ObjectWarning>()
 
     fun getName() = when (type) {
-        PolygonType.TOR -> "Tornado Warning"
-        PolygonType.TST -> "Severe Thunderstorm Warning"
-        PolygonType.FFW -> "Flash Flood Warning"
+        PolygonWarningType.TornadoWarning -> "Tornado Warning"
+        PolygonWarningType.ThunderstormWarning -> "Severe Thunderstorm Warning"
+        PolygonWarningType.FlashFloodWarning -> "Flash Flood Warning"
         else -> ""
     }
 
-    fun generateString() {
-        val html = ObjectWarning.getBulkData(type)
+    fun download() {
+        ObjectPolygonWarning.polygonDataByType[type]!!.download()
+        generateString()
+    }
+
+    private fun generateString() {
+        val html = ObjectPolygonWarning.polygonDataByType[type]!!.getData()
         warningList = ObjectWarning.parseJson(html)
     }
 
     fun getCount(): Int {
-        // TODO FIXME
         var i = 0
         for (s in warningList) {
             if (s.isCurrent) {

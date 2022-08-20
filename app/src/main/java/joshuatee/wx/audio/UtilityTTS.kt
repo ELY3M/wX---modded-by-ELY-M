@@ -324,6 +324,8 @@ object UtilityTts {
     }
 
     fun conditionalPlay(arguments: Array<String>, index: Int, context: Context, html: String, label: String) {
-        if (arguments.size > index && arguments[index] == "sound") synthesizeTextAndPlay(context, html, label)
+        if (arguments.size > index && arguments[index] == "sound") {
+            synthesizeTextAndPlay(context, html, label)
+        }
     }
 }

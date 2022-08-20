@@ -62,7 +62,7 @@ class ObjectCardStormReportItem(context: Context) {
 
     fun setTextHeader(stormReport: StormReport) {
         textTop.text = stormReport.title.uppercase(Locale.US)
-        textTop.setTextSize(TextSize.LARGE)
+        textTop.setSize(TextSize.LARGE)
         textTop.setPadding(20)
         textTitle.visibility = View.GONE
         textBottom.visibility = View.GONE

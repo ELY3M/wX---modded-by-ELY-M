@@ -51,6 +51,7 @@ class ImageCollectionActivity : VideoRecordActivity() {
     private lateinit var image: TouchImage
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var imageCollection: ObjectImagesCollection
+    // TODO FIXME use ObjectAnimate if possible
     private var animDrawable = AnimationDrawable()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -116,13 +117,11 @@ class ImageCollectionActivity : VideoRecordActivity() {
         }
         when (item.itemId) {
             R.id.action_animate -> getAnimate()
-            R.id.action_share -> {
-                if (UIPreferences.recordScreenShare) {
+            R.id.action_share -> if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
                     UtilityShare.bitmap(this, imageCollection.title, image.bitmap)
                 }
-            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true

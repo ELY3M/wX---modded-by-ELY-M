@@ -64,7 +64,6 @@ class NwsObsSitesActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, R.menu.nwsobssites, bottomToolbar = false)
         title = titleString
         updateButton()
-        siteDisplay = false
         objectRecyclerView = ObjectRecyclerView(this, R.id.card_list, GlobalArrays.states.toMutableList(), ::itemClicked)
     }
 
@@ -102,14 +101,13 @@ class NwsObsSitesActivity : BaseActivity() {
     private fun getContent() {
         val text = UtilityIO.readTextFileFromRaw(resources, R.raw.stations_us4)
         val lines = text.split("\n")
-        val listSort = mutableListOf<String>()
         val listCity = mutableListOf<String>()
         listOf(listIds).forEach {
             it.clear()
         }
         listCity.add("..Back to state list")
         listIds.add("..Back to state list")
-        lines.filterTo(listSort) { it.startsWith(stateSelected.uppercase(Locale.US)) }
+        val listSort = lines.filter { it.startsWith(stateSelected.uppercase(Locale.US)) }.toMutableList()
         listSort.sort()
         listSort.forEach {
             val items = it.split(",")

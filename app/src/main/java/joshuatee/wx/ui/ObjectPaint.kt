@@ -31,7 +31,7 @@ class ObjectPaint {
 
     init {
         paint.color = UIPreferences.nwsIconTextColor
-        paint.textSize = 14f
+        paint.textSize = 14.0f
         paint.typeface = Typeface.DEFAULT_BOLD
         paint.isAntiAlias = true
     }

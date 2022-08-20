@@ -119,7 +119,7 @@ internal object UtilityWpcText {
         "offn12: Navtex Marine fcst for Kodiak, AK (N Gulf)",
         "offn13: Navtex Marine fcst for Kodiak, AK (West)",
         "offn14: Navtex Marine fcst for Kodiak, AK (NW)",
-        "offn15: Navtex Marine fcst for Kodiak, AK(Arctic)",
+        "offn15: Navtex Marine fcst for Kodiak, AK (Arctic)",
 
         "uvicac: NOAA/EPA Ultraviolet Index /UVI/ Forecast",
         "tptwrn: Hourly temp/wx for Western US",

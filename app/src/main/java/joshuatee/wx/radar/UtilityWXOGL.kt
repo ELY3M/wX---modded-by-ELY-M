@@ -33,7 +33,6 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.ObjectWarning
-import joshuatee.wx.settings.RadarPreferences
 
 object UtilityWXOGL {
 
@@ -132,8 +131,8 @@ object UtilityWXOGL {
     }
 
     fun showTextProducts(latLon: LatLon): String {
-        var html = ObjectPolygonWarning.severeDashboardTor.value + ObjectPolygonWarning.severeDashboardTst.value + ObjectPolygonWarning.severeDashboardFfw.value
-        RadarPreferences.radarWarningPolygons.forEach {
+        var html = ""
+        ObjectPolygonWarning.polygonDataByType.values.forEach {
             if (it.isEnabled) {
                 html += it.storage.value
             }

@@ -47,7 +47,7 @@ internal object UtilityNexradRadial8Bit {
         val rBuff = ByteBuffer.allocateDirect(32)
         UtilityCanvasMain.setImageOffset(context)
         val canvas = Canvas(bitmap)
-        val zeroColor = RadarPreferences.nexradRadarBackgroundColor
+        val zeroColor = RadarPreferences.nexradBackgroundColor
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
             dis.bigEndian = true

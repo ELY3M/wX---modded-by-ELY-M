@@ -64,9 +64,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         } else {
             GlobalVariables.ICON_PAUSE_WHITE
         }
-        fabPause.setResDrawable(icon)
+        fabPause.set(icon)
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        diaAfd.setSingleChoiceItems { dialog, which ->
+        diaAfd.connect { dialog, which ->
             val name = diaAfd.getItem(which)
             val product = "AFD" + name.split(":").dropLastWhile { it.isEmpty() }[0].uppercase(Locale.US)
             if (!ridFav.contains(product)) {
@@ -79,11 +79,11 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             } else {
                 dialog.dismiss()
                 val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
-                ObjectPopupMessage(this, rootView, "$product already in playlist")
+                ObjectPopupMessage(rootView, "$product already in playlist")
             }
         }
         diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labels)
-        diaMain.setSingleChoiceItems { dialog, which ->
+        diaMain.connect { dialog, which ->
             val name = diaMain.getItem(which)
             val product = name.split(":").dropLastWhile { it.isEmpty() }[0].uppercase(Locale.US)
             if (!ridFav.contains(product)) {
@@ -96,7 +96,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             } else {
                 dialog.dismiss()
                 val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
-                ObjectPopupMessage(this, rootView, "$product already in playlist")
+                ObjectPopupMessage(rootView, "$product already in playlist")
             }
         }
         ridFav = Utility.readPref(this, prefToken, "")
@@ -182,14 +182,14 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         } else {
             GlobalVariables.ICON_PAUSE
         }
-        fabPause.setResDrawable(icon)
+        fabPause.set(icon)
         if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
             UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
     }
 
     private fun playAll() {
-        fabPause.setResDrawable(GlobalVariables.ICON_PAUSE)
+        fabPause.set(GlobalVariables.ICON_PAUSE)
         if (isStoragePermissionGranted) {
             UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
         }

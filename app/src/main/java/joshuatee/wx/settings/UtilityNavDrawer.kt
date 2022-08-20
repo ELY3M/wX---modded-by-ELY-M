@@ -171,8 +171,7 @@ internal object UtilityNavDrawer {
                 //val visible = Utility.readPref(context, getPrefVar(value), "")  == "true"
                 val visible = tokenString.contains(":$value")
                 if (!visible) {
-                    val item = navigationView.menu.findItem(key)
-                    item.isVisible = false
+                    navigationView.menu.findItem(key).isVisible = false
                 }
             }
         }

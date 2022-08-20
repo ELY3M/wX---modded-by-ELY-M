@@ -28,7 +28,6 @@ import java.nio.ByteOrder
 import joshuatee.wx.Jni
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.RadarPreferences
@@ -63,7 +62,9 @@ open class ObjectOglBuffers() {
     var isInitialized = false
         set(downloaded) {
             field = downloaded
-            if (!isInitialized) chunkCount = 0
+            if (!isInitialized) {
+                chunkCount = 0
+            }
         }
     var lenInit = 7.5f
     var xList = DoubleArray(1)
@@ -71,7 +72,7 @@ open class ObjectOglBuffers() {
     var triangleCount = 0
     var scaleCutOff = 0.0f
     var type = PolygonType.NONE
-    var geotype = GeographyType.NONE
+    var geotype = RadarGeometryTypeEnum.NONE
     var warningType: ObjectPolygonWarning? = null
     var hailSizeNumber: Double = 0.0
     var hailIcon: String = "hailunknown.png"
@@ -90,7 +91,7 @@ open class ObjectOglBuffers() {
         this.scaleCutOff = scaleCutOff
     }
 
-    constructor(geotype: GeographyType, scaleCutOff: Float) : this() {
+    constructor(geotype: RadarGeometryTypeEnum, scaleCutOff: Float) : this() {
         this.geotype = geotype
         this.scaleCutOff = scaleCutOff
     }
@@ -111,6 +112,10 @@ open class ObjectOglBuffers() {
 
     fun initialize(floatCount: Int, indexCount: Int, colorCount: Int, solidColor: Int) {
         this.initialize(floatCount, indexCount, colorCount)
+        initializeColor(solidColor)
+    }
+
+    fun initializeColor(solidColor: Int) {
         solidColorRed = Color.red(solidColor).toByte()
         solidColorGreen = Color.green(solidColor).toByte()
         solidColorBlue = Color.blue(solidColor).toByte()
@@ -180,7 +185,7 @@ open class ObjectOglBuffers() {
     companion object {
         // TVS
         private fun redrawTriangle(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
-            if (!RadarPreferences.radarUseJni) {
+            if (!RadarPreferences.useJni) {
 	    	//elys mod
                 UtilityWXOGLPerf.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
             } else {
@@ -204,7 +209,7 @@ open class ObjectOglBuffers() {
 
         // HI
         private fun redrawTriangleUp(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
-            if (!RadarPreferences.radarUseJni) {
+            if (!RadarPreferences.useJni) {
 	        //elys mod
                 UtilityWXOGLPerf.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
             } else {
@@ -228,7 +233,7 @@ open class ObjectOglBuffers() {
 
         // LOCDOT, SPOTTER
         private fun redrawCircle(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
-            if (!RadarPreferences.radarUseJni) {
+            if (!RadarPreferences.useJni) {
                 UtilityWXOGLPerf.genCircle(buffers, projectionNumbers)
             } else {
                 Jni.genCircle(
@@ -252,7 +257,7 @@ open class ObjectOglBuffers() {
 
         // WIND BARB CIRCLE
         private fun redrawCircleWithColor(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
-            if (!RadarPreferences.radarUseJni) {
+            if (!RadarPreferences.useJni) {
                 UtilityWXOGLPerf.genCircleWithColor(buffers, projectionNumbers)
             } else {
                 Jni.genCircleWithColor(

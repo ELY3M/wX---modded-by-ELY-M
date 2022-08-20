@@ -243,7 +243,7 @@ internal object UtilityMetar {
             val metarDataAsList = metarDataRaw.split("\n").dropLastWhile { it.isEmpty() }
             metarDataAsList.indices.forEach {
                 val tokens = metarDataAsList[it].split(" ")
-                metarSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2])))
+                metarSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2]), 0.0))
             }
         }
     }

@@ -22,6 +22,7 @@
 package joshuatee.wx.ui
 
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.R
 
@@ -45,5 +46,9 @@ class ObjectToolbar(private val toolbar: Toolbar) {
 
     fun connect(fn: Toolbar.OnMenuItemClickListener) {
         toolbar.setOnMenuItemClickListener(fn)
+    }
+
+    fun connectClick(fn: View.OnClickListener) {
+        toolbar.setOnClickListener(fn)
     }
 }

@@ -111,7 +111,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun showText(html: String) {
-        cardText.setTextAndTranslate(html)
+        if (html.contains("<BR><BR>")) {
+            cardText.setTextAndTranslate(Utility.fromHtml(html))
+        } else {
+            cardText.setTextAndTranslate(html)
+        }
         if (UtilityWpcText.needsFixedWidthFont(product.uppercase(Locale.US))) {
             cardText.typefaceMono()
         } else {

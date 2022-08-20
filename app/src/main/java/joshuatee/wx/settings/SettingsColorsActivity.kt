@@ -26,8 +26,10 @@ import android.graphics.Color
 import android.os.Bundle
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.objects.GeographyType
+import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.PolygonWarningType
+import joshuatee.wx.radar.RadarGeometry
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectColorLabel
 import joshuatee.wx.ui.VBox
@@ -71,8 +73,10 @@ class SettingsColorsActivity : BaseActivity() {
             "NWS Forecast Icon Bottom color" to "NWS_ICON_BOTTOM_COLOR",
             "Nexrad Radar Background color" to "NEXRAD_RADAR_BACKGROUND_COLOR"
         )
-        RadarPreferences.radarWarningPolygons.forEach {
-            mapColorToPref[it.name + " color"] = it.prefTokenColor
+        ObjectPolygonWarning.polygonDataByType.values.forEach {
+            if (it.type != PolygonWarningType.FlashFloodWarning &&  it.type != PolygonWarningType.ThunderstormWarning && it.type != PolygonWarningType.TornadoWarning) {
+                mapColorToPref[it.name + " color"] = it.prefTokenColor
+            }
         }
         objectSettingsColorLabels = mapColorToPref.keys.sorted().map {
             ObjectColorLabel(this, box, it, mapColorToPref[it]!!)
@@ -85,7 +89,7 @@ class SettingsColorsActivity : BaseActivity() {
     }
 
     override fun onStop() {
-        GeographyType.refresh()
+        RadarGeometry.updateConfig()
         PolygonType.refresh()
         super.onStop()
     }

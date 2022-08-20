@@ -30,7 +30,6 @@ import android.util.DisplayMetrics
 import android.util.TypedValue
 import java.util.concurrent.TimeUnit
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.RadarGeometry
@@ -130,10 +129,8 @@ class MyApplication : Application() {
             loadedBuffers = true
             ColorPalettes.initialize(context)
             RadarPreferences.initGenericRadarWarnings(context)
-            GeographyType.values().forEach {
-                RadarGeometry.initialize(context, it)
-            }
-            GeographyType.refresh()
+//            GeographyType.refresh()
+            RadarGeometry.initialize(context)
         }
 
         private fun getInitialPreferenceString(pref: String, initValue: String) = preferences.getString(pref, initValue) ?: initValue

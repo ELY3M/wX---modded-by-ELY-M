@@ -184,6 +184,9 @@ Use screen recording technology for sharing in activities involving just images 
           in the DCIM or Movies folder.
       </string>
 
+    <string name="show_radar_when_pan_label">
+Determines whether nexrad radar will be shown during a drag/pan motion.
+</string>
 
     <string name="spotters_label">
 Determines whether storm spotters are shown along with radar. Color and size for storm spotter markers can also
@@ -368,6 +371,9 @@ Thickness of lines for storm tracks. Smaller number is thinner.
 </string>
     <string name="swo_linesize_np">
 Thickness of lines for the SPC Convective Outlooks. Smaller number is thinner.
+</string>
+    <string name="wpc_fronts_linesize_np">
+Thickness of lines for WPC Fronts. Smaller number is thinner.
 </string>
     <string name="wb_linesize_np">
 Thickness of lines for wind barbs. Smaller number is thinner.

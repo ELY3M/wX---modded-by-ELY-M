@@ -232,7 +232,9 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 getContent()
             }
             R.id.action_forward -> {
-                if (version > 1) version -= 2
+                if (version > 1) {
+                    version -= 2
+                }
                 getContent()
             }
             R.id.action_fav -> toggleFavorite()
@@ -367,43 +369,16 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_M -> {
-                if (event.isCtrlPressed)
-                    toolbarBottom.showOverflowMenu()
-                return true
-            }
-            KeyEvent.KEYCODE_D -> {
-                if (event.isCtrlPressed)
-                    objectNavDrawer.openGravity(GravityCompat.START)
-                true
-            }
-            KeyEvent.KEYCODE_F -> {
-                if (event.isCtrlPressed)
-                    toggleFavorite()
-                return true
-            }
-            KeyEvent.KEYCODE_P -> {
-                if (event.isCtrlPressed)
-                    audioPlayMenu(R.id.action_read_aloud, html, product, product + wfo)
-                return true
-            }
-            KeyEvent.KEYCODE_S -> {
-                if (event.isCtrlPressed)
-                    audioPlayMenu(R.id.action_stop, html, product, product + wfo)
-                return true
-            }
-            KeyEvent.KEYCODE_L -> {
-                if (event.isCtrlPressed)
-                    imageMap.toggleMap()
-                return true
-            }
-            KeyEvent.KEYCODE_SLASH -> {
-                if (event.isAltPressed)
-                    ObjectDialogue(this, Utility.showWfoTextShortCuts())
-                return true
-            }
+        when (keyCode) {
+            KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) toolbarBottom.showOverflowMenu()
+            KeyEvent.KEYCODE_D -> if (event.isCtrlPressed) objectNavDrawer.openGravity(GravityCompat.START)
+            KeyEvent.KEYCODE_F -> if (event.isCtrlPressed) toggleFavorite()
+            KeyEvent.KEYCODE_P -> if (event.isCtrlPressed) audioPlayMenu(R.id.action_read_aloud, html, product, product + wfo)
+            KeyEvent.KEYCODE_S -> if (event.isCtrlPressed) audioPlayMenu(R.id.action_stop, html, product, product + wfo)
+            KeyEvent.KEYCODE_L -> if (event.isCtrlPressed) imageMap.toggleMap()
+            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showWfoTextShortCuts())
             else -> super.onKeyUp(keyCode, event)
         }
+        return true
     }
 }

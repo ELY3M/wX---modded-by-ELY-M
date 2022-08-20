@@ -26,6 +26,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
 class VBox(val context: Context) {
@@ -50,6 +51,12 @@ class VBox(val context: Context) {
         fun fromResource(activity: Activity): VBox {
             val box = VBox(activity)
             box.linearLayout = activity.findViewById(R.id.linearLayout)
+            return box
+        }
+
+        fun fromViewResource(view: View): VBox {
+            val box = VBox(MyApplication.appContext)
+            box.linearLayout = view.findViewById(R.id.linearLayout)
             return box
         }
     }

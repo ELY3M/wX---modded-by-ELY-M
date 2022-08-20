@@ -54,7 +54,7 @@ abstract class BaseActivity : AppCompatActivity() {
             toolbarBottom = Toolbar(this as Context)
         }
         objectToolbarBottom = ObjectToolbar(toolbarBottom)
-        UtilityToolbar.fullScreenMode(toolbar, false)
+        UtilityToolbar.setElevation(toolbar)
     }
 
     fun setTitle(s: String) {

@@ -50,7 +50,7 @@ class SpcCompmapActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
         objectNavDrawer = ObjectNavDrawer(this, paramList)
         objectNavDrawer.connect { _, _, position, _ ->
-            objectNavDrawer.setItemChecked(position, false)
+            objectNavDrawer.setItemChecked(position)
             objectNavDrawer.close()
             val positionStr = UtilitySpcCompmap.urlIndex[position]
             if (paramList[position].contains("(on)")) {
@@ -84,7 +84,7 @@ class SpcCompmapActivity : BaseActivity() {
                 break
             }
         }
-        objectNavDrawer.setItemChecked(position, false)
+        objectNavDrawer.setItemChecked(position)
         objectNavDrawer.close()
         if (!paramList[position].contains("(on)")) {
             paramList[position] = "(on) " + paramList[position]

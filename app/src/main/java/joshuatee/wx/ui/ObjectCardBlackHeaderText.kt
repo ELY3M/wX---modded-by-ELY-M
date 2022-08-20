@@ -42,7 +42,7 @@ class ObjectCardBlackHeaderText(context: Context, val box: VBox, val title: Stri
 
     private fun setTextHeader() {
         text.text = title
-        text.setTextSize(TextSize.LARGE)
+        text.setSize(TextSize.LARGE)
         text.setPadding(20)
         text.color = UIPreferences.textHighlightColor
         text.setBackgroundColor(Color.BLACK)

@@ -33,7 +33,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
-class ObjectAlertSummary(private val context: Context, private val box: VBox, private val scrollView: ScrollView) {
+class ObjectAlertSummary(private val context: Context, mainBox: VBox, private val scrollView: ScrollView) {
 
     private var totalAlertsCnt = 0
     var navList = listOf<String>()
@@ -43,24 +43,40 @@ class ObjectAlertSummary(private val context: Context, private val box: VBox, pr
     var bitmap = UtilityImg.getBlankBitmap()
     private var image = Image(context, bitmap)
     private val cardText = CardText(context)
+    private val textBox = VBox(context)
 
     init {
-        box.addWidget(cardText.get())
-        box.addWidget(image.get())
+        if (UtilityUI.isLandScape(context)) {
+            mainBox.makeHorizontal()
+        }
+        textBox.addWidget(cardText.get())
+        mainBox.addWidget(image.get())
+        mainBox.addLayout(textBox.get())
     }
 
     fun updateImage(bitmap: Bitmap) {
         this.bitmap = bitmap
-        image.set(bitmap)
+//        image.set2(bitmap)
+        if (UtilityUI.isLandScape(context)) {
+            image.set2(bitmap, 2)
+        } else {
+            image.set2(bitmap)
+        }
     }
 
     fun updateContent(data: String, filterOriginal: String, firstRun: Boolean) {
-        box.removeChildrenAndLayout()
+        textBox.removeChildrenAndLayout()
         scrollView.smoothScrollTo(0, 0)
-        box.addWidget(cardText.get())
-        image = Image(context, bitmap)
+        textBox.addWidget(cardText.get())
+//        image = Image(context, bitmap)
+//        image = Image(context)
+        if (UtilityUI.isLandScape(context)) {
+            image.set2(bitmap, 2)
+        } else {
+            image.set2(bitmap)
+        }
         image.connect { Route.image(context, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")) }
-        box.addWidget(image.get())
+//        box.addWidget(image.get())
         val mapEvent = mutableMapOf<String, Int>()
         val mapState = mutableMapOf<String, Int>()
         val map = mutableMapOf<String, Int>()
@@ -101,7 +117,7 @@ class ObjectAlertSummary(private val context: Context, private val box: VBox, pr
                     val objectCardAlertSummaryItem = ObjectCardAlertDetail(context)
                     objectCardAlertSummaryItem.setTextFields(nwsOffice, nwsLoc, capAlert)
                     objectCardAlertSummaryItem.connect { Route.hazard(context, arrayOf(capAlert.url, "")) }
-                    box.addWidget(objectCardAlertSummaryItem.get())
+                    textBox.addWidget(objectCardAlertSummaryItem.get())
                     i += 1
                 }
             }

@@ -24,7 +24,6 @@ package joshuatee.wx.settings
 
 import android.os.Bundle
 import joshuatee.wx.R
-import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.Route
@@ -51,7 +50,7 @@ class SettingsMainActivity : BaseActivity() {
         //elys mod
 	CardText(this, box, "Spotter Network Settings", textSize, SettingsSpotterNetwork::class.java, padding)
         CardText(this, box, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
-        CardText(this, box, "PlayList", textSize, SettingsPlaylistActivity::class.java, padding)
+        CardText(this, box, "PlayList", textSize, { Route.playlist(this) }, padding)
         CardText(this, box, "Radar", textSize, SettingsRadarActivity::class.java, padding)
         CardText(this, box, "User Interface", textSize, SettingsUIActivity::class.java, padding)
         CardText(this, box, "Widgets", textSize, SettingsWidgetsActivity::class.java, padding)

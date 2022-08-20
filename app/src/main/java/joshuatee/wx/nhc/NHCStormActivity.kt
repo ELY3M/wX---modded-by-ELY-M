@@ -98,7 +98,7 @@ class NhcStormActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid( this, ::downloadImages, ::showImages)
+        FutureVoid(this, ::downloadImages, ::showImages)
         FutureText(this, textProductUrl, ::showText)
     }
 

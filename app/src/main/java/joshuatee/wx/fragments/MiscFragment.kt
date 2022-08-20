@@ -115,7 +115,7 @@ class MiscFragment : Fragment() {
                         R.drawable.nws_sector,
                         RadarMosaicNwsActivity::class.java,
                         RadarMosaicNwsActivity.URL,
-                        arrayOf(""),
+                        arrayOf("sector"),
                         "nwsmosaic", "NWS Radar Mosaics"
                 )
             }

@@ -99,9 +99,9 @@ class ObjectCardCurrentConditions(val context: Context, version: Int) {
 
     fun update(objCc: ObjectCurrentConditions, isUS: Boolean, radarTime: String = "") {
         if (isUS) {
-            photo.setImage(UtilityForecastIcon.getIcon(context, objCc.iconUrl))
+            photo.set(UtilityForecastIcon.getIcon(context, objCc.iconUrl))
         } else {
-            photo.setImage(UtilityForecastIcon.getIcon(context, UtilityCanada.translateIconNameCurrentConditions(objCc.data, objCc.status)))
+            photo.set(UtilityForecastIcon.getIcon(context, UtilityCanada.translateIconNameCurrentConditions(objCc.data, objCc.status)))
         }
         val sep = " - "
         val conditionTokens = objCc.data.split(sep).dropLastWhile { it.isEmpty() }

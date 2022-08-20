@@ -87,13 +87,12 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 box.makeHorizontal()
             }
         }
-        toolbarBottom.setOnMenuItemClickListener(this)
-        val menu = toolbarBottom.menu
-        timeMenuItem = menu.findItem(R.id.action_time)
-        runMenuItem = menu.findItem(R.id.action_run)
-        miStatusParam1 = menu.findItem(R.id.action_status_param1)
-        miStatusParam2 = menu.findItem(R.id.action_status_param2)
-        star = menu.findItem(R.id.action_fav)
+        objectToolbarBottom.connect(this)
+        timeMenuItem = objectToolbarBottom.find(R.id.action_time)
+        runMenuItem = objectToolbarBottom.find(R.id.action_run)
+        miStatusParam1 = objectToolbarBottom.find(R.id.action_status_param1)
+        miStatusParam2 = objectToolbarBottom.find(R.id.action_status_param2)
+        star = objectToolbarBottom.getFavIcon()
         star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         title = arguments[2]
         if (om.numPanes < 2) {
@@ -105,19 +104,19 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 om.rightClick()
                 getContent()
             }
-            menu.findItem(R.id.action_img1).isVisible = false
-            menu.findItem(R.id.action_img2).isVisible = false
+            objectToolbarBottom.hide(R.id.action_img1)
+            objectToolbarBottom.hide(R.id.action_img2)
             if (UIPreferences.fabInModels) {
-                menu.findItem(R.id.action_back).isVisible = false
-                menu.findItem(R.id.action_forward).isVisible = false
+                objectToolbarBottom.hide(R.id.action_back)
+                objectToolbarBottom.hide(R.id.action_forward)
             }
             fab1?.visibility = View.GONE
             fab2?.visibility = View.GONE
             miStatusParam2.isVisible = false
         } else {
-            menu.findItem(R.id.action_multipane).isVisible = false
+            objectToolbarBottom.hide(R.id.action_multipane)
         }
-        miStatus = menu.findItem(R.id.action_status)
+        miStatus = objectToolbarBottom.find(R.id.action_status)
         miStatus.title = "in through"
         om.displayData = DisplayData(this, this, om.numPanes, om)
         setupModel()
@@ -159,7 +158,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     false
             )
         }
-        miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
+        miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr.replace("</a>&nbsp in through <b>", " ")
         om.run = om.rtd.listRun.safeGet(0)
         om.setTimeIdx(Utility.readPrefInt(this, om.prefRunPosn, 1))
         getContent()
@@ -211,15 +210,12 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_fav -> toggleFavorite()
             R.id.action_time -> ObjectDialogue.generic(this, om.times, ::getContent) { om.setTimeIdx(it) }
             R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) { om.run = om.rtd.listRun[it] }
-            R.id.action_share -> {
-                if (UIPreferences.recordScreenShare) {
+            R.id.action_share -> if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(this, om.animRan, om)
+                    UtilityModels.legacyShare(this, om)
                 }
-            }
             R.id.action_animate -> UtilityModels.getAnimate(this, om, listOf(""))
-            R.id.action_help -> showHelpTextDialog()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -256,10 +252,6 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         objectNavDrawerCombo.onConfigurationChanged(newConfig)
     }
 
-    private fun showHelpTextDialog() {
-        UtilityAlertDialog.showHelpTextWeb("${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/about_sref.html", this)
-    }
-
     private fun toggleFavorite() {
         UtilityFavorites.toggle(this, om.displayData.param[om.curImg], star, "SREF_FAV")
     }
@@ -289,16 +281,11 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_J -> {
-                if (event.isCtrlPressed) om.leftClick()
-                true
-            }
-            KeyEvent.KEYCODE_K -> {
-                if (event.isCtrlPressed) om.rightClick()
-                true
-            }
+        when (keyCode) {
+            KeyEvent.KEYCODE_J -> if (event.isCtrlPressed) om.leftClick()
+            KeyEvent.KEYCODE_K -> if (event.isCtrlPressed) om.rightClick()
             else -> super.onKeyUp(keyCode, event)
         }
+        return true
     }
 }

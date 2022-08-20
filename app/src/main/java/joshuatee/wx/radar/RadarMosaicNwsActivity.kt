@@ -41,8 +41,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     //   https://www.weather.gov/media/notification/pdf2/pns22-09_ridge_ii_public_local_standard_radar_pages.pdf
     //   https://www.weather.gov/media/notification/pdf2/pns22-19_aviation_website_upgrade.pdf
     //
-    // arg1: "widget" (optional) - if this arg is specified it will show mosaic for widget location
-    //       "location" for current location
+    // arg1: "sector" (optional) - if this arg is not a empty string then the last used location will be used
     //
 
     companion object { const val URL = "" }
@@ -53,6 +52,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     private val prefImagePosition = "RADARMOSAICNWS"
     private val prefTokenSector = "REMEMBER_NWSMOSAIC_SECTOR"
     private var sector = UtilityNwsRadarMosaic.getNearestMosaic(Location.latLon)
+    private var saveLocation = false
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.radarnwsmosaic, menu)
@@ -74,9 +74,9 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
         image.setMaxZoom(8.0f)
         image.connect(objectNavDrawer) { getContent() }
         if (arguments.isNotEmpty() && arguments[0] != "") {
-            sector = arguments[0]
+            sector = Utility.readPref(this, prefTokenSector, sector)
+            saveLocation = true
         }
-        // sector = Utility.readPref(this, prefTokenSector, sector)
         objectNavDrawer.index = UtilityNwsRadarMosaic.sectors.indexOf(sector)
         getContent()
     }
@@ -95,7 +95,9 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     private fun showImage(bitmap: Bitmap) {
         image.set(bitmap)
         image.firstRun(prefImagePosition)
-        Utility.writePref(this, prefTokenSector, objectNavDrawer.url)
+        if (saveLocation) {
+            Utility.writePref(this, prefTokenSector, objectNavDrawer.url)
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

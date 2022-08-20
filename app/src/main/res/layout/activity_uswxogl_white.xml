@@ -45,14 +45,6 @@
             android:orientation="vertical"
             android:padding="0dip"
             android:stretchColumns="*">
-
-            <joshuatee.wx.ui.TouchImageView2
-                android:id="@+id/iv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="fitCenter" />
-
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map"
                 android:layout_width="match_parent"

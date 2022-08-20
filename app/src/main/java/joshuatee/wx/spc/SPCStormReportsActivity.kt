@@ -113,7 +113,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         stateArray = listOf("")
         objectNavDrawer = ObjectNavDrawer(this, stateArray)
         objectNavDrawer.connect { _, _, position, _ ->
-            objectNavDrawer.setItemChecked(position, false)
+            objectNavDrawer.setItemChecked(position)
             objectNavDrawer.close()
             filter = stateArray.getOrNull(position) ?: ""
             getContent()
@@ -195,7 +195,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cardText.text = mapOut
         textForShare.insert(0, Utility.fromHtml("<br><b>" + mapOut + GlobalVariables.newline + "</b><br>"))
         if (firstRun) {
-            stateArray = mapState.keys.toList()
+            stateArray = mapState.keys.sorted().toList()
             val stateArrayLabel = mutableListOf<String>()
             stateArray.indices.forEach {
                 stateArrayLabel.add(stateArray[it] + ": " + mapState[stateArray[it]])

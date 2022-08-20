@@ -32,6 +32,7 @@ http://bmx3r.com/wx/switch
 
 ## TO DO List: 
 
+* change up how Spotter icons is - green for active - yellow for idle - red for inactive based on their time of their last location report.  think I will use custom icon like in Pykl3
 * conus radar overlay when you zoom out like on pykl3   
 * add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs    
 * add warning list within radar  
@@ -44,15 +45,16 @@ http://bmx3r.com/wx/switch
 * android wear support. I own android wear watches and love them.      
 * would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
 * make VAD Wind Profile more better and friendly  like the one at cod.edu    
-* color tables for SRM and Spectrum Width  
+* color tables for SRM 
 * get dbz and wind speed from point via long press - request by Mike T.      
 
 
 #
 ## DONE!
-====================================  
+==================================== 
+* added Idle Time in Spotter Info popup.  Now, you can see how long they been idling since their last report time.   
 * I finally fixed how hail icons works. I know it have been long time that radar was showing wrong hail icons for hail sizes. It should show correct hail icons for hail sizes from now on.  The hail icons are in wX folder on the phone memory or sd card.  This idea came from GRLevelx and PYKL3. this meant to allow users to change hail icons.  just have to use png and follow image names.         
-* as temp fix, I switched conus radar to WPC for now.   I know the radar on weather.gov is chang.   
+* as temp fix, I switched conus radar to WPC for now.   I know the radar on weather.gov is changed and no longer using static gif files.   
 * Added 3 fingers touch function to show conus radar from any zoom.  press and hold screen with 3 fingers to show conus radar map anytime.  
 * Added in function to enable and disable showing radar.  idea/request by Mike T. - very great idea!   The radar show/hide function is in menu in tools section. NOTE:  the radar do not disappear or appear auto - you have to tap/move the screen then radar will disappear or appear.             
 * reversed my old warning mod and cleaned up.   

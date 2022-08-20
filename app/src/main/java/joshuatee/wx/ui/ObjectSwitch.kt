@@ -28,12 +28,10 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityNotification
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.radar.RadarGeometry
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
 
 class ObjectSwitch(context: Context, label: String, pref: String, strId: Int) {
 
@@ -67,6 +65,7 @@ class ObjectSwitch(context: Context, label: String, pref: String, strId: Int) {
                 "USE_NWS_API_HOURLY",
                 "LIGHTNING_USE_GOES",
                 "USE_AWC_MOSAIC",
+                "SHOW_RADAR_WHEN_PAN",
         )
         checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
              || ( pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")
@@ -90,32 +89,37 @@ class ObjectSwitch(context: Context, label: String, pref: String, strId: Int) {
             if (pref == "SIMPLE_MODE") {
                 if (UIPreferences.simpleMode != Utility.readPref(context, "SIMPLE_MODE", "false").startsWith("t")) {
                     Utility.commitPref(context)
-                    UtilityAlertDialog.restart()
+                    Utility.restart()
                 }
             }
             if (pref == "HIDE_TOP_TOOLBAR") {
                 if (UIPreferences.hideTopToolbar != Utility.readPref(context, "HIDE_TOP_TOOLBAR", "false").startsWith("t")) {
                     Utility.commitPref(context)
-                    UtilityAlertDialog.restart()
+                    Utility.restart()
                 }
             }
             if (pref == "UI_MAIN_SCREEN_RADAR_FAB") {
                 if (UIPreferences.mainScreenRadarFab != Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t")) {
                     Utility.commitPref(context)
-                    UtilityAlertDialog.restart()
+                    Utility.restart()
                 }
             }
             when (pref) {
                 "COD_WARNINGS_DEFAULT", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
                     MyApplication.initPreferences(context)
+                    // TODO FIXME more granular
                     when (pref) {
-                        "RADAR_STATE_HIRES" -> RadarGeometry.initialize(context, GeographyType.STATE_LINES)
-                        "RADAR_COUNTY_HIRES" -> RadarGeometry.initialize(context, GeographyType.COUNTY_LINES)
-                        "RADAR_HW_ENH_EXT" -> RadarGeometry.initialize(context, GeographyType.HIGHWAYS_EXTENDED)
-                        "RADAR_CAMX_BORDERS" -> RadarGeometry.initialize(context, GeographyType.STATE_LINES)
+//                        "RADAR_STATE_HIRES" -> RadarGeometry.initialize(context, GeographyType.STATE_LINES)
+//                        "RADAR_COUNTY_HIRES" -> RadarGeometry.initialize(context, GeographyType.COUNTY_LINES)
+//                        "RADAR_HW_ENH_EXT" -> RadarGeometry.initialize(context, GeographyType.HIGHWAYS_EXTENDED)
+//                        "RADAR_CAMX_BORDERS" -> RadarGeometry.initialize(context, GeographyType.STATE_LINES)
+                        "RADAR_STATE_HIRES" -> RadarGeometry.initialize(context)
+                        "RADAR_COUNTY_HIRES" -> RadarGeometry.initialize(context)
+                        "RADAR_HW_ENH_EXT" -> RadarGeometry.initialize(context)
+                        "RADAR_CAMX_BORDERS" -> RadarGeometry.initialize(context)
                     }
-                    GeographyType.refresh()
+//                    GeographyType.refresh()
                 }
             }
         }

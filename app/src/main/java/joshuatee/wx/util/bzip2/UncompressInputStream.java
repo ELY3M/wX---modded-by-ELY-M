@@ -46,8 +46,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-
-
 /**
  * This class decompresses an input stream containing data compressed with
  * the unix "compress" utility (LZC, a LZW variant). This code is based

@@ -59,7 +59,8 @@ class ObjectNhcStormDetails(
 //            modBinNumber = modBinNumber.insert(2, "0")
 //        }
         val modBinNumber = id.substring(0, 4).uppercase()
-        baseUrl = "https://www.nhc.noaa.gov/storm_graphics/" + modBinNumber + "/" + id.uppercase(Locale.US)
+        baseUrl = "https://www.nhc.noaa.gov/storm_graphics/" + modBinNumber.replace("AL", "AT") + "/" + id.uppercase(Locale.US)
+//        UtilityLog.d("WXNHC", baseUrl)
         goesUrl = "https://cdn.star.nesdis.noaa.gov/FLOATER/data/" + id.uppercase(Locale.US) + "/GEOCOLOR/latest.jpg"
     }
 

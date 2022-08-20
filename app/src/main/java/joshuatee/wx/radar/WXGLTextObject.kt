@@ -32,12 +32,10 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.ProjectionNumbers
-
 import kotlin.math.*
 
 class WXGLTextObject(
@@ -101,7 +99,7 @@ class WXGLTextObject(
     }
 
     private fun addCities() {
-        if (GeographyType.CITIES.pref && citiesInitialized) {
+        if (RadarPreferences.cities && citiesInitialized) {
             projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             hideCities()
             wxglSurfaceView.cities.clear()
@@ -110,7 +108,7 @@ class WXGLTextObject(
             if (wxglRender.zoom < 1.00f) {
                 oglrZoom = wxglRender.zoom * 0.8f
             }
-            textSize = UIPreferences.textSizeSmall * oglrZoom * 0.75f * RadarPreferences.radarTextSize
+            textSize = UIPreferences.textSizeSmall * oglrZoom * 0.75f * RadarPreferences.textSize
             val cityMinZoom = 0.50
             if (wxglRender.zoom > cityMinZoom) {
                 val cityExtLength = UtilityCitiesExtended.cities.size
@@ -121,7 +119,7 @@ class WXGLTextObject(
                                 UtilityCitiesExtended.cityLat[index],
                                 UtilityCitiesExtended.cityLon[index],
                                 UtilityCitiesExtended.cityLabels[index],
-                                RadarPreferences.radarColorCity
+                                RadarPreferences.colorCity
                         )
                     } else {
                         break
@@ -143,14 +141,14 @@ class WXGLTextObject(
     }
 
     private fun initializeCities(context: Context) {
-        if (GeographyType.CITIES.pref) {
+        if (RadarPreferences.cities) {
             citiesInitialized = true
             UtilityCitiesExtended.create(context)
         }
     }
 
     private fun initializeCountyLabels(context: Context) {
-        if (RadarPreferences.radarCountyLabels) {
+        if (RadarPreferences.countyLabels) {
             UtilityCountyLabels.create(context)
             countyLabelsInitialized = true
         }
@@ -159,7 +157,7 @@ class WXGLTextObject(
     private fun getScale() = 8.1f * wxglRender.zoom / UIPreferences.deviceScale * (glviewWidth / 800.0f * UIPreferences.deviceScale) / textViewFudgeFactor
 
     private fun addCountyLabels() {
-        if (RadarPreferences.radarCountyLabels && countyLabelsInitialized) {
+        if (RadarPreferences.countyLabels && countyLabelsInitialized) {
             projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             hideCountyLabels()
             wxglSurfaceView.countyLabels.clear()
@@ -168,7 +166,7 @@ class WXGLTextObject(
             if (wxglRender.zoom < 1.00f) {
                 oglrZoom = wxglRender.zoom * 0.8f
             }
-            textSize = UIPreferences.textSizeSmall * oglrZoom * 0.65f * RadarPreferences.radarTextSize
+            textSize = UIPreferences.textSizeSmall * oglrZoom * 0.65f * RadarPreferences.textSize
             if (wxglRender.zoom > 1.50) {
                 UtilityCountyLabels.countyName.indices.forEach {
                     checkAndDrawText(
@@ -176,7 +174,7 @@ class WXGLTextObject(
                             UtilityCountyLabels.countyLat[it],
                             UtilityCountyLabels.countyLon[it],
                             UtilityCountyLabels.countyName[it],
-                            RadarPreferences.radarColorCountyLabels
+                            RadarPreferences.colorCountyLabels
                     )
                 }
             } else {
@@ -206,7 +204,7 @@ class WXGLTextObject(
             if (wxglRender.zoom < 1.00f) {
                 oglrZoom = wxglRender.zoom * 0.8f
             }
-            textSize = UIPreferences.textSizeSmall * oglrZoom * RadarPreferences.radarTextSize * 0.75f
+            textSize = UIPreferences.textSizeSmall * oglrZoom * RadarPreferences.textSize * 0.75f
             if (wxglRender.zoom > 0.5) {
                 // spotter list make copy first
                 // multiple bug reports against this
@@ -218,7 +216,7 @@ class WXGLTextObject(
                             spotterListCopy[it].latD,
                             spotterListCopy[it].lonD,
                             spotterListCopy[it].lastName.replace("0FAV ", ""),
-                            RadarPreferences.radarColorSpotter
+                            RadarPreferences.colorSpotter
                     )
                 }
             } else {
@@ -246,7 +244,7 @@ class WXGLTextObject(
             if (wxglRender.zoom < 1.00f) {
                 oglrZoom = wxglRender.zoom * 0.8f
             }
-            textSize = UIPreferences.textSizeSmall * oglrZoom * RadarPreferences.radarHiTextSize * 0.75f
+            textSize = UIPreferences.textSizeSmall * oglrZoom * RadarPreferences.hiTextSize * 0.75f
             if (wxglRender.zoom > 0.5) {
                 // FIXME make copy first
                 WXGLNexradLevel3HailIndex.hailList.indices.forEach {
@@ -255,7 +253,7 @@ class WXGLTextObject(
                             WXGLNexradLevel3HailIndex.hailList[it].latD - 0.163 / wxglRender.zoom, //move down to under HI icon
                             WXGLNexradLevel3HailIndex.hailList[it].lonD,
                             WXGLNexradLevel3HailIndex.hailList[it].hailSize,
-                            RadarPreferences.radarColorHiText
+                            RadarPreferences.colorHiText
                     )
                 }
             } else {
@@ -398,8 +396,8 @@ class WXGLTextObject(
                             wxglSurfaceView.spotterTextView,
                             spotterLat,
                             spotterLon * -1,
-                           RadarPreferences.radarColorSpotter,
-                           UIPreferences.textSizeSmall * oglrZoom * 1.5f * RadarPreferences.radarTextSize
+                           RadarPreferences.colorSpotter,
+                           UIPreferences.textSizeSmall * oglrZoom * 1.5f * RadarPreferences.textSize
                     )
                     if (drawText) {
                         if (!report) {
@@ -465,7 +463,7 @@ class WXGLTextObject(
     }
 
     fun addWpcPressureCenters() {
-        if (RadarPreferences.radarShowWpcFronts) {
+        if (PolygonType.WPC_FRONTS.pref) {
             projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             hideWpcPressureCenters()
             wxglSurfaceView.pressureCenterLabels.clear()
@@ -474,7 +472,7 @@ class WXGLTextObject(
             if (wxglRender.zoom < 1.00f) {
                 oglrZoom = wxglRender.zoom * 0.8f
             }
-            textSize = UIPreferences.textSizeNormal * RadarPreferences.radarTextSize
+            textSize = UIPreferences.textSizeNormal * RadarPreferences.textSize
             if (wxglRender.zoom < (0.5 / wxglRender.zoomScreenScaleFactor)) {
                 UtilityWpcFronts.pressureCenters.indices.forEach {
                     var color = Color.rgb(0,127,225)
@@ -491,8 +489,8 @@ class WXGLTextObject(
                 }
 		//elys mod
                 ///Fix to hide the wpc pressure center texts from conus radar.
-                if (RadarPreferences.radarConusRadar) {
-                    if (wxglRender.zoom < (RadarPreferences.radarConusRadarZoom / 1000.0).toFloat()) {
+                if (RadarPreferences.conusRadar) {
+                    if (wxglRender.zoom < (RadarPreferences.conusRadarZoom / 1000.0).toFloat()) {
                         hideWpcPressureCenters()
                     }
                 }
@@ -508,7 +506,7 @@ class WXGLTextObject(
 
     fun addObservations() {
         if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && observationsInitialized) {
-            val obsExtZoom = RadarPreferences.radarObsExtZoom.toDouble()
+            val obsExtZoom = RadarPreferences.obsExtZoom.toDouble()
             projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             obsLat = 0.0
             obsLon = 0.0
@@ -520,7 +518,7 @@ class WXGLTextObject(
             if (wxglRender.zoom < 1.0f) {
                 oglrZoom = wxglRender.zoom * 0.8f
             }
-            textSize = UIPreferences.textSizeSmall * oglrZoom * fontScaleFactorObs * RadarPreferences.radarTextSize
+            textSize = UIPreferences.textSizeSmall * oglrZoom * fontScaleFactorObs * RadarPreferences.textSize
             val obsArr = UtilityMetar.metarDataList[paneNumber].obsArr.toList()
             val obsArrExt = UtilityMetar.metarDataList[paneNumber].obsArrExt.toList()
             if (wxglRender.zoom > 0.5) {
@@ -535,8 +533,8 @@ class WXGLTextObject(
                         val drawText = checkButDoNotDrawText(
                                 wxglSurfaceView.observations,
                             obsLat,
-                            obsLon * -1,
-                                RadarPreferences.radarColorObs,
+                            obsLon * -1.0,
+                                RadarPreferences.colorObs,
                                 textSize
                         )
                         if (drawText) {

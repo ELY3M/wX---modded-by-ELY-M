@@ -57,10 +57,6 @@
         android:title="@string/animate_icon"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_help"
-        android:title="@string/help_menu_item"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_share"
         android:title="@string/label_share"
         app:showAsAction="never" />

@@ -27,7 +27,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
-import androidx.cardview.widget.CardView
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
@@ -59,7 +58,7 @@ class HourlyActivity : BaseActivity() {
     private lateinit var cardVerticalText: CardVerticalText
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
-    private lateinit var graphCard: CardView
+    private lateinit var graphCard: Card
     private lateinit var graph: GraphView
     private var objectHourly = ObjectHourly()
     private var locationNumber = 0
@@ -76,7 +75,8 @@ class HourlyActivity : BaseActivity() {
         card = Card(this, R.color.black, R.id.graphCard)
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
-        graphCard = findViewById(R.id.graphCard)
+        graphCard = Card(this, R.id.graphCard)
+        graphCard.setCardBackgroundColor(Color.BLACK)
         graph = findViewById(R.id.graph)
         graphCard.visibility = View.GONE
         cardVerticalText = CardVerticalText(this, 5, box, toolbar)
@@ -99,7 +99,6 @@ class HourlyActivity : BaseActivity() {
         } else {
             UtilityUSHourly.getStringForActivityFromOldApi(htmlShare[1])
         }
-        graphCard.visibility = View.VISIBLE
         cardVerticalText.set(listOf(
                 objectHourly.time,
                 objectHourly.temp,
@@ -107,13 +106,14 @@ class HourlyActivity : BaseActivity() {
                 objectHourly.windDir,
                 objectHourly.conditions))
         plotData()
+        graphCard.visibility = View.VISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> if (htmlShare.size > 1) UtilityShare.text(this, "Hourly", htmlShare[1])
             R.id.action_settings -> Route.settings(this)
-            R.id.action_radar -> Route.radarNew(this, arrayOf(Location.rid, ""))
+            R.id.action_radar -> Route.radar(this, arrayOf(Location.rid, ""))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -138,7 +138,11 @@ class HourlyActivity : BaseActivity() {
             override fun formatLabel(value: Double, isValueX: Boolean): String {
                 return if (isValueX) {
                     // show normal x values
-                    if ((value.toInt() % 10) == 0) super.formatLabel(value, isValueX) else ""
+                    if ((value.toInt() % 10) == 0) {
+                        super.formatLabel(value, isValueX)
+                    } else {
+                        ""
+                    }
                 } else {
                     // show currency for y values
                     super.formatLabel(value, isValueX)

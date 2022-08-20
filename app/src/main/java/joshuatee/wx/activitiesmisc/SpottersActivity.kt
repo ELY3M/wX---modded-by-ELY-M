@@ -152,25 +152,12 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun sortSpotters() {
-        Collections.sort(spotterList, Comparator { p1, p2 ->
-            val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
-            if (res != 0) return@Comparator res
-            p1.firstName.compareTo(p2.firstName, ignoreCase = true)
-        })
-        // spotterList = spotterList.sortedWith(compareBy({ it.lastName.lowercase() }, { it.firstName.lowercase() })).toMutableList()
+        spotterList.sortWith(compareBy({ it.lastName.lowercase() }, { it.firstName.lowercase() }))
         if (firstTime) {
-            spotterList2 = mutableListOf()
-            spotterList.indices.forEach {
-                spotterList2.add(spotterList[it])
-            }
+            spotterList2 = spotterList.toMutableList()
             firstTime = false
         }
-        Collections.sort(spotterList2, Comparator { p1, p2 ->
-            val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
-            if (res != 0)
-                return@Comparator res
-            p1.firstName.compareTo(p2.firstName, ignoreCase = true)
-        })
+        spotterList2.sortWith(compareBy({ it.lastName.lowercase() }, { it.firstName.lowercase() }))
     }
 
     private fun itemClicked(position: Int) {

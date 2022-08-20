@@ -60,7 +60,11 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objectToolbarBottom.connect(this)
         cardText = CardText(this, box, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
-            if (url.contains("<")) cardText.text = Utility.fromHtml(url) else cardText.text = url
+            if (url.contains("<")) {
+                cardText.text = Utility.fromHtml(url)
+            } else {
+                cardText.text = url
+            }
             html = url
         } else {
             getContent()

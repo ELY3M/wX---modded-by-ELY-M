@@ -27,27 +27,28 @@ import joshuatee.wx.settings.RadarPreferences
 
 enum class PolygonType constructor(var color: Int, private val typeAsString: String, var pref: Boolean, var size: Float) {
 
-    MCD(RadarPreferences.radarColorMcd, "MCD", RadarPreferences.radarWatMcd, RadarPreferences.radarWatchMcdLineSize),
-    MPD(RadarPreferences.radarColorMpd, "MPD", RadarPreferences.radarMpd, RadarPreferences.radarWatchMcdLineSize),
-    WATCH(RadarPreferences.radarColorTstormWatch, "WATCH", RadarPreferences.radarWatMcd, RadarPreferences.radarWatchMcdLineSize),
-    WATCH_TORNADO(RadarPreferences.radarColorTorWatch, "WATCH_TORNADO", RadarPreferences.radarWatMcd, RadarPreferences.radarWatchMcdLineSize),
-    TST(RadarPreferences.radarColorTstorm, "TST", RadarPreferences.radarWarnings, RadarPreferences.radarWarnLineSize),
-    TOR(RadarPreferences.radarColorTor, "TOR", RadarPreferences.radarWarnings, RadarPreferences.radarWarnLineSize),
-    FFW(RadarPreferences.radarColorFfw, "FFW", RadarPreferences.radarWarnings, RadarPreferences.radarWarnLineSize),
-    SPOTTER(RadarPreferences.radarColorSpotter, "SPOTTER", RadarPreferences.radarSpotters, RadarPreferences.radarSpotterSize.toFloat()),
-    SPOTTER_LABELS(RadarPreferences.radarColorSpotter, "SPOTTER_LABELS", RadarPreferences.radarSpottersLabel, 0.0f),
-    WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", RadarPreferences.radarObsWindbarbs, RadarPreferences.radarWbLineSize.toFloat()),
-    WIND_BARB(RadarPreferences.radarColorObsWindbarbs, "WIND_BARB", RadarPreferences.radarObsWindbarbs, RadarPreferences.radarWbLineSize.toFloat()),
-    WIND_BARB_CIRCLE(RadarPreferences.radarColorObsWindbarbs, "WIND_BARB_CIRCLE", RadarPreferences.radarObsWindbarbs, RadarPreferences.radarAviationSize.toFloat()),
-    LOCDOT(RadarPreferences.radarColorLocdot, "LOCDOT", RadarPreferences.radarLocDot, RadarPreferences.radarLocdotSize.toFloat()),
-    STI(RadarPreferences.radarColorSti, "STI", RadarPreferences.radarSti, RadarPreferences.radarStiLineSize.toFloat()),
-    TVS(RadarPreferences.radarColorTor, "TVS", RadarPreferences.radarTvs, RadarPreferences.radarTvsSize.toFloat()),
-    HI(RadarPreferences.radarColorHi, "HI", RadarPreferences.radarHi, RadarPreferences.radarHiSize.toFloat()),
-    HAIL_LABELS(RadarPreferences.radarColorHiText, "HAILSIZE_LABELS", RadarPreferences.radarHailSizeLabel, RadarPreferences.radarHiTextSize),
-    OBS(RadarPreferences.radarColorObs, "OBS", RadarPreferences.radarObs, 0.0f),
-    SWO(RadarPreferences.radarColorHi, "SWO", RadarPreferences.radarSwo, RadarPreferences.radarSwoLineSize.toFloat()),
-    USERPOINTS(0, "USERPOINTS", RadarPreferences.radarUserPoints, 0.0f),
-    CONUS(0, "CONUS", RadarPreferences.radarConusRadar, 0.0f),
+    MCD(RadarPreferences.colorMcd, "MCD", RadarPreferences.watMcd, RadarPreferences.watchMcdLineSize),
+    MPD(RadarPreferences.colorMpd, "MPD", RadarPreferences.mpd, RadarPreferences.watchMcdLineSize),
+    WATCH(RadarPreferences.colorTstormWatch, "WATCH", RadarPreferences.watMcd, RadarPreferences.watchMcdLineSize),
+    WATCH_TORNADO(RadarPreferences.colorTorWatch, "WATCH_TORNADO", RadarPreferences.watMcd, RadarPreferences.watchMcdLineSize),
+    TST(RadarPreferences.colorTstorm, "TST", RadarPreferences.warnings, RadarPreferences.warnLineSize),
+    TOR(RadarPreferences.colorTor, "TOR", RadarPreferences.warnings, RadarPreferences.warnLineSize),
+    FFW(RadarPreferences.colorFfw, "FFW", RadarPreferences.warnings, RadarPreferences.warnLineSize),
+    SPOTTER(RadarPreferences.colorSpotter, "SPOTTER", RadarPreferences.spotters, RadarPreferences.spotterSize.toFloat()),
+    SPOTTER_LABELS(RadarPreferences.colorSpotter, "SPOTTER_LABELS", RadarPreferences.spottersLabel, 0.0f),
+    WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", RadarPreferences.obsWindbarbs, RadarPreferences.wbLineSize.toFloat()),
+    WIND_BARB(RadarPreferences.colorObsWindbarbs, "WIND_BARB", RadarPreferences.obsWindbarbs, RadarPreferences.wbLineSize.toFloat()),
+    WIND_BARB_CIRCLE(RadarPreferences.colorObsWindbarbs, "WIND_BARB_CIRCLE", RadarPreferences.obsWindbarbs, RadarPreferences.aviationSize.toFloat()),
+    LOCDOT(RadarPreferences.colorLocdot, "LOCDOT", RadarPreferences.locDot, RadarPreferences.locdotSize.toFloat()),
+    STI(RadarPreferences.colorSti, "STI", RadarPreferences.sti, RadarPreferences.stiLineSize.toFloat()),
+    TVS(RadarPreferences.colorTor, "TVS", RadarPreferences.tvs, RadarPreferences.tvsSize.toFloat()),
+    HI(RadarPreferences.colorHi, "HI", RadarPreferences.hi, RadarPreferences.hiSize.toFloat()),
+    HAIL_LABELS(RadarPreferences.colorHiText, "HAILSIZE_LABELS", RadarPreferences.hailSizeLabel, RadarPreferences.hiTextSize),
+    OBS(RadarPreferences.colorObs, "OBS", RadarPreferences.obs, 0.0f),
+    SWO(RadarPreferences.colorHi, "SWO", RadarPreferences.swo, RadarPreferences.swoLineSize.toFloat()),
+    WPC_FRONTS(RadarPreferences.colorHi, "WPC_FRONTS", RadarPreferences.wpcFronts, RadarPreferences.wpcFrontLineSize.toFloat()),
+    USERPOINTS(0, "USERPOINTS", RadarPreferences.userPoints, 0.0f),
+    CONUS(0, "CONUS", RadarPreferences.conusRadar, 0.0f),
     NONE(0, "", false, 0.0f);
 
     override fun toString() = typeAsString
@@ -55,55 +56,57 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
     companion object {
         fun refresh() {
 
-            MCD.pref = RadarPreferences.radarWatMcd
-            MPD.pref = RadarPreferences.radarMpd
-            WATCH.pref = RadarPreferences.radarWatMcd
-            WATCH_TORNADO.pref = RadarPreferences.radarWatMcd
-            TST.pref = RadarPreferences.radarWarnings
-            TOR.pref = RadarPreferences.radarWarnings
-            FFW.pref = RadarPreferences.radarWarnings
-            SPOTTER.pref = RadarPreferences.radarSpotters
-            SPOTTER_LABELS.pref = RadarPreferences.radarSpottersLabel
-            WIND_BARB_GUSTS.pref = RadarPreferences.radarObsWindbarbs
-            WIND_BARB_GUSTS.size = RadarPreferences.radarWbLineSize.toFloat()
-            WIND_BARB.pref = RadarPreferences.radarObsWindbarbs
-            WIND_BARB.size = RadarPreferences.radarWbLineSize.toFloat()
-            WIND_BARB_CIRCLE.pref = RadarPreferences.radarObsWindbarbs
-            LOCDOT.pref = RadarPreferences.radarLocDot
-            STI.pref = RadarPreferences.radarSti
-            TVS.pref = RadarPreferences.radarTvs
-            HI.pref = RadarPreferences.radarHi
-	    HAIL_LABELS.pref = RadarPreferences.radarHailSizeLabel
-            OBS.pref = RadarPreferences.radarObs
-            SWO.pref = RadarPreferences.radarSwo
-            USERPOINTS.pref = RadarPreferences.radarUserPoints
-            CONUS.pref = RadarPreferences.radarConusRadar
-            MCD.color = RadarPreferences.radarColorMcd
-            MPD.color = RadarPreferences.radarColorMpd
-            WATCH.color = RadarPreferences.radarColorTstormWatch
-            WATCH_TORNADO.color = RadarPreferences.radarColorTorWatch
-            TST.color = RadarPreferences.radarColorTstorm
-            TOR.color = RadarPreferences.radarColorTor
-            FFW.color = RadarPreferences.radarColorFfw
-            SPOTTER.color = RadarPreferences.radarColorSpotter
+            MCD.pref = RadarPreferences.watMcd
+            MPD.pref = RadarPreferences.mpd
+            WATCH.pref = RadarPreferences.watMcd
+            WATCH_TORNADO.pref = RadarPreferences.watMcd
+            WPC_FRONTS.pref = RadarPreferences.wpcFronts
+            TST.pref = RadarPreferences.warnings
+            TOR.pref = RadarPreferences.warnings
+            FFW.pref = RadarPreferences.warnings
+            SPOTTER.pref = RadarPreferences.spotters
+            SPOTTER_LABELS.pref = RadarPreferences.spottersLabel
+            WIND_BARB_GUSTS.pref = RadarPreferences.obsWindbarbs
+            WIND_BARB_GUSTS.size = RadarPreferences.wbLineSize.toFloat()
+            WIND_BARB.pref = RadarPreferences.obsWindbarbs
+            WIND_BARB.size = RadarPreferences.wbLineSize.toFloat()
+            WIND_BARB_CIRCLE.pref = RadarPreferences.obsWindbarbs
+            LOCDOT.pref = RadarPreferences.locDot
+            STI.pref = RadarPreferences.sti
+            TVS.pref = RadarPreferences.tvs
+            HI.pref = RadarPreferences.hi
+	    HAIL_LABELS.pref = RadarPreferences.hailSizeLabel
+            OBS.pref = RadarPreferences.obs
+            SWO.pref = RadarPreferences.swo
+            USERPOINTS.pref = RadarPreferences.userPoints
+            CONUS.pref = RadarPreferences.conusRadar
+            MCD.color = RadarPreferences.colorMcd
+            MPD.color = RadarPreferences.colorMpd
+            WATCH.color = RadarPreferences.colorTstormWatch
+            WATCH_TORNADO.color = RadarPreferences.colorTorWatch
+            TST.color = RadarPreferences.colorTstorm
+            TOR.color = RadarPreferences.colorTor
+            FFW.color = RadarPreferences.colorFfw
+            SPOTTER.color = RadarPreferences.colorSpotter
             WIND_BARB_GUSTS.color = Color.RED
-            WIND_BARB.color = RadarPreferences.radarColorObsWindbarbs
-            WIND_BARB_CIRCLE.color = RadarPreferences.radarColorObsWindbarbs
-            LOCDOT.color = RadarPreferences.radarColorLocdot
-            STI.color = RadarPreferences.radarColorSti
-            STI.size = RadarPreferences.radarStiLineSize.toFloat()
-            TVS.color = RadarPreferences.radarColorTor
-            HI.color = RadarPreferences.radarColorHi
-            OBS.color = RadarPreferences.radarColorObs
-            SWO.color = RadarPreferences.radarColorHi
-            SWO.size = RadarPreferences.radarSwoLineSize.toFloat()
-            MCD.size = RadarPreferences.radarWatchMcdLineSize
-            MPD.size = RadarPreferences.radarWatchMcdLineSize
-            WATCH.size = RadarPreferences.radarWatchMcdLineSize
-            WATCH_TORNADO.size = RadarPreferences.radarWatchMcdLineSize
-            TST.size = RadarPreferences.radarWarnLineSize
-            TOR.size = RadarPreferences.radarWarnLineSize
-            FFW.size = RadarPreferences.radarWarnLineSize
+            WIND_BARB.color = RadarPreferences.colorObsWindbarbs
+            WIND_BARB_CIRCLE.color = RadarPreferences.colorObsWindbarbs
+            LOCDOT.color = RadarPreferences.colorLocdot
+            STI.color = RadarPreferences.colorSti
+            STI.size = RadarPreferences.stiLineSize.toFloat()
+            TVS.color = RadarPreferences.colorTor
+            HI.color = RadarPreferences.colorHi
+            OBS.color = RadarPreferences.colorObs
+            SWO.color = RadarPreferences.colorHi
+            SWO.size = RadarPreferences.swoLineSize.toFloat()
+            MCD.size = RadarPreferences.watchMcdLineSize
+            MPD.size = RadarPreferences.watchMcdLineSize
+            WATCH.size = RadarPreferences.watchMcdLineSize
+            WATCH_TORNADO.size = RadarPreferences.watchMcdLineSize
+            WPC_FRONTS.size = RadarPreferences.wpcFrontLineSize.toFloat()
+            TST.size = RadarPreferences.warnLineSize
+            TOR.size = RadarPreferences.warnLineSize
+            FFW.size = RadarPreferences.warnLineSize
         }
     }
 }

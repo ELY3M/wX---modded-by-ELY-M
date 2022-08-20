@@ -71,7 +71,7 @@ class WXGLNexradLevel3 internal constructor() {
 
     init {
         try {
-            if (RadarPreferences.radarUseJni) {
+            if (RadarPreferences.useJni) {
                 oBuff = ByteBuffer.allocateDirect(1000000)
                 oBuff.order(ByteOrder.nativeOrder())
             }
@@ -168,7 +168,7 @@ class WXGLNexradLevel3 internal constructor() {
             halfword48 = dis.readUnsignedShort().toShort()
             dis.skipBytes(24)
             seekStart = dis.filePointer
-            if (RadarPreferences.radarUseJni) {
+            if (RadarPreferences.useJni) {
                 compressedFileSize = (dis.length() - dis.filePointer).toInt()
                 iBuff = ByteBuffer.allocateDirect(compressedFileSize)
                 iBuff.order(ByteOrder.nativeOrder())

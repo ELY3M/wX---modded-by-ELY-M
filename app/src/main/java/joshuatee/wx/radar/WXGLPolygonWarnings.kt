@@ -39,16 +39,15 @@ internal object WXGLPolygonWarnings {
         return warningList
     }
 
-    fun add(projectionNumbers: ProjectionNumbers, polygonType: PolygonType): List<Double> {
-        val html = ObjectWarning.getBulkData(polygonType)
-        val warnings = ObjectWarning.parseJson(html)
-        val warningList = mutableListOf<Double>()
-        for (w in warnings) {
-            if (w.isCurrent) {
-                val latLons = w.getPolygonAsLatLons(-1)
-                warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
+    fun getCount(type: PolygonWarningType): Int {
+        val html = ObjectPolygonWarning.polygonDataByType[type]!!.getData()
+        val warningList = ObjectWarning.parseJson(html)
+        var i = 0
+        for (s in warningList) {
+            if (s.isCurrent) {
+                i += 1
             }
         }
-        return warningList
+        return i
     }
 }

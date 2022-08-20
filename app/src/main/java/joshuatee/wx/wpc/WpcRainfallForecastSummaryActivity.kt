@@ -57,24 +57,21 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        UtilityWpcRainfallForecast.urls.indices.forEach {
-            FutureVoid(this, { bitmaps[it] = UtilityWpcRainfallForecast.urls[it].getImage() }) { update(it) }
+        UtilityWpcRainfallForecast.urls.forEachIndexed { index, url ->
+            FutureVoid(this, { bitmaps[index] = url.getImage() }) { update(index) }
         }
     }
 
     private fun update(index: Int) {
         objectImageSummary.set(index, bitmaps[index])
         objectImageSummary.connect(index) {
-            val textProduct = UtilityWpcRainfallForecast.productCode[index]
-            val imageUrl = UtilityWpcRainfallForecast.urls[index]
-            val day = (index + 1).toString()
-            Route(this, WpcRainfallForecastActivity::class.java, WpcRainfallForecastActivity.NUMBER, arrayOf(textProduct, imageUrl, day))
+            Route.wpcRainfallByDay(this, index.toString())
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, getString(UtilityWpcRainfallForecast.activityTitle), "", bitmaps)
+            R.id.action_share -> UtilityShare.text(this, "WPC Excessive Rainfall Forecast", "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -62,7 +62,7 @@ internal class SevereNotice(val type: PolygonType) {
             numbers = UtilityString.parseColumnAl(html, pattern)
         }
         numbers.indices.forEach { count ->
-            if ( type == PolygonType.WATCH) {
+            if (type == PolygonType.WATCH) {
                 numbers[count] = String.format("%4s", numbers[count]).replace(' ', '0')
             }
             val url = when (type) {

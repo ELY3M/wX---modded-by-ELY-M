@@ -104,7 +104,7 @@ class Text(val context: Context) {
         }
     }
 
-    fun setTextSize(size: TextSize) {
+    fun setSize(size: TextSize) {
         refreshTextSize(size)
     }
 
@@ -117,11 +117,11 @@ class Text(val context: Context) {
         set(newValue) { tv.typeface = newValue }
 
     private fun setAsBackgroundText() {
-        setAsSmallText()
+        setSmall()
         tv.setTextColor(UIPreferences.textSmallThemeColor)
     }
 
-    private fun setAsSmallText() {
+    private fun setSmall() {
         tv.setTextColor(UIPreferences.backgroundColor)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
     }

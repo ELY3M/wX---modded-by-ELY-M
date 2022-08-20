@@ -72,11 +72,11 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cardText = CardText(this, box, toolbar, toolbarBottom)
         arguments = intent.getStringArrayExtra(NUMBER)!!
         number = arguments[0]
-        when (arguments[2]) {
-            "MCD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MCD, number)
-            "WATCH" -> objectWatchProduct = ObjectWatchProduct(PolygonType.WATCH, number)
-            "MPD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MPD, number)
-            else -> {}
+        objectWatchProduct = when (arguments[2]) {
+            "MCD" -> ObjectWatchProduct(PolygonType.MCD, number)
+            "WATCH" -> ObjectWatchProduct(PolygonType.WATCH, number)
+            "MPD" -> ObjectWatchProduct(PolygonType.MPD, number)
+            else -> ObjectWatchProduct(PolygonType.MPD, number)
         }
         getContent()
     }

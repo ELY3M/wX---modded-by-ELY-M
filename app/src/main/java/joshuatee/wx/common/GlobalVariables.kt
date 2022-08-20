@@ -46,11 +46,13 @@ object GlobalVariables {
     //const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
 
     //const val nwsConusRadar = "https://atlas.niu.edu/analysis/radar/CONUS/usrad_current_b.gif"  //backup url
-    const val nwsConusRadar = "https://www.aviationweather.gov/data/obs/radar/rad_rala_us.gif"
+    //const val nwsConusRadar = "https://www.aviationweather.gov/data/obs/radar/rad_rala_us.gif"
+    //testing//
+    const val nwsConusRadar = "https://radar.weather.gov/ridge/lite/CONUS-LARGE_0.gif"
     const val conusImageName = "conus.gif"
 
     //testing
-    const val nwsConusRadarNew = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_raw/ows?service=wms&version=1.3.0&request=GetCapabilities"
+    //const val nwsConusRadarNew = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_raw/ows?service=wms&version=1.3.0&request=GetCapabilities"
 	//end of elys mod 
 
 

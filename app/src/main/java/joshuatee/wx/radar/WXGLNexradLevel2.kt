@@ -43,7 +43,7 @@ class WXGLNexradLevel2 {
     private var ibuff = ByteBuffer.allocate(0)
 
     init {
-        if (RadarPreferences.radarUseJni) {
+        if (RadarPreferences.useJni) {
             obuff = ByteBuffer.allocateDirect(829472)
             ibuff = ByteBuffer.allocateDirect(600000)
             // decomp size is a follows ref 827040 vel 460800
@@ -54,7 +54,7 @@ class WXGLNexradLevel2 {
     fun decodeAndPlot(context: Context, fileName: String, prod: String, radarStatusStr: String, idxStr: String, performDecompression: Boolean) {
         val decompFileName = "$fileName.decomp$idxStr"
         val productCode: Short = if (prod == "L2VEL") 154 else 153
-        if (RadarPreferences.radarUseJni) {
+        if (RadarPreferences.useJni) {
             ibuff.position(0)
             obuff.position(0)
             try {
@@ -91,7 +91,7 @@ class WXGLNexradLevel2 {
         msecs.order(ByteOrder.nativeOrder())
         msecs.position(0)
         try {
-            if (RadarPreferences.radarUseJni) {
+            if (RadarPreferences.useJni) {
                 Jni.level2Decode(
                     UtilityIO.getFilePath(context, decompFileName),
                     binWord,
@@ -143,7 +143,7 @@ class WXGLNexradLevel2 {
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        if (!RadarPreferences.radarUseJni) {
+        if (!RadarPreferences.useJni) {
             UtilityFileManagement.deleteFile(context, decompFileName)
         }
     }

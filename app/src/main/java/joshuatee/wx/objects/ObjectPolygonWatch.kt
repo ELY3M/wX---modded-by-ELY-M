@@ -52,7 +52,7 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
 //        colorInt = Utility.readPrefInt(colorPrefByType[type]!!, colorDefaultByType[type]!!)
     }
 
-    fun get(context: Context) {
+    fun download(context: Context) {
         if (timer.isRefreshNeeded(context)) {
             getImmediate(context)
         }

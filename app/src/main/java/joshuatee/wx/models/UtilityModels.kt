@@ -118,19 +118,8 @@ object UtilityModels {
         }
     }
 
-    fun legacyShare(activity: Activity, animRan: Boolean, om: ObjectModel) {
-//        if (animRan)
-//            UtilityShare.animGif(
-//                    activity,
-//                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
-//                    om.displayData.animDrawable[0]
-//            )
-//        else
-            UtilityShare.bitmap(
-                    activity,
-                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
-                    om.displayData.bitmaps[0]
-            )
+    fun legacyShare(activity: Activity, om: ObjectModel) {
+        UtilityShare.bitmap(activity, om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(), om.displayData.bitmaps[0])
     }
 
     fun convertTimeRunToTimeString(runStr: String, timeStringOriginal: String, showDate: Boolean): String {

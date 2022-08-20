@@ -77,7 +77,7 @@ object UtilityUSHourly {
         return ObjectHourly(timeData, tempData, windSpeedData, windDirData, conditionData)
     }
 
-    private fun shortenConditions(string: String) = string.replace("Showers And Thunderstorms", "Sh/Tst")
+    private fun shortenConditions(s: String) = s.replace("Showers And Thunderstorms", "Sh/Tst")
             .replace("Chance", "Chc")
             .replace("Slight", "Slt")
             .replace("Light", "Lgt")

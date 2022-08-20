@@ -35,6 +35,7 @@ import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
@@ -61,9 +62,10 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         arguments = intent.getStringArrayExtra(NUMBER)!!
-        textProduct = arguments[0]
-        imageUrl = arguments[1]
-        setTitle("Day " + arguments[2] + " Excessive Rainfall Discussion", textProduct)
+        val dayIndex = To.int(arguments[0])
+        textProduct = UtilityWpcRainfallForecast.productCode[dayIndex]
+        imageUrl = UtilityWpcRainfallForecast.urls[dayIndex]
+        setTitle("Day " + (dayIndex + 1).toString() + " Excessive Rainfall Discussion", textProduct)
         box = VBox.fromResource(this)
         objectToolbarBottom.hideRadar()
         objectToolbarBottom.connect(this)

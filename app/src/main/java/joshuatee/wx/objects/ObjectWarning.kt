@@ -21,10 +21,7 @@
 
 package joshuatee.wx.objects
 
-import joshuatee.wx.Extensions.parseColumn
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.external.ExternalDuplicateRemover
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityString
@@ -115,17 +112,6 @@ class ObjectWarning() {
             }
         }
 
-        fun getBulkData(type1: PolygonType): String {
-            return when (type1) {
-                PolygonType.TOR -> ObjectPolygonWarning.severeDashboardTor.value
-                PolygonType.TST -> ObjectPolygonWarning.severeDashboardTst.value
-                PolygonType.FFW -> ObjectPolygonWarning.severeDashboardFfw.value
-                else -> {
-                    ""
-                }
-            }
-        }
-
         fun parseJson(htmlF: String): List<ObjectWarning> {
             val html = htmlF.replace("\"geometry\": null,", "\"geometry\": null, \"coordinates\":[[]]}")
             val warnings = mutableListOf<ObjectWarning>()
@@ -159,28 +145,7 @@ class ObjectWarning() {
             return warnings
         }
 
-        fun getStormCount(data: String): Int {
-            var dashboardString = ""
-            val vtecPattern = "([A-Z0]{1}\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)"
-            data.parseColumn(vtecPattern).forEach { vtec ->
-                val vtecIsCurrent = ObjectDateTime.isVtecCurrent(vtec)
-                if (!vtec.startsWith("O.EXP") && vtecIsCurrent) {
-                    dashboardString += vtec
-                    val offices = vtec.split(".")
-                    val officeLabel = if (offices.size > 1) {
-                        val wfo = offices[2].replace("^[KP]".toRegex(), "")
-                        Utility.getWfoSiteName(wfo)
-                    } else {
-                        ""
-                    }
-                    dashboardString += "  " + officeLabel + GlobalVariables.newline
-                }
-            }
-            dashboardString = ExternalDuplicateRemover().stripDuplicates(dashboardString)
-            return dashboardString.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }.size
-        }
-
-        fun getStormCountGeneric(data: String) = data.parseColumn("(\"id\": \"https://api.weather.gov/alerts/urn:oid)").size
+//        fun getStormCountGeneric(data: String) = data.parseColumn("(\"id\": \"https://api.weather.gov/alerts/urn:oid)").size
 
     }
 }

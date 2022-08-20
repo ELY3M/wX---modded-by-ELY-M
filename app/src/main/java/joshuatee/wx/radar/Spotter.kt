@@ -67,13 +67,14 @@ class Spotter internal constructor(uniq: String, icon: String, camera: String, r
         this.note = note
         this.firstName = firstName
         //this.lastName = lastName.replace("^ ".toRegex(), "")
-	this.lastName = lastName
+	    this.lastName = lastName
 
         latD = lat.toDoubleOrNull() ?: 0.0
         lonD = -1.0 * (lon.toDoubleOrNull() ?: 0.0)
     }
 
     override fun toString() = "$firstName $lastName"
+
 }
 
 

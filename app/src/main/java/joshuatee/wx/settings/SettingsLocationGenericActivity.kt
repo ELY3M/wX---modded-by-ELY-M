@@ -506,7 +506,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun showMessage(string: String) {
-        ObjectPopupMessage(this, rl, string)
+        ObjectPopupMessage(rl, string)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {

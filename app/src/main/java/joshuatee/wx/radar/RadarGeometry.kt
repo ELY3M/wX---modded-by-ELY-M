@@ -23,125 +23,42 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.R
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.util.UtilityLog
-import java.io.BufferedInputStream
-import java.io.DataInputStream
-import java.io.IOException
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 object RadarGeometry {
 
-    // radar geometry files are in: ./app/src/main/res/raw/
-    // count values below are file size in bytes divided by 4 as these files contain binary packed floats
-    // TODO FIXME lots of room for improvement including how it's structured and reading file size dynamically
-    const val canadaResId = R.raw.ca
-    const val mexicoResId = R.raw.mx
-    private const val caCnt = 161792
-    private const val mxCnt = 151552
-    private var countStateUs = 205748
-    var countState = 205748
-    var countHw = 862208
-    const val countHwExt = 770048
-    private const val hwExtFileResId = R.raw.hwv4ext
-    const val countLakes = 503808
-    var countCounty = 212992
-    private var hwFileResId = R.raw.hwv4
-    private const val lakesFileResId = R.raw.lakesv3
-    private var countyFileResId = R.raw.county
+    val dataByType = mutableMapOf<RadarGeometryTypeEnum, RadarGeomInfo>()
 
-    var stateRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-    var hwRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-    var hwExtRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-    var lakesRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-    var countyRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
+    val orderedTypes = listOf(
+            RadarGeometryTypeEnum.CountyLines,
+            RadarGeometryTypeEnum.StateLines,
+            RadarGeometryTypeEnum.CaLines,
+            RadarGeometryTypeEnum.MxLines,
+            RadarGeometryTypeEnum.HwLines,
+            RadarGeometryTypeEnum.HwExtLines,
+            RadarGeometryTypeEnum.LakeLines,
+    )
 
-    fun initialize(context: Context, type: GeographyType) {
-        var stateLinesFileResId = R.raw.statev2
-        countState = 205748
-        if (RadarPreferences.radarStateHires) {
-            stateLinesFileResId = R.raw.statev3
-            countState = 1166552
-            countStateUs = 1166552
+    fun initialize(context: Context) {
+        orderedTypes.forEach {
+            dataByType[it] = RadarGeomInfo(context, it)
         }
-        if (RadarPreferences.radarCamxBorders) {
-            countState += caCnt + mxCnt
+        if (RadarPreferences.stateHires) {
+            dataByType[RadarGeometryTypeEnum.StateLines]!!.count = 1166552
+            dataByType[RadarGeometryTypeEnum.StateLines]!!.fileId = R.raw.statev3
         }
-        if (RadarPreferences.radarCountyHires) {
-            countyFileResId = R.raw.countyv2
-            countCounty = 820852
+        if (RadarPreferences.countyHires) {
+            dataByType[RadarGeometryTypeEnum.CountyLines]!!.count = 820852
+            dataByType[RadarGeometryTypeEnum.CountyLines]!!.fileId = R.raw.countyv2
         }
-        val fileIds = listOf(
-                lakesFileResId,
-                hwFileResId,
-                countyFileResId,
-                stateLinesFileResId,
-                canadaResId,
-                mexicoResId,
-                hwExtFileResId
-        )
-        val countArr = listOf(countLakes, countHw, countCounty, countStateUs, caCnt, mxCnt, countHwExt)
-        val prefArr = listOf(true, true, true, true, RadarPreferences.radarCamxBorders, RadarPreferences.radarCamxBorders, RadarPreferences.radarHwEnhExt)
-        when (type) {
-            GeographyType.STATE_LINES -> {
-                stateRelativeBuffer = ByteBuffer.allocateDirect(4 * countState)
-                stateRelativeBuffer.order(ByteOrder.nativeOrder())
-                stateRelativeBuffer.position(0)
-                listOf(3, 4, 5).forEach {
-                    loadBuffer(context, fileIds[it], stateRelativeBuffer, countArr[it], prefArr[it])
-                }
-            }
-            GeographyType.HIGHWAYS -> {
-                hwRelativeBuffer = ByteBuffer.allocateDirect(4 * countHw)
-                hwRelativeBuffer.order(ByteOrder.nativeOrder())
-                hwRelativeBuffer.position(0)
-                for (s in intArrayOf(1)) {
-                    loadBuffer(context, fileIds[s], hwRelativeBuffer, countArr[s], prefArr[s])
-                }
-            }
-            GeographyType.HIGHWAYS_EXTENDED -> {
-                if (RadarPreferences.radarHwEnhExt) {
-                    hwExtRelativeBuffer = ByteBuffer.allocateDirect(4 * countHwExt)
-                    hwExtRelativeBuffer.order(ByteOrder.nativeOrder())
-                    hwExtRelativeBuffer.position(0)
-                }
-                for (s in intArrayOf(6)) {
-                    loadBuffer(context, fileIds[s], hwExtRelativeBuffer, countArr[s], prefArr[s])
-                }
-            }
-            GeographyType.LAKES -> {
-                lakesRelativeBuffer = ByteBuffer.allocateDirect(4 * countLakes)
-                lakesRelativeBuffer.order(ByteOrder.nativeOrder())
-                lakesRelativeBuffer.position(0)
-                val s = 0
-                loadBuffer(context, fileIds[s], lakesRelativeBuffer, countArr[s], prefArr[s])
-            }
-            GeographyType.COUNTY_LINES -> {
-                countyRelativeBuffer = ByteBuffer.allocateDirect(4 * countCounty)
-                countyRelativeBuffer.order(ByteOrder.nativeOrder())
-                countyRelativeBuffer.position(0)
-                val s = 2
-                loadBuffer(context, fileIds[s], countyRelativeBuffer, countArr[s], prefArr[s])
-            }
-            else -> {}
+        orderedTypes.forEach {
+            dataByType[it]!!.loadData(context)
         }
     }
 
-    private fun loadBuffer(context: Context, fileID: Int, byteBuffer: ByteBuffer, count: Int, isEnabled: Boolean) {
-        if (isEnabled) {
-            try {
-                val inputStream = context.resources.openRawResource(fileID)
-                val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
-                repeat(count) {
-                    byteBuffer.putFloat(dataInputStream.readFloat())
-                }
-                dataInputStream.close()
-                inputStream.close()
-            } catch (e: IOException) {
-                UtilityLog.handleException(e)
-            }
+    fun updateConfig() {
+        dataByType.values.forEach {
+            it.update()
         }
     }
 }

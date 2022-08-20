@@ -54,7 +54,7 @@ class ObjectAlertDetail(val context: Context, box: VBox) {
         var wfo = ""
         if (capAlert.text.contains("This alert has expired")) {
             objectTextViews[0].text = capAlert.text
-            objectTextViews[0].setTextSize(TextSize.LARGE)
+            objectTextViews[0].setSize(TextSize.LARGE)
         } else {
             if (!url.contains("urn:oid")) {
                 if (capAlert.title.contains("until")) {

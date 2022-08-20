@@ -29,16 +29,13 @@ import android.view.View
 import android.widget.ScrollView
 import java.util.Locale
 import joshuatee.wx.R
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.ObjectCurrentConditions
 import joshuatee.wx.util.ObjectHazards
 import joshuatee.wx.util.ObjectSevenDay
-import joshuatee.wx.util.UtilityTimeSunMoon
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.ui.*
 
 class ForecastActivity : BaseActivity() {
@@ -123,15 +120,12 @@ class ForecastActivity : BaseActivity() {
     private fun update7Day() {
         boxForecast.removeChildrenAndLayout()
         objectSevenDay.icons.forEachIndexed { index, iconUrl ->
-            val objectCard7Day = SevenDayCard(this, iconUrl, true, index, objectSevenDay.forecastList)
-            objectCard7Day.connect { scrollView.smoothScrollTo(0, 0) }
-            boxForecast.addWidget(objectCard7Day.get())
+            val sevenDayCard = SevenDayCard(this, iconUrl, true, objectSevenDay.forecastList[index])
+            sevenDayCard.connect { scrollView.smoothScrollTo(0, 0) }
+            boxForecast.addWidget(sevenDayCard.get())
         }
-        val sunriseCard = CardText(this)
-        sunriseCard.center()
-        sunriseCard.text = UtilityTimeSunMoon.getSunriseSunset(this, Location.currentLocationStr, false) +
-                GlobalVariables.newline + ObjectDateTime.gmtTime()
-        boxForecast.addWidget(sunriseCard.get())
+        val sunRiseCard = SunRiseCard(this, latLon, scrollView)
+        boxForecast.addWidget(sunRiseCard.get())
     }
 
     private fun setupHazardCards() {
@@ -139,10 +133,10 @@ class ForecastActivity : BaseActivity() {
         hazardCards.clear()
         objectHazards.titles.indices.forEach { z ->
             hazardCards.add(CardText(this))
-            hazardCards[z].setupHazard()
-            hazardCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
-            hazardCards[z].connect { Route.hazard(this, arrayOf(objectHazards.urls[z])) }
-            boxHazards.addWidget(hazardCards[z].get())
+            hazardCards.last().setupHazard()
+            hazardCards.last().text = objectHazards.titles[z].uppercase(Locale.US)
+            hazardCards.last().connect { Route.hazard(this, arrayOf(objectHazards.urls[z])) }
+            boxHazards.addWidget(hazardCards.last().get())
         }
     }
 
@@ -156,6 +150,6 @@ class ForecastActivity : BaseActivity() {
 
     private fun saveLocation() {
         val message = Location.save(this, latLon)
-        ObjectPopupMessage(this, box.get(), message)
+        ObjectPopupMessage(box.get(), message)
     }
 }

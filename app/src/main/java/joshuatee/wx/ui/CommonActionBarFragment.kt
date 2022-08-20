@@ -39,7 +39,6 @@ import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.audio.UtilityVoiceCommand
-import joshuatee.wx.canada.*
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.*
 import joshuatee.wx.settings.UtilityHomeScreen
@@ -71,24 +70,16 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     "Local forecast"
                 )
             )	    
-            R.id.action_alert -> {
-                if (Location.isUS) {
-                    Route.usAlerts(this)
-                } else {
-                    Route(this, CanadaAlertsActivity::class.java)
-                }
-            }
+	    R.id.action_alert -> Route.alerts(this)
             R.id.action_observations -> Route.observations(this)
-            R.id.action_playlist -> Route(this, SettingsPlaylistActivity::class.java)
-            R.id.action_soundings -> if (Location.isUS) {
-                Route.sounding(this)
-            }
+            R.id.action_playlist -> Route.playlist(this)
+            R.id.action_soundings -> Route.sounding(this)
             R.id.action_cloud -> openVis()
             R.id.action_radar -> openNexradRadar(this)
             R.id.action_forecast -> openHourly()
             R.id.action_afd -> openAfd()
             R.id.action_dashboard -> openDashboard()
-            R.id.action_spotters -> Route(this, SpottersActivity::class.java)
+            R.id.action_spotters -> Route.spotters(this)
             R.id.action_settings -> openSettings()
             R.id.action_radar_mosaic -> Route.radarMosaic(this)
             R.id.action_vr -> {
@@ -116,18 +107,14 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            ObjectPopupMessage(this, view, thingsYouSaid!![0])
+            ObjectPopupMessage(view, thingsYouSaid!![0])
             val string = thingsYouSaid[0]
             UtilityVoiceCommand.processCommand(this, string, Location.rid, Location.wfo, Location.state)
         }
     }
 
     fun openNexradRadar(context: Context) {
-        if (!UIPreferences.dualpaneRadarIcon) {
-            Route.radar(context, arrayOf(Location.rid, ""))
-        } else {
-            Route.radarMultiPane(context, arrayOf(Location.rid, "", "2"))
-        }
+        Route.radarMainScreen(context)
     }
 
     fun openAfd() {
@@ -143,11 +130,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     }
 
     fun openDashboard() {
-        if (Location.isUS) {
-            Route.severeDash(this)
-        } else {
-            Route(this, CanadaAlertsActivity::class.java)
-        }
+        Route.severeDashMainScreen(this)
     }
 
     fun openHourly() {

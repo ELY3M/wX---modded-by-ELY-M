@@ -38,6 +38,7 @@ import joshuatee.wx.radar.UtilityRadar
 import joshuatee.wx.radar.UtilityRadarUI
 import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.ui.UtilityUI
+import kotlin.system.exitProcess
 import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
 import android.net.ConnectivityManager
 
@@ -282,6 +283,10 @@ object Utility {
                 "Ctrl-d: Show navigation drawer" + GlobalVariables.newline
 
     fun showLocationEditShortCuts() = "Ctrl-g: Use GPS to find location" + GlobalVariables.newline + "Ctrl-m: Show submenu" + GlobalVariables.newline
+
+    fun restart() {
+        exitProcess(0)
+    }
 
     //elys mod    
     fun checkInternet(context: Context) {

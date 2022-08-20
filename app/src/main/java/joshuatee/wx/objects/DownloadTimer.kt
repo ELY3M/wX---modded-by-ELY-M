@@ -49,7 +49,7 @@ class DownloadTimer(private val identifier: String) {
             initialized = true
             lastRefresh = currentTime / 1000
         }
-        //UtilityLog.d("wx", "TIMER: $identifier $refreshNeeded")
+//        UtilityLog.d("wxWARN2_DEBUG", "TIMER: $identifier $refreshNeeded")
         return refreshNeeded
     }
 

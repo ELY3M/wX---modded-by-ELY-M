@@ -69,8 +69,8 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
         bitmaps = MutableList(urls.size) { UtilityImg.getBlankBitmap() }
         box.removeChildrenAndLayout()
         objectImageSummary = ObjectImageSummary(this, box, bitmaps)
-        urls.indices.forEach {
-            FutureVoid(this, { bitmaps[it] = urls[it].getImage() }, { update(it) })
+        urls.forEachIndexed { index, url ->
+            FutureVoid(this, { bitmaps[index] = url.getImage() }, { update(index) })
         }
     }
 

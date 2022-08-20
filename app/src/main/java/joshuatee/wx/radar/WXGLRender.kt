@@ -20,7 +20,6 @@
 */
 //modded by ELY M. 
 
-
 package joshuatee.wx.radar
 
 import java.nio.ByteBuffer
@@ -35,9 +34,7 @@ import android.opengl.Matrix
 import joshuatee.wx.Extensions.isEven
 import android.util.Log
 import joshuatee.wx.Jni
-import joshuatee.wx.objects.GeographyType
-import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.objects.ProjectionType
+import joshuatee.wx.objects.*
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
@@ -48,7 +45,6 @@ import android.graphics.RectF
 import joshuatee.wx.common.GlobalVariables
 import java.nio.FloatBuffer
 import java.nio.ShortBuffer
-
 
 class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
@@ -78,11 +74,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         var east = 0.toDouble()
         var newbottom = 0.toDouble()
         var newleft = 0.toDouble()
-
-
     }
 
-    val TAG: String = "WXGLRender"
     // this string is normally no string but for dual pane will be set to either 1 or 2 to differentiate timestamps
     var radarStatusStr = ""
     var indexString = "0"
@@ -99,34 +92,43 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     private var gpsX = 0.0
     private var gpsY = 0.0
     private val zoomToHideMiscFeatures = 0.5f
-    private val radarBuffers = ObjectOglRadarBuffers(context, RadarPreferences.nexradRadarBackgroundColor)
+    private val radarBuffers = ObjectOglRadarBuffers(context, RadarPreferences.nexradBackgroundColor)
+    // TODO FIXME dynamic
+    val geographicBuffers = mapOf(
+            RadarGeometryTypeEnum.StateLines to ObjectOglBuffers(RadarGeometryTypeEnum.StateLines, 0.0f),
+            RadarGeometryTypeEnum.CaLines to ObjectOglBuffers(RadarGeometryTypeEnum.CaLines, 0.0f),
+            RadarGeometryTypeEnum.MxLines to ObjectOglBuffers(RadarGeometryTypeEnum.MxLines, 0.0f),
+            RadarGeometryTypeEnum.CountyLines to ObjectOglBuffers(RadarGeometryTypeEnum.CountyLines, 0.75f),
+            RadarGeometryTypeEnum.HwLines to ObjectOglBuffers(RadarGeometryTypeEnum.HwLines, 0.45f),
+            RadarGeometryTypeEnum.HwExtLines to ObjectOglBuffers(RadarGeometryTypeEnum.HwExtLines, 3.00f),
+            RadarGeometryTypeEnum.LakeLines to ObjectOglBuffers(RadarGeometryTypeEnum.LakeLines, zoomToHideMiscFeatures)
+    )
     private val spotterBuffers = ObjectOglBuffers(PolygonType.SPOTTER, zoomToHideMiscFeatures)
-    private val stateLineBuffers = ObjectOglBuffers(GeographyType.STATE_LINES, 0.0f)
-    private val countyLineBuffers = ObjectOglBuffers(GeographyType.COUNTY_LINES, 0.75f) // was .75
-    private val hwBuffers = ObjectOglBuffers(GeographyType.HIGHWAYS, 0.45f)
-    private val hwExtBuffers = ObjectOglBuffers(GeographyType.HIGHWAYS_EXTENDED, 3.00f)
-    private val lakeBuffers = ObjectOglBuffers(GeographyType.LAKES, zoomToHideMiscFeatures)
-    private val stiBuffers = ObjectOglBuffers(PolygonType.STI, zoomToHideMiscFeatures)
+    val stiBuffers = ObjectOglBuffers(PolygonType.STI, zoomToHideMiscFeatures)
     private val wbBuffers = ObjectOglBuffers(PolygonType.WIND_BARB, zoomToHideMiscFeatures)
     private val wbGustsBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_GUSTS, zoomToHideMiscFeatures)
-    private val mpdBuffers = ObjectOglBuffers(PolygonType.MPD)
     ///private val hiBuffers = ObjectOglBuffers(PolygonType.HI, zoomToHideMiscFeatures)
+    //elys mod - custom icons
     private var hiBuffersList = mutableListOf<ObjectOglBuffers>()
     private val tvsBuffers = ObjectOglBuffers(PolygonType.TVS, zoomToHideMiscFeatures)
-    private val warningFfwBuffers = ObjectOglBuffers(PolygonType.FFW)
-    private val warningTstBuffers = ObjectOglBuffers(PolygonType.TST)
-    private val warningTorBuffers = ObjectOglBuffers(PolygonType.TOR)
-    private val watchBuffers = ObjectOglBuffers(PolygonType.WATCH)
-    private val watchTornadoBuffers = ObjectOglBuffers(PolygonType.WATCH_TORNADO)
-    private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD)
-    private val swoBuffers = ObjectOglBuffers()
+    // FIXME TODO FUTURE USE
+    val triangleBuffers = mapOf(
+            PolygonType.SPOTTER to ObjectOglBuffers(PolygonType.SPOTTER, zoomToHideMiscFeatures),
+    )
+    val polygonBuffers = mapOf(
+            PolygonType.WATCH to ObjectOglBuffers(PolygonType.WATCH),
+            PolygonType.WATCH_TORNADO to ObjectOglBuffers(PolygonType.WATCH_TORNADO),
+            PolygonType.MCD to ObjectOglBuffers(PolygonType.MCD),
+            PolygonType.MPD to ObjectOglBuffers(PolygonType.MPD),
+    )
+    private val swoBuffers = ObjectOglBuffers(PolygonType.SWO)
     private val userPointsBuffers = ObjectOglBuffers(PolygonType.USERPOINTS, zoomToHideMiscFeatures)
     private val locationDotBuffers = ObjectOglBuffers(PolygonType.LOCDOT, 0.0f)
     private val locIconBuffers = ObjectOglBuffers()
     private val locBugBuffers = ObjectOglBuffers()
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, zoomToHideMiscFeatures)
     private val conusRadarBuffers = ObjectOglBuffers()
-    private val genericWarningBuffers = mutableListOf<ObjectOglBuffers>()
+    private val warningBuffers = mutableMapOf<PolygonWarningType, ObjectOglBuffers>()
     private var wpcFrontBuffersList = mutableListOf<ObjectOglBuffers>()
     private var wpcFrontPaints = mutableListOf<Int>()
     private val colorSwo = intArrayOf(
@@ -211,10 +213,10 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         set(value) { prod = value }
 
     init {
-        bgColorFRed = Color.red(RadarPreferences.nexradRadarBackgroundColor) / 255.0f
-        bgColorFGreen = Color.green(RadarPreferences.nexradRadarBackgroundColor) / 255.0f
-        bgColorFBlue = Color.blue(RadarPreferences.nexradRadarBackgroundColor) / 255.0f
-        defaultLineWidth = RadarPreferences.radarDefaultLinesize.toFloat()
+        bgColorFRed = Color.red(RadarPreferences.nexradBackgroundColor) / 255.0f
+        bgColorFGreen = Color.green(RadarPreferences.nexradBackgroundColor) / 255.0f
+        bgColorFBlue = Color.blue(RadarPreferences.nexradBackgroundColor) / 255.0f
+        defaultLineWidth = RadarPreferences.defaultLinesize.toFloat()
         try {
             triangleIndexBuffer = ByteBuffer.allocateDirect(12 * breakSize15)
             lineIndexBuffer = ByteBuffer.allocateDirect(4 * breakSizeLine)
@@ -227,15 +229,15 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         triangleIndexBuffer.position(0)
         lineIndexBuffer.order(ByteOrder.nativeOrder())
         lineIndexBuffer.position(0)
-        if (!RadarPreferences.radarUseJni) {
+        if (!RadarPreferences.useJni) {
             UtilityWXOGLPerf.generateIndex(triangleIndexBuffer, breakSize15, breakSize15)
             UtilityWXOGLPerf.generateIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
         } else {
             Jni.genIndex(triangleIndexBuffer, breakSize15, breakSize15)
             Jni.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
         }
-        RadarPreferences.radarWarningPolygons.forEach {
-            genericWarningBuffers.add(ObjectOglBuffers(it))
+        ObjectPolygonWarning.polygonList.forEach {
+            warningBuffers[it] = ObjectOglBuffers(ObjectPolygonWarning.polygonDataByType[it]!!)
         }
         if (UtilityUI.isTablet()) {
             zoomScreenScaleFactor = 2.0
@@ -258,7 +260,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     }
 
     // final arg is whether or not to perform decompression
-    fun constructPolygons(fileName: String, urlStr: String, performDecomp: Boolean) {
+    @Synchronized fun constructPolygons(fileName: String, urlStr: String, performDecomp: Boolean) {
         radarBuffers.fileName = fileName
         totalBins = 0
         // added to allow animations to skip a frame and continue
@@ -271,8 +273,11 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 product = "N0Q"
             }
         }
+        //
+        // Download the radar file
         // if fn is empty string then we need to fetch the radar file
         // if set, its part of an anim sequence
+        //
         if (radarBuffers.fileName == "") {
             ridPrefixGlobal = WXGLDownload.getRadarFile(context, urlStr, this.rid, prod, indexString, tdwr)
             radarBuffers.fileName = if (!product.contains("L2")) {
@@ -283,6 +288,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }
         }
         radarBuffers.setProductCodeFromString(product)
+        //
+        // extract information from the header
+        //
         try {
             when {
                 // Level 2
@@ -308,6 +316,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         }
         radarBuffers.initialize()
         radarBuffers.setToPositionZero()
+        //
+        // decode the radar file
+        //
         val objectColorPalette =
                 if (ObjectColorPalette.colorMap.containsKey(radarBuffers.productCode.toInt())) {
                     ObjectColorPalette.colorMap[radarBuffers.productCode.toInt()]!!
@@ -320,7 +331,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 totalBins = UtilityWXOGLPerfRaster.generate(radarBuffers, wxglNexradLevel3.binWord)
             } else if (!product.contains("L2")) {
                 totalBins = if (!fourBitProducts.contains(radarBuffers.productCode)) {
-                    if (!RadarPreferences.radarUseJni || radarBuffers.productCode.toInt() == 2153 || radarBuffers.productCode.toInt() == 2154)
+                    if (!RadarPreferences.useJni || radarBuffers.productCode.toInt() == 2153 || radarBuffers.productCode.toInt() == 2154)
                         UtilityWXOGLPerf.decode8BitAndGenRadials(context, radarBuffers)
                     else {
                         Jni.decode8BitAndGenRadials(
@@ -346,7 +357,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 }
             } else {
                 wxglNexradLevel2.binWord.position(0)
-                totalBins = if (RadarPreferences.radarUseJni)
+                totalBins = if (RadarPreferences.useJni)
                     Jni.level2GenRadials(
                             radarBuffers.floatBuffer,
                             radarBuffers.colorBuffer,
@@ -391,12 +402,12 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, vertexShaderUniform)
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, fragmentShaderUniform)
         GLES20.glLinkProgram(OpenGLShaderUniform.sp_SolidColorUniform)
-
+	
+	//elys mod
         OpenGLShader.sp_loadimage = GLES20.glCreateProgram()
         GLES20.glAttachShader(OpenGLShader.sp_loadimage, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.vs_loadimage))
         GLES20.glAttachShader(OpenGLShader.sp_loadimage, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_loadimage))
         GLES20.glLinkProgram(OpenGLShader.sp_loadimage)
-
         //shader for conus
         OpenGLShader.sp_conus = GLES20.glCreateProgram()
         GLES20.glAttachShader(OpenGLShader.sp_conus, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.vs_conus))
@@ -423,136 +434,161 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         }
         Matrix.scaleM(matrixProjectionAndView, 0, zoom, zoom, 1.0f)
         GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_SolidColor, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
-	
+        //
+        // Draw Nexrad radar
+        //
+	//elys mod
         //show/hide radar
-        UtilityLog.d("radarshow", "showradar: " + RadarPreferences.radarShowRadar)
-        if (RadarPreferences.radarShowRadar) {
-        (0 until chunkCount).forEach {
-            radarChunkCnt = if (it < chunkCount - 1) {
-                breakSizeRadar * 6
-            } else {
-                6 * (totalBinsOgl - it * breakSizeRadar)
+        UtilityLog.d("radarshow", "showRadarWhenPan: " + RadarPreferences.showRadarWhenPan)
+        UtilityLog.d("radarshow", "showradar: " + RadarPreferences.showRadar)
+        if ((RadarPreferences.showRadar) || (displayHold && !RadarPreferences.showRadarWhenPan)) {
+        //if (displayHold && !RadarPreferences.showRadarWhenPan) {
+        //org
+        //if (!(displayHold && !RadarPreferences.showRadarWhenPan)) {
+            (0 until chunkCount).forEach {
+                radarChunkCnt = if (it < chunkCount - 1) {
+                    breakSizeRadar * 6
+                } else {
+                    6 * (totalBinsOgl - it * breakSizeRadar)
+                }
+                try {
+                    radarBuffers.floatBuffer.position(it * breakSizeRadar * 32)
+                    GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, radarBuffers.floatBuffer.slice().asFloatBuffer())
+                    radarBuffers.colorBuffer.position(it * breakSizeRadar * 12)
+                    GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, radarBuffers.colorBuffer.slice())
+                    triangleIndexBuffer.position(0)
+                    GLES20.glDrawElements(GLES20.GL_TRIANGLES, radarChunkCnt, GLES20.GL_UNSIGNED_SHORT, triangleIndexBuffer.slice().asShortBuffer())
+                } catch (e: Exception) { UtilityLog.handleException(e) }
             }
-            try {
-                radarBuffers.floatBuffer.position(it * breakSizeRadar * 32)
-                GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, radarBuffers.floatBuffer.slice().asFloatBuffer())
-                radarBuffers.colorBuffer.position(it * breakSizeRadar * 12)
-                GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, radarBuffers.colorBuffer.slice())
-                triangleIndexBuffer.position(0)
-                GLES20.glDrawElements(GLES20.GL_TRIANGLES, radarChunkCnt, GLES20.GL_UNSIGNED_SHORT, triangleIndexBuffer.slice().asShortBuffer())
-            } catch (e: Exception) { UtilityLog.handleException(e) }
         }
-        } //show/hide radar
-        GLES20.glLineWidth(defaultLineWidth)
-        listOf(countyLineBuffers, stateLineBuffers, hwBuffers, hwExtBuffers, lakeBuffers).forEach {
-            if (zoom > it.scaleCutOff) {
-                GLES20.glLineWidth(it.geotype.lineWidth.toFloat())
-                drawElement(it)
+        //
+        // Geography
+        //
+        RadarGeometry.orderedTypes.forEach {
+            if (RadarGeometry.dataByType[it]!!.isEnabled && zoom > geographicBuffers[it]!!.scaleCutOff) {
+                GLES20.glLineWidth(RadarGeometry.dataByType[it]!!.lineSize)
+                drawElement(geographicBuffers[it]!!)
             }
         }
         // whether or not to respect the display being touched needs to be stored in object gl buffers
         if (!displayHold) {
-
-            //FIXME use real plotting....
-         /*
-            Log.i(TAG, "zoom: " + zoom)
-            if (RadarPreferences.radarConusRadar) {
-                if (zoom < 0.093f) {
-                    Log.i(TAG, "zoom out to conusradar")
-                    drawConusRadar(conusRadarBuffers)
-            }
-        }
-         */
-
-        listOf(spotterBuffers).forEach {
-            if (zoom > it.scaleCutOff) {
-                drawTriangles(it)
-            }
-        }
-
-
+	
+	
             //elys mod - hailmod
+	    //Custom Hail Icons
             hiBuffersList.forEach {
                 if (zoom > zoomToHideMiscFeatures) {
                     drawHI(it)
-                    Log.i("haildraw", "hailicon: "+it.hailIcon)
                 }
             }
-
-
-
-
-        listOf(tvsBuffers).forEach {
-        if (zoom > it.scaleCutOff) {
+	    
+	    //elys mod 
+	    //Custom TVS Icon
+            listOf(tvsBuffers).forEach {
+            if (zoom > it.scaleCutOff) {
             drawTVS(it)
-        }
-        }
-
+            }
+            }
 
             GLES20.glLineWidth(3.0f)
+            //
+            // storm tracks, wind barbs
+            //
             listOf(stiBuffers, wbGustsBuffers, wbBuffers).forEach {
-                if (zoom > it.scaleCutOff) {
+                if (it.type.pref && zoom > it.scaleCutOff) {
                     GLES20.glLineWidth(it.type.size)
                     drawPolygons(it, 16)
                 }
             }
-            listOf(wbCircleBuffers).forEach {
-                if (zoom > it.scaleCutOff) {
+            //
+            // spotters, wb circles
+            //
+            listOf(spotterBuffers, wbCircleBuffers).forEach {
+                if (it.type.pref && zoom > it.scaleCutOff) {
                     drawTriangles(it)
                 }
-            }
-
-            GLES20.glLineWidth(defaultLineWidth)
-
-        //drawTriangles(locationDotBuffers)
-        //drawLocation(locationDotBuffers)
-
-
-            if (RadarPreferences.radarUserPoints) {
+            }	    	
+            // elys mod
+            // UserPoints
+	    //	
+            if (RadarPreferences.userPoints) {
                 listOf(userPointsBuffers).forEach {
                 if (zoom > userPointsBuffers.scaleCutOff) {
                     drawUserPoints(it)
                 }
                 }
-            }
-
-
+            }	
+	
+	
+            //
+            // location dots
+	    //
+            //elys mod
             if (RadarPreferences.locationDotFollowsGps) {
                 locIconBuffers.chunkCount = 1
                 drawLocation(locIconBuffers)
             } else {
-	        //drawTriangles(wbCircleBuffers)
-            //GLES20.glLineWidth(defaultLineWidth)
-            // FIXME use new configurable
-            GLES20.glLineWidth(RadarPreferences.radarGpsCircleLineSize.toFloat())
+            GLES20.glLineWidth(RadarPreferences.gpsCircleLineSize.toFloat())
             drawTriangles(locationDotBuffers)
             }
 
 
+	    //elys mod
+	    //Location bug like in Pykl3   
         if (RadarPreferences.locdotBug)  {
-            //Log.i(TAG, "bearing: " + WXGLRadarActivity.bearingCurrent)
-            //Log.i(TAG, "speed: " + WXGLRadarActivity.speedCurrent)
             if (WXGLRadarActivity.speedCurrent >= 0.43) {
                 //set up location bug
-                Log.i(TAG, "location bug!!!!")
                 drawLocationBug(locBugBuffers)
             }
         }
+        //
+        // warnings
+        //
         GLES20.glLineWidth(PolygonType.TOR.size)
-        listOf(warningTstBuffers, warningFfwBuffers, warningTorBuffers).forEach { drawPolygons(it, 8) }
-        genericWarningBuffers.forEach { if (it.warningType!!.isEnabled) drawPolygons(it, 8) }
+        warningBuffers.values.forEach {
+            if (it.warningType!!.isEnabled) {
+                drawPolygons(it, 8)
+            }
+        }
+        //
+        // MCD, Watch
+        //
+        // TODO FIXME move if inside loop and fold in MPD
         GLES20.glLineWidth(PolygonType.WATCH_TORNADO.size)
-        listOf(mpdBuffers, mcdBuffers, watchBuffers, watchTornadoBuffers).forEach { drawPolygons(it, 8) }
-        GLES20.glLineWidth(PolygonType.SWO.size)
-        listOf(swoBuffers).forEach { drawPolygons(it, 8) }
-        if (zoom < (0.50 / zoomScreenScaleFactor)) {
-            GLES20.glLineWidth(RadarPreferences.radarWatchMcdLineSize)
-            wpcFrontBuffersList.forEach { drawElement(it) }
+        if (PolygonType.MCD.pref) {
+            listOf(PolygonType.MCD, PolygonType.WATCH, PolygonType.WATCH_TORNADO).forEach {
+                drawPolygons(polygonBuffers[it]!!, 8)
+            }
+        }
+        //
+        // MPD
+        //
+        if (PolygonType.MPD.pref) {
+            drawPolygons(polygonBuffers[PolygonType.MPD]!!, 8)
+        }
+        //
+        // SPC Convective Outlook
+        //
+        if (PolygonType.SWO.pref) {
+            GLES20.glLineWidth(PolygonType.SWO.size)
+            drawPolygons(swoBuffers, 8)
+        }
+        //
+        // WPC Fronts
+        //
+        if (PolygonType.WPC_FRONTS.pref && zoom < (0.50 / zoomScreenScaleFactor)) {
+            GLES20.glLineWidth(PolygonType.WPC_FRONTS.size)
+            wpcFrontBuffersList.forEach {
+                drawElement(it)
+            }
         }
 
-    } //displayhold
 
 
+        } //displayHold
+
+//elys mod
+////Conus Radar
 /*
         //TODO try to use real plotting without adding usa map....
         //hack job!!!
@@ -569,50 +605,53 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         */
 
         if (displayConus) {
-	    useMercatorProjection = false
+            useMercatorProjection = false
             drawConusRadarTest(conusRadarBuffers)
         } else {
-	    useMercatorProjection = true
-	}
-	
+            useMercatorProjection = true
+        }
+
         //TODO try to use real plotting without adding usa map....
         //hack job!!!
         if (!displayHold) {
             UtilityLog.d("wx", "zoom: " + zoom)
-            UtilityLog.d("wx", "zoom setting: "+RadarPreferences.radarConusRadarZoom+ " math: "+(RadarPreferences.radarConusRadarZoom / 1000.0))
-            if (RadarPreferences.radarConusRadar) {
-                if (zoom < (RadarPreferences.radarConusRadarZoom / 1000.0).toFloat()) {
+            UtilityLog.d("wx", "zoom setting: "+RadarPreferences.conusRadarZoom+ " math: "+(RadarPreferences.conusRadarZoom / 1000.0))
+            if (RadarPreferences.conusRadar) {
+                if (zoom < (RadarPreferences.conusRadarZoom / 1000.0).toFloat()) {
                     UtilityLog.d("wx", "zoom out to conusradar")
                     displayConus = true
                 } else { displayConus = false }
             }
         }
-
-
-    }
+//////////////////Conus Radar End////////////////
 
 
 
 
 
-    private fun drawConusRadarTest(buffers: ObjectOglBuffers) {
-        if (buffers.isInitialized) {
-            buffers.setToPositionZero()
-
-            var vertexBuffer: FloatBuffer
-            var drawListBuffer: ShortBuffer
-            var uvBuffer: FloatBuffer
+    } //onDrawFrame(gl: GL10) End
 
 
-            //use conus shader
-            GLES20.glUseProgram(OpenGLShader.sp_conus)
+//elys mod
+////////Conus Radar///////////
+private fun drawConusRadarTest(buffers: ObjectOglBuffers) {
+    if (buffers.isInitialized) {
+        buffers.setToPositionZero()
+
+        var vertexBuffer: FloatBuffer
+        var drawListBuffer: ShortBuffer
+        var uvBuffer: FloatBuffer
+
+
+        //use conus shader
+        GLES20.glUseProgram(OpenGLShader.sp_conus)
 
 
 
-            val conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
-            val ridx = Utility.readPref(context, "RID_" + rid + "_X", "0.0f").toFloat()
-            val ridy = Utility.readPref(context, "RID_" + rid + "_Y", "0.0f").toFloat() / -1.0
-            UtilityLog.d("wx", rid + " rid x: " + ridx + " y: " + ridy)
+        val conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
+        val ridx = Utility.readPref(context, "RID_" + rid + "_X", "0.0f").toFloat()
+        val ridy = Utility.readPref(context, "RID_" + rid + "_Y", "0.0f").toFloat() / -1.0
+        UtilityLog.d("wx", rid + " rid x: " + ridx + " y: " + ridy)
 /*
 
             UtilityLog.d("wx", "gfw1: " + UtilityConusRadar.gfw1)
@@ -654,135 +693,137 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
 
-            /*
-            val mRatio = conusbitmap.width / conusbitmap.height
-            val mLeft = awest.toFloat()
-            val mBottom = asouth.toFloat()
-            val mTop = anorth.toFloat()
-            val near = 1.0f
-            val far = 10.0f
-            Matrix.frustumM(matrixProjectionAndView, 0, mLeft, mRatio.toFloat(), mBottom, mTop, near, far)
-            */
+        /*
+        val mRatio = conusbitmap.width / conusbitmap.height
+        val mLeft = awest.toFloat()
+        val mBottom = asouth.toFloat()
+        val mTop = anorth.toFloat()
+        val near = 1.0f
+        val far = 10.0f
+        Matrix.frustumM(matrixProjectionAndView, 0, mLeft, mRatio.toFloat(), mBottom, mTop, near, far)
+        */
 
 
-            //val riddist = LatLon.distance(LatLon(ridx.toDouble(), ridy.toDouble()), LatLon(south, west), DistanceUnit.MILE)
-            //UtilityLog.d("wx", "riddist: " + riddist)
-            //getNewConusPoint(south, west, riddist)
+        //val riddist = LatLon.distance(LatLon(ridx.toDouble(), ridy.toDouble()), LatLon(south, west), DistanceUnit.MILE)
+        //UtilityLog.d("wx", "riddist: " + riddist)
+        //getNewConusPoint(south, west, riddist)
 
 
-            /*
+        /*
 
-	gchar *clear = g_malloc0(2048*2048*4);
-	glBindTexture(GL_TEXTURE_2D, tile->tex);
+gchar *clear = g_malloc0(2048*2048*4);
+glBindTexture(GL_TEXTURE_2D, tile->tex);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, 2048, 2048, 0,GL_RGBA, GL_UNSIGNED_BYTE, clear);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 1,1, CONUS_WIDTH/2,CONUS_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-	tile->coords.n = 1.0/(CONUS_WIDTH/2);
-	tile->coords.w = 1.0/ CONUS_HEIGHT;
-	tile->coords.s = tile->coords.n +  CONUS_HEIGHT   / 2048.0;
-	tile->coords.e = tile->coords.w + (CONUS_WIDTH/2) / 2048.0;
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glFlush();
-	g_free(clear);
+glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+glPixelStorei(GL_PACK_ALIGNMENT, 1);
+glTexImage2D(GL_TEXTURE_2D, 0, 4, 2048, 2048, 0,GL_RGBA, GL_UNSIGNED_BYTE, clear);
+glTexSubImage2D(GL_TEXTURE_2D, 0, 1,1, CONUS_WIDTH/2,CONUS_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+tile->coords.n = 1.0/(CONUS_WIDTH/2);
+tile->coords.w = 1.0/ CONUS_HEIGHT;
+tile->coords.s = tile->coords.n +  CONUS_HEIGHT   / 2048.0;
+tile->coords.e = tile->coords.w + (CONUS_WIDTH/2) / 2048.0;
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+glFlush();
+g_free(clear);
 
-             */
-
-
-            //triangle
-            val base = RectF(-conusbitmap!!.width.toFloat(), conusbitmap.height.toFloat(), conusbitmap.width.toFloat(), -conusbitmap.height.toFloat())
-            val scale = 3.0f //was 2.0f
-
-            UtilityLog.d("wx", "left: " + base.left)
-            UtilityLog.d("wx", "right: " + base.right)
-            UtilityLog.d("wx", "bottom: " + base.bottom)
-            UtilityLog.d("wx", "top: " + base.top)
-
-            val left = base.left * scale
-            val right = base.right * scale
-            val bottom = base.bottom * scale
-            val top = base.top * scale
-
-            /*
-            val westnorth = LatLon(west, north)
-            val westsouth = LatLon(west, south)
-            val eastsouth = LatLon(east, south)
-            val eastnorth = LatLon(east, north)
-
-            UtilityLog.d("wx", "westnorth: " + westnorth)
-            UtilityLog.d("wx", "westsouth: " + westsouth)
-            UtilityLog.d("wx", "eastsouth: " + eastsouth)
-            UtilityLog.d("wx", "eastnorth: " + eastnorth)
-            */
+         */
 
 
-            val vertices = floatArrayOf(
-                    left, top, 0.0f,
-                    left, bottom, 0.0f,
-                    right, bottom, 0.0f,
-                    right, top, 0.0f)
+        //triangle
+        val base = RectF(-conusbitmap!!.width.toFloat(), conusbitmap.height.toFloat(), conusbitmap.width.toFloat(), -conusbitmap.height.toFloat())
+        val scale = 3.0f //was 2.0f
+
+        UtilityLog.d("wx", "left: " + base.left)
+        UtilityLog.d("wx", "right: " + base.right)
+        UtilityLog.d("wx", "bottom: " + base.bottom)
+        UtilityLog.d("wx", "top: " + base.top)
+
+        val left = base.left * scale
+        val right = base.right * scale
+        val bottom = base.bottom * scale
+        val top = base.top * scale
+
+        /*
+        val westnorth = LatLon(west, north)
+        val westsouth = LatLon(west, south)
+        val eastsouth = LatLon(east, south)
+        val eastnorth = LatLon(east, north)
+
+        UtilityLog.d("wx", "westnorth: " + westnorth)
+        UtilityLog.d("wx", "westsouth: " + westsouth)
+        UtilityLog.d("wx", "eastsouth: " + eastsouth)
+        UtilityLog.d("wx", "eastnorth: " + eastnorth)
+        */
 
 
-            val indices = shortArrayOf(0, 1, 2, 0, 2, 3) // The order of vertexrendering.
-
-            // The vertex buffer.
-            val vbb = ByteBuffer.allocateDirect(vertices.size * 4)
-            vbb.order(ByteOrder.nativeOrder())
-            vertexBuffer = vbb.asFloatBuffer()
-            vertexBuffer.put(vertices)
-            vertexBuffer.position(0)
-
-            // initialize byte buffer for the draw list
-            val dlb = ByteBuffer.allocateDirect(indices.size * 2)
-            dlb.order(ByteOrder.nativeOrder())
-            drawListBuffer = dlb.asShortBuffer()
-            drawListBuffer.put(indices)
-            drawListBuffer.position(0)
+        val vertices = floatArrayOf(
+            left, top, 0.0f,
+            left, bottom, 0.0f,
+            right, bottom, 0.0f,
+            right, top, 0.0f)
 
 
-            //texture
-            val uvs = floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f)
+        val indices = shortArrayOf(0, 1, 2, 0, 2, 3) // The order of vertexrendering.
 
-            // The texture buffer
-            val tbb = ByteBuffer.allocateDirect(uvs.size * 4)
-            tbb.order(ByteOrder.nativeOrder())
-            uvBuffer = tbb.asFloatBuffer()
-            uvBuffer.put(uvs)
-            uvBuffer.position(0)
-            OpenGLShader.LoadImage(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
+        // The vertex buffer.
+        val vbb = ByteBuffer.allocateDirect(vertices.size * 4)
+        vbb.order(ByteOrder.nativeOrder())
+        vertexBuffer = vbb.asFloatBuffer()
+        vertexBuffer.put(vertices)
+        vertexBuffer.position(0)
 
-            val mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_conus, "vPosition")
-            GLES20.glEnableVertexAttribArray(mPositionHandle)
-            GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer)
+        // initialize byte buffer for the draw list
+        val dlb = ByteBuffer.allocateDirect(indices.size * 2)
+        dlb.order(ByteOrder.nativeOrder())
+        drawListBuffer = dlb.asShortBuffer()
+        drawListBuffer.put(indices)
+        drawListBuffer.position(0)
 
-            val mTexCoordLoc = GLES20.glGetAttribLocation(OpenGLShader.sp_conus, "a_texCoords")
-            GLES20.glEnableVertexAttribArray(mTexCoordLoc)
-            GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT, false, 0, uvBuffer)
-            val mtrxhandle = GLES20.glGetUniformLocation(OpenGLShader.sp_conus, "uMVPMatrix")
-            GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, matrixProjectionAndView, 0)
-            val conusTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_conus, "u_texture")
-            GLES20.glUniform1i(conusTexture, 0)
-            GLES20.glEnable(GLES20.GL_BLEND);
-            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.size, GLES20.GL_UNSIGNED_SHORT, drawListBuffer)
 
-            // Disable vertex array
-            GLES20.glDisableVertexAttribArray(mPositionHandle)
-            GLES20.glDisableVertexAttribArray(mTexCoordLoc)
-            //back to regular shader
-            GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
+        //texture
+        val uvs = floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f)
 
-        }
+        // The texture buffer
+        val tbb = ByteBuffer.allocateDirect(uvs.size * 4)
+        tbb.order(ByteOrder.nativeOrder())
+        uvBuffer = tbb.asFloatBuffer()
+        uvBuffer.put(uvs)
+        uvBuffer.position(0)
+        OpenGLShader.LoadImage(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
+
+        val mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_conus, "vPosition")
+        GLES20.glEnableVertexAttribArray(mPositionHandle)
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer)
+
+        val mTexCoordLoc = GLES20.glGetAttribLocation(OpenGLShader.sp_conus, "a_texCoords")
+        GLES20.glEnableVertexAttribArray(mTexCoordLoc)
+        GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT, false, 0, uvBuffer)
+        val mtrxhandle = GLES20.glGetUniformLocation(OpenGLShader.sp_conus, "uMVPMatrix")
+        GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, matrixProjectionAndView, 0)
+        val conusTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_conus, "u_texture")
+        GLES20.glUniform1i(conusTexture, 0)
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.size, GLES20.GL_UNSIGNED_SHORT, drawListBuffer)
+
+        // Disable vertex array
+        GLES20.glDisableVertexAttribArray(mPositionHandle)
+        GLES20.glDisableVertexAttribArray(mTexCoordLoc)
+        //back to regular shader
+        GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
 
     }
 
+}
+//////////Conus Radar End/////////////////////
 
 
 
+
+//elys mod
 //point sprite blah//
     private fun drawConusRadar(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
@@ -817,7 +858,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
             sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            GLES20.glUniform1f(sizeHandle, RadarPreferences.radarUserPointSize.toFloat())
+            GLES20.glUniform1f(sizeHandle, RadarPreferences.userPointSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             userPointId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + "userpoint.png")
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
@@ -840,7 +881,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
                 sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-                GLES20.glUniform1f(sizeHandle, RadarPreferences.radarLocIconSize.toFloat())
+                GLES20.glUniform1f(sizeHandle, RadarPreferences.locIconSize.toFloat())
                 iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
                 locationId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + "location.png")
                 GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
@@ -863,7 +904,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
             sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            GLES20.glUniform1f(sizeHandle, RadarPreferences.radarLocBugSize.toFloat())
+            GLES20.glUniform1f(sizeHandle, RadarPreferences.locBugSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             val rotatebug: Bitmap = OpenGLShader.RotateBitmap(GlobalVariables.FilesPath + "headingbug.png", WXGLRadarActivity.bearingCurrent.toDouble())
             locationBugId = OpenGLShader.LoadBitmapTexture(rotatebug)
@@ -889,7 +930,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
                 sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-                GLES20.glUniform1f(sizeHandle, RadarPreferences.radarTvsSize.toFloat())
+                GLES20.glUniform1f(sizeHandle, RadarPreferences.tvsSize.toFloat())
                 iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
                 tvsId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + "tvs.png")
                 GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
@@ -915,7 +956,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
             sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            GLES20.glUniform1f(sizeHandle, RadarPreferences.radarHiSize.toFloat())
+            GLES20.glUniform1f(sizeHandle, RadarPreferences.hiSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             hiId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + buffers.hailIcon)
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
@@ -942,6 +983,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         at joshuatee.wx.radar.WXGLRender.drawTriangles(WXGLRender.kt:388)
         at joshuatee.wx.radar.WXGLRender.onDrawFrame(WXGLRender.kt:359)
     * */
+///////////  
     private fun drawTriangles(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
@@ -1004,92 +1046,64 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         Matrix.scaleM(matrixProjectionAndView, 0, zoom, zoom, 1.0f)
     }
 
-    private fun scaleLength(currentLength: Float) = if (zoom > 1.01f) currentLength / zoom * 2.0f else currentLength
-
-    fun constructStateLines() {
-        constructGenericGeographic(stateLineBuffers)
+    private fun scaleLength(currentLength: Float) = if (zoom > 1.01f) {
+        currentLength / zoom * 2.0f
+    } else {
+        currentLength
     }
 
-    fun constructHWLines() {
-        constructGenericGeographic(hwBuffers)
-    }
-
-    fun deconstructHWLines() {
-        deconstructGenericGeographic(hwBuffers)
-    }
-
-    fun constructHWEXTLines() {
-        constructGenericGeographic(hwExtBuffers)
-    }
-
-    fun deconstructHWEXTLines() {
-        deconstructGenericGeographic(hwExtBuffers)
-    }
-
-    fun constructLakes() {
-        constructGenericGeographic(lakeBuffers)
-    }
-
-    fun deconstructLakes() {
-        deconstructGenericGeographic(lakeBuffers)
-    }
-
-    fun constructCounty() {
-        constructGenericGeographic(countyLineBuffers)
-    }
-
-    fun deconstructCounty() {
-        deconstructGenericGeographic(countyLineBuffers)
-    }
-
-    // if the rectangular projection is realized.
-    private fun constructGenericGeographic(buffers: ObjectOglBuffers) {
+    //
+    // for types RadarGeometryTypeEnum
+    //   initialize the ObjectOglBuffers object for things like color and size
+    //
+    // TODO FIXME force a way to regen color
+    //
+    fun constructGeographic(buffers: ObjectOglBuffers, forceColorReset: Boolean = false) {
         if (!buffers.isInitialized) {
-            buffers.count = buffers.geotype.count
+            buffers.count = RadarGeometry.dataByType[buffers.geotype]!!.count
             buffers.breakSize = 30000
-            buffers.initialize(4 * buffers.count, 0, 3 * buffers.breakSize * 2, buffers.geotype.color)
-            if (RadarPreferences.radarUseJni) {
+            buffers.initialize(4 * buffers.count, 0, 3 * buffers.breakSize * 2, RadarGeometry.dataByType[buffers.geotype]!!.colorInt)
+            // TODO FIXME should be?  3 * buffers.breakSize * 2
+            if (RadarPreferences.useJni) {
                 Jni.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             } else {
                 UtilityWXOGLPerf.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             }
             buffers.isInitialized = true
-        }
-        if (!RadarPreferences.radarUseJni) {
-            if (useMercatorProjection) {
-                UtilityWXOGLPerf.genMercator(buffers.geotype.relativeBuffer, buffers.floatBuffer, projectionNumbers, buffers.count)
+        } else if (forceColorReset) {
+            buffers.initializeColor(RadarGeometry.dataByType[buffers.geotype]!!.colorInt)
+            buffers.setToPositionZero()
+            buffers.breakSize = 30000
+            if (RadarPreferences.useJni) {
+                // TODO FIXME should be?  3 * buffers.breakSize * 2
+                //Jni.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
+                UtilityWXOGLPerf.colorGen(buffers.colorBuffer,  buffers.breakSize * 2, buffers.colorArray)
             } else {
-                UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, projectionNumbers, buffers.count)
+                UtilityWXOGLPerf.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             }
+        }
+        if (!RadarPreferences.useJni) {
+            UtilityWXOGLPerf.genMercator(RadarGeometry.dataByType[buffers.geotype]!!.lineData, buffers.floatBuffer, projectionNumbers, buffers.count)
         } else {
-            if (useMercatorProjection) {
-                Jni.genMercato(
-                        buffers.geotype.relativeBuffer,
-                        buffers.floatBuffer,
-                        projectionNumbers.xFloat,
-                        projectionNumbers.yFloat,
-                        projectionNumbers.xCenter.toFloat(),
-                        projectionNumbers.yCenter.toFloat(),
-                        projectionNumbers.oneDegreeScaleFactorFloat,
-                        buffers.count
-                )
-            } else {
-                // This is not used at the moment
-                UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, projectionNumbers, buffers.count)	    
-	    }
+            Jni.genMercato(
+                    RadarGeometry.dataByType[buffers.geotype]!!.lineData,
+                    buffers.floatBuffer,
+                    projectionNumbers.xFloat,
+                    projectionNumbers.yFloat,
+                    projectionNumbers.xCenter.toFloat(),
+                    projectionNumbers.yCenter.toFloat(),
+                    projectionNumbers.oneDegreeScaleFactorFloat,
+                    buffers.count
+            )
         }
         buffers.setToPositionZero()
     }
 
-    private fun deconstructGenericGeographic(buffers: ObjectOglBuffers) {
-        buffers.isInitialized = false
-    }
-
-    private fun constructGenericLinesShort(buffers: ObjectOglBuffers, list: List<Double>) {
+    private fun constructLinesShort(buffers: ObjectOglBuffers, list: List<Double>) {
         val remainder: Int
         buffers.initialize(4 * 4 * list.size, 0, 3 * 4 * list.size, buffers.type.color)
         try {
-            if (RadarPreferences.radarUseJni) {
+            if (RadarPreferences.useJni) {
                 Jni.colorGen(buffers.colorBuffer, 4 * list.size, buffers.colorArray)
             } else {
                 UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * list.size, buffers.colorArray)
@@ -1122,45 +1136,14 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         buffers.isInitialized = true
     }
 
-    fun constructStiLines() {
-        constructGenericLinesShort(stiBuffers, WXGLNexradLevel3StormInfo.decodeAndPlot(context, indexString, projectionNumbers))
-    }
+//    private fun constructStiLines() {
+////        constructLinesShort(stiBuffers, WXGLNexradLevel3StormInfo.decodeAndPlot(context, indexString, projectionNumbers))
+//        constructLines(stiBuffers)
+//    }
 
-    fun deconstructStiLines() {
-        deconstructGenericLines(stiBuffers)
-    }
-
-    fun constructWatchMcdLines() {
-        constructGenericLines(mcdBuffers)
-        constructGenericLines(watchBuffers)
-        constructGenericLines(watchTornadoBuffers)
-    }
-
-    fun deconstructWatchMcdLines() {
-        deconstructGenericLines(mcdBuffers)
-        deconstructGenericLines(watchBuffers)
-        deconstructGenericLines(watchTornadoBuffers)
-    }
-
-    @Synchronized fun constructWarningLines() {
-        constructGenericLines(warningTstBuffers)
-        constructGenericLines(warningTorBuffers)
-        constructGenericLines(warningFfwBuffers)
-    }
-
-    fun deconstructWarningLines() {
-        deconstructGenericLines(warningTstBuffers)
-        deconstructGenericLines(warningTorBuffers)
-        deconstructGenericLines(warningFfwBuffers)
-    }
-
-    fun constructGenericWarningLines() {
-        genericWarningBuffers.forEach {
-            if (it.warningType!!.isEnabled) {
-                constructGenericLines(it)
-            } else {
-                deconstructGenericLines(it)
-            }
+    @Synchronized fun constructWarningLines(polygonWarningType: PolygonWarningType) {
+        if (warningBuffers[polygonWarningType]!!.warningType!!.isEnabled) {
+            constructLines(warningBuffers[polygonWarningType]!!)
         }
     }
 
@@ -1171,13 +1154,13 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         if (RadarPreferences.locationDotFollowsGps) {
             locationDotBuffers.lenInit = 0f
         } else {
-            locationDotBuffers.lenInit = RadarPreferences.radarLocdotSize.toFloat()
+            locationDotBuffers.lenInit = RadarPreferences.locdotSize.toFloat()
         }
         locYCurrent = locYCurrent.replace("-", "")
         val x = locXCurrent.toDoubleOrNull() ?: 0.0
         val y = locYCurrent.toDoubleOrNull() ?: 0.0
         if (PolygonType.LOCDOT.pref) {
-            locationMarkers = UtilityLocation.latLonAsDouble()
+            locationMarkers = UtilityLocation.latLonAsDouble().toMutableList()
         }
         if (RadarPreferences.locationDotFollowsGps || archiveMode) {
             locationMarkers.add(x)
@@ -1197,7 +1180,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         locIconBuffers.initialize(32 * locIconBuffers.triangleCount,
                 8 * locIconBuffers.triangleCount,
                 6 * locIconBuffers.triangleCount,
-                RadarPreferences.radarColorLocdot)
+                RadarPreferences.colorLocdot)
 
 
         //location bug
@@ -1205,11 +1188,11 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         locBugBuffers.initialize(32 * locBugBuffers.triangleCount,
                 8 * locBugBuffers.triangleCount,
                 6 * locBugBuffers.triangleCount,
-                RadarPreferences.radarColorLocdot)
+                RadarPreferences.colorLocdot)
 
 
         /* not needed .. have custom location icon
-        if (RadarPreferences.radarUseJni) {
+        if (RadarPreferences.useJni) {
             Jni.colorGen(
                     locCircleBuffers.colorBuffer,
                     2 * locCircleBuffers.triangleCount,
@@ -1228,7 +1211,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         if (RadarPreferences.locationDotFollowsGps) {
             locIconBuffers.lenInit = locationDotBuffers.lenInit
             val gpsCoordinates = UtilityCanvasProjection.computeMercatorNumbers(gpsX, gpsY, projectionNumbers)
-            gpsLatLonTransformed[0] = -gpsCoordinates[0].toFloat()
+            gpsLatLonTransformed[0] = -1.0f * gpsCoordinates[0].toFloat()
             gpsLatLonTransformed[1] = gpsCoordinates[1].toFloat()
 
 
@@ -1265,6 +1248,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     /*
     *
     *
+//elys mod 
+//conus radar    
 -127.620375523875420
 50.406626367301044
     * */
@@ -1291,25 +1276,20 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         conusRadarBuffers.isInitialized = true
     }
 
+
     fun deconstructConusRadar() {
         conusRadarBuffers.isInitialized = false
     }
 
     fun constructSpotters() {
         spotterBuffers.isInitialized = false //leave it at false or the app will crash randomly
-        spotterBuffers.lenInit = RadarPreferences.radarSpotterSize.toFloat()
+        spotterBuffers.lenInit = PolygonType.SPOTTER.size
         spotterBuffers.triangleCount = 6
         UtilitySpotter.get(context)
         spotterBuffers.xList = UtilitySpotter.x
         spotterBuffers.yList = UtilitySpotter.y
         constructTriangles(spotterBuffers)
     }
-
-    fun deconstructSpotters() {
-        spotterBuffers.isInitialized = false
-    }
-
-
 
     //elys mod - hailmod
     //hiBuffersList
@@ -1371,7 +1351,6 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
     }
 
-
     fun deconstructHi() {
         hiBuffersList = mutableListOf()
     }
@@ -1388,6 +1367,28 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     fun deconstructUserPoints() {
         userPointsBuffers.isInitialized = false
     }
+ 
+    
+    
+    //I can only use this for Spotter....  
+    // FIXME TODO future use for Spotter
+    fun constructTrianglesGeneric(type: PolygonType) {
+        triangleBuffers[type]!!.lenInit = type.size
+        when (type) {
+            //PolygonType.HI -> triangleBuffers[type]!!.setXYList(WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString))
+            PolygonType.SPOTTER -> {
+                triangleBuffers[type]!!.isInitialized = false
+                triangleBuffers[type]!!.triangleCount = 6
+                UtilitySpotter.get(context)
+                triangleBuffers[type]!!.xList = UtilitySpotter.x
+                triangleBuffers[type]!!.yList = UtilitySpotter.y
+            }
+            //PolygonType.TVS -> triangleBuffers[type]!!.setXYList(WXGLNexradLevel3TVS.decodeAndPlot(context, rid, indexString))
+        }
+        constructTriangles(triangleBuffers[type]!!)
+    }
+    
+    
 
     private fun constructTriangles(buffers: ObjectOglBuffers) {
         buffers.count = buffers.xList.size
@@ -1401,15 +1402,15 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         buffers.draw(projectionNumbers)
         buffers.isInitialized = true
     }
-
+    //elys mod
     private fun constructMarker(buffers: ObjectOglBuffers) {
         buffers.count = buffers.xList.size
         if (buffers.count == 0) {
-            Log.i(TAG, "buffer count is 0")
-            Log.i(TAG, "Not loading anything!")
+            Log.i("wx", "buffer count is 0")
+            Log.i("wx", "Not loading anything!")
             buffers.isInitialized = false
         } else {
-            Log.i(TAG, "buffer count: " + buffers.count)
+            Log.i("wx", "buffer count: " + buffers.count)
             buffers.triangleCount = 1
             buffers.initialize(
                     24 * buffers.count * buffers.triangleCount,
@@ -1425,13 +1426,13 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     private fun constructIcon(buffers: ObjectOglBuffers, icon: String) {
         buffers.count = buffers.xList.size
         buffers.hailIcon = icon
-        Log.i(TAG, "buffer icon: " + buffers.hailIcon)
+        Log.i("wx", "buffer icon: " + buffers.hailIcon)
         if (buffers.count == 0) {
-            Log.i(TAG, "buffer count is 0")
-            Log.i(TAG, "Not loading anything!")
+            Log.i("wx", "buffer count is 0")
+            Log.i("wx", "Not loading anything!")
             buffers.isInitialized = false
         } else {
-            Log.i(TAG, "buffer count: " + buffers.count)
+            Log.i("wx", "buffer count: " + buffers.count)
             buffers.triangleCount = 1
             buffers.initialize(
                 24 * buffers.count * buffers.triangleCount,
@@ -1444,30 +1445,23 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         }
     }
 
+    //elys mod - custom TVS icon
     fun constructTvs() {
-        tvsBuffers.lenInit = 0f //RadarPreferences.radarTvsSize.toFloat()
+        tvsBuffers.lenInit = 0f 
         tvsBuffers.setXYList(WXGLNexradLevel3TVS.decodeAndPlot(context, rid, indexString))
         constructMarker(tvsBuffers)
 
     }
 
-    fun deconstructTvs() {
-        tvsBuffers.isInitialized = false
-    }
+    //fun deconstructTvs() {
+    //    tvsBuffers.isInitialized = false
+    //}
 
-    fun constructMpdLines() {
-        constructGenericLines(mpdBuffers)
-    }
-
-    fun deconstructMpdLines() {
-        deconstructGenericLines(mpdBuffers)
-    }
-
-    private fun constructGenericLines(buffers: ObjectOglBuffers) {
+    fun constructLines(buffers: ObjectOglBuffers) {
+        buffers.isInitialized = false
         var list = listOf<Double>()
         when (buffers.type) {
             PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH, PolygonType.WATCH_TORNADO -> list = UtilityWatch.add(projectionNumbers, buffers.type).toList()
-            PolygonType.TST, PolygonType.TOR, PolygonType.FFW -> list = WXGLPolygonWarnings.add(projectionNumbers, buffers.type).toList()
             PolygonType.STI -> list = WXGLNexradLevel3StormInfo.decodeAndPlot(context, indexString, projectionNumbers).toList()
             else -> if (buffers.warningType != null) {
                 list = WXGLPolygonWarnings.addGeneric(projectionNumbers, buffers.warningType!!).toList()
@@ -1491,7 +1485,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         } else {
             buffers.initialize(4 * 4 * totalBinsGeneric, 0, 3 * 4 * totalBinsGeneric, buffers.warningType!!.color)
         }
-        if (RadarPreferences.radarUseJni) {
+        if (RadarPreferences.useJni) {
             Jni.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
         } else {
             UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
@@ -1514,28 +1508,32 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         buffers.isInitialized = true
     }
 
-    private fun deconstructGenericLines(buffers: ObjectOglBuffers) {
-        buffers.chunkCount = 0
-        buffers.isInitialized = false
-    }
-
-    fun constructWBLines() {
-        constructGenericLinesShort(wbBuffers, WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, projectionType, false, paneNumber))
-        constructWBLinesGusts()
+    fun constructWindBarbs() {
+        constructLinesShort(wbBuffers, WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, projectionType, false, paneNumber))
+        constructLinesShort(wbGustsBuffers, WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, projectionType, true, paneNumber))
+        //constructWBLinesGusts()
         constructWBCircle()
     }
 
-    private fun constructWBLinesGusts() {
-        constructGenericLinesShort(wbGustsBuffers, WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, projectionType, true, paneNumber))
+    private fun constructWBCircle() {
+        wbCircleBuffers.lenInit = PolygonType.WIND_BARB_CIRCLE.size
+        wbCircleBuffers.xList = UtilityMetar.metarDataList[paneNumber].x
+        wbCircleBuffers.yList = UtilityMetar.metarDataList[paneNumber].y
+        wbCircleBuffers.colorIntArray = UtilityMetar.metarDataList[paneNumber].obsArrAviationColor
+        wbCircleBuffers.count = wbCircleBuffers.xList.size
+        wbCircleBuffers.triangleCount = 6
+        val count = wbCircleBuffers.count * wbCircleBuffers.triangleCount
+        wbCircleBuffers.initialize(24 * count, 12 * count, 9 * count)
+        wbCircleBuffers.lenInit = scaleLength(wbCircleBuffers.lenInit)
+        wbCircleBuffers.draw(projectionNumbers)
+        wbCircleBuffers.isInitialized = true
     }
 
-    fun deconstructWBLines() {
-        wbBuffers.isInitialized = false
-        deconstructWBLinesGusts()
-        deconstructWBCircle()
-    }
+//    private fun constructWBLinesGusts() {
+//        constructLinesShort(wbGustsBuffers, WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, projectionType, true, paneNumber))
+//    }
 
-    fun constructWpcFronts() {
+    @Synchronized fun constructWpcFronts() {
         wpcFrontBuffersList = mutableListOf()
         wpcFrontPaints = mutableListOf()
         var coordinates: DoubleArray
@@ -1578,33 +1576,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         }
     }
 
-    fun deconstructWpcFronts() {
-        wpcFrontBuffersList = mutableListOf()
-    }
-
-    private fun deconstructWBLinesGusts() {
-        wbGustsBuffers.isInitialized = false
-    }
-
-    private fun constructWBCircle() {
-        wbCircleBuffers.lenInit = RadarPreferences.radarAviationSize.toFloat()
-        wbCircleBuffers.xList = UtilityMetar.metarDataList[paneNumber].x
-        wbCircleBuffers.yList = UtilityMetar.metarDataList[paneNumber].y
-        wbCircleBuffers.colorIntArray = UtilityMetar.metarDataList[paneNumber].obsArrAviationColor
-        wbCircleBuffers.count = wbCircleBuffers.xList.size
-        wbCircleBuffers.triangleCount = 6
-        val count = wbCircleBuffers.count * wbCircleBuffers.triangleCount
-        wbCircleBuffers.initialize(24 * count, 12 * count, 9 * count)
-        wbCircleBuffers.lenInit = scaleLength(wbCircleBuffers.lenInit)
-        wbCircleBuffers.draw(projectionNumbers)
-        wbCircleBuffers.isInitialized = true
-    }
-
-    private fun deconstructWBCircle() {
-        wbCircleBuffers.isInitialized = false
-    }
-
     @Synchronized fun constructSwoLines() {
+        swoBuffers.isInitialized = false
         val hashSwo = UtilitySwoDayOne.hashSwo.toMap()
         var coordinates: DoubleArray
         val fSize = (0..4).filter { hashSwo[it] != null }.sumOf { hashSwo.getOrElse(it) { listOf() }.size }
@@ -1618,7 +1591,6 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             swoBuffers.chunkCount = totalBinsSwo / swoBuffers.breakSize
             swoBuffers.chunkCount = swoBuffers.chunkCount + 1
         }
-        swoBuffers.isInitialized = true
         (0..4).forEach {
             if (hashSwo[it] != null) {
                 for (j in hashSwo.getOrElse(it) { listOf() }.indices step 4) {
@@ -1637,17 +1609,12 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 }
             }
         }
+        swoBuffers.isInitialized = true
     }
 
-    fun deconstructSwoLines() {
-        swoBuffers.isInitialized = false
-    }
-
-    /*
     fun setHiInit(hiInit: Boolean) {
-        hiBuffersList.isInitialized = hiInit
+        hiBuffersList.forEach { it.isInitialized = hiInit }
     }
-    */
 
     fun setTvsInit(tvsInit: Boolean) {
         tvsBuffers.isInitialized = tvsInit

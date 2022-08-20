@@ -55,7 +55,7 @@ object UtilityCanvasWindbarbs {
         if (isGust) {
             paint.color = Color.RED
         } else {
-            paint.color = RadarPreferences.radarColorObsWindbarbs
+            paint.color = RadarPreferences.colorObsWindbarbs
         }
         paint.textSize = textSize.toFloat()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)

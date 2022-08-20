@@ -21,7 +21,6 @@
 
 package joshuatee.wx.wpc
 
-import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 
 internal object UtilityWpcRainfallForecast {
@@ -37,6 +36,4 @@ internal object UtilityWpcRainfallForecast {
         "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
         "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"
     )
-
-    const val activityTitle = R.string.title_activity_hpcrainfall_forecast
 }

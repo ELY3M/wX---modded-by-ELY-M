@@ -26,7 +26,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Paint.Style
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.UtilityLog
@@ -39,14 +38,14 @@ internal object UtilityCanvasGeneric {
             bitmap: Bitmap,
             radarSite: String,
             lineWidth: Int,
-            geographyType: GeographyType,
+            geographyType: RadarGeometryTypeEnum,
             genericByteBuffer: ByteBuffer
     ) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
         paint.strokeWidth = lineWidth.toFloat()
-        paint.color = geographyType.color
+        paint.color = RadarGeometry.dataByType[geographyType]!!.colorInt
         if (projectionType.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }

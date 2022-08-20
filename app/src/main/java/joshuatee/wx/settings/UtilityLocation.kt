@@ -38,7 +38,7 @@ import java.util.*
 
 object UtilityLocation {
 
-    fun latLonAsDouble(): MutableList<Double> {
+    fun latLonAsDouble(): List<Double> {
         val latLon = mutableListOf<Double>()
         (0 until joshuatee.wx.settings.Location.numLocations).forEach {
             val lat: String
@@ -48,9 +48,17 @@ object UtilityLocation {
                 lon = joshuatee.wx.settings.Location.getY(it).replace("-", "")
             } else {
                 val tmpXArr = joshuatee.wx.settings.Location.getX(it).split(":")
-                lat = if (tmpXArr.size > 2) tmpXArr[2] else ""
+                lat = if (tmpXArr.size > 2) {
+                    tmpXArr[2]
+                } else {
+                    ""
+                }
                 val tmpYArr = joshuatee.wx.settings.Location.getY(it).replace("-", "").split(":")
-                lon = if (tmpYArr.size > 1) tmpYArr[1] else ""
+                lon = if (tmpYArr.size > 1) {
+                    tmpYArr[1]
+                } else {
+                    ""
+                }
             }
             latLon.add(To.double(lat))
             latLon.add(To.double(lon))
@@ -90,10 +98,7 @@ object UtilityLocation {
         val sites = mutableListOf<RID>()
         officeArray.forEach {
             val labelArr = it.split(":")
-            sites.add(RID(labelArr[0], getSiteLocation(labelArr[0], prefToken)))
-        }
-        sites.forEach {
-            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM)
+            sites.add(RID(labelArr[0], getSiteLocation(labelArr[0], prefToken), LatLon.distance(location, getSiteLocation(labelArr[0], prefToken), DistanceUnit.KM)))
         }
         sites.sortBy { it.distance }
         return sites[0].name
@@ -103,16 +108,13 @@ object UtilityLocation {
         val radarSites = mutableListOf<RID>()
         GlobalArrays.radars.forEach {
             val labels = it.split(":")
-            radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
+            radarSites.add(RID(labels[0], getSiteLocation(labels[0]), LatLon.distance(location, getSiteLocation(labels[0]), DistanceUnit.MILE)))
         }
         if (includeTdwr) {
             GlobalArrays.tdwrRadars.forEach {
                 val labels = it.split(" ")
-                radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
+                radarSites.add(RID(labels[0], getSiteLocation(labels[0]), LatLon.distance(location, getSiteLocation(labels[0]), DistanceUnit.MILE)))
             }
-        }
-        radarSites.forEach {
-            it.distance = LatLon.distance(location, it.location, DistanceUnit.MILE)
         }
         radarSites.sortBy { it.distance }
         return radarSites.subList(0, count)
@@ -123,18 +125,18 @@ object UtilityLocation {
         val radarSites = mutableListOf<RID>()
         GlobalArrays.radars.forEach {
             val labels = it.split(":")
-            radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
+            radarSites.add(RID(labels[0], getSiteLocation(labels[0]), LatLon.distance(location, getSiteLocation(labels[0]), DistanceUnit.MILE)))
         }
-            GlobalArrays.tdwrRadars.forEach {
-                val labels = it.split(" ")
-                radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
-            }
+        GlobalArrays.tdwrRadars.forEach {
+        val labels = it.split(" ")
+        radarSites.add(RID(labels[0], getSiteLocation(labels[0]), LatLon.distance(location, getSiteLocation(labels[0]), DistanceUnit.MILE)))
+        }
+	
         var currentDistance: Double
         radarSites.forEach {
             currentDistance = LatLon.distance(location, it.location, DistanceUnit.MILE)
             it.distance = currentDistance
         }
-//        Collections.sort(radarSites, RID.DESCENDING_COMPARATOR)
         radarSites.sortBy { it.distance }
         return radarSites[0].name
     }
@@ -171,7 +173,9 @@ object UtilityLocation {
 
 
     fun getNearestSoundingSite(location: LatLon): String {
-        val sites = GlobalArrays.soundingSites.map { RID(it, getSiteLocation(it, "SND")) } as MutableList<RID>
+        val sites = GlobalArrays.soundingSites.map {
+            RID(it, getSiteLocation(it, "SND"), LatLon.distance(location, getSiteLocation(it, "SND"), DistanceUnit.KM))
+        }.toMutableList()
         GlobalArrays.soundingSites.indices.forEach {
             sites[it].distance = LatLon.distance(location, sites[it].location, DistanceUnit.KM)
         }
@@ -181,9 +185,10 @@ object UtilityLocation {
 
     fun getSiteLocation(site: String, officeType: String = "RID"): LatLon {
         // SND, NWS, or RID
-        var addChar = "-"
-        if (officeType == "NWS") {
-            addChar = ""
+        val addChar = if (officeType == "NWS") {
+            ""
+        } else {
+            "-"
         }
         val x: String
         val y: String

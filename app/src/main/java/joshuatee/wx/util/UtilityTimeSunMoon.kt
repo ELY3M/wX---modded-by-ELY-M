@@ -29,6 +29,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.external.ExternalSunriseLocation
 import joshuatee.wx.external.ExternalSunriseSunsetCalculator
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.radar.RID
 import joshuatee.wx.settings.Location
@@ -234,9 +235,38 @@ object UtilityTimeSunMoon {
         } else {
             "Sunrise: $sunRiseTime$am   Sunset: $sunSetTime$pm"
         }
-
     }
 
+    private fun getSunriseSunset(context: Context, latLon: LatLon, shortFormat: Boolean): String {
+        val lat = latLon.latString
+        val lon = latLon.lonString
+        val location = ExternalSunriseLocation(lat, lon)
+        val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
+        val officialSunriseCal = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
+        val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
+        val sunRiseTime: String
+        val sunSetTime: String
+        var am = ""
+        var pm = ""
+        if (!DateFormat.is24HourFormat(context)) {
+            am = "am"
+            pm = "pm"
+            sunRiseTime = officialSunriseCal.get(Calendar.HOUR).toString() + ":" +
+                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(' ', '0')
+            sunSetTime = officialSunsetCal.get(Calendar.HOUR).toString() + ":" +
+                    String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
+        } else {
+            sunRiseTime = officialSunriseCal.get(Calendar.HOUR_OF_DAY).toString() + ":" +
+                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(' ', '0')
+            sunSetTime = officialSunsetCal.get(Calendar.HOUR_OF_DAY).toString() + ":" +
+                    String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
+        }
+        return if (shortFormat) {
+            "$sunRiseTime$am / $sunSetTime$pm"
+        } else {
+            "Sunrise: $sunRiseTime$am   Sunset: $sunSetTime$pm"
+        }
+    }
 
     fun getForHomeScreen(context: Context) =
         getSunriseSunset(context, Location.currentLocationStr, false) + 

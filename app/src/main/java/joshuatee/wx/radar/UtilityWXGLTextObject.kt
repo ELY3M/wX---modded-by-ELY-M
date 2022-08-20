@@ -48,7 +48,7 @@ object UtilityWXGLTextObject {
             textObjects[it].addObservations()
         }
     }
-
+    //elys mod - not removing yet
     fun updateObservationsSinglePane(paneNumber: Int, textObjects: List<WXGLTextObject>) {
         textObjects[paneNumber].initializeObservations()
         textObjects[paneNumber].addObservations()

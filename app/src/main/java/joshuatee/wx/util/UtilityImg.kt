@@ -18,30 +18,25 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//Modded by ELY M.
 
 package joshuatee.wx.util
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
+import android.graphics.*
 import android.graphics.Bitmap.Config
-import android.graphics.Color
-import android.graphics.Matrix
-import android.graphics.Paint
-import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
-import androidx.core.graphics.drawable.DrawableCompat
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
 import joshuatee.wx.radar.UtilityUSImgWX
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.WXGLNexrad
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.ui.UtilityUI
 
@@ -267,4 +262,46 @@ object UtilityImg {
 
     fun getNexradRefBitmap(context: Context, radarSite: String, isInteractive: Boolean) =
             UtilityUSImgWX.layeredImg(context, radarSite, "N0Q", isInteractive)
+
+
+
+   fun changeColor(bitmap: Bitmap, oldcolor: Int, newcolor: Int): Bitmap {
+
+       val allpixels = IntArray(bitmap.getHeight() * bitmap.getWidth())
+
+       bitmap.getPixels(allpixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
+
+       for (i in allpixels.indices) {
+           if (allpixels[i] == oldcolor) {
+               allpixels[i] = newcolor
+           }
+       }
+
+       bitmap.setPixels(allpixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
+       return bitmap
+
+   }
+
+
+
+    fun replaceColor(src: Bitmap, fromColor: Int, targetColor: Int): Bitmap {
+        // Source image size
+        val width = src.width
+        val height = src.height
+        val pixels = IntArray(width * height)
+        //get pixels
+        src.getPixels(pixels, 0, width, 0, 0, width, height)
+        for (x in pixels.indices) {
+            pixels[x] = if (pixels[x] == fromColor) targetColor else pixels[x]
+        }
+        // create result bitmap output
+        val result = Bitmap.createBitmap(width, height, src.config)
+        //set pixels
+        result.setPixels(pixels, 0, width, 0, 0, width, height)
+        return result
+    }
+
+
+
+
 }

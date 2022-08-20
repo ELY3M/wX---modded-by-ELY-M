@@ -19,6 +19,7 @@
 
  */
 //modded by ELY M. (readTextFile() cant be private....)
+//keeping read from uri function
 
 package joshuatee.wx.util
 
@@ -139,6 +140,7 @@ object UtilityIO {
         }
     }
 
+    //elys mod - keeping this
     fun readTextFromUri(context: Context, uri: Uri): String {
         var content = ""
         try {

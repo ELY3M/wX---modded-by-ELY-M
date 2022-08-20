@@ -424,12 +424,12 @@ public object UtilityConusRadar {
         return bitmap
     }
 
-    //adjusted for size of AWV radar.....   NWS radar gif is dead  :(
+    //adjusted for size of new ridge radar.
     fun layerDrawableToBitmapConusSquare(layers: MutableList<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
         val bitmap: Bitmap
         val width = 3400
-        val height = 3680 //test
+        val height = 3400
         if (width > 0 && height > 0) {
             try {
                 bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -514,13 +514,21 @@ public object UtilityConusRadar {
         //bitmap = UtilityImg.eraseBackground(bitmap, Color.WHITE)
         //testing 12-30-20
         //bitmap.eraseColor(Color.TRANSPARENT);
-        bitmap = UtilityImg.eraseBackground(bitmap, Color.WHITE)
-        if (bitmap.height > 10) {
-            bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        //bitmap = UtilityImg.eraseBackground(bitmap, Color.WHITE)
+        //test //erase light blue
+        //bitmap = UtilityImg.eraseBackground(bitmap, Color.rgb(204,255,255))
+
+
+        var bitmap1 = UtilityImg.changeColor(bitmap, Color.WHITE, Color.BLACK)
+
+        var fbitmap = bitmap1
+
+        if (fbitmap.height > 10) {
+            bitmapCanvas = Bitmap.createBitmap(fbitmap.width, fbitmap.height, Bitmap.Config.ARGB_8888)
             UtilityCanvasMain.addCanvasConus(context, bitmapCanvas, scaleType, "latest", 1)
         }
         layers.add(cd)
-        layers.add(BitmapDrawable(context.resources, bitmap))
+        layers.add(BitmapDrawable(context.resources, fbitmap))
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         val finalbitmap: Bitmap = layerDrawableToBitmapConusSquare(layers)
         saveImage(finalbitmap)

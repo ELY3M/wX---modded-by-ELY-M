@@ -32,8 +32,7 @@ object UtilityNwsRadarMosaic {
     fun getNearestMosaic(latLon: LatLon): String {
         val sites = mutableListOf<RID>()
         cityToLatLon.forEach { m ->
-            sites.add(RID(m.key, m.value))
-            sites.last().distance = LatLon.distance(latLon, m.value, DistanceUnit.MILE)
+            sites.add(RID(m.key, m.value, LatLon.distance(latLon, m.value, DistanceUnit.MILE)))
         }
         sites.sortBy { it.distance }
         return sites[0].name

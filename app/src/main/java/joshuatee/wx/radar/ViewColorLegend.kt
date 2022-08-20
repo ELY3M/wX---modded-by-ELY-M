@@ -77,11 +77,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     public override fun onDraw(canvas: Canvas) {
         paintText.style = Paint.Style.FILL
         paintText.strokeWidth = 1f
-        paintText.textSize = RadarPreferences.radarShowLegendTextSize.toFloat() //was 30f
-        paintText.color = RadarPreferences.radarShowLegendTextColor
+        paintText.textSize = RadarPreferences.showLegendTextSize.toFloat() //was 30f
+        paintText.color = RadarPreferences.showLegendTextColor
         //if (!RadarPreferences.blackBg) paintText.color = Color.BLACK
         val startHeight = UIPreferences.actionBarHeight.toFloat()
-        val width = RadarPreferences.radarShowLegendWidth.toFloat() //was 50f
+        val width = RadarPreferences.showLegendWidth.toFloat() //was 50f
         val widthStarting = 0.0f
         val textFromLegend = 10.0f
         val heightFudge = 30.0f

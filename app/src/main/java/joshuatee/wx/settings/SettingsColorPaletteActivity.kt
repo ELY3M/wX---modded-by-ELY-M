@@ -123,7 +123,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 if (ObjectColorPalette.radarColorPalette[typeAsInt] == it.colorMapLabel && it.builtin) {
                     builtinStr = "true"
                     fab2.visibility = View.GONE
-                    fab1.setDrawable(ContextCompat.getDrawable(this, GlobalVariables.ICON_ADD2))
+                    fab1.set(GlobalVariables.ICON_ADD2)
                 }
             }
             return allItems
@@ -178,11 +178,11 @@ class SettingsColorPaletteActivity : BaseActivity() {
         if (rowListItem[position].builtin) {
             builtinStr = "true"
             fab2.visibility = View.GONE
-            fab1.setDrawable(ContextCompat.getDrawable(this, GlobalVariables.ICON_ADD2))
+            fab1.set(GlobalVariables.ICON_ADD2)
         } else {
             builtinStr = "false"
             fab2.visibility = View.VISIBLE
-            fab1.setDrawable(ContextCompat.getDrawable(this, R.drawable.ic_reorder_24dp))
+            fab1.set(R.drawable.ic_reorder_24dp)
         }
         if (rowListItem[position].prefToken == "RADAR_COLOR_PALETTE_$type") {
             ObjectColorPalette.radarColorPalette[typeAsInt] = rowListItem[position].colorMapLabel

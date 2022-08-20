@@ -26,15 +26,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.util.TypedValue
 import android.view.MenuItem
 import android.widget.EditText
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
@@ -168,7 +164,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_reset -> palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1]))
             R.id.action_clear -> palContent.setText("")
-            R.id.action_help -> ObjectDialogue(this,"Not implemented yet.")
             R.id.action_share -> UtilityShare.textAsAttachment(this, palTitle.text.toString(), palContent.text.toString(), "wX_colormap_" + palTitle.text.toString() + ".txt")
             R.id.action_load -> loadSettings()
             else -> return super.onOptionsItemSelected(item)
@@ -212,37 +207,35 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         return txtLocal
     }
 
-    // TODO FIXME deprecation
+    /**
+     * Fires an intent to spin up the "file chooser" UI and select an image.
+     */
     private fun performFileSearch() {
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser.
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        // Filter to only show results that can be "opened", such as a
+        // file (as opposed to a list of contacts or timezones)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
+        // Filter to show only images, using the image MIME data type.
+        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+        // To search for all documents available via installed storage providers,
+        // it would be "*/*".
         intent.type = "*/*"
         startActivityForResult(intent, READ_REQUEST_CODE)
-//        startForResult.launch(intent)
     }
 
-//    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//        result: ActivityResult ->
-//        if (result.resultCode == Activity.RESULT_OK) {
-////            val uri = result.data
-////            displaySettings(readTextFromUri(uri!!))
-//            result?.let {
-//                val uri = it.data
-//                displaySettings(readTextFromUri(uri!!))
-//            }
-//        }
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, resultData)
+        super.onActivityResult(requestCode, resultCode, resultData)
         // The ACTION_OPEN_DOCUMENT intent was sent with the request code
         // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
         // response to some other intent, and the code below shouldn't run at all.
+
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             // The document selected by the user won't be returned in the intent.
             // Instead, a URI to that document will be contained in the return intent
             // provided to this method as a parameter.
             // Pull that URI using resultData.getData().
+            //val uri: Uri
             resultData?.let {
                 val uri = it.data
                 displaySettings(readTextFromUri(uri!!))

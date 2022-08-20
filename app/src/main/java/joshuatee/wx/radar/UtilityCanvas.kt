@@ -44,8 +44,16 @@ internal object UtilityCanvas {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
         val path = Path()
-        val paintList = listOf(RadarPreferences.radarColorFfw, RadarPreferences.radarColorTstorm, RadarPreferences.radarColorTor)
-        val dataList = listOf(ObjectPolygonWarning.severeDashboardFfw.value, ObjectPolygonWarning.severeDashboardTst.value, ObjectPolygonWarning.severeDashboardTor.value)
+        val paintList = listOf(RadarPreferences.colorFfw, RadarPreferences.colorTstorm, RadarPreferences.colorTor)
+        val dataList = listOf(
+//                ObjectPolygonWarning.severeDashboardFfw.value,
+//                ObjectPolygonWarning.severeDashboardTst.value,
+//                ObjectPolygonWarning.severeDashboardTor.value
+
+                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.FlashFloodWarning]!!.getData(),
+                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.TornadoWarning]!!.getData(),
+                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.ThunderstormWarning]!!.getData(),
+        )
         if (projectionType.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
@@ -71,7 +79,7 @@ internal object UtilityCanvas {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
         paint.strokeWidth = 1.0f
-        paint.color = GeographyType.CITIES.color
+        paint.color = RadarPreferences.colorCity
         if (projectionType.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
@@ -104,7 +112,7 @@ internal object UtilityCanvas {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
         paint.strokeWidth = 1.0f
-        paint.color = RadarPreferences.radarColorLocdot
+        paint.color = RadarPreferences.colorLocdot
         if (projectionType.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
@@ -115,17 +123,16 @@ internal object UtilityCanvas {
         } else {
             UtilityCanvasProjection.compute4326Numbers(x, y, projectionNumbers)
         }
-        paint.color = RadarPreferences.radarColorLocdot
+        paint.color = RadarPreferences.colorLocdot
 
 	//elys mod
         //custom locationdot//
         if (RadarPreferences.locationDotFollowsGps) {
             val locationicon: Bitmap = BitmapFactory.decodeFile(GlobalVariables.FilesPath + "location.png");
-            val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, RadarPreferences.radarLocIconSize, RadarPreferences.radarLocIconSize, false)
+            val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, RadarPreferences.locIconSize, RadarPreferences.locIconSize, false)
             canvas.drawBitmap(locationiconresized, coordinates[0].toFloat(), coordinates[1].toFloat(), null)
         } else {
         canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
-
         }
 
     }

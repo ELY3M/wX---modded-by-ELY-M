@@ -1,5 +1,6 @@
-<!-- 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+/*
+
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -16,20 +17,17 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
- -->
+ */
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sv"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:scrollbars="none">
+package joshuatee.wx.radar
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/padding_ll"
-        android:stretchColumns="*" />
-
-</ScrollView>
+enum class RadarGeometryTypeEnum {
+    CaLines,
+    MxLines,
+    StateLines,
+    CountyLines,
+    HwLines,
+    HwExtLines,
+    LakeLines,
+    NONE,
+}

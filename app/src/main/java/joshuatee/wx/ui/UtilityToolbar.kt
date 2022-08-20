@@ -61,8 +61,7 @@ object UtilityToolbar {
         }
     }
 
-    // overload to simply set elevation
-    fun fullScreenMode(toolbar: Toolbar, blank: Boolean) {
+    fun setElevation(toolbar: Toolbar) {
         toolbar.elevation = UIPreferences.elevationPref
     }
 
@@ -80,20 +79,17 @@ object UtilityToolbar {
 
     fun showHide(toolbar: Toolbar) {
         if (!UIPreferences.lockToolbars) {
-            if (toolbar.isShown) toolbar.visibility = View.GONE else toolbar.visibility = View.VISIBLE
+            if (toolbar.isShown) {
+                toolbar.visibility = View.GONE
+            } else {
+                toolbar.visibility = View.VISIBLE
+            }
         }
     }
 
     // thanks inner_class7 http://stackoverflow.com/questions/26489079/evenly-spaced-menu-items-on-toolbar
     // modified slightly
-
-    /**
-     * This method will take however many items you have in your
-     * menu/menu_main.xml and distribute them across your devices screen
-     * evenly using a Toolbar. Enjoy
-     */
-    // FIXME TODO https://stackoverflow.com/questions/63276134/getter-for-defaultdisplay-display-is-deprecated-deprecated-in-java
-    // FIXME TODO this feature needs to be deprecated, it has caused issues for users and is not aligned at all with platform standards
+    // FIXME TODO remove after 2023-12-31
     fun setupEvenlyDistributedToolbar(activity: Activity, toolbarBottom: Toolbar, menuRes: Int) {
         // Use Display metrics to get Screen Dimensions
         val display = activity.windowManager.defaultDisplay

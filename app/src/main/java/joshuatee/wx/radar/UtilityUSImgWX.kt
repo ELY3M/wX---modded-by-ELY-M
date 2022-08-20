@@ -70,7 +70,7 @@ object UtilityUSImgWX {
             } catch (e: Exception) { UtilityLog.handleException(e) }
         }
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = ColorDrawable(RadarPreferences.nexradRadarBackgroundColor)
+        val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
         try {
             var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
             if (!product.startsWith("L2")) {
@@ -111,7 +111,7 @@ object UtilityUSImgWX {
             scaleType = ProjectionType.WX_RENDER_48
         }
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = ColorDrawable(RadarPreferences.nexradRadarBackgroundColor)
+        val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
         var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
         if (!product.startsWith("L2")) {
             if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {

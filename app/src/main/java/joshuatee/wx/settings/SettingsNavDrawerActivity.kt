@@ -27,7 +27,7 @@ import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectSwitch
 import joshuatee.wx.ui.VBox
-import joshuatee.wx.util.UtilityAlertDialog
+import joshuatee.wx.util.Utility
 
 class SettingsNavDrawerActivity : BaseActivity() {
 
@@ -52,14 +52,14 @@ class SettingsNavDrawerActivity : BaseActivity() {
 
     override fun onBackPressed() {
         UtilityNavDrawer.generateNewTokenList(this)
-        UtilityAlertDialog.restart()
+        Utility.restart()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 UtilityNavDrawer.generateNewTokenList(this)
-                UtilityAlertDialog.restart()
+                Utility.restart()
             }
             else -> return super.onOptionsItemSelected(item)
         }

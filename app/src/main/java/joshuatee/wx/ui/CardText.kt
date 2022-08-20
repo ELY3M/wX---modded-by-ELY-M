@@ -42,7 +42,10 @@ class CardText(context: Context) {
     private var padding = UIPreferences.padding
 
     init {
-        textViewSetup(this)
+        tv.setPadding(padding)
+        tv.gravity = Gravity.START
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+        tv.setTextColor(UIPreferences.backgroundColor)
         tv.setTextIsSelectable(true)
         tv.isFocusable = false
         card.addWidget(tv)
@@ -250,15 +253,5 @@ class CardText(context: Context) {
         setPaddingAmount(UIPreferences.paddingSettings)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
         setTextColor(UIPreferences.textHighlightColor)
-    }
-
-    companion object {
-
-        fun textViewSetup(cardText: CardText) {
-            cardText.tv.setPadding(cardText.padding)
-            cardText.tv.gravity = Gravity.START
-            cardText.tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
-            cardText.tv.setTextColor(UIPreferences.backgroundColor)
-        }
     }
 }

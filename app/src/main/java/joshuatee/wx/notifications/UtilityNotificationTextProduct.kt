@@ -44,11 +44,11 @@ object UtilityNotificationTextProduct {
         if (!NotificationPreferences.notifTextProdStr.contains(prod)) {
             Utility.writePref(context, PREF_TOKEN, NotificationPreferences.notifTextProdStr + ":" + prod)
             NotificationPreferences.notifTextProdStr = NotificationPreferences.notifTextProdStr + ":" + prod
-            ObjectPopupMessage(context, view, "$prod saved to notification list")
+            ObjectPopupMessage(view, "$prod saved to notification list")
         } else {
             NotificationPreferences.notifTextProdStr = NotificationPreferences.notifTextProdStr.replace(":$prod", "")
             Utility.writePref(context, PREF_TOKEN, NotificationPreferences.notifTextProdStr)
-            ObjectPopupMessage(context, view, "$prod removed from notification list")
+            ObjectPopupMessage(view, "$prod removed from notification list")
             Utility.removePref(context, PREF_TOKEN + "_" + prod)
         }
     }

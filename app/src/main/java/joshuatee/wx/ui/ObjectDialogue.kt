@@ -47,7 +47,7 @@ class ObjectDialogue {
                 dialog.dismiss()
                 UtilityUI.immersiveMode(context)
             }
-            objectDialogue.setSingleChoiceItems { dialog, which ->
+            objectDialogue.connect { dialog, which ->
                 fn(which)
                 getContent()
                 dialog.dismiss()
@@ -110,6 +110,8 @@ class ObjectDialogue {
         val ad = alertDialog.create()
         ad.setCanceledOnTouchOutside(true)
         ad.show()
+        val textView: TextView = ad.findViewById(android.R.id.message)!!
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
     }
 
     fun setupTextView(textView: TextView) {
@@ -126,7 +128,7 @@ class ObjectDialogue {
         alertDialog.show()
     }
 
-    fun setSingleChoiceItems(listener: DialogInterface.OnClickListener) {
+    fun connect(listener: DialogInterface.OnClickListener) {
         alertDialog.setSingleChoiceItems(arrayAdapter, checkedItem, listener)
     }
 

@@ -47,6 +47,8 @@ object WXGLNexrad {
 
     fun isProductTdwr(product: String) = product.startsWith("TV") || product == "TZL" || product.startsWith("TZ")
 
+    fun isTdwr(product: String) = product in tdwrProductList
+
     // next 3 maps are for color palette editor : Map<String, String>
     val productCodeStringToName = mapOf(
         94 to "Reflectivity",

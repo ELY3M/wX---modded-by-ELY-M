@@ -23,6 +23,8 @@ package joshuatee.wx.nhc
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityString
 
 object UtilityNhc {
 
@@ -55,6 +57,13 @@ object UtilityNhc {
         //    statusList.add(status)
         //}
 
+        var publicAdvisories = mutableListOf<String>()
+        val publicAdvisoriesChunk = UtilityString.parseColumn(html, "\"publicAdvisory\": \\{(.*?)\\}")
+        for (chunk in publicAdvisoriesChunk) {
+            val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
+            publicAdvisories.add(token)
+        }
+
         if (ids.isNotEmpty()) {
             ids.indices.forEach { index ->
                 val objectNhcStormDetails = ObjectNhcStormDetails(
@@ -70,7 +79,7 @@ object UtilityNhc {
                         longitudes[index],
                         intensities[index],
                         "",
-                        "",
+                        Utility.safeGet(publicAdvisories, index),
                         "",
                         "",
                         ""

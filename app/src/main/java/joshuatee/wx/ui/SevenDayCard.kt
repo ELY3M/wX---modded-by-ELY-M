@@ -29,7 +29,7 @@ import joshuatee.wx.fragments.UtilityLocationFragment
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.util.UtilityForecastIcon
 
-class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, day: Int, forecasts: List<String>) {
+class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, forecast: String) {
 
     private val card = Card(context)
     private val photo = Photo(context)
@@ -47,11 +47,7 @@ class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, day: Int, f
         }
         hbox.addLayout(vbox)
         card.addLayout(hbox)
-        val items = if (forecasts.size > day) {
-            forecasts[day].split(": ")
-        } else {
-            listOf()
-        }
+        val items = forecast.split(": ")
         if (items.size > 1) {
             if (isUS) {
                 setTopLine(
@@ -74,7 +70,7 @@ class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, day: Int, f
             setBottomLine(items[1])
         }
         if (!UIPreferences.locfragDontShowIcons) {
-            photo.setImage(UtilityForecastIcon.getIcon(context, iconUrl))
+            photo.set(UtilityForecastIcon.getIcon(context, iconUrl))
         }
     }
 

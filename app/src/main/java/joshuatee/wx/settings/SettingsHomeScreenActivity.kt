@@ -29,7 +29,6 @@ import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.wpc.UtilityWpcText
 import java.util.*
 
@@ -53,32 +52,31 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         favoriteString = UIPreferences.homescreenFav
         homeScreenFavOrig = favoriteString
         setTitle("Manage Home Screen", "Tap item to delete or move.")
-        UtilityToolbar.fullScreenMode(toolbar, false)
         ObjectFab(this, R.id.fab, GlobalVariables.ICON_ADD) { dialogueMain.show() }
         updateList(true)
         recyclerView = ObjectRecyclerView(this, R.id.card_list, labels, ::prodClicked)
         dialogueMain = ObjectDialogue(this, "Select text products:", UtilityHomeScreen.localChoicesText + UtilityWpcText.labels)
-        dialogueMain.setSingleChoiceItems { dialog, which ->
+        dialogueMain.connect { dialog, which ->
             alertDialogClicked(dialogueMain, "TXT-", which)
             dialog.dismiss()
         }
         dialogueImages = ObjectDialogue(this, "Select image products:", UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts)
-        dialogueImages.setSingleChoiceItems { dialog, which ->
+        dialogueImages.connect { dialog, which ->
             alertDialogClicked(dialogueImages, "", which)
             dialog.dismiss()
         }
         dialogueAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        dialogueAfd.setSingleChoiceItems { dialog, which ->
+        dialogueAfd.connect { dialog, which ->
             alertDialogClicked(dialogueAfd, "TXT-" + "AFD", which)
             dialog.dismiss()
         }
         dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars + GlobalArrays.tdwrRadarsForHomeScreen)
-        dialogueRadar.setSingleChoiceItems { dialog, which ->
+        dialogueRadar.connect { dialog, which ->
             alertDialogClicked(dialogueRadar, "NXRD-", which)
             dialog.dismiss()
         }
         dialogueWeb = ObjectDialogue(this, "Select Web page:", UtilityHomeScreen.localChoicesWeb)
-        dialogueWeb.setSingleChoiceItems { dialog, which ->
+        dialogueWeb.connect { dialog, which ->
             alertDialogClicked(dialogueWeb, "WEB-", which)
             dialog.dismiss()
         }
@@ -236,7 +234,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     override fun onBackPressed() {
         if (favoriteString != homeScreenFavOrig) {
-            UtilityAlertDialog.restart()
+            Utility.restart()
         } else {
             super.onBackPressed()
         }
@@ -281,7 +279,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             updateList()
             recyclerView.notifyDataSetChanged()
         } else {
-            ObjectPopupMessage(this, recyclerView.get(), "$textProduct is already in home screen.")
+            ObjectPopupMessage(recyclerView.get(), "$textProduct is already in home screen.")
         }
     }
 }

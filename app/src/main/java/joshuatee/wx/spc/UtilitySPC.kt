@@ -28,10 +28,8 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.ObjectPolygonWarning
-import joshuatee.wx.objects.ObjectPolygonWatch
-import joshuatee.wx.objects.ObjectWarning
-import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.*
+import joshuatee.wx.radar.WXGLPolygonWarnings
 
 object UtilitySpc {
 
@@ -147,9 +145,14 @@ object UtilitySpc {
         var tStormCount = 0
         var floodCount = 0
         if (UIPreferences.checktor) {
-            tStormCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
-            torCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
-            floodCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
+//            tStormCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
+//            torCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
+//            floodCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
+
+            tStormCount = WXGLPolygonWarnings.getCount(PolygonWarningType.ThunderstormWarning)
+            torCount = WXGLPolygonWarnings.getCount(PolygonWarningType.TornadoWarning)
+            floodCount = WXGLPolygonWarnings.getCount(PolygonWarningType.FlashFloodWarning)
+
             if (tStormCount > 0 || torCount > 0 || floodCount > 0) {
                 usWarnPresent = true
             }

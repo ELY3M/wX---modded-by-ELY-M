@@ -18,12 +18,16 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M. 
 
 package joshuatee.wx.objects
 
 import android.content.Context
+import android.graphics.Color
+import joshuatee.wx.radar.WXGLPolygonWarnings
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityIO
+import joshuatee.wx.util.UtilityDownloadNws
 
 class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
 
@@ -34,24 +38,22 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
 
     init {
         storage.update(context)
-        color = Utility.readPrefInt(context, prefTokenColor, type.initialColor)
-        isEnabled = Utility.readPref(context, prefTokenEnabled, "false").startsWith("t")
+        update()
         timer = DownloadTimer("WARNINGS_" + getTypeName())
     }
 
-    // Not currently used
     fun download() {
         if (timer.isRefreshNeeded(context)) {
-            val html = UtilityIO.getHtml(getUrl())
+            val html = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(getUrl())
             if (html != "") {
                 storage.valueSet(context, html)
             }
         }
     }
 
-//    fun getData(): String {
-//        return storage.value
-//    }
+    fun getData(): String {
+        return storage.value
+    }
 
     fun getUrlToken() = longName[type] ?: ""
 
@@ -59,27 +61,55 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
 
     private fun getTypeName() = type.toString().replace("PolygonType.", "")
 
-    val name get() = type.urlToken.replace("%20", " ")
+    val name get() = longName[type]!!.replace("%20", " ")
 
-    val prefTokenEnabled get() = "RADAR_SHOW_" + type.productCode
+    val prefTokenEnabled get() = "RADAR_SHOW_" + namesByEnumId[type]!!
 
-    val prefTokenColor get() = "RADAR_COLOR_" + type.productCode
+    val prefTokenColor get() = "RADAR_COLOR_" + namesByEnumId[type]!!
 
-    private val prefTokenStorage get() = "SEVERE_DASHBOARD_" + type.productCode
+    private val prefTokenStorage get() = "SEVERE_DASHBOARD_" + namesByEnumId[type]!!
+
+    private fun update() {
+        color = Utility.readPrefInt(context, prefTokenColor, defaultColors[type]!!)
+        isEnabled = Utility.readPref(context, prefTokenEnabled, "false").startsWith("t")
+        if (type == PolygonWarningType.TornadoWarning || type == PolygonWarningType.FlashFloodWarning || type == PolygonWarningType.ThunderstormWarning) {
+            isEnabled = RadarPreferences.warnings
+        }
+    }
 
     companion object {
 
-        val severeDashboardTor = DataStorage("SEVERE_DASHBOARD_TOR")
-        val severeDashboardTst = DataStorage("SEVERE_DASHBOARD_TST")
-        val severeDashboardFfw = DataStorage("SEVERE_DASHBOARD_FFW")
+        var polygonDataByType = mutableMapOf<PolygonWarningType, ObjectPolygonWarning>()
 
-        private var polygonDataByType = mutableMapOf<PolygonWarningType, ObjectPolygonWarning>()
+        // NWS default colors: https://www.weather.gov/help-map
+        private val defaultColors = mapOf(
+                PolygonWarningType.TornadoWarning to Color.RED,
+                PolygonWarningType.ThunderstormWarning to Color.YELLOW,
+                PolygonWarningType.FlashFloodWarning to Color.GREEN,
+                PolygonWarningType.SpecialMarineWarning to Color.CYAN,
+                PolygonWarningType.SnowSquallWarning to Color.rgb(199, 21, 133),
+                PolygonWarningType.DustStormWarning to Color.rgb(255, 228, 196),
+                PolygonWarningType.SpecialWeatherStatement to Color.rgb(255, 228, 181)
+        )
 
-        private val polygonList = listOf(
+        val namesByEnumId = mapOf(
+                PolygonWarningType.ThunderstormWarning to "TSTORM",
+                PolygonWarningType.TornadoWarning to "TOR",
+                PolygonWarningType.FlashFloodWarning to "FFW",
+                PolygonWarningType.SnowSquallWarning to "SQW",
+                PolygonWarningType.DustStormWarning to "DSW",
+                PolygonWarningType.SpecialWeatherStatement to "SPS",
+                PolygonWarningType.SpecialMarineWarning to "SMW"
+        )
+
+        val polygonList = listOf(
             PolygonWarningType.SpecialMarineWarning,
             PolygonWarningType.SnowSquallWarning,
             PolygonWarningType.DustStormWarning,
-            PolygonWarningType.SpecialWeatherStatement
+            PolygonWarningType.SpecialWeatherStatement,
+            PolygonWarningType.TornadoWarning,
+            PolygonWarningType.ThunderstormWarning,
+            PolygonWarningType.FlashFloodWarning,
         )
 
         val longName = mapOf(
@@ -87,9 +117,9 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
             PolygonWarningType.SnowSquallWarning to "Snow%20Squall%20Warning",
             PolygonWarningType.DustStormWarning to "Dust%20Storm%20Warning",
             PolygonWarningType.SpecialWeatherStatement to "Special%20Weather%20Statement",
-//            PolygonType.tor: "Tornado%20Warning",
-//            PolygonType.tst: "Severe%20Thunderstorm%20Warning",
-//            PolygonType.ffw: "Flash%20Flood%20Warning",
+            PolygonWarningType.TornadoWarning to "Tornado%20Warning",
+            PolygonWarningType.ThunderstormWarning to "Severe%20Thunderstorm%20Warning",
+            PolygonWarningType.FlashFloodWarning to "Flash%20Flood%20Warning",
         )
 
         const val baseUrl = "https://api.weather.gov/alerts/active?event="
@@ -105,24 +135,20 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
         }
 
         fun load(context: Context) {
-            println("ObjectPolygonWarning load")
-            severeDashboardTor.update(context)
-            severeDashboardTst.update(context)
-            severeDashboardFfw.update(context)
-
             polygonList.forEach {
-                polygonDataByType[it] = ObjectPolygonWarning(context, it)
+                if (!polygonDataByType.containsKey(it)) {
+                    polygonDataByType[it] = ObjectPolygonWarning(context, it)
+                } else {
+                    polygonDataByType[it]!!.update()
+                }
             }
         }
 
         fun isCountNonZero(): Boolean {
-            val tstCount = ObjectWarning.getStormCount(severeDashboardTst.value)
-            val torCount = ObjectWarning.getStormCount(severeDashboardTor.value)
-            val ffwCount = ObjectWarning.getStormCount(severeDashboardFfw.value)
-            var count = tstCount + torCount + ffwCount
+            var count = 0
             polygonList.forEach {
                 if (polygonDataByType[it]!!.isEnabled) {
-                    count += ObjectWarning.getStormCountGeneric(polygonDataByType[it]!!.storage.value)
+                    count += WXGLPolygonWarnings.getCount(it)
                 }
             }
             return count > 0

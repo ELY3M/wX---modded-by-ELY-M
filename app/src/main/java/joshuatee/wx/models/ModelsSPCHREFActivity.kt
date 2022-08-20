@@ -81,29 +81,28 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 box.makeHorizontal()
             }
         }
-        toolbarBottom.setOnMenuItemClickListener(this)
+        objectToolbarBottom.connect(this)
         title = arguments!![2]
-        val menu = toolbarBottom.menu
-        timeMenuItem = menu.findItem(R.id.action_time)
-        runMenuItem = menu.findItem(R.id.action_run)
-        miStatusParam1 = menu.findItem(R.id.action_status_param1)
-        miStatusParam2 = menu.findItem(R.id.action_status_param2)
+        timeMenuItem = objectToolbarBottom.find(R.id.action_time)
+        runMenuItem = objectToolbarBottom.find(R.id.action_run)
+        miStatusParam1 = objectToolbarBottom.find(R.id.action_status_param1)
+        miStatusParam2 = objectToolbarBottom.find(R.id.action_status_param2)
         if (om.numPanes < 2) {
             fab1 = ObjectFab(this, R.id.fab1) { om.leftClick() }
             fab2 = ObjectFab(this, R.id.fab2) { om.rightClick() }
-            menu.findItem(R.id.action_img1).isVisible = false
-            menu.findItem(R.id.action_img2).isVisible = false
+            objectToolbarBottom.hide(R.id.action_img1)
+            objectToolbarBottom.hide(R.id.action_img2)
             if (UIPreferences.fabInModels) {
-                menu.findItem(R.id.action_back).isVisible = false
-                menu.findItem(R.id.action_forward).isVisible = false
+                objectToolbarBottom.hide(R.id.action_back)
+                objectToolbarBottom.hide(R.id.action_forward)
             }
             fab1?.visibility = View.GONE
             fab2?.visibility = View.GONE
             miStatusParam2.isVisible = false
         } else {
-            menu.findItem(R.id.action_multipane).isVisible = false
+            objectToolbarBottom.hide(R.id.action_multipane)
         }
-        miStatus = menu.findItem(R.id.action_status)
+        miStatus = objectToolbarBottom.find(R.id.action_status)
         miStatus.title = "in through"
         om.displayData = DisplayData(this, this, om.numPanes, om)
         om.sector = Utility.readPref(this, om.prefSector, om.sectors[0])
@@ -154,13 +153,11 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_time -> ObjectDialogue.generic(this, om.times, ::getContent) { om.setTimeIdx(it) }
             R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) { om.run = om.rtd.listRun[it] }
             R.id.action_multipane -> Route(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", arguments!![1], arguments!![2]))
-            R.id.action_share -> {
-                if (UIPreferences.recordScreenShare) {
+            R.id.action_share -> if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(this, om.animRan, om)
+                    UtilityModels.legacyShare(this, om)
                 }
-            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -239,16 +236,11 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_J -> {
-                if (event.isCtrlPressed) om.leftClick()
-                true
-            }
-            KeyEvent.KEYCODE_K -> {
-                if (event.isCtrlPressed) om.rightClick()
-                true
-            }
+        when (keyCode) {
+            KeyEvent.KEYCODE_J -> if (event.isCtrlPressed) om.leftClick()
+            KeyEvent.KEYCODE_K -> if (event.isCtrlPressed) om.rightClick()
             else -> super.onKeyUp(keyCode, event)
         }
+        return true
     }
 }
