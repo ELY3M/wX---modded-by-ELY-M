@@ -134,7 +134,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
             }
 	        //elys mod - 3 finger to show conus radar map
             MotionEvent.ACTION_MOVE -> {
-	        //elys mod
+	            //elys mod
                 //3 fingers press to show conus
                 val count = event.pointerCount
                 UtilityLog.d("wx", "Fingers Count: "+count)
@@ -149,7 +149,8 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
                 } else {
                     if (!locationFragment) {
                         (0 until numPanes).forEach {
-                            wxglRenders[it].displayHold = false
+                            wxglTextObjects[it].hideLabels()
+                            wxglRenders[it].displayHold = true
                             wxglRenders[it].displayConus = false
                         }
                     }

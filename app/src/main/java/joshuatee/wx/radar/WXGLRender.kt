@@ -437,12 +437,12 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         //
         // Draw Nexrad radar
         //
-	//elys mod
+	    //elys mod
         //show/hide radar
+        UtilityLog.d("radarshow", "displayHold: " + displayHold)
         UtilityLog.d("radarshow", "showRadarWhenPan: " + RadarPreferences.showRadarWhenPan)
         UtilityLog.d("radarshow", "showradar: " + RadarPreferences.showRadar)
-        if ((RadarPreferences.showRadar) || (displayHold && !RadarPreferences.showRadarWhenPan)) {
-        //if (displayHold && !RadarPreferences.showRadarWhenPan) {
+        if ((RadarPreferences.showRadar) && (!(displayHold && !RadarPreferences.showRadarWhenPan))) {
         //org
         //if (!(displayHold && !RadarPreferences.showRadarWhenPan)) {
             (0 until chunkCount).forEach {
@@ -475,7 +475,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 	
 	
             //elys mod - hailmod
-	    //Custom Hail Icons
+	        //Custom Hail Icons
             hiBuffersList.forEach {
                 if (zoom > zoomToHideMiscFeatures) {
                     drawHI(it)
