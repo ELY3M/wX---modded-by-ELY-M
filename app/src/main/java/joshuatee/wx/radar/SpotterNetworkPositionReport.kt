@@ -4,7 +4,6 @@
 
 package joshuatee.wx.radar
 
-import android.annotation.SuppressLint
 import joshuatee.wx.MyApplication
 import android.content.Context
 import android.content.pm.PackageManager
@@ -22,7 +21,6 @@ import java.text.SimpleDateFormat
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -32,12 +30,11 @@ import java.util.*
 import kotlinx.coroutines.*
 
 
-
 object SpotterNetworkPositionReport {
-    var TAG = "joshuatee-SpotterNetworkPositionReport"
+    var TAG = "SpotterNetworkPositionReport"
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var success: Boolean = false
-    val timer = DownloadTimer("SPOTTERGPSREPORT")
+    val timer = DownloadTimer("SpotterNetworkPositionReport")
     var key: String = RadarPreferences.sn_key
     var lat: Double = 0.0
     var lon: Double = 0.0
@@ -70,12 +67,11 @@ object SpotterNetworkPositionReport {
     private val locationListener: LocationListener = object : LocationListener {
 
         override fun onLocationChanged(location: Location) {
-            //FIXME!!!!  TESTING
             if (timer.isRefreshNeeded(MyApplication.appContext)) {
                 GetLocation(location)
-                Log.i(TAG, "onLocationChanged lat: " + location.latitude + " lon: " + location.longitude)
+                Log.i(TAG, "Spotter onLocationChanged lat: " + location.latitude + " lon: " + location.longitude)
             } else {
-                Log.i(TAG, "Timer not run out!!!!")
+                Log.i(TAG, "Spotter Timer not run out!!!!")
             }
             }
 
@@ -166,6 +162,10 @@ object SpotterNetworkPositionReport {
         strbearing = info[6]
         strgpsprovider = info[8].toString()
 
+
+        if (timer.isRefreshNeeded(MyApplication.appContext)) {
+            Log.i(TAG, "Refresh needed!!!!")
+        }
 
         Send_Location_Task()
         //var task = Send_Location_Task()

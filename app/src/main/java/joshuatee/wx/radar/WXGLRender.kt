@@ -1147,26 +1147,26 @@ g_free(clear);
         }
     }
 
-    fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
-        var locYCurrent = locYCurrentF
+    fun constructLocationDot(locXCurrent: Double, locYCurrent: Double, archiveMode: Boolean) {
+        //var locYCurrent = locYCurrentF
         var locationMarkers = mutableListOf<Double>()
 	
         if (RadarPreferences.locationDotFollowsGps) {
             locationDotBuffers.lenInit = 0f
         } else {
-            locationDotBuffers.lenInit = RadarPreferences.locdotSize.toFloat()
+            locationDotBuffers.lenInit = PolygonType.LOCDOT.size
         }
-        locYCurrent = locYCurrent.replace("-", "")
-        val x = locXCurrent.toDoubleOrNull() ?: 0.0
-        val y = locYCurrent.toDoubleOrNull() ?: 0.0
+        //locYCurrent = locYCurrent.replace("-", "")
+        //val x = locXCurrent.toDoubleOrNull() ?: 0.0
+        //val y = locYCurrent.toDoubleOrNull() ?: 0.0
         if (PolygonType.LOCDOT.pref) {
             locationMarkers = UtilityLocation.latLonAsDouble().toMutableList()
         }
         if (RadarPreferences.locationDotFollowsGps || archiveMode) {
-            locationMarkers.add(x)
-            locationMarkers.add(y)
-            gpsX = x
-            gpsY = y
+            locationMarkers.add(locXCurrent)
+            locationMarkers.add(locYCurrent * -1.0)
+            gpsX = locXCurrent
+            gpsY = locYCurrent * -1.0
         }
         locationDotBuffers.xList = locationMarkers.filterIndexed { index: Int, _: Double -> index.isEven() }.toDoubleArray()
         locationDotBuffers.yList = locationMarkers.filterIndexed { index: Int, _: Double -> !index.isEven() }.toDoubleArray()

@@ -10,17 +10,23 @@ import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.intentfilter.androidpermissions.PermissionManager
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.notifications.AlertService
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.Route
+import joshuatee.wx.radar.SpotterNetworkPositionReport
+import joshuatee.wx.radar.SpotterNetworkPositionReportService
 import joshuatee.wx.radar.UtilityConusRadar
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityStorePreferences
 import joshuatee.wx.util.Utility
@@ -151,6 +157,8 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         UtilityLog.d("wx", "downloading conus on start....")
         UtilityConusRadar.getConusImage()
 
+        //start service for Spotter Network Location Auto Reporting
+        applicationContext.startService(Intent(applicationContext, SpotterNetworkPositionReportService::class.java))
 
         if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
             Route(this, WX::class.java)
@@ -162,7 +170,6 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         }
 
     }
-
 
 
     fun checkfiles(drawable: Int, filename: String) {

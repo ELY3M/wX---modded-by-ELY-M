@@ -22,14 +22,12 @@
 package joshuatee.wx.radar
 
 import android.Manifest
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
@@ -41,7 +39,6 @@ import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
 
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 abstract class VideoRecordActivity : AppCompatActivity() {
 
     companion object {
@@ -92,7 +89,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
 
     protected fun checkOverlayPerms() {
         if (isStoragePermissionGranted) {
-            if (Build.VERSION.SDK_INT > 22) checkDrawOverlayPermission() else fireScreenCaptureIntent()
+            checkDrawOverlayPermission()
         }
     }
 
@@ -104,8 +101,8 @@ abstract class VideoRecordActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_PERM) {
-            if (Build.VERSION.SDK_INT >= 23) {
-                if (Settings.canDrawOverlays(this)) fireScreenCaptureIntent()
+            if (Settings.canDrawOverlays(this)) {
+                fireScreenCaptureIntent()
             }
         }
         if (requestCode == CREATE_SCREEN_CAPTURE && resultCode == Activity.RESULT_OK) {
@@ -117,31 +114,24 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     }
 
     private fun checkDrawOverlayPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            /** check if we already  have permission to draw over other apps  */
-            if (!Settings.canDrawOverlays(this)) {
-                /** if not construct intent to request permission  */
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-                /** request permission via start activity for result  */
-                startActivityForResult(intent, REQUEST_CODE_PERM)
-            } else {
-                fireScreenCaptureIntent()
-            }
+        /** check if we already  have permission to draw over other apps  */
+        if (!Settings.canDrawOverlays(this)) {
+            /** if not construct intent to request permission  */
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+            /** request permission via start activity for result  */
+            startActivityForResult(intent, REQUEST_CODE_PERM)
+        } else {
+            fireScreenCaptureIntent()
         }
     }
 
-    private //permission is automatically granted on sdk<23 upon installation
-    val isStoragePermissionGranted: Boolean
+    private val isStoragePermissionGranted: Boolean
         get() {
-            return if (Build.VERSION.SDK_INT >= 23) {
-                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    true
-                } else {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-                    false
-                }
-            } else {
+            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 true
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                false
             }
         }
 

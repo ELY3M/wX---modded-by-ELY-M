@@ -17,12 +17,30 @@
 // [REF] After Oct 2022 - raise targetSdkVersion to Android 13 API 33 from API 32
 // [REF] ObjectNhc (activity) and UtilityNhc (notification) should share code
 // [REF] consolidate single and multipane as much as possible
-// [REF] nexrad single pane - remove use of wxglRender, wxglSurfaceView and rely on single element list to mimic multipane
-// [REF] NexradState class to bundle wxglrender, surfaceview, textobject, radarSite, prod, old* and methods to restore/save prefs
+// [REF] look for methods that take top/bottom toolbars and can instead pass custom activity
+// [REF] nexrad getLatLon is not optimal
+// [REF] NexradArguments for multipane
+// [FIX] nexrad multipane change tilt and then tap ref icon, changes back to lowest tilt (unlike single pan)
+// [REF] nexrad convert locXCurrent to double
 ```
 [[_TOC_]]
 
-## 55672 2022_08_19
+## 55675 2022_08_20
+* [REF] NexradDraw, reduce arg count with NexradState
+* [REF] VideoRecordActivity.kt, remove obsolete SDK checks after going to 23
+
+## 55674 2022_08_20
+* [REF] more work on NexradState for LocationFragment
+* [REF] LocationFragment, remove paneList and SDK check 23 related to activity
+
+## 55673 2022_08_20
+* [REF] more work on NexradState
+* [ADD] Nexrad multipane, if you tap on the text in the upper left that lists radar site/product it will take you to severe dashboard (similar to single pane)
+* [ADD] Nexrad multipane, if warnings(tor/ffw/tst) enabled, show in top toolbar similar to single pane
+* [REF] Nexrad multipane, remove idxIntAl, it is redundant to NexradState.curRadar
+
+## 55672 2022_08_20
+* [REF] use NexradState in multi pane Nexrad
 
 ## 55671 2022_08_19
 * [REF] nexrad - migrate away from paneList

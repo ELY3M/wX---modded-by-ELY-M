@@ -25,7 +25,6 @@ import android.content.Context
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.R
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.Utility
 
 object WXGLNexrad {
@@ -192,31 +191,6 @@ object WXGLNexrad {
     fun isRidTdwr(rid: String) = GlobalArrays.tdwrRadars.any { rid == RegExp.space.split(it)[0] }
 
     fun getTdwrFromRid(rid: String) = closestTdwrToNexrad[rid] ?: ""
-
-    fun savePrefs(context: Context, prefPrefix: String, wxglRender: WXGLRender) {
-        Utility.writePref(context, prefPrefix + "_RID", wxglRender.rid)
-        Utility.writePref(context, prefPrefix + "_PROD", wxglRender.product)
-        Utility.writePrefFloat(context, prefPrefix + "_ZOOM", wxglRender.zoom)
-        Utility.writePrefFloat(context, prefPrefix + "_X", wxglRender.x)
-        Utility.writePrefFloat(context, prefPrefix + "_Y", wxglRender.y)
-        RadarPreferences.wxoglRid = wxglRender.rid
-        RadarPreferences.wxoglProd = wxglRender.product
-        RadarPreferences.wxoglZoom = wxglRender.zoom
-        RadarPreferences.wxoglX = wxglRender.x
-        RadarPreferences.wxoglY = wxglRender.y
-    }
-
-    fun savePrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {
-        Utility.writePref(context, prefPrefix + "_RID" + idx.toString(), wxglRender.rid)
-        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
-        Utility.writePrefFloat(context, prefPrefix + "_ZOOM" + idx.toString(), wxglRender.zoom)
-        Utility.writePrefFloat(context, prefPrefix + "_X" + idx.toString(), wxglRender.x)
-        Utility.writePrefFloat(context, prefPrefix + "_Y" + idx.toString(), wxglRender.y)
-    }
-
-    fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {
-        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
-    }
 
     fun getRadarInfo(context: Context, pane: String) = Utility.readPref(context, "WX_RADAR_CURRENT_INFO$pane", "")
 

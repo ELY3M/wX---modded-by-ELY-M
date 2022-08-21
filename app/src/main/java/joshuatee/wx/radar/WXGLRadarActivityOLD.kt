@@ -238,9 +238,8 @@ class WXGLRadarActivityOLD : VideoRecordActivity(), OnMenuItemClickListener {
         menu.findItem(R.id.action_jellybean_drawtools).isVisible = false
 
         // disable new Level3 super-res until NWS is past deployment phase
-	//elys mod - I enabled those menus 
-        menu.findItem(R.id.action_n0b).isVisible = true
-        menu.findItem(R.id.action_n0g).isVisible = true
+        menu.findItem(R.id.action_n0b).isVisible = false
+        menu.findItem(R.id.action_n0g).isVisible = false
 
         delay = UtilityImg.animInterval(this)
         img = findViewById(R.id.iv)
@@ -254,17 +253,17 @@ class WXGLRadarActivityOLD : VideoRecordActivity(), OnMenuItemClickListener {
         wxglRender = WXGLRender(this, 0)
         wxglRenders.add(wxglRender)
         wxglSurfaceViews.add(wxglSurfaceView)
-        NexradDraw.initGlView(
-                wxglSurfaceView,
-                wxglSurfaceViews,
-                wxglRender,
-                wxglRenders,
-                this,
-                toolbar,
-                toolbarBottom,
-                changeListener,
-                archiveMode
-        )
+//        NexradDraw.initGlView(
+//                wxglSurfaceView,
+//                wxglSurfaceViews,
+//                wxglRender,
+//                wxglRenders,
+//                this,
+//                toolbar,
+//                toolbarBottom,
+//                changeListener,
+//                archiveMode
+//        )
         wxglRender.product = "N0Q"
         oglInView = true
         if (arguments == null) {
@@ -838,7 +837,7 @@ class WXGLRadarActivityOLD : VideoRecordActivity(), OnMenuItemClickListener {
     override fun onStop() {
         super.onStop()
         if (!archiveMode && !fixedSite) {
-            WXGLNexrad.savePrefs(this, "WXOGL", wxglRender)
+           // WXGLNexrad.savePrefs(this, "WXOGL", wxglRender)
         }
         // otherwise cpu will spin with no fix but to kill app
         inOglAnim = false
@@ -970,7 +969,7 @@ class WXGLRadarActivityOLD : VideoRecordActivity(), OnMenuItemClickListener {
         UtilityLog.d("wx", "speed: "+speedCurrent)
         UtilityLog.d("wx", "speed in mph: "+(speedCurrent * 3.6 * 0.62137119))
         getGPSFromDouble()
-        wxglRender.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
+//        wxglRender.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
         wxglSurfaceView.requestRender()
         if (RadarPreferences.wxoglCenterOnLocation) {
             UtilityWXGLTextObject.hideLabels(1, wxglTextObjects)
@@ -1195,7 +1194,7 @@ class WXGLRadarActivityOLD : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun showMultipaneRadar(numberOfPanes: String) {
         if (!archiveMode && !fixedSite) {
-            WXGLNexrad.savePrefs(this, "WXOGL", wxglRender)
+            //WXGLNexrad.savePrefs(this, "WXOGL", wxglRender)
         }
         Route.radarMultiPane(this, arrayOf(joshuatee.wx.settings.Location.rid, "", numberOfPanes, "true"))
     }

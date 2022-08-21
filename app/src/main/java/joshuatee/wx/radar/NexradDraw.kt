@@ -22,10 +22,8 @@
 
 package joshuatee.wx.radar
 
-import android.app.Activity
 import android.opengl.GLSurfaceView
 import android.view.View
-import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.objects.*
 import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.settings.RadarPreferences
@@ -33,46 +31,39 @@ import joshuatee.wx.util.UtilityLog
 
 internal object NexradDraw {
 
-    fun initGlviewFragment(
-            wxglSurfaceView: WXGLSurfaceView,
+    fun initGlviewMainScreen(
             index: Int,
-            wxglRenders: List<WXGLRender>,
-            wxglSurfaceViews: List<WXGLSurfaceView>,
-            wxglTextObjects: List<WXGLTextObject>,
+            nexradState: NexradStateMainScreen,
             changeListener: WXGLSurfaceView.OnProgressChangeListener
     ): Boolean {
-        wxglSurfaceView.setEGLContextClientVersion(2)
-        wxglTextObjects[index].setWXGLRender(wxglRenders[index])
-        wxglRenders[index].indexString = index.toString()
-        wxglSurfaceView.setRenderer(wxglRenders[index])
-        wxglSurfaceView.setRenderVar(wxglRenders[index], wxglRenders, wxglSurfaceViews)
-        wxglSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-        wxglSurfaceView.setOnProgressChangeListener(changeListener)
-        wxglRenders[index].zoom = RadarPreferences.wxoglSize / 10.0f
-        wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize / 10.0f
+        nexradState.wxglSurfaceViews[index].setEGLContextClientVersion(2)
+        nexradState.wxglTextObjects[index].setWXGLRender(nexradState.wxglRenders[index])
+        nexradState.wxglRenders[index].indexString = index.toString()
+        nexradState.wxglSurfaceViews[index].setRenderer(nexradState.wxglRenders[index])
+        nexradState.wxglSurfaceViews[index].setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews)
+        nexradState.wxglSurfaceViews[index].renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+        nexradState.wxglSurfaceViews[index].setOnProgressChangeListener(changeListener)
+        nexradState.wxglRenders[index].zoom = RadarPreferences.wxoglSize / 10.0f
+        nexradState.wxglSurfaceViews[index].scaleFactor = RadarPreferences.wxoglSize / 10.0f
         return true
     }
 
     fun initGlView(
-            wxglSurfaceView: WXGLSurfaceView,
-            wxglSurfaceViews: List<WXGLSurfaceView>,
-            wxglRender: WXGLRender,
-            wxglRenders: List<WXGLRender>,
-            activity: Activity,
-            toolbar: Toolbar,
-            toolbarBottom: Toolbar,
+            index: Int,
+            nexradState: NexradState,
+            activity: VideoRecordActivity,
             changeListener: WXGLSurfaceView.OnProgressChangeListener,
             archived: Boolean = false
     ) {
-        wxglSurfaceView.setEGLContextClientVersion(2)
-        wxglSurfaceView.setRenderer(wxglRender)
-        wxglSurfaceView.setRenderVar(wxglRender, wxglRenders, wxglSurfaceViews, activity)
-        wxglSurfaceView.fullScreen = true
-        wxglSurfaceView.setOnProgressChangeListener(changeListener)
-        wxglSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-        wxglSurfaceView.toolbar = toolbar
-        wxglSurfaceView.toolbarBottom = toolbarBottom
-        wxglSurfaceView.archiveMode = archived
+        nexradState.wxglSurfaceViews[index].setEGLContextClientVersion(2)
+        nexradState.wxglSurfaceViews[index].setRenderer(nexradState.wxglRenders[index])
+        nexradState.wxglSurfaceViews[index].setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews, activity)
+        nexradState.wxglSurfaceViews[index].fullScreen = true
+        nexradState.wxglSurfaceViews[index].setOnProgressChangeListener(changeListener)
+        nexradState.wxglSurfaceViews[index].renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+        nexradState.wxglSurfaceViews[index].toolbar = activity.toolbar
+        nexradState.wxglSurfaceViews[index].toolbarBottom = activity.toolbarBottom
+        nexradState.wxglSurfaceViews[index].archiveMode = archived
     }
 
     fun initGeom(
@@ -155,7 +146,7 @@ internal object NexradDraw {
         }
         if (PolygonType.LOCDOT.pref || RadarPreferences.locationDotFollowsGps) {
             val latLon = fnGetLatLon()
-            wxglRenders[index].constructLocationDot(latLon.latString, latLon.lonString, archived)
+            wxglRenders[index].constructLocationDot(latLon.lat, latLon.lon, archived)
         } else {
             wxglRenders[index].deconstructLocationDot()
         }
@@ -216,12 +207,13 @@ internal object NexradDraw {
         }
         if (PolygonType.LOCDOT.pref || RadarPreferences.locationDotFollowsGps) {
             val latLon = fnGetLatLon()
-            wxglRender.constructLocationDot(latLon.latString, latLon.lonString, archived)
+            wxglRender.constructLocationDot(latLon.lat, latLon.lon, archived)
         } else {
             wxglRender.deconstructLocationDot()
         }
     }
 
+    // TODO FIXME move to NexradState
     fun resetGlview(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender) {
         wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize / 10.0f
         wxglRender.setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)

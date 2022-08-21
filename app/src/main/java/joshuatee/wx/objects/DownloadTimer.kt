@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//Modded by ELY M.
 
 package joshuatee.wx.objects
 
@@ -35,11 +36,17 @@ class DownloadTimer(private val identifier: String) {
     private var lastRefresh = 0.toLong()
 
     fun isRefreshNeeded(context: Context): Boolean {
-        var refreshDataInMinutes: Int = maxOf(Utility.readPrefInt(context, "RADAR_REFRESH_INTERVAL", 3), 6)
+        var refreshDataInMinutes: Int =
+            maxOf(Utility.readPrefInt(context, "RADAR_REFRESH_INTERVAL", 3), 6)
         if (identifier.contains("WARNINGS"))
             refreshDataInMinutes = Utility.readPrefInt(context, "RADAR_REFRESH_INTERVAL", 3)
-        if (identifier == "SEVERE_DASHBOARD_ACTIVITY")
+        if (identifier == "SEVERE_DASHBOARD_ACTIVITY") {
             refreshDataInMinutes = 3
+        }
+        //elys mod --- 5 mins for now for SN Auto Report
+        if (identifier == "SpotterNetworkPositionReport") {
+            refreshDataInMinutes = 5
+        }
         var refreshNeeded = false
         val currentTime = ObjectDateTime.currentTimeMillis()
         val currentTimeSeconds = currentTime / 1000

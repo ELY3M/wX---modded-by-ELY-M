@@ -28,8 +28,6 @@ import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.util.UtilityLog
 
 object NexradLayerDownload {
 
@@ -42,8 +40,6 @@ object NexradLayerDownload {
             radarUpdateFn: () -> Unit,
             showWpcFronts: Boolean = true
     ) {
-
-
         //
         // Warnings
         //

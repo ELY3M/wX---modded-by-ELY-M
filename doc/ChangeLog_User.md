@@ -6,6 +6,43 @@ FAQ can be accessed via Settings -> About
 
 Please also review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md) impacting all or some users.
 
+## 55XXX 2022_0X_XX (BETA)
+This beta is the 2nd beta release that has been impacted by a significant re-write (ie refactor) of many parts of the program.
+This was necessary to make the code base easier to understand/maintain and be more consistent with newer versions such as the
+desktop versions. As a result, in some areas the program should appear faster and be efficient with respect data data download.
+This especially holds true with Nexrad radar and the "Severe Dashboard". In addition, limitations present for many years have been
+fixed. As with any major work, new bugs might have been introduced.
+Please email me if something seems not right.
+-- updates through 55674:
+* [ADD] Nexrad multipane, if you tap on the text in the upper left that lists radar site/product it will take you to severe dashboard (similar to single pane)
+* [ADD] Nexrad multipane, if warnings(tor/ffw/tst) enabled, show in top toolbar similar to single pane
+* [FIX] tap on any NHC notification would cause a crash (user reported)
+* [FIX] NHC graphics for ATL storms were not working
+* [ADD] severe dashboard - warnings/watch/mcd/mpd are downloaded in parallel
+* [ADD] to meet the Oct 2022 announcement - raise minSDK to Android 6 API 23 from API 21
+* [FIX] Day 8-14 Hazard Outlook is to large to display via default options
+* [FIX] in Color Palette Editor remove the unimplemented "help" option
+* [FIX] in Color Palette Editor remove the "load from file" option - please use copy/paste instead. It is not worth the complexity to leave this in place
+* [ADD] in settings->radar WPC Fronts line size is now a configurable item
+* [ADD] Us Alerts - if in landscape do 2 columns
+* [ADD] Nexrad radar has had a large chunk of it re-written to modernize the code and to help improve performance
+*       by doing more work in parallel. Please do email me if any bugs are encountered.
+* [ADD] For new NWS radar mosaic, tile icon in MISC tab will show the last viewed location. Main submenu will continue to show nearest image.
+* [ADD] in Nexrad single pane some settings changes that previously required restarting the nexrad view no longer require (like adding CA/MX borders)
+* [FIX] wpc mpd as viewed in playlist has HTML tags showing (changed WpcTextProductsActivity.kt)
+* [ADD] Nexrad on main screen and multipane nexrad now show SPC Convective Outlooks if configured to do so
+* [FIX] Nexrad long press observation dialogue was not respecting the text size setting
+* [FIX] nexrad - long press and select the "Beam Height" entry changed the radar site, it should do nothing
+* [FIX] MCD/MPD/Watch viewer won't crash if text product is not yet available
+* [ADD] Nexrad radar option "Show radar during a pan/drag motion" which is enabled by default to mimic historic behavior
+* [FIX] SPC SREF - remove help from submenu as it doesn't add value
+* [FIX] SPC SREF - correct formatting for status of current model run in submenu
+* [ADD] Multi-pane nexrad now shows WPC Fronts if configured
+* [ADD] Spc Storm Reports drawer with states used to filter is now sorted
+* [FIX] if user chose to not use main screen radar floating action button and also chose to use a navigation drawer, the radar FAB would not show
+* [FIX] adhoc forecast via long press in nexrad was not showing correct sunrise/sunset data
+* [FIX] If audio was previously paused, going into another activity with text to speech controls shows text "stop button" instead of icon
+
 ## 55655 2022_08_11 (BETA)
 * [ADD] Material3 "You" partial implementation for all themes
 * [FIX] TouchImageView2.java, add try/catch in onDraw to handle images that are to large. Show nothing but don't crash

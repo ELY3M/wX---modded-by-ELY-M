@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55672"
-    android:versionName="55672-elys"
+    android:versionCode="55675"
+    android:versionName="55675-elys"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -113,7 +113,10 @@
       android:label="@string/title_activity_text_screen"
       android:parentActivityName="WX" >
   </activity>
-
+  <service
+      android:name=".radar.SpotterNetworkPositionReportService"
+      android:enabled="true" >
+  </service>
   <service
       android:name=".notifications.AlertService"
       android:enabled="true" >
