@@ -22,6 +22,7 @@
 #
 ## DONE!
 ==================================== 
+* added ACRA Crash Logger from https://www.acra.ch and updated privacy policy because of acra crash logger.  This is temporary.  
 * added Idle Time in Spotter Info popup.  Now, you can see how long they been idling since their last report time.   
 * I finally fixed how hail icons works. I know it have been long time that radar was showing wrong hail icons for hail sizes. It should show correct hail icons for hail sizes from now on.  The hail icons are in wX folder on the phone memory or sd card.  This idea came from GRLevelx and PYKL3. this meant to allow users to change hail icons.  just have to use png and follow image names.         
 * as temp fix, I switched conus radar to WPC for now.   I know the radar on weather.gov is changed and no longer using static gif files.   
