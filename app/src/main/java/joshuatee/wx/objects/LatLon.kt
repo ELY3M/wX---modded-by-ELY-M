@@ -121,6 +121,8 @@ class LatLon() {
 
     fun print()= "$latString $lonString "
 
+    fun prettyPrint()= "${latString.take(6)}, ${lonString.take(7)}"
+
     companion object {
         // 1.1515 is the number of statute miles in a nautical mile
         // 1.609344 is the number of kilometres in a mile

@@ -510,7 +510,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }	    	
             // elys mod
             // UserPoints
-	    //	
+	        //
             if (RadarPreferences.userPoints) {
                 listOf(userPointsBuffers).forEach {
                 if (zoom > userPointsBuffers.scaleCutOff) {
@@ -522,7 +522,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 	
             //
             // location dots
-	    //
+	        //
             //elys mod
             if (RadarPreferences.locationDotFollowsGps) {
                 locIconBuffers.chunkCount = 1
@@ -1347,6 +1347,7 @@ g_free(clear);
             Log.i("hailconstloop", "hail setDouble: " + WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber)
 
             constructIcon(buff, hailList[it].hailIcon)
+            //constructMarker(buff)
         }
 
     }
@@ -1612,9 +1613,15 @@ g_free(clear);
         swoBuffers.isInitialized = true
     }
 
-    fun setHiInit(hiInit: Boolean) {
-        hiBuffersList.forEach { it.isInitialized = hiInit }
+    //fun setHiInit(hiInit: Boolean) {
+    //    hiBuffersList.forEach { it.isInitialized = hiInit }
+    //}
+
+    fun clearHailList() {
+        UtilityLog.d("hail", "clearHailList()")
+        hiBuffersList.clear()
     }
+
 
     fun setTvsInit(tvsInit: Boolean) {
         tvsBuffers.isInitialized = tvsInit

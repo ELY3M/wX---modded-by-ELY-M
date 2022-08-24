@@ -64,9 +64,7 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
 
     private fun update(index: Int) {
         objectImageSummary.set(index, bitmaps[index])
-        objectImageSummary.connect(index) {
-            Route.wpcRainfallByDay(this, index.toString())
-        }
+        objectImageSummary.connect(index) { Route.wpcRainfallByDay(this, index.toString()) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -130,5 +130,8 @@ class ObjectImageMap(
         get() = map.visibility
         set(value) { map.visibility = value }
 
+    val isHidden
+        get() = visibility == View.GONE
+
     fun get() = map
 }

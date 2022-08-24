@@ -26,7 +26,6 @@ package joshuatee.wx.fragments
 import android.content.*
 import java.util.Locale
 import android.os.Bundle
-import android.os.Handler
 import androidx.fragment.app.FragmentActivity
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -36,7 +35,6 @@ import android.webkit.WebView
 import android.widget.RelativeLayout
 import android.widget.ScrollView
 import androidx.fragment.app.Fragment
-import joshuatee.wx.Extensions.parse
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.canada.UtilityCanada
@@ -48,10 +46,6 @@ import joshuatee.wx.settings.*
 import joshuatee.wx.ui.*
 
 class LocationFragment : Fragment() {
-
-    //elys mod
-    //private var sn_Handler_m: Handler? = null
-    //private var sn_Interval = 300000 // 5 mins by default
 
     //
     // Displays the main content when wX is first opened including current conditions
@@ -89,15 +83,17 @@ class LocationFragment : Fragment() {
     private var dataNotInitialized = true
     private var alertDialogStatus: ObjectDialogue? = null
     private val alertDialogStatusList = mutableListOf<String>()
-    private var idxIntG = 0
-    private var dialogRadarLongPress: ObjectDialogue? = null
-    private val radarLongPressItems = mutableListOf<String>()
+//    private var idxIntG = 0
+//    private var longPressDialogue: ObjectDialogue? = null
+//    private val radarLongPressItems = mutableListOf<String>()
     private var objectHazards = ObjectHazards()
     private var objectSevenDay = ObjectSevenDay()
     private var locationChangedSevenDay = false
     private var locationChangedHazards = false
     private var objectCurrentConditions = ObjectCurrentConditions()
     private lateinit var nexradState: NexradStateMainScreen
+    private lateinit var nexradLongPressMenu: NexradLongPressMenu
+    private lateinit var nexradArguments: NexradArguments
 
     private fun addDynamicCards() {
         var currentConditionsAdded = false
@@ -105,7 +101,11 @@ class LocationFragment : Fragment() {
         val cards = mutableListOf<Card>()
         val homeScreenTokens = homescreenFavLocal.split(":").dropLastWhile { it.isEmpty() }
         val numberOfRadars = homeScreenTokens.count { it == "OGL-RADAR" || it.contains("NXRD-") }
+        nexradArguments = NexradArguments()
+        nexradArguments.locXCurrent = Location.latLon.lat
+        nexradArguments.locYCurrent = Location.latLon.lon
         nexradState = NexradStateMainScreen(MyApplication.appContext, numberOfRadars, homeScreenTokens)
+        nexradLongPressMenu = NexradLongPressMenu(activityReference, nexradState, nexradArguments, ::longPressRadarSiteSwitch)
         var index = 0
         homeScreenTokens.forEach { token ->
             if (token == "TXT-CC" || token == "TXT-CC2") {
@@ -158,7 +158,7 @@ class LocationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupAlertDialogStatus()
-        setupRadarLongPress()
+        //setupRadarLongPress()
         val view = inflater.inflate(R.layout.fragment_location, container, false)
         homescreenFavLocal = UIPreferences.homescreenFav
         if (homescreenFavLocal.contains("TXT-CC") || homescreenFavLocal.contains("TXT-HAZ") || homescreenFavLocal.contains("TXT-7DAY")) {
@@ -195,7 +195,8 @@ class LocationFragment : Fragment() {
         getContent()
         if (UIPreferences.locDisplayImg) {
             nexradState.wxglSurfaceViews.indices.forEach {
-                glviewInitialized = NexradDraw.initGlviewMainScreen(it, nexradState, changeListener)
+                nexradState.wxglSurfaceViews[it].index = it
+                glviewInitialized = NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
             }
         }
         scrollView = view.findViewById(R.id.sv)
@@ -254,16 +255,6 @@ class LocationFragment : Fragment() {
         lastRefresh = currentTime / 1000
         // TODO FIXME what is this for?
         Utility.writePrefLong(MyApplication.appContext, "LOC_LAST_UPDATE", lastRefresh)
-
-/*
-        //elys mod
-        if (RadarPreferences.sn_locationreport) {
-            UtilityLog.d("wx", "starting location report")
-            sn_Handler_m = Handler(Looper.getMainLooper())
-            start_sn_reporting()
-        }
-*/
-
     }
 
     override fun onResume() {
@@ -292,7 +283,7 @@ class LocationFragment : Fragment() {
         if (UIPreferences.locDisplayImg) {
             if (!glviewInitialized) {
                 nexradState.wxglSurfaceViews.indices.forEach {
-                    glviewInitialized = NexradDraw.initGlviewMainScreen(it, nexradState, changeListener)
+                    glviewInitialized = NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
                 }
             }
         }
@@ -320,7 +311,7 @@ class LocationFragment : Fragment() {
                 nexradState.wxglSurfaceViews,
                 ::getGPSFromDouble,
                 ::getLatLon,
-                false, false)
+                archived = false, forceReset = false)
         FutureVoid(MyApplication.appContext, {
             // attempted bugfix for most plentiful crash
             //kotlin.KotlinNullPointerException:
@@ -385,25 +376,25 @@ class LocationFragment : Fragment() {
         homeScreenWebViews.last().loadUrl(forecastUrl)
     }
 
-    private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
-        override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
-            if (progress != 50000) {
-                idxIntG = idx
-                UtilityRadarUI.setupContextMenu(
-                        radarLongPressItems,
-                        Location.x,
-                        Location.y,
-                        activityReference,
-                        nexradState.wxglSurfaceViews[idx],
-                        nexradState.wxglRenders[idx],
-                        dialogRadarLongPress!!)
-            } else {
-                nexradState.wxglTextObjects.forEach {
-                    it.addLabels()
-                }
-            }
-        }
-    }
+//    private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
+//        override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
+//            if (progress != 50000) {
+//                nexradState.curRadar = idx
+//                UtilityRadarUI.setupContextMenu(
+//                        radarLongPressItems,
+//                        Location.latLon.lat,
+//                        Location.latLon.lon,
+//                        activityReference,
+//                        nexradState.surface,
+//                        nexradState.render,
+//                        longPressDialogue!!)
+//            } else {
+//                nexradState.wxglTextObjects.forEach {
+//                    it.addLabels()
+//                }
+//            }
+//        }
+//    }
 
     private fun getRadarTimeStampForHomescreen(radarSite: String): String {
         var timestamp = ""
@@ -412,7 +403,7 @@ class LocationFragment : Fragment() {
             timestamp = tokens[3]
         }
         return if (oglrIdx != -1) {
-            " " + nexradState.wxglRenders[idxIntG].rid + ": " + timestamp
+            " " + nexradState.radarSite + ": " + timestamp
         } else {
             ""
         }
@@ -429,7 +420,10 @@ class LocationFragment : Fragment() {
 
     private fun getGPSFromDouble() {}
 
-    private fun getLatLon() = LatLon(Location.x, Location.y)
+//    private fun getLatLon() = LatLon(Location.x, Location.y)
+
+    // main screen will not show GPS so if configured just show it off the screen
+    private fun getLatLon() = LatLon(0.0, 0.0)
 
     override fun onPause() {
         if (glviewInitialized) {
@@ -523,28 +517,33 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun setupRadarLongPress() {
-        dialogRadarLongPress = ObjectDialogue(activityReference, radarLongPressItems)
-        dialogRadarLongPress?.setNegativeButton { dialog, _ ->
-            dialog.dismiss()
-        }
-        dialogRadarLongPress?.connect { dialog, which ->
-            val item = radarLongPressItems[which]
-            UtilityRadarUI.doLongPressAction(item, activityReference, nexradState.wxglSurfaceViews[idxIntG], nexradState.wxglRenders[idxIntG], ::longPressRadarSiteSwitch)
-            dialog.dismiss()
-        }
-    }
+//    private fun setupRadarLongPress() {
+//        longPressDialogue = ObjectDialogue(activityReference, radarLongPressItems)
+//        longPressDialogue?.connectCancel { dialog, _ ->
+//            dialog.dismiss()
+//        }
+//        longPressDialogue?.connect { dialog, itemIndex ->
+//            val item = radarLongPressItems[itemIndex]
+//            UtilityRadarUI.doLongPressAction(
+//                    item,
+//                    activityReference,
+//                    nexradState.surface,
+//                    nexradState.render,
+//                    ::longPressRadarSiteSwitch)
+//            dialog.dismiss()
+//        }
+//    }
 
-    private fun longPressRadarSiteSwitch(strName: String) {
-        val newRadarSite = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
-        val oldRidIdx = nexradState.wxglRenders[idxIntG].rid
-        nexradState.adjustPaneTo(idxIntG, newRadarSite)
-        if (idxIntG != oglrIdx) {
-            UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace("NXRD-$oldRidIdx", "NXRD-" + nexradState.wxglRenders[idxIntG].rid)
+    private fun longPressRadarSiteSwitch(s: String) {
+        val newRadarSite = s.split(" ")[0]
+        val oldRidIdx = nexradState.radarSite
+        nexradState.adjustPaneTo(nexradState.curRadar, newRadarSite)
+        if (nexradState.curRadar != oglrIdx) {
+            UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace("NXRD-$oldRidIdx", "NXRD-" + nexradState.radarSite)
             Utility.writePref(activityReference, "HOMESCREEN_FAV", UIPreferences.homescreenFav)
         }
-        radarLocationChangedAl[idxIntG] = true
-        getRadar(idxIntG)
+        radarLocationChangedAl[nexradState.curRadar] = true
+        getRadar(nexradState.curRadar)
     }
 
     private var mActivity: FragmentActivity? = null
@@ -703,28 +702,4 @@ class LocationFragment : Fragment() {
             }
             return mActivity!!
         }
-
-/*
-
-    //elys mod
-    //report your spotter network location
-    private val sn_handler = Handler(Looper.getMainLooper())
-    private val sn_reporter: Runnable = object : Runnable {
-        override fun run() {
-            UtilityLog.d("wx", "SendPosition(this)")
-            SendPosition(MyApplication.appContext)
-            sn_handler.postDelayed(this, sn_Interval.toLong())
-        }
-    }
-    private fun start_sn_reporting() {
-        sn_Handler_m!!.removeCallbacks(sn_reporter)
-        sn_reporter.run()
-    }
-    private fun stop_sn_reporting() {
-        sn_Handler_m!!.removeCallbacks(sn_reporter)
-        sn_Handler_m = null
-    }
-*/
-
-
 }

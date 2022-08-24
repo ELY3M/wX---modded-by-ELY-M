@@ -27,7 +27,6 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
-import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.Route
@@ -53,7 +52,6 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
 
     private var textProduct = ""
     private var imageUrl = ""
-    private lateinit var arguments: Array<String>
     private lateinit var image: Image
     private lateinit var cardText: CardText
     private lateinit var box: VBox
@@ -61,7 +59,7 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
-        arguments = intent.getStringArrayExtra(NUMBER)!!
+        val arguments = intent.getStringArrayExtra(NUMBER)!!
         val dayIndex = To.int(arguments[0])
         textProduct = UtilityWpcRainfallForecast.productCode[dayIndex]
         imageUrl = UtilityWpcRainfallForecast.urls[dayIndex]
@@ -81,13 +79,8 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     }
 
     private fun getContent() {
-        FutureText(this, textProduct, ::showText)
+        FutureText(this, textProduct, cardText::setText1)
         FutureBytes(this, imageUrl, ::showImage)
-    }
-
-    private fun showText(html: String) {
-        cardText.text = html
-        UtilityTts.conditionalPlay(arguments, 1, applicationContext, cardText.text, textProduct)
     }
 
     private fun showImage(bitmap: Bitmap) {

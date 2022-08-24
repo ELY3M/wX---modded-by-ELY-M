@@ -50,4 +50,16 @@ internal object WXGLPolygonWarnings {
         }
         return i
     }
+
+    fun getCountString() = "(" +
+                getCount(PolygonWarningType.ThunderstormWarning).toString() + "," +
+                getCount(PolygonWarningType.TornadoWarning).toString() + "," +
+                getCount(PolygonWarningType.FlashFloodWarning).toString() + ")"
+
+    fun areWarningsPresent(): Boolean {
+        val tStormCount = getCount(PolygonWarningType.ThunderstormWarning)
+        val torCount = getCount(PolygonWarningType.TornadoWarning)
+        val floodCount = getCount(PolygonWarningType.FlashFloodWarning)
+        return tStormCount > 0 || torCount > 0 || floodCount > 0
+    }
 }

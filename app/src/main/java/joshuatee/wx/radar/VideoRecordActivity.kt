@@ -110,6 +110,12 @@ abstract class VideoRecordActivity : AppCompatActivity() {
             intent.putExtra("show_distance_tool", showDistanceTool)
             intent.putExtra("show_recording_tools", "true")
             startService(intent)
+
+            // draw tools only?
+//            val intent = TelecineService.newIntent(this, 1, Intent())
+//            intent.putExtra("show_distance_tool", showDistanceTool)
+//            intent.putExtra("show_recording_tools", "false")
+//            startService(intent)
         }
     }
 

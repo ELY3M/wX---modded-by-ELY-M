@@ -26,16 +26,17 @@ import android.widget.RelativeLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.RadarPreferences
 
-class NexradStateMainScreen(activityReference: Context, numberOfPanes: Int, homeScreenTokens: List<String>) {
+class NexradStateMainScreen(
+        activityReference: Context,
+        numberOfPanes: Int,
+        homeScreenTokens: List<String>
+) : NexradState(numberOfPanes) {
 
-    val wxglRenders = mutableListOf<WXGLRender>()
-    val wxglSurfaceViews = mutableListOf<WXGLSurfaceView>()
-    var wxglTextObjects = mutableListOf<WXGLTextObject>()
-    val relativeLayouts = mutableListOf<RelativeLayout>()
     var oldRadarSites = Array(numberOfPanes) { "" }
 
     init {
         var index = 0
+        isHomeScreen = true
         homeScreenTokens.forEach { token ->
             if (token == "OGL-RADAR" || token.contains("NXRD-")) {
                 wxglRenders.add(WXGLRender(MyApplication.appContext, 4))
@@ -81,16 +82,16 @@ class NexradStateMainScreen(activityReference: Context, numberOfPanes: Int, home
     }
 
     fun adjustForTdwr(idx: Int) {
-        if (wxglRenders[idx].product == "N0Q" && WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
+        if (wxglRenders[idx].product == "N0Q" && isRidTdwr(wxglRenders[idx].rid)) {
             wxglRenders[idx].product = "TZL"
         }
-        if (wxglRenders[idx].product == "TZL" && !WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
+        if (wxglRenders[idx].product == "TZL" && !isRidTdwr(wxglRenders[idx].rid)) {
             wxglRenders[idx].product = "N0Q"
         }
-        if (wxglRenders[idx].product == "N0U" && WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
+        if (wxglRenders[idx].product == "N0U" && isRidTdwr(wxglRenders[idx].rid)) {
             wxglRenders[idx].product = "TV0"
         }
-        if (wxglRenders[idx].product == "TV0" && !WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
+        if (wxglRenders[idx].product == "TV0" && !isRidTdwr(wxglRenders[idx].rid)) {
             wxglRenders[idx].product = "N0U"
         }
     }

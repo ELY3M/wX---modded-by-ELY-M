@@ -22,31 +22,12 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.R
-import joshuatee.wx.common.RegExp
 import joshuatee.wx.util.Utility
 
 object WXGLNexrad {
 
-    val tdwrProductList = listOf(
-        "TZ0",
-        "TZ1",
-        "TZ2",
-        "TR0",
-        "TR1",
-        "TR2",
-        "TV0",
-        "TV1",
-        "TV2",
-        "TZL",
-        "N1P",
-        "NTP"
-    )
-
     fun isProductTdwr(product: String) = product.startsWith("TV") || product == "TZL" || product.startsWith("TZ")
-
-    fun isTdwr(product: String) = product in tdwrProductList
 
     // next 3 maps are for color palette editor : Map<String, String>
     val productCodeStringToName = mapOf(
@@ -186,9 +167,6 @@ object WXGLNexrad {
         153, 154, 2153, 2154 -> binSize13
         else -> binSize54
     }
-
-    // FIXME use different split
-    fun isRidTdwr(rid: String) = GlobalArrays.tdwrRadars.any { rid == RegExp.space.split(it)[0] }
 
     fun getTdwrFromRid(rid: String) = closestTdwrToNexrad[rid] ?: ""
 

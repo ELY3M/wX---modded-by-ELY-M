@@ -69,7 +69,7 @@ class ForecastActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         val arguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(arguments[0], arguments[1])
-        setTitle("Forecast for", latLon.latString + "," + latLon.lonString)
+        setTitle("Forecast for", latLon.prettyPrint())
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
         objectCardCurrentConditions = ObjectCardCurrentConditions(this, 2)

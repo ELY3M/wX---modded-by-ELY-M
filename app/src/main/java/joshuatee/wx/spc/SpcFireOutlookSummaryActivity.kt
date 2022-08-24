@@ -68,11 +68,7 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
 
     private fun updateImage(index: Int) {
         objectImageSummary.set(index, bitmaps[index])
-        objectImageSummary.connect(index) {
-            val textProduct = UtilitySpcFireOutlook.textProducts[index]
-            val imageUrl = UtilitySpcFireOutlook.urls[index]
-            Route(this, SpcFireOutlookActivity::class.java, SpcFireOutlookActivity.NUMBER, arrayOf(textProduct, imageUrl))
-        }
+        objectImageSummary.connect(index) { Route.spcFireOutlookByDay(this, index) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

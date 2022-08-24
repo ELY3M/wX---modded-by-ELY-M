@@ -33,6 +33,7 @@ import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.ObjectPolygonWatch
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.RadarGeometry
+import joshuatee.wx.radar.SpotterNetworkPositionReport
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
@@ -40,12 +41,46 @@ import joshuatee.wx.settings.*
 import joshuatee.wx.settings.UtilityHomeScreen
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import org.acra.config.mailSender
+import org.acra.data.StringFormat
+import org.acra.ktx.initAcra
+import java.text.SimpleDateFormat
+import java.util.*
 
 //
 // Class that has methods that run at app start and store critical preference data structures
 //
 class MyApplication : Application() {
 
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        initAcra {
+            buildConfigClass = BuildConfig::class.java
+            reportFormat = StringFormat.KEY_VALUE_LIST
+
+            val cal: Calendar = Calendar.getInstance()
+            val format = SimpleDateFormat("hh.mm.ss---MM-dd-yy")
+            format.setTimeZone(TimeZone.getTimeZone("CDT"))
+            val nowDateTime = format.format(cal.getTime())
+
+
+            mailSender {
+                //required
+                mailTo = "money@mboca.com"
+                //defaults to true
+                reportAsFile = true
+                //defaults to ACRA-report.stacktrace
+                reportFileName = "Crash_$nowDateTime.txt"
+                //defaults to "<applicationId> Crash Report"
+                subject = "wX App Crashed!"
+                //defaults to empty
+                body = ""
+            }
+
+
+
+        }
+    }
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext

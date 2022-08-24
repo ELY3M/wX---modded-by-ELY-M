@@ -519,9 +519,9 @@ public object UtilityConusRadar {
         //bitmap = UtilityImg.eraseBackground(bitmap, Color.rgb(204,255,255))
 
 
-        var bitmap1 = UtilityImg.changeColor(bitmap, Color.WHITE, Color.BLACK)
+        //var bitmap1 = UtilityImg.changeColor(bitmap, Color.WHITE, Color.BLACK)
 
-        var fbitmap = bitmap1
+        var fbitmap = bitmap
 
         if (fbitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(fbitmap.width, fbitmap.height, Bitmap.Config.ARGB_8888)
@@ -550,7 +550,7 @@ public object UtilityConusRadar {
         try {
             nwsConusRadarWithMapSquare(MyApplication.appContext)
         } catch (e: Exception) {
-        UtilityLog.d("wx", "getConusImage() failed!!!!!!!!!!!!!!!!!")
+        UtilityLog.d("wx", "getConusImage() failed! error: "+e.toString())
         UtilityLog.handleException(e)
     }
         }

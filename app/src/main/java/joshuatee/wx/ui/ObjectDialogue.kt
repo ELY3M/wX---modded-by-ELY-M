@@ -43,7 +43,7 @@ class ObjectDialogue {
 
         fun generic(context: Activity, list: List<String>, getContent: () -> Unit, fn: (Int) -> Unit) {
             val objectDialogue = ObjectDialogue(context, list)
-            objectDialogue.setNegativeButton { dialog, _ ->
+            objectDialogue.connectCancel { dialog, _ ->
                 dialog.dismiss()
                 UtilityUI.immersiveMode(context)
             }
@@ -132,7 +132,7 @@ class ObjectDialogue {
         alertDialog.setSingleChoiceItems(arrayAdapter, checkedItem, listener)
     }
 
-    fun setNegativeButton(listener: DialogInterface.OnClickListener) {
+    fun connectCancel(listener: DialogInterface.OnClickListener) {
         alertDialog.setNegativeButton("Cancel", listener)
     }
 

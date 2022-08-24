@@ -183,6 +183,10 @@ class Route() {
             Route(context, SpcFireOutlookSummaryActivity::class.java)
         }
 
+        fun spcFireOutlookByDay(context: Context, index: Int) {
+            Route(context, SpcFireOutlookActivity::class.java, SpcFireOutlookActivity.NUMBER, arrayOf(index.toString()))
+        }
+
         fun spcHref(context: Context) {
             Route(context, ModelsSpcHrefActivity::class.java, "", arrayOf("1", "SPCHREF", "SPC HREF"))
         }

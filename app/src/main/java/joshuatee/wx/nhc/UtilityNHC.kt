@@ -57,7 +57,7 @@ object UtilityNhc {
         //    statusList.add(status)
         //}
 
-        var publicAdvisories = mutableListOf<String>()
+        val publicAdvisories = mutableListOf<String>()
         val publicAdvisoriesChunk = UtilityString.parseColumn(html, "\"publicAdvisory\": \\{(.*?)\\}")
         for (chunk in publicAdvisoriesChunk) {
             val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")

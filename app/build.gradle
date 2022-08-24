@@ -97,9 +97,11 @@ dependencies {
     // https://developer.android.com/studio/write/java8-support
     // https://developer.android.com/studio/write/java8-support-table
     // https://developer.android.com/reference/java/time/package-summary
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'    
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     
     //elys mods
+    implementation 'ch.acra:acra-mail:5.9.6'
+    implementation 'ch.acra:acra-core:5.9.6'
     implementation 'io.github.nishkarsh:android-permissions:0.1.7'
     implementation 'org.shredzone.commons:commons-suncalc:2.6'
 }

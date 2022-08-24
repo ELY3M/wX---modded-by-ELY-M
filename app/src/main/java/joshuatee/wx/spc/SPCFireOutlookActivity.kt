@@ -27,7 +27,6 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
-import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.Route
@@ -35,6 +34,7 @@ import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
@@ -52,7 +52,6 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private var textProduct = ""
     private var imageUrl = ""
-    private lateinit var arguments: Array<String>
     private lateinit var image: Image
     private lateinit var cardText: CardText
     private lateinit var box: VBox
@@ -60,9 +59,10 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
-        arguments = intent.getStringArrayExtra(NUMBER)!!
-        textProduct = arguments[0]
-        imageUrl = arguments[1]
+        val arguments = intent.getStringArrayExtra(NUMBER)!!
+        val dayIndex = To.int(arguments[0])
+        textProduct = UtilitySpcFireOutlook.textProducts[dayIndex]
+        imageUrl = UtilitySpcFireOutlook.urls[dayIndex]
         setTitle("Fire Weather Outlook", "SPC $textProduct")
         box = VBox.fromResource(this)
         objectToolbarBottom.hideRadar()
@@ -80,7 +80,7 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() {
         FutureBytes(this, imageUrl, ::showImage)
-        FutureText(this, textProduct, ::showText)
+        FutureText(this, textProduct, cardText::setText1)
     }
 
     private fun showImage(bitmap: Bitmap) {
@@ -90,11 +90,6 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
             image.set(bitmap)
         }
         image.connect { Route.image(this, arrayOf(imageUrl, textProduct, "true")) }
-    }
-
-    private fun showText(html: String) {
-        cardText.text = html
-        UtilityTts.conditionalPlay(arguments, 1, applicationContext, cardText.text, textProduct)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

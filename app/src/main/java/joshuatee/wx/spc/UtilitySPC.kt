@@ -139,26 +139,13 @@ object UtilitySpc {
         } else {
             tabStrSpc = UIPreferences.tabHeaders[1]
         }
-        // US Warn
+        // US Warnings
         var usWarnPresent = false
-        var torCount = 0
-        var tStormCount = 0
-        var floodCount = 0
         if (UIPreferences.checktor) {
-//            tStormCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTst.value)
-//            torCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardTor.value)
-//            floodCount = ObjectWarning.getStormCount(ObjectPolygonWarning.severeDashboardFfw.value)
-
-            tStormCount = WXGLPolygonWarnings.getCount(PolygonWarningType.ThunderstormWarning)
-            torCount = WXGLPolygonWarnings.getCount(PolygonWarningType.TornadoWarning)
-            floodCount = WXGLPolygonWarnings.getCount(PolygonWarningType.FlashFloodWarning)
-
-            if (tStormCount > 0 || torCount > 0 || floodCount > 0) {
-                usWarnPresent = true
-            }
+            usWarnPresent = WXGLPolygonWarnings.areWarningsPresent()
         }
         val tabStr = if (usWarnPresent) {
-            UIPreferences.tabHeaders[2] + " W(" + tStormCount + "," + torCount + "," + floodCount + ")"
+            UIPreferences.tabHeaders[2] + " W" + WXGLPolygonWarnings.getCountString()
         } else {
             UIPreferences.tabHeaders[2]
         }

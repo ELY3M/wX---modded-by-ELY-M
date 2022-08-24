@@ -1,4 +1,11 @@
 Privacy Policy for Android “wX” app and iOS “wXL23” app by joshua.tee@gmail.com:
 
-These apps do not collect any data from the user or the user’s device.
+These apps do not collect any data from the user or the user’s device only during normal usage and not crashing.  
 
+I am using Acra Logger from http://www.acra.ch/
+It will catch any crashes on this app and it will ask you to send me email crash logs.  
+
+You will be sending your phone brand, model, infos, app's settings, catlog, stack traces to help me to solve any crashing issues.   
+
+
+ 

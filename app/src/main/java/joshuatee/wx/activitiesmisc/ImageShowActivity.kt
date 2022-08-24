@@ -40,7 +40,7 @@ class ImageShowActivity : BaseActivity() {
     // This is a general purpose activity used to view one image. URL and title are passed in via extras
     //
     // Arguments
-    // 1: URL
+    // 1: URL (can be a local file with something like this "raw:radar_legend" / "app/src/main/res/drawable-nodpi/radar_legend.png" )
     // 2: Title
     // 3: (optional) string "true" means a white background is needed
     //
@@ -69,6 +69,7 @@ class ImageShowActivity : BaseActivity() {
         setTitle("Image Viewer", shareTitle)
         image = TouchImage(this, toolbar, R.id.iv)
         when {
+            // TODO FIXME is "file:" used anymore, think not
             url.contains("file:") -> {
                 urls = url.split(":")
                 getContentFromStorage()

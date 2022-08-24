@@ -18,16 +18,41 @@
 // [REF] ObjectNhc (activity) and UtilityNhc (notification) should share code
 // [REF] consolidate single and multipane as much as possible
 // [REF] look for methods that take top/bottom toolbars and can instead pass custom activity
-// [REF] nexrad getLatLon is not optimal
-// [REF] NexradArguments for multipane
 // [FIX] nexrad multipane change tilt and then tap ref icon, changes back to lowest tilt (unlike single pan)
-// [REF] nexrad convert locXCurrent to double
+// [FIX] nexrad single and multi use differents way to adjust menus for tilt and tdwr
+// [ADD] nexrad - show map, phone off, onrestart observations show with map still up
+// [FIX] multipane with no locked panes, long press on non-selected radar will select it but not change in title
+// [ADD] debug option with circular log for downloads
+
 ```
 [[_TOC_]]
 
-## 55675 2022_08_20
+## 55679 2022_08_23
+
+## 55678 2022_08_23
+* [FIX] nexrad autorefresh fix related to onresume/pause or restart (use onresume and not both)
+* [ADD] nexrad multipane "ctrl-a" will now toggle an animation on/off (similar to how single pane has been)
+* [ADD] nexrad multipane "ctrl-r" (ref) and "ctrl-v" (vel) added (similar to how single pane has been) (use alt-? on main screen and nexrad to show shortcuts)
+* [ADD] additional helper Nexrad* classes
+
+## 55677 2022_08_22
+* [REF] misc refactor
+* [FIX] nexrad autorefresh fix related to onresume/pause or restart
+
+## 55676 2022_08_22
+* [REF] misc refactor
+* [FIX] In single pane nexrad, if animating, switching radars via the map was not working
+* [FIX] nexrad help in submenu needed to be freshened up a bit
+* [FIX] The main screen will no longer show the primary "location dot" surrounded by a circle as this shape is reserved from the dedicated
+         nexrad viewer which if configured does use active GPS location
+* [ADD] NexradLongPressMenu and changes in NexradState* and NexradArguments* to make it happen
+
+## 55675 2022_08_21
 * [REF] NexradDraw, reduce arg count with NexradState
 * [REF] VideoRecordActivity.kt, remove obsolete SDK checks after going to 23
+* [REF] nexrad convert locXCurrent to double
+* [ADD] Nexrad long press - shorten (since large text goes off screen) and make verbiage consistent with iOS port wXL23
+* [FIX] adhoc location forecast activity (via nexrad long-press) had to many digits for lat/lon
 
 ## 55674 2022_08_20
 * [REF] more work on NexradState for LocationFragment

@@ -254,39 +254,36 @@ Remove line breaks used to keep NWS text products at fixed width.
     </string>
 
     <string name="help_radar">
-Radar: The default radar provider "WXOGL" uses OpenGL to render nexrad radar data that is decoded locally on your device.
-    If global settings are enabled warning polygons will be displayed for the most severe weather.
-    Roads, lakes, and city markers can be enabled as desired.
-    The interface allows pinch zoom, double tap to zoom in, single tap to zoom out, long press on a new location to change radar site and
-    reset center and zoom level. A variety of radar products and animation options are available in the toolbar menu including access to Level 2 data.
+    The Nexrad radar interface allows pinch zoom, double tap to zoom in, single tap to zoom out, long press on the screen to bring up a contextual menu
+        allowing you to do a variety of things. A number of radar products and animation options are available in the toolbar menu.
+        "Tools -> Radar" (also available from the main screen as "Settings -> Radar") can be be used to enable a variety of layers
+        such as warnings and watches.
 </string>
 
     <string name="help_radar_drawingtools">
 
+        When "Share / Drawing Tools" is selected from the sub-menu, a recording toolbar appears in the top right of the screen.
+        You will need to approve and enable various Android permissions to allow this to happen.
         In the recording toolbar at the top, options exist for a drawing tool and with single pane radar a distance tool.
         When the drawing tool or distance tool are engaged, you are not able to pan or zoom the radar. When you stop the drawing tool all markings are removed.
         You can also use the "X" to close the toolbar which will clear the distance and/or drawing tool markings.
         Default color is red but is configurable in settings->colors. The width of the line is also configurable.
-        Usage is the same as the drawing tool.
 
     </string>
 
     <string name="help_radar_recording">
 
-         With records to screen recording technology invokes via "share" menu entry, in order to support this new architecture
-        additional android permissions were needed including
-        WRITE_EXTERNAL_STORAGE and SYSTEM_ALERT_WINDOW. These are required as the files to be shared are written to your SDCARD
-        in “Videos/joshuatee.wx” and “DCIM/joshuatee.wx”. Android 6.0+ users will notice popups to enable these permissions on the fly.
-        All users will notice a popup requesting permission to record the screen.
-        If you are on Android 6.0 or higher you may need to tap “share” multiple times to enable all of the necessary permissions.
-        After the first time it will come up on first touch. To use this new feature simply select “share” from the submenu in single
+         For screen recording and screenshots files can be shared and are written to your SDCARD
+        in “Android/data/joshuatee.wx/files/Movies" and "DCIM”. All users will notice a popup requesting permission to record the screen.
+        You may need to tap “share” multiple times to enable all of the necessary permissions.
+        After the first time it will come up on first touch. To use this new feature simply select “Shared / Drawing Tools” from the submenu in single
         or multi-pane nexrad radar and you will notice a floating and persistent set of icons in the upper right which allows you
         to exit the icon pane, take a screenshot, and record a video respectively. If you take a video by default the video will
         start immediately  ( a 3 second delay can be enabled in Settings->Radar->Screen Recorder ).
         Once the recorder is running the icons will disappear ( since you are literally getting everything on the screen
         including any panning/zooming or product changes ). To stop the recording simply tap the screen in the same location
-        the recording used to be. Once a video or screenshot have been captured a notification will fire and from there you can view,
-        share, or delete the given media file.
+        the recording used to be. Once a video or screenshot have been captured a notification will fire and from there you can view or
+        share the given media file.
 
     </string>
 

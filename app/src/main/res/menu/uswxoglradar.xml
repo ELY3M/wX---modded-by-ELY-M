@@ -72,10 +72,6 @@
         android:title="@string/label_share_and_tools"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_jellybean_drawtools"
-        android:title="@string/label_radar_jellybean_drawtools"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_l3"
         android:title="@string/label_other"
         app:showAsAction="never">
