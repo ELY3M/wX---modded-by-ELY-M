@@ -160,8 +160,8 @@ object RadarPreferences {
 	
 	//elys mod
         sn_key = getInitialPreferenceString("SN_KEY", "")
-        sn_locationreport = getInitialPreference("SN_LOCATIONREPORT", "")
-	showRadarWhenPan = getInitialPreference("SHOW_RADAR_WHEN_PAN", "true")		
+        sn_locationreport = getInitialPreference("SN_LOCATIONREPORT", "false")
+	    showRadarWhenPan = getInitialPreference("SHOW_RADAR_WHEN_PAN", "true")
         wpcFronts = getInitialPreference("RADAR_SHOW_WPC_FRONTS", "false")
         locationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
         conusRadar = getInitialPreference("CONUS_RADAR", "false")
@@ -194,7 +194,7 @@ object RadarPreferences {
         stateHires = getInitialPreference("RADAR_STATE_HIRES", "false")
         iconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
         hideRadar = getInitialPreference("RADAR_HIDE_RADAR", "false")
-        showLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
+        showLegend = getInitialPreference("RADAR_SHOW_LEGEND", "true")
         showLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
         showLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)
         wxoglCenterOnLocation = getInitialPreference("RADAR_CENTER_ON_LOCATION", "false")
