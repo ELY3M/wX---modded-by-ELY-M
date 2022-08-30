@@ -22,6 +22,7 @@ import joshuatee.wx.radar.SpotterNetworkPositionReportService
 import joshuatee.wx.radar.UtilityConusRadar
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityStorePreferences
 import joshuatee.wx.util.Utility
@@ -153,7 +154,9 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         UtilityConusRadar.getConusImage()
 
         //start service for Spotter Network Location Auto Reporting
-        applicationContext.startService(Intent(applicationContext, SpotterNetworkPositionReportService::class.java))
+        if (RadarPreferences.sn_locationreport) {
+            applicationContext.startService(Intent(applicationContext, SpotterNetworkPositionReportService::class.java))
+        }
 
         if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
             Route(this, WX::class.java)

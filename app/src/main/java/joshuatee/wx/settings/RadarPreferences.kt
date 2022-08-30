@@ -71,8 +71,8 @@ object RadarPreferences {
     var sti = false
     var hi = false
     var tvs = false
-    var showRadar = true
-    var showLegend = false
+    var hideRadar = false
+    var showLegend = true
     var showLegendWidth = 0
     var showLegendTextSize = 0
     var drawToolSize = 0
@@ -193,7 +193,7 @@ object RadarPreferences {
         countyHires = getInitialPreference("RADAR_COUNTY_HIRES", "false")
         stateHires = getInitialPreference("RADAR_STATE_HIRES", "false")
         iconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
-        showRadar = getInitialPreference("RADAR_SHOW_RADAR", "false")
+        hideRadar = getInitialPreference("RADAR_HIDE_RADAR", "false")
         showLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
         showLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
         showLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)

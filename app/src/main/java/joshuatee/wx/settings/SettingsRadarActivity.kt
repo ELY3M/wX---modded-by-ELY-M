@@ -129,7 +129,7 @@ class SettingsRadarActivity : BaseActivity() {
                 ObjectSwitch(this, "WPC Fronts and pressure highs and lows", "RADAR_SHOW_WPC_FRONTS", R.string.radar_show_wpc_fronts_label),
 		        //elys mod
 		        ObjectSwitch(this, "Enable userpoints icons on radar", "RADAR_USERPOINTS", R.string.radar_userpoints),
-            	ObjectSwitch(this, "Show/Hide radar", "RADAR_SHOW_RADAR", R.string.show_hide_radar),
+            	ObjectSwitch(this, "Hide radar", "RADAR_HIDE_RADAR", R.string.hide_radar),
 
 
         )

@@ -308,7 +308,7 @@
     <string name="tdwr_products">TDWR Products</string>
     <string name="quad_pane_radar">Quad Pane Radar</string>
     <string name="dual_pane_radar">Dual Pane Radar</string>
-    <string name="show_hide_radar">Show/Hide Radar</string>
+    <string name="hide_radar">Hide Radar</string>
     <string name="show_hide_color_legend">Show/Hide Color Legend</string>
     <string name="conus_warning_map">CONUS warning map</string>
     <string name="ak_warning_map">Alaska warning map</string>

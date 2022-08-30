@@ -95,6 +95,8 @@ object SpotterNetworkPositionReport {
 
     fun SendPosition(context: Context): Boolean {
 
+        if (RadarPreferences.sn_locationreport) {
+
         criteria.accuracy = Criteria.ACCURACY_FINE
         criteria.isAltitudeRequired = true;
         criteria.isSpeedRequired = true;
@@ -166,10 +168,10 @@ object SpotterNetworkPositionReport {
         if (timer.isRefreshNeeded(MyApplication.appContext)) {
             Log.i(TAG, "Refresh needed!!!!")
         }
-
         Send_Location_Task()
         //var task = Send_Location_Task()
         //task.execute()
+        }
         return false
     }
 

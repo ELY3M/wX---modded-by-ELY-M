@@ -441,8 +441,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         //show/hide radar
         UtilityLog.d("radarshow", "displayHold: " + displayHold)
         UtilityLog.d("radarshow", "showRadarWhenPan: " + RadarPreferences.showRadarWhenPan)
-        UtilityLog.d("radarshow", "showradar: " + RadarPreferences.showRadar)
-        if ((RadarPreferences.showRadar) && (!(displayHold && !RadarPreferences.showRadarWhenPan))) {
+        UtilityLog.d("radarshow", "hideradar: " + RadarPreferences.hideRadar)
+        if ((!RadarPreferences.hideRadar) && (!(displayHold && !RadarPreferences.showRadarWhenPan))) {
         //org
         //if (!(displayHold && !RadarPreferences.showRadarWhenPan)) {
             (0 until chunkCount).forEach {

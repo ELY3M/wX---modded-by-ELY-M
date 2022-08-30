@@ -300,8 +300,8 @@
         app:showAsAction="never">
         <menu>
             <item
-                android:id="@+id/action_radar_showhide"
-                android:title="@string/show_hide_radar"
+                android:id="@+id/action_radar_hide"
+                android:title="@string/hide_radar"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_legend"

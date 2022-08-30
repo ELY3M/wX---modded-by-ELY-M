@@ -81,7 +81,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var conus_Handler_m: Handler? = null
     private var conus_Interval = 300000 // 5 mins for conus download might more is better
     //elys mod
-    private var radarShown = true
+    private var radarHidden = false
     private var loopCount = 0
     private var inOglAnim = false
     private var inOglAnimPaused = false
@@ -327,7 +327,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_N0C -> changeProduct("N" + nexradState.tilt + "C")
             R.id.action_N0K -> changeProduct("N" + nexradState.tilt + "K")
             R.id.action_H0C -> changeProduct("H" + nexradState.tilt + "C")
-            R.id.action_radar_showhide -> showRadar()
+            R.id.action_radar_hide -> hideRadar()
             R.id.action_legend -> nexradColorLegend.showLegend()
             R.id.action_about -> nexradUI.showRadarScanInfo()
             R.id.action_dvl -> changeProduct("DVL")
@@ -654,20 +654,20 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return true
     }
     //elys mod
-    private fun showRadar() {
-        UtilityLog.d("radarshow", "showRadar() radarShown: "+radarShown)
-        if (radarShown) {
-            UtilityLog.d("radarshow", "showRadar() setting to false")
-            radarShown = false
-            RadarPreferences.showRadar = false
-            Utility.writePref(this, "RADAR_SHOW_RADAR", "false")
-            UtilityLog.d("radarshow", "showRadar() radarShowRadar: "+RadarPreferences.showRadar)
+    private fun hideRadar() {
+        UtilityLog.d("radarHidden", "showRadar() radarShown: "+radarHidden)
+        if (radarHidden) {
+            UtilityLog.d("radarHidden", "showRadar() setting to false")
+            radarHidden = false
+            RadarPreferences.hideRadar = false
+            Utility.writePref(this, "RADAR_HIDE_RADAR", "false")
+            UtilityLog.d("radarHidden", "showRadar() radarShowRadar: "+RadarPreferences.hideRadar)
         } else {
-            UtilityLog.d("radarshow", "showRadar() setting to true")
-            radarShown = true
-            RadarPreferences.showRadar = true
-            Utility.writePref(this, "RADAR_SHOW_RADAR", "true")
-            UtilityLog.d("radarshow", "showRadar() radarShowRadar: "+RadarPreferences.showRadar)
+            UtilityLog.d("radarHidden", "showRadar() setting to true")
+            radarHidden = true
+            RadarPreferences.hideRadar = true
+            Utility.writePref(this, "RADAR_HIDE_RADAR", "true")
+            UtilityLog.d("radarshow", "showRadar() radarShowRadar: "+RadarPreferences.hideRadar)
         }
     }
 }
