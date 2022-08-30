@@ -126,7 +126,7 @@ class NhcStormActivity : BaseActivity() {
                     url = url.dropLast(2)
                 }
                 val fullUrl = url + imageUrls[index]
-                Route.image(this, arrayOf(fullUrl, ""))
+                Route.image(this, fullUrl, "")
             }
         }
     }
@@ -145,10 +145,10 @@ class NhcStormActivity : BaseActivity() {
         when (item.itemId) {
             R.id.action_cloud -> Route.visNhc(this, stormData.goesUrl)
             R.id.action_share -> UtilityShare.text(this, stormData.name, "", bitmaps)
-            R.id.action_MIATCPEP2 -> Route.wpcText(this, arrayOf("${office}TCP${stormData.binNumber}"))
-            R.id.action_MIATCMEP2 -> Route.wpcText(this, arrayOf("${office}TCM${stormData.binNumber}"))
-            R.id.action_MIATCDEP2 -> Route.wpcText(this, arrayOf("${office}TCD${stormData.binNumber}"))
-            R.id.action_MIAPWSEP2 -> Route.wpcText(this, arrayOf("${office}PWS${stormData.binNumber}"))
+            R.id.action_MIATCPEP2 -> Route.wpcText(this, "${office}TCP${stormData.binNumber}")
+            R.id.action_MIATCMEP2 -> Route.wpcText(this, "${office}TCM${stormData.binNumber}")
+            R.id.action_MIATCDEP2 -> Route.wpcText(this, "${office}TCD${stormData.binNumber}")
+            R.id.action_MIAPWSEP2 -> Route.wpcText(this, "${office}PWS${stormData.binNumber}")
             R.id.action_mute_notification -> UtilityNotificationNhc.muteNotification(this, stormData.id)
             else -> return super.onOptionsItemSelected(item)
         }

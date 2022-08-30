@@ -21,16 +21,19 @@
 
 package joshuatee.wx.objects
 
+//
+// WX_OGL is used by the main Nexrad OpenGL based radar
+// WX_RENDER is used by the Nexrad Canvas based radar (widget)
+// WX_RENDER_48 is used by the Nexrad Canvas based radar for TDWR radar
+//
+
 enum class ProjectionType constructor(
     val isMercator: Boolean,
     internal val needsBlackPaint: Boolean,
     internal val needsCanvasShift: Boolean,
     val isCanvas: Boolean
 ) {
-    NWS_MOSAIC(false, false, false, true),
-    NWS_MOSAIC_SECTOR(false, false, false, true),
     WX_RENDER(true, false, true, true),
     WX_RENDER_48(true, false, true, true),
     WX_OGL(true, false, false, false),
-    WX_OGL_48(true, false, false, false),
 }

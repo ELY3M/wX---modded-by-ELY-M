@@ -32,7 +32,6 @@ import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.CardText
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityImg
@@ -50,24 +49,22 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
 
     companion object { const val NUMBER = "" }
 
-    private var textProduct = ""
+    private var product = ""
     private var imageUrl = ""
     private lateinit var image: Image
     private lateinit var cardText: CardText
     private lateinit var box: VBox
-    private var tabletInLandscape = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         val arguments = intent.getStringArrayExtra(NUMBER)!!
         val dayIndex = To.int(arguments[0])
-        textProduct = UtilityWpcRainfallForecast.productCode[dayIndex]
+        product = UtilityWpcRainfallForecast.productCode[dayIndex]
         imageUrl = UtilityWpcRainfallForecast.urls[dayIndex]
-        setTitle("Day " + (dayIndex + 1).toString() + " Excessive Rainfall Discussion", textProduct)
+        setTitle("Day " + (dayIndex + 1).toString() + " Excessive Rainfall Discussion", product)
         box = VBox.fromResource(this)
         objectToolbarBottom.hideRadar()
         objectToolbarBottom.connect(this)
-        tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         image = if (tabletInLandscape) {
             box.makeHorizontal()
             Image(this, box, UtilityImg.getBlankBitmap(), 2)
@@ -79,7 +76,7 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     }
 
     private fun getContent() {
-        FutureText(this, textProduct, cardText::setText1)
+        FutureText(this, product, cardText::setText1)
         FutureBytes(this, imageUrl, ::showImage)
     }
 
@@ -89,18 +86,18 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
         } else {
             image.set(bitmap)
         }
-        image.connect { Route.image(this, arrayOf(imageUrl, textProduct, "true")) }
+        image.connect { Route.image(this, imageUrl, product) }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, cardText.text, textProduct, textProduct)) {
+        if (audioPlayMenu(item.itemId, cardText.text, product, product)) {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, textProduct, image.bitmap, cardText.text)
-            R.id.action_share_text -> UtilityShare.text(this, textProduct, cardText.text)
-            R.id.action_share_url -> UtilityShare.text(this, textProduct, textProduct)
-            R.id.action_share_image -> UtilityShare.bitmap(this, textProduct, image.bitmap)
+            R.id.action_share_all -> UtilityShare.bitmap(this, product, image, cardText.text)
+            R.id.action_share_text -> UtilityShare.text(this, product, cardText.text)
+            R.id.action_share_url -> UtilityShare.text(this, product, product)
+            R.id.action_share_image -> UtilityShare.bitmap(this, product, image)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

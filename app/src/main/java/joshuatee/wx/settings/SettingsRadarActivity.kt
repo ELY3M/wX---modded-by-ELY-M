@@ -24,7 +24,6 @@ package joshuatee.wx.settings
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -52,6 +51,7 @@ class SettingsRadarActivity : BaseActivity() {
         val padding = UIPreferences.paddingSettings
         CardText(this, box.get(), "Colors", textSize, SettingsColorsActivity::class.java, padding)
         CardText(this, box.get(), "Color Palettes", textSize, SettingsColorPaletteListingActivity::class.java, padding)
+        CardText(this, box.get(), "Line / Marker sizes", textSize, SettingsRadarSizesActivity::class.java, padding)
         CardText(this, box.get(), "Screen Recorder", textSize, SettingsTelecineActivity::class.java, padding)
         box.addWidget(
                 ObjectSwitch(this, "Warnings (TST/TOR/FFW)", "COD_WARNINGS_DEFAULT", R.string.cod_warnings_default_label).get()
@@ -97,17 +97,17 @@ class SettingsRadarActivity : BaseActivity() {
                 ObjectSwitch(this, "Canadian and Mexican borders", "RADAR_CAMX_BORDERS", R.string.camx_borders_label),
                 ObjectSwitch(this, "Center radar on location", "RADAR_CENTER_ON_LOCATION", R.string.radar_center_on_location_default_label),
                 ObjectSwitch(this, "Cities", "COD_CITIES_DEFAULT", R.string.cod_cities_default_label),
-	    	//elys mod
-	    	ObjectSwitch(this, "Conus Radar", "CONUS_RADAR", R.string.conus_radar_label),
-	    	//elys mod end
+	    	    //elys mod
+	    	    ObjectSwitch(this, "Conus Radar", "CONUS_RADAR", R.string.conus_radar_label),
+	    	    //elys mod end
                 ObjectSwitch(this, "Convective Outlook Day One", "RADAR_SHOW_SWO", R.string.show_swo_label),
                 ObjectSwitch(this, "Counties", "RADAR_SHOW_COUNTY", R.string.show_county_label),
                 ObjectSwitch(this, "Counties use high resolution data", "RADAR_COUNTY_HIRES", R.string.county_hires_label),
                 ObjectSwitch(this, "County labels", "RADAR_COUNTY_LABELS", R.string.show_county_labels_label),
                 ObjectSwitch(this, "Hail index", "RADAR_SHOW_HI", R.string.show_hi_label),
-		//elys mod
-		ObjectSwitch(this, "Hail labels", "WXOGL_HAIL_LABEL", R.string.show_hi_label_label),
-		//elys mod end
+		        //elys mod
+		        ObjectSwitch(this, "Hail labels", "WXOGL_HAIL_LABEL", R.string.show_hi_label_label),
+		        //elys mod end
                 ObjectSwitch(this, "Highways", "COD_HW_DEFAULT", R.string.cod_hw_default_label),
                 ObjectSwitch(this, "Launch app directly to radar", "LAUNCH_TO_RADAR", R.string.launch_to_radar_label),
                 ObjectSwitch(this, "Lakes and rivers", "COD_LAKES_DEFAULT", R.string.cod_lakes_default_label),
@@ -127,8 +127,8 @@ class SettingsRadarActivity : BaseActivity() {
                 ObjectSwitch(this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label),
                 ObjectSwitch(this, "Wind barbs", "WXOGL_OBS_WINDBARBS", R.string.obs_windbarbs_label),
                 ObjectSwitch(this, "WPC Fronts and pressure highs and lows", "RADAR_SHOW_WPC_FRONTS", R.string.radar_show_wpc_fronts_label),
-		//elys mod 
-		ObjectSwitch(this, "Enable userpoints icons on radar", "RADAR_USERPOINTS", R.string.radar_userpoints),
+		        //elys mod
+		        ObjectSwitch(this, "Enable userpoints icons on radar", "RADAR_USERPOINTS", R.string.radar_userpoints),
             	ObjectSwitch(this, "Show/Hide radar", "RADAR_SHOW_RADAR", R.string.show_hide_radar),
 
 
@@ -139,42 +139,42 @@ class SettingsRadarActivity : BaseActivity() {
         val numberPickers = listOf(
             ObjectNumberPicker(this, "Animation speed", "ANIM_INTERVAL", R.string.animation_interval_np_label, UIPreferences.animationIntervalDefault, 1, 15),
 			//elys mod
-			ObjectNumberPicker(this, "Color Legend width", "RADAR_SHOW_LEGEND_WIDTH", R.string.showlegendwidth, 50, 1, 100),
-			ObjectNumberPicker(this, "Color Legend text size", "RADAR_SHOW_LEGEND_TEXTSIZE", R.string.showlegendtextsize, 30, 1, 100),
-			ObjectNumberPicker(this, "Conus Radar Zoom", "CONUS_RADAR_ZOOM", R.string.conus_radar_zoom_label, 75, 0, 530),
-			ObjectNumberPicker(this, "Default line size", "RADAR_DEFAULT_LINESIZE", R.string.default_linesize_np_label, 1, 1, 15),
+			//ObjectNumberPicker(this, "Color Legend width", "RADAR_SHOW_LEGEND_WIDTH", R.string.showlegendwidth, 50, 1, 100),
+			//ObjectNumberPicker(this, "Color Legend text size", "RADAR_SHOW_LEGEND_TEXTSIZE", R.string.showlegendtextsize, 30, 1, 100),
+			//ObjectNumberPicker(this, "Conus Radar Zoom", "CONUS_RADAR_ZOOM", R.string.conus_radar_zoom_label, 75, 0, 530),
+			//ObjectNumberPicker(this, "Default line size", "RADAR_DEFAULT_LINESIZE", R.string.default_linesize_np_label, 1, 1, 15),
 			//elys mod end
             ObjectNumberPicker(this, "GPS update interval", "RADAR_LOCATION_UPDATE_INTERVAL", R.string.gps_update_interval_label, 10, 1, 60),
             ObjectNumberPicker(this, "Refresh interval", "RADAR_REFRESH_INTERVAL", R.string.wxogl_refresh_interval_label, 3, 1, 15),
-            ObjectNumberPicker(this, "Aviation dot size", "RADAR_AVIATION_SIZE", R.string.aviation_size_label, RadarPreferences.aviationSizeDefault, 1, 50),
-            ObjectNumberPicker(this, "Convective outlook line size", "RADAR_SWO_LINESIZE", R.string.swo_linesize_np, 3, 1, 10),
-            ObjectNumberPicker(this, "County line size", "RADAR_COUNTY_LINESIZE", R.string.county_linesize_np, 2, 1, 10),
-            ObjectNumberPicker(this, "Detailed observations Zoom", "RADAR_OBS_EXT_ZOOM", R.string.obs_ext_zoom_label, 7, 1, 10),
-            ObjectNumberPicker(this, "Draw tool line size", "DRAWTOOL_SIZE", R.string.drawtool_size_label, 4, 1, 20),
-	    //elys mod
-            //ObjectNumberPicker(this, "GPS Circle line size", "RADAR_GPSCIRCLE_LINESIZE", R.string.gpscircle_linesize_np, 5, 1, 10),
-	    ObjectNumberPicker(this, "Location icon size", "RADAR_LOCICON_SIZE", R.string.locicon_size_np, 75, 1, 530),
-	    ObjectNumberPicker(this, "Location bug size", "RADAR_LOCBUG_SIZE", R.string.locbug_size_np, 75, 1, 530),
-            ObjectNumberPicker(this, "Hail icon size", "RADAR_HI_SIZE", R.string.hi_size_np, 75, 1, 530),
-	    ObjectNumberPicker(this, "Hail Text size", "RADAR_HI_TEXT_SIZE", R.string.hi_size_np, (RadarPreferences.hiTextSize * 10).toInt(), 1, 20),
-	    //elys mod end			
-            ObjectNumberPicker(this, "Highway line size", "RADAR_HW_LINESIZE", R.string.hw_linesize_np, 2, 1, 10),
-            ObjectNumberPicker(this, "Lake line size", "RADAR_LAKE_LINESIZE", R.string.lakes_linesize_np, 2, 1, 10),
-            ObjectNumberPicker(this, "Location marker size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, RadarPreferences.locationDotSizeDefault, 1, 50),
-            ObjectNumberPicker(this, "MCD/MPD/Watch line size", "RADAR_WATMCD_LINESIZE", R.string.watmcd_linesize_np, RadarPreferences.watchMcdLineSizeDefault, 1, 10),
-            ObjectNumberPicker(this, "Secondary road line size", "RADAR_HWEXT_LINESIZE", R.string.hwext_linesize_np, 2, 1, 10),
-            ObjectNumberPicker(this, "State line size", "RADAR_STATE_LINESIZE", R.string.state_linesize_np, 2, 1, 10),
-            ObjectNumberPicker(this, "Storm spotter size", "RADAR_SPOTTER_SIZE", R.string.spotter_size_label, RadarPreferences.spotterSizeDefault, 1, 50),
-            ObjectNumberPicker(this, "Storm tracks line size", "RADAR_STI_LINESIZE", R.string.sti_linesize_np, 3, 1, 10),
-            ObjectNumberPicker(this, "Text size", "RADAR_TEXT_SIZE", R.string.text_size_label, (RadarPreferences.textSizeDefault * 10).toInt(), 4, 40),
-	    //elys mod
-            ObjectNumberPicker(this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530),
-            ObjectNumberPicker(this, "Userpoints icon size", "RADAR_USERPOINT_SIZE", R.string.userpoints_size_np, 75, 1, 530),
-	    //elys mod end			
-            ObjectNumberPicker(this, "Warning line size", "RADAR_WARN_LINESIZE", R.string.warn_linesize_np_label, RadarPreferences.warnLineSizeDefault, 1, 10),
-            ObjectNumberPicker(this, "Wind barbs line size", "RADAR_WB_LINESIZE", R.string.wb_linesize_np, 3, 1, 10),
-            ObjectNumberPicker(this, "WPC Fronts line size", "RADAR_WPC_FRONT_LINESIZE", R.string.wpc_fronts_linesize_np, 4, 1, 10),
-            ObjectNumberPicker(this, "WXOGL initial view size", "WXOGL_SIZE", R.string.wxogl_size_np, RadarPreferences.wxoglSizeDefault, 5, 25),
+//            ObjectNumberPicker(this, "Aviation dot size", "RADAR_AVIATION_SIZE", R.string.aviation_size_label, RadarPreferences.aviationSizeDefault, 1, 50),
+//            ObjectNumberPicker(this, "Convective outlook line size", "RADAR_SWO_LINESIZE", R.string.swo_linesize_np, 3, 1, 10),
+//            ObjectNumberPicker(this, "County line size", "RADAR_COUNTY_LINESIZE", R.string.county_linesize_np, 2, 1, 10),
+              ObjectNumberPicker(this, "Detailed observations Zoom", "RADAR_OBS_EXT_ZOOM", R.string.obs_ext_zoom_label, 7, 1, 10),
+//            ObjectNumberPicker(this, "Draw tool line size", "DRAWTOOL_SIZE", R.string.drawtool_size_label, 4, 1, 20),
+              //elys mod
+              //ObjectNumberPicker(this, "GPS Circle line size", "RADAR_GPSCIRCLE_LINESIZE", R.string.gpscircle_linesize_np, 5, 1, 10),
+//	          ObjectNumberPicker(this, "Location icon size", "RADAR_LOCICON_SIZE", R.string.locicon_size_np, 75, 1, 530),
+//	          ObjectNumberPicker(this, "Location bug size", "RADAR_LOCBUG_SIZE", R.string.locbug_size_np, 75, 1, 530),
+//            ObjectNumberPicker(this, "Hail icon size", "RADAR_HI_SIZE", R.string.hi_size_np, 75, 1, 530),
+//	          ObjectNumberPicker(this, "Hail Text size", "RADAR_HI_TEXT_SIZE", R.string.hi_size_np, (RadarPreferences.hiTextSize * 10).toInt(), 1, 20),
+	          //elys mod end
+//            ObjectNumberPicker(this, "Highway line size", "RADAR_HW_LINESIZE", R.string.hw_linesize_np, 2, 1, 10),
+//            ObjectNumberPicker(this, "Lake line size", "RADAR_LAKE_LINESIZE", R.string.lakes_linesize_np, 2, 1, 10),
+//            ObjectNumberPicker(this, "Location marker size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, RadarPreferences.locationDotSizeDefault, 1, 50),
+//            ObjectNumberPicker(this, "MCD/MPD/Watch line size", "RADAR_WATMCD_LINESIZE", R.string.watmcd_linesize_np, RadarPreferences.watchMcdLineSizeDefault, 1, 10),
+//            ObjectNumberPicker(this, "Secondary road line size", "RADAR_HWEXT_LINESIZE", R.string.hwext_linesize_np, 2, 1, 10),
+//            ObjectNumberPicker(this, "State line size", "RADAR_STATE_LINESIZE", R.string.state_linesize_np, 2, 1, 10),
+//            ObjectNumberPicker(this, "Storm spotter size", "RADAR_SPOTTER_SIZE", R.string.spotter_size_label, RadarPreferences.spotterSizeDefault, 1, 50),
+//            ObjectNumberPicker(this, "Storm tracks line size", "RADAR_STI_LINESIZE", R.string.sti_linesize_np, 3, 1, 10),
+//            ObjectNumberPicker(this, "Text size", "RADAR_TEXT_SIZE", R.string.text_size_label, (RadarPreferences.textSizeDefault * 10).toInt(), 4, 40),
+//	          //elys mod
+//            ObjectNumberPicker(this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530),
+//            ObjectNumberPicker(this, "Userpoints icon size", "RADAR_USERPOINT_SIZE", R.string.userpoints_size_np, 75, 1, 530),
+//	          //elys mod end
+//            ObjectNumberPicker(this, "Warning line size", "RADAR_WARN_LINESIZE", R.string.warn_linesize_np_label, RadarPreferences.warnLineSizeDefault, 1, 10),
+//            ObjectNumberPicker(this, "Wind barbs line size", "RADAR_WB_LINESIZE", R.string.wb_linesize_np, 3, 1, 10),
+//            ObjectNumberPicker(this, "WPC Fronts line size", "RADAR_WPC_FRONT_LINESIZE", R.string.wpc_fronts_linesize_np, 4, 1, 10),
+              ObjectNumberPicker(this, "WXOGL initial view size", "WXOGL_SIZE", R.string.wxogl_size_np, RadarPreferences.wxoglSizeDefault, 5, 25),
         )
         numberPickers.forEach {
             box.addWidget(it.get())
@@ -198,12 +198,10 @@ class SettingsRadarActivity : BaseActivity() {
     }
 
     private fun showGPSPermsDialogue() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionsAccessFineLocation)
-                }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionsAccessFineLocation)
             }
         }
     }

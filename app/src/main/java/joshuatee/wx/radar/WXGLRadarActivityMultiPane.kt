@@ -38,10 +38,8 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.content.ContextCompat
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.ObjectDialogue
@@ -74,12 +72,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var loopCount = 0
     private var inOglAnim = false
     private var inOglAnimPaused = false
+    private var animTriggerDownloads = false
     private var delay = 0
     private var locationManager: LocationManager? = null
-    private var animTriggerDownloads = false
     private lateinit var objectImageMap: ObjectImageMap
-    private var landScape = false
     private var settingsVisited = false
+    private var landScape = false
     private var nexradArguments = NexradArgumentsMultipane()
     private lateinit var nexradState: NexradStatePane
     private lateinit var nexradSubmenu: NexradSubmenu
@@ -110,7 +108,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         nexradState.setupMultiPaneObjects(nexradArguments)
         nexradSubmenu = NexradSubmenu(objectToolbarBottom, nexradState)
         nexradLongPressMenu = NexradLongPressMenu(this, nexradState, nexradArguments, ::longPressRadarSiteSwitch)
-        nexradUI = NexradUI(this, nexradState)
+        nexradUI = NexradUI(this, nexradState, nexradSubmenu)
         nexradState.initGlView(nexradLongPressMenu.changeListener)
         objectImageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, nexradState.wxglSurfaceViews)
         objectImageMap.connect(::mapSwitch, UtilityImageMap::mapToRid)
@@ -215,7 +213,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun getContent(z: Int) {
-        getContentPrep(z)
+        nexradUI.getContentPrepMultiPane(z)
         initGeom(z)
         FutureVoid(this, {
             NexradDraw.plotRadar(nexradState.wxglRenders[z], "", ::getGpsFromDouble, nexradState::getLatLon, false)
@@ -235,15 +233,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 nexradState.wxglSurfaceViews[z],
                 nexradState.wxglTextObjects,
                 nexradUI::setTitleWithWarningCountsMultiPane)
-    }
-
-    // TODO FIXME move to NexradUI
-    private fun getContentPrep(z: Int) {
-        nexradState.adjustForTdwrMultiPane(z)
-        toolbar.subtitle = ""
-        nexradUI.setToolbarTitle()
-        nexradSubmenu.adjustTiltAndProductMenus()
-        invalidateOptionsMenu()
     }
 
     private fun initGeom(z: Int) {
@@ -294,16 +283,18 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                             wxglRender.constructPolygons((z + 1).toString() + wxglRender.product + "nexrad_anim" + r.toString(), "", true)
                         }
                     }
-                    launch(uiDispatcher) { nexradUI.progressUpdateMultiPane((r + 1).toString(), (animArray[0].size).toString()) }
+                    launch(uiDispatcher) {
+                        nexradUI.progressUpdateMultiPane((r + 1).toString(), (animArray[0].size).toString())
+                    }
                     nexradState.drawAll()
                     timeMilli = ObjectDateTime.currentTimeMillis()
                     if ((timeMilli - priorTime) < delay) {
-                        SystemClock.sleep(delay - ((timeMilli - priorTime)))
+                        SystemClock.sleep(delay - (timeMilli - priorTime))
                     }
                     if (!inOglAnim) {
                         break
                     }
-                    if (r == (animArray[0].lastIndex)) {
+                    if (r == animArray[0].lastIndex) {
                         SystemClock.sleep(delay.toLong() * 2)
                     }
                 }
@@ -342,9 +333,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_help -> UtilityRadarUI.showHelp(this)
             R.id.action_share -> startScreenRecord()
             R.id.action_settings -> { settingsVisited = true; Route.settingsRadar(this) }
-            R.id.action_radar_markers -> Route.image(this, arrayOf("raw:radar_legend", "Radar Markers"))
-            R.id.action_radar_site_status_l3 -> Route.webView(this, arrayOf("http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended"))
-            R.id.action_radar_site_status_l2 -> Route.webView(this, arrayOf("http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended"))
+            R.id.action_radar_markers -> Route.image(this, "raw:radar_legend", "Radar Markers")
+            R.id.action_radar_site_status_l3 -> Route.webView(this, "http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended")
+            R.id.action_radar_site_status_l2 -> Route.webView(this, "http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended")
             R.id.action_radar1 -> switchRadar(0)
             R.id.action_radar2 -> switchRadar(1)
             R.id.action_radar3 -> switchRadar(2)
@@ -385,7 +376,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_a3 -> animateRadar(3)
             R.id.action_fav -> pauseButtonTapped()
             R.id.action_radar_4 -> startFourPaneNexrad()
-            R.id.action_TDWR -> showTdwrDialog()
+            R.id.action_TDWR -> nexradUI.showTdwrDialog(::mapSwitch)
             R.id.action_ridmap -> objectImageMap.showMap(nexradState.numberOfPanes, nexradState.wxglTextObjects)
             else -> return super.onOptionsItemSelected(item)
         }
@@ -535,28 +526,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             nexradState.radarSite = newRadarSite
             mapSwitch(nexradState.radarSite)
         }
-    }
-
-    // TODO FIXME move to NexradUI
-    private fun showTdwrDialog() {
-        val objectDialogue = ObjectDialogue(this, GlobalArrays.tdwrRadars)
-        objectDialogue.connectCancel { dialog, _ ->
-            dialog.dismiss()
-            UtilityUI.immersiveMode(this)
-        }
-        objectDialogue.connect { dialog, itemIndex ->
-            val s = GlobalArrays.tdwrRadars[itemIndex]
-            nexradState.radarSite = s.split(" ")[0]
-            // TODO FIXME single pane does not have this
-//            if (nexradState.product.matches(Regex("N[0-3]Q"))) {
-//                nexradState.product = "TZL"
-//            } else {
-//                nexradState.product = "TV0"
-//            }
-            mapSwitch(nexradState.radarSite)
-            dialog.dismiss()
-        }
-        objectDialogue.show()
     }
 
     @Synchronized private fun getContentParallel() {

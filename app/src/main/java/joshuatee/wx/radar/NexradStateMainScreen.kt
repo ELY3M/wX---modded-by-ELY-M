@@ -95,4 +95,11 @@ class NexradStateMainScreen(
             wxglRenders[idx].product = "N0U"
         }
     }
+
+    fun resetAllGlview() {
+        wxglSurfaceViews.indices.forEach {
+            NexradDraw.resetGlview(wxglSurfaceViews[it], wxglRenders[it])
+            wxglTextObjects[it].addLabels()
+        }
+    }
 }

@@ -42,6 +42,7 @@ import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.ShortcutType
@@ -77,7 +78,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var notificationToggle: MenuItem
     private lateinit var star: MenuItem
     private lateinit var locationList: List<String>
-    private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
     private var version = 1
     private var oldProduct = ""
@@ -147,23 +147,23 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        if (ridFavOld != UIPreferences.wfoFav) {
-            locationList = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
+        if (ridFavOld != UIPreferences.favorites[FavoriteType.WFO]) {
+            locationList = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         }
         super.onRestart()
     }
 
     private fun getContent() {
-        locationList = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
+        locationList = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         updateSubmenuNotificationText()
         invalidateOptionsMenu()
-        if (UIPreferences.wfoFav.contains(":$wfo:")) {
+        if (UIPreferences.favorites[FavoriteType.WFO]!!.contains(":$wfo:")) {
             star.setIcon(GlobalVariables.STAR_ICON)
         } else {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
         scrollView.smoothScrollTo(0, 0)
-        ridFavOld = UIPreferences.wfoFav
+        ridFavOld = UIPreferences.favorites[FavoriteType.WFO]!!
         if (product != oldProduct) {
             version = 1
         }
@@ -248,8 +248,8 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.AFD)
-            R.id.action_website -> Route.webView(this, arrayOf("https://www.weather.gov/" + wfo.lowercase(Locale.US), wfo, "extended"))
-            R.id.action_hazards -> Route.image(this, arrayOf("https://www.weather.gov/wwamap/png/" + wfo.lowercase(Locale.US) + ".png", "$wfo WWA Map"))
+            R.id.action_website -> Route.webView(this, "https://www.weather.gov/" + wfo.lowercase(Locale.US), wfo, "extended")
+            R.id.action_hazards -> Route.image(this, "https://www.weather.gov/wwamap/png/" + wfo.lowercase(Locale.US) + ".png", "$wfo WWA Map")
             R.id.action_share -> UtilityShare.text(this, product + wfo, textToShare)
             else -> return super.onOptionsItemSelected(item)
         }
@@ -269,7 +269,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(this, wfo, star, prefToken)
+        UtilityFavorites.toggle(this, wfo, star, FavoriteType.WFO)
     }
 
     private fun updateSubmenuNotificationText() {
@@ -291,7 +291,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContentByState() {
         scrollView.smoothScrollTo(0, 0)
-        ridFavOld = UIPreferences.wfoFav
+        ridFavOld = UIPreferences.favorites[FavoriteType.WFO]!!
         if (product != oldProduct) {
             version = 1
         }
@@ -329,13 +329,13 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (objectNavDrawer.onOptionsItemSelected(item)) {
             return true
         }
-        locationList = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
+        locationList = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         when (item.itemId) {
             R.id.action_sector -> ObjectDialogue.generic(this, locationList, ::getContent) {
                 if (locationList.isNotEmpty()) {
                     when (it) {
-                        1 -> Route.favoriteAdd(this, arrayOf("WFO"))
-                        2 -> Route.favoriteRemove(this, arrayOf("WFO"))
+                        1 -> Route.favoriteAdd(this, FavoriteType.WFO)
+                        2 -> Route.favoriteRemove(this, FavoriteType.WFO)
                         else -> {
                             wfo = locationList[it].split(" ").getOrNull(0) ?: ""
                             originalWfo = wfo

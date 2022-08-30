@@ -121,7 +121,7 @@ class SpcCompmapActivity : BaseActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, "SPC Compmap", image.bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "SPC Compmap", image)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

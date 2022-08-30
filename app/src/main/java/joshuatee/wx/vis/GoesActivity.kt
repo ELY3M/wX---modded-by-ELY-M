@@ -93,8 +93,7 @@ class GoesActivity : VideoRecordActivity() {
     private fun getContent(sectorF: String) {
         sector = sectorF
         writePrefs()
-        toolbar.title = UtilityGoes.sectorToName[sector] ?: ""
-        toolbar.subtitle = objectNavDrawer.getLabel()
+        setTitle(UtilityGoes.sectorToName[sector] ?: "", objectNavDrawer.getLabel())
         if (!goesFloater) {
             FutureBytes(this, UtilityGoes.getImage(objectNavDrawer.url, sector), ::display)
         } else {
@@ -209,7 +208,7 @@ class GoesActivity : VideoRecordActivity() {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.bitmap(this, objectNavDrawer.getLabel(), image.bitmap)
+                    UtilityShare.bitmap(this, objectNavDrawer.getLabel(), image)
                 }
             }
             else -> return super.onOptionsItemSelected(item)

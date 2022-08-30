@@ -26,11 +26,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config
 import android.graphics.Color
-import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.LayerDrawable
 import joshuatee.wx.Extensions.getInputStream
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.UtilityIO
@@ -41,15 +39,14 @@ import joshuatee.wx.settings.RadarPreferences
 
 object UtilityUSImgWX {
 
-    private const val CANVAS_X = 1000
-    private const val CANVAS_Y = 1000
+    private const val imageWidth = 1000
+    private const val imageHeight = 1000
 
-    fun layeredImg(context: Context, radarSiteArg: String, product: String, isInteractive: Boolean): Bitmap {
+    fun layeredImg(context: Context, radarSiteArg: String, product: String): Bitmap {
         var radarSite = radarSiteArg
         var tdwr = false
         var ridTdwr = ""
         var scaleType = ProjectionType.WX_RENDER
-        val hwLineWidth = 1
         if (WXGLNexrad.isProductTdwr(product)) {
             ridTdwr = WXGLNexrad.getTdwrFromRid(radarSite)
             tdwr = true
@@ -72,8 +69,9 @@ object UtilityUSImgWX {
         val layers = mutableListOf<Drawable>()
         val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
         try {
-            var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
+            var bitmapCanvas = Bitmap.createBitmap(imageWidth, imageHeight, Config.ARGB_8888)
             if (!product.startsWith("L2")) {
+                // TODO FIXME method to detect 4bit project?
                 if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {
                     UtilityNexradRadial4Bit.decodeAndPlot(context, bitmapCanvas, "nids", product)
                 } else {
@@ -86,7 +84,7 @@ object UtilityUSImgWX {
                 radarSite = ridTdwr
             }
             val citySize = 18
-            UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, hwLineWidth, citySize, isInteractive)
+            UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, citySize)
             bitmapCanvas = UtilityImg.drawText(context, bitmapCanvas)
             layers.add(colorDrawable)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
@@ -98,12 +96,11 @@ object UtilityUSImgWX {
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun layeredImgFromFile(context: Context, radarSiteArg: String, product: String, idxStr: String, isInteractive: Boolean): Bitmap {
+    fun layeredImgFromFile(context: Context, radarSiteArg: String, product: String, idxStr: String): Bitmap {
         var radarSite = radarSiteArg
         var tdwr = false
         var ridTdwr = ""
         var scaleType = ProjectionType.WX_RENDER
-        val hwLineWidth = 1
         if (WXGLNexrad.isProductTdwr(product)) {
             ridTdwr = WXGLNexrad.getTdwrFromRid(radarSite)
             tdwr = true
@@ -112,8 +109,9 @@ object UtilityUSImgWX {
         }
         val layers = mutableListOf<Drawable>()
         val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
-        var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
+        var bitmapCanvas = Bitmap.createBitmap(imageWidth, imageHeight, Config.ARGB_8888)
         if (!product.startsWith("L2")) {
+            // TODO FIXME method to detect 4bit project?
             if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {
                 UtilityNexradRadial4Bit.decodeAndPlot(context, bitmapCanvas, "nids$idxStr", product)
             } else {
@@ -126,58 +124,11 @@ object UtilityUSImgWX {
             radarSite = ridTdwr
         }
         val citySize = 18
-        UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, hwLineWidth, citySize, isInteractive)
+        UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, citySize)
         bitmapCanvas = UtilityImg.drawText(context, bitmapCanvas)
         layers.add(colorDrawable)
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         return UtilityImg.layerDrawableToBitmap(layers)
-    }
-
-    fun animationFromFiles(context: Context, radarSiteOriginal: String, product: String, frameCount: Int, idxStr: String, isInteractive: Boolean): AnimationDrawable {
-        var radarSite = radarSiteOriginal
-        var scaleType = ProjectionType.WX_RENDER
-        val ridTdwr: String
-        if (WXGLNexrad.isProductTdwr(product)) {
-            ridTdwr = WXGLNexrad.getTdwrFromRid(radarSite)
-            radarSite = ridTdwr
-            scaleType = ProjectionType.WX_RENDER_48
-        }
-        val fileList = Array(frameCount) { "" }
-        (0 until frameCount).forEach {
-            if (idxStr == "") {
-                fileList[it] = "nexrad_anim$it"
-            } else {
-                fileList[it] = idxStr + product + "nexrad_anim" + it.toString()
-            }
-        }
-        val hwLineWidth = 1
-        val animDrawable = AnimationDrawable()
-        val bitmapCanvas = Bitmap.createBitmap(1000, 1000, Config.ARGB_8888)
-        val cd = if (RadarPreferences.blackBg) {
-            ColorDrawable(Color.BLACK)
-        } else {
-            ColorDrawable(Color.WHITE)
-        }
-        val bitmaps = Array(frameCount) { UtilityImg.getBlankBitmap() }
-        (0 until frameCount).forEach {
-            bitmaps[it] = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
-            if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {
-                UtilityNexradRadial4Bit.decodeAndPlot(context, bitmaps[it], fileList[it], product)
-            } else {
-                UtilityNexradRadial8Bit.decodeAndPlot(context, bitmaps[it], fileList[it], product)
-            }
-        }
-        val citySize = 20
-        UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, hwLineWidth, citySize, isInteractive)
-        val delay = UtilityImg.animInterval(context)
-        (0 until frameCount).forEach {
-            val layers = arrayOf(cd, BitmapDrawable(context.resources, bitmaps[it]), BitmapDrawable(context.resources, bitmapCanvas))
-            animDrawable.addFrame(LayerDrawable(layers), delay)
-        }
-        (0 until frameCount).forEach {
-            context.deleteFile(fileList[it])
-        }
-        return animDrawable
     }
 
     fun bitmapForColorPalette(context: Context, product: Int): Bitmap {
@@ -190,7 +141,7 @@ object UtilityUSImgWX {
             ColorDrawable(Color.WHITE)
         }
         try {
-            val bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
+            val bitmapCanvas = Bitmap.createBitmap(imageWidth, imageHeight, Config.ARGB_8888)
             UtilityNexradRadial8Bit.decodeAndPlot(context, bitmapCanvas, fileName, WXGLNexrad.productCodeStringToCode[product] ?: "N0Q")
             layers.add(colorDrawable)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))

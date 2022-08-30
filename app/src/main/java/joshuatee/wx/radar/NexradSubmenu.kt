@@ -24,6 +24,7 @@ package joshuatee.wx.radar
 import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.ObjectToolbar
 
@@ -92,7 +93,7 @@ class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState:
     }
 
     fun setStarButton() {
-        if (UIPreferences.ridFav.contains(":" + nexradState.radarSite + ":")) {
+        if (UIPreferences.favorites[FavoriteType.RID]!!.contains(":" + nexradState.radarSite + ":")) {
             starButton.setIcon(GlobalVariables.STAR_ICON_WHITE)
         } else {
             starButton.setIcon(GlobalVariables.STAR_OUTLINE_ICON_WHITE)

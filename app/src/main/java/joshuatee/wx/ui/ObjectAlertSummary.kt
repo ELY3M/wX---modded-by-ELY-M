@@ -56,7 +56,6 @@ class ObjectAlertSummary(private val context: Context, mainBox: VBox, private va
 
     fun updateImage(bitmap: Bitmap) {
         this.bitmap = bitmap
-//        image.set2(bitmap)
         if (UtilityUI.isLandScape(context)) {
             image.set2(bitmap, 2)
         } else {
@@ -68,15 +67,12 @@ class ObjectAlertSummary(private val context: Context, mainBox: VBox, private va
         textBox.removeChildrenAndLayout()
         scrollView.smoothScrollTo(0, 0)
         textBox.addWidget(cardText.get())
-//        image = Image(context, bitmap)
-//        image = Image(context)
         if (UtilityUI.isLandScape(context)) {
             image.set2(bitmap, 2)
         } else {
             image.set2(bitmap)
         }
-        image.connect { Route.image(context, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")) }
-//        box.addWidget(image.get())
+        image.connect { Route.image(context, "https://forecast.weather.gov/wwamap/png/US.png", "US Alerts") }
         val mapEvent = mutableMapOf<String, Int>()
         val mapState = mutableMapOf<String, Int>()
         val map = mutableMapOf<String, Int>()
@@ -116,7 +112,7 @@ class ObjectAlertSummary(private val context: Context, mainBox: VBox, private va
                     }
                     val objectCardAlertSummaryItem = ObjectCardAlertDetail(context)
                     objectCardAlertSummaryItem.setTextFields(nwsOffice, nwsLoc, capAlert)
-                    objectCardAlertSummaryItem.connect { Route.hazard(context, arrayOf(capAlert.url, "")) }
+                    objectCardAlertSummaryItem.connect { Route.hazard(context, capAlert.url) }
                     textBox.addWidget(objectCardAlertSummaryItem.get())
                     i += 1
                 }

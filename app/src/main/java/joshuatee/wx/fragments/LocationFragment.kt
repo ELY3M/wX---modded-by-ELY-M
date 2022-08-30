@@ -79,13 +79,10 @@ class LocationFragment : Fragment() {
     private var boxForecast: VBox? = null
     private var boxHazards: VBox? = null
     private val hazardsCards = mutableListOf<CardText>()
-    private val hazardsExpandedAl = mutableListOf<Boolean>()
+    private val hazardsExpandedList = mutableListOf<Boolean>()
     private var dataNotInitialized = true
     private var alertDialogStatus: ObjectDialogue? = null
     private val alertDialogStatusList = mutableListOf<String>()
-//    private var idxIntG = 0
-//    private var longPressDialogue: ObjectDialogue? = null
-//    private val radarLongPressItems = mutableListOf<String>()
     private var objectHazards = ObjectHazards()
     private var objectSevenDay = ObjectSevenDay()
     private var locationChangedSevenDay = false
@@ -135,20 +132,20 @@ class LocationFragment : Fragment() {
                 box.addWidget(cards.last().get())
                 index += 1
             } else if (token.contains("TXT-")) {
-                val hsTextTmp = CardHSText(activityReference, token.replace("TXT-", ""))
-                box.addWidget(hsTextTmp.get())
-                homeScreenTextCards.add(hsTextTmp)
-                hsTextTmp.connect { hsTextTmp.toggleText() }
+                val hsText = CardHSText(activityReference, token.replace("TXT-", ""))
+                box.addWidget(hsText.get())
+                homeScreenTextCards.add(hsText)
+                hsText.connect { hsText.toggleText() }
             } else if (token.contains("IMG-")) {
-                val hsImageTmp = CardHSImage(activityReference, token.replace("IMG-", ""))
-                box.addWidget(hsImageTmp.get())
-                homeScreenImageCards.add(hsImageTmp)
+                val hsImage = CardHSImage(activityReference, token.replace("IMG-", ""))
+                box.addWidget(hsImage.get())
+                homeScreenImageCards.add(hsImage)
                 setImageOnClick()
             } else if (token.contains("WEB-")) {
                 if (token == "WEB-7DAY") {
-                    val wv = WebView(activityReference)
+                    val webView = WebView(activityReference)
                     homeScreenWebCards.add(Card(activityReference))
-                    homeScreenWebViews.add(wv)
+                    homeScreenWebViews.add(webView)
                     homeScreenWebCards.last().addWidget(homeScreenWebViews.last())
                     box.addWidget(homeScreenWebCards.last().get())
                 }
@@ -158,7 +155,6 @@ class LocationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupAlertDialogStatus()
-        //setupRadarLongPress()
         val view = inflater.inflate(R.layout.fragment_location, container, false)
         homescreenFavLocal = UIPreferences.homescreenFav
         if (homescreenFavLocal.contains("TXT-CC") || homescreenFavLocal.contains("TXT-HAZ") || homescreenFavLocal.contains("TXT-7DAY")) {
@@ -171,7 +167,7 @@ class LocationFragment : Fragment() {
             dialog.dismiss()
         }
         // The main LinearLayout that holds all content
-        box = VBox.fromViewResource(view) //view.findViewById(R.id.linearLayout)
+        box = VBox.fromViewResource(view)
         // The button the user will tap to change the current location
         locationLabel = CardText(activityReference, box.get(), Location.name, TextSize.MEDIUM)
         val locationLabelPadding = if (UtilityUI.isTablet()) {
@@ -224,7 +220,7 @@ class LocationFragment : Fragment() {
             setImageOnClick()
             getContent()
         } else {
-            Route.locationEdit(activityReference, arrayOf((position + 1).toString(), ""))
+            Route.locationEdit(activityReference, (position + 1).toString())
         }
         locationLabel.text = Location.name
     }
@@ -376,26 +372,6 @@ class LocationFragment : Fragment() {
         homeScreenWebViews.last().loadUrl(forecastUrl)
     }
 
-//    private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
-//        override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
-//            if (progress != 50000) {
-//                nexradState.curRadar = idx
-//                UtilityRadarUI.setupContextMenu(
-//                        radarLongPressItems,
-//                        Location.latLon.lat,
-//                        Location.latLon.lon,
-//                        activityReference,
-//                        nexradState.surface,
-//                        nexradState.render,
-//                        longPressDialogue!!)
-//            } else {
-//                nexradState.wxglTextObjects.forEach {
-//                    it.addLabels()
-//                }
-//            }
-//        }
-//    }
-
     private fun getRadarTimeStampForHomescreen(radarSite: String): String {
         var timestamp = ""
         val tokens = WXGLNexrad.getRadarInfo(radarSite).split(" ")
@@ -420,10 +396,11 @@ class LocationFragment : Fragment() {
 
     private fun getGPSFromDouble() {}
 
-//    private fun getLatLon() = LatLon(Location.x, Location.y)
-
     // main screen will not show GPS so if configured just show it off the screen
-    private fun getLatLon() = LatLon(0.0, 0.0)
+    // NOTE - this was backed out as it's not a good solution when user enables "center radar on location"
+//    private fun getLatLon() = LatLon(0.0, 0.0)
+
+    private fun getLatLon() = LatLon(Location.x, Location.y)
 
     override fun onPause() {
         if (glviewInitialized) {
@@ -453,7 +430,6 @@ class LocationFragment : Fragment() {
                             args[z] = Location.rid
                     }
                     if (cl != null && id != null) {
-//                        Route(MyApplication.appContext, cl, id, args)
                         val intent = Intent(MyApplication.appContext, cl)
                         intent.putExtra(id, args)
                         startActivity(intent)
@@ -471,27 +447,20 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun resetAllGlview() {
-        nexradState.wxglSurfaceViews.indices.forEach {
-            NexradDraw.resetGlview(nexradState.wxglSurfaceViews[it], nexradState.wxglRenders[it])
-            nexradState.wxglTextObjects[it].addLabels()
-        }
-    }
-
     private fun radarTimestamps(): List<String> {
         return (0 until nexradState.wxglSurfaceViews.size).map { getRadarTimeStamp(nexradState.wxglRenders[it].wxglNexradLevel3.timestamp, it) }
     }
 
     private fun setupHazardCardsCA(hazUrl: String) {
         boxHazards?.removeChildrenAndLayout()
-        hazardsExpandedAl.clear()
+        hazardsExpandedList.clear()
         hazardsCards.clear()
-        hazardsExpandedAl.add(false)
+        hazardsExpandedList.add(false)
         hazardsCards.add(CardText(activityReference))
         hazardsCards[0].setupHazard()
         hazardsCards[0].text = hazUrl
         val hazUrlCa = objectHazards.hazards
-        hazardsCards[0].connect { Route.text(activityReference, arrayOf(Utility.fromHtml(hazUrlCa), hazUrl)) }
+        hazardsCards[0].connect { Route.text(activityReference, Utility.fromHtml(hazUrlCa), hazUrl) }
         if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) {
             boxHazards?.addWidget(hazardsCards[0].get())
         }
@@ -511,28 +480,11 @@ class LocationFragment : Fragment() {
                     renderOrNull,
                     activityReference,
                     ::getContent,
-                    ::resetAllGlview,
+                    nexradState::resetAllGlview,
                     ::getAllRadars)
             dialog.dismiss()
         }
     }
-
-//    private fun setupRadarLongPress() {
-//        longPressDialogue = ObjectDialogue(activityReference, radarLongPressItems)
-//        longPressDialogue?.connectCancel { dialog, _ ->
-//            dialog.dismiss()
-//        }
-//        longPressDialogue?.connect { dialog, itemIndex ->
-//            val item = radarLongPressItems[itemIndex]
-//            UtilityRadarUI.doLongPressAction(
-//                    item,
-//                    activityReference,
-//                    nexradState.surface,
-//                    nexradState.render,
-//                    ::longPressRadarSiteSwitch)
-//            dialog.dismiss()
-//        }
-//    }
 
     private fun longPressRadarSiteSwitch(s: String) {
         val newRadarSite = s.split(" ")[0]
@@ -548,7 +500,7 @@ class LocationFragment : Fragment() {
 
     private var mActivity: FragmentActivity? = null
 
-    override fun onAttach(context: Context) { // was Context? before 'androidx.preference:preference:1.1.0' // was 1.0.0
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is FragmentActivity) {
             mActivity = context
@@ -562,18 +514,18 @@ class LocationFragment : Fragment() {
 
     private fun setupHazardCards() {
         boxHazards?.removeChildrenAndLayout()
-        hazardsExpandedAl.clear()
+        hazardsExpandedList.clear()
         hazardsCards.clear()
         objectHazards.titles.indices.forEach { z ->
             if (UtilityNotificationTools.nwsLocalAlertNotFiltered(activityReference, objectHazards.titles[z])) {
-                hazardsExpandedAl.add(false)
+                hazardsExpandedList.add(false)
                 hazardsCards.add(CardText(activityReference))
                 hazardsCards[z].setupHazard()
                 hazardsCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
-                hazardsCards[z].connect { Route.hazard(activityReference, arrayOf(objectHazards.urls[z])) }
+                hazardsCards[z].connect { Route.hazard(activityReference, objectHazards.urls[z]) }
                 boxHazards?.addWidget(hazardsCards[z].get())
             } else {
-                hazardsExpandedAl.add(false)
+                hazardsExpandedList.add(false)
                 hazardsCards.add(CardText(activityReference))
             }
         }

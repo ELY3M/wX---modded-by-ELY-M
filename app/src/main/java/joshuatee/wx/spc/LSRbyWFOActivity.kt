@@ -33,6 +33,7 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
@@ -57,7 +58,6 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
     private var locations = listOf<String>()
-    private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
     private var lsrList = mutableListOf<String>()
     private var textList = mutableListOf<CardText>()
@@ -85,15 +85,15 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         box = VBox.fromResource(this)
         objectToolbarBottom.connect(this)
         star = objectToolbarBottom.getFavIcon()
-        locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
         imageMap.connect(::mapSwitch, UtilityImageMap::mapToWfo)
         getContent()
     }
 
     override fun onRestart() {
-        if (ridFavOld != UIPreferences.wfoFav) {
-            locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
+        if (ridFavOld != UIPreferences.favorites[FavoriteType.WFO]) {
+            locations = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         }
         super.onRestart()
     }
@@ -115,22 +115,22 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView.visibility = View.VISIBLE
         wfo = loc.uppercase(Locale.US)
         mapShown = false
-        locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         getContent()
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(this, wfo, star, prefToken)
+        UtilityFavorites.toggle(this, wfo, star, FavoriteType.WFO)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         when (item.itemId) {
             R.id.action_sector -> ObjectDialogue.generic(this, locations, ::getContent) {
                 if (locations.isNotEmpty()) {
                     when (it) {
-                        1 -> Route.favoriteAdd(this, arrayOf("WFO"))
-                        2 -> Route.favoriteRemove(this, arrayOf("WFO"))
+                        1 -> Route.favoriteAdd(this, FavoriteType.WFO)
+                        2 -> Route.favoriteRemove(this, FavoriteType.WFO)
                         else -> wfo = locations[it].split(" ").getOrNull(0) ?: ""
                     }
                     if (firstTime) {
@@ -145,15 +145,15 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        locations = UtilityFavorites.setupMenu(this, UIPreferences.wfoFav, wfo, prefToken)
+        locations = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         invalidateOptionsMenu()
-        if (UIPreferences.wfoFav.contains(":$wfo:")) {
+        if (UIPreferences.favorites[FavoriteType.WFO]!!.contains(":$wfo:")) {
             star.setIcon(GlobalVariables.STAR_ICON)
         } else {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
         scrollView.smoothScrollTo(0, 0)
-        ridFavOld = UIPreferences.wfoFav
+        ridFavOld = UIPreferences.favorites[FavoriteType.WFO]!!
         box.removeChildren()
         FutureVoid(this, ::downloadFirst, ::getLsrFromWfo)
     }

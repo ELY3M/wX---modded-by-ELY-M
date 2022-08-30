@@ -32,7 +32,6 @@ import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.CardText
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
@@ -45,7 +44,8 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     //
     // Arguments
     //
-    // 1: number of MCD, WAT, or MPD such as 0403
+    // 1: number of MCD, WAT, or MPD such as "0403"
+    // 2: type such as "MCD", "WATCH", "MPD"
     //
 
     companion object { const val NUMBER = "" }
@@ -56,13 +56,11 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var cardText: CardText
     private lateinit var objectWatchProduct: ObjectWatchProduct
     private lateinit var box: VBox
-    private var tabletInLandscape = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         box = VBox.fromResource(this)
         objectToolbarBottom.connect(this)
-        tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         image = if (tabletInLandscape) {
             box.makeHorizontal()
             Image(this, box, UtilityImg.getBlankBitmap(), 2)
@@ -72,7 +70,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cardText = CardText(this, box, toolbar, toolbarBottom)
         arguments = intent.getStringArrayExtra(NUMBER)!!
         number = arguments[0]
-        objectWatchProduct = when (arguments[2]) {
+        objectWatchProduct = when (arguments[1]) {
             "MCD" -> ObjectWatchProduct(PolygonType.MCD, number)
             "WATCH" -> ObjectWatchProduct(PolygonType.WATCH, number)
             "MPD" -> ObjectWatchProduct(PolygonType.MPD, number)
@@ -87,22 +85,14 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this, ::downloadText, ::updateText)
-        FutureVoid(this, ::downloadImage, ::updateImage)
-    }
-
-    private fun downloadText() {
-        objectWatchProduct.getText(this)
-    }
-
-    private fun downloadImage() {
-        objectWatchProduct.getImage()
+        FutureVoid(this, { objectWatchProduct.getText(this) }, ::updateText)
+        FutureVoid(this, { objectWatchProduct.getImage() }, ::updateImage)
     }
 
     private fun updateText() {
         cardText.text = Utility.fromHtml(objectWatchProduct.text)
         setTitle(objectWatchProduct.title, objectWatchProduct.textForSubtitle)
-        UtilityTts.conditionalPlay(arguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
+        UtilityTts.conditionalPlay(arguments, 2, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
 
     private fun updateImage() {
@@ -111,9 +101,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         } else {
             image.set(objectWatchProduct.bitmap)
         }
-        image.connect {
-            Route.image(this, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
-        }
+        image.connect { Route.image(this, objectWatchProduct.imgUrl, objectWatchProduct.title) }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

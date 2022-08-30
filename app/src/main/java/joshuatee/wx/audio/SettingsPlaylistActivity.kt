@@ -24,7 +24,6 @@ package joshuatee.wx.audio
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -151,15 +150,11 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private val isStoragePermissionGranted: Boolean
         get() {
-            return if (Build.VERSION.SDK_INT >= 23) {
-                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    true
-                } else {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-                    false
-                }
-            } else {
+            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 true
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                false
             }
         }
 
@@ -225,7 +220,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun viewItem(position: Int) {
-        Route.wpcText(this, arrayOf(playListItems[position].split(";")[0].lowercase(Locale.US)))
+        Route.wpcText(this, playListItems[position].split(";")[0].lowercase(Locale.US))
     }
 
     private fun playItem(position: Int) {

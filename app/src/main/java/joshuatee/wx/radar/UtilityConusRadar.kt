@@ -479,7 +479,7 @@ public object UtilityConusRadar {
         } else {
             ColorDrawable(Color.WHITE)
         }
-        var scaleType = ProjectionType.NWS_MOSAIC
+        var scaleType = ProjectionType.WX_RENDER
         var bitmap = imgUrl.getImage()
         var bitmapCanvas = UtilityImg.getBlankBitmap()
         //if (MyApplication.blackBg) {
@@ -487,7 +487,7 @@ public object UtilityConusRadar {
         //}
         if (bitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-            UtilityCanvasMain.addCanvasConus(context, bitmapCanvas, scaleType, "latest", 1)
+            UtilityCanvasMain.addCanvasConus(context, bitmapCanvas, scaleType, "latest")
         }
         layers.add(cd)
         layers.add(BitmapDrawable(context.resources, bitmap))
@@ -504,7 +504,7 @@ public object UtilityConusRadar {
         } else {
             ColorDrawable(Color.WHITE)
         }
-        var scaleType = ProjectionType.NWS_MOSAIC
+        var scaleType = ProjectionType.WX_RENDER
         var bitmap = imgUrl.getImage()
         var bitmapCanvas = UtilityImg.getBlankBitmap()
         //if (MyApplication.blackBg) {
@@ -525,7 +525,7 @@ public object UtilityConusRadar {
 
         if (fbitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(fbitmap.width, fbitmap.height, Bitmap.Config.ARGB_8888)
-            UtilityCanvasMain.addCanvasConus(context, bitmapCanvas, scaleType, "latest", 1)
+            UtilityCanvasMain.addCanvasConus(context, bitmapCanvas, scaleType, "latest")
         }
         layers.add(cd)
         layers.add(BitmapDrawable(context.resources, fbitmap))

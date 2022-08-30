@@ -87,7 +87,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var inOglAnimPaused = false
     private var animTriggerDownloads = false
     private var delay = 0
-    private val prefToken = "RID_FAV"
     private var locationManager: LocationManager? = null
     private lateinit var objectImageMap: ObjectImageMap
     private var settingsVisited = false
@@ -114,16 +113,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         nexradState = NexradStatePane(this, 1, listOf(R.id.rl), 1, 1)
         nexradSubmenu = NexradSubmenu(objectToolbarBottom, nexradState)
         nexradLongPressMenu = NexradLongPressMenu(this, nexradState, nexradArguments, ::longPressRadarSiteSwitch)
-        nexradUI = NexradUI(this, nexradState)
-        nexradColorLegend = NexradColorLegend(this, nexradState)
+        nexradUI = NexradUI(this, nexradState, nexradSubmenu)
         nexradState.initGlView(nexradLongPressMenu.changeListener)
         objectImageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, nexradState.wxglSurfaceViews)
         objectImageMap.connect(::mapSwitch, UtilityImageMap::mapToRid)
         nexradState.readPreferences(nexradArguments)
-        // TODO FIXME move to helper class
-        if (RadarPreferences.showLegend) {
-            nexradColorLegend.showLegend()
-        }
+        nexradColorLegend = NexradColorLegend(this, nexradState)
         getContent()
     }
 
@@ -177,7 +172,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private fun checkForAutoRefresh() {
         if (RadarPreferences.wxoglRadarAutoRefresh || RadarPreferences.locationDotFollowsGps) {
             interval = 60000 * Utility.readPrefInt(this, "RADAR_REFRESH_INTERVAL", 3)
-            locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
             ) {
@@ -185,7 +180,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 if (gpsEnabled != null && gpsEnabled) {
                     locationManager?.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
-                            //20000.toLong(),
                             (RadarPreferences.locationUpdateInterval * 1000).toLong(),
                             WXGLNexrad.radarLocationUpdateDistanceInMeters,
                             locationListener
@@ -193,7 +187,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 }
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            //mHandler = Handler(Looper.getMainLooper())
             startRepeatingTask()
         }
 	//elys mod
@@ -204,7 +197,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     @Synchronized private fun getContent() {
-        getContentPrep()
+        nexradUI.getContentPrep()
         initGeom()
         FutureVoid(this, {
             NexradDraw.plotRadar(
@@ -232,17 +225,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 nexradState.surface,
                 nexradState.wxglTextObjects,
                 nexradUI::setTitleWithWarningCounts)
-    }
-
-    // TODO FIXME NexradUI
-    private fun getContentPrep() {
-        nexradState.radarSitesForFavorites = UtilityFavorites.setupMenu(this, UIPreferences.ridFav, nexradState.radarSite, prefToken)
-        invalidateOptionsMenu()
-        nexradState.adjustForTdwrSinglePane()
-        title = nexradState.product
-        nexradSubmenu.adjustTiltAndProductMenus()
-        nexradSubmenu.setStarButton()
-        toolbar.subtitle = ""
     }
 
     private fun initGeom() {
@@ -285,20 +267,23 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                         break
                     }
                     // if the first pass has completed, for L2 no longer uncompress, use the existing decomp files
-                    if (loopCnt > 0)
+                    if (loopCnt > 0) {
                         nexradState.render.constructPolygons("nexrad_anim$r", nexradArguments.urlStr, false)
-                    else
+                    } else {
                         nexradState.render.constructPolygons("nexrad_anim$r", nexradArguments.urlStr, true)
-                    launch(uiDispatcher) { nexradUI.progressUpdate((r + 1).toString(), animArray.size.toString()) }
+                    }
+                    launch(uiDispatcher) {
+                        nexradUI.progressUpdate((r + 1).toString(), animArray.size.toString())
+                    }
                     nexradState.draw()
                     timeMilli = ObjectDateTime.currentTimeMillis()
                     if ((timeMilli - priorTime) < delay) {
-                        SystemClock.sleep(delay - ((timeMilli - priorTime)))
+                        SystemClock.sleep(delay - (timeMilli - priorTime))
                     }
                     if (!inOglAnim) {
                         break
                     }
-                    if (r == (animArray.lastIndex)) {
+                    if (r == animArray.lastIndex) {
                         SystemClock.sleep(delay.toLong() * 2)
                     }
                 }
@@ -324,11 +309,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_help -> UtilityRadarUI.showHelp(this)
             R.id.action_share -> startScreenRecord()
             R.id.action_settings -> { settingsVisited = true; Route.settingsRadar(this) }
-            R.id.action_radar_markers -> Route.image(this, arrayOf("raw:radar_legend", "Radar Markers"))
+            R.id.action_radar_markers -> Route.image(this,"raw:radar_legend", "Radar Markers")
             R.id.action_radar_2 -> showMultipaneRadar(2)
             R.id.action_radar_4 -> showMultipaneRadar(4)
-            R.id.action_radar_site_status_l3 -> Route.webView(this, arrayOf("http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended"))
-            R.id.action_radar_site_status_l2 -> Route.webView(this, arrayOf("http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended"))
+            R.id.action_radar_site_status_l3 -> Route.webView(this, "http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended")
+            R.id.action_radar_site_status_l2 -> Route.webView(this, "http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended")
             R.id.action_n0q, R.id.action_n0q_menu  -> nexradState.getReflectivity(::getContent)
             R.id.action_n0u, R.id.action_n0u_menu -> nexradState.getVelocity(::getContent)
             R.id.action_n0b -> changeProduct("N" + nexradState.tilt + "B")
@@ -409,7 +394,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(this, nexradState.radarSite, nexradSubmenu.starButton, prefToken)
+        UtilityFavorites.toggle(this, nexradState.radarSite, nexradSubmenu.starButton, FavoriteType.RID)
     }
 
     override fun onStop() {
@@ -538,15 +523,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        nexradState.radarSitesForFavorites = UtilityFavorites.setupMenu(this, UIPreferences.ridFav, nexradState.radarSite, prefToken)
+        nexradState.radarSitesForFavorites = UtilityFavorites.setupMenu(this, nexradState.radarSite, FavoriteType.RID)
         when (item.itemId) {
             R.id.action_sector -> {
                 ObjectDialogue.generic(this, nexradState.radarSitesForFavorites, ::getContent) {
                     if (nexradState.radarSitesForFavorites.size > 2) {
                         stopAnimation()
                         when (it) {
-                            1 -> Route.favoriteAdd(this, arrayOf("RID"))
-                            2 -> Route.favoriteRemove(this, arrayOf("RID"))
+                            1 -> Route.favoriteAdd(this, FavoriteType.RID)
+                            2 -> Route.favoriteRemove(this, FavoriteType.RID)
                             else -> {
                                 if (nexradState.radarSitesForFavorites[it] == " ") {
                                     nexradState.radarSite = joshuatee.wx.settings.Location.rid
@@ -556,10 +541,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                                 mapSwitch(nexradState.radarSite)
                             }
                         }
-//                        if (firstTime) {
-//                            UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
-//                            firstTime = false
-//                        }
                     }
                     UtilityUI.immersiveMode(this)
                 }

@@ -311,8 +311,8 @@
     <string name="show_hide_radar">Show/Hide Radar</string>
     <string name="show_hide_color_legend">Show/Hide Color Legend</string>
     <string name="conus_warning_map">CONUS warning map</string>
-    <string name="ak_warning_map">AK warning map</string>
-    <string name="hi_warning_map">HI warning map</string>
+    <string name="ak_warning_map">Alaska warning map</string>
+    <string name="hi_warning_map">Hawaii warning map</string>
     <string name="surface">Surface</string>
     <string name="spc_help">SPC Help</string>
     <string name="layers">Layers</string>

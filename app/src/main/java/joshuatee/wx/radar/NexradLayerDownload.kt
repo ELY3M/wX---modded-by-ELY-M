@@ -2,7 +2,7 @@
 
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
-    This file is part of wX.
+    This file is part of wX.4
 
     wX is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

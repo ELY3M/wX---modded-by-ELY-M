@@ -25,46 +25,9 @@ import java.nio.ByteBuffer
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.ProjectionNumbers
-import joshuatee.wx.util.UtilityLog
 import kotlin.math.*
 
 object UtilityCanvasProjection {
-
-    fun compute4326Numbers(x: Double, y: Double, pn: ProjectionNumbers) =
-        doubleArrayOf(
-            (-((y - pn.yDbl) * pn.scale) + pn.xCenter),
-            (-((x - pn.xDbl) * pn.scale) + pn.yCenter)
-        )
-
-    fun compute4326Numbers(latLon: LatLon, projectionNumbers: ProjectionNumbers) = compute4326Numbers(latLon.lat, latLon.lon, projectionNumbers)
-
-    fun compute4326NumbersFloatToBuffer(numBuffer: ByteBuffer, tmpBuffer: ByteBuffer, projectionNumbers: ProjectionNumbers) {
-        numBuffer.position(0)
-        tmpBuffer.position(0)
-        var x: Float
-        var y: Float
-        var xTmp: Float
-        var yTmp: Float
-        val pnXFloat = projectionNumbers.xFloat
-        val pnYFloat = projectionNumbers.yFloat
-        val pnScaleFloat = projectionNumbers.scaleFloat
-        val pnXCenter = projectionNumbers.xCenter
-        val pnYCenter = projectionNumbers.yCenter
-        try {
-            while (numBuffer.position() < numBuffer.capacity()) {
-                xTmp = numBuffer.float
-                yTmp = numBuffer.float
-                x = (-((yTmp - pnYFloat) * pnScaleFloat) + pnXCenter.toFloat())
-                y = (-((xTmp - pnXFloat) * pnScaleFloat) + pnYCenter.toFloat())
-                if (tmpBuffer.position() < (tmpBuffer.capacity() - 7)) {
-                    tmpBuffer.putFloat(x)
-                    tmpBuffer.putFloat(y)
-                }
-            }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-    }
 
     fun computeMercatorFloatToBuffer(numBuffer: ByteBuffer, tmpBuffer: ByteBuffer, projectionNumbers: ProjectionNumbers) {
         numBuffer.position(0)
@@ -81,8 +44,8 @@ object UtilityCanvasProjection {
         while (numBuffer.position() < numBuffer.capacity()) {
             xTmp = numBuffer.float
             yTmp = numBuffer.float
-            x = (-((yTmp - pnYFloat) * oneDegreeScaleFactor)) + pnXCenter.toFloat()
-            y = (-((180.0 / PI * log(
+            x = (-1.0f * ((yTmp - pnYFloat) * oneDegreeScaleFactor)) + pnXCenter.toFloat()
+            y = (-1.0 * ((180.0 / PI * log(
                 tan(PI / 4.0 + xTmp * (PI / 180.0) / 2.0),
                 E
             ) - 180.0 / PI * log(
@@ -98,10 +61,11 @@ object UtilityCanvasProjection {
 
     fun computeMercatorNumbers(ec: ExternalGlobalCoordinates, pn: ProjectionNumbers) = computeMercatorNumbers(ec.latitude, ec.longitude * -1.0, pn)
 
+    // TODO FIXME returning a List<Float> would remove some boilerplate but would likely require changes in quite a few spots and may not be worth it
     fun computeMercatorNumbers(x: Double, y: Double, pn: ProjectionNumbers) =
         doubleArrayOf(
-            (-((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat(),
-            (-((180.0 / PI * log(
+            (-1.0 * ((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat(),
+            (-1.0 * ((180.0 / PI * log(
                 tan(PI / 4.0 + x * (PI / 180.0) / 2.0),
                 E
             ) - 180.0 / PI * log(
@@ -109,4 +73,17 @@ object UtilityCanvasProjection {
                 E
             )) * pn.oneDegreeScaleFactor)) + pn.yCenter
         )
+
+    // nexrad widget storm info
+    fun computeMercatorNumbers(x: Float, y: Float, pn: ProjectionNumbers) =
+            listOf(
+                    ((-1.0f * ((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat()).toFloat(),
+                    ((-1.0f * ((180.0f / PI * log(
+                            tan(PI / 4.0 + x * (PI / 180.0f) / 2.0f),
+                            E
+                    ) - 180.0f / PI * log(
+                            tan(PI / 4.0f + pn.xDbl * (PI / 180.0f) / 2.0f),
+                            E
+                    )) * pn.oneDegreeScaleFactor)) + pn.yCenter).toFloat()
+            )
 }

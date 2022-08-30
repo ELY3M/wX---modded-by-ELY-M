@@ -138,7 +138,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun showText(html: String) {
         cardText.text = html
         toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
-        if (arguments[1] == "sound") {
+        if (arguments.size > 1 && arguments[1] == "sound") {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         }
     }
@@ -150,14 +150,10 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
     }
 
-    private fun showImageProduct(imageUrl: String, title: String) {
-        Route.image(this, arrayOf(imageUrl, title))
-    }
-
     private fun showImage(index: Int) {
         images[index].visibility = View.VISIBLE
         images[index].set(bitmaps[index], imagesPerRow)
-        images[index].connect { showImageProduct(urls[index], imageLabel) }
+        images[index].connect { Route.image(this, urls[index], imageLabel) }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

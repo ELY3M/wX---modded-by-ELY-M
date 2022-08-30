@@ -7,6 +7,7 @@
 // [REF] replace String.format with stuff in to.kt
 // [ADD] user request for metar homescreen widget
 // [ADD] user request for dawn/dusk, look to migrate to: https://github.com/phototime/solarized-android
+// [ADD] user request for multiple nexrad widgets of different sites (products?)
 // [FIX] SPC HREF radar stuff
 // [REF] IntentService is deprecated (AudioService* and others) https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
 // [ADD] handle deprecations in UtilityUI https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
@@ -23,11 +24,60 @@
 // [ADD] nexrad - show map, phone off, onrestart observations show with map still up
 // [FIX] multipane with no locked panes, long press on non-selected radar will select it but not change in title
 // [ADD] debug option with circular log for downloads
-
+// [FIX] look for other Route.* that do not need Array as arg
 ```
 [[_TOC_]]
 
-## 55679 2022_08_23
+## 55688 2022_08_30
+
+## 55687 2022_08_30
+* [REF] misc refactor
+* [ADD] In activity to add or edit location, place cursor at end of text in label field
+
+## 55686 2022_08_29
+* [FIX] nexrad widget warning colors broke in recent refactor
+* [REF] refactor warning handling in UtilityCanvas for NexradWidget
+
+## 55685 2022_08_29
+* [REF] misc refactor - SettingsLocationGenericActivity.kt
+* [FIX] In activity to add/modify location, if you delete location, add new location - lat/lon is not blank and shows for the deleted location
+* [ADD] Settings -> location add # of locations in title
+* [FIX] settings -> location truncates actual stored lat / lon too much - add a few more characters
+
+-        classpath 'com.android.tools.build:gradle:7.2.1'
+-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
++        classpath 'com.android.tools.build:gradle:7.2.2'
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
+
+## 55684 2022_08_28
+* [REF] nexrad widget, refactor and re-order some of the drawing
+* [REF] remove unused ProjectionType.WX_OGL_48
+* [ADD] Settings->Radar has been split it two activities. The line/marker (tvs/hail) size settings can now be accessed
+        via a second activity accessible from the "Line / Marker sizes" button 3rd from the top
+* [FIX] SPC SREF - when using left/right button to move through model images, image was download twice instead of just once
+
+## 55683 2022_08_28
+* [REF] misc refactor - cleanup in canvas nexrad and projection type
+
+## 55682 2022_08_27
+* [REF] misc refactor - remove Route.image that fills background to white (test NHC)
+* [ADD] In US Alerts submenu, show Alaska instead of AK (and same for HI)
+* [FIX] In nexrad widget, draw county line below state-line
+* [ADD] use enum for fav mgmt
+
+## 55681 2022_08_27
+* [REF] misc refactor
+* [ADD] Nexrad radar widget now respects geographic line size setting as used for the main program Nexrad
+
+## 55680 2022_08_27
+* [REF] misc refactor
+* [ADD] long press radar status message shows nearest radar to where long press occurred - not radar currently selected
+* [FIX] handle RSM (radar status message) better for terminal radars
+* [FIX] SPC SWO Day X State graphic - don't like AK/HI in menu as SPC only covers CONUS
+* [FIX] Revert this change as it breaks the radar on the main screen when "center on location" is enabled: location dot on main screen will continue to be dot with circle around it (for now)
+
+## 55679 2022_08_24
+* [REF] misc refactor
 
 ## 55678 2022_08_23
 * [FIX] nexrad autorefresh fix related to onresume/pause or restart (use onresume and not both)

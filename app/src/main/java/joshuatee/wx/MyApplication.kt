@@ -59,8 +59,8 @@ class MyApplication : Application() {
             reportFormat = StringFormat.KEY_VALUE_LIST
 
             val cal: Calendar = Calendar.getInstance()
-            val format = SimpleDateFormat("hh.mm.ss---MM-dd-yy")
-            format.setTimeZone(TimeZone.getTimeZone("CDT"))
+            val format = SimpleDateFormat("MM-dd-yy---h.mm.ss.a")
+            format.setTimeZone(TimeZone.getTimeZone("America/Chicago"))
             val nowDateTime = format.format(cal.getTime())
 
 

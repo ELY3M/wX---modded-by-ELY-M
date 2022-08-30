@@ -50,23 +50,9 @@ class ProjectionNumbers {
 
     constructor(radarSite: String, projectionType: ProjectionType) {
         this.radarSite = radarSite
-        xCenter = 0.0
-        yCenter = 0.0
+//        xCenter = 0.0
+//        yCenter = 0.0
         when (projectionType) {
-            ProjectionType.NWS_MOSAIC -> {
-                scale = 55.50
-                xCenter = 1700.0
-                yCenter = 800.0
-            }
-            ProjectionType.NWS_MOSAIC_SECTOR -> if (radarSite == "hawaii") {
-                scale = 62.00
-                xCenter = 300.0
-                yCenter = 285.0
-            } else {
-                scale = 55.50
-                xCenter = 420.0
-                yCenter = 400.0
-            }
             ProjectionType.WX_RENDER -> {
                 scale = 38.00 * UIPreferences.widgetNexradSize
                 xCenter = 500.0
@@ -81,12 +67,6 @@ class ProjectionNumbers {
             }
             ProjectionType.WX_OGL -> {
                 scale = 190.00
-                xCenter = 0.0
-                yCenter = 0.0
-                polygonWidth = 1.0
-            }
-            ProjectionType.WX_OGL_48 -> {
-                scale = 450.00
                 xCenter = 0.0
                 yCenter = 0.0
                 polygonWidth = 1.0

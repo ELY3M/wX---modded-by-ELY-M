@@ -122,7 +122,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.bitmap(this, "NWS mosaic", image.bitmap)
+                    UtilityShare.bitmap(this, "NWS mosaic", image)
                 }
             }
             else -> return super.onOptionsItemSelected(item)

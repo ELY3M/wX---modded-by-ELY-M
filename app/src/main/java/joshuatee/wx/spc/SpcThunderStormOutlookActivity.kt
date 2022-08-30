@@ -76,7 +76,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
 
     private fun update(index: Int) {
         objectImageSummary.set(index, bitmaps[index])
-        objectImageSummary.connect(index) { Route.image(this, arrayOf(urls[index], "")) }
+        objectImageSummary.connect(index) { Route.image(this, urls[index], "") }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

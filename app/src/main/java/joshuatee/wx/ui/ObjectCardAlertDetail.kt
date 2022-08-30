@@ -91,6 +91,6 @@ class ObjectCardAlertDetail(val context: Context) {
         } else {
             radarButton.connect { Route.radarBySite(context, capAlert.getClosestRadarXml()) }
         }
-        detailsButton.connect { Route.hazard(context, arrayOf(capAlert.url, "")) }
+        detailsButton.connect { Route.hazard(context, capAlert.url) }
     }
 }

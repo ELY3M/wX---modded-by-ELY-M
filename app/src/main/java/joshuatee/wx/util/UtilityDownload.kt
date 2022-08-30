@@ -34,6 +34,7 @@ import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.*
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.UtilityAwcRadarMosaic
 import joshuatee.wx.radar.UtilityNwsRadarMosaic
@@ -151,7 +152,7 @@ object UtilityDownload {
             }
             "SPCMESO1" -> {
                 var param = "500mb"
-                val items = UIPreferences.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
+                val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":").dropLastWhile { it.isEmpty() }
                 if (items.size > 3) param = items[3]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -162,7 +163,7 @@ object UtilityDownload {
             }
             "SPCMESO2" -> {
                 var param = "pmsl"
-                val items = UIPreferences.spcMesoFav.split(":")
+                val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
                 if (items.size > 4) param = items[4]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -173,7 +174,7 @@ object UtilityDownload {
             }
             "SPCMESO3" -> {
                 var param = "ttd"
-                val items = UIPreferences.spcMesoFav.split(":")
+                val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
                 if (items.size > 5) param = items[5]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -184,7 +185,7 @@ object UtilityDownload {
             }
             "SPCMESO4" -> {
                 var param = "rgnlrad"
-                val items = UIPreferences.spcMesoFav.split(":")
+                val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
                 if (items.size > 6) param = items[6]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -195,7 +196,7 @@ object UtilityDownload {
             }
             "SPCMESO5" -> {
                 var param = "lllr"
-                val items = UIPreferences.spcMesoFav.split(":")
+                val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
                 if (items.size > 7) param = items[7]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -206,7 +207,7 @@ object UtilityDownload {
             }
             "SPCMESO6" -> {
                 var param = "laps"
-                val items = UIPreferences.spcMesoFav.split(":")
+                val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
                 if (items.size > 8) param = items[8]
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
@@ -411,6 +412,13 @@ object UtilityDownload {
             prod.contains("PMDMRD") -> {
                 val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxus06.kwbc.pmd.mrd.txt"
                 text = textUrl.getHtmlWithNewLine().removeLineBreaks()
+            }
+            prod.startsWith("FTM") -> {
+                val radarSite = prod.substring(3, 6)
+                val url = "https://forecast.weather.gov/product.php?site=NWS&product=FTM&issuedby=$radarSite"
+                text = url.getHtmlSep()
+                text = UtilityString.extractPreLsr(text)
+                text = text.replace("<br>", "\n")
             }
             prod.startsWith("RWR") -> {
                 val product = prod.substring(0, 3)

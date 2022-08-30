@@ -24,14 +24,34 @@ package joshuatee.wx.radar
 import android.graphics.Color
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityLog
 import java.io.File
 
-class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePane) {
+class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePane, private val nexradSubmenu: NexradSubmenu) {
+
+    fun getContentPrep() {
+        nexradState.radarSitesForFavorites = UtilityFavorites.setupMenu(activity, nexradState.radarSite, FavoriteType.RID)
+        activity.invalidateOptionsMenu()
+        nexradState.adjustForTdwrSinglePane()
+        activity.title = nexradState.product
+        nexradSubmenu.adjustTiltAndProductMenus()
+        nexradSubmenu.setStarButton()
+        activity.toolbar.subtitle = ""
+    }
+
+    fun getContentPrepMultiPane(z: Int) {
+        nexradState.adjustForTdwrMultiPane(z)
+        activity.toolbar.subtitle = ""
+        setToolbarTitle()
+        nexradSubmenu.adjustTiltAndProductMenus()
+        activity.invalidateOptionsMenu()
+    }
 
     fun showTdwrDialog(mapSwitch: (String) -> Unit) {
         val objectDialogue = ObjectDialogue(activity, GlobalArrays.tdwrRadars)
@@ -42,7 +62,7 @@ class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePa
         objectDialogue.connect { dialog, itemIndex ->
             val s = GlobalArrays.tdwrRadars[itemIndex]
             nexradState.radarSite = s.split(" ")[0]
-            nexradState.product = "TZL"
+//            nexradState.product = "TZL"
             mapSwitch(nexradState.radarSite)
             dialog.dismiss()
         }
@@ -104,7 +124,6 @@ class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePa
         }
     }
 
-    // TODO FIXME move out
     fun animateDownloadFiles(frameCount: Int): List<String> {
         val animArray = WXGLDownload.getRadarFilesForAnimation(activity, frameCount, nexradState.radarSite, nexradState.product)
         try {

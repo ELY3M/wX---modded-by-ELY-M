@@ -42,6 +42,7 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     //
     // Arguments:
     // 1: url
+    // 2: "sound" (optional)
     //
 
     companion object { const val URL = "" }

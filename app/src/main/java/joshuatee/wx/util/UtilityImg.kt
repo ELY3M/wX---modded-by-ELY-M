@@ -265,6 +265,6 @@ object UtilityImg {
         return combinedImage
     }
 
-    fun getNexradRefBitmap(context: Context, radarSite: String, isInteractive: Boolean) =
-            UtilityUSImgWX.layeredImg(context, radarSite, "N0Q", isInteractive)
+    fun getNexradRefBitmap(context: Context, radarSite: String) =
+            UtilityUSImgWX.layeredImg(context, radarSite, "N0Q")
 }

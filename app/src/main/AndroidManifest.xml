@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55679"
-    android:versionName="55679-elys"
+    android:versionCode="55688"
+    android:versionName="55688-elys"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -541,6 +541,11 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
+      android:name=".settings.SettingsRadarSizesActivity"
+      android:label="Radar Line Size Settings"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
       android:name=".settings.SettingsAboutActivity"
       android:label="About wX"
       android:parentActivityName="WX" >
@@ -558,12 +563,6 @@
       android:name=".radar.WXGLRadarActivityMultiPane"
       android:parentActivityName="WX" >
   </activity>
-  <!--
-  <activity
-      android:name=".radar.UtilityConusRadar"
-      android:parentActivityName="WX" >
-  </activity>
-  -->
   <activity
       android:name=".spc.SpcSwoActivity"
       android:parentActivityName="WX" >

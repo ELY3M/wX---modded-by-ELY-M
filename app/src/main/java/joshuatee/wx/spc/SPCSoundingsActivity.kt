@@ -33,6 +33,7 @@ import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.*
@@ -51,7 +52,6 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     private var firstTime = true
     private lateinit var star: MenuItem
     private var locations = listOf<String>()
-    private val prefToken = "SND_FAV"
     private var upperAir = ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -81,9 +81,9 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        locations = UtilityFavorites.setupMenu(this, UIPreferences.sndFav, office, prefToken)
+        locations = UtilityFavorites.setupMenu(this, office, FavoriteType.SND)
         invalidateOptionsMenu()
-        if (UIPreferences.sndFav.contains(":$office:")) {
+        if (UIPreferences.favorites[FavoriteType.SND]!!.contains(":$office:")) {
             star.setIcon(GlobalVariables.STAR_ICON)
         } else {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
@@ -118,7 +118,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, "$office sounding", image.bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "$office sounding", image)
             R.id.action_250mb -> setPlotAndGet("250")
             R.id.action_300mb -> setPlotAndGet("300")
             R.id.action_500mb -> setPlotAndGet("500")
@@ -128,7 +128,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
             R.id.action_sfc -> setPlotAndGet("sfc")
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_fav -> toggleFavorite()
-            R.id.action_spc_help -> Route.webView(this, arrayOf("${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", office))
+            R.id.action_spc_help -> Route.webView(this, "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", office)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -147,11 +147,11 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(this, office, star, prefToken)
+        UtilityFavorites.toggle(this, office, star, FavoriteType.SND)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        locations = UtilityFavorites.setupMenu(this, UIPreferences.sndFav, office, prefToken)
+        locations = UtilityFavorites.setupMenu(this, office, FavoriteType.SND)
         when (item.itemId) {
             R.id.action_sector -> ObjectDialogue.generic(this, locations, ::getContent) {
                 if (locations.isNotEmpty()) {
@@ -160,8 +160,8 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
                         firstTime = false
                     }
                     when (it) {
-                        1 -> Route.favoriteAdd(this, arrayOf("SND"))
-                        2 -> Route.favoriteRemove(this, arrayOf("SND"))
+                        1 -> Route.favoriteAdd(this, FavoriteType.SND)
+                        2 -> Route.favoriteRemove(this, FavoriteType.SND)
                         else -> {
                             office = locations[it].split(" ").getOrNull(0) ?: ""
                             //getContent()

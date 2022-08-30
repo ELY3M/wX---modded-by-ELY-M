@@ -54,17 +54,17 @@ internal object UtilityWatch {
         }
         val polygons = watchLatLon.split(":").dropLastWhile { it.isEmpty() }
         var notFound = true
-        var text = ""
+        var numberString = ""
         polygons.indices.forEach { z ->
             val latLons = LatLon.parseStringToLatLons(polygons[z],-1.0, false)
             if (latLons.isNotEmpty()) {
                 val contains = ExternalPolygon.polygonContainsPoint(latLon, latLons)
                 if (contains && notFound) {
-                    text = numberList[z]
+                    numberString = numberList[z]
                     notFound = false
                 }
             }
         }
-        return text
+        return numberString
     }
 }

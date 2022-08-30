@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//Modded by ELY M.
 
 package joshuatee.wx.objects
 
@@ -93,8 +94,8 @@ class Route() {
             context.startActivity(intent)
         }
 
-        fun mcd(context: Context, array: Array<String>) {
-            Route(context, SpcMcdWatchShowActivity::class.java, SpcMcdWatchShowActivity.NUMBER, array)
+        fun mcd(context: Context, number: String, type: String) {
+            Route(context, SpcMcdWatchShowActivity::class.java, SpcMcdWatchShowActivity.NUMBER, arrayOf(number, type))
         }
 
         fun sounding(context: Context) {
@@ -109,6 +110,7 @@ class Route() {
             }
         }
 
+        // used by voice recognition for sound on activity invokation
         fun wfoText(context: Context, array: Array<String>) {
             Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, array)
         }
@@ -121,16 +123,16 @@ class Route() {
             }
         }
 
-        fun hazard(context: Context, array: Array<String>) {
-            Route(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, array)
+        fun hazard(context: Context, url: String) {
+            Route(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url))
         }
 
         fun goesFd(context: Context) {
             Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("GOESFD"))
         }
 
-        fun forecast(context: Context, array: Array<String>) {
-            Route(context, ForecastActivity::class.java, ForecastActivity.URL, array)
+        fun forecast(context: Context, wxglSurfaceView: WXGLSurfaceView) {
+            Route(context, ForecastActivity::class.java, ForecastActivity.URL, arrayOf(wxglSurfaceView.newY.toString(), "-" + wxglSurfaceView.newX.toString()))
         }
 
         fun lightning(context: Context) {
@@ -156,6 +158,10 @@ class Route() {
         fun visWv(context: Context) {
             Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
         }
+        //elys mod - for radar longpress menu
+        fun vis00(context: Context) {
+            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "00"))
+        }
 
         fun usAlerts(context: Context) {
             Route(
@@ -172,7 +178,6 @@ class Route() {
             } else {
                 Route(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf(""))
             }
-//            ObjectIntent(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf("CONUS"))
         }
 
         fun spcCompmap(context: Context) {
@@ -207,34 +212,35 @@ class Route() {
             Route(context, SpcStormReportsActivity::class.java, SpcStormReportsActivity.DAY, arrayOf("today"))
         }
 
-        fun spcSwo(context: Context, array: Array<String>) {
-            Route(context, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER, array)
+        fun spcSwo(context: Context, day: String, sound: String = "") {
+            Route(context, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER, arrayOf(day, sound))
         }
 
         fun spcSwoDay1(context: Context) {
-            spcSwo(context, arrayOf("1", ""))
+            spcSwo(context, "1")
         }
 
         fun spcSwoDay2(context: Context) {
-            spcSwo(context, arrayOf("2", ""))
+            spcSwo(context, "2")
         }
 
         fun spcSwoDay3(context: Context) {
-            spcSwo(context, arrayOf("3", ""))
+            spcSwo(context, "3")
         }
 
         fun spcSwoDay48(context: Context) {
-            spcSwo(context, arrayOf("4-8", ""))
+            spcSwo(context, "4-8")
         }
 
         fun spcSwoSummary(context: Context) {
-            Route(context, SpcSwoSummaryActivity::class.java )
+            Route(context, SpcSwoSummaryActivity::class.java)
         }
 
         fun spcTstorm(context: Context) {
             Route(context, SpcThunderStormOutlookActivity::class.java)
         }
 
+        // TODO FIXME
         fun model(context: Context, array: Array<String>) {
             Route(context, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, array)
         }
@@ -259,7 +265,7 @@ class Route() {
             if (Location.isUS) {
                 Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OBSERVATIONS"))
             } else {
-                image(context, arrayOf("http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg", "Observations"))
+                image(context, "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg", "Observations")
             }
         }
 
@@ -287,10 +293,6 @@ class Route() {
             }
         }
 
-//        fun radarNew(context: Context, array: Array<String>) {
-//            Route(context, WXGLRadarActivityNew::class.java, WXGLRadarActivityNew.RID, array)
-//        }
-
         fun radarBySite(context: Context, radarSite: String) {
             val radarLabel = Utility.getRadarSiteName(radarSite)
             val state = radarLabel.split(",")[0]
@@ -309,24 +311,25 @@ class Route() {
             radarMultiPane(context, arrayOf(Location.rid, "", "4"))
         }
 
-        fun image(context: Context, array: Array<String>) {
-            Route(context, ImageShowActivity::class.java, ImageShowActivity.URL, array)
+        fun image(context: Context, url: String, title: String) {
+            Route(context, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(url, title))
         }
 
-        fun favoriteAdd(context: Context, array: Array<String>) {
-            Route(context, FavAddActivity::class.java, FavAddActivity.TYPE, array)
+        fun favoriteAdd(context: Context, type: FavoriteType) {
+            Route(context, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf(type.name))
         }
 
-        fun favoriteRemove(context: Context, array: Array<String>) {
-            Route(context, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, array)
+        fun favoriteRemove(context: Context, type: FavoriteType) {
+            Route(context, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf(type.name))
         }
 
-        fun text(context: Context, array: Array<String>) {
-            Route(context, TextScreenActivity::class.java, TextScreenActivity.URL, array)
+        // url could be a chunk of text
+        fun text(context: Context, url: String, title: String) {
+            Route(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(url, title))
         }
 
-        fun locationEdit(context: Context, array: Array<String>) {
-            Route(context, SettingsLocationGenericActivity::class.java, SettingsLocationGenericActivity.LOC_NUM, array)
+        fun locationEdit(context: Context, locationNumber: String) {
+            Route(context, SettingsLocationGenericActivity::class.java, SettingsLocationGenericActivity.LOC_NUM, arrayOf(locationNumber))
         }
 
         fun playlist(context: Context) {
@@ -353,8 +356,12 @@ class Route() {
             Route(context, Intent.ACTION_VIEW, Uri.parse(url))
         }
 
-        fun webView(context: Context, array: Array<String>) {
-            Route(context, WebView::class.java, WebView.URL, array)
+        fun webView(context: Context, url: String, title: String) {
+            Route(context, WebView::class.java, WebView.URL, arrayOf(url, title))
+        }
+
+        fun webView(context: Context, url: String, title: String, extended: String) {
+            Route(context, WebView::class.java, WebView.URL, arrayOf(url, title, extended))
         }
 
         fun webViewTwitterStates(context: Context) {
@@ -362,7 +369,7 @@ class Route() {
         }
 
         fun webViewTwitterTornado(context: Context) {
-            webView(context, arrayOf("https://mobile.twitter.com/hashtag/tornado", "#tornado"))
+            webView(context, "https://mobile.twitter.com/hashtag/tornado", "#tornado")
         }
 
         fun wpcGefs(context: Context) {
@@ -385,8 +392,8 @@ class Route() {
             Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"))
         }
 
-        fun wpcText(context: Context, array: Array<String>) {
-            Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, array)
+        fun wpcText(context: Context, product: String) {
+            Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(product))
         }
     }
 }

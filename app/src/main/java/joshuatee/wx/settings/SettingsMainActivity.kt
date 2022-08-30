@@ -43,7 +43,7 @@ class SettingsMainActivity : BaseActivity() {
         val padding = UIPreferences.paddingSettings
         CardText(this, box, "About wX", textSize, SettingsAboutActivity::class.java, padding)
         CardText(this, box, "Celsius to fahrenheit table", textSize,
-                { Route.text(this, arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table")) }, padding)
+                { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") }, padding)
         CardText(this, box, "Colors", textSize, SettingsColorsActivity::class.java, padding)
         CardText(this, box, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding)
         CardText(this, box, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding)

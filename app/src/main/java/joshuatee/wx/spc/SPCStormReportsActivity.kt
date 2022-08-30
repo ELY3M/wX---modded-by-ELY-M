@@ -182,7 +182,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 val xStr = stormReport.lat
                 val yStr = stormReport.lon
                 stormCard.connect {
-                    Route.webView(this, arrayOf(UtilityMap.getUrl(xStr, yStr, "10"), "$xStr,$yStr"))
+                    Route.webView(this, UtilityMap.getUrl(xStr, yStr, "10"), "$xStr,$yStr")
                 }
                 if (!(stormReport.description.contains("(") && stormReport.description.contains(")"))) {
                     stormCard.setTextHeader(stormReport)
@@ -304,9 +304,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", image.bitmap, textForShare.toString())
+            R.id.action_share_all -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", image, textForShare.toString())
             R.id.action_share_text -> UtilityShare.text(this, "Storm Reports - $dayArgument", textForShare.toString())
-            R.id.action_share_image -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", image.bitmap)
+            R.id.action_share_image -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", image)
             R.id.action_lsrbywfo -> Route(this, LsrByWfoActivity::class.java, LsrByWfoActivity.URL, arrayOf(Location.wfo, "LSR"))
             else -> return super.onOptionsItemSelected(item)
         }

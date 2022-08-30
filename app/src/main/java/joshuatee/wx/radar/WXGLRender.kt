@@ -1295,7 +1295,7 @@ g_free(clear);
     //hiBuffersList
     fun constructHi() {
         val hailList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, indexString)
-        hiBuffersList.clear()
+        //hiBuffersList.clear() //crashing for sure....
         hiBuffersList = mutableListOf()
         hailList.indices.forEach {
             val buff = ObjectOglBuffers()
@@ -1346,8 +1346,8 @@ g_free(clear);
             Log.i("hailconstloop", "hail setIcon: " + WXGLNexradLevel3HailIndex.hailList[it].hailIcon)
             Log.i("hailconstloop", "hail setDouble: " + WXGLNexradLevel3HailIndex.hailList[it].hailSizeNumber)
 
-            constructIcon(buff, hailList[it].hailIcon)
-            //constructMarker(buff)
+            //constructIcon(buff, hailList[it].hailIcon)
+            constructMarker(buff)
         }
 
     }
@@ -1385,6 +1385,7 @@ g_free(clear);
                 triangleBuffers[type]!!.yList = UtilitySpotter.y
             }
             //PolygonType.TVS -> triangleBuffers[type]!!.setXYList(WXGLNexradLevel3TVS.decodeAndPlot(context, rid, indexString))
+            else -> {}
         }
         constructTriangles(triangleBuffers[type]!!)
     }
@@ -1407,11 +1408,11 @@ g_free(clear);
     private fun constructMarker(buffers: ObjectOglBuffers) {
         buffers.count = buffers.xList.size
         if (buffers.count == 0) {
-            Log.i("wx", "buffer count is 0")
-            Log.i("wx", "Not loading anything!")
+            Log.i("constructMarker", "buffer count is 0")
+            Log.i("constructMarker", "Not loading anything!")
             buffers.isInitialized = false
         } else {
-            Log.i("wx", "buffer count: " + buffers.count)
+            Log.i("constructMarker", "buffer count: " + buffers.count)
             buffers.triangleCount = 1
             buffers.initialize(
                     24 * buffers.count * buffers.triangleCount,
@@ -1423,17 +1424,17 @@ g_free(clear);
             buffers.isInitialized = true
         }
     }
-
+/*
     private fun constructIcon(buffers: ObjectOglBuffers, icon: String) {
         buffers.count = buffers.xList.size
         buffers.hailIcon = icon
-        Log.i("wx", "buffer icon: " + buffers.hailIcon)
+        Log.i("constructIcon", "buffer icon: " + buffers.hailIcon)
         if (buffers.count == 0) {
-            Log.i("wx", "buffer count is 0")
-            Log.i("wx", "Not loading anything!")
+            Log.i("constructIcon", "buffer count is 0")
+            Log.i("constructIcon", "Not loading anything!")
             buffers.isInitialized = false
         } else {
-            Log.i("wx", "buffer count: " + buffers.count)
+            Log.i("constructIcon", "buffer count: " + buffers.count)
             buffers.triangleCount = 1
             buffers.initialize(
                 24 * buffers.count * buffers.triangleCount,
@@ -1445,6 +1446,7 @@ g_free(clear);
             buffers.isInitialized = true
         }
     }
+*/
 
     //elys mod - custom TVS icon
     fun constructTvs() {
@@ -1613,9 +1615,9 @@ g_free(clear);
         swoBuffers.isInitialized = true
     }
 
-    //fun setHiInit(hiInit: Boolean) {
-    //    hiBuffersList.forEach { it.isInitialized = hiInit }
-    //}
+    fun setHiInit(hiInit: Boolean) {
+        hiBuffersList.forEach { it.isInitialized = hiInit }
+    }
 
     fun clearHailList() {
         UtilityLog.d("hail", "clearHailList()")

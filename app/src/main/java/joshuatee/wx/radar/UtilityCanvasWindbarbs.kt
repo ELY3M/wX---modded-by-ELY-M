@@ -33,6 +33,7 @@ import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.ProjectionNumbers
+import joshuatee.wx.util.To
 
 object UtilityCanvasWindbarbs {
 
@@ -41,17 +42,11 @@ object UtilityCanvasWindbarbs {
         UtilityMetar.getStateMetarArrayForWXOGL(context, radarSite, 5)
         val wbCircleXArr = UtilityMetar.metarDataList[index].x
         val wbCircleYArr = UtilityMetar.metarDataList[index].y
-        var mercator = false
-        if (projectionType !== ProjectionType.NWS_MOSAIC) {
-            mercator = true
-        }
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
-        paint.strokeWidth = 2f
-        if (projectionType === ProjectionType.WX_RENDER || projectionType === ProjectionType.WX_RENDER_48) {
-            canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
-        }
+        paint.strokeWidth = 2.0f
+        canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         if (isGust) {
             paint.color = Color.RED
         } else {
@@ -59,8 +54,6 @@ object UtilityCanvasWindbarbs {
         }
         paint.textSize = textSize.toFloat()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
-        var pixXInit: Double
-        var pixYInit: Double
         val stormList = mutableListOf<Double>()
         val arrWb = if (!isGust) {
             UtilityMetar.metarDataList[index].obsArrWb
@@ -83,10 +76,10 @@ object UtilityCanvasWindbarbs {
                 var locXDbl = 0.0
                 var locYDbl = 0.0
                 if (metarArr.size > 3) {
-                    locXDbl = metarArr[0].toDoubleOrNull() ?: 0.0
-                    locYDbl = metarArr[1].toDoubleOrNull() ?: 0.0
-                    angle = metarArr[2].toIntOrNull() ?: 0
-                    length = metarArr[3].toIntOrNull() ?: 0
+                    locXDbl = To.double(metarArr[0])
+                    locYDbl = To.double(metarArr[1])
+                    angle = To.int(metarArr[2])
+                    length = To.int(metarArr[3])
                 }
                 if (length > 4) {
                     val degree2 = angle.toDouble()
@@ -125,20 +118,18 @@ object UtilityCanvasWindbarbs {
             UtilityLog.handleException(e)
         }
         val stormListArr = FloatArray(stormList.size)
-        stormList.indices.forEach { stormListArr[it] = stormList[it].toFloat() }
+        stormList.indices.forEach {
+            stormListArr[it] = stormList[it].toFloat()
+        }
         canvas.drawLines(stormListArr, paint)
         // draw aviation circle on top
         wbCircleXArr.indices.forEach { k ->
             if (UtilityMetar.metarDataList[index].obsArrAviationColor.size > k) {
                 paint.color = UtilityMetar.metarDataList[index].obsArrAviationColor[k]
-                val list = if (mercator) {
-                    UtilityCanvasProjection.computeMercatorNumbers(wbCircleXArr[k], wbCircleYArr[k], projectionNumbers).toList()
-                } else {
-                    UtilityCanvasProjection.compute4326Numbers(wbCircleXArr[k], wbCircleYArr[k], projectionNumbers).toList()
-                }
-                pixXInit = list[0]
-                pixYInit = list[1]
-                canvas.drawCircle(pixXInit.toFloat(), pixYInit.toFloat(), 5f, paint)
+                val list = UtilityCanvasProjection.computeMercatorNumbers(wbCircleXArr[k].toFloat(), wbCircleYArr[k].toFloat(), projectionNumbers)
+                val pixXInit = list[0]
+                val pixYInit = list[1]
+                canvas.drawCircle(pixXInit, pixYInit, 5.0f, paint)
             }
         }
     }

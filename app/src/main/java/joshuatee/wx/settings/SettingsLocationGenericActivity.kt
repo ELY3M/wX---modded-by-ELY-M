@@ -24,7 +24,6 @@ package joshuatee.wx.settings
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -40,6 +39,7 @@ import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.UtilityCitiesExtended
 import joshuatee.wx.ui.*
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
 
@@ -53,12 +53,15 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     companion object { const val LOC_NUM = "" }
 
-    private var locXStr = ""
-    private var locYStr = ""
-    private var updateTitle = true
-    private var locLabelCurrent = ""
-    private var locNum = ""
-    private var locNumToSaveStr = ""
+    private var locationLat = ""
+    private var locationLon = ""
+    // This controls whether or not the title should update based on
+    // If this is a location edit (show)
+    // This is a new location (don't show)
+    // This is a new location that was then saved (show)
+    private var updateTitle = true // TODO FIXME remove the need for this
+    private var locationLabel = ""
+    private var locationNumber = ""
     private lateinit var alertRadar1Sw: ObjectSwitch
     private lateinit var alertSoundSw: ObjectSwitch
     private lateinit var alert7Day1Sw: ObjectSwitch
@@ -69,57 +72,77 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private lateinit var alertSpcfwSw: ObjectSwitch
     private lateinit var alertWpcmpdSw: ObjectSwitch
     private var menuLocal: Menu? = null
-    private lateinit var locLabelEt: EditText
-    private lateinit var locXEt: EditText
-    private lateinit var locYEt: EditText
+    private lateinit var editTextLabel: EditText
+    private lateinit var editTextLat: EditText
+    private lateinit var editTextLon: EditText
     private lateinit var box: VBox
-    private lateinit var rl: RelativeLayout
+    private lateinit var relativeLayout: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_generic, R.menu.settings_location_generic_bottom, true)
-        val locNumArr = intent.getStringArrayExtra(LOC_NUM)
-        locNum = locNumArr!![0]
-        val locNumInt = locNum.toIntOrNull() ?: 0
-        title = "Location $locNum"
-
-        locLabelEt = findViewById(R.id.locLabelEt)
-        locXEt = findViewById(R.id.locXEt)
-        locYEt = findViewById(R.id.locYEt)
+        locationNumber = intent.getStringArrayExtra(LOC_NUM)!![0]
+        title = "Location $locationNumber" // TODO FIXME move into updateSubTitle and rename method
+        editTextLabel = findViewById(R.id.locLabelEt)
+        editTextLat = findViewById(R.id.locXEt)
+        editTextLon = findViewById(R.id.locYEt)
         box = VBox.fromResource(this)
-        rl = findViewById(R.id.rl)
+        relativeLayout = findViewById(R.id.rl)
+        objectToolbarBottom.connect(this)
+        ObjectFab(this, R.id.fab) { saveLocation() }
+        Card(this, R.id.cv1)
+        initializeDataStructures()
+        addSwitches()
+        updateSubTitle()
+        adjustForWhiteTheme()
+        hideNonUSNotifications()
+    }
 
+    private fun initializeDataStructures() {
+        objectToolbarBottom.find(R.id.action_delete).isVisible = Location.numLocations > 1
         UtilityCitiesExtended.create(this)
         UtilityCitiesCanada.initialize()
-
-        toolbarBottom.setOnMenuItemClickListener(this)
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
         Utility.writePref(this, "LOCATION_CANADA_CITY", "")
         Utility.writePref(this, "LOCATION_CANADA_ID", "")
-        ObjectFab(this, R.id.fab) { fabSaveLocation() }
-        val me = toolbarBottom.menu
-        Card(this, R.id.cv1)
-        locXStr = Utility.readPref(this, "LOC" + locNum + "_X", "")
-        locYStr = Utility.readPref(this, "LOC" + locNum + "_Y", "")
-        var alertNotificationCurrent = Utility.readPref(this, "ALERT" + locNum + "_NOTIFICATION", "false")
-        var alertNotificationRadarCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_RADAR$locNum", "false")
-        var alertCcNotificationCurrent = Utility.readPref(this, "ALERT_CC" + locNum + "_NOTIFICATION", "false")
-        var alert7Day1NotificationCurrent = Utility.readPref(this, "ALERT_7DAY_" + locNum + "_NOTIFICATION", "false")
-        var alertNotificationSoundCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SOUND$locNum", "false")
-        var alertNotificationMcdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_MCD$locNum", "false")
-        var alertNotificationSwoCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SWO$locNum", "false")
-        var alertNotificationSpcfwCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locNum", "false")
-        var alertNotificationWpcmpdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locNum", "false")
-        locLabelCurrent = Utility.readPref(this, "LOC" + locNum + "_LABEL", "")
+        locationLat = Utility.readPref(this, "LOC" + locationNumber + "_X", "")
+        locationLon = Utility.readPref(this, "LOC" + locationNumber + "_Y", "")
+        locationLabel = Utility.readPref(this, "LOC" + locationNumber + "_LABEL", "")
+        editTextLat.setText(locationLat)
+        editTextLon.setText(locationLon)
+        editTextLabel.setText(locationLabel)
+        editTextLabel.setSelection(editTextLabel.length())
+    }
+
+    private fun adjustForWhiteTheme() {
+        if (UIPreferences.themeIsWhite) {
+            listOf(editTextLabel, editTextLat, editTextLon).forEach {
+                it.setTextColor(Color.BLACK)
+                it.setHintTextColor(Color.GRAY)
+            }
+        }
+    }
+
+    private fun addSwitches() {
+        var alertNotificationCurrent = Utility.readPref(this, "ALERT" + locationNumber + "_NOTIFICATION", "false")
+        var alertNotificationRadarCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_RADAR$locationNumber", "false")
+        var alertCcNotificationCurrent = Utility.readPref(this, "ALERT_CC" + locationNumber + "_NOTIFICATION", "false")
+        var alert7Day1NotificationCurrent = Utility.readPref(this, "ALERT_7DAY_" + locationNumber + "_NOTIFICATION", "false")
+        var alertNotificationSoundCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SOUND$locationNumber", "false")
+        var alertNotificationMcdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_MCD$locationNumber", "false")
+        var alertNotificationSwoCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SWO$locationNumber", "false")
+        var alertNotificationSpcfwCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locationNumber", "false")
+        var alertNotificationWpcmpdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locationNumber", "false")
         // If this this is a new location
-        if (locNumInt == Location.numLocations + 1) {
+        if (To.int(locationNumber) == Location.numLocations + 1) {
             updateTitle = false
-            locNumToSaveStr = Location.numLocations.toString()
-            locLabelCurrent = "Location $locNum"
+            locationLabel = "Location $locationNumber"
+            editTextLabel.setText(locationLabel)
+            editTextLabel.setSelection(editTextLabel.length())
             //
             // needed to prevent old location(deleted) data from showing up when adding new
             //
-            locXStr = ""
-            locYStr = ""
+            locationLat = ""
+            locationLon = ""
             alertNotificationCurrent = "false"
             alertNotificationRadarCurrent = "false"
             alertCcNotificationCurrent = "false"
@@ -130,63 +153,51 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             alertNotificationSpcfwCurrent = "false"
             alertNotificationWpcmpdCurrent = "false"
         }
-        updateSubTitle()
-        me.findItem(R.id.action_delete).isVisible = Location.numLocations > 1
-        locLabelEt.setText(locLabelCurrent)
-        locXEt.setText(locXStr)
-        locYEt.setText(locYStr)
-        if (UIPreferences.themeIsWhite) {
-            locLabelEt.setTextColor(Color.BLACK)
-            locXEt.setTextColor(Color.BLACK)
-            locYEt.setTextColor(Color.BLACK)
-            locLabelEt.setHintTextColor(Color.GRAY)
-            locXEt.setHintTextColor(Color.GRAY)
-            locYEt.setHintTextColor(Color.GRAY)
-        }
+        // FIXME TODO refactor this, use a map based off key
         alertSw = ObjectSwitch(this,
                 "Alert",
-                "ALERT" + locNum + "_NOTIFICATION",
+                "ALERT" + locationNumber + "_NOTIFICATION",
                 R.string.alert_switch_text)
         alertSw.isChecked(alertNotificationCurrent == "true")
         alertCcSw = ObjectSwitch(this,
                 "Conditions",
-                "ALERT_CC" + locNum + "_NOTIFICATION",
+                "ALERT_CC" + locationNumber + "_NOTIFICATION",
                 R.string.alert_cc_switch_text)
         alertCcSw.isChecked(alertCcNotificationCurrent == "true")
         alert7Day1Sw = ObjectSwitch(this,
                 "7day",
-                "ALERT_7DAY_" + locNum + "_NOTIFICATION",
+                "ALERT_7DAY_" + locationNumber + "_NOTIFICATION",
                 R.string.alert_7day_1_switch_text)
         alert7Day1Sw.isChecked(alert7Day1NotificationCurrent == "true")
         alertSoundSw = ObjectSwitch(this,
                 "Sound",
-                "ALERT_NOTIFICATION_SOUND$locNum",
+                "ALERT_NOTIFICATION_SOUND$locationNumber",
                 R.string.alert_sound_switch_text)
         alertSoundSw.isChecked(alertNotificationSoundCurrent == "true")
         alertRadar1Sw = ObjectSwitch(this,
                 "Radar",
-                "ALERT_NOTIFICATION_RADAR$locNum",
+                "ALERT_NOTIFICATION_RADAR$locationNumber",
                 R.string.alert_radar1_switch_text)
         alertRadar1Sw.isChecked(alertNotificationRadarCurrent == "true")
         alertMcdSw = ObjectSwitch(this,
                 "SPC MCD",
-                "ALERT_NOTIFICATION_MCD$locNum",
+                "ALERT_NOTIFICATION_MCD$locationNumber",
                 R.string.alert_mcd_switch_text)
         alertMcdSw.isChecked(alertNotificationMcdCurrent == "true")
         alertSwoSw = ObjectSwitch(this,
                 "SPC SWO",
-                "ALERT_NOTIFICATION_SWO$locNum",
+                "ALERT_NOTIFICATION_SWO$locationNumber",
                 R.string.alert_swo_switch_text)
         alertSwoSw.isChecked(alertNotificationSwoCurrent == "true")
         alertSpcfwSw = ObjectSwitch(this,
                 "SPC FW",
-                "ALERT_NOTIFICATION_SPCFW$locNum",
+                "ALERT_NOTIFICATION_SPCFW$locationNumber",
                 R.string.alert_spcfw_switch_text)
         alertSpcfwSw.isChecked(alertNotificationSpcfwCurrent == "true")
         alertWpcmpdSw = ObjectSwitch(
                 this,
                 "WPC MPD",
-                "ALERT_NOTIFICATION_WPCMPD$locNum",
+                "ALERT_NOTIFICATION_WPCMPD$locationNumber",
                 R.string.alert_wpcmpd_switch_text
         )
         alertWpcmpdSw.isChecked(alertNotificationWpcmpdCurrent == "true")
@@ -203,7 +214,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         ).forEach{
             box.addWidget(it.get())
         }
-        hideNonUSNotifications()
     }
 
     override fun onRestart() {
@@ -211,27 +221,27 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         val caCity = Utility.readPref(this, "LOCATION_CANADA_CITY", "")
         val caId = Utility.readPref(this, "LOCATION_CANADA_ID", "")
         if (caProv != "" || caCity != "" || caId != "") {
-            locXEt.setText(resources.getString(R.string.settings_loc_generic_ca_x, caProv))
-            locYEt.setText(caId)
+            editTextLat.setText(resources.getString(R.string.settings_loc_generic_ca_x, caProv))
+            editTextLon.setText(caId)
             val caLabel = "$caCity, $caProv"
-            locLabelEt.setText(caLabel)
+            editTextLabel.setText(caLabel)
             notificationsCanada(true)
-            fabSaveLocation()
+            saveLocation()
         }
         afterDelete()
         super.onRestart()
     }
 
     private fun afterDelete() {
-        val alertNotificationCurrent = Utility.readPref(this, "ALERT" + locNum + "_NOTIFICATION", "false")
-        val alertNotificationRadarCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_RADAR$locNum", "false")
-        val alertCcNotificationCurrent = Utility.readPref(this, "ALERT_CC" + locNum + "_NOTIFICATION", "false")
-        val alert7Day1NotificationCurrent = Utility.readPref(this, "ALERT_7DAY_" + locNum + "_NOTIFICATION", "false")
-        val alertNotificationSoundCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SOUND$locNum", "false")
-        val alertNotificationMcdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_MCD$locNum", "false")
-        val alertNotificationSwoCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SWO$locNum", "false")
-        val alertNotificationSpcfwCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locNum", "false")
-        val alertNotificationWpcmpdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locNum", "false")
+        val alertNotificationCurrent = Utility.readPref(this, "ALERT" + locationNumber + "_NOTIFICATION", "false")
+        val alertNotificationRadarCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_RADAR$locationNumber", "false")
+        val alertCcNotificationCurrent = Utility.readPref(this, "ALERT_CC" + locationNumber + "_NOTIFICATION", "false")
+        val alert7Day1NotificationCurrent = Utility.readPref(this, "ALERT_7DAY_" + locationNumber + "_NOTIFICATION", "false")
+        val alertNotificationSoundCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SOUND$locationNumber", "false")
+        val alertNotificationMcdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_MCD$locationNumber", "false")
+        val alertNotificationSwoCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SWO$locationNumber", "false")
+        val alertNotificationSpcfwCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locationNumber", "false")
+        val alertNotificationWpcmpdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locationNumber", "false")
         listOf(alertRadar1Sw,
                 alertSoundSw,
                 alert7Day1Sw,
@@ -257,15 +267,18 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         hideNonUSNotifications()
     }
 
-    private fun saveLocation(locNum: String, xStr: String, yStr: String, labelStr: String) {
+    private fun saveLocation() {
+        val lat = editTextLat.text.toString()
+        val lon = editTextLon.text.toString()
+        val label = editTextLabel.text.toString()
         FutureText2(
                 this,
-                { Location.save(this, locNum, xStr, yStr, labelStr) })
-                { toastStr ->
-                    showMessage(toastStr)
+                { Location.save(this, locationNumber, lat, lon, label) })
+                { saveStatus ->
+                    ObjectPopupMessage(relativeLayout, saveStatus)
                     updateTitle = true
                     updateSubTitle()
-                    if (xStr.startsWith("CANADA:")) {
+                    if (lat.startsWith("CANADA:")) {
                         notificationsCanada(true)
                     } else {
                         notificationsCanada(false)
@@ -284,11 +297,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.settings_location_generic, menu)
+        menuInflater.inflate(R.menu.settings_location_generic, menu)
         val searchView = menu.findItem(R.id.ab_search).actionView as ArrayAdapterSearchView
-//        UtilityCitiesExtended.create(this)
-//        UtilityCitiesCanada.initialize()
         val combinedCitiesList = UtilityCitiesExtended.cityLabels.toList()
         val cityArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, combinedCitiesList)
         cityArrayAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
@@ -304,17 +314,14 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             }
             if (k < UtilityCitiesExtended.cityLabels.size) {
                 searchView.setText(cityArrayAdapter.getItem(position)!!)
-                locLabelEt.setText(cityArrayAdapter.getItem(position))
-                locXEt.setText(UtilityCitiesExtended.cityLat[k].toString())
-                val longitudeLabel = "-" + UtilityCitiesExtended.cityLon[k].toString()
-                locYEt.setText(longitudeLabel)
+                editTextLabel.setText(cityArrayAdapter.getItem(position))
+                editTextLat.setText(UtilityCitiesExtended.cityLat[k].toString())
+                val lonString = "-" + UtilityCitiesExtended.cityLon[k].toString()
+                editTextLon.setText(lonString)
                 val searchViewLocal = menuLocal!!.findItem(R.id.ab_search).actionView as SearchView
                 searchViewLocal.onActionViewCollapsed()
                 searchViewLocal.isIconified = true
-                val xStr = locXEt.text.toString()
-                val yStr = locYEt.text.toString()
-                val labelStr = locLabelEt.text.toString()
-                saveLocation(locNum, xStr, yStr, labelStr)
+                saveLocation()
             }
         }
 
@@ -323,7 +330,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             override fun onQueryTextChange(newText: String) = false
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                locLabelEt.setText(query)
+                editTextLabel.setText(query)
                 val searchViewLocal = menuLocal!!.findItem(R.id.ab_search).actionView as SearchView
                 searchViewLocal.onActionViewCollapsed()
                 return false
@@ -350,37 +357,19 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun delete() {
-        Location.delete(this, locNum)
-        afterDelete()
-        showMessage("Deleted location: $locNum ($locLabelCurrent)")
+        Location.delete(this, locationNumber)
         UtilityWXJobService.startService(this)
-        var locNumIntCurrent = Location.numLocations
-        locNumIntCurrent += 1
-        locNumToSaveStr = locNumIntCurrent.toString()
-        locNum = locNumToSaveStr
-        locLabelCurrent = "Location $locNumToSaveStr"
-        //
-        // needed to prevent old location(deleted) data from showing up when adding new
-        //
-        locXStr = ""
-        locYStr = ""
-        locXEt.setText(locXStr)
-        locYEt.setText(locYStr)
-        locLabelEt.setText(locLabelCurrent)
-        title = locLabelCurrent
-        afterDelete()
         finish()
     }
 
     private fun showMap() {
-        val xStr = locXEt.text.toString()
-        val yStr = locYEt.text.toString()
-        if (xStr.isNotEmpty() && yStr.isNotEmpty()) {
-            if (Location.us(xStr)) {
-                Route.webView(this, arrayOf(UtilityMap.getUrl(xStr, yStr, "9"), Location.name))
+        val lat = editTextLat.text.toString()
+        val lon = editTextLon.text.toString()
+        if (lat.isNotEmpty() && lon.isNotEmpty()) {
+            if (Location.us(lat)) {
+                Route.webView(this, UtilityMap.getUrl(lat, lon, "9"), Location.name)
             } else {
-                val addressForMap = locLabelEt.text.toString()
-                Route.webView(this, arrayOf(UtilityMap.getUrlFromAddress(addressForMap), Location.name))
+                Route.webView(this, UtilityMap.getUrlFromAddress(editTextLabel.text.toString()), Location.name)
             }
         }
     }
@@ -420,22 +409,16 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun actionGps() {
-        if (Build.VERSION.SDK_INT < 23) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             val xy = UtilityLocation.getGps(this)
-            locXEt.setText(xy[0].toString())
-            locYEt.setText(xy[1].toString())
+            editTextLat.setText(xy[0].toString())
+            editTextLon.setText(xy[1].toString())
+            saveLocation()
         } else {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                val xy = UtilityLocation.getGps(this)
-                locXEt.setText(xy[0].toString())
-                locYEt.setText(xy[1].toString())
-                fabSaveLocation()
-            } else {
-                // The ACCESS_FINE_LOCATION is denied, then I request it and manage the result in
-                // onRequestPermissionsResult() using the constant myPermissionAccessFineLocation
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionAccessFineLocation)
-                }
+            // The ACCESS_FINE_LOCATION is denied, then I request it and manage the result in
+            // onRequestPermissionsResult() using the constant myPermissionAccessFineLocation
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionAccessFineLocation)
             }
         }
     }
@@ -447,16 +430,17 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         when (requestCode) {
             myPermissionAccessFineLocation -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val xy = UtilityLocation.getGps(this)
-                locXEt.setText(xy[0].toString())
-                locYEt.setText(xy[1].toString())
+                editTextLat.setText(xy[0].toString())
+                editTextLon.setText(xy[1].toString())
             }
         }
     }
 
     private fun notificationsCanada(hide: Boolean) {
-        var visibility = View.VISIBLE
-        if (hide) {
-            visibility = View.GONE
+        val visibility = if (hide) {
+            View.GONE
+        } else {
+            View.VISIBLE
         }
         listOf(alertMcdSw,
                 alertSwoSw,
@@ -468,14 +452,16 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun hideNonUSNotifications() {
-        val label = locXEt.text.toString()
+        val label = editTextLat.text.toString()
         if (label.contains("CANADA")) {
             notificationsCanada(true)
         }
     }
 
     private fun updateSubTitle() {
-        val subTitleString = "WFO: " + Utility.readPref(this, "NWS$locNum", "") + " - Nexrad: " + Utility.readPref(this, "RID$locNum", "")
+        val subTitleString = "WFO: " +
+                Utility.readPref(this, "NWS$locationNumber", "") +
+                " - Nexrad: " + Utility.readPref(this, "RID$locationNumber", "")
         if (subTitleString != "WFO:  - Nexrad: " && updateTitle) {
             toolbar.subtitle = subTitleString
         }
@@ -493,37 +479,17 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         }
     }
 
-    // FIXME variable naming throughout
-    private fun fabSaveLocation() {
-        val xStr = locXEt.text.toString()
-        val yStr = locYEt.text.toString()
-        val labelStr = locLabelEt.text.toString()
-        saveLocation(locNum, xStr, yStr, labelStr)
-    }
-
     private fun openCanadaMap(s: String) {
         Route(this, SettingsLocationCanadaMapActivity::class.java, SettingsLocationCanadaMapActivity.URL, arrayOf(s))
     }
 
-    private fun showMessage(string: String) {
-        ObjectPopupMessage(rl, string)
-    }
-
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        return when (keyCode) {
-            KeyEvent.KEYCODE_G -> {
-                if (event.isCtrlPressed) actionGps()
-                true
-            }
-            KeyEvent.KEYCODE_M -> {
-                if (event.isCtrlPressed) toolbarBottom.showOverflowMenu()
-                true
-            }
-            KeyEvent.KEYCODE_SLASH -> {
-                if (event.isAltPressed) ObjectDialogue(this, Utility.showLocationEditShortCuts())
-                true
-            }
+        when (keyCode) {
+            KeyEvent.KEYCODE_G -> if (event.isCtrlPressed) actionGps()
+            KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) toolbarBottom.showOverflowMenu()
+            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showLocationEditShortCuts())
             else -> super.onKeyUp(keyCode, event)
         }
+        return true
     }
 }

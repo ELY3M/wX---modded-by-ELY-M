@@ -4,8 +4,9 @@ These apps do not collect any data from the user or the user’s device only dur
 
 I am using Acra Logger from http://www.acra.ch/
 It will catch any crashes on this app and it will ask you to send me email crash logs.  
+You will be sending your phone brand, model, infos, app's settings, catlog, stack traces to help me to solve any crashing issues.  
 
-You will be sending your phone brand, model, infos, app's settings, catlog, stack traces to help me to solve any crashing issues.   
-
-
- 
+I have Spotter Network Auto Report your current GPS location. 
+if you add your application key and enable auto report your location.  
+you will be submitting your GPS location automatically to Spotter Network for your beacon to show up on any maps or radar with Spotter Network.       
+Please review Spotter Network's Privacy Policy at https://www.spotternetwork.org/pages/privacy 

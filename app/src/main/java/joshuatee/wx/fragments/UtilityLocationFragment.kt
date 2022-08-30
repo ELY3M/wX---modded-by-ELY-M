@@ -294,7 +294,7 @@ object UtilityLocationFragment {
 
     fun handleIconTap(stringName: String, wxglRender: WXGLRender?, activityReference: Context, fnRefresh: () -> Unit, fnResetRadarView: () -> Unit, fnGetRadars: () -> Unit) {
         when {
-            stringName.contains("Edit Location..") -> Route.locationEdit(activityReference, arrayOf(Location.currentLocationStr, ""))
+            stringName.contains("Edit Location..") -> Route.locationEdit(activityReference, Location.currentLocationStr)
             stringName.contains("Force Data Refresh") -> fnRefresh()
             stringName.contains("Radar type: Reflectivity") -> {
                 wxglRender?.product = "N0Q"

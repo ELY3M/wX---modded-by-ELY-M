@@ -35,6 +35,7 @@ import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
@@ -63,7 +64,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
-    private val prefToken = "NWS_TEXT_FAV"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.wpctext_products_top, menu)
@@ -97,16 +97,16 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        products = UtilityFavorites.setupMenu(this, UIPreferences.nwsTextFav, product, prefToken)
+        products = UtilityFavorites.setupMenu(this, product, FavoriteType.NWS_TEXT)
         invalidateOptionsMenu()
         updateSubmenuNotificationText()
         scrollView.smoothScrollTo(0, 0)
-        if (UIPreferences.nwsTextFav.contains(":$product:")) {
+        if (UIPreferences.favorites[FavoriteType.NWS_TEXT]!!.contains(":$product:")) {
             star.setIcon(GlobalVariables.STAR_ICON)
         } else {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
-        ridFavOld = UIPreferences.nwsTextFav
+        ridFavOld = UIPreferences.favorites[FavoriteType.NWS_TEXT]!!
         FutureText(this, product, ::showText)
     }
 
@@ -149,13 +149,13 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
-        products = UtilityFavorites.setupMenu(this, UIPreferences.nwsTextFav, product, prefToken)
+        products = UtilityFavorites.setupMenu(this, product, FavoriteType.NWS_TEXT)
         when (item.itemId) {
             R.id.action_product -> {
                 ObjectDialogue.generic(this, products, ::getContent) {
                     when (it) {
-                        1 -> Route.favoriteAdd(this, arrayOf("NWSTEXT"))
-                        2 -> Route.favoriteRemove(this, arrayOf("NWSTEXT"))
+                        1 -> Route.favoriteAdd(this, FavoriteType.NWS_TEXT)
+                        2 -> Route.favoriteRemove(this, FavoriteType.NWS_TEXT)
                         else -> {
                             product = products[it].split(" ").getOrNull(0) ?: ""
                             getContent()
@@ -169,7 +169,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(this, product, star, prefToken)
+        UtilityFavorites.toggle(this, product, star, FavoriteType.NWS_TEXT)
     }
 
     private fun changeProduct() {

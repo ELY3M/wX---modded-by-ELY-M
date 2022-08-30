@@ -121,7 +121,7 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
         box.removeChildren()
         mcdList.indices.forEach { index ->
             val image = Image(this, box, bitmaps[index])
-            image.connect { Route.mcd(this, arrayOf(mcdNumbers[index], "", polygonType.toString())) }
+            image.connect { Route.mcd(this, mcdNumbers[index], polygonType.toString()) }
         }
         titleString = "$activityLabel " + mcdNumbers.toString().replace("[{}]".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", "")
         title = titleString

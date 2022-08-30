@@ -29,8 +29,10 @@ import androidx.core.content.ContextCompat
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityFavorites
 
 object UIPreferences {
 
@@ -46,7 +48,6 @@ object UIPreferences {
     var paddingSmall = 0
     var lLpadding = 0.0f
     var actionBarHeight = 0
-
     var refreshLocMin = 0
     var translateText = false
     var nwsTextRemovelinebreaks = false
@@ -75,7 +76,6 @@ object UIPreferences {
     var locfragDontShowIcons = false
     var nwsIconSizeDefault = 20
     var nwsIconSize = 0
-
     var normalTextSizeDefault = 16
     var normalTextSize = 16
     var navDrawerMainScreen = false
@@ -85,49 +85,36 @@ object UIPreferences {
     var lightningUseGoes = true
     var useAwcMosaic = true
     var tabHeaders = arrayOf("", "", "")
-
     var widgetPreventTap = false
     var fullscreenMode = false
     var lockToolbars = false
     var unitsM = false
     var unitsF = false
-
     var widgetTextColor = 0
     var widgetHighlightTextColor = 0
     var widgetNexradSize = 0
     var nwsIconTextColor = 0
     var nwsIconBottomColor = 0
-
     var cardElevation = 0.0f
     var fabElevation = 0.0f
     var fabElevationDepressed = 0.0f
     var elevationPref = 0.0f
     var elevationPrefDefault = 5
-	
 	//elys mod 
 	var checkinternet = false
-
     var iconsEvenSpaced = false
     var simpleMode = false
     var checkspc = false
     var checkwpc = false
     var checktor = false
     var vrButton = false
-
     var homescreenFav = ""
     var locDisplayImg = false
-
-    var wfoFav = ""
-    var ridFav = ""
-    var sndFav = ""
-    var srefFav = ""
-    var spcMesoFav = ""
-    var nwsTextFav = ""
+    var favorites = mutableMapOf<FavoriteType, String>()
     var wfoTextFav = ""
     var wpcTextFav = ""
     var spotterFav = ""
     var playlistStr = ""
-
     var widgetCCShow7Day = false
     var primaryColor = 0
     var spinnerLayout = R.layout.spinner_row_blue
@@ -139,9 +126,6 @@ object UIPreferences {
     const val HOMESCREEN_FAV_DEFAULT = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
 
     fun initPreferences(context: Context) {
-
-
-
         useNwsApi = Utility.readPref(context,"USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
         useNwsApiForHourly = Utility.readPref(context,"USE_NWS_API_HOURLY", "true").startsWith("t")
         lightningUseGoes = Utility.readPref(context,"LIGHTNING_USE_GOES", "true").startsWith("t")
@@ -190,11 +174,9 @@ object UIPreferences {
             backgroundColor = Color.WHITE
             themeIsWhite = false
         }
-
         tabHeaders[0] = Utility.readPref(context,"TAB1_HEADER", "LOCAL")
         tabHeaders[1] = Utility.readPref(context,"TAB2_HEADER", "SPC")
         tabHeaders[2] = Utility.readPref(context,"TAB3_HEADER", "MISC")
-
         widgetPreventTap = getInitialPreference("UI_WIDGET_PREVENT_TAP", "")
         fullscreenMode = getInitialPreference("FULLSCREEN_MODE", "false")
         lockToolbars = getInitialPreference("LOCK_TOOLBARS", "false")
@@ -205,51 +187,39 @@ object UIPreferences {
         widgetNexradSize = getInitialPreference("WIDGET_NEXRAD_SIZE", 10)
         nwsIconTextColor = getInitialPreference("NWS_ICON_TEXT_COLOR", Color.rgb(38, 97, 139))
         nwsIconBottomColor = getInitialPreference("NWS_ICON_BOTTOM_COLOR", Color.rgb(255, 255, 255))
-
         elevationPref = getInitialPreference("ELEVATION_PREF", elevationPrefDefault).toFloat()
         elevationPref = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, MyApplication.dm)
         cardElevation = elevationPref
         fabElevation = elevationPref
         fabElevationDepressed = elevationPref * 2
-		
 		//elys mod 
 		checkinternet = getInitialPreference("CHECKINTERNET", "false")
-
         iconsEvenSpaced = getInitialPreference("UI_ICONS_EVENLY_SPACED", "false")
         simpleMode = getInitialPreference("SIMPLE_MODE", "false")
         checkspc = getInitialPreference("CHECKSPC", "false")
         checkwpc = getInitialPreference("CHECKWPC", "false")
         checktor = getInitialPreference("CHECKTOR", "false")
         vrButton = getInitialPreference("VR_BUTTON", "false")
-
         if (UtilityUI.isTablet()) {
             nwsIconSizeDefault = 6
         }
         nwsIconSize = MyApplication.preferences.getInt("NWS_ICON_SIZE_PREF", nwsIconSizeDefault)
-
         homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT)
         locDisplayImg = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
-
-        wfoFav = getInitialPreferenceString("WFO_FAV", GlobalVariables.prefSeparator)
-        ridFav = getInitialPreferenceString("RID_FAV", GlobalVariables.prefSeparator)
-        sndFav = getInitialPreferenceString("SND_FAV", GlobalVariables.prefSeparator)
-        srefFav = getInitialPreferenceString("SREF_FAV", GlobalVariables.prefSeparator)
-        spcMesoFav = getInitialPreferenceString("SPCMESO_FAV", GlobalVariables.prefSeparator)
-        nwsTextFav = getInitialPreferenceString("NWS_TEXT_FAV", GlobalVariables.prefSeparator)
+        FavoriteType.values().forEach {
+            favorites[it] = getInitialPreferenceString(UtilityFavorites.getPrefToken(it), GlobalVariables.prefSeparator)
+        }
         spotterFav = getInitialPreferenceString("SPOTTER_FAV", "")
         wfoTextFav = getInitialPreferenceString("WFO_TEXT_FAV", "AFD")
         wpcTextFav = getInitialPreferenceString("WPC_TEXT_FAV", "pmdspd")
         playlistStr = getInitialPreferenceString("PLAYLIST", "")
-
         widgetCCShow7Day = getInitialPreference("WIDGET_CC_DONOTSHOW_7_DAY", "true")
-
         primaryColor = MyApplication.preferences.getInt("MYAPP_PRIMARY_COLOR", 0)
         spinnerLayout = if (themeIsWhite) {
             R.layout.spinner_row_white
         } else {
             R.layout.spinner_row_blue
         }
-
     }
 
     private fun getInitialPreference(pref: String, initValue: Int) = MyApplication.preferences.getInt(pref, initValue)

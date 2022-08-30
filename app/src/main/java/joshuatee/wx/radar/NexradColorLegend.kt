@@ -30,6 +30,12 @@ class NexradColorLegend(val activity: VideoRecordActivity, val nexradState: Nexr
     private var legendShown = false
     private var legend: ViewColorLegend? = null
 
+    init {
+        if (RadarPreferences.showLegend) {
+            showLegend()
+        }
+    }
+
     fun showLegend() {
         if (!legendShown) {
             if (nexradState.product == "DSA" || nexradState.product == "DAA") {

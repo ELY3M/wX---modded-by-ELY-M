@@ -183,6 +183,9 @@ var classToId = Map<int, List<double>>();
 kotlin:
 NhcOceanEnum.values().forEach {}
 
+String representation:
+NhcOceanEnum.ATL.name
+
 Dart:
 NhcOceanEnum.values.forEach ((data){});
 

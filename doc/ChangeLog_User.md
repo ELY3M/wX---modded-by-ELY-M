@@ -6,18 +6,33 @@ FAQ can be accessed via Settings -> About
 
 Please also review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md) impacting all or some users.
 
-## 55XXX 2022_0X_XX (BETA)
-This beta is the 2nd beta release that has been impacted by a significant re-write (ie refactor) of many parts of the program.
+## 55681 2022_08_27 (BETA)
+This beta is the 3rd beta release that has been impacted by a significant re-write (ie refactor) of many parts of the program.
 This was necessary to make the code base easier to understand/maintain and be more consistent with newer versions such as the
 desktop versions. As a result, in some areas the program should appear faster and be efficient with respect data data download.
 This especially holds true with Nexrad radar and the "Severe Dashboard". In addition, limitations present for many years have been
 fixed. As with any major work, new bugs might have been introduced.
 Please email me if something seems not right.
--- updates through 55674:
+* [ADD] long press radar status message shows nearest radar to where long press occurred - not radar currently selected
+* [FIX] handle RSM (radar status message) better for terminal radars
+* [FIX] SPC SWO Day X State graphic - don't like AK/HI in menu as SPC only covers CONUS
+* [FIX] Revert this change as it breaks the radar on the main screen when "center on location" is enabled: location dot on main screen will continue to be dot with circle around it (for now)
+* [ADD] Nexrad radar widget now respects geographic line size setting as used for the main program Nexrad
+
+## 55679 2022_08_25 (BETA)
 * [ADD] Nexrad multipane, if you tap on the text in the upper left that lists radar site/product it will take you to severe dashboard (similar to single pane)
 * [ADD] Nexrad multipane, if warnings(tor/ffw/tst) enabled, show in top toolbar similar to single pane
 * [FIX] tap on any NHC notification would cause a crash (user reported)
 * [FIX] NHC graphics for ATL storms were not working
+* [ADD] Nexrad long press - shorten (since large text goes off screen) and make verbiage consistent with iOS port wXL23
+* [FIX] adhoc location forecast activity (via nexrad long-press) had to many digits for lat/lon
+* [FIX] In single pane nexrad, if animating, switching radars via the map was not working
+* [FIX] nexrad help in submenu needed to be freshened up a bit
+* [FIX] nexrad autorefresh fix related to onresume/pause or restart
+* [ADD] nexrad multipane "ctrl-a" will now toggle an animation on/off (similar to how single pane has been)
+* [ADD] nexrad multipane "ctrl-r" (ref) and "ctrl-v" (vel) added (similar to how single pane has been) (use alt-? on main screen and nexrad to show shortcuts)
+* [FIX] The main screen will no longer show the primary "location dot" surrounded by a circle as this shape is reserved from the dedicated
+    nexrad viewer which if configured does use active GPS location
 * [ADD] severe dashboard - warnings/watch/mcd/mpd are downloaded in parallel
 * [ADD] to meet the Oct 2022 announcement - raise minSDK to Android 6 API 23 from API 21
 * [FIX] Day 8-14 Hazard Outlook is to large to display via default options

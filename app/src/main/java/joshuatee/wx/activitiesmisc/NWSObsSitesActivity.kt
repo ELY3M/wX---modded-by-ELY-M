@@ -91,7 +91,7 @@ class NwsObsSitesActivity : BaseActivity() {
     private fun showObsSite(obsSite: String) {
         Utility.writePref(prefToken, obsSite)
         updateButton()
-        Route.webView(this, arrayOf("https://www.weather.gov/wrh/timeseries?site=$obsSite", obsSite))
+        Route.webView(this, "https://www.weather.gov/wrh/timeseries?site=$obsSite", obsSite)
     }
 
     private fun stateSelected() {
@@ -123,8 +123,8 @@ class NwsObsSitesActivity : BaseActivity() {
             R.id.action_lastused -> showObsSite(
                     Utility.readPref(this, prefToken, UtilityMetar.findClosestObservation(this, Location.latLon).name))
             R.id.action_map -> Route.webView(this,
-                        arrayOf("https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
-                                "Observations near " + Location.wfo))
+                        "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
+                                "Observations near " + Location.wfo)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

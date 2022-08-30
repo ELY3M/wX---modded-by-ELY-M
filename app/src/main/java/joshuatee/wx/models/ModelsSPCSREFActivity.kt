@@ -34,6 +34,7 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.DisplayData
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.VideoRecordActivity
@@ -63,7 +64,6 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var om: ObjectModel
     private lateinit var timeMenuItem: MenuItem
     private lateinit var runMenuItem: MenuItem
-    private val prefToken = "SPCSREF_FAV"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.models_spcsref_top, menu)
@@ -98,11 +98,11 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (om.numPanes < 2) {
             fab1 = ObjectFab(this, R.id.fab1) {
                 om.leftClick()
-                getContent()
+                //getContent()
             }
             fab2 = ObjectFab(this, R.id.fab2) {
                 om.rightClick()
-                getContent()
+                //getContent()
             }
             objectToolbarBottom.hide(R.id.action_img1)
             objectToolbarBottom.hide(R.id.action_img2)
@@ -120,7 +120,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         miStatus.title = "in through"
         om.displayData = DisplayData(this, this, om.numPanes, om)
         setupModel()
-        favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
+        favList = UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
         UtilityModelSpcSrefInterface.createData()
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
         objectNavDrawerCombo = ObjectNavDrawerCombo(
@@ -135,7 +135,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun updateStarIcon() {
-        if (UIPreferences.srefFav.contains(":" + om.displayData.param[om.curImg] + ":"))
+        if (UIPreferences.favorites[FavoriteType.SREF]!!.contains(":" + om.displayData.param[om.curImg] + ":"))
             star.setIcon(GlobalVariables.STAR_ICON)
         else
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
@@ -165,7 +165,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
+        favList = UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
         updateMenuTitles()
         updateStarIcon()
         UtilityModels.getContent(this, om, listOf(""))
@@ -225,12 +225,12 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
-        favList = UtilityFavorites.setupMenu(this, UIPreferences.srefFav, om.displayData.param[om.curImg], prefToken)
+        favList = UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
         when (item.itemId) {
             R.id.action_param -> ObjectDialogue.generic(this, favList, ::getContent) {
                 when (it) {
-                    1 -> Route.favoriteAdd(this, arrayOf("SREF"))
-                    2 -> Route.favoriteRemove(this, arrayOf("SREF"))
+                    1 -> Route.favoriteAdd(this, FavoriteType.SREF)
+                    2 -> Route.favoriteRemove(this, FavoriteType.SREF)
                     else -> {
                         om.displayData.param[om.curImg] = favList[it].split(" ").safeGet(0)
                         getContent()
@@ -253,7 +253,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(this, om.displayData.param[om.curImg], star, "SREF_FAV")
+        UtilityFavorites.toggle(this, om.displayData.param[om.curImg], star, FavoriteType.SREF)
     }
 
     private fun refreshSpinner() {

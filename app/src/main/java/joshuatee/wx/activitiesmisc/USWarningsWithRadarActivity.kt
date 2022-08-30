@@ -136,9 +136,9 @@ class USWarningsWithRadarActivity : BaseActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_warnmap -> Route.image(this, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
-            R.id.action_warnmapAK -> Route.image(this, arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))
-            R.id.action_warnmapHI -> Route.image(this, arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map"))
+            R.id.action_warnmap -> Route.image(this, "https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
+            R.id.action_warnmapAK -> Route.image(this, "https://forecast.weather.gov/wwamap/png/ak.png", "Alaska warning map")
+            R.id.action_warnmapHI -> Route.image(this, "https://forecast.weather.gov/wwamap/png/hi.png", "Hawaii warning map")
             else -> return super.onOptionsItemSelected(item)
         }
         return true

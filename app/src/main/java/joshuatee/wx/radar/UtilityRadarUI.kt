@@ -42,12 +42,13 @@ internal object UtilityRadarUI {
     fun getLastRadarTime(context: Context) = Utility.readPref(context, lastRadarTimePref, "")
 
     fun getRadarStatus(activity: Activity, wxglRender: WXGLRender) {
+        val radar = wxglRender.ridNewList[0].name
         FutureText2(activity,
-                { UtilityDownload.getRadarStatusMessage(activity, wxglRender.rid) })
+                { UtilityDownload.getRadarStatusMessage(activity, radar) })
                 { s ->
                     var radarStatus = s
                     if (radarStatus == "") {
-                        radarStatus = "The current radar status for " + wxglRender.rid + " is not available."
+                        radarStatus = "The current radar status for $radar is not available."
                     }
                     ObjectDialogue(activity, radarStatus)
                 }
@@ -59,28 +60,24 @@ internal object UtilityRadarUI {
                 { s -> ObjectDialogue(activity, s) }
     }
 
-    fun showNearestForecast(context: Context, wxglSurfaceView: WXGLSurfaceView) {
-        Route.forecast(context, arrayOf(wxglSurfaceView.newY.toString(), "-" + wxglSurfaceView.newX.toString()))
-    }
-
     fun showNearestMeteogram(context: Context, wxglSurfaceView: WXGLSurfaceView) {
         // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
         // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
         val obsSite = UtilityMetar.findClosestObservation(context, wxglSurfaceView.latLon)
-        Route.image(context, arrayOf(UtilityWXOGL.getMeteogramUrl(obsSite.name), obsSite.name + " Meteogram"))
+        Route.image(context, UtilityWXOGL.getMeteogramUrl(obsSite.name), obsSite.name + " Meteogram")
     }
 
     fun showNearestWarning(context: Context, wxglSurfaceView: WXGLSurfaceView) {
         val url = UtilityWXOGL.showTextProducts(wxglSurfaceView.latLon)
         if (url != "") {
-            Route.hazard(context, arrayOf(url, ""))
+            Route.hazard(context, url)
         }
     }
 
     fun showNearestProduct(context: Context, polygonType: PolygonType, wxglSurfaceView: WXGLSurfaceView) {
-        val text = UtilityWatch.show(wxglSurfaceView.latLon, polygonType)
-        if (text != "") {
-            Route.mcd(context, arrayOf(text, "", polygonType.toString()))
+        val numberString = UtilityWatch.show(wxglSurfaceView.latLon, polygonType)
+        if (numberString != "") {
+            Route.mcd(context, numberString, polygonType.toString())
         }
     }
 
@@ -89,8 +86,7 @@ internal object UtilityRadarUI {
                 activity,
                 wxglRender.rid,
                 wxglRender.product,
-                indexString,
-                true)
+                indexString)
         }) { bitmapForShare -> UtilityShare.bitmap(activity,
                 wxglRender.rid + " (" + Utility.getRadarSiteName(wxglRender.rid) + ") " + wxglRender.product,
                 bitmapForShare
@@ -107,29 +103,8 @@ internal object UtilityRadarUI {
                         + GlobalVariables.newline + GlobalVariables.newline
         )
     }
+
     //elys mod
-    var getrid: String = ""
-    fun showNearestRadarStatus(context: Context, activity: Activity, glview: WXGLSurfaceView) {
-        FutureText2(
-            context,
-            {
-                getrid = UtilityLocation.getNearestRadarSite(glview.latLon)
-                UtilityLog.d("radarstatus", "radar status on point: " + getrid)
-                UtilityDownload.getRadarStatusMessage(context, getrid)
-
-            },
-            {   s ->
-                var radarStatus = s
-                if (radarStatus == "") {
-                    radarStatus = "The current radar status for " + getrid + " is not available."
-                }
-                ObjectDialogue(activity, Utility.fromHtml(radarStatus))
-            }
-        )
-
-
-    }
-
     fun showSpotterInfo(activity: Activity, glview: WXGLSurfaceView, context: Context) {
         FutureText2(
             context,

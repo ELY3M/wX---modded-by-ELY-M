@@ -266,6 +266,8 @@ object Location {
         Utility.writePref(context, "ALERT_NOTIFICATION_SWO$locNumIntCurrentStr", "false")
         Utility.writePref(context, "ALERT_NOTIFICATION_SPCFW$locNumIntCurrentStr", "false")
         Utility.writePref(context, "ALERT_NOTIFICATION_WPCMPD$locNumIntCurrentStr", "false")
+        Utility.writePref(context, "LOC" + locNumIntCurrentStr + "_X", "")
+        Utility.writePref(context, "LOC" + locNumIntCurrentStr + "_Y", "")
         val locFragCurrentInt = currentLocation
         if (locToDeleteInt == (locFragCurrentInt + 1)) {
             Utility.writePref(context, "CURRENT_LOC_FRAGMENT", "1")

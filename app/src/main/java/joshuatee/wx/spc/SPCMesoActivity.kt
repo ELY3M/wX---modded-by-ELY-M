@@ -34,10 +34,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.models.ObjectModel
 import joshuatee.wx.models.UtilityModels
-import joshuatee.wx.objects.DisplayData
-import joshuatee.wx.objects.FutureText2
-import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.Route
+import joshuatee.wx.objects.*
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.*
@@ -82,7 +79,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var prefParamLabel: String
     private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var displayData: DisplayData
-    private val prefToken = "SPCMESO_FAV"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spcmeso_top, menu)
@@ -205,9 +201,9 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         displayData.objectAnimates.forEach {
             it.stop()
         }
-        favListParm = UtilityFavorites.setupMenu(this, UIPreferences.spcMesoFav, displayData.param[curImg], prefToken)
+        favListParm = UtilityFavorites.setupMenu(this, displayData.param[curImg], FavoriteType.SPCMESO)
         invalidateOptionsMenu()
-        if (UIPreferences.spcMesoFav.contains(":" + displayData.param[curImg] + ":"))
+        if (UIPreferences.favorites[FavoriteType.SPCMESO]!!.contains(":" + displayData.param[curImg] + ":"))
             star.setIcon(GlobalVariables.STAR_ICON)
         else
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
@@ -383,12 +379,12 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
-        favListParm = UtilityFavorites.setupMenu(this, UIPreferences.spcMesoFav, displayData.param[curImg], prefToken)
+        favListParm = UtilityFavorites.setupMenu(this, displayData.param[curImg], FavoriteType.SPCMESO)
         when (item.itemId) {
             R.id.action_product -> ObjectDialogue.generic(this, favListParm, {}) {
                 when (it) {
-                    1 -> Route.favoriteAdd(this, arrayOf("SPCMESO"))
-                    2 -> Route.favoriteRemove(this, arrayOf("SPCMESO"))
+                    1 -> Route.favoriteAdd(this, FavoriteType.SPCMESO)
+                    2 -> Route.favoriteRemove(this, FavoriteType.SPCMESO)
                     else -> showProductInFavList(it)
                 }
             }
@@ -471,6 +467,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(this, displayData.param[curImg], star, prefToken)
+        UtilityFavorites.toggle(this, displayData.param[curImg], star, FavoriteType.SPCMESO)
     }
 }

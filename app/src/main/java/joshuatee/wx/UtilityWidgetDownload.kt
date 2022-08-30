@@ -61,7 +61,7 @@ internal object UtilityWidgetDownload {
         val rid = Location.getRid(context, widgetLocationNumber)
         try {
             val bitmap = if (Location.isUS(widgetLocationNumber)) {
-                UtilityImg.getNexradRefBitmap(context, rid, false)
+                UtilityImg.getNexradRefBitmap(context, rid)
             } else {
                 UtilityImg.getBlankBitmap()
             }

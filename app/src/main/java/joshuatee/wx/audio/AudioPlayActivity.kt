@@ -23,7 +23,6 @@ package joshuatee.wx.audio
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -36,6 +35,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
@@ -54,6 +54,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
     private var ttsTxt = ""
     private lateinit var view: View
     private var pausePressedIcon = 0
+    protected var tabletInLandscape = false
 
     protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int) {
         setTheme(UIPreferences.themeInt)
@@ -80,6 +81,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         }
         initBottomToolbar()
         UtilityTts.initTts(this)
+        tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
     }
 
     fun setTitle(s: String) {
@@ -152,15 +154,11 @@ abstract class AudioPlayActivity : AppCompatActivity() {
 
     private val isStoragePermissionGranted: Boolean
         get() {
-            return if (Build.VERSION.SDK_INT >= 23) {
-                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    true
-                } else {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-                    false
-                }
-            } else {
+            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 true
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                false
             }
         }
 

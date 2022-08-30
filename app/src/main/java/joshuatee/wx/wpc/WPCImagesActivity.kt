@@ -157,7 +157,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
                 if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else
-                    UtilityShare.bitmap(this, objectNavDrawerCombo.getLabel(), image.bitmap)
+                    UtilityShare.bitmap(this, objectNavDrawerCombo.getLabel(), image)
             }
             else -> return super.onOptionsItemSelected(item)
         }

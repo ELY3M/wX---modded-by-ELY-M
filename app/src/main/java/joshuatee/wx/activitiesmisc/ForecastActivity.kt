@@ -124,8 +124,7 @@ class ForecastActivity : BaseActivity() {
             sevenDayCard.connect { scrollView.smoothScrollTo(0, 0) }
             boxForecast.addWidget(sevenDayCard.get())
         }
-        val sunRiseCard = SunRiseCard(this, latLon, scrollView)
-        boxForecast.addWidget(sunRiseCard.get())
+        boxForecast.addWidget(SunRiseCard(this, latLon, scrollView).get())
     }
 
     private fun setupHazardCards() {
@@ -135,7 +134,7 @@ class ForecastActivity : BaseActivity() {
             hazardCards.add(CardText(this))
             hazardCards.last().setupHazard()
             hazardCards.last().text = objectHazards.titles[z].uppercase(Locale.US)
-            hazardCards.last().connect { Route.hazard(this, arrayOf(objectHazards.urls[z])) }
+            hazardCards.last().connect { Route.hazard(this, objectHazards.urls[z]) }
             boxHazards.addWidget(hazardCards.last().get())
         }
     }

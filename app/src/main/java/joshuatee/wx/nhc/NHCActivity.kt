@@ -64,11 +64,7 @@ class NhcActivity : BaseActivity() {
     }
 
     private fun showTextProduct(prod: String) {
-        Route.wpcText(this, arrayOf(prod.lowercase(Locale.US), ""))
-    }
-
-    private fun showImageProduct(imageUrl: String, title: String, needWhiteBackground: String) {
-        Route.image(this, arrayOf(imageUrl, title, needWhiteBackground))
+        Route.wpcText(this, prod.lowercase(Locale.US))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -81,12 +77,12 @@ class NhcActivity : BaseActivity() {
             R.id.action_epac_tws -> showTextProduct("MIATWSEP")
             R.id.action_cpac_two -> showTextProduct("HFOTWOCP")
             R.id.action_share -> UtilityShare.text(this, "NHC", "", objectNhc.bitmaps)
-            R.id.action_epac_daily -> showImageProduct("https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg", "EPAC Daily Analysis", "false")
-            R.id.action_atl_daily -> showImageProduct("https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg", "ATL Daily Analysis", "false")
-            R.id.action_epac_7daily -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anal.gif", "EPAC 7-Day Analysis", "true")
-            R.id.action_atl_7daily -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
-            R.id.action_epac_sst_anomaly -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
-            R.id.action_atl_sst_anomaly -> showImageProduct("${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
+            R.id.action_epac_daily -> Route.image(this, "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg", "EPAC Daily Analysis")
+            R.id.action_atl_daily -> Route.image(this, "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg", "ATL Daily Analysis")
+            R.id.action_epac_7daily -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anal.gif", "EPAC 7-Day Analysis")
+            R.id.action_atl_7daily -> Route.image(this,"${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis")
+            R.id.action_epac_sst_anomaly -> Route.image(this,"${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly")
+            R.id.action_atl_sst_anomaly -> Route.image(this,"${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly")
             else -> return super.onOptionsItemSelected(item)
         }
         return true

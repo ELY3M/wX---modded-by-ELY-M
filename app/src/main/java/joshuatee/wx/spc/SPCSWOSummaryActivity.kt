@@ -75,7 +75,7 @@ class SpcSwoSummaryActivity : BaseActivity() {
             "4-8"
         }
         objectImageSummary.set(index, bitmaps[index])
-        objectImageSummary.connect(index) { Route.spcSwo(this, arrayOf(day, "")) }
+        objectImageSummary.connect(index) { Route.spcSwo(this, day) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

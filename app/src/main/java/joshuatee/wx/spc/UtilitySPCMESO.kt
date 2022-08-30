@@ -23,6 +23,7 @@ package joshuatee.wx.spc
 
 import android.util.SparseArray
 import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
@@ -147,7 +148,7 @@ object UtilitySpcMeso {
 
     internal fun setParamFromFav(token: String): String {
         var param = ""
-        val tmpArr = UIPreferences.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
+        val tmpArr = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":").dropLastWhile { it.isEmpty() }
         when (token) {
             "SPCMESO1" -> param = if (tmpArr.size > 3) tmpArr[3] else "500mb"
             "SPCMESO2" -> param = if (tmpArr.size > 4) tmpArr[4] else "pmsl"

@@ -25,71 +25,60 @@ import android.content.Context
 import android.view.MenuItem
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.wpc.UtilityWpcText
 
 object UtilityFavorites {
 
-    private const val DELIM_TOKEN = " "
-    private const val ADD_STR = "Add..."
-    private const val MODIFY_STR = "Modify..."
     const val initialValue = " : : :"
 
-    // TODO refactor method/var names
-    private fun checkAndCorrect(context: Context, value: String, prefToken: String) {
-        if (value.contains("::")) {
-            val newFav = value.replace(":{2,}".toRegex(), ":")
-            savePref(context, newFav, prefToken)
+    private fun checkAndCorrect(context: Context, type: FavoriteType) {
+        if (UIPreferences.favorites[type]!!.contains("::")) {
+            val newFav = UIPreferences.favorites[type]!!.replace(":{2,}".toRegex(), ":")
+            savePref(context, newFav, type)
         }
-        if (!value.contains(GlobalVariables.prefSeparator)) {
-            val newFav = GlobalVariables.prefSeparator + value.trimStart()
-            savePref(context, newFav, prefToken)
-        }
-    }
-
-    private fun savePref(context: Context, value: String, prefToken: String) {
-        Utility.writePref(context, prefToken, value)
-        when (prefToken) {
-            "WFO_FAV" -> UIPreferences.wfoFav = value
-            "RID_FAV" -> UIPreferences.ridFav = value
-            "SND_FAV" -> UIPreferences.sndFav = value
-            "SREF_FAV" -> UIPreferences.srefFav = value
-            "NWS_TEXT_FAV" -> UIPreferences.nwsTextFav = value
-            "SPCMESO_FAV" -> UIPreferences.spcMesoFav = value
+        if (!UIPreferences.favorites[type]!!.contains(GlobalVariables.prefSeparator)) {
+            val newFav = GlobalVariables.prefSeparator + UIPreferences.favorites[type]!!.trimStart()
+            savePref(context, newFav, type)
         }
     }
 
-    fun setupMenu(context: Context, favoriteString: String, value: String, prefToken: String): List<String> {
-        checkAndCorrect(context, favoriteString, prefToken)
-        var favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
+    private fun savePref(context: Context, value: String, type: FavoriteType) {
+        Utility.writePref(context, getPrefToken(type), value)
+        UIPreferences.favorites[type] = value
+    }
+
+    fun setupMenu(context: Context, value: String, type: FavoriteType): List<String> {
+        checkAndCorrect(context, type)
+        var favorites = UIPreferences.favorites[type]!!.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
         if (favorites.size < 3) {
             favorites = MutableList(3) { "" }
         }
         favorites[0] = value
-        favorites[1] = ADD_STR
-        favorites[2] = MODIFY_STR
+        favorites[1] = "Add..."
+        favorites[2] = "Modify..."
         val returnList = MutableList(favorites.size) { "" }
         favorites.indices.forEach { k ->
-            val name = when (prefToken) {
-                "RID_FAV" -> Utility.getRadarSiteName(favorites[k])
-                "WFO_FAV" -> Utility.getWfoSiteName(favorites[k])
-                "SND_FAV" -> Utility.getSoundingSiteName(favorites[k])
-                "NWS_TEXT_FAV" -> UtilityWpcText.getLabel(favorites[k])
-                "SPCMESO_FAV" -> UtilitySpcMeso.getLabelFromParam(favorites[k])
-                "SPCSREF_FAV" -> ""
-                else -> "FIXME"
+            val name = when (type) {
+                FavoriteType.RID -> Utility.getRadarSiteName(favorites[k])
+                FavoriteType.WFO -> Utility.getWfoSiteName(favorites[k])
+                FavoriteType.SND -> Utility.getSoundingSiteName(favorites[k])
+                FavoriteType.NWS_TEXT -> UtilityWpcText.getLabel(favorites[k])
+                FavoriteType.SPCMESO -> UtilitySpcMeso.getLabelFromParam(favorites[k])
+                FavoriteType.SREF -> ""
             }
             if (k == 1 || k == 2) {
                 returnList[k] = favorites[k]
             } else {
-                returnList[k] = favorites[k] + DELIM_TOKEN + name
+                returnList[k] = favorites[k] + " " + name
             }
         }
-        return returnList.toList()
+        return returnList
     }
 
-    fun toggle(context: Context, value: String, star: MenuItem, prefToken: String) {
-        var favoriteString = Utility.readPref(context, prefToken, initialValue)
+    fun toggle(context: Context, value: String, star: MenuItem, type: FavoriteType) {
+        var favoriteString = Utility.readPref(context, getPrefToken(type), initialValue)
         if (favoriteString.contains(value)) {
             favoriteString = favoriteString.replace("$value:", "")
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
@@ -97,14 +86,8 @@ object UtilityFavorites {
             favoriteString = "$favoriteString$value:"
             star.setIcon(GlobalVariables.STAR_ICON)
         }
-        Utility.writePref(context, prefToken, favoriteString)
-        when (prefToken) {
-            "RID_FAV" -> UIPreferences.ridFav = favoriteString
-            "WFO_FAV" -> UIPreferences.wfoFav = favoriteString
-            "SND_FAV" -> UIPreferences.sndFav = favoriteString
-            "SREF_FAV" -> UIPreferences.srefFav = favoriteString
-            "NWS_TEXT_FAV" -> UIPreferences.nwsTextFav = favoriteString
-            "SPCMESO_FAV" -> UIPreferences.spcMesoFav = favoriteString
-        }
+        savePref(context, favoriteString, type)
     }
+
+    fun getPrefToken(type: FavoriteType) = type.name + "_FAV"
 }

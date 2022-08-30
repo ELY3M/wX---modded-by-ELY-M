@@ -35,7 +35,6 @@ import joshuatee.wx.util.UtilityMath
 import kotlin.math.roundToInt
 //elys mod
 import joshuatee.wx.MyApplication //elys mod //need context...
-import joshuatee.wx.settings.UtilityLocation
 
 
 class NexradLongPressMenu(
@@ -131,7 +130,7 @@ class NexradLongPressMenu(
                 it.name + " " + Utility.getRadarSiteName(it.name) + " " + it.distance.roundToInt().toString() + " mi"
             }
             val obsSite = UtilityMetar.findClosestObservation(context, wxglSurfaceView.latLon)
-            if ((RadarPreferences.warnings || ObjectPolygonWarning.areAnyEnabled()) && ObjectPolygonWarning.isCountNonZero()) {
+            if ((RadarPreferences.warnings || ObjectPolygonWarning.areAnyEnabled()) /*&& ObjectPolygonWarning.isCountNonZero()*/) {
                 longPressList.add("Show Warning")
             }
             // Thanks to Ely
@@ -145,19 +144,20 @@ class NexradLongPressMenu(
                 longPressList.add("Show MPD")
             }
             // end Thanks to Ely
+            //elys mod
+            longPressList.add("Radar Mosaic")
+            longPressList.add("GOES Satellite")
+            ///
             longPressList.add("Observation: " + obsSite.name + " (" + obsSite.distance.roundToInt() + " mi)")
             longPressList.add("Forecast: $latLonTitle")
             longPressList.add("Meteogram: " + obsSite.name)
-    	//elys mod
-	    //TODO Merge this?? and just use one with the lat/lon??
-        longPressList.add("Current Radar status message: " + wxglRender.rid)
-	    val getridpoint = UtilityLocation.getNearestRadarSite(wxglSurfaceView.latLon)
-	    longPressList.add("Radar status message: " + getridpoint)
-        if (RadarPreferences.spotters || RadarPreferences.spottersLabel) longPressList.add("Spotter Info")
-	    longPressList.add("Userpoint info: " + latLonTitle)
-        longPressList.add("Add userpoint for: " + latLonTitle)
-        longPressList.add("Delete userpoint for: " + latLonTitle)
-        longPressList.add("Delete all userpoints")
+            longPressList.add("Radar status message: " + wxglRender.ridNewList[0].name)
+            //elys mod
+            if (RadarPreferences.spotters || RadarPreferences.spottersLabel) longPressList.add("Spotter Info")
+	        longPressList.add("Userpoint info: " + latLonTitle)
+            longPressList.add("Add userpoint for: " + latLonTitle)
+            longPressList.add("Delete userpoint for: " + latLonTitle)
+            longPressList.add("Delete all userpoints")
             longPressDialogue.show()
         }
 
@@ -174,18 +174,21 @@ class NexradLongPressMenu(
                 s.contains("Show Watch") -> UtilityRadarUI.showNearestProduct(activity, PolygonType.WATCH, wxglSurfaceView)
                 s.contains("Show MCD") -> UtilityRadarUI.showNearestProduct(activity, PolygonType.MCD, wxglSurfaceView)
                 s.contains("Show MPD") -> UtilityRadarUI.showNearestProduct(activity, PolygonType.MPD, wxglSurfaceView)
+                //elys mod
+                s.contains("Radar Mosaic") -> Route.radarMosaic(activity)
+                s.contains("GOES Satellite") -> Route.vis00(activity)
+                ///
                 s.startsWith("Observation") -> UtilityRadarUI.getMetar(wxglSurfaceView, activity)
-                s.startsWith("Forecast") -> UtilityRadarUI.showNearestForecast(activity, wxglSurfaceView)
+                s.startsWith("Forecast") -> Route.forecast(activity, wxglSurfaceView)
                 s.startsWith("Meteogram") -> UtilityRadarUI.showNearestMeteogram(activity, wxglSurfaceView)
-            s.startsWith("Current Radar status message") -> UtilityRadarUI.getRadarStatus(activity, wxglRender)
+                s.startsWith("Radar status message") -> UtilityRadarUI.getRadarStatus(activity, wxglRender)
                 s.startsWith("Beam") -> {}
-            //elys mod //need context....
-            s.contains("Radar status message") -> UtilityRadarUI.showNearestRadarStatus(MyApplication.appContext, activity, wxglSurfaceView)
-            s.contains("Spotter Info") -> UtilityRadarUI.showSpotterInfo(activity, wxglSurfaceView, MyApplication.appContext)
-            s.contains("Userpoint info") -> UtilityRadarUI.showUserPointInfo(activity, MyApplication.appContext, wxglSurfaceView)
-            s.contains("Add userpoint for") -> UtilityRadarUI.addUserPoint(activity, MyApplication.appContext, wxglSurfaceView)
-            s.contains("Delete userpoint for") ->  UtilityRadarUI.deleteUserPoint(activity, MyApplication.appContext, wxglSurfaceView)
-            s.contains("Delete all userpoints") -> UtilityRadarUI.deleteAllUserPoints(activity, MyApplication.appContext)
+            	//elys mod //need context....
+            	s.contains("Spotter Info") -> UtilityRadarUI.showSpotterInfo(activity, wxglSurfaceView, MyApplication.appContext)
+            	s.contains("Userpoint info") -> UtilityRadarUI.showUserPointInfo(activity, MyApplication.appContext, wxglSurfaceView)
+            	s.contains("Add userpoint for") -> UtilityRadarUI.addUserPoint(activity, MyApplication.appContext, wxglSurfaceView)
+            	s.contains("Delete userpoint for") ->  UtilityRadarUI.deleteUserPoint(activity, MyApplication.appContext, wxglSurfaceView)
+            	s.contains("Delete all userpoints") -> UtilityRadarUI.deleteAllUserPoints(activity, MyApplication.appContext)
                 else -> function(s)
             }
         }

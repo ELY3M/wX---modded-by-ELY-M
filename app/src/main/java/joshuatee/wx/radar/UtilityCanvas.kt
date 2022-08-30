@@ -33,9 +33,8 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.*
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.util.ProjectionNumbers
-import joshuatee.wx.util.UtilityCities
-import joshuatee.wx.util.UtilityString
+import joshuatee.wx.util.*
+import java.nio.ByteBuffer
 
 internal object UtilityCanvas {
 
@@ -44,33 +43,22 @@ internal object UtilityCanvas {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
         val path = Path()
-        val paintList = listOf(RadarPreferences.colorFfw, RadarPreferences.colorTstorm, RadarPreferences.colorTor)
-        val dataList = listOf(
-//                ObjectPolygonWarning.severeDashboardFfw.value,
-//                ObjectPolygonWarning.severeDashboardTst.value,
-//                ObjectPolygonWarning.severeDashboardTor.value
-
-                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.FlashFloodWarning]!!.getData(),
-                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.TornadoWarning]!!.getData(),
-                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.ThunderstormWarning]!!.getData(),
-        )
         if (projectionType.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
         paint.strokeWidth = projectionNumbers.polygonWidth.toFloat()
-        dataList.forEachIndexed { index, it ->
-            paint.color = paintList[index]
-            val data = it.replace("\n", "").replace(" ", "")
-            val warnings = UtilityString.parseColumnMutable(data, RegExp.warningLatLonPattern)
-            val warningsFiltered = mutableListOf<String>()
-            val vtecs = data.parseColumn(RegExp.warningVtecPattern)
-            warnings.forEachIndexed { i, _ ->
-                warnings[i] = warnings[i].replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
-                if (!(vtecs[i].startsWith("O.EXP") || vtecs[i].startsWith("O.CAN"))) {
-                    warningsFiltered.add(warnings[i])
+        listOf(PolygonWarningType.FlashFloodWarning, PolygonWarningType.TornadoWarning, PolygonWarningType.ThunderstormWarning).forEach {
+            paint.color = ObjectPolygonWarning.polygonDataByType[it]!!.color
+            val html = ObjectPolygonWarning.polygonDataByType[it]!!.getData()
+            val warnings = ObjectWarning.parseJson(html)
+            val warningList = mutableListOf<Double>()
+            for (w in warnings) {
+                if (it == PolygonWarningType.SpecialWeatherStatement || it == PolygonWarningType.SpecialMarineWarning || w.isCurrent) {
+                    val latLons = w.getPolygonAsLatLons(-1)
+                    warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
                 }
             }
-            canvasDrawWarnings(warningsFiltered, vtecs, canvas, path, paint, projectionType.isMercator, projectionNumbers)
+            drawWarnings(warningList, canvas, path, paint)
         }
     }
 
@@ -88,16 +76,12 @@ internal object UtilityCanvas {
         }
         paint.textSize = textSize.toFloat()
         UtilityCities.list.indices.forEach {
-            val coordinates = if (projectionType.isMercator) {
-                UtilityCanvasProjection.computeMercatorNumbers(UtilityCities.list[it].x, UtilityCities.list[it].y, projectionNumbers)
-            } else {
-                UtilityCanvasProjection.compute4326Numbers(UtilityCities.list[it].x, UtilityCities.list[it].y, projectionNumbers)
-            }
+            val coordinates = UtilityCanvasProjection.computeMercatorNumbers(UtilityCities.list[it].x, UtilityCities.list[it].y, projectionNumbers)
             if (textSize > 0) {
                 canvas.drawText(
                         RegExp.comma.split(UtilityCities.list[it].city)[0],
-                        coordinates[0].toFloat() + 4,
-                        coordinates[1].toFloat() - 4,
+                        coordinates[0].toFloat() + 4.0f,
+                        coordinates[1].toFloat() - 4.0f,
                         paint
                 )
                 canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
@@ -116,16 +100,12 @@ internal object UtilityCanvas {
         if (projectionType.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
-        val x = Location.x.toDoubleOrNull() ?: 0.0
-        val y = Location.y.replace("-", "").toDoubleOrNull() ?: 0.0
-        val coordinates = if (projectionType.isMercator) {
-            UtilityCanvasProjection.computeMercatorNumbers(x, y, projectionNumbers)
-        } else {
-            UtilityCanvasProjection.compute4326Numbers(x, y, projectionNumbers)
-        }
+        val x = To.double(Location.x)
+        val y = To.double(Location.y.replace("-", ""))
+        val coordinates = UtilityCanvasProjection.computeMercatorNumbers(x, y, projectionNumbers)
         paint.color = RadarPreferences.colorLocdot
 
-	//elys mod
+	    //elys mod
         //custom locationdot//
         if (RadarPreferences.locationDotFollowsGps) {
             val locationicon: Bitmap = BitmapFactory.decodeFile(GlobalVariables.FilesPath + "location.png");
@@ -133,9 +113,10 @@ internal object UtilityCanvas {
             canvas.drawBitmap(locationiconresized, coordinates[0].toFloat(), coordinates[1].toFloat(), null)
         } else {
         canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
-        }
+	}
 
     }
+
     fun addMcd(projectionType: ProjectionType, bitmap: Bitmap, projectionNumbers: ProjectionNumbers, polygonType: PolygonType) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -147,71 +128,69 @@ internal object UtilityCanvas {
         }
         paint.strokeWidth = projectionNumbers.polygonWidth.toFloat()
         paint.color = polygonType.color
-        // TODO FIXME refactor
-        val prefToken = when (polygonType) {
-            PolygonType.MCD -> ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.latLonList.value
-            PolygonType.MPD -> ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.latLonList.value
-            PolygonType.WATCH -> ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.latLonList.value
-            PolygonType.WATCH_TORNADO -> ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH_TORNADO]!!.latLonList.value
-            else -> ""
-        }
+        val prefToken = ObjectPolygonWatch.polygonDataByType[polygonType]!!.latLonList.value
         val list = prefToken.split(":").dropLastWhile { it.isEmpty() }
-        canvasDrawWatchMcdMpd(list, canvas, path, paint, projectionType.isMercator, projectionNumbers)
+        drawMcd(list, canvas, path, paint, projectionNumbers)
     }
 
-    private fun canvasDrawWatchMcdMpd(warnings: List<String>, canvas: Canvas, path: Path, paint: Paint, isMercator: Boolean, projectionNumbers: ProjectionNumbers) {
-        warnings.forEach { warning ->
-            val latLons = LatLon.parseStringToLatLons(warning, 1.0, false)
+    private fun drawMcd(polygons: List<String>, canvas: Canvas, path: Path, paint: Paint, projectionNumbers: ProjectionNumbers) {
+        val warningList = mutableListOf<Double>()
+        polygons.forEach { polygon ->
+            val latLons = LatLon.parseStringToLatLons(polygon, 1.0, false)
+            warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
+        }
+        if (warningList.size > 3) {
             path.reset()
-            if (latLons.isNotEmpty()) {
-                val startCoordinates = if (isMercator) {
-                    UtilityCanvasProjection.computeMercatorNumbers(latLons[0], projectionNumbers)
-                } else {
-                    UtilityCanvasProjection.compute4326Numbers(latLons[0], projectionNumbers)
-                }
-                val firstX = startCoordinates[0]
-                val firstY = startCoordinates[1]
-                path.moveTo(firstX.toFloat(), firstY.toFloat())
-                (1 until latLons.size).forEach { index ->
-                    val coordinates = if (isMercator) {
-                        UtilityCanvasProjection.computeMercatorNumbers(latLons[index], projectionNumbers)
-                    } else {
-                        UtilityCanvasProjection.compute4326Numbers(latLons[index], projectionNumbers)
-                    }
-                    path.lineTo(coordinates[0].toFloat(), coordinates[1].toFloat())
-                }
-                path.lineTo(firstX.toFloat(), firstY.toFloat())
+            warningList.indices.step(4).forEach {
+                path.moveTo(warningList[it].toFloat(), warningList[it + 1].toFloat())
+                path.lineTo(warningList[it].toFloat(), warningList[it + 1].toFloat())
+                path.lineTo(warningList[it + 2].toFloat(), warningList[it + 3].toFloat())
                 canvas.drawPath(path, paint)
             }
         }
     }
 
-    private fun canvasDrawWarnings(warnings: List<String>, vtecs: List<String>, canvas: Canvas, path: Path, paint: Paint, isMercator: Boolean, projectionNumbers: ProjectionNumbers) {
-        warnings.forEachIndexed { polygonCount, warning ->
-            if (vtecs.isNotEmpty() && vtecs.size > polygonCount && !vtecs[polygonCount].startsWith("0.EXP") && !vtecs[polygonCount].startsWith("0.CAN")) {
-                val latLons = LatLon.parseStringToLatLons(warning)
-                path.reset()
-                if (latLons.isNotEmpty()) {
-                    val startCoordinates = if (isMercator) {
-                        UtilityCanvasProjection.computeMercatorNumbers(latLons[0], projectionNumbers)
-                    } else {
-                        UtilityCanvasProjection.compute4326Numbers(latLons[0], projectionNumbers)
-                    }
-                    val firstX = startCoordinates[0].toFloat()
-                    val firstY = startCoordinates[1].toFloat()
-                    path.moveTo(firstX, firstY)
-                    (1 until latLons.size).forEach { index ->
-                        val coordinates = if (isMercator) {
-                            UtilityCanvasProjection.computeMercatorNumbers(latLons[index], projectionNumbers)
-                        } else {
-                            UtilityCanvasProjection.compute4326Numbers(latLons[index], projectionNumbers)
-                        }
-                        path.lineTo(coordinates[0].toFloat(), coordinates[1].toFloat())
-                    }
-                    path.lineTo(firstX, firstY)
-                    canvas.drawPath(path, paint)
-                }
+    private fun drawWarnings(warnings: List<Double>, canvas: Canvas, path: Path, paint: Paint) {
+        if (warnings.size > 3) {
+            path.reset()
+            warnings.indices.step(4).forEach {
+                path.moveTo(warnings[it].toFloat(), warnings[it + 1].toFloat())
+                path.lineTo(warnings[it].toFloat(), warnings[it + 1].toFloat())
+                path.lineTo(warnings[it + 2].toFloat(), warnings[it + 3].toFloat())
+                canvas.drawPath(path, paint)
             }
+        }
+    }
+
+    fun drawGeometry(
+            projectionType: ProjectionType,
+            bitmap: Bitmap,
+            radarSite: String,
+            geographyType: RadarGeometryTypeEnum,
+            genericByteBuffer: ByteBuffer
+    ) {
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.style = Style.STROKE
+        paint.strokeWidth = (RadarGeometry.dataByType[geographyType]!!.lineSize / 2.0).toFloat()
+        paint.color = RadarGeometry.dataByType[geographyType]!!.colorInt
+        if (projectionType.needsCanvasShift) {
+            canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
+        }
+        val path = Path()
+        val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
+        genericByteBuffer.position(0)
+        try {
+            val tmpBuffer = ByteBuffer.allocateDirect(genericByteBuffer.capacity())
+            UtilityCanvasProjection.computeMercatorFloatToBuffer(genericByteBuffer, tmpBuffer, projectionNumbers)
+            tmpBuffer.position(0)
+            while (tmpBuffer.position() < tmpBuffer.capacity()) {
+                path.moveTo(tmpBuffer.float, tmpBuffer.float)
+                path.lineTo(tmpBuffer.float, tmpBuffer.float)
+            }
+            canvas.drawPath(path, paint)
+        } catch (e: OutOfMemoryError) {
+            UtilityLog.handleException(e)
         }
     }
 }

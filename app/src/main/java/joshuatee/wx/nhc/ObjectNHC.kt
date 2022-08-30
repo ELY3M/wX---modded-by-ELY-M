@@ -195,7 +195,7 @@ class ObjectNhc(val context: Context, box: VBox) {
                 Image(context, boxRows.last(), bitmap, imagesPerRow)
             }
             numberOfImages += 1
-            image.connect { Route.image(context, arrayOf(urls[index], imageTitles[index])) }
+            image.connect { Route.image(context, urls[index], imageTitles[index]) }
             bitmaps.add(bitmap)
             images.add(image)
         }
@@ -203,7 +203,7 @@ class ObjectNhc(val context: Context, box: VBox) {
 
     fun updateImageData(index: Int, bitmap: Bitmap) {
         images[index].set2(bitmap, imagesPerRow)
-        images[index].connect { Route.image(context, arrayOf(urls[index], imageTitles[index])) }
+        images[index].connect { Route.image(context, urls[index], imageTitles[index]) }
     }
 
     private fun clearNhcNotificationBlock() {

@@ -23,6 +23,7 @@ package joshuatee.wx.settings
 
 import android.os.Bundle
 import joshuatee.wx.R
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.spc.UtilitySpcMeso
@@ -36,56 +37,48 @@ class FavRemoveActivity : BaseActivity() {
     // called from various activities that need favorite management,
     // allows one to remove from list of favorite sites and reorder
     //
-    // arg1: type such as SND WFO RID
+    // arg1: type such as "SND", "WFO", "SREF", "SPCMESO", "NWSTEXT", and "RID"
     //
 
     companion object { const val TYPE = "" }
 
     private var favorites = mutableListOf<String>()
     private var favoriteString = ""
-    private var prefToken = ""
     private var prefTokenLocation = ""
     private var labels = mutableListOf<String>()
     private lateinit var objectRecyclerView: ObjectRecyclerView
-    private var type = ""
+    private lateinit var type: FavoriteType
     private val initialValue = " : : "
     private val startIndex = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
-        val arguments = intent.getStringArrayExtra(TYPE)!!
-        type = arguments[0]
+        type = FavoriteType.stringToType(intent.getStringArrayExtra(TYPE)!![0])
         var verboseTitle = ""
         when (type) {
-            "SND" -> {
-                prefToken = "SND_FAV"
+            FavoriteType.SND -> {
                 prefTokenLocation = "NWS_LOCATION_"
                 verboseTitle = "sounding sites"
             }
-            "WFO" -> {
-                prefToken = "WFO_FAV"
+            FavoriteType.WFO -> {
                 prefTokenLocation = "NWS_LOCATION_"
                 verboseTitle = "NWS offices"
             }
-            "RID" -> {
-                prefToken = "RID_FAV"
+            FavoriteType.RID -> {
                 prefTokenLocation = "RID_LOC_"
                 verboseTitle = "radar sites"
             }
-            "NWSTEXT" -> {
-                prefToken = "NWS_TEXT_FAV"
+            FavoriteType.NWS_TEXT -> {
                 verboseTitle = "text products"
             }
-            "SREF" -> {
-                prefToken = "SREF_FAV"
+            FavoriteType.SREF -> {
                 verboseTitle = "parameters"
             }
-            "SPCMESO" -> {
-                prefToken = "SPCMESO_FAV"
+            FavoriteType.SPCMESO -> {
                 verboseTitle = "parameters"
             }
         }
-        favoriteString = Utility.readPref(this, prefToken, UtilityFavorites.initialValue)
+        favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.initialValue)
         title = "Modify $verboseTitle"
         toolbar.subtitle = "Tap item to delete or move."
         updateList()
@@ -100,16 +93,16 @@ class FavRemoveActivity : BaseActivity() {
         labels.clear()
         favorites.forEach {
             when (type) {
-                "NWSTEXT" -> labels.add(getFullString(it))
-                "SREF" -> labels.add(it)
-                "SPCMESO" -> labels.add(findSpcMesoLabel(it))
+                FavoriteType.NWS_TEXT -> labels.add(getFullString(it))
+                FavoriteType.SREF -> labels.add(it)
+                FavoriteType.SPCMESO -> labels.add(findSpcMesoLabel(it))
                 else -> labels.add(getFullString(it))
             }
         }
     }
 
     private fun moveUp(position: Int) {
-        favoriteString = Utility.readPref(this, prefToken, "")
+        favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), "")
         val tempList = favoriteString.split(":").dropLastWhile { it.isEmpty() }
         favorites.clear()
         favorites = (startIndex until tempList.size).map { tempList[it] }.toMutableList()
@@ -128,13 +121,13 @@ class FavRemoveActivity : BaseActivity() {
         favorites.forEach {
             favoriteString += ":$it"
         }
-        Utility.writePref(this, prefToken, "$favoriteString:")
+        Utility.writePref(this, UtilityFavorites.getPrefToken(type), "$favoriteString:")
         updateList()
         objectRecyclerView.notifyDataSetChanged()
     }
 
     private fun moveDown(pos: Int) {
-        favoriteString = Utility.readPref(this, prefToken, "")
+        favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), "")
         val tempList = favoriteString.split(":").dropLastWhile { it.isEmpty() }
         favorites.clear()
         favorites = (startIndex until tempList.size).map { tempList[it] }.toMutableList()
@@ -150,32 +143,24 @@ class FavRemoveActivity : BaseActivity() {
         }
         favoriteString = initialValue
         favorites.forEach { favoriteString += ":$it" }
-        Utility.writePref(this, prefToken, "$favoriteString:")
+        Utility.writePref(this, UtilityFavorites.getPrefToken(type), "$favoriteString:")
         updateList()
         objectRecyclerView.notifyDataSetChanged()
     }
 
     private fun getFullString(shortCode: String): String {
         return when (type) {
-            "SND" -> Utility.getSoundingSiteName(shortCode)
-            "WFO" -> shortCode + ": " + Utility.getWfoSiteName(shortCode)
-            "RID" -> shortCode + ": " + Utility.getRadarSiteName(shortCode)
-            "NWSTEXT" -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
-            "SREF" -> shortCode
-            "SPCMESO" -> findSpcMesoLabel(shortCode)
-            else -> ""
+            FavoriteType.SND -> Utility.getSoundingSiteName(shortCode)
+            FavoriteType.WFO -> shortCode + ": " + Utility.getWfoSiteName(shortCode)
+            FavoriteType.RID -> shortCode + ": " + Utility.getRadarSiteName(shortCode)
+            FavoriteType.NWS_TEXT -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
+            FavoriteType.SREF -> shortCode
+            FavoriteType.SPCMESO -> findSpcMesoLabel(shortCode)
         }
     }
 
-    private fun saveMyApp(favorite: String) {
-        when (type) {
-            "SND" -> UIPreferences.sndFav = favorite
-            "WFO" -> UIPreferences.wfoFav = favorite
-            "RID" -> UIPreferences.ridFav = favorite
-            "NWSTEXT" -> UIPreferences.nwsTextFav = favorite
-            "SREF" -> UIPreferences.srefFav = favorite
-            "SPCMESO" -> UIPreferences.spcMesoFav = favorite
-        }
+    private fun saveMyApp(s: String) {
+        UIPreferences.favorites[type] = s
     }
 
     private fun findSpcMesoLabel(rid: String): String {
@@ -196,18 +181,18 @@ class FavRemoveActivity : BaseActivity() {
 
     private fun deleteItem(position: Int) {
         when (type) {
-            "SPCMESO" -> {
-                favoriteString = Utility.readPref(this, prefToken, " : :")
+            FavoriteType.SPCMESO -> {
+                favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), " : :")
                 favoriteString = favoriteString.replace(favorites[position] + ":", "")
                 objectRecyclerView.deleteItem(position)
-                Utility.writePref(this, prefToken, favoriteString)
+                Utility.writePref(this, UtilityFavorites.getPrefToken(type), favoriteString)
                 saveMyApp(favoriteString)
             }
             else -> {
-                favoriteString = Utility.readPref(this, prefToken, " : :")
+                favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), " : :")
                 favoriteString = favoriteString.replace(favorites[position] + ":", "")
                 objectRecyclerView.deleteItem(position)
-                Utility.writePref(this, prefToken, favoriteString)
+                Utility.writePref(this, UtilityFavorites.getPrefToken(type), favoriteString)
                 saveMyApp(favoriteString)
             }
         }

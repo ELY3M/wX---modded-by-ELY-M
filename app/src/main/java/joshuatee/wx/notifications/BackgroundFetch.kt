@@ -98,8 +98,8 @@ class BackgroundFetch(val context: Context) {
                                 context,
                                 SpcMcdWatchShowActivity::class.java,
                                 SpcMcdWatchShowActivity.NUMBER,
-                                arrayOf(mcdNumber, "", polygonType.toString()),
-                                arrayOf(mcdNumber, "sound", polygonType.toString())
+                                arrayOf(mcdNumber, polygonType.toString()),
+                                arrayOf(mcdNumber, polygonType.toString(), "sound")
                         )
                         cancelStr = "usspcmcd$mcdNumber"
                         if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
@@ -143,8 +143,8 @@ class BackgroundFetch(val context: Context) {
                                 context,
                                 SpcMcdWatchShowActivity::class.java,
                                 SpcMcdWatchShowActivity.NUMBER,
-                                arrayOf(mpdNumber, "", polygonType.toString()),
-                                arrayOf(mpdNumber, "sound", polygonType.toString())
+                                arrayOf(mpdNumber, polygonType.toString()),
+                                arrayOf(mpdNumber, polygonType.toString(), "sound")
                         )
                         cancelStr = "uswpcmpd$mpdNumber"
                         if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {

@@ -53,9 +53,7 @@ object UtilityCanvasStormInfo {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
         paint.strokeWidth = 2.0f
-        if (projectionType === ProjectionType.WX_RENDER || projectionType === ProjectionType.WX_RENDER_48) {
-            canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
-        }
+        canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         if (projectionType.needsBlackPaint) {
             paint.color = Color.rgb(0, 0, 0)
         }
@@ -81,17 +79,16 @@ object UtilityCanvasStormInfo {
                 }
             val posnNumbers = posnStr.parseColumnAll(pattern3)
             val motNumbers = motionStr.parseColumnAll(pattern3)
-            var endPoint: DoubleArray
             val degreeShift = 180.00
             val arrowLength = 2.0
             val arrowBend = 20.0
             val sti15IncrementLength = 0.40
             if (posnNumbers.size == motNumbers.size && posnNumbers.size > 1) {
                 for (s in posnNumbers.indices step 2) {
-                    val degree = posnNumbers[s].toDouble()
-                    val nm = posnNumbers[s + 1].toDouble()
-                    val degree2 = motNumbers[s].toDouble()
-                    val nm2 = motNumbers[s + 1].toDouble()
+                    val degree = To.double(posnNumbers[s])
+                    val nm = To.double(posnNumbers[s + 1])
+                    val degree2 = To.double(motNumbers[s])
+                    val nm2 = To.double(motNumbers[s + 1])
                     var start = ExternalGlobalCoordinates(location)
                     var ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree, nm * 1852.0)
                     stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers).toList()
@@ -106,7 +103,7 @@ object UtilityCanvasStormInfo {
                         latLons.add(LatLon(UtilityCanvasProjection.computeMercatorNumbers(ecList[z], projectionNumbers)))
                     }
                     stormList += list
-                    endPoint = list.toDoubleArray()
+                    val endPoint = list.toDoubleArray()
                     if (nm2 > 0.01) {
                         start = ExternalGlobalCoordinates(ec)
                         drawLine(stormList, endPoint, projectionNumbers, start, degree2 + arrowBend, arrowLength * 1852.0)
@@ -136,18 +133,18 @@ object UtilityCanvasStormInfo {
         val wallPath = Path()
         wallPath.reset()
         for (i in 0 until stormList.size step 4) {
-            val list: List<Double>
-            val list2: List<Double>
+            val list: List<Float>
+            val list2: List<Float>
             if (projectionType.isMercator) {
-                list = UtilityCanvasProjection.computeMercatorNumbers(stormLists[i].toDouble(), stormLists[i + 1].toDouble(), projectionNumbers).toList()
-                list2 = UtilityCanvasProjection.computeMercatorNumbers(stormLists[i + 2].toDouble(), stormLists[i + 3].toDouble(), projectionNumbers).toList()
+                list = UtilityCanvasProjection.computeMercatorNumbers(stormLists[i], stormLists[i + 1], projectionNumbers)
+                list2 = UtilityCanvasProjection.computeMercatorNumbers(stormLists[i + 2], stormLists[i + 3], projectionNumbers)
             } else {
-                list = UtilityCanvasProjection.computeMercatorNumbers(stormLists[i].toDouble(), stormLists[i + 1].toDouble(), projectionNumbers).toList()
-                list2 = UtilityCanvasProjection.computeMercatorNumbers(stormLists[i + 2].toDouble(), stormLists[i + 3].toDouble(), projectionNumbers).toList()
+                list = UtilityCanvasProjection.computeMercatorNumbers(stormLists[i], stormLists[i + 1], projectionNumbers)
+                list2 = UtilityCanvasProjection.computeMercatorNumbers(stormLists[i + 2], stormLists[i + 3], projectionNumbers)
             }
             wallPath.reset()
-            wallPath.moveTo(list[0].toFloat(), list[1].toFloat())
-            wallPath.lineTo(list2[0].toFloat(), list2[1].toFloat())
+            wallPath.moveTo(list[0], list[1])
+            wallPath.lineTo(list2[0], list2[1])
             canvas.drawPath(wallPath, paint)
         }
     }

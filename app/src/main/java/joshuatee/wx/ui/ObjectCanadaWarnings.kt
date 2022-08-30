@@ -103,7 +103,7 @@ class ObjectCanadaWarnings(private val activity: Activity, private val box: VBox
     val title get() = provinceToLabel[province] + " (" + listLocUrl.size + ")"
 
     private fun getWarningDetail(url: String, location: String) {
-        FutureText2(activity, { UtilityCanada.getHazardsFromUrl(url) }) { data -> Route.text(activity, arrayOf(data, location)) }
+        FutureText2(activity, { UtilityCanada.getHazardsFromUrl(url) }) { data -> Route.text(activity, data, location) }
     }
 
     companion object {

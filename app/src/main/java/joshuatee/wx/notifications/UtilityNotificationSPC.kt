@@ -199,8 +199,8 @@ internal object UtilityNotificationSpc {
         val resultIntent = Intent(context, SpcMcdWatchShowActivity::class.java)
         val resultIntent2 = Intent(context, SpcMcdWatchShowActivity::class.java)
         val polygonType = PolygonType.MCD
-        resultIntent.putExtra(SpcMcdWatchShowActivity.NUMBER, arrayOf(mdNo, "", polygonType.toString()))
-        resultIntent2.putExtra(SpcMcdWatchShowActivity.NUMBER, arrayOf(mdNo, "sound", polygonType.toString()))
+        resultIntent.putExtra(SpcMcdWatchShowActivity.NUMBER, arrayOf(mdNo, polygonType.toString()))
+        resultIntent2.putExtra(SpcMcdWatchShowActivity.NUMBER, arrayOf(mdNo, polygonType.toString(), "sound"))
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(SpcMcdWatchShowActivity::class.java)
         stackBuilder.addNextIntent(resultIntent)

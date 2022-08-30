@@ -19,8 +19,27 @@
 
 */
 
-package joshuatee.wx.radar
+package joshuatee.wx.objects
 
-import java.nio.ByteBuffer
+enum class FavoriteType {
+    SND,
+    WFO,
+    SREF,
+    SPCMESO,
+    NWS_TEXT,
+    RID;
 
-class GeometryData(val highways: ByteBuffer, val counties: ByteBuffer, val stateLines: ByteBuffer, val lakes: ByteBuffer)
+    companion object {
+        fun stringToType(typeAsString: String): FavoriteType {
+            return when (typeAsString) {
+                "SND" -> SND
+                "WFO" -> WFO
+                "SREF" -> SREF
+                "SPCMESO" -> SPCMESO
+                "NWS_TEXT" -> NWS_TEXT
+                "RID" -> RID
+                else -> RID
+            }
+        }
+    }
+}

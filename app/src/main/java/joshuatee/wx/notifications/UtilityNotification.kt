@@ -124,7 +124,7 @@ object UtilityNotification {
                 val bitmap: Bitmap
                 if (Location.isUS(locNumInt)) {
                     url2 = Location.getRid(locNumInt) + "US"
-                    bitmap = UtilityImg.getNexradRefBitmap(context, Location.getRid(locNumInt), false)
+                    bitmap = UtilityImg.getNexradRefBitmap(context, Location.getRid(locNumInt))
                 } else {
                     url2 = Location.getRid(locNumInt) + "CA"
                     bitmap = UtilityImg.getBlankBitmap()

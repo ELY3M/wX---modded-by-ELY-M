@@ -83,9 +83,9 @@ internal object NexradDraw {
             wxglRenders[index].setChunkCount(0)
             wxglRenders[index].setChunkCountSti(0)
             //elys mod
-            //wxglRenders[index].setHiInit(false) //crashing???
-            UtilityLog.d("hail", "before clearHailList()")
-            wxglRenders[index].clearHailList()
+            UtilityLog.d("hail", "before setHiInit")
+            wxglRenders[index].setHiInit(false) //crashing???
+            //wxglRenders[index].clearHailList()
             wxglRenders[index].setTvsInit(false)
             RadarGeometry.orderedTypes.forEach {
                 Thread {

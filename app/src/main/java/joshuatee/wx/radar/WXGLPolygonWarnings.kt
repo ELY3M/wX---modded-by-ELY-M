@@ -27,7 +27,7 @@ import joshuatee.wx.util.ProjectionNumbers
 internal object WXGLPolygonWarnings {
 
     fun addGeneric(projectionNumbers: ProjectionNumbers, warn: ObjectPolygonWarning): List<Double> {
-        val html = warn.storage.value
+        val html = warn.getData()
         val warnings = ObjectWarning.parseJson(html)
         val warningList = mutableListOf<Double>()
         for (w in warnings) {

@@ -51,7 +51,7 @@ internal object WXGLNexradLevel3HailIndex {
         val fileName = hiBaseFn + fnSuffix
         val stormList = mutableListOf<Double>()
         val location = UtilityLocation.getSiteLocation(radarSite)
-        //make sure we clear the list or we get duplicate texts
+        //make sure we clear the list or we get duplicate texts and icons
         hailList.clear()
         ///File("/sdcard/wX/hailtest").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true)
         WXGLDownload.getNidsTab(context, "HI", radarSite, fileName)

@@ -61,7 +61,7 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
         if (nonUs) {
             holder.text2.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${lat.take(6)} , ${lon.take(6)})"
         } else {
-            holder.text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${Location.getX(position).take(6)} , ${Location.getY(position).take(6)})"
+            holder.text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${Location.getX(position).take(8)} , ${Location.getY(position).take(9)})"
         }
     }
 

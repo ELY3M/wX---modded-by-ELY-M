@@ -113,7 +113,7 @@ class SevereDashboardActivity : BaseActivity() {
                 severeWarning.warningList.forEach { w ->
                     if (w.isCurrent) {
                         val objectCardDashAlertItem = ObjectCardDashAlertItem(this, boxWarnings, w)
-                        objectCardDashAlertItem.connect { Route.hazard(this, arrayOf(w.url, ""))  }
+                        objectCardDashAlertItem.connect { Route.hazard(this, w.url)  }
                     }
                 }
             }
@@ -173,7 +173,7 @@ class SevereDashboardActivity : BaseActivity() {
                 if (it < numbers.size) {
                     val number = numbers[it]
                     val type = types[it]
-                    card.connect { Route.mcd(this, arrayOf(number, "", type)) }
+                    card.connect { Route.mcd(this, number, type) }
                 }
             }
         }

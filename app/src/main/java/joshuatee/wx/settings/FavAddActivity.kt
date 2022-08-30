@@ -25,6 +25,7 @@ import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.models.UtilityModelSpcSrefInterface
+import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
@@ -34,45 +35,45 @@ import joshuatee.wx.wpc.UtilityWpcText
 
 class FavAddActivity : BaseActivity() {
 
+    //
+    // called from various activities that need favorite management,
+    // allows one to add from list of favorite sites
+    //
+    // arg1: type such as "SND", "WFO", "SREF", "SPCMESO", "NWSTEXT", and "RID"
+    //
+
     companion object { const val TYPE = "" }
 
-    private var prefToken = ""
     private var data = listOf<String>()
     private var dataTokens = listOf<String>()
-    private var type = ""
+    private lateinit var type: FavoriteType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
-        type = intent.getStringArrayExtra(TYPE)!![0]
+        type = FavoriteType.stringToType(intent.getStringArrayExtra(TYPE)!![0])
         var verboseTitle = ""
         when (type) {
-            "SND" -> {
-                prefToken = "SND_FAV"
+            FavoriteType.SND -> {
                 data = GlobalArrays.soundingSites.map { "$it " + Utility.getSoundingSiteName(it) }
                 verboseTitle = "sounding site"
             }
-            "WFO" -> {
-                prefToken = "WFO_FAV"
+            FavoriteType.WFO -> {
                 data = GlobalArrays.wfos
                 verboseTitle = "NWS office"
             }
-            "RID" -> {
-                prefToken = "RID_FAV"
+            FavoriteType.RID -> {
                 data = GlobalArrays.radars + GlobalArrays.tdwrRadars
                 verboseTitle = "radar site"
             }
-            "NWSTEXT" -> {
-                prefToken = "NWS_TEXT_FAV"
+            FavoriteType.NWS_TEXT -> {
                 data = UtilityWpcText.labels
                 verboseTitle = "text product"
             }
-            "SREF" -> {
-                prefToken = "SREF_FAV"
+            FavoriteType.SREF -> {
                 data = UtilityModelSpcSrefInterface.params
                 verboseTitle = "parameter"
             }
-            "SPCMESO" -> {
-                prefToken = "SPCMESO_FAV"
+            FavoriteType.SPCMESO -> {
                 data = UtilitySpcMeso.labels
                 dataTokens = UtilitySpcMeso.params
                 verboseTitle = "parameter"
@@ -84,16 +85,16 @@ class FavAddActivity : BaseActivity() {
 
     private fun itemClicked(position: Int) {
         val item = data[position]
-        var favoriteString = Utility.readPref(this, prefToken, UtilityFavorites.initialValue)
+        var favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.initialValue)
         val tmpArr = when (type) {
-            "SPCMESO" -> {
+            FavoriteType.SPCMESO -> {
                 if (dataTokens[position].contains(":")) {
                     dataTokens[position].split(":").dropLastWhile { it.isEmpty() }
                 } else {
                     dataTokens[position].split(" ").dropLastWhile { it.isEmpty() }
                 }
             }
-            "SND" -> {
+            FavoriteType.SND -> {
                 if (GlobalArrays.soundingSites[position].contains(":")) {
                     GlobalArrays.soundingSites[position].split(":").dropLastWhile { it.isEmpty() }
                 } else {
@@ -110,25 +111,14 @@ class FavAddActivity : BaseActivity() {
         }
         if (!favoriteString.contains(tmpArr[0])) {
             favoriteString += when (type) {
-                "SPCMESO" -> UtilitySpcMeso.params[position] + ":"
+                FavoriteType.SPCMESO -> UtilitySpcMeso.params[position] + ":"
                 else -> tmpArr[0] + ":"
             }
-            Utility.writePref(this, prefToken, favoriteString)
-            saveMyApp(favoriteString)
+            Utility.writePref(this, UtilityFavorites.getPrefToken(type), favoriteString)
+            UIPreferences.favorites[type] = favoriteString
             toolbar.subtitle = "Last added: $item"
         } else {
             toolbar.subtitle = "Already added: $item"
-        }
-    }
-
-    private fun saveMyApp(favorite: String) {
-        when (type) {
-            "SND" -> UIPreferences.sndFav = favorite
-            "WFO" -> UIPreferences.wfoFav = favorite
-            "RID" -> UIPreferences.ridFav = favorite
-            "NWSTEXT" -> UIPreferences.nwsTextFav = favorite
-            "SREF" -> UIPreferences.srefFav = favorite
-            "SPCMESO" -> UIPreferences.spcMesoFav = favorite
         }
     }
 }

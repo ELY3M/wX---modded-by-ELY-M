@@ -54,7 +54,7 @@ class ObjectCardDashAlertItem(val context: Context, val box: VBox, private val w
         setTextFields()
         box.addWidget(card.get())
         radarButton.connect { Route.radarBySite(context, warning.getClosestRadar()) }
-        detailsButton.connect { Route.hazard(context, arrayOf(warning.url, "")) }
+        detailsButton.connect { Route.hazard(context, warning.url) }
     }
 
     fun connect(fn: View.OnClickListener) {

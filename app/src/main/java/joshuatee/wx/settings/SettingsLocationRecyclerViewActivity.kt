@@ -28,6 +28,7 @@ import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.ObjectCurrentConditions
+import joshuatee.wx.util.To
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
@@ -97,7 +98,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun updateTitle() {
-        title = "Locations"
+        title = "Locations (" + To.string(Location.numLocations) + ")"
     }
 
     private fun itemSelected(position: Int) {
@@ -108,7 +109,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun edit(position: Int) {
-        Route.locationEdit(this, arrayOf((position + 1).toString(), ""))
+        Route.locationEdit(this, (position + 1).toString())
     }
 
     private fun delete(position: Int) {
@@ -154,6 +155,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun addLocation() {
-        Route.locationEdit(this, arrayOf((locations.size + 1).toString(), ""))
+        Route.locationEdit(this, (locations.size + 1).toString())
     }
 }

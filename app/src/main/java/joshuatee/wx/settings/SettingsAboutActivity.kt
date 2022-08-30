@@ -38,7 +38,6 @@ import joshuatee.wx.util.UtilityShare
 
 class SettingsAboutActivity : BaseActivity() {
 
-    private var html = ""
     private lateinit var cardText: CardText
     private val faqUrl = "https://gitlab.com/joshua.tee/wxl23/-/tree/master/doc/FAQ.md"
     //private val releaseNotesUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vT-YfH9yH_qmxLHe25UGlJvHHj_25qmTHJoeWPBbNWlvS4nm0YBmFeAnEpeel3GTL3OYKnvXkMNbnOX/pub"
@@ -63,29 +62,22 @@ class SettingsAboutActivity : BaseActivity() {
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
         releaseNotesButton.connect { Route.web(this, releaseNotesUrl) }
 
-        cardText = CardText(this, box)
+        cardText = CardText(this, box, Utility.showVersion(this))
         val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
         cardDeleteFiles.connect {
             ObjectPopupMessage(box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         }
         box.addWidget(cardDeleteFiles.get())
-        displayContent()
-    }
-
-    private fun displayContent() {
-        cardText.text = Utility.showVersion(this)
-        html = Utility.showVersion(this)
     }
 
     override fun onRestart() {
         cardText.text = Utility.showVersion(this)
-        html = Utility.showVersion(this)
         super.onRestart()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, "About wX", html)
+            R.id.action_share -> UtilityShare.text(this, "About wX", Utility.showVersion(this))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

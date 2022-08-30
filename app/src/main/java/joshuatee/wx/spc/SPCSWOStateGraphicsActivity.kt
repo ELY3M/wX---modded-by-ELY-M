@@ -46,7 +46,6 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     companion object { const val NO = "" }
 
     private var day = ""
-    private var imgUrl = ""
     private lateinit var image: TouchImage
     private var state = ""
     private var firstTime = true
@@ -78,7 +77,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     private fun getContent() {
         title = "SWO D$day"
         invalidateOptionsMenu()
-        imgUrl = UtilitySpcSwo.getSwoStateUrl(state, day)
+        val imgUrl = UtilitySpcSwo.getSwoStateUrl(state, day)
         FutureBytes(this, imgUrl, ::showImage)
     }
 
@@ -89,15 +88,18 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_sector -> ObjectDialogue.generic(this, GlobalArrays.states, ::getContent) {
+            R.id.action_sector -> ObjectDialogue.generic(this,
+                    GlobalArrays.states.filter { !it.startsWith("AK") && !it.startsWith("HI") },
+                    ::getContent) {
                 if (firstTime) {
                     UtilityToolbar.fullScreenMode(this)
                     firstTime = false
                 }
                 image.setZoom(1.0f)
-                state = GlobalArrays.states[it].split(":")[0]
+                state = GlobalArrays.states.filter { state ->
+                    !state.startsWith("AK") && !state.startsWith("HI") }[it].split(":")[0]
             }
-            R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", image.bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", image)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

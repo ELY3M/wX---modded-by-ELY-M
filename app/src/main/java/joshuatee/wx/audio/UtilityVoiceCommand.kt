@@ -33,12 +33,11 @@ import joshuatee.wx.wpc.WpcTextProductsActivity
 object UtilityVoiceCommand {
 
     fun processCommand(context: Context, vrStringOriginal: String, radarSiteArg: String, wfoOriginal: String, state: String): Boolean {
-        var vrString = vrStringOriginal
         var radarSite = radarSiteArg
         var wfo = wfoOriginal
         var gotHit = true
-        val tokens = RegExp.space.split(vrString)
-        if (vrString.contains("radar")) {
+        val tokens = RegExp.space.split(vrStringOriginal)
+        if (vrStringOriginal.contains("radar")) {
             var validRid = true
             if (tokens.size > 1) {
                 radarSite = tokens[1].uppercase(Locale.US)
@@ -49,7 +48,7 @@ object UtilityVoiceCommand {
             if (validRid) {
                 Route.radar(context, arrayOf(radarSite, state))
             }
-        } else if (vrString.contains("AFD") || vrString.contains("text")) {
+        } else if (vrStringOriginal.contains("AFD") || vrStringOriginal.contains("text")) {
             if (tokens.size > 1) {
                 wfo = tokens[1].uppercase(Locale.US)
             }
@@ -58,36 +57,34 @@ object UtilityVoiceCommand {
             } else {
                 Route.wfoText(context, arrayOf(wfo, "AFD", "sound"))
             }
-        } else if (vrString.contains("cloud")) {
+        } else if (vrStringOriginal.contains("cloud")) {
             Route.vis(context)
-        } else if (vrString.uppercase(Locale.US).contains("SPC")) {
+        } else if (vrStringOriginal.uppercase(Locale.US).contains("SPC")) {
             if (tokens.size > 1) {
                 when {
-                    vrString.contains("1") -> Route.spcSwo(context, arrayOf("1", "sound"))
-                    vrString.contains("2") -> Route.spcSwo(context, arrayOf("2", "sound"))
-                    vrString.contains("3") -> Route.spcSwo(context, arrayOf("3", "sound"))
-                    else -> Route.spcSwo(context, arrayOf("4-8", "sound"))
+                    vrStringOriginal.contains("1") -> Route.spcSwo(context, "1", "sound")
+                    vrStringOriginal.contains("2") -> Route.spcSwo(context, "2", "sound")
+                    vrStringOriginal.contains("3") -> Route.spcSwo(context, "3", "sound")
+                    else -> Route.spcSwo(context, "4-8", "sound")
                 }
             } else {
-                Route.spcSwo(context, arrayOf("1", "sound"))
+                Route.spcSwo(context, "1", "sound")
             }
-        } else if (vrString.contains("day one")) {
-            Route.spcSwo(context, arrayOf("1", "sound"))
-        } else if (vrString.contains("day 2")) {
-            Route.spcSwo(context, arrayOf("2", "sound"))
-        } else if (vrString.contains("day 3")) {
-            Route.spcSwo(context, arrayOf("3", "sound"))
-        } else if (vrString.contains("day 4")) {
-            Route.spcSwo(context, arrayOf("4-8", "sound"))
-        } else if (vrString.contains("add")) {
-            vrString = vrString.replace("add location", "")
-            Route.locationEdit(context, arrayOf((Location.numLocations + 1).toString(), vrString))
-        } else if (vrString.contains("edit")) {
-            vrString = vrString.replace("edit location", "")
-            Route.locationEdit(context, arrayOf(Location.currentLocationStr, vrString))
-        } else if (vrString.contains("mosaic")) {
+        } else if (vrStringOriginal.contains("day one")) {
+            Route.spcSwo(context, "1", "sound")
+        } else if (vrStringOriginal.contains("day 2")) {
+            Route.spcSwo(context, "2", "sound")
+        } else if (vrStringOriginal.contains("day 3")) {
+            Route.spcSwo(context, "3", "sound")
+        } else if (vrStringOriginal.contains("day 4")) {
+            Route.spcSwo(context, "4-8", "sound")
+        } else if (vrStringOriginal.contains("add")) {
+            Route.locationEdit(context, (Location.numLocations + 1).toString())
+        } else if (vrStringOriginal.contains("edit")) {
+            Route.locationEdit(context, Location.currentLocationStr)
+        } else if (vrStringOriginal.contains("mosaic")) {
             Route.radarMosaic(context)
-        } else if (vrString.contains("map")) {
+        } else if (vrStringOriginal.contains("map")) {
             if (tokens.size > 1) {
                 when (tokens[1]) {
                     "pressure" -> {
@@ -117,10 +114,10 @@ object UtilityVoiceCommand {
                 }
             }
             Route(context, SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "1", "SPCMESO"))
-        } else if (vrString.contains("forecast")) {
+        } else if (vrStringOriginal.contains("forecast")) {
             val forecast = Utility.readPref(context, "FCST", "")
             UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")
-        } else if (vrString.contains("playlist")) {
+        } else if (vrStringOriginal.contains("playlist")) {
             UtilityTts.synthesizeTextAndPlayPlaylist(context, 1)
         } else {
             gotHit = false

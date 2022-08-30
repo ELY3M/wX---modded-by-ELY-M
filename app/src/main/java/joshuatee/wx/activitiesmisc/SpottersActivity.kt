@@ -168,9 +168,9 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun showItemOnMap(position: Int) {
-        Route.webView(this, arrayOf(UtilityMap.getUrl(spotterList[position].lat, spotterList[position].lon, "9"),
+        Route.webView(this,
+                UtilityMap.getUrl(spotterList[position].lat, spotterList[position].lon, "9"),
                 spotterList[position].lastName + ", " + spotterList[position].firstName)
-        )
     }
 
     private fun showItemOnRadar(position: Int) {
