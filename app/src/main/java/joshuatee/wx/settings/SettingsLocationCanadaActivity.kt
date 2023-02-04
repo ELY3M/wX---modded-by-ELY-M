@@ -26,7 +26,7 @@ import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.Extensions.parseColumn
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility

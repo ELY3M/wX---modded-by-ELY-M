@@ -42,7 +42,7 @@ object SpotterNetworkPositionReport {
     var time: Long = 0
     var speed: Float = 0.0f
     var bearing: Float = 0.0f
-    var gpsprovider: String = ""
+    var gpsprovider: String? = ""
 
 
     var strkey: String? = RadarPreferences.sn_key

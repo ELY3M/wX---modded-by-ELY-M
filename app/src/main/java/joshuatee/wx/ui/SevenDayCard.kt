@@ -29,7 +29,7 @@ import joshuatee.wx.fragments.UtilityLocationFragment
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.util.UtilityForecastIcon
 
-class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, forecast: String) {
+class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, forecast: String) : Widget {
 
     private val card = Card(context)
     private val photo = Photo(context)
@@ -41,9 +41,9 @@ class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, forecast: S
         val vbox = VBox(context)
         topLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
         bottomLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
-        vbox.addWidgets(listOf(topLineText.get(), bottomLineText.get()))
+        vbox.addWidgets(listOf(topLineText, bottomLineText))
         if (!UIPreferences.locfragDontShowIcons) {
-            hbox.addWidget(photo.get())
+            hbox.addWidget(photo)
         }
         hbox.addLayout(vbox)
         card.addLayout(hbox)
@@ -54,7 +54,7 @@ class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, forecast: S
                         items[0] + " (" + UtilityLocationFragment.extractTemperature(
                                 items[1]
                         )
-                                + GlobalVariables.DEGREE_SYMBOL
+                                + GlobalVariables.degreeSymbol
                                 + UtilityLocationFragment.extractWindDirection(items[1].substring(1))
                                 + UtilityLocationFragment.extract7DayMetrics(items[1].substring(1)) + ")"
                 )
@@ -62,7 +62,7 @@ class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, forecast: S
                 setTopLine(
                         items[0] + " ("
                                 + UtilityLocationFragment.extractCanadaTemperature(items[1])
-                                + GlobalVariables.DEGREE_SYMBOL
+                                + GlobalVariables.degreeSymbol
                                 + UtilityLocationFragment.extractCanadaWindDirection(items[1])
                                 + UtilityLocationFragment.extractCanadaWindSpeed(items[1]) + ")"
                 )
@@ -91,5 +91,5 @@ class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, forecast: S
         bottomLineText.refreshTextSize(TextSize.MEDIUM)
     }
 
-    fun get() = card.get()
+    override fun getView() = card.getView()
 }

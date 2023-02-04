@@ -59,11 +59,12 @@ internal class SevereNotice(val type: PolygonType) {
                 PolygonType.MPD -> RegExp.mpdPattern
                 else -> RegExp.mcdPatternUtilSpc
             }
-            numbers = UtilityString.parseColumnAl(html, pattern)
+            numbers = UtilityString.parseColumn(html, pattern).toMutableList()
         }
         numbers.indices.forEach { count ->
             if (type == PolygonType.WATCH) {
-                numbers[count] = String.format("%4s", numbers[count]).replace(' ', '0')
+                numbers[count] = String.format("%4s", numbers[count]).replace(' ', '0') // TODO FIXME
+                // numbers[count] = To.stringPadLeftZeros(numbers[count], 4)
             }
             val url = when (type) {
                 PolygonType.MCD -> "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd" + numbers[count] + ".gif"
@@ -75,7 +76,7 @@ internal class SevereNotice(val type: PolygonType) {
         }
     }
 
-    fun getCount() = bitmaps.size
+    fun getCount(): Int = bitmaps.size
 
-    override fun toString() = typeAsString
+    override fun toString(): String = typeAsString
 }

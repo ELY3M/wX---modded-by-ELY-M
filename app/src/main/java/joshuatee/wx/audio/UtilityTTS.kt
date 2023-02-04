@@ -63,19 +63,17 @@ object UtilityTts {
 
     fun initTts(context: Context) {
         // samsung bug, if users do not have google TTS selected it will crash - add try-catch so user can at least use rest of program
-        //if (!ttsInit) {
-            try {
-                ttobjGlobal = TextToSpeech(context) { status ->
-                    if (status != TextToSpeech.ERROR) {
-                        ttobjGlobal?.language = Locale.US
-                    }
+        try {
+            ttobjGlobal = TextToSpeech(context) { status ->
+                if (status != TextToSpeech.ERROR) {
+                    ttobjGlobal?.language = Locale.US
                 }
-                ttsInit = true
-                ttobjGlobal!!.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10f)
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
             }
-        //}
+            ttsInit = true
+            ttobjGlobal!!.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10.0f)
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
+        }
     }
 
     fun shutdownTts() {
@@ -86,15 +84,17 @@ object UtilityTts {
     }
 
     internal fun playAgainTts(context: Context) {
-        if (!ttsInit) initTts(context)
-        ttobjGlobal!!.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10f)
+        if (!ttsInit) {
+            initTts(context)
+        }
+        ttobjGlobal!!.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10.0f)
         splitInChunks(Utility.fromHtml(TEXT_OLD), 1000).forEach {
             ttobjGlobal!!.speak(it, TextToSpeech.QUEUE_ADD, null)
         }
     }
 
-    private fun splitInChunks(string: String, chunkSize: Int): List<String> =
-            (0..string.length step chunkSize).map { string.substring(it, min(string.length, it + chunkSize)) }
+    private fun splitInChunks(s: String, chunkSize: Int): List<String> =
+            (0..s.length step chunkSize).map { s.substring(it, min(s.length, it + chunkSize)) }
 
     private fun initMediaPlayer(context: Context) {
         mediaPlayer = MediaPlayer()
@@ -226,7 +226,6 @@ object UtilityTts {
         if (!ttsInit) {
             initTts(context)
         }
-        //initTts(context)
         // clear the queue of any pending objects
         ttobjGlobal!!.stop()
         if (!mpInit) {
@@ -248,7 +247,9 @@ object UtilityTts {
     }
 
     private fun synthesizeText(context: Context, txtF: String, prod: String) {
-        if (mediaPlayer != null && mediaPlayer!!.isPlaying) mediaPlayer!!.stop()
+        if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
+            mediaPlayer!!.stop()
+        }
         val txt = UtilityTtsTranslations.translateAbbreviation(txtF)
         val myHashRender = HashMap<String, String>()
         val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)

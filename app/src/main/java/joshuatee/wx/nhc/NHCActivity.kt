@@ -28,6 +28,7 @@ import android.widget.ScrollView
 import java.util.Locale
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.util.UtilityShare
@@ -37,9 +38,10 @@ import joshuatee.wx.ui.VBox
 
 class NhcActivity : BaseActivity() {
 
-    private lateinit var objectNhc: ObjectNhc
+    private lateinit var nhc: Nhc
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
+    private var downloadTimer = DownloadTimer("NHC_ACTIVITY")
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.nhc, menu)
@@ -48,19 +50,25 @@ class NhcActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc, false)
-        scrollView = findViewById(R.id.scrollView)
-        box = VBox.fromResource(this)
-        objectNhc = ObjectNhc(this, box)
+        setTitle("NHC", "National Hurricane Center")
+        setupUI()
         getContent()
     }
 
-    private fun getContent() {
-        scrollView.smoothScrollTo(0, 0)
-        FutureVoid(this, objectNhc::getTextData,  objectNhc::showTextData)
-        objectNhc.urls.forEachIndexed { index, url ->
-            FutureBytes(this, url) { s -> objectNhc.updateImageData(index, s) }
-        }
+    private fun setupUI() {
+        scrollView = findViewById(R.id.scrollView)
+        box = VBox.fromResource(this)
+        nhc = Nhc(this, box)
+    }
 
+    private fun getContent() {
+        if (downloadTimer.isRefreshNeeded(this)) {
+            scrollView.smoothScrollTo(0, 0)
+            FutureVoid(this, nhc::getText, nhc::showText)
+            nhc.urls.forEachIndexed { index, url ->
+                FutureBytes(this, url) { s -> nhc.updateImageData(index, s) }
+            }
+        }
     }
 
     private fun showTextProduct(prod: String) {
@@ -76,7 +84,7 @@ class NhcActivity : BaseActivity() {
             R.id.action_atl_tws -> showTextProduct("MIATWSAT")
             R.id.action_epac_tws -> showTextProduct("MIATWSEP")
             R.id.action_cpac_two -> showTextProduct("HFOTWOCP")
-            R.id.action_share -> UtilityShare.text(this, "NHC", "", objectNhc.bitmaps)
+            R.id.action_share -> UtilityShare.text(this, "NHC", "", nhc.bitmaps)
             R.id.action_epac_daily -> Route.image(this, "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg", "EPAC Daily Analysis")
             R.id.action_atl_daily -> Route.image(this, "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg", "ATL Daily Analysis")
             R.id.action_epac_7daily -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anal.gif", "EPAC 7-Day Analysis")
@@ -89,7 +97,8 @@ class NhcActivity : BaseActivity() {
     }
 
     override fun onRestart() {
-        objectNhc.handleRestartForNotification()
+        nhc.handleRestartForNotification()
+        getContent()
         super.onRestart()
     }
 }

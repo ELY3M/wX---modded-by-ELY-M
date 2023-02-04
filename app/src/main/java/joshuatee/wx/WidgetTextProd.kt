@@ -25,11 +25,13 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.WidgetFile.AFD
+import joshuatee.wx.widgets.WidgetFile
+import joshuatee.wx.widgets.UtilityWidget
+import joshuatee.wx.widgets.UtilityWidgetDownload
 
 class WidgetTextProd : AppWidgetProvider() {
 
-    private val type = AFD
+    private val type = WidgetFile.AFD
 
     override fun onDisabled(context: Context) {
         UtilityWidget.disableWidget(context, type)

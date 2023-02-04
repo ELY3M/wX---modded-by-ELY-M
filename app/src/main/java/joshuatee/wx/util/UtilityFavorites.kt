@@ -26,6 +26,7 @@ import android.view.MenuItem
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FavoriteType
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.wpc.UtilityWpcText
 
@@ -59,19 +60,19 @@ object UtilityFavorites {
         favorites[1] = "Add..."
         favorites[2] = "Modify..."
         val returnList = MutableList(favorites.size) { "" }
-        favorites.indices.forEach { k ->
+        favorites.forEachIndexed { k, fav ->
             val name = when (type) {
-                FavoriteType.RID -> Utility.getRadarSiteName(favorites[k])
-                FavoriteType.WFO -> Utility.getWfoSiteName(favorites[k])
-                FavoriteType.SND -> Utility.getSoundingSiteName(favorites[k])
-                FavoriteType.NWS_TEXT -> UtilityWpcText.getLabel(favorites[k])
-                FavoriteType.SPCMESO -> UtilitySpcMeso.getLabelFromParam(favorites[k])
+                FavoriteType.RID -> UtilityLocation.getRadarSiteName(fav)
+                FavoriteType.WFO -> UtilityLocation.getWfoSiteName(fav)
+                FavoriteType.SND -> UtilityLocation.getSoundingSiteName(fav)
+                FavoriteType.NWS_TEXT -> UtilityWpcText.getLabel(fav)
+                FavoriteType.SPCMESO -> UtilitySpcMeso.getLabelFromParam(fav)
                 FavoriteType.SREF -> ""
             }
             if (k == 1 || k == 2) {
-                returnList[k] = favorites[k]
+                returnList[k] = fav
             } else {
-                returnList[k] = favorites[k] + " " + name
+                returnList[k] = "$fav $name"
             }
         }
         return returnList
@@ -89,5 +90,5 @@ object UtilityFavorites {
         savePref(context, favoriteString, type)
     }
 
-    fun getPrefToken(type: FavoriteType) = type.name + "_FAV"
+    fun getPrefToken(type: FavoriteType): String = type.name + "_FAV"
 }

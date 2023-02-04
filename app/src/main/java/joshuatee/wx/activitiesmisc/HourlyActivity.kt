@@ -42,6 +42,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.To
 
 class HourlyActivity : BaseActivity() {
 
@@ -60,7 +61,7 @@ class HourlyActivity : BaseActivity() {
     private lateinit var box: VBox
     private lateinit var graphCard: Card
     private lateinit var graph: GraphView
-    private var objectHourly = ObjectHourly()
+    private var hourly = Hourly()
     private var locationNumber = 0
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,8 +71,13 @@ class HourlyActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, false)
-        locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
+        locationNumber = To.int(intent.getStringExtra(LOC_NUM)!!) - 1
         setTitle("Hourly Forecast", Location.getName(locationNumber))
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         card = Card(this, R.color.black, R.id.graphCard)
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
@@ -79,9 +85,9 @@ class HourlyActivity : BaseActivity() {
         graphCard.setCardBackgroundColor(Color.BLACK)
         graph = findViewById(R.id.graph)
         graphCard.visibility = View.GONE
-        cardVerticalText = CardVerticalText(this, 5, box, toolbar)
+        cardVerticalText = CardVerticalText(this, 5, toolbar)
+        box.addWidget(cardVerticalText)
         cardVerticalText.connect { scrollView.scrollTo(0, 0) }
-        getContent()
     }
 
     override fun onRestart() {
@@ -94,17 +100,17 @@ class HourlyActivity : BaseActivity() {
     }
 
     private fun update() {
-        objectHourly = if (UIPreferences.useNwsApiForHourly) {
+        hourly = if (UIPreferences.useNwsApiForHourly) {
             UtilityUSHourly.getStringForActivity(htmlShare[1])
         } else {
             UtilityUSHourly.getStringForActivityFromOldApi(htmlShare[1])
         }
         cardVerticalText.set(listOf(
-                objectHourly.time,
-                objectHourly.temp,
-                objectHourly.windSpeed,
-                objectHourly.windDir,
-                objectHourly.conditions))
+            hourly.time,
+            hourly.temp,
+            hourly.windSpeed,
+            hourly.windDir,
+            hourly.conditions))
         plotData()
         graphCard.visibility = View.VISIBLE
     }
@@ -113,42 +119,43 @@ class HourlyActivity : BaseActivity() {
         when (item.itemId) {
             R.id.action_share -> if (htmlShare.size > 1) UtilityShare.text(this, "Hourly", htmlShare[1])
             R.id.action_settings -> Route.settings(this)
-            R.id.action_radar -> Route.radar(this, arrayOf(Location.rid, ""))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
     private fun plotData() {
-        val linesOfData = objectHourly.temp.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
+        val linesOfData = hourly.temp.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
         val dataPoints = mutableListOf<DataPoint>()
         (1 until linesOfData.lastIndex).forEach {
-            val temp = linesOfData[it].toIntOrNull() ?: 0
+            val temp = To.int(linesOfData[it])
             dataPoints.add(DataPoint(it.toDouble(), temp.toDouble()))
         }
         val series = LineGraphSeries(dataPoints.toTypedArray())
         series.color = Color.BLACK
-        graph.removeAllSeries()
-        graph.viewport.isXAxisBoundsManual = true
-        graph.viewport.backgroundColor = Color.LTGRAY
-        graph.viewport.setMinX(0.0)
-        graph.viewport.setMaxX(160.0)
-        graph.gridLabelRenderer.numHorizontalLabels = 10
-        graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
-            override fun formatLabel(value: Double, isValueX: Boolean): String {
-                return if (isValueX) {
-                    // show normal x values
-                    if ((value.toInt() % 10) == 0) {
-                        super.formatLabel(value, isValueX)
+        with (graph) {
+            removeAllSeries()
+            viewport.isXAxisBoundsManual = true
+            viewport.backgroundColor = Color.LTGRAY
+            viewport.setMinX(0.0)
+            viewport.setMaxX(160.0)
+            gridLabelRenderer.numHorizontalLabels = 10
+            gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
+                override fun formatLabel(value: Double, isValueX: Boolean): String {
+                    return if (isValueX) {
+                        // show normal x values
+                        if ((value.toInt() % 10) == 0) {
+                            super.formatLabel(value, isValueX)
+                        } else {
+                            ""
+                        }
                     } else {
-                        ""
+                        // show currency for y values
+                        super.formatLabel(value, isValueX)
                     }
-                } else {
-                    // show currency for y values
-                    super.formatLabel(value, isValueX)
                 }
             }
+            addSeries(series)
         }
-        graph.addSeries(series)
     }
 }

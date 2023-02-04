@@ -24,7 +24,7 @@ package joshuatee.wx.models
 internal object UtilityModelNcepInterface {
 
     val models = listOf(
-            "ESTOFS",
+            "STOFS",
             "FIREWX",
             "GEFS-MEAN-SPRD",
             "GEFS-SPAG",
@@ -206,7 +206,7 @@ internal object UtilityModelNcepInterface {
             "WEST-ATL"
     )
 
-    val sectorsEstofs = listOf(
+    val sectorsStofs = listOf(
             "EAST-GOA",
             "EAST-GOM",
             "HAWAII",
@@ -875,12 +875,12 @@ internal object UtilityModelNcepInterface {
             "Secondary Swell Direction and Period (sec)"
     )
 
-    val paramsEstofs = listOf(
+    val paramsStofs = listOf(
             "storm_surge",
             "total_water_level"
     )
 
-    val labelsEstofs = listOf(
+    val labelsStofs = listOf(
             "Storm surge relative to Mean Sea Level (feet)",
             "Total Water Level relative to Mean Sea Level (feet)"
     )

@@ -39,47 +39,23 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
-import joshuatee.wx.radar.UtilityUSImgWX
+import joshuatee.wx.radar.CanvasCreate
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.radar.WXGLNexrad
-import joshuatee.wx.ui.TouchImage
+import joshuatee.wx.radar.NexradUtil
 import joshuatee.wx.ui.UtilityUI
 
 object UtilityImg {
 
-    fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap) =
+    fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap): Bitmap =
             layerDrawableToBitmap(listOf(BitmapDrawable(context.resources, imageA), BitmapDrawable(context.resources, imageB)))
 
-    fun addColorBackground(context: Context, bitmap: Bitmap, color: Int) =
+    fun addColorBackground(context: Context, bitmap: Bitmap, color: Int): Bitmap =
             layerDrawableToBitmap(listOf(ColorDrawable(color), BitmapDrawable(context.resources, bitmap)))
 
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
 
-    fun getBitmapAddWhiteBackground(context: Context, imgUrl: String) =
+    fun getBitmapAddWhiteBackground(context: Context, imgUrl: String): Bitmap =
             layerDrawableToBitmap(listOf(ColorDrawable(Color.WHITE), BitmapDrawable(context.resources, imgUrl.getImage())))
-
-    fun imgRestorePosnZoom(context: Context, img: TouchImage, prefStr: String) {
-        img.setZoom(
-                Utility.readPrefFloat(context, prefStr + "_ZOOM", 1.0f),
-                Utility.readPrefFloat(context, prefStr + "_X", 0.5f),
-                Utility.readPrefFloat(context, prefStr + "_Y", 0.5f)
-        )
-    }
-
-    fun imgSavePosnZoom(context: Context, img: TouchImage, prefStr: String) {
-        val poi = img.scrollPosition
-        var z = img.currentZoom
-        if (poi != null) {
-            var x = poi.x
-            var y = poi.y
-            if (x.isNaN()) x = 1.0f
-            if (y.isNaN()) y = 1.0f
-            if (z.isNaN()) z = 1.0f
-            Utility.writePrefFloat(context, prefStr + "_X", x)
-            Utility.writePrefFloat(context, prefStr + "_Y", y)
-            Utility.writePrefFloat(context, prefStr + "_ZOOM", z)
-        }
-    }
 
     fun loadBitmap(context: Context, resourceId: Int, resize: Boolean): Bitmap {
         val inputStream = context.resources.openRawResource(resourceId)
@@ -106,9 +82,11 @@ object UtilityImg {
         }
     }
 
-    fun animInterval(context: Context) = 50 * Utility.readPrefInt(context, "ANIM_INTERVAL", UIPreferences.animationIntervalDefault)
+    fun animInterval(context: Context): Int =
+            50 * Utility.readPrefInt(context, "ANIM_INTERVAL", UIPreferences.animationIntervalDefault)
 
-    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap) = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
+    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable =
+            LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 
     fun layerDrawableToBitmap(layers: List<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
@@ -190,46 +168,42 @@ object UtilityImg {
         return output
     }
 
-    fun drawTextToBitmap(context: Context, bitmap: Bitmap, text: String, textColor: Int): Bitmap {
-        try {
-            val scale = context.resources.displayMetrics.density
-            val canvas = Canvas(bitmap)
-            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-            paint.color = textColor
-            paint.textSize = 12 * scale
-            paint.setShadowLayer(1.0f, 0.0f, 1.0f, Color.DKGRAY)
-            val bounds = Rect()
-            paint.getTextBounds(text, 0, text.length, bounds)
-            val x = (bitmap.width - bounds.width()) / 6
-            val y = 15
-            canvas.drawText(text, x * scale, y * scale, paint)
-            return bitmap
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-            return Bitmap.createBitmap(10, 10, Config.ARGB_8888)
-        }
+    fun drawTextToBitmap(context: Context, bitmap: Bitmap, text: String, textColor: Int): Bitmap = try {
+        val scale = context.resources.displayMetrics.density
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.color = textColor
+        paint.textSize = 12 * scale
+        paint.setShadowLayer(1.0f, 0.0f, 1.0f, Color.DKGRAY)
+        val bounds = Rect()
+        paint.getTextBounds(text, 0, text.length, bounds)
+        val x = (bitmap.width - bounds.width()) / 6
+        val y = 15
+        canvas.drawText(text, x * scale, y * scale, paint)
+        bitmap
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        Bitmap.createBitmap(10, 10, Config.ARGB_8888)
     }
 
     // used in UtilityUSImgWX for nexrad
-    fun drawText(context: Context, bitmap: Bitmap): Bitmap {
-        val radarStatus = WXGLNexrad.readRadarTimeForWidget(context)
-        try {
-            val scale = context.resources.displayMetrics.density
-            val canvas = Canvas(bitmap)
-            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-            paint.color = Color.WHITE
-            paint.textSize = (12 * scale).toInt().toFloat()
-            paint.setShadowLayer(1f, 0f, 1f, Color.DKGRAY)
-            val bounds = Rect()
-            paint.getTextBounds(radarStatus, 0, radarStatus.length, bounds)
-            val x = (bitmap.width - bounds.width()) / 6
-            val y = 15
-            canvas.drawText(radarStatus, x * scale, y * scale, paint)
-            return bitmap
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-            return Bitmap.createBitmap(10, 10, Config.ARGB_8888)
-        }
+    fun drawText(context: Context, bitmap: Bitmap): Bitmap = try {
+        val radarStatus = NexradUtil.readRadarTimeForWidget(context)
+        val scale = context.resources.displayMetrics.density
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.color = Color.WHITE
+        paint.textSize = (12 * scale).toInt().toFloat()
+        paint.setShadowLayer(1.0f, 0.0f, 1.0f, Color.DKGRAY)
+        val bounds = Rect()
+        paint.getTextBounds(radarStatus, 0, radarStatus.length, bounds)
+        val x = (bitmap.width - bounds.width()) / 6
+        val y = 15
+        canvas.drawText(radarStatus, x * scale, y * scale, paint)
+        bitmap
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        Bitmap.createBitmap(10, 10, Config.ARGB_8888)
     }
 
     fun vectorDrawableToBitmap(context: Context, resourceDrawable: Int, color: Int): Bitmap {
@@ -252,19 +226,20 @@ object UtilityImg {
                 width = it.width
             }
         }
-        if ( width == 0 || height == 0 ) {
+        if (width == 0 || height == 0) {
             return getBlankBitmap()
         }
         combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
         val comboImage = Canvas(combinedImage!!)
-        var workingHeight = 0f
+        var workingHeight = 0.0f
         images.forEach {
-            comboImage.drawBitmap(it, 0f, workingHeight, null)
+            comboImage.drawBitmap(it, 0.0f, workingHeight, null)
             workingHeight += it.height
         }
         return combinedImage
     }
 
-    fun getNexradRefBitmap(context: Context, radarSite: String) =
-            UtilityUSImgWX.layeredImg(context, radarSite, "N0Q")
+    // FIXME TODO move elsewhere
+    fun getNexradRefBitmap(context: Context, radarSite: String): Bitmap =
+            CanvasCreate.layeredImage(context, radarSite, "N0Q")
 }

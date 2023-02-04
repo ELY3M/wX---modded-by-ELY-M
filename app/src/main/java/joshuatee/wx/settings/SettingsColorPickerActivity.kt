@@ -22,12 +22,15 @@
 package joshuatee.wx.settings
 
 import joshuatee.wx.R
-import joshuatee.wx.ui.ColorPicker.OnColorChangedListener
 import joshuatee.wx.MyApplication
 import android.os.Bundle
 import android.graphics.Color
 import android.widget.Button
-import joshuatee.wx.ui.*
+import joshuatee.wx.externalColorChooser.ColorPicker
+import joshuatee.wx.externalColorChooser.ColorPicker.OnColorChangedListener
+import joshuatee.wx.externalColorChooser.SaturationBar
+import joshuatee.wx.externalColorChooser.ValueBar
+import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.Utility
 
 // was inherited from AppCompatActivity
@@ -52,7 +55,12 @@ class SettingsColorPickerActivity : BaseActivity(), OnColorChangedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_color_picker, null, false)
         val arguments = intent.getStringArrayExtra(INFO)!!
+        title = arguments[1]
         prefVal = arguments[0]
+        setupUI()
+    }
+
+    private fun setupUI() {
         colorPicker = findViewById(R.id.colorPicker)
         vBar = findViewById(R.id.vBar)
         sBar = findViewById(R.id.sBar)
@@ -60,18 +68,20 @@ class SettingsColorPickerActivity : BaseActivity(), OnColorChangedListener {
         color = UtilityColor.setColor(prefVal)
         val currentColor = Utility.readPrefInt(this, prefVal, color)
         buttonDefault.setTextColor(color)
-        colorPicker.oldCenterColor = currentColor
-        colorPicker.color = currentColor
-        colorPicker.addValueBar(vBar)
-        colorPicker.addSaturationBar(sBar)
-        colorPicker.setOnColorChangedListener(this)
+        with (colorPicker) {
+            oldCenterColor = currentColor
+            this.color = currentColor
+            addValueBar(vBar)
+            addSaturationBar(sBar)
+            setOnColorChangedListener(this@SettingsColorPickerActivity)
+        }
         buttonDefault.setOnClickListener {
             colorPicker.oldCenterColor = color
             Utility.writePrefInt(this, prefVal, color)
             toolbar.subtitle = "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
         }
         val currColorViaPref = Utility.readPrefInt(this, prefVal, color)
-        setTitle(arguments[1], "(" + Color.red(currColorViaPref) + "," + Color.green(currColorViaPref) + "," + Color.blue(currColorViaPref) + ")")
+        toolbar.subtitle = "(" + Color.red(currColorViaPref) + "," + Color.green(currColorViaPref) + "," + Color.blue(currColorViaPref) + ")"
     }
 
     override fun onColorChanged(color: Int) {

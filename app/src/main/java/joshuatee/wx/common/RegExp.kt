@@ -32,7 +32,9 @@ object RegExp {
     val mcdPatternUtilSpc: Pattern = Pattern.compile(">Mesoscale Discussion #(.*?)</a>")
     val mpdPattern: Pattern = Pattern.compile(">MPD #(.*?)</a></strong>")
     val prePattern: Pattern = Pattern.compile("<pre.*?>(.*?)</pre>")
+    const val pre: String = "<pre.*?>(.*?)</pre>"
     val pre2Pattern: Pattern = Pattern.compile("<pre>(.*?)</pre>")
+    const val pre2: String = "<pre>(.*?)</pre>"
 
     val space: Pattern = Pattern.compile(" ")
     val colon: Pattern = Pattern.compile(":")

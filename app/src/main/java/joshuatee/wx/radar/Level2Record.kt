@@ -161,16 +161,20 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
                     dbpp5 = dbp9
                 }
             }
-            if (hasHighResREFData) reflectHROffset = (dbpp4 + 28).toShort()
-            if (hasHighResVELData) velocityHROffset = (dbpp5 + 28).toShort()
+            if (hasHighResREFData) {
+                reflectHROffset = (dbpp4 + 28).toShort()
+            }
+            if (hasHighResVELData) {
+                velocityHROffset = (dbpp5 + 28).toShort()
+            }
         }
     }
 
     private fun getDataOffset(dataType: Int) = when (dataType) {
-            REFLECTIVITY_HIGH -> reflectHROffset
-            VELOCITY_HIGH -> velocityHROffset
-            else -> Short.MIN_VALUE
-        }
+        REFLECTIVITY_HIGH -> reflectHROffset
+        VELOCITY_HIGH -> velocityHROffset
+        else -> Short.MIN_VALUE
+    }
 
     @Throws(IOException::class)
     private fun getDataBlockValue(ucarRandomAccessFile: UCARRandomAccessFile, offset: Short, skip: Int): Short {
@@ -186,7 +190,9 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
         ucarRandomAccessFile.seek(off)
         ucarRandomAccessFile.skipBytes(skip)
         val byteArray = ByteArray(size)
-        for (i in 0 until size) { byteArray[i] = ucarRandomAccessFile.readByte() }
+        for (i in 0 until size) {
+            byteArray[i] = ucarRandomAccessFile.readByte()
+        }
         return String(byteArray)
     }
 
@@ -195,7 +201,9 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
         // offset is from "start of digital radar data message header"
         val offset = messageOffset + MESSAGE_HEADER_SIZE.toLong() + getDataOffset(dataType).toLong()
         ucarRandomAccessFile.seek(offset)
-        for (i in 0..915) { binWord.put(ucarRandomAccessFile.readUnsignedByte().toByte()) }
+        for (i in 0..915) {
+            binWord.put(ucarRandomAccessFile.readUnsignedByte().toByte())
+        }
     }
 
     companion object {
@@ -225,7 +233,11 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
         @Throws(IOException::class)
         fun factory(din: UCARRandomAccessFile, record: Int, message_offset31: Long): Level2Record? {
             val offset = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + message_offset31
-            return if (offset >= din.length()) null else Level2Record(din, record, message_offset31)
+            return if (offset >= din.length()) {
+                null
+            } else {
+                Level2Record(din, record, message_offset31)
+            }
         }
     }
 }

@@ -26,16 +26,18 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import joshuatee.wx.Extensions.getHtmlSep
+import joshuatee.wx.Extensions.parse
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.ui.ObjectCALegal
+import joshuatee.wx.ui.CanadaLegal
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.DownloadText
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.wpc.UtilityWpcText
@@ -54,8 +56,9 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
-        cardText = CardText(this, box, toolbar, toolbarBottom)
-        ObjectCALegal(this, box.get(), GlobalVariables.canadaEcSitePrefix)
+        cardText = CardText(this, toolbar, toolbarBottom)
+        box.addWidget(cardText)
+        CanadaLegal(this, box, GlobalVariables.canadaEcSitePrefix)
         product = Utility.readPref(this, "CA_TEXT_LASTUSED", product)
         getContent()
     }
@@ -74,15 +77,16 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun download() {
         html = if (product != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
-            UtilityDownload.getTextProduct(this@CanadaTextActivity, product)
+            DownloadText.byProduct(this, product)
         } else {
-            UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
+//            UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
+            product.getHtmlSep().parse("<pre>(.*?)</pre>")
         }
     }
 
     private fun update() {
-        cardText.setTextAndTranslate(Utility.fromHtml(html))
-        Utility.writePref(this@CanadaTextActivity, "CA_TEXT_LASTUSED", product)
+        cardText.setTextAndTranslate(html)
+        Utility.writePref(this, "CA_TEXT_LASTUSED", product)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

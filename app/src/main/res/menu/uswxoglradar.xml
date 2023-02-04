@@ -182,26 +182,10 @@
                 android:id="@+id/action_tz0"
                 android:title="@string/label_tz0"
                 app:showAsAction="ifRoom" />
-            <!--<item
-                android:id="@+id/action_tr0"
-                android:title="@string/label_tr0"
-                app:showAsAction="ifRoom" />-->
             <item
                 android:id="@+id/action_tv0"
                 android:title="@string/label_tv0"
                 app:showAsAction="never" />
-            <!--<item
-                android:id="@+id/action_dhr"
-                android:title="@string/label_dhr"
-                app:showAsAction="never" />-->
-            <!--<item
-                android:id="@+id/action_n1p"
-                android:title="@string/label_n1p"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_ntp"
-                android:title="@string/label_ntp"
-                app:showAsAction="never" />-->
             <item
                 android:id="@+id/action_et"
                 android:title="@string/label_et"

@@ -14,9 +14,8 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.xml.sax.SAXException
 import androidx.core.content.ContextCompat
-import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.util.UtilityAlertDialog
+import joshuatee.wx.ui.ObjectDialogue
 import java.io.*
 
 
@@ -60,7 +59,7 @@ object UtilityBackupRestore {
                 fileCopiedFrom = File("/dbdata/databases/" + context.packageName + "/../shared_prefs/" + context.packageName + "_preferences.xml")
                 Log.d("backuprestore", "Next Trying  " + fileCopiedFrom.absolutePath)
                 if (!fileCopiedFrom.exists()) {
-                    UtilityAlertDialog.showDialogBox("Backup failed", R.drawable.wx,"wX was unable to detect the location of your preferences on your device", context)
+                    ObjectDialogue(context, "wX was unable to detect the location of your preferences on your device")
                     return
                 }
             }
@@ -74,7 +73,7 @@ object UtilityBackupRestore {
                 dst.close()
                 Log.d("backuprestore", "wXPATH=${GlobalVariables.BackupFilesPath}")
                 Log.d("backuprestore", "where backup files are written to " + backupFilePath.absolutePath)
-                UtilityAlertDialog.showDialogBox("Backup Done", R.drawable.wx, "Backed up user preferences and files to " + GlobalVariables.BackupFilesPath, context)
+                ObjectDialogue(context, "Backed up user preferences and files to " + GlobalVariables.BackupFilesPath)
                 return
             } catch (e: FileNotFoundException) {
                 error = e.message
@@ -84,7 +83,7 @@ object UtilityBackupRestore {
                 e.printStackTrace()
             }
 
-            UtilityAlertDialog.showDialogBox("Backup failed", R.drawable.wx, "Failed to Back up user preferences and files to " + fileCopiedTo.absolutePath + " - " + error, context)
+            ObjectDialogue(context, "Failed to Back up user preferences and files to " + fileCopiedTo.absolutePath + " - " + error)
         }
 
         //RESTORE
@@ -136,25 +135,25 @@ object UtilityBackupRestore {
 
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
-                UtilityAlertDialog.showDialogBox("Restore failed", R.drawable.wx, "Failed to restore user prefs from " + backupFile.absolutePath + " - " + error, context)
+                ObjectDialogue(context, "Failed to restore user prefs from " + backupFile.absolutePath + " - " + error)
                 return false
             } catch (e: ParserConfigurationException) {
                 e.printStackTrace()
-                UtilityAlertDialog.showDialogBox("Restore failed", R.drawable.wx,"Failed to restore user prefs from " + backupFile.absolutePath + " - " + error, context)
+                ObjectDialogue(context,"Failed to restore user prefs from " + backupFile.absolutePath + " - " + error)
                 return false
             } catch (e: SAXException) {
                 e.printStackTrace()
-                UtilityAlertDialog.showDialogBox("Restore failed", R.drawable.wx,"Failed to restore user prefs from " + backupFile.absolutePath + " - " + error, context)
+                ObjectDialogue(context,"Failed to restore user prefs from " + backupFile.absolutePath + " - " + error)
                 return false
             } catch (e: IOException) {
                 e.printStackTrace()
-                UtilityAlertDialog.showDialogBox("Restore failed", R.drawable.wx,"Failed to restore user prefs from " + backupFile.absolutePath + " - " + error, context)
+                ObjectDialogue(context,"Failed to restore user prefs from " + backupFile.absolutePath + " - " + error)
                 return false
             }
 
             restorefiles()
 
-            UtilityAlertDialog.showDialogBox("Restore Done", R.drawable.wx,"Restored user preferences and files from " + Environment.getExternalStorageDirectory().absolutePath + "/wXBackup/ Important: Please restart wX app. After wX app restart, the restore will be complete.", context)
+            ObjectDialogue(context, "Restored user preferences and files from " + Environment.getExternalStorageDirectory().absolutePath + "/wXBackup/ Important: Please restart wX app. After wX app restart, the restore will be complete.")
             return true
         }
 

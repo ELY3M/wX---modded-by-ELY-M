@@ -76,5 +76,6 @@
     <string name="label_voice_command">Voice Command</string>
 
     <string name="spc_meso_counties">Counties</string>
-
+    <string name="spc_meso_obs">Observations</string>
+    <string name="spc_meso_population">Population</string>
 </resources>

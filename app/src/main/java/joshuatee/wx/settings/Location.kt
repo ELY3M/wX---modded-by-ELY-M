@@ -25,21 +25,28 @@ import android.content.Context
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.Utility
-import java.util.*
+import java.util.Locale
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalDictionaries
+import joshuatee.wx.objects.OfficeTypeEnum
+import joshuatee.wx.util.To
+//import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
 object Location {
 
-    val locations = mutableListOf<ObjectLocation>()
+    var locations = listOf<ObjectLocation>()
     var numLocations = 1
     var currentLocation = 0
         private set
 
-    val listOf = mutableListOf<String> ()
+    val listOf = mutableListOf<String>()
 
-    fun us(xStr: String) = if (xStr.isNotEmpty()) Character.isDigit(xStr[0]) else true
+    fun us(xStr: String): Boolean = if (xStr.isNotEmpty()) {
+        Character.isDigit(xStr[0])
+    } else {
+        true
+    }
 
     fun addToListOfNames(name: String) {
         listOf.add(name)
@@ -68,7 +75,7 @@ object Location {
 
     var currentLocationStr: String
         get() = (currentLocation + 1).toString()
-        set(currentLocationStr) { currentLocation = (currentLocationStr.toIntOrNull() ?: 0) - 1 }
+        set(currentLocationStr) { currentLocation = To.int(currentLocationStr) - 1 }
 
     val state get() = locations.getOrNull(currentLocation)?.state ?: "MI"
 
@@ -84,19 +91,19 @@ object Location {
 
     val name get() = locations.getOrNull(currentLocation)?.name ?: ""
 
-    fun getName(locNum: Int) = locations.getOrNull(locNum)?.name ?: "0.0"
+    fun getName(locNum: Int): String = locations.getOrNull(locNum)?.name ?: "0.0"
 
-    fun getX(locNum: Int) = locations.getOrNull(locNum)?.x ?: "0.0"
+    fun getX(locNum: Int): String = locations.getOrNull(locNum)?.x ?: "0.0"
 
-    fun getY(locNum: Int) = locations.getOrNull(locNum)?.y ?: "-0.0"
+    fun getY(locNum: Int): String = locations.getOrNull(locNum)?.y ?: "-0.0"
 
-    fun getRid(locNum: Int) = locations.getOrNull(locNum)?.rid ?: "DTX"
+    fun getRid(locNum: Int): String = locations.getOrNull(locNum)?.rid ?: "DTX"
 
-    fun getWfo(locNum: Int) = locations.getOrNull(locNum)?.wfo ?: "DTX"
+    fun getWfo(locNum: Int): String = locations.getOrNull(locNum)?.wfo ?: "DTX"
 
-    fun getObservation(locNum: Int) = locations.getOrNull(locNum)?.observation ?: ""
+    fun getObservation(locNum: Int): String = locations.getOrNull(locNum)?.observation ?: ""
 
-    fun getLatLon(locNum: Int) = LatLon(getX(locNum), getY(locNum))
+    fun getLatLon(locNum: Int): LatLon = LatLon(getX(locNum), getY(locNum))
 
     fun getIdentifier(locNum: Int): String {
         val lat = locations.getOrNull(locNum)?.x ?: ""
@@ -106,19 +113,18 @@ object Location {
 
     val locationIndex get() = currentLocation
 
-    fun isUS(locationNumber: Int) = locations.getOrNull(locationNumber)?.isUS ?: true
+    fun isUS(locationNumber: Int): Boolean = locations.getOrNull(locationNumber)?.isUS ?: true
 
-    fun isUS(locationNumberString: String) = locations[locationNumberString.toInt() - 1].isUS
+    fun isUS(locationNumberString: String): Boolean = locations[locationNumberString.toInt() - 1].isUS
 
     val isUS get() = locations.getOrNull(currentLocation)?.isUS ?: true
 
-    fun getRid(context: Context, locNum: String) = Utility.readPref(context, "RID$locNum", "")
+    fun getRid(context: Context, locNum: String): String = Utility.readPref(context, "RID$locNum", "")
 
     fun refreshLocationData(context: Context) {
         initNumLocations(context)
-        locations.clear()
         clearListOfNames()
-        (0 until numLocations).mapTo(locations) { ObjectLocation(context, it) }
+        locations = (0 until numLocations).map { ObjectLocation(context, it) }
         addToListOfNames(ADD_LOC_STR)
         checkCurrentLocationValidity()
     }
@@ -133,16 +139,20 @@ object Location {
         return listOf(wfo, radarStation)
     }
 
-    fun save(context: Context, latLon: LatLon) =
+    fun save(context: Context, latLon: LatLon): String =
             save(context, (numLocations + 1).toString(), latLon.latString, latLon.lonString, latLon.toString())
 
     fun save(context: Context, locNum: String, xStr: String, yStr: String, labelStr: String): String {
         if (xStr == "" || yStr == "" || labelStr == "") {
             return "Location label, latitude, and longitude all must have valid values, please try again."
         }
-        val locNumInt = locNum.toIntOrNull() ?: 0
+        val locNumInt = To.int(locNum)
         val locNumIntCurrent = numLocations
-        val locNumToSave = if (locNumInt == locNumIntCurrent + 1) locNumInt else locNumIntCurrent
+        val locNumToSave = if (locNumInt == locNumIntCurrent + 1) {
+            locNumInt
+        } else {
+            locNumIntCurrent
+        }
         Utility.writePref(context, "LOC" + locNum + "_X", xStr)
         Utility.writePref(context, "LOC" + locNum + "_Y", yStr)
         Utility.writePref(context, "LOC" + locNum + "_LABEL", labelStr)
@@ -154,10 +164,10 @@ object Location {
             wfo = wfoAndRadar[0]
             radarSite = wfoAndRadar[1]
             if (wfo == "") {
-                wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).lowercase(Locale.US)
+                wfo = UtilityLocation.getNearestOffice(OfficeTypeEnum.WFO, LatLon(xStr, yStr)).lowercase(Locale.US)
             }
             if (radarSite == "") {
-                radarSite = UtilityLocation.getNearestOffice( "RADAR", LatLon(xStr, yStr))
+                radarSite = UtilityLocation.getNearestOffice(OfficeTypeEnum.RADAR, LatLon(xStr, yStr))
             }
             // CT shows mosaic not nexrad so the old way is needed
             if (radarSite == "") {
@@ -203,13 +213,13 @@ object Location {
         return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.uppercase(Locale.US) + "(" + radarSite.uppercase(Locale.US) + ")"
     }
 
-    private fun setCurrentLocationStr(context: Context, locNum: String) {
+    fun setCurrentLocationStr(context: Context, locNum: String) {
         Utility.writePref(context, "CURRENT_LOC_FRAGMENT", locNum)
         currentLocationStr = locNum
     }
 
     fun delete(context: Context, locToDeleteStr: String) {
-        val locToDeleteInt = locToDeleteStr.toIntOrNull() ?: 0
+        val locToDeleteInt = To.int(locToDeleteStr)
         val locNumIntCurrent = numLocations
         val locNumIntCurrentStr = locNumIntCurrent.toString()
         if (locToDeleteInt == locNumIntCurrent) {
@@ -278,7 +288,7 @@ object Location {
             currentLocationStr = shiftNum
         }
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val widgetLocNumInt = widgetLocNum.toIntOrNull() ?: 0
+        val widgetLocNumInt = To.int(widgetLocNum)
         if (locToDeleteInt == widgetLocNumInt) {
             Utility.writePref(context, "WIDGET_LOCATION", "1")
         } else if (widgetLocNumInt > locToDeleteInt) {

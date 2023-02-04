@@ -23,6 +23,7 @@ package joshuatee.wx.util
 
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ProjectionType
+import joshuatee.wx.settings.UtilityLocation
 
 class ProjectionNumbers {
 
@@ -50,8 +51,6 @@ class ProjectionNumbers {
 
     constructor(radarSite: String, projectionType: ProjectionType) {
         this.radarSite = radarSite
-//        xCenter = 0.0
-//        yCenter = 0.0
         when (projectionType) {
             ProjectionType.WX_RENDER -> {
                 scale = 38.00 * UIPreferences.widgetNexradSize
@@ -72,8 +71,8 @@ class ProjectionNumbers {
                 polygonWidth = 1.0
             }
         }
-        x = Utility.getRadarSiteX(radarSite)
-        y = Utility.getRadarSiteY(radarSite)
+        x = UtilityLocation.getRadarSiteX(radarSite)
+        y = UtilityLocation.getRadarSiteY(radarSite)
         oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scale)
         scaleFloat = scale.toFloat()
     }

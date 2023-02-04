@@ -55,10 +55,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         arguments = intent.getStringArrayExtra(URL)!!
         url = arguments[0]
         title = arguments[1]
-        box = VBox.fromResource(this)
-        objectToolbarBottom.hide(R.id.action_playlist)
-        objectToolbarBottom.connect(this)
-        cardText = CardText(this, box, toolbar, toolbarBottom)
+        setupUI()
         if (!url.startsWith("http")) {
             if (url.contains("<")) {
                 cardText.text = Utility.fromHtml(url)
@@ -69,6 +66,14 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         } else {
             getContent()
         }
+    }
+
+    private fun setupUI() {
+        box = VBox.fromResource(this)
+        objectToolbarBottom.hide(R.id.action_playlist)
+        objectToolbarBottom.connect(this)
+        cardText = CardText(this, toolbar, toolbarBottom)
+        box.addWidget(cardText)
     }
 
     override fun onRestart() {

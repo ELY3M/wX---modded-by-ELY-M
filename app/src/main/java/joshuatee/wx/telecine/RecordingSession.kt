@@ -57,8 +57,7 @@ import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 import android.widget.Toast.LENGTH_SHORT
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.radar.WXGLRender
-import joshuatee.wx.radar.WXGLSurfaceView
+import joshuatee.wx.radar.NexradRenderSurfaceView
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.fingerdraw.DrawLineView
@@ -67,6 +66,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.radar.NexradRenderState
 import joshuatee.wx.util.FileProvider
 
 internal class RecordingSession(
@@ -310,13 +310,12 @@ internal class RecordingSession(
                 TRANSLUCENT
             )
             params.gravity = Gravity.BOTTOM
-            distanceToolObject = DrawLineView(
-                context,
-                WXGLRender.ridGlobal, WXGLSurfaceView.scaleFactorGlobal,
-                WXGLRender.positionXGlobal,
-                WXGLRender.positionYGlobal,
-                WXGLRender.ortIntGlobal.toFloat(),
-                WXGLRender.oneDegreeScaleFactorGlobal
+            distanceToolObject = DrawLineView(context,
+                    NexradRenderState.ridGlobal, NexradRenderSurfaceView.scaleFactorGlobal,
+                    NexradRenderState.positionXGlobal,
+                    NexradRenderState.positionYGlobal,
+                    NexradRenderState.ortIntGlobal.toFloat(),
+                    NexradRenderState.oneDegreeScaleFactorGlobal
             )
             windowManager.addView(distanceToolObject, params)
             distanceToolActive = true

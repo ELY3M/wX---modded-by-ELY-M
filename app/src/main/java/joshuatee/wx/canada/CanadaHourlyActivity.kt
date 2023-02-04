@@ -27,7 +27,7 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCALegal
+import joshuatee.wx.ui.CanadaLegal
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.VBox
 
@@ -44,8 +44,9 @@ class CanadaHourlyActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         box = VBox.fromResource(this)
         locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
-        text = CardText(this, box, toolbar)
-        ObjectCALegal(this, box.get(), UtilityCanadaHourly.getUrl(Location.locationIndex))
+        text = CardText(this, toolbar)
+        box.addWidget(text)
+        CanadaLegal(this, box, UtilityCanadaHourly.getUrl(Location.locationIndex))
         title = Location.getName(locationNumber) + " hourly forecast"
         getContent()
     }

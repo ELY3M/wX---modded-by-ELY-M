@@ -52,30 +52,31 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
                 lon = lonArr[1]
             }
         }
-        holder.text1.text = Location.getName(position)
-        if (UtilityLocation.hasAlerts(position)) {
-            holder.text1.text = Location.getName(position) + " +Alert"
-        }
-        holder.text1.color = UIPreferences.textHighlightColor
-        holder.currentConditions.text = Location.getObservation(position)
-        if (nonUs) {
-            holder.text2.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${lat.take(6)} , ${lon.take(6)})"
-        } else {
-            holder.text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${Location.getX(position).take(8)} , ${Location.getY(position).take(9)})"
+        with (holder) {
+            text1.text = Location.getName(position)
+            if (UtilityLocation.hasAlerts(position)) {
+                text1.text = Location.getName(position) + " +Alert"
+            }
+            text1.color = UIPreferences.textHighlightColor
+            currentConditions.text = Location.getObservation(position)
+            if (nonUs) {
+                text2.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${lat.take(6)} , ${lon.take(6)})"
+            } else {
+                text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${Location.getX(position).take(8)} , ${Location.getY(position).take(9)})"
+            }
         }
     }
 
     fun deleteItem(index: Int) {
         if (index < dataSet.count()) {
             dataSet.removeAt(index)
-//            notifyDataSetChanged()
             notifyItemRemoved(index)
         }
     }
 
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount(): Int = dataSet.size
 
-    fun getItem(index: Int) = dataSet[index]
+    fun getItem(index: Int): String = dataSet[index]
 
     interface MyClickListener { fun onItemClick(position: Int) }
 }

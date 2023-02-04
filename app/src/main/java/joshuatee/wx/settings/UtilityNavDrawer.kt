@@ -32,7 +32,6 @@ internal object UtilityNavDrawer {
     val labels = listOf(
         "ESRL HRRR/RAP",
         "Excessive Rainfall Outlook",
-//        "GLCFS",
         "Global Satellite",
         "GOES Conus Water Vapor",
         "Lightning",
@@ -72,7 +71,6 @@ internal object UtilityNavDrawer {
     val labelToTokenMap = mapOf(
         "ESRL HRRR/RAP" to "model_hrrr",
         "Excessive Rainfall Outlook" to "wpc_rainfall",
-//        "GLCFS" to "model_glcfs",
         "Global Satellite" to "goesfulldisk",
         "GOES Conus Water Vapor" to "goes",
         "Lightning" to "lightning",
@@ -112,7 +110,6 @@ internal object UtilityNavDrawer {
     private val navDrawerIdToToken = mapOf(
         R.id.esrl to "model_hrrr",
         R.id.rainfall_outlook to "wpc_rainfall",
-//        R.id.glcfs to "model_glcfs",
         R.id.goes_global to "goesfulldisk",
         R.id.goes_conus_wv to "goes",
         R.id.lightning to "lightning",
@@ -151,11 +148,11 @@ internal object UtilityNavDrawer {
 
     // The Pref ver below is important, it must stay as is and no other prefs must start with XZ_
     // This is referenced in ObjectSettingsCheckBox so that they are all true by default
-    fun getPrefVar(token: String) = "XZ_NAV_DRAWER_$token"
+    fun getPrefVar(token: String): String = "XZ_NAV_DRAWER_$token"
 
     private const val navDrawerTokenPref = "NAV_DRAWER_TOKEN_LIST"
 
-    fun getNavDrawerTokenList(context: Context) = Utility.readPref(context, navDrawerTokenPref, "")
+    fun getNavDrawerTokenList(context: Context): String = Utility.readPref(context, navDrawerTokenPref, "")
 
     private fun setNavDrawerTokenList(context: Context, value: String) {
         Utility.writePref(context, navDrawerTokenPref, value)
@@ -168,7 +165,6 @@ internal object UtilityNavDrawer {
         val tokenString = getNavDrawerTokenList(context)
         if (tokenString != "") {
             navDrawerIdToToken.forEach { (key, value) ->
-                //val visible = Utility.readPref(context, getPrefVar(value), "")  == "true"
                 val visible = tokenString.contains(":$value")
                 if (!visible) {
                     navigationView.menu.findItem(key).isVisible = false

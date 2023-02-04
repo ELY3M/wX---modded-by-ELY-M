@@ -28,7 +28,7 @@ import android.widget.TableLayout
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.util.UtilityImg
 
-open class Image {
+open class Image : Widget {
 
     protected val card: Card
     private val context: Context
@@ -36,6 +36,12 @@ open class Image {
         internal set
     internal val layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
     var bitmap = UtilityImg.getBlankBitmap()
+
+    constructor(context: Context) {
+        this.context = context
+        img = TouchImageView2(context)
+        card = Card(context)
+    }
 
     constructor(context: Context, bitmap: Bitmap) {
         this.context = context
@@ -46,66 +52,23 @@ open class Image {
         card.addWidget(img)
     }
 
-    constructor(context: Context, box: VBox, bitmap: Bitmap, numberAcross: Int = 1) {
+    constructor(context: Context, bitmap: Bitmap, numberAcross: Int = 1) {
         this.context = context
         card = Card(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
         card.addWidget(img)
-        box.addWidget(get())
     }
 
-    constructor(context: Context, box: HBox, bitmap: Bitmap, numberAcross: Int = 1) {
-        this.context = context
-        card = Card(context)
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        card.addWidget(img)
-        box.addWidget(get())
-    }
-
-    constructor(context: Context, box: VBox, toolbar: Toolbar, bitmap: Bitmap) {
+    constructor(context: Context, toolbar: Toolbar, bitmap: Bitmap) {
         this.context = context
         card = Card(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         card.addWidget(img)
-        box.addWidget(get())
         connect { UtilityToolbar.showHide(toolbar) }
-    }
-
-    constructor(context: Context, box: VBox, toolbar: Toolbar, toolbarBottom: Toolbar, bitmap: Bitmap) {
-        this.context = context
-        card = Card(context)
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        card.addWidget(img)
-        box.addWidget(get())
-        connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
-    }
-
-    constructor(context: Context) {
-        this.context = context
-        img = TouchImageView2(context)
-        card = Card(context)
-    }
-
-    constructor(context: Context, box: VBox) {
-        this.context = context
-        img = TouchImageView2(context)
-        card = Card(context)
-        box.addWidget(get())
-    }
-
-    constructor(context: Context, box: HBox) {
-        this.context = context
-        img = TouchImageView2(context)
-        card = Card(context)
-        box.addWidget(get())
     }
 
     open fun set(bitmap: Bitmap, numberAcross: Int = 1) {
@@ -117,7 +80,7 @@ open class Image {
     }
 
     open fun set2(bitmap: Bitmap, numberAcross: Int = 1) {
-        card.get().removeAllViews()
+        card.removeAllViews()
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
@@ -129,7 +92,7 @@ open class Image {
         img.resetZoom()
     }
 
-    fun get() = card.get()
+    override fun getView() = card.getView()
 
     var visibility
         get() = card.visibility

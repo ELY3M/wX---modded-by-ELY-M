@@ -25,11 +25,13 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.WidgetFile.WPCIMG
+import joshuatee.wx.widgets.WidgetFile
+import joshuatee.wx.widgets.UtilityWidget
+import joshuatee.wx.widgets.UtilityWidgetDownload
 
 class WidgetWPCIMG : AppWidgetProvider() {
 
-    private val type = WPCIMG
+    private val type = WidgetFile.WPCIMG
 
     override fun onDisabled(context: Context) {
         UtilityWidget.disableWidget(context, type)

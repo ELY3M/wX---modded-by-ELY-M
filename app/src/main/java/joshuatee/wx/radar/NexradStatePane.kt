@@ -49,13 +49,13 @@ class NexradStatePane(
     var radarSitesForFavorites = listOf<String>()
     var oldProd = ""
 
-    // multipane only, single pane is "WXOGL" harcoded in methods
+    // multipane only, single pane is "WXOGL" hard coded in methods
     private var prefPrefix = "WXOGL_DUALPANE"
 
     init {
         repeat(numberOfPanes) {
-            wxglSurfaceViews.add(WXGLSurfaceView(activity, widthDivider, numberOfPanes, heightDivider))
-            wxglRenders.add(WXGLRender(activity, it))
+            wxglSurfaceViews.add(NexradRenderSurfaceView(activity, widthDivider, heightDivider))
+            wxglRenders.add(NexradRender(activity, it))
         }
         wxglRenders.indices.forEach {
             relativeLayouts.add(activity.findViewById(relativeLayoutResIdList[it]))
@@ -73,7 +73,9 @@ class NexradStatePane(
                             2 - UtilityUI.statusBarHeight(activity) / 2 -
                             (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
                 if (UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode && numberOfPanes == 4) {
-                    params.height = MyApplication.dm.heightPixels / 2 - UtilityUI.statusBarHeight(activity) / 2
+                    params.height = MyApplication.dm.heightPixels / 2 // - UtilityUI.statusBarHeight(activity) / 2
+                            // (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
+                            // (UIPreferences.actionBarHeight / 2) -
                 }
                 params.width = MyApplication.dm.widthPixels / 2
             } else if (numberOfPanes == 2) {
@@ -90,17 +92,21 @@ class NexradStatePane(
             }
         }
         wxglSurfaceViews.indices.forEach {
-            wxglTextObjects.add(WXGLTextObject(activity, relativeLayouts[it], wxglSurfaceViews[it], wxglRenders[it], numberOfPanes, it))
-            wxglSurfaceViews[it].wxglTextObjects = wxglTextObjects
+            wxglTextObjects.add(NexradRenderTextObject(activity,
+                    relativeLayouts[it],
+                    wxglSurfaceViews[it],
+                    wxglRenders[it].state,
+                    numberOfPanes,
+                    it))
+            wxglSurfaceViews[it].textObjects = wxglTextObjects
             wxglTextObjects.last().initializeLabels(activity)
         }
-
         val latLonListAsDoubles = UtilityLocation.getGps(activity)
         latD = latLonListAsDoubles[0]
         lonD = latLonListAsDoubles[1]
     }
 
-    fun initGlView(changeListener: WXGLSurfaceView.OnProgressChangeListener) {
+    fun initGlView(changeListener: NexradRenderSurfaceView.OnProgressChangeListener) {
         wxglRenders.indices.forEach {
             NexradDraw.initGlView(it, this, activity, changeListener)
         }
@@ -115,8 +121,8 @@ class NexradStatePane(
         }
         repeat(numberOfPanes) {
             wxglSurfaceViews[it].idxInt = it
-            wxglRenders[it].radarStatusStr = (it + 1).toString()
-            wxglRenders[it].indexString = (it + 1).toString()
+            wxglRenders[it].state.timeStampId = (it + 1).toString()
+            wxglRenders[it].state.indexString = (it + 1).toString()
         }
     }
 
@@ -160,14 +166,18 @@ class NexradStatePane(
                 initialRadarSite = joshuatee.wx.settings.Location.rid
             }
             if (!nexradArguments.useSinglePanePref) {
-                wxglRender.rid = Utility.readPref(context, prefPrefix + "_RID" + (index + 1).toString(), initialRadarSite)
+                wxglRender.state.rid = Utility.readPref(context, prefPrefix + "_RID" + (index + 1).toString(), initialRadarSite)
             } else {
-                wxglRender.rid = Utility.readPref(context, prefPrefix + "_RID", initialRadarSite)
+                wxglRender.state.rid = Utility.readPref(context, prefPrefix + "_RID", initialRadarSite)
+            }
+            // jump from single pane which is from an alert
+            if (nexradArguments.doNotSavePref && !nexradArguments.useSinglePanePref) {
+                wxglRender.state.rid = initialRadarSite
             }
         }
         if (RadarPreferences.dualpaneshareposn) {
             (1 until numberOfPanes).forEach {
-                wxglRenders[it].rid = wxglRenders[0].rid
+                wxglRenders[it].state.rid = wxglRenders[0].state.rid
             }
         }
         //
@@ -176,7 +186,13 @@ class NexradStatePane(
         val defaultProducts = listOf("N0Q", "N0U", "N0C", "DVL")
         wxglRenders.indices.forEach {
             oldRadarSites[it] = ""
-            wxglRenders[it].product = Utility.readPref(context, prefPrefix + "_PROD" + (it + 1).toString(), defaultProducts[it])
+            wxglRenders[it].state.product = Utility.readPref(context, prefPrefix + "_PROD" + (it + 1).toString(), defaultProducts[it])
+        }
+        // jump from single pane which is from an alert
+        if (nexradArguments.doNotSavePref && !nexradArguments.useSinglePanePref) {
+            wxglRenders.indices.forEach {
+                wxglRenders[it].state.product = defaultProducts[it]
+            }
         }
         //
         // restore session (x, y, zoom)
@@ -200,7 +216,7 @@ class NexradStatePane(
                 wxglSurfaceViews[it].scaleFactor = wxglSurfaceViews[0].scaleFactor
                 wxglRenders[it].setViewInitial(
                         Utility.readPrefFloat(context, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
-                        wxglRenders[0].x, wxglRenders[0].y
+                        wxglRenders[0].state.x, wxglRenders[0].state.y
                 )
             }
         } else {
@@ -217,18 +233,18 @@ class NexradStatePane(
 
     fun writePreferences(context: Context, nexradArguments: NexradArgumentsSinglePane) {
         if (!nexradArguments.archiveMode && !nexradArguments.fixedSite) {
-            savePrefs(context, render)
+            savePrefs(context, render.state)
         }
     }
 
     fun writePreferencesMultipane(context: Context, doNotSavePref: Boolean) {
         if (!doNotSavePref) {
             wxglRenders.forEachIndexed { index, wxglRender ->
-                savePrefs(context, prefPrefix, index + 1, wxglRender)
+                savePrefs(context, prefPrefix, index + 1, wxglRender.state)
             }
         } else {
             wxglRenders.forEachIndexed { index, wxglRender ->
-                saveProductPrefs(context, prefPrefix, index + 1, wxglRender)
+                saveProductPrefs(context, prefPrefix, index + 1, wxglRender.state)
             }
         }
     }
@@ -236,68 +252,62 @@ class NexradStatePane(
     fun writePreferencesMultipaneOnStop(context: Context, doNotSavePref: Boolean) {
         if (!doNotSavePref) {
             wxglRenders.forEachIndexed { index, wxglRender ->
-                savePrefs(context, prefPrefix, index + 1, wxglRender)
-            }
-        } else {
-            // TODO FIXME why is this here?
-            wxglRenders.forEachIndexed { index, wxglRender ->
-                saveProductPrefs(context, prefPrefix, index + 1, wxglRender)
+                savePrefs(context, prefPrefix, index + 1, wxglRender.state)
             }
         }
     }
 
     // single pane
-    private fun savePrefs(context: Context, wxglRender: WXGLRender) {
+    private fun savePrefs(context: Context, state: NexradRenderState) {
         val prefToken = "WXOGL"
-        Utility.writePref(context, prefToken + "_RID", wxglRender.rid)
-        Utility.writePref(context, prefToken + "_PROD", wxglRender.product)
-        Utility.writePrefFloat(context, prefToken + "_ZOOM", wxglRender.zoom)
-        Utility.writePrefFloat(context, prefToken + "_X", wxglRender.x)
-        Utility.writePrefFloat(context, prefToken + "_Y", wxglRender.y)
-        RadarPreferences.wxoglRid = wxglRender.rid
-        RadarPreferences.wxoglProd = wxglRender.product
-        RadarPreferences.wxoglZoom = wxglRender.zoom
-        RadarPreferences.wxoglX = wxglRender.x
-        RadarPreferences.wxoglY = wxglRender.y
+        Utility.writePref(context, prefToken + "_RID", state.rid)
+        Utility.writePref(context, prefToken + "_PROD", state.product)
+        Utility.writePrefFloat(context, prefToken + "_ZOOM", state.zoom)
+        Utility.writePrefFloat(context, prefToken + "_X", state.x)
+        Utility.writePrefFloat(context, prefToken + "_Y", state.y)
+        RadarPreferences.wxoglRid = state.rid
+        RadarPreferences.wxoglProd = state.product
+        RadarPreferences.wxoglZoom = state.zoom
+        RadarPreferences.wxoglX = state.x
+        RadarPreferences.wxoglY = state.y
     }
 
-    private fun savePrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {
-        Utility.writePref(context, prefPrefix + "_RID" + idx.toString(), wxglRender.rid)
-        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
-        Utility.writePrefFloat(context, prefPrefix + "_ZOOM" + idx.toString(), wxglRender.zoom)
-        Utility.writePrefFloat(context, prefPrefix + "_X" + idx.toString(), wxglRender.x)
-        Utility.writePrefFloat(context, prefPrefix + "_Y" + idx.toString(), wxglRender.y)
+    private fun savePrefs(context: Context, prefPrefix: String, idx: Int, state: NexradRenderState) {
+        Utility.writePref(context, prefPrefix + "_RID" + idx.toString(), state.rid)
+        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), state.product)
+        Utility.writePrefFloat(context, prefPrefix + "_ZOOM" + idx.toString(), state.zoom)
+        Utility.writePrefFloat(context, prefPrefix + "_X" + idx.toString(), state.x)
+        Utility.writePrefFloat(context, prefPrefix + "_Y" + idx.toString(), state.y)
     }
 
-    private fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {
-        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
+    private fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, state: NexradRenderState) {
+        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), state.product)
     }
 
     fun setToolbarTitleMultipane(updateWithWarnings: Boolean): String {
-        // TODO FIXME refactor this mess
-        var title = ""
-        if (numberOfPanes == 4) {
-            title = if (RadarPreferences.dualpaneshareposn) {
-                (curRadar + 1).toString() + ":" + wxglRenders[0].rid + "(" + wxglRenders[0].product + "," + wxglRenders[1].product + "," + wxglRenders[2].product + "," + wxglRenders[3].product + ")"
-            } else {
-                (curRadar + 1).toString() + ": " + wxglRenders[0].rid + "(" + wxglRenders[0].product + ") " + wxglRenders[1].rid + "(" + wxglRenders[1].product + ") " + wxglRenders[2].rid + "(" + wxglRenders[2].product + ") " + wxglRenders[3].rid + "(" + wxglRenders[3].product + ")"
+        var title = if (RadarPreferences.dualpaneshareposn) {
+            var s = (curRadar + 1).toString() + ":" + wxglRenders[0].state.rid + "("
+            wxglRenders.forEach {
+                s += it.state.product + ","
             }
-        } else if (numberOfPanes == 2) {
-            title = if (RadarPreferences.dualpaneshareposn) {
-                (curRadar + 1).toString() + ":" + wxglRenders[0].rid + "(" + wxglRenders[0].product + "," + wxglRenders[1].product + ")"
-            } else {
-                (curRadar + 1).toString() + ": " + wxglRenders[0].rid + "(" + wxglRenders[0].product + ") " + wxglRenders[1].rid + "(" + wxglRenders[1].product + ") "
+            s = s.trimEnd(',')
+            "$s)"
+        } else {
+            var s = (curRadar + 1).toString() + ": "
+            wxglRenders.forEach {
+                s += it.state.rid + "(" + it.state.product + ") "
             }
+            s.trimEnd()
         }
         if (updateWithWarnings) {
-            title += " " + WXGLPolygonWarnings.getCountString()
+            title += " " + Warnings.getCountString()
         }
         return title
     }
 
     fun setAllPanesTo(newRadarSite: String) {
         wxglRenders.forEach {
-            it.rid = newRadarSite
+            it.state.rid = newRadarSite
         }
     }
 
@@ -311,37 +321,31 @@ class NexradStatePane(
     // multi pane
     fun adjustAllPanesTo(newRadarSite: String) {
         wxglRenders.indices.forEach {
-            wxglRenders[it].rid = newRadarSite
+            wxglRenders[it].state.rid = newRadarSite
             wxglSurfaceViews[it].scaleFactor = RadarPreferences.wxoglSize / 10.0f
             wxglRenders[it].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
         }
     }
 
     fun adjustOnePaneTo(index: Int, newRadarSite: String) {
-        wxglRenders[index].rid = newRadarSite
+        wxglRenders[index].state.rid = newRadarSite
         wxglSurfaceViews[index].scaleFactor = RadarPreferences.wxoglSize / 10.0f
         wxglRenders[index].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
     }
 
-    // TODO FIXME constructLocationDot should not take String
-    fun updateLocationDotsMultipane() {
+    fun updateLocationDots(nexradArguments: NexradArguments) {
         wxglRenders.indices.forEach {
-            wxglRenders[it].constructLocationDot(latD, lonD, false)
+            wxglRenders[it].construct.locationDot(
+                    latD,
+                    lonD,
+                    nexradArguments.archiveMode
+            )
             draw(it)
             if (RadarPreferences.wxoglCenterOnLocation) {
                 wxglSurfaceViews[it].resetView()
-                UtilityWXGLTextObject.hideLabels(it, wxglTextObjects)
-                UtilityWXGLTextObject.showLabels(it, wxglTextObjects)
+                NexradRenderTextObject.hideLabels(wxglTextObjects)
+                NexradRenderTextObject.showLabels(wxglTextObjects)
             }
-        }
-    }
-
-    fun updateLocationDots(nexradArguments: NexradArgumentsSinglePane) {
-        render.constructLocationDot(latD, lonD, nexradArguments.archiveMode)
-        draw()
-        if (RadarPreferences.wxoglCenterOnLocation) {
-            UtilityWXGLTextObject.hideLabels(1, wxglTextObjects)
-            UtilityWXGLTextObject.showLabels(1, wxglTextObjects)
         }
     }
 
@@ -414,17 +418,19 @@ class NexradStatePane(
     }
 
     fun adjustForTdwrMultiPane(z: Int) {
-        if ((wxglRenders[z].product.matches(Regex("N[0-3]Q")) || wxglRenders[z].product == "L2REF") && isRidTdwr(wxglRenders[z].rid)) {
-            wxglRenders[z].product = "TZL"
-        }
-        if (wxglRenders[z].product == "TZL" && !isRidTdwr(wxglRenders[z].rid)) {
-            wxglRenders[z].product = "N0Q"
-        }
-        if ((wxglRenders[z].product.matches(Regex("N[0-3]U")) || wxglRenders[z].product == "L2VEL") && isRidTdwr(wxglRenders[z].rid)) {
-            wxglRenders[z].product = "TV0"
-        }
-        if (wxglRenders[z].product == "TV0" && !isRidTdwr(wxglRenders[z].rid)) {
-            wxglRenders[z].product = "N0U"
+        with (wxglRenders[z]) {
+            if ((state.product.matches(Regex("N[0-3]Q")) || state.product == "L2REF") && isRidTdwr(state.rid)) {
+                state.product = "TZL"
+            }
+            if (state.product == "TZL" && !isRidTdwr(state.rid)) {
+                state.product = "N0Q"
+            }
+            if ((state.product.matches(Regex("N[0-3]U")) || state.product == "L2VEL") && isRidTdwr(state.rid)) {
+                state.product = "TV0"
+            }
+            if (state.product == "TV0" && !isRidTdwr(state.rid)) {
+                state.product = "N0U"
+            }
         }
     }
 
@@ -454,5 +460,5 @@ class NexradStatePane(
         getContent()
     }
 
-    fun getLatLon() = LatLon(latD, lonD)
+    fun getLatLon(): LatLon = LatLon(latD, lonD)
 }

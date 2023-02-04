@@ -23,13 +23,14 @@ package joshuatee.wx.spc
 
 import android.content.Context
 import android.graphics.Bitmap
-import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.DownloadText
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.*
-import joshuatee.wx.radar.WXGLPolygonWarnings
+import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.PolygonWatch
+import joshuatee.wx.radar.Warnings
 
 object UtilitySpc {
 
@@ -43,13 +44,12 @@ object UtilitySpc {
             return dates.map { "${url}imgs/enh_$it.gif".getImage() }
         }
 
-    internal val thunderStormOutlookUrls: List<String>
-        get() {
-            val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
-            val html = url.getHtml()
-            val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
-            return dates.map { "${url}imgs/enh_$it.gif" }
-        }
+    internal fun thunderStormOutlookUrls(): List<String> {
+        val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
+        val html = url.getHtml()
+        val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
+        return dates.map { "${url}imgs/enh_$it.gif" }
+    }
 
     fun checkSpcDayX(context: Context, prod: String): List<String> {
         val highStr = "THERE IS A HIGH RISK OF"
@@ -58,7 +58,7 @@ object UtilitySpc {
         val enhStr = "THERE IS AN ENHANCED RISK OF"
         val marginalStr = "THERE IS A MARGINAL RISK OF"
         var returnStr = ""
-        var html = UtilityDownload.getTextProduct(context, prod)
+        var html = DownloadText.byProduct(context, prod)
         if (html.contains(marginalStr)) {
             returnStr = "marginal"
         }
@@ -96,17 +96,17 @@ object UtilitySpc {
         var dashboardStrMpd = ""
         var dashboardStrMcd = ""
         if (UIPreferences.checkspc) {
-            if (!ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.storage.value.contains(mcdNothingString)) {
+            if (!PolygonWatch.byType[PolygonType.MCD]!!.storage.value.contains(mcdNothingString)) {
                 mdPresent = true
-                val items = ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]!!.storage.value.parseColumn(RegExp.mcdPatternUtilSpc)
+                val items = PolygonWatch.byType[PolygonType.MCD]!!.storage.value.parseColumn(RegExp.mcdPatternUtilSpc)
                 mdCount = items.size
                 items.forEach {
                     dashboardStrMcd += ":$it"
                 }
             }
-            if (!ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.storage.value.contains(watchNothingString)) {
+            if (!PolygonWatch.byType[PolygonType.WATCH]!!.storage.value.contains(watchNothingString)) {
                 watchPresent = true
-                val items = ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]!!.storage.value.parseColumn(RegExp.watchPattern)
+                val items = PolygonWatch.byType[PolygonType.WATCH]!!.storage.value.parseColumn(RegExp.watchPattern)
                 watchCount = items.size
                 items.forEach {
                     dashboardStrWat += ":$it"
@@ -114,9 +114,9 @@ object UtilitySpc {
             }
         }
         if (UIPreferences.checkwpc) {
-            if (!ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.storage.value.contains(mpdNothingString)) {
+            if (!PolygonWatch.byType[PolygonType.MPD]!!.storage.value.contains(mpdNothingString)) {
                 mpdPresent = true
-                val items = ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]!!.storage.value.parseColumn(RegExp.mpdPattern)
+                val items = PolygonWatch.byType[PolygonType.MPD]!!.storage.value.parseColumn(RegExp.mpdPattern)
                 mpdCount = items.size
                 items.forEach {
                     dashboardStrMpd += ":$it"
@@ -142,10 +142,10 @@ object UtilitySpc {
         // US Warnings
         var usWarnPresent = false
         if (UIPreferences.checktor) {
-            usWarnPresent = WXGLPolygonWarnings.areWarningsPresent()
+            usWarnPresent = Warnings.arePresent()
         }
         val tabStr = if (usWarnPresent) {
-            UIPreferences.tabHeaders[2] + " W" + WXGLPolygonWarnings.getCountString()
+            UIPreferences.tabHeaders[2] + " W" + Warnings.getCountString()
         } else {
             UIPreferences.tabHeaders[2]
         }

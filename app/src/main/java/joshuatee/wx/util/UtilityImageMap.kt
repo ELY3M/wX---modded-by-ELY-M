@@ -25,7 +25,7 @@ import joshuatee.wx.R
 
 object UtilityImageMap {
 
-    fun mapToRid(id: Int) = when (id) {
+    fun mapToRid(id: Int): String = when (id) {
         R.id.CBW -> "CBW"
         R.id.GYX -> "GYX"
         R.id.CXX -> "CXX"
@@ -185,7 +185,7 @@ object UtilityImageMap {
         else -> ""
     }
 
-    fun mapToWfo(id: Int) = when (id) {
+    fun mapToWfo(id: Int): String = when (id) {
         R.id.afc -> "afc"
         R.id.afg -> "afg"
         R.id.ajk -> "ajk"
@@ -311,7 +311,7 @@ object UtilityImageMap {
         else -> ""
     }
 
-    fun mapToSnd(id: Int) = when (id) {
+    fun mapToSnd(id: Int): String = when (id) {
         R.id.ABQ -> "ABQ"
         R.id.ABR -> "ABR"
         R.id.ALB -> "ALB"
@@ -430,7 +430,7 @@ object UtilityImageMap {
 //        else -> ""
 //    }
 
-    fun canadaMap(id: Int) = when (id) {
+    fun canadaMap(id: Int): String = when (id) {
         R.id.ab_49 -> "ab_49"
         R.id.ab_52 -> "ab_52"
         R.id.ab_59 -> "ab_59"

@@ -25,7 +25,6 @@ import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.UtilityLocation
@@ -62,30 +61,28 @@ class CapAlert {
     // used for XML
     private var polygon = ""
 
-    fun getClosestRadar(): String {
-        return ObjectWarning.getClosestRadarCompute(points)
-    }
+    fun getClosestRadar(): String = ObjectWarning.getClosestRadarCompute(points)
 
-    fun getClosestRadarXml(): String {
-        if (points.size > 2) {
-            val latTmp = points[0]
-            val list1 = latTmp.split(",")
-            val lat = list1[0]
-            val lonTmp = points[0]
-            val list2 = lonTmp.split(",")
-            val lon = list2[1]
-            val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, false)
-            if (radarSites.isEmpty()) {
-                return ""
-            }
-            return radarSites[0].name
+    fun getClosestRadarXml(): String = if (points.size > 2) {
+        val latTmp = points[0]
+        val list1 = latTmp.split(",")
+        val lat = list1[0]
+        val lonTmp = points[0]
+        val list2 = lonTmp.split(",")
+        val lon = list2[1]
+        val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, false)
+        if (radarSites.isEmpty()) {
+            ""
+        } else {
+            radarSites[0].name
         }
-        return ""
+    } else {
+        ""
     }
 
     companion object {
 
-        // used by usAlerts
+        // used by USWarningsWithRadarActivity / AlertSummary
         fun initializeFromCap(eventText: String): CapAlert {
             val capAlert = CapAlert()
             capAlert.url = eventText.parse("<id>(.*?)</id>")
@@ -110,9 +107,9 @@ class CapAlert {
             capAlert.text += GlobalVariables.newline + GlobalVariables.newline
             capAlert.text += capAlert.instructions
             capAlert.text += GlobalVariables.newline + GlobalVariables.newline
-            if (UIPreferences.nwsTextRemovelinebreaks) {
-                capAlert.instructions = capAlert.instructions.replace("<br><br>", "<BR><BR>").replace("<br>", " ")
-            }
+//            if (UIPreferences.nwsTextRemovelinebreaks) {
+//                capAlert.instructions = capAlert.instructions.replace("<br><br>", "<BR><BR>").replace("<br>", " ")
+//            }
             capAlert.points = capAlert.polygon.split(" ")
             return capAlert
         }
@@ -121,19 +118,23 @@ class CapAlert {
         fun createFromUrl(url: String): CapAlert {
             val capAlert = CapAlert()
             capAlert.url = url
-            val html = if (url.contains("urn:oid")) {
-                UtilityDownloadNws.getStringFromUrlSep(url)
-            } else {
-                url.getHtmlSep()
-            }
+            val html = UtilityDownloadNws.getStringFromUrlSep(url)
+//            UtilityLog.d("wx", ":::" + url)
+//            val html = if (url.contains("urn:oid")) {
+//                UtilityDownloadNws.getStringFromUrlSep(url)
+//            } else {
+//                UtilityLog.d("wx", "::: SEP")
+//                url.getHtmlSep()
+//            }
             capAlert.points = getWarningsFromJson(html)
             capAlert.title = html.parse("\"headline\": \"(.*?)\"")
             capAlert.summary = html.parse("\"description\": \"(.*?)\"")
             capAlert.instructions = html.parse("\"instruction\": \"(.*?)\"")
             capAlert.area = html.parse("\"areaDesc\": \"(.*?)\"")
-            capAlert.summary = capAlert.summary.replace("\\n\\n", "ABC123")
-            capAlert.summary = capAlert.summary.replace("\\n", " ")
-            capAlert.summary = capAlert.summary.replace("ABC123", "\n\n")
+            capAlert.summary = capAlert.summary.removeLineBreaksCap()
+//            capAlert.summary = capAlert.summary.replace("\\n\\n", "ABC123")
+//            capAlert.summary = capAlert.summary.replace("\\n", " ")
+//            capAlert.summary = capAlert.summary.replace("ABC123", "\n\n")
             capAlert.vtec = UtilityString.parse(html, RegExp.warningVtecPattern)
             capAlert.instructions = capAlert.instructions.replace("\\n", " ")
 
@@ -186,17 +187,17 @@ class CapAlert {
             capAlert.extended += capAlert.motion + GlobalVariables.newline
             capAlert.extended += capAlert.vtec + GlobalVariables.newline
 
-            capAlert.summary = capAlert.summary.replace("<br>\\*".toRegex(), "<br><br>*")
+//            capAlert.summary = capAlert.summary.replace("<br>\\*".toRegex(), "<br><br>*")
             return capAlert
         }
 
         private fun getWarningsFromJson(html: String): List<String> {
             val data = html.replace("\n", "").replace(" ", "")
-            var points = data.parseFirst(RegExp.warningLatLonPattern)
-            points = points.replace("[", "")
-                    .replace("]", "")
-                    .replace(",", " ")
-                    .replace("-", "")
+            val points = data.parseFirst(RegExp.warningLatLonPattern)
+                             .replace("[", "")
+                             .replace("]", "")
+                             .replace(",", " ")
+                             .replace("-", "")
             return points.split(" ")
         }
     }

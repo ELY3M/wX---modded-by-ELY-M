@@ -22,47 +22,12 @@
 
 package joshuatee.wx.util
 
-import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
-import android.webkit.WebView
-import android.webkit.WebViewClient
-
-import joshuatee.wx.ui.ObjectDialogue
-import android.webkit.WebResourceRequest
-import android.os.Build
-import android.annotation.TargetApi
 import kotlin.system.exitProcess
 
 object UtilityAlertDialog {
-
-    fun showHelpTextWeb(help: String, activity: Activity) {
-        val alert = AlertDialog.Builder(activity)
-        val wv = WebView(activity)
-        wv.loadUrl(help)
-        wv.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                view.loadUrl(url)
-                return true
-            }
-
-            @TargetApi(Build.VERSION_CODES.N)
-            override fun shouldOverrideUrlLoading(
-                view: WebView,
-                request: WebResourceRequest
-            ): Boolean {
-                view.loadUrl(request.url.toString())
-                return true
-            }
-        }
-        alert.setView(wv)
-        alert.setNegativeButton("Close") { dialog, _ ->
-            dialog.dismiss()
-        }
-        alert.show()
-    }
-
-
+/*
     fun showDialogueWithContext(str: String, context: Context) {
         val alertDialogBuilder = AlertDialog.Builder(context)
         alertDialogBuilder.setMessage(str).setCancelable(false)
@@ -83,4 +48,5 @@ object UtilityAlertDialog {
     fun restart() {
         exitProcess(0)
     }
+*/
 }

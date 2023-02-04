@@ -24,19 +24,19 @@ package joshuatee.wx.wpc
 import android.util.SparseArray
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.Group
-import joshuatee.wx.ui.ObjectMenuTitle
+import joshuatee.wx.ui.MenuTitle
 
 internal object UtilityWpcImages {
 
     private val titles = listOf(
-        ObjectMenuTitle("Surface Analysis", 9),
-        ObjectMenuTitle("Forecast Maps", 22),
-        ObjectMenuTitle("QPF", 27),
-        ObjectMenuTitle("Snow / Ice", 17),
-        ObjectMenuTitle("National Digital Forecast Database", 15),
-        ObjectMenuTitle("CPC Outlooks", 24),
-        ObjectMenuTitle("Aviation", 16),
-        ObjectMenuTitle("Space Weather", 3)
+        MenuTitle("Surface Analysis", 9),
+        MenuTitle("Forecast Maps", 22),
+        MenuTitle("QPF", 27),
+        MenuTitle("Snow / Ice", 17),
+        MenuTitle("National Digital Forecast Database", 15),
+        MenuTitle("CPC Outlooks", 24),
+        MenuTitle("Aviation", 16),
+        MenuTitle("Space Weather", 3)
     )
 
     val labels = listOf(
@@ -337,10 +337,10 @@ internal object UtilityWpcImages {
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(
+            for (j in (MenuTitle.getStart(
                     titles,
                     index
-            ) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+            ) until titles[index].count + MenuTitle.getStart(titles, index))) {
                 group.children.add(labels[j])
                 shortCodes[index][m] = urls[k]
                 longCodes[index][m] = labels[k]

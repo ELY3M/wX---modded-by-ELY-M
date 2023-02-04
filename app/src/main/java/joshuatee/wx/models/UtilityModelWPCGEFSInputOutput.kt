@@ -23,11 +23,9 @@ package joshuatee.wx.models
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.util.UtilityImgAnim
 
 internal object UtilityModelWpcGefsInputOutput {
 
@@ -38,7 +36,7 @@ internal object UtilityModelWpcGefsInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val currentHour = ObjectDateTime.currentHourInUtc
+            val currentHour = ObjectDateTime.currentHourInUtc()
             runData.mostRecentRun = "00"
             if (currentHour in 12..17) {
                 runData.mostRecentRun = "06"
@@ -56,7 +54,7 @@ internal object UtilityModelWpcGefsInputOutput {
             return runData
         }
 
-    fun getImage(om: ObjectModel, time: String): Bitmap {
+    fun getImage(@Suppress("UNUSED_PARAMETER") context: Context, om: ObjectModel, time: String): Bitmap {
         val sectorAdd = if (om.sector == "AK") {
             "_ak"
         } else {
@@ -64,15 +62,5 @@ internal object UtilityModelWpcGefsInputOutput {
         }
         val url = "${GlobalVariables.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
         return url.getImage()
-    }
-
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
-        }
-        val bitmaps = (om.spinnerTimeValue until om.times.size).map {
-            getImage(om, om.times[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

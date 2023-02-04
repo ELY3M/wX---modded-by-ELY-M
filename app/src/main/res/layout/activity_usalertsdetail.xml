@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/padding_ll"
-                android:stretchColumns="*">
+                >
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView"

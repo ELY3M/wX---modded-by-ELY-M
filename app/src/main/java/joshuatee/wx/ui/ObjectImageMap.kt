@@ -25,17 +25,15 @@ import android.app.Activity
 import android.graphics.Color
 import android.view.View
 import joshuatee.wx.util.ImageMap
-import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
-import joshuatee.wx.radar.UtilityWXGLTextObject
-import joshuatee.wx.radar.WXGLTextObject
+import joshuatee.wx.radar.NexradRenderTextObject
 import joshuatee.wx.util.Utility
 
 class ObjectImageMap(
     val activity: Activity,
     resId: Int,
-    val toolbar: Toolbar,
-    val toolbarBottom: Toolbar,
+    val toolbar: ObjectToolbar,
+    val toolbarBottom: ObjectToolbar,
     private val views: List<View>
 ) {
 
@@ -84,12 +82,12 @@ class ObjectImageMap(
         }
     }
 
-    fun showMap(numberOfPanes: Int, wxglTextObjects: List<WXGLTextObject>) {
+    fun showMap(wxglTextObjects: List<NexradRenderTextObject>) {
         toggleMap()
         if (visibility != View.GONE) {
-            UtilityWXGLTextObject.hideLabels(numberOfPanes, wxglTextObjects)
+            NexradRenderTextObject.hideLabels(wxglTextObjects)
         } else {
-            UtilityWXGLTextObject.showLabels(numberOfPanes, wxglTextObjects)
+            NexradRenderTextObject.showLabels(wxglTextObjects)
         }
     }
 
@@ -119,7 +117,7 @@ class ObjectImageMap(
         })
     }
 
-    private fun setupImageMap(toolbar: Toolbar, toolbarBottom: Toolbar) {
+    private fun setupImageMap(toolbar: ObjectToolbar, toolbarBottom: ObjectToolbar) {
         val layoutParams = map.layoutParams
         layoutParams.height = MyApplication.dm.heightPixels - toolbar.height - toolbarBottom.height - UtilityUI.statusBarHeight(activity)
         layoutParams.width = MyApplication.dm.widthPixels
@@ -132,6 +130,4 @@ class ObjectImageMap(
 
     val isHidden
         get() = visibility == View.GONE
-
-    fun get() = map
 }

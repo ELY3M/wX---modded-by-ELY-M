@@ -27,15 +27,15 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
         }
         val text: TextView = convertView!!.findViewById(R.id.textView1)
         val linearLayout: LinearLayout = convertView.findViewById(R.id.linearLayout)
-        val spacing: View = convertView.findViewById(R.id.spacing)
+//        val spacing: View = convertView.findViewById(R.id.spacing)
         text.text = children
         if (Utility.isThemeAllWhite()) {
-            spacing.setBackgroundColor(Color.WHITE)
+//            spacing.setBackgroundColor(Color.WHITE)
             linearLayout.setBackgroundColor(Color.WHITE)
             text.setBackgroundColor(Color.WHITE)
             text.setTextColor(Color.BLACK)
         } else if (Utility.isThemeAllBlack()) {
-            spacing.setBackgroundColor(Color.BLACK)
+//            spacing.setBackgroundColor(Color.BLACK)
             linearLayout.setBackgroundColor(Color.BLACK)
             text.setBackgroundColor(Color.BLACK)
             text.setTextColor(Color.WHITE)

@@ -62,17 +62,23 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
         product = UtilitySpcFireOutlook.textProducts[dayIndex]
         imageUrl = UtilitySpcFireOutlook.urls[dayIndex]
         setTitle("Fire Weather Outlook", "SPC $product")
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         box = VBox.fromResource(this)
         objectToolbarBottom.hideRadar()
         objectToolbarBottom.connect(this)
         image = if (tabletInLandscape) {
             box.makeHorizontal()
-            Image(this, box, UtilityImg.getBlankBitmap(), 2)
+            Image(this, UtilityImg.getBlankBitmap(), 2)
         } else {
-            Image(this, box)
+            Image(this)
         }
-        cardText = CardText(this, box, toolbar, toolbarBottom)
-        getContent()
+        cardText = CardText(this, toolbar, toolbarBottom)
+        box.addWidget(image)
+        box.addWidget(cardText)
     }
 
     private fun getContent() {

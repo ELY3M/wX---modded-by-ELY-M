@@ -26,17 +26,25 @@ import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ImageSummary
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
 class WpcRainfallForecastSummaryActivity : BaseActivity() {
 
+    //
+    // WPC Excessive Rainfall Outlooks
+    //
+
     private val bitmaps = MutableList(UtilityWpcRainfallForecast.urls.size) { UtilityImg.getBlankBitmap() }
     private lateinit var box: VBox
-    private lateinit var objectImageSummary: ObjectImageSummary
+    private lateinit var imageSummary: ImageSummary
+    private var downloadTimer = DownloadTimer("ACTIVITY_WPC_RAINFALL_SUMMARY")
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.shared_multigraphics, menu)
@@ -47,7 +55,7 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
         setTitle("Excessive Rainfall Outlooks", "WPC")
         box = VBox.fromResource(this)
-        objectImageSummary = ObjectImageSummary(this, box, bitmaps)
+        imageSummary = ImageSummary(this, box, bitmaps)
         getContent()
     }
 
@@ -57,14 +65,16 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        UtilityWpcRainfallForecast.urls.forEachIndexed { index, url ->
-            FutureVoid(this, { bitmaps[index] = url.getImage() }) { update(index) }
+        if (downloadTimer.isRefreshNeeded(this)) {
+            UtilityWpcRainfallForecast.urls.forEachIndexed { index, url ->
+                FutureVoid(this, { bitmaps[index] = url.getImage() }) { update(index) }
+            }
         }
     }
 
     private fun update(index: Int) {
-        objectImageSummary.set(index, bitmaps[index])
-        objectImageSummary.connect(index) { Route.wpcRainfallByDay(this, index.toString()) }
+        imageSummary.set(index, bitmaps[index])
+        imageSummary.connect(index) { Route.wpcRainfallByDay(this, index.toString()) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -33,15 +33,32 @@ import joshuatee.wx.canada.CanadaHourlyActivity
 import joshuatee.wx.canada.CanadaTextActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.models.ModelsSpcHrefActivity
-import joshuatee.wx.models.ModelsSpcHrrrActivity
-import joshuatee.wx.models.ModelsSpcSrefActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.nhc.NhcStormActivity
-import joshuatee.wx.nhc.ObjectNhcStormDetails
-import joshuatee.wx.radar.*
-import joshuatee.wx.settings.*
-import joshuatee.wx.spc.*
-import joshuatee.wx.util.Utility
+import joshuatee.wx.nhc.NhcStormDetails
+import joshuatee.wx.radar.AwcRadarMosaicActivity
+import joshuatee.wx.radar.RadarMosaicNwsActivity
+import joshuatee.wx.radar.WXGLRadarActivity
+import joshuatee.wx.radar.WXGLRadarActivityMultiPane
+import joshuatee.wx.settings.FavAddActivity
+import joshuatee.wx.settings.FavRemoveActivity
+import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.SettingsColorPickerActivity
+import joshuatee.wx.settings.SettingsLocationGenericActivity
+import joshuatee.wx.settings.SettingsMainActivity
+import joshuatee.wx.settings.SettingsRadarActivity
+import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.spc.LsrByWfoActivity
+import joshuatee.wx.spc.SpcCompmapActivity
+import joshuatee.wx.spc.SpcFireOutlookActivity
+import joshuatee.wx.spc.SpcFireOutlookSummaryActivity
+import joshuatee.wx.spc.SpcMcdWatchShowActivity
+import joshuatee.wx.spc.SpcMesoActivity
+import joshuatee.wx.spc.SpcSoundingsActivity
+import joshuatee.wx.spc.SpcStormReportsActivity
+import joshuatee.wx.spc.SpcThunderStormOutlookActivity
+import joshuatee.wx.spc.SpcSwoActivity
+import joshuatee.wx.spc.SpcSwoSummaryActivity
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.wpc.WpcImagesActivity
 import joshuatee.wx.wpc.WpcRainfallForecastActivity
@@ -88,31 +105,28 @@ class Route() {
             }
         }
 
-        fun nhcStorm(context: Context, stormData: ObjectNhcStormDetails) {
-            val intent = Intent(context, NhcStormActivity::class.java)
-            intent.putExtra(NhcStormActivity.URL, stormData)
-            context.startActivity(intent)
+        fun colorPicker(context: Context, pref: String, label: String) {
+            Route(context, SettingsColorPickerActivity::class.java, SettingsColorPickerActivity.INFO, arrayOf(pref, label))
         }
 
-        fun mcd(context: Context, number: String, type: String) {
-            Route(context, SpcMcdWatchShowActivity::class.java, SpcMcdWatchShowActivity.NUMBER, arrayOf(number, type))
+        fun favoriteAdd(context: Context, type: FavoriteType) {
+            Route(context, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf(type.name))
         }
 
-        fun sounding(context: Context) {
-            Route(context, SpcSoundingsActivity::class.java, SpcSoundingsActivity.URL, arrayOf(Location.wfo, ""))
+        fun favoriteRemove(context: Context, type: FavoriteType) {
+            Route(context, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf(type.name))
         }
 
-        fun wfoText(context: Context) {
-            if (Location.isUS) {
-                Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, arrayOf(Location.wfo, ""))
-            } else {
-                Route(context, CanadaTextActivity::class.java)
-            }
+        fun forecast(context: Context, latLon: LatLon) {
+            Route(context, ForecastActivity::class.java, ForecastActivity.URL, arrayOf(latLon.latString, latLon.lonString))
         }
 
-        // used by voice recognition for sound on activity invokation
-        fun wfoText(context: Context, array: Array<String>) {
-            Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, array)
+        fun goesFd(context: Context) {
+            Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("GOESFD"))
+        }
+
+        fun hazard(context: Context, url: String) {
+            Route(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url))
         }
 
         fun hourly(context: Context) {
@@ -123,53 +137,104 @@ class Route() {
             }
         }
 
-        fun hazard(context: Context, url: String) {
-            Route(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url))
-        }
-
-        fun goesFd(context: Context) {
-            Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("GOESFD"))
-        }
-
-        fun forecast(context: Context, wxglSurfaceView: WXGLSurfaceView) {
-            Route(context, ForecastActivity::class.java, ForecastActivity.URL, arrayOf(wxglSurfaceView.newY.toString(), "-" + wxglSurfaceView.newX.toString()))
+        fun image(context: Context, url: String, title: String) {
+            Route(context, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(url, title))
         }
 
         fun lightning(context: Context) {
-            if (UIPreferences.lightningUseGoes) {
-                Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "23"))
+            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "23"))
+        }
+
+        fun locationEdit(context: Context, locationNumber: String) {
+            Route(context, SettingsLocationGenericActivity::class.java, SettingsLocationGenericActivity.LOC_NUM, arrayOf(locationNumber))
+        }
+
+        fun lsrByWfo(context: Context) {
+            Route(context, LsrByWfoActivity::class.java, LsrByWfoActivity.URL, arrayOf(Location.wfo, "LSR"))
+        }
+
+        fun mcd(context: Context, number: String, type: String) {
+            Route(context, SpcMcdWatchShowActivity::class.java, SpcMcdWatchShowActivity.NUMBER, arrayOf(number, type))
+        }
+
+        fun model(context: Context, numberPanes: String, prefToken: String, title: String) {
+            Route(context, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf(numberPanes, prefToken, title))
+        }
+
+        fun modelEsrl(context: Context) {
+            model(context, "1", "ESRL", "ESRL")
+        }
+
+        fun modelNcep(context: Context) {
+            model(context, "1", "NCEP", "NCEP")
+        }
+
+        fun modelNsslWrf(context: Context) {
+            model(context, "1", "NSSL", "NSSL")
+        }
+
+        fun nhc(context: Context) {
+            Route(context, NhcActivity::class.java)
+        }
+
+        fun nhcStorm(context: Context, stormData: NhcStormDetails) {
+            val intent = Intent(context, NhcStormActivity::class.java)
+            intent.putExtra(NhcStormActivity.URL, stormData)
+            context.startActivity(intent)
+        }
+
+        fun observations(context: Context) {
+            if (Location.isUS) {
+                Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OBSERVATIONS"))
             } else {
-                Route(context, LightningActivity::class.java)
+                image(context, "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg", "Observations")
             }
+        }
+
+        fun obsSites(context: Context) {
+            Route(context, NwsObsSitesActivity::class.java)
         }
 
         fun opc(context: Context) {
             Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OPC"))
         }
 
-        fun vis(context: Context) {
-            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf(""))
+        fun playlist(context: Context) {
+            Route(context, SettingsPlaylistActivity::class.java)
         }
 
-        fun visNhc(context: Context, url: String) {
-            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf(url, ""))
+        fun radar(context: Context, array: Array<String>) {
+            Route(context, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, array)
         }
 
-        fun visWv(context: Context) {
-            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
-        }
-        //elys mod - for radar longpress menu
-        fun vis00(context: Context) {
-            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "00"))
+        fun radarMainScreen(context: Context) {
+            if (!UIPreferences.dualpaneRadarIcon) {
+                radar(context, arrayOf(Location.rid, ""))
+            } else {
+                radarMultiPane(context, arrayOf(Location.rid, "", "2"))
+            }
         }
 
-        fun usAlerts(context: Context) {
-            Route(
-                    context,
-                    USWarningsWithRadarActivity::class.java,
-                    USWarningsWithRadarActivity.URL,
-                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
-            )
+        fun radarBySite(context: Context, radarSite: String) {
+            val radarLabel = UtilityLocation.getRadarSiteName(radarSite)
+            val state = radarLabel.split(",")[0]
+            radar(context, arrayOf(radarSite, state, "N0Q", ""))
+        }
+
+        fun radarWithOneSpotter(context: Context, radarSite: String, spotter: String) {
+            radar(context, arrayOf(radarSite, "", "N0Q", "", spotter))
+        }
+
+        fun radarMultiPane(context: Context, array: Array<String>) {
+            Route(context, WXGLRadarActivityMultiPane::class.java, WXGLRadarActivityMultiPane.RID, array)
+        }
+
+        fun radarMultiPane2(context: Context) {
+            radarMultiPane(context, arrayOf(Location.rid, "", "2"))
+        }
+
+        fun radarMultiPane4(context: Context) {
+            radarMultiPane(context, arrayOf(Location.rid, "", "4"))
         }
 
         fun radarMosaic(context: Context) {
@@ -178,6 +243,34 @@ class Route() {
             } else {
                 Route(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf(""))
             }
+        }
+
+        fun rtma(context: Context) {
+            Route(context, RtmaActivity::class.java, RtmaActivity.RID, arrayOf("2m_temp"))
+        }
+
+        fun settings(context: Context) {
+            Route(context, SettingsMainActivity::class.java)
+        }
+
+        fun settingsRadar(context: Context) {
+            Route(context, SettingsRadarActivity::class.java)
+        }
+
+        fun severeDash(context: Context) {
+            Route(context, SevereDashboardActivity::class.java)
+        }
+
+        fun severeDashMainScreen(context: Context) {
+            if (Location.isUS) {
+                severeDash(context)
+            } else {
+                Route(context, CanadaAlertsActivity::class.java)
+            }
+        }
+
+        fun sounding(context: Context) {
+            Route(context, SpcSoundingsActivity::class.java, SpcSoundingsActivity.URL, arrayOf(Location.wfo, ""))
         }
 
         fun spcCompmap(context: Context) {
@@ -196,16 +289,28 @@ class Route() {
             Route(context, ModelsSpcHrefActivity::class.java, "", arrayOf("1", "SPCHREF", "SPC HREF"))
         }
 
+        fun spcHrefDualPane(context: Context) {
+            Route(context, ModelsSpcHrefActivity::class.java, "", arrayOf("2", "SPCHREF", "SPC HREF"))
+        }
+
         fun spcHrrr(context: Context) {
-            Route(context, ModelsSpcHrrrActivity::class.java, "", arrayOf("1", "SPCHRRR", "SPC HRRR"))
+            model(context, "1", "SPCHRRR", "SPC HRRR")
         }
 
         fun spcMeso(context: Context) {
             Route(context, SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "1", "SPCMESO"))
         }
 
+        fun spcMesoDualPane(context: Context) {
+            Route(context, SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "2", "SPCMESO"))
+        }
+
         fun spcSref(context: Context) {
-            Route(context, ModelsSpcSrefActivity::class.java, ModelsSpcSrefActivity.INFO, arrayOf("1", "SPCSREF", "SPCSREF"))
+            Route(context, ModelsSpcHrefActivity::class.java, ModelsSpcHrefActivity.INFO, arrayOf("1", "SPCSREF", "SPCSREF"))
+        }
+
+        fun spcSrefDualPane(context: Context) {
+            Route(context, ModelsSpcHrefActivity::class.java, ModelsSpcHrefActivity.INFO, arrayOf("2", "SPCSREF", "SPCSREF"))
         }
 
         fun spcStormReports(context: Context) {
@@ -240,87 +345,8 @@ class Route() {
             Route(context, SpcThunderStormOutlookActivity::class.java)
         }
 
-        // TODO FIXME
-        fun model(context: Context, array: Array<String>) {
-            Route(context, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, array)
-        }
-
-        fun modelEsrl(context: Context) {
-            model(context, arrayOf("1", "ESRL", "ESRL"))
-        }
-
-        fun modelNcep(context: Context) {
-            model(context, arrayOf("1", "NCEP", "NCEP"))
-        }
-
-        fun modelNsslWrf(context: Context) {
-            model(context, arrayOf("1", "NSSL", "NSSL"))
-        }
-
-        fun nhc(context: Context) {
-            Route(context, NhcActivity::class.java)
-        }
-
-        fun observations(context: Context) {
-            if (Location.isUS) {
-                Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OBSERVATIONS"))
-            } else {
-                image(context, "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg", "Observations")
-            }
-        }
-
-        fun obsSites(context: Context) {
-            Route(context, NwsObsSitesActivity::class.java)
-        }
-
-        fun settings(context: Context) {
-            Route(context, SettingsMainActivity::class.java)
-        }
-
-        fun settingsRadar(context: Context) {
-            Route(context, SettingsRadarActivity::class.java)
-        }
-
-        fun radar(context: Context, array: Array<String>) {
-            Route(context, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, array)
-        }
-
-        fun radarMainScreen(context: Context) {
-            if (!UIPreferences.dualpaneRadarIcon) {
-                radar(context, arrayOf(Location.rid, ""))
-            } else {
-                radarMultiPane(context, arrayOf(Location.rid, "", "2"))
-            }
-        }
-
-        fun radarBySite(context: Context, radarSite: String) {
-            val radarLabel = Utility.getRadarSiteName(radarSite)
-            val state = radarLabel.split(",")[0]
-            radar(context, arrayOf(radarSite, state, "N0Q", ""))
-        }
-
-        fun radarMultiPane(context: Context, array: Array<String>) {
-            Route(context, WXGLRadarActivityMultiPane::class.java, WXGLRadarActivityMultiPane.RID, array)
-        }
-
-        fun radarMultiPane2(context: Context) {
-            radarMultiPane(context, arrayOf(Location.rid, "", "2"))
-        }
-
-        fun radarMultiPane4(context: Context) {
-            radarMultiPane(context, arrayOf(Location.rid, "", "4"))
-        }
-
-        fun image(context: Context, url: String, title: String) {
-            Route(context, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(url, title))
-        }
-
-        fun favoriteAdd(context: Context, type: FavoriteType) {
-            Route(context, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf(type.name))
-        }
-
-        fun favoriteRemove(context: Context, type: FavoriteType) {
-            Route(context, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf(type.name))
+        fun spotters(context: Context) {
+            Route(context, SpottersActivity::class.java)
         }
 
         // url could be a chunk of text
@@ -328,28 +354,38 @@ class Route() {
             Route(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(url, title))
         }
 
-        fun locationEdit(context: Context, locationNumber: String) {
-            Route(context, SettingsLocationGenericActivity::class.java, SettingsLocationGenericActivity.LOC_NUM, arrayOf(locationNumber))
-        }
-
-        fun playlist(context: Context) {
-            Route(context, SettingsPlaylistActivity::class.java)
-        }
-
-        fun severeDash(context: Context) {
-            Route(context, SevereDashboardActivity::class.java)
-        }
-
-        fun severeDashMainScreen(context: Context) {
+        fun wfoText(context: Context) {
             if (Location.isUS) {
-                severeDash(context)
+                Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, arrayOf(Location.wfo, ""))
             } else {
-                Route(context, CanadaAlertsActivity::class.java)
+                Route(context, CanadaTextActivity::class.java)
             }
         }
 
-        fun spotters(context: Context) {
-            Route(context, SpottersActivity::class.java)
+        // used by voice recognition for sound on activity invocation
+        fun wfoText(context: Context, array: Array<String>) {
+            Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, array)
+        }
+
+        fun vis(context: Context) {
+            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf(""))
+        }
+
+        fun visNhc(context: Context, url: String) {
+            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf(url, ""))
+        }
+
+        fun visWv(context: Context) {
+            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
+        }
+
+        fun usAlerts(context: Context) {
+            Route(
+                    context,
+                    USWarningsWithRadarActivity::class.java,
+                    USWarningsWithRadarActivity.URL,
+                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
+            )
         }
 
         fun web(context: Context, url: String) {
@@ -373,7 +409,7 @@ class Route() {
         }
 
         fun wpcGefs(context: Context) {
-            model(context, arrayOf("1", "WPCGEFS", "WPC"))
+            model(context,"1", "WPCGEFS", "WPC")
         }
 
         fun wpcImages(context: Context) {
@@ -395,5 +431,18 @@ class Route() {
         fun wpcText(context: Context, product: String) {
             Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(product))
         }
+        //elys mod  
+        //elys mod - for radar longpress menu
+        fun vis00(context: Context) {
+            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "00"))
+        }
+        //elys mod - for longpress in radar
+        fun radarMosaicConus(context: Context) {
+            if (UIPreferences.useAwcMosaic) {
+                Route(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf("us"))
+            } else {
+                Route(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf("CONUS"))
+            }
+        }		
     }
 }

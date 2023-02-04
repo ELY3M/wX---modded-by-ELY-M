@@ -36,8 +36,18 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectImageMap
+import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.DownloadText
+import joshuatee.wx.util.To
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityFavorites
+import joshuatee.wx.util.UtilityImageMap
+import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.UtilityString
 
 class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -53,7 +63,6 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var firstTime = true
     private var wfo = ""
     private lateinit var imageMap: ObjectImageMap
-    private var mapShown = false
     private lateinit var star: MenuItem
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
@@ -77,18 +86,19 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.lsrbywfo)
         val arguments = intent.getStringArrayExtra(URL)!!
         wfo = arguments[0]
-        if (wfo == "") {
-            wfo = "OUN"
-        }
         title = "LSR"
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
         objectToolbarBottom.connect(this)
         star = objectToolbarBottom.getFavIcon()
         locations = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
-        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
+        imageMap = ObjectImageMap(this, R.id.map, objectToolbar, objectToolbarBottom, listOf<View>(scrollView))
         imageMap.connect(::mapSwitch, UtilityImageMap::mapToWfo)
-        getContent()
     }
 
     override fun onRestart() {
@@ -105,7 +115,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_map -> imageMap.toggleMap()
-            R.id.action_share -> UtilityShare.text(this, "LSR$wfo", Utility.fromHtml(lsrList.toString()))
+            R.id.action_share -> UtilityShare.text(this, "LSR$wfo", lsrList.toString())
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -114,7 +124,6 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun mapSwitch(loc: String) {
         scrollView.visibility = View.VISIBLE
         wfo = loc.uppercase(Locale.US)
-        mapShown = false
         locations = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
         getContent()
     }
@@ -166,11 +175,11 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun download(i: Int , version: Int) {
-        lsrList[i] = UtilityDownload.getTextProduct("LSR$wfo", version)
+        lsrList[i] = DownloadText.byProduct("LSR$wfo", version)
     }
 
     private fun update(i: Int) {
-        textList[i].setText1(Utility.fromHtml(lsrList[i]))
+        textList[i].setText1(lsrList[i])
         textList[i].typefaceMono()
     }
 
@@ -182,14 +191,15 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             toolbar.subtitle = "Showing: None"
         } else {
             var maxVersions = To.int(numberLSR)
-            toolbar.subtitle = "Showing: " + (maxVersions - 1).toString()
+            toolbar.subtitle = "Showing: " + To.string(maxVersions)
             if (maxVersions > 30) {
                 maxVersions = 30
             }
             var i = 0
-            (1..maxVersions + 1 step 2).forEach { version ->
+            (1..maxVersions step 2).forEach { version ->
                 lsrList.add("")
-                textList.add(CardText(this, box))
+                textList.add(CardText(this))
+                box.addWidget(textList.last())
                 val iFinal = i
                 FutureVoid(this, { download(iFinal, version) }, { update(iFinal) })
                 i += 1

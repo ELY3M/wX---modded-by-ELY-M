@@ -57,9 +57,13 @@ Polygon contains point - APL 2.0
 sromku
 https://github.com/sromku/polygon-contains-point
 
-Sunrise,Sunset calc - APL 2.0
+No longer used (2013-2022 Nov) Sunrise,Sunset calc - APL 2.0
 mikereedell
 https://github.com/mikereedell/sunrisesunsetlib-java
+
+(2022 Nov - ) Solarized
+Yaroslav Zotov m@zotov.dev
+https://github.com/phototime/solarized-android
 
 FingerDraw 
 Chris Lizon

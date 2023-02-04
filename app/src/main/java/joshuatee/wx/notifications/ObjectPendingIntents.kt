@@ -25,7 +25,7 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
-import joshuatee.wx.nhc.ObjectNhcStormDetails
+import joshuatee.wx.nhc.NhcStormDetails
 import joshuatee.wx.objects.ObjectDateTime
 
 class ObjectPendingIntents {
@@ -46,7 +46,7 @@ class ObjectPendingIntents {
         resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
-    constructor(context: Context, cl: Class<*>, classFlag: String, classArgs1: ObjectNhcStormDetails) {
+    constructor(context: Context, cl: Class<*>, classFlag: String, classArgs1: NhcStormDetails) {
         val resultIntent = Intent(context, cl)
         val resultIntent2 = Intent(context, cl)
         resultIntent.putExtra(classFlag, classArgs1)

@@ -32,14 +32,19 @@ import java.util.Locale
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.notifications.UtilityNotificationTextProduct
+import joshuatee.wx.notifications.NotificationTextProduct
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.Route
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.NavDrawerCombo
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityFavorites
+import joshuatee.wx.util.UtilityShare
 
 class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -61,7 +66,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var notificationToggle: MenuItem
     private var ridFavOld = ""
     private lateinit var cardText: CardText
-    private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
+    private lateinit var navDrawerCombo: NavDrawerCombo
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
 
@@ -84,16 +89,21 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             product = arguments[0]
             initialProduct = product
         }
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
         objectToolbarBottom.connect(this)
         star = objectToolbarBottom.getFavIcon()
         notificationToggle = objectToolbarBottom.find(R.id.action_notif_text_prod)
-        cardText = CardText(this, box, toolbar, toolbarBottom)
+        cardText = CardText(this, toolbar, toolbarBottom)
+        box.addWidget(cardText)
         UtilityWpcText.create()
-        objectNavDrawerCombo = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
-        objectNavDrawerCombo.connect(::changeProduct)
-        getContent()
+        navDrawerCombo = NavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
+        navDrawerCombo.connect(::changeProduct)
     }
 
     private fun getContent() {
@@ -136,7 +146,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(this, box.get(), product.uppercase(Locale.US))
+                NotificationTextProduct.toggle(this, box.get(), product.uppercase(Locale.US))
                 updateSubmenuNotificationText()
             }
             R.id.action_share -> UtilityShare.text(this, product, textToShare)
@@ -146,7 +156,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawerCombo.onOptionsItemSelected(item)) {
+        if (navDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
         products = UtilityFavorites.setupMenu(this, product, FavoriteType.NWS_TEXT)
@@ -173,12 +183,12 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun changeProduct() {
-        product = objectNavDrawerCombo.getUrl()
+        product = navDrawerCombo.getUrl()
         getContent()
     }
 
     private fun updateSubmenuNotificationText() {
-        if (UtilityNotificationTextProduct.check(product.uppercase(Locale.US))) {
+        if (NotificationTextProduct.check(product.uppercase(Locale.US))) {
             notificationToggle.title = resources.getString(R.string.notif_remove)
         } else {
             notificationToggle.title = resources.getString(R.string.notif_add)
@@ -187,11 +197,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawerCombo.syncState()
+        navDrawerCombo.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawerCombo.onConfigurationChanged(newConfig)
+        navDrawerCombo.onConfigurationChanged(newConfig)
     }
 }

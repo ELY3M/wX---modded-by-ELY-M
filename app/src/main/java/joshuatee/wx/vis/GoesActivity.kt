@@ -23,6 +23,7 @@ package joshuatee.wx.vis
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -33,8 +34,11 @@ import joshuatee.wx.objects.ObjectAnimate
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
+import joshuatee.wx.ui.NavDrawer
+import joshuatee.wx.ui.TouchImage
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.UtilityShortcut
 import joshuatee.wx.util.To
 
 class GoesActivity : VideoRecordActivity() {
@@ -43,17 +47,19 @@ class GoesActivity : VideoRecordActivity() {
     // GOES 16 / GOES 17 image viewer
     // https://www.star.nesdis.noaa.gov/GOES/index.php
     //
-    // Misc tab and ObjectWidgetGeneric.kt have:
-    //    GoesActivity::class.java,
-    //    GoesActivity.RID,
-    //    arrayOf("CONUS", "09"),
+    // Misc tab, ObjectWidgetGeneric.kt have: arrayOf("CONUS", "09")
+    // NHC has arrayOf(url, "")
+    // Cloud icon has arrayOf("")
+    //
+    //  arg1: sector or url(NHC) (ie "CONUS") or ""
+    //  arg2 (optional): product (ie "09", "23" is lightning) or for NHC ""
     //
 
     companion object { const val RID = "" }
 
     private lateinit var objectAnimate: ObjectAnimate
-    private lateinit var image: TouchImage
-    private lateinit var objectNavDrawer: ObjectNavDrawer
+    private lateinit var touchImage: TouchImage
+    private lateinit var navDrawer: NavDrawer
     private var sector = "cgl"
     private var oldSector = "cgl"
     private var savePrefs = true
@@ -80,68 +86,72 @@ class GoesActivity : VideoRecordActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.goes16, iconsEvenlySpaced = true, bottomToolbar = false)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         arguments = intent.getStringArrayExtra(RID)!!
-        objectNavDrawer = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes) { getContent(sector) }
-        image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
-        objectAnimate = ObjectAnimate(this, image)
-        toolbar.setOnClickListener { objectNavDrawer.open() }
-        image.setMaxZoom(8.0f)
-        image.connect(objectNavDrawer) { getContent(sector) }
+        setupUI()
         readPrefs()
         getContent(sector)
     }
 
-    private fun getContent(sectorF: String) {
-        sector = sectorF
+    private fun setupUI() {
+        navDrawer = NavDrawer(this, UtilityGoes.labels, UtilityGoes.codes) { getContent(sector) }
+        touchImage = TouchImage(this, toolbar, R.id.iv, navDrawer, "")
+        objectAnimate = ObjectAnimate(this, touchImage)
+        objectToolbar.connectClick { navDrawer.open() }
+        touchImage.setMaxZoom(8.0f)
+        touchImage.connect(navDrawer) { getContent(sector) }
+    }
+
+    private fun getContent(sector: String) {
+        this.sector = sector
         writePrefs()
-        setTitle(UtilityGoes.sectorToName[sector] ?: "", objectNavDrawer.getLabel())
+        setTitle(UtilityGoes.sectorToName[sector] ?: "", navDrawer.getLabel())
         if (!goesFloater) {
-            FutureBytes(this, UtilityGoes.getImage(objectNavDrawer.url, sector), ::display)
+            FutureBytes(this, UtilityGoes.getImage(navDrawer.url, sector), ::display)
         } else {
-            FutureBytes(this, UtilityGoes.getImageGoesFloater(goesFloaterUrl, objectNavDrawer.url), ::display)
+            FutureBytes(this, UtilityGoes.getImageGoesFloater(goesFloaterUrl, navDrawer.url), ::display)
         }
     }
 
     private fun display(bitmap: Bitmap) {
-        image.set(bitmap)
-        image.firstRun(prefImagePosition)
+        touchImage.set(bitmap)
+        touchImage.firstRun(prefImagePosition)
         if (oldSector != sector) {
-            image.setZoom(1.0f)
+            touchImage.setZoom(1.0f)
             oldSector = sector
         }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.syncState()
+        navDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.onConfigurationChanged(newConfig)
+        navDrawer.onConfigurationChanged(newConfig)
     }
 
     private fun writePrefs() {
         if (savePrefs) {
             Utility.writePref(this, "GOES16_SECTOR", sector)
-            Utility.writePrefInt(this, "GOES16_IMG_FAV_IDX", objectNavDrawer.index)
+            Utility.writePrefInt(this, "GOES16_IMG_FAV_IDX", navDrawer.index)
         }
     }
 
     private fun readPrefs() {
         if (arguments.isNotEmpty() && arguments[0] == "") {
             sector = Utility.readPref(this, "GOES16_SECTOR", sector)
-            objectNavDrawer.index = Utility.readPrefInt(this, "GOES16_IMG_FAV_IDX", 0)
+            navDrawer.index = Utility.readPrefInt(this, "GOES16_IMG_FAV_IDX", 0)
         } else if (arguments.size > 1 && arguments[0].contains("http")) {
             // NHC floater
             goesFloater = true
             goesFloaterUrl = arguments[0]
-            objectNavDrawer.index = 0
+            navDrawer.index = 0
             sector = goesFloaterUrl
             savePrefs = false
         } else {
             if (arguments.size > 1) {
                 sector = arguments[0]
-                objectNavDrawer.index = To.int(arguments[1])
+                navDrawer.index = To.int(arguments[1])
                 savePrefs = false
             }
         }
@@ -149,7 +159,7 @@ class GoesActivity : VideoRecordActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.onOptionsItemSelected(item)) {
+        if (navDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -205,10 +215,10 @@ class GoesActivity : VideoRecordActivity() {
             R.id.action_np -> getContent("np")
             R.id.action_na -> getContent("na")
             R.id.action_share -> {
-                if (UIPreferences.recordScreenShare) {
+                if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.bitmap(this, objectNavDrawer.getLabel(), image)
+                    UtilityShare.bitmap(this, navDrawer.getLabel(), touchImage)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -222,15 +232,15 @@ class GoesActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        image.imgSavePosnZoom(prefImagePosition)
+        touchImage.imgSavePosnZoom(prefImagePosition)
         super.onStop()
     }
 
     private fun getAnimate(frameCount: Int) {
         if (!goesFloater) {
-            objectAnimate.animateClicked({}) { UtilityGoes.getAnimation(objectNavDrawer.url, sector, frameCount) }
+            objectAnimate.animateClicked({}) { UtilityGoes.getAnimation(navDrawer.url, sector, frameCount) }
         } else {
-            objectAnimate.animateClicked({}) { UtilityGoes.getAnimationGoesFloater(objectNavDrawer.url, sector, frameCount) }
+            objectAnimate.animateClicked({}) { UtilityGoes.getAnimationGoesFloater(navDrawer.url, sector, frameCount) }
         }
     }
 }

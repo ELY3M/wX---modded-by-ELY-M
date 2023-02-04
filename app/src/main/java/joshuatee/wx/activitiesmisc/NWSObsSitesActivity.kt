@@ -30,7 +30,7 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.objects.Route
-import joshuatee.wx.radar.UtilityMetar
+import joshuatee.wx.radar.Metar
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
@@ -56,19 +56,14 @@ class NwsObsSitesActivity : BaseActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.action_lastused).title = "Last Used: " + Utility.readPref(this, prefToken, UtilityMetar.findClosestObservation(this, Location.latLon).name)
+        menu.findItem(R.id.action_lastused).title = "Last Used: " + Utility.readPref(this, prefToken, Metar.findClosestObsSite(this, Location.latLon).name)
         return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, R.menu.nwsobssites, bottomToolbar = false)
         title = titleString
-        updateButton()
         objectRecyclerView = ObjectRecyclerView(this, R.id.card_list, GlobalArrays.states.toMutableList(), ::itemClicked)
-    }
-
-    private fun updateButton() {
-        invalidateOptionsMenu()
     }
 
     private fun itemClicked(position: Int) {
@@ -90,7 +85,7 @@ class NwsObsSitesActivity : BaseActivity() {
 
     private fun showObsSite(obsSite: String) {
         Utility.writePref(prefToken, obsSite)
-        updateButton()
+        invalidateOptionsMenu()
         Route.webView(this, "https://www.weather.gov/wrh/timeseries?site=$obsSite", obsSite)
     }
 
@@ -121,7 +116,7 @@ class NwsObsSitesActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_lastused -> showObsSite(
-                    Utility.readPref(this, prefToken, UtilityMetar.findClosestObservation(this, Location.latLon).name))
+                    Utility.readPref(this, prefToken, Metar.findClosestObsSite(this, Location.latLon).name))
             R.id.action_map -> Route.webView(this,
                         "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
                                 "Observations near " + Location.wfo)

@@ -23,13 +23,15 @@ class FileProvider : androidx.core.content.FileProvider() {
         sortOrder: String?
     ): Cursor {
         val source = super.query(uri, projection, selection, selectionArgs, sortOrder)
-        val columnNames = source!!.columnNames
+        val columnNames = source.columnNames
         val newColumnNames = columnNamesWithData(columnNames)
         val cursor = MatrixCursor(newColumnNames, source.count)
         source.moveToPosition(-1)
         while (source.moveToNext()) {
             val row = cursor.newRow()
-            columnNames.indices.forEach { row.add(source.getString(it)) }
+            columnNames.indices.forEach {
+                row.add(source.getString(it))
+            }
         }
         return cursor
     }

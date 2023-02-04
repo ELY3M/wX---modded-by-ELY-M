@@ -26,11 +26,7 @@ import android.widget.RelativeLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.RadarPreferences
 
-class NexradStateMainScreen(
-        activityReference: Context,
-        numberOfPanes: Int,
-        homeScreenTokens: List<String>
-) : NexradState(numberOfPanes) {
+class NexradStateMainScreen(context: Context, numberOfPanes: Int, homeScreenTokens: List<String>) : NexradState(numberOfPanes) {
 
     var oldRadarSites = Array(numberOfPanes) { "" }
 
@@ -39,24 +35,24 @@ class NexradStateMainScreen(
         isHomeScreen = true
         homeScreenTokens.forEach { token ->
             if (token == "OGL-RADAR" || token.contains("NXRD-")) {
-                wxglRenders.add(WXGLRender(MyApplication.appContext, 4))
-                wxglSurfaceViews.add(WXGLSurfaceView(MyApplication.appContext, 1, 1, 1))
+                wxglRenders.add(NexradRender(MyApplication.appContext, 4))
+                wxglSurfaceViews.add(NexradRenderSurfaceView(MyApplication.appContext, 1, 1))
                 wxglSurfaceViews[index].index = index
                 if (token.contains("NXRD-")) {
-                    wxglRenders[index].rid = token.replace("NXRD-", "")
+                    wxglRenders[index].state.rid = token.replace("NXRD-", "")
                 } else {
-                    wxglRenders[index].rid = ""
+                    wxglRenders[index].state.rid = ""
                 }
                 oldRadarSites[index] = ""
-                relativeLayouts.add(RelativeLayout(activityReference))
-                wxglTextObjects.add(WXGLTextObject(activityReference,
+                relativeLayouts.add(RelativeLayout(context))
+                wxglTextObjects.add(NexradRenderTextObject(context,
                         relativeLayouts[index],
                         wxglSurfaceViews[index],
-                        wxglRenders[index],
+                        wxglRenders[index].state,
                         1, 4))
-                wxglSurfaceViews[index].wxglTextObjects = wxglTextObjects
+                wxglSurfaceViews[index].textObjects = wxglTextObjects
                 wxglSurfaceViews[index].locationFragment = true
-                wxglTextObjects[index].initializeLabels(activityReference)
+                wxglTextObjects[index].initializeLabels(context)
                 relativeLayouts[index].addView(wxglSurfaceViews[index])
                 index += 1
             }
@@ -64,7 +60,7 @@ class NexradStateMainScreen(
     }
 
     fun adjustPaneTo(index: Int, newRadarSite: String) {
-        wxglRenders[index].rid = newRadarSite
+        wxglRenders[index].state.rid = newRadarSite
         wxglSurfaceViews[index].scaleFactor = RadarPreferences.wxoglSize / 10.0f
         wxglRenders[index].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
     }
@@ -82,17 +78,19 @@ class NexradStateMainScreen(
     }
 
     fun adjustForTdwr(idx: Int) {
-        if (wxglRenders[idx].product == "N0Q" && isRidTdwr(wxglRenders[idx].rid)) {
-            wxglRenders[idx].product = "TZL"
-        }
-        if (wxglRenders[idx].product == "TZL" && !isRidTdwr(wxglRenders[idx].rid)) {
-            wxglRenders[idx].product = "N0Q"
-        }
-        if (wxglRenders[idx].product == "N0U" && isRidTdwr(wxglRenders[idx].rid)) {
-            wxglRenders[idx].product = "TV0"
-        }
-        if (wxglRenders[idx].product == "TV0" && !isRidTdwr(wxglRenders[idx].rid)) {
-            wxglRenders[idx].product = "N0U"
+        with (wxglRenders[idx]) {
+            if (state.product == "N0Q" && isRidTdwr(state.rid)) {
+                state.product = "TZL"
+            }
+            if (state.product == "TZL" && !isRidTdwr(state.rid)) {
+                state.product = "N0Q"
+            }
+            if (state.product == "N0U" && isRidTdwr(state.rid)) {
+                state.product = "TV0"
+            }
+            if (state.product == "TV0" && !isRidTdwr(state.rid)) {
+                state.product = "N0U"
+            }
         }
     }
 

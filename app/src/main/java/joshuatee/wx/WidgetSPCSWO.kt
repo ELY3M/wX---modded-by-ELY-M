@@ -25,19 +25,21 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.WidgetFile.SPCSWO
+import joshuatee.wx.widgets.WidgetFile
+import joshuatee.wx.widgets.UtilityWidget
+import joshuatee.wx.widgets.UtilityWidgetDownload
 
 class WidgetSPCSWO : AppWidgetProvider() {
 
-    private val type = SPCSWO
+    private val type = WidgetFile.SPCSWO
 
     override fun onDisabled(context: Context) {
-        UtilityWidget.disableWidget(context, SPCSWO)
+        UtilityWidget.disableWidget(context, type)
         super.onDisabled(context)
     }
 
     override fun onEnabled(context: Context) {
-        UtilityWidget.enableWidget(context, SPCSWO)
+        UtilityWidget.enableWidget(context, type)
         getContent(context)
         super.onEnabled(context)
     }

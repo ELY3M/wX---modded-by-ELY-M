@@ -28,14 +28,12 @@ import joshuatee.wx.util.UtilityString
 object UtilityGoes {
 
     private fun getImageFileName(sector: String): String {
-        val fullSize = "latest"
-        val size = sizeMap[sector] ?: fullSize
+        val size = sizeMap[sector] ?: "latest"
         return "$size.jpg"
     }
 
-    fun getImageGoesFloater(url: String, product: String): String {
-        return url.replace("GEOCOLOR", product)
-    }
+    fun getImageGoesFloater(url: String, product: String): String =
+            url.replace("GEOCOLOR", product)
 
     fun getImage(product: String, sector: String): String {
         var sectorLocal = if (sector == "FD" || sector == "CONUS" || sector == "CONUS-G17") {
@@ -60,7 +58,7 @@ object UtilityGoes {
         var url = GlobalVariables.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
         if (product == "GLM") {
             url = url.replace("ABI", "GLM")
-            url = url.replace("$sectorLocal/GLM", "$sectorLocal/EXTENT3")
+                     .replace("$sectorLocal/GLM", "$sectorLocal/EXTENT3")
         }
         return url
     }
@@ -69,7 +67,11 @@ object UtilityGoes {
     // https://www.star.nesdis.noaa.gov/GOES/sector_band.php?sat=G16&sector=cgl&band=GEOCOLOR&length=12
     fun getAnimation(product: String, sector: String, frameCount: Int): List<String> {
         val frameCountString = frameCount.toString()
-        val satellite = if (sectorsInGoes17.contains(sector)) "G17" else "G16"
+        val satellite = if (sectorsInGoes17.contains(sector)) {
+            "G17"
+        } else {
+            "G16"
+        }
         val productLocal = product.replace("GLM", "EXTENT3")
         val url = when (sector) {
             // https://www.star.nesdis.noaa.gov/GOES/fulldisk_band.php?sat=G17&band=GEOCOLOR&length=12
@@ -77,7 +79,9 @@ object UtilityGoes {
             "CONUS", "CONUS-G17" -> GlobalVariables.goes16AnimUrl + "/GOES/conus_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
             else -> GlobalVariables.goes16AnimUrl + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$productLocal&length=$frameCountString"
         }
-        val html = url.getHtml().replace("\n", "").replace("\r", "")
+        val html = url.getHtml()
+                        .replace("\n", "")
+                        .replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")
         return imageHtml.parseColumn("'(https.*?jpg)'")
     }
@@ -96,59 +100,59 @@ object UtilityGoes {
     }
 
     val labels = listOf(
-        "00 True color daytime, multispectral IR at night",
-        "00.47 um (Band 1) Blue - Visible",
-        "00.64 um (Band 2) Red - Visible",
-        "00.86 um (Band 3) Veggie - Near IR",
-        "01.37 um (Band 4) Cirrus - Near IR",
-        "01.6 um (Band 5) Snow/Ice - Near IR",
-        "02.2 um (Band 6) Cloud Particle - Near IR",
-        "03.9 um (Band 7) Shortwave Window - IR",
-        "06.2 um (Band 8) Upper-Level Water Vapor - IR",
-        "06.9 um (Band 9) Mid-Level Water Vapor - IR",
-        "07.3 um (Band 10) Lower-level Water Vapor - IR",
-        "08.4 um (Band 11) Cloud Top - IR",
-        "09.6 um (Band 12) Ozone - IR",
-        "10.3 um (Band 13) Clean Longwave Window - IR",
-        "11.2 um (Band 14) Longwave Window - IR",
-        "12.3 um (Band 15) Dirty Longwave Window - IR",
-        "13.3 um (Band 16) CO2 Longwave - IR",
-        "AirMass - RGB composite based on the data from IR and WV",
-        "Sandwich RGB - Bands 3 and 13 combo",
-        "Day Cloud Phase",
-        "Night Microphysics",
-        "Fire Temperature",
-        "Dust RGB",
-        "GLM FED+GeoColor",
-        "DMW"
+            "00 True color daytime, multispectral IR at night",
+            "00.47 um (Band 1) Blue - Visible",
+            "00.64 um (Band 2) Red - Visible",
+            "00.86 um (Band 3) Veggie - Near IR",
+            "01.37 um (Band 4) Cirrus - Near IR",
+            "01.6 um (Band 5) Snow/Ice - Near IR",
+            "02.2 um (Band 6) Cloud Particle - Near IR",
+            "03.9 um (Band 7) Shortwave Window - IR",
+            "06.2 um (Band 8) Upper-Level Water Vapor - IR",
+            "06.9 um (Band 9) Mid-Level Water Vapor - IR",
+            "07.3 um (Band 10) Lower-level Water Vapor - IR",
+            "08.4 um (Band 11) Cloud Top - IR",
+            "09.6 um (Band 12) Ozone - IR",
+            "10.3 um (Band 13) Clean Longwave Window - IR",
+            "11.2 um (Band 14) Longwave Window - IR",
+            "12.3 um (Band 15) Dirty Longwave Window - IR",
+            "13.3 um (Band 16) CO2 Longwave - IR",
+            "AirMass - RGB composite based on the data from IR and WV",
+            "Sandwich RGB - Bands 3 and 13 combo",
+            "Day Cloud Phase",
+            "Night Microphysics",
+            "Fire Temperature",
+            "Dust RGB",
+            "GLM FED+GeoColor",
+            "DMW"
     )
 
     val codes = listOf(
-        "GEOCOLOR",
-        "01",
-        "02",
-        "03",
-        "04",
-        "05",
-        "06",
-        "07",
-        "08",
-        "09",
-        "10",
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "AirMass",
-        "Sandwich",
-        "DayCloudPhase",
-        "NightMicrophysics",
-        "FireTemperature",
-        "Dust",
-        "GLM",
-        "DMW"
+            "GEOCOLOR",
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "AirMass",
+            "Sandwich",
+            "DayCloudPhase",
+            "NightMicrophysics",
+            "FireTemperature",
+            "Dust",
+            "GLM",
+            "DMW"
     )
 
     private val sectorsInGoes17 = listOf(

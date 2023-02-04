@@ -21,7 +21,7 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.objects.ObjectPolygonWarning
+import joshuatee.wx.objects.PolygonWarning
 import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.objects.PolygonWarningType
 
@@ -33,7 +33,7 @@ class SevereWarning(private val type: PolygonWarningType) {
 
     var warningList = listOf<ObjectWarning>()
 
-    fun getName() = when (type) {
+    fun getName(): String = when (type) {
         PolygonWarningType.TornadoWarning -> "Tornado Warning"
         PolygonWarningType.ThunderstormWarning -> "Severe Thunderstorm Warning"
         PolygonWarningType.FlashFloodWarning -> "Flash Flood Warning"
@@ -41,22 +41,14 @@ class SevereWarning(private val type: PolygonWarningType) {
     }
 
     fun download() {
-        ObjectPolygonWarning.polygonDataByType[type]!!.download()
+        PolygonWarning.byType[type]!!.download()
         generateString()
     }
 
     private fun generateString() {
-        val html = ObjectPolygonWarning.polygonDataByType[type]!!.getData()
+        val html = PolygonWarning.byType[type]!!.getData()
         warningList = ObjectWarning.parseJson(html)
     }
 
-    fun getCount(): Int {
-        var i = 0
-        for (s in warningList) {
-            if (s.isCurrent) {
-                i += 1
-            }
-        }
-        return i
-    }
+    fun getCount(): Int = warningList.count { it.isCurrent }
 }

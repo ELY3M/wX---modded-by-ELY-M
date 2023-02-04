@@ -24,9 +24,9 @@ package joshuatee.wx.audio
 import java.util.Locale
 import android.content.Context
 import joshuatee.wx.settings.Location
-import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.Route
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.WpcTextProductsActivity
 
@@ -37,90 +37,86 @@ object UtilityVoiceCommand {
         var wfo = wfoOriginal
         var gotHit = true
         val tokens = RegExp.space.split(vrStringOriginal)
-        if (vrStringOriginal.contains("radar")) {
-            var validRid = true
-            if (tokens.size > 1) {
-                radarSite = tokens[1].uppercase(Locale.US)
-                if (Utility.getRadarSiteName(radarSite) == "") {
-                    validRid = false
-                }
-            }
-            if (validRid) {
-                Route.radar(context, arrayOf(radarSite, state))
-            }
-        } else if (vrStringOriginal.contains("AFD") || vrStringOriginal.contains("text")) {
-            if (tokens.size > 1) {
-                wfo = tokens[1].uppercase(Locale.US)
-            }
-            if (wfo == "WPC") {
-                Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
-            } else {
-                Route.wfoText(context, arrayOf(wfo, "AFD", "sound"))
-            }
-        } else if (vrStringOriginal.contains("cloud")) {
-            Route.vis(context)
-        } else if (vrStringOriginal.uppercase(Locale.US).contains("SPC")) {
-            if (tokens.size > 1) {
-                when {
-                    vrStringOriginal.contains("1") -> Route.spcSwo(context, "1", "sound")
-                    vrStringOriginal.contains("2") -> Route.spcSwo(context, "2", "sound")
-                    vrStringOriginal.contains("3") -> Route.spcSwo(context, "3", "sound")
-                    else -> Route.spcSwo(context, "4-8", "sound")
-                }
-            } else {
-                Route.spcSwo(context, "1", "sound")
-            }
-        } else if (vrStringOriginal.contains("day one")) {
-            Route.spcSwo(context, "1", "sound")
-        } else if (vrStringOriginal.contains("day 2")) {
-            Route.spcSwo(context, "2", "sound")
-        } else if (vrStringOriginal.contains("day 3")) {
-            Route.spcSwo(context, "3", "sound")
-        } else if (vrStringOriginal.contains("day 4")) {
-            Route.spcSwo(context, "4-8", "sound")
-        } else if (vrStringOriginal.contains("add")) {
-            Route.locationEdit(context, (Location.numLocations + 1).toString())
-        } else if (vrStringOriginal.contains("edit")) {
-            Route.locationEdit(context, Location.currentLocationStr)
-        } else if (vrStringOriginal.contains("mosaic")) {
-            Route.radarMosaic(context)
-        } else if (vrStringOriginal.contains("map")) {
-            if (tokens.size > 1) {
-                when (tokens[1]) {
-                    "pressure" -> {
-                        Utility.writePref(context, "SPCMESO_LAST_USED", "pmsl")
-                        Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MSL Pressure/Wind")
-                    }
-                    "500" -> {
-                        Utility.writePref(context, "SPCMESO_LAST_USED", "500mb")
-                        Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "500mb Analysis")
-                    }
-                    "cape" -> {
-                        Utility.writePref(context, "SPCMESO_LAST_USED", "mucp")
-                        Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MUCAPE / LPL Height")
-                    }
-                    "supercell" -> {
-                        Utility.writePref(context, "SPCMESO_LAST_USED", "scp")
-                        Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "Supercell Composite")
-                    }
-                    "wind" -> {
-                        Utility.writePref(context, "SPCMESO_LAST_USED", "eshr")
-                        Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "Effective Shear")
-                    }
-                    else -> {
-                        Utility.writePref(context, "SPCMESO_LAST_USED", "pmsl")
-                        Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MSL Pressure/Wind")
+        when {
+            vrStringOriginal.contains("radar") -> {
+                var validRid = true
+                if (tokens.size > 1) {
+                    radarSite = tokens[1].uppercase(Locale.US)
+                    if (UtilityLocation.getRadarSiteName(radarSite) == "") {
+                        validRid = false
                     }
                 }
+                if (validRid) {
+                    Route.radar(context, arrayOf(radarSite, state))
+                }
             }
-            Route(context, SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "1", "SPCMESO"))
-        } else if (vrStringOriginal.contains("forecast")) {
-            val forecast = Utility.readPref(context, "FCST", "")
-            UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")
-        } else if (vrStringOriginal.contains("playlist")) {
-            UtilityTts.synthesizeTextAndPlayPlaylist(context, 1)
-        } else {
-            gotHit = false
+            vrStringOriginal.contains("AFD") || vrStringOriginal.contains("text") -> {
+                if (tokens.size > 1) {
+                    wfo = tokens[1].uppercase(Locale.US)
+                }
+                if (wfo == "WPC") {
+                    Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
+                } else {
+                    Route.wfoText(context, arrayOf(wfo, "AFD", "sound"))
+                }
+            }
+            vrStringOriginal.contains("cloud") -> Route.vis(context)
+            vrStringOriginal.uppercase(Locale.US).contains("SPC") -> {
+                if (tokens.size > 1) {
+                    when {
+                        vrStringOriginal.contains("1") -> Route.spcSwo(context, "1", "sound")
+                        vrStringOriginal.contains("2") -> Route.spcSwo(context, "2", "sound")
+                        vrStringOriginal.contains("3") -> Route.spcSwo(context, "3", "sound")
+                        else -> Route.spcSwo(context, "4-8", "sound")
+                    }
+                } else {
+                    Route.spcSwo(context, "1", "sound")
+                }
+            }
+            vrStringOriginal.contains("day one") -> Route.spcSwo(context, "1", "sound")
+            vrStringOriginal.contains("day 2") -> Route.spcSwo(context, "2", "sound")
+            vrStringOriginal.contains("day 3") -> Route.spcSwo(context, "3", "sound")
+            vrStringOriginal.contains("day 4") -> Route.spcSwo(context, "4-8", "sound")
+            vrStringOriginal.contains("add") -> Route.locationEdit(context, (Location.numLocations + 1).toString())
+            vrStringOriginal.contains("edit") -> Route.locationEdit(context, Location.currentLocationStr)
+            vrStringOriginal.contains("mosaic") -> Route.radarMosaic(context)
+            vrStringOriginal.contains("map") -> {
+                if (tokens.size > 1) {
+                    when (tokens[1]) {
+                        "pressure" -> {
+                            Utility.writePref(context, "SPCMESO_LAST_USED", "pmsl")
+                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MSL Pressure/Wind")
+                        }
+                        "500" -> {
+                            Utility.writePref(context, "SPCMESO_LAST_USED", "500mb")
+                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "500mb Analysis")
+                        }
+                        "cape" -> {
+                            Utility.writePref(context, "SPCMESO_LAST_USED", "mucp")
+                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MUCAPE / LPL Height")
+                        }
+                        "supercell" -> {
+                            Utility.writePref(context, "SPCMESO_LAST_USED", "scp")
+                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "Supercell Composite")
+                        }
+                        "wind" -> {
+                            Utility.writePref(context, "SPCMESO_LAST_USED", "eshr")
+                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "Effective Shear")
+                        }
+                        else -> {
+                            Utility.writePref(context, "SPCMESO_LAST_USED", "pmsl")
+                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MSL Pressure/Wind")
+                        }
+                    }
+                }
+                Route.spcMeso(context)
+            }
+            vrStringOriginal.contains("forecast") -> {
+                val forecast = Utility.readPref(context, "FCST", "")
+                UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")
+            }
+            vrStringOriginal.contains("playlist") -> UtilityTts.synthesizeTextAndPlayPlaylist(context, 1)
+            else -> { gotHit = false }
         }
         return gotHit
     }

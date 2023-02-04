@@ -26,33 +26,33 @@ import joshuatee.wx.common.GlobalArrays
 
 open class NexradState(val numberOfPanes: Int) {
 
-    val wxglRenders = mutableListOf<WXGLRender>()
-    val wxglSurfaceViews = mutableListOf<WXGLSurfaceView>()
-    var wxglTextObjects = mutableListOf<WXGLTextObject>()
+    val wxglRenders = mutableListOf<NexradRender>()
+    val wxglSurfaceViews = mutableListOf<NexradRenderSurfaceView>()
+    var wxglTextObjects = mutableListOf<NexradRenderTextObject>()
     val relativeLayouts = mutableListOf<RelativeLayout>()
     var curRadar = 0
     var isHomeScreen = false
 
     var product: String
-        get() = wxglRenders[curRadar].product
+        get() = wxglRenders[curRadar].state.product
         set(prod) {
-            wxglRenders[curRadar].product = prod
+            wxglRenders[curRadar].state.product = prod
         }
 
     var radarSite: String
-        get() = wxglRenders[curRadar].rid
+        get() = wxglRenders[curRadar].state.rid
         set(rid) {
-            wxglRenders[curRadar].rid = rid
+            wxglRenders[curRadar].state.rid = rid
         }
 
-    val surface: WXGLSurfaceView
+    val surface: NexradRenderSurfaceView
         get() = wxglSurfaceViews[curRadar]
 
-    val render: WXGLRender
+    val render: NexradRender
         get() = wxglRenders[curRadar]
 
     val isTdwr: Boolean
         get() = isRidTdwr(radarSite)
 
-    protected fun isRidTdwr(rid: String) = GlobalArrays.tdwrRadars.any { rid == it.split(" ")[0] }
+    protected fun isRidTdwr(rid: String): Boolean = GlobalArrays.tdwrRadars.any { rid == it.split(":")[0] }
 }

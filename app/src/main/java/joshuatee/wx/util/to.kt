@@ -23,19 +23,17 @@ package joshuatee.wx.util
 
 object To {
 
-    fun int(s: String) = s.toIntOrNull() ?: 0
+    fun int(s: String): Int = s.toIntOrNull() ?: 0
 
-    fun float(s: String) = s.toFloatOrNull() ?: 0.0f
+    fun float(s: String): Float = s.toFloatOrNull() ?: 0.0f
 
-    fun double(s: String) = s.toDoubleOrNull() ?: 0.0
+    fun double(s: String): Double = s.toDoubleOrNull() ?: 0.0
 
-    fun string(i: Int) = i.toString()
+    fun string(i: Int): String = i.toString()
 
-    fun stringPadLeft(s: String, padAmount: Int) = String.format("%-" + padAmount.toString() + "s", s)
+    fun stringPadLeft(s: String, padAmount: Int): String = String.format("%-" + padAmount.toString() + "s", s)
 
-    fun stringPadLeftZeros(s: Int, padAmount: Int) = String.format("%0" + padAmount.toString() + "d", s)
+    fun stringPadLeftZeros(s: Int, padAmount: Int): String = String.format("%0" + padAmount.toString() + "d", s)
 
-//    fun stringFromFloatFixed(d: Double, precision: Int): String {
-//        return String.format(  "%." + precision.toString() + "f", d)
-//    }
+    fun stringFromFloatFixed(d: Double, precision: Int): String = String.format("%." + precision.toString() + "f", d)
 }

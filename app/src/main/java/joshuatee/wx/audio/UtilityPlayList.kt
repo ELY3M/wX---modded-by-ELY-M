@@ -28,9 +28,9 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.ui.ObjectPopupMessage
+import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.DownloadText
 
 object UtilityPlayList {
 
@@ -41,9 +41,9 @@ object UtilityPlayList {
         if (!UIPreferences.playlistStr.contains(productUpperCase)) {
             Utility.writePref(context, "PLAYLIST", UIPreferences.playlistStr + ":" + productUpperCase)
             UIPreferences.playlistStr = UIPreferences.playlistStr + ":" + productUpperCase
-            ObjectPopupMessage(view, productUpperCase + " saved to playlist: " + text.length)
+            PopupMessage(view, productUpperCase + " saved to playlist: " + text.length)
         } else {
-            ObjectPopupMessage(view, productUpperCase + " already in playlist: " + text.length)
+            PopupMessage(view, productUpperCase + " already in playlist: " + text.length)
         }
         val formattedDate = ObjectDateTime.getDateAsString(FORMAT_TIME_STR)
         Utility.writePref(context, "PLAYLIST_$productUpperCase", text)
@@ -60,11 +60,11 @@ object UtilityPlayList {
     }
 
     internal fun downloadAll(context: Context): String {
-        var string = ""
+        var s = ""
         val items = RegExp.colon.split(UIPreferences.playlistStr)
         val formattedDate = ObjectDateTime.getDateAsString(FORMAT_TIME_STR)
         (1 until items.size).forEach {
-            var text = UtilityDownload.getTextProduct(context, items[it])
+            var text = DownloadText.byProduct(context, items[it])
             if (items[it].contains("SWO")) {
                 text = text.substring(text.indexOf('>') + 1)
                 text = text.replace("^<br>".toRegex(), "")
@@ -73,10 +73,10 @@ object UtilityPlayList {
                 Utility.writePref(context, "PLAYLIST_" + items[it], text)
                 Utility.writePref(context, "PLAYLIST_" + items[it] + "_TIME", formattedDate)
             }
-            string += items[it] + " " + text.length.toString() + " "
+            s += items[it] + " " + text.length.toString() + " "
         }
-        val date = ObjectDateTime.getDateAsString("MM-dd-yy HH:mm:SS Z")
-        Utility.writePref(context, "PLAYLIST_STATUS", date + GlobalVariables.newline + string)
-        return string
+        val date = ObjectDateTime.getDateAsString("MM-dd-yy HH:mm:ss")
+        Utility.writePref(context, "PLAYLIST_STATUS", date + GlobalVariables.newline + s)
+        return s
     }
 }

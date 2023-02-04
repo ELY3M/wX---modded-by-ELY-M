@@ -25,6 +25,10 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import joshuatee.wx.util.Utility
 
+//
+// class to represent a value in memory but also simultaneously stored to disk
+//
+
 class DataStorage(private val preference: String) {
 
     private var storedVal = ""

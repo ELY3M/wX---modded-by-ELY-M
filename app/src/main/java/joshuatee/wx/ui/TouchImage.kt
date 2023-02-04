@@ -35,10 +35,10 @@ class TouchImage {
 
     private var img: TouchImageView2
     private val context: Context
-    private var imageLoaded = false
+    var imageLoaded = false
     private var firstRun = false
     private var prefTokenIdx = ""
-    private var drw: ObjectNavDrawer? = null
+    private var drw: NavDrawer? = null
     var bitmap = UtilityImg.getBlankBitmap()
 
     constructor(context: Context) {
@@ -59,19 +59,19 @@ class TouchImage {
         connectClick { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
-    constructor(activity: Activity, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String) {
+    constructor(activity: Activity, resourceId: Int, drw: NavDrawer, prefTokenIdx: String) {
         img = activity.findViewById(resourceId)
         this.context = activity
         this.drw = drw
         this.prefTokenIdx = prefTokenIdx
     }
 
-    constructor(activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
+    constructor(activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int, drw: NavDrawer, prefTokenIdx: String
     ) : this(activity, resourceId, drw, prefTokenIdx) {
         connectClick { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
-    constructor(activity: Activity, toolbar: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
+    constructor(activity: Activity, toolbar: Toolbar, resourceId: Int, drw: NavDrawer, prefTokenIdx: String
     ) : this(activity, resourceId, drw, prefTokenIdx) {
         connectClick { UtilityToolbar.showHide(toolbar) }
     }
@@ -127,19 +127,39 @@ class TouchImage {
         img.setZoom(x, y, z)
     }
 
-    fun connect(drw: ObjectNavDrawer, fn: () -> Unit) {
+    fun connect(navDrawer: NavDrawer, fn: () -> Unit) {
         img.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) showNextImg(drw, fn)
+                if (img.currentZoom < 1.01f) {
+                    showNextImg(navDrawer, fn)
+                }
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) showPrevImg(drw, fn)
+                if (img.currentZoom < 1.01f) {
+                    showPrevImg(navDrawer, fn)
+                }
             }
         })
     }
 
-    fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
+    fun connect2(left: () -> Unit, right: () -> Unit) {
+        img.setOnTouchListener(object : OnSwipeTouchListener(context) {
+            override fun onSwipeLeft() {
+                if (img.currentZoom < 1.01f) {
+                    left()
+                }
+            }
+
+            override fun onSwipeRight() {
+                if (img.currentZoom < 1.01f) {
+                    right()
+                }
+            }
+        })
+    }
+
+    fun showNextImg(drw: NavDrawer, fn: () -> Unit) {
         drw.index += 1
         if (drw.index == drw.getUrlCount()) {
             drw.index = 0
@@ -147,7 +167,7 @@ class TouchImage {
         fn()
     }
 
-    fun showPrevImg(drw: ObjectNavDrawer, fn: () -> Unit) {
+    fun showPrevImg(drw: NavDrawer, fn: () -> Unit) {
         drw.index -= 1
         if (drw.index == -1) {
             drw.index = drw.getUrlCount() - 1
@@ -170,6 +190,14 @@ class TouchImage {
         }
     }
 
+    fun imgRestorePosnZoom(prefStr: String) {
+        setZoom(
+                Utility.readPrefFloat(context, prefStr + "_ZOOM", 1.0f),
+                Utility.readPrefFloat(context, prefStr + "_X", 0.5f),
+                Utility.readPrefFloat(context, prefStr + "_Y", 0.5f)
+        )
+    }
+
     fun imgSavePosnZoom(prefStr: String) {
         if (imageLoaded) {
             val poi = img.scrollPosition
@@ -177,9 +205,15 @@ class TouchImage {
             if (poi != null) {
                 var x = poi.x
                 var y = poi.y
-                if (x.isNaN()) x = 1.0f
-                if (y.isNaN()) y = 1.0f
-                if (z.isNaN()) z = 1.0f
+                if (x.isNaN()) {
+                    x = 1.0f
+                }
+                if (y.isNaN()) {
+                    y = 1.0f
+                }
+                if (z.isNaN()) {
+                    z = 1.0f
+                }
                 Utility.writePrefFloat(context, prefStr + "_X", x)
                 Utility.writePrefFloat(context, prefStr + "_Y", y)
                 Utility.writePrefFloat(context, prefStr + "_ZOOM", z)

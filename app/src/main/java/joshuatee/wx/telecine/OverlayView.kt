@@ -24,7 +24,6 @@ import joshuatee.wx.R
 import joshuatee.wx.util.UtilityImg
 import java.util.Locale
 import android.graphics.PixelFormat.TRANSLUCENT
-import android.os.Build.VERSION_CODES.LOLLIPOP_MR1
 import android.text.TextUtils.getLayoutDirectionFromLocale
 import android.view.ViewAnimationUtils.createCircularReveal
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -196,9 +195,7 @@ internal class OverlayView private constructor(
         fun createLayoutParams(context: Context): WindowManager.LayoutParams {
             val res = context.resources
             val width = res.getDimensionPixelSize(R.dimen.overlay_width)
-            var height = res.getDimensionPixelSize(R.dimen.overlay_height)
-            // TODO Remove explicit "M" comparison when M is released.
-            if (Build.VERSION.SDK_INT > LOLLIPOP_MR1 || "M" == Build.VERSION.RELEASE) height = res.getDimensionPixelSize(R.dimen.overlay_height_m)
+            val height = res.getDimensionPixelSize(R.dimen.overlay_height_m)
             val layoutFlag: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             } else {

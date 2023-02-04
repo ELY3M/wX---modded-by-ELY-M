@@ -32,16 +32,6 @@ import joshuatee.wx.objects.LatLon
 class ExternalPolygon private constructor(private val sides: List<ExternalLine>, private val boundingBox: BoundingBox) {
 
     /**
-     * Get the builder of the polygon
-     *
-     * @return The builder
-     */
-    /*public static Builder Builder()
-	{
-		return new Builder();
-	}*/
-
-    /**
      * Builder of the polygon
      *
      * @author Roman Kushnarenko (sromku@gmail.com)

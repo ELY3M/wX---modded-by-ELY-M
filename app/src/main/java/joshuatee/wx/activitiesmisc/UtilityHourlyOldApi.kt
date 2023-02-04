@@ -21,22 +21,21 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.Extensions.getHtml
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.To
-import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityString
 
 object UtilityHourlyOldApi {
 
     fun getHourlyString(locNumber: Int): String {
         val latLon = Location.getLatLon(locNumber)
-        val html = UtilityIO.getHtml("https://forecast.weather.gov/MapClick.php?lat=" +
+        val html = ("https://forecast.weather.gov/MapClick.php?lat=" +
                 latLon.latString + "&lon=" +
-                latLon.lonString + "&FcstType=digitalDWML")
-        val header = To.stringPadLeft("Time", 16) + " " +
+                latLon.lonString + "&FcstType=digitalDWML").getHtml()
+        val header = To.stringPadLeft("Time", 12) + " " +
                 To.stringPadLeft("Temp", 8) +
                 To.stringPadLeft("Dew", 8) +
                 To.stringPadLeft("Precip%", 8) +
@@ -45,35 +44,18 @@ object UtilityHourlyOldApi {
     }
 
     private fun parseHourly(html: String): String {
-        val regexpList = arrayOf(
-            "<temperature type=.hourly.*?>(.*?)</temperature>",
-            "<temperature type=.dew point.*?>(.*?)</temperature>",
-            "<time-layout.*?>(.*?)</time-layout>",
-            "<probability-of-precipitation.*?>(.*?)</probability-of-precipitation>",
-            "<cloud-amount type=.total.*?>(.*?)</cloud-amount>"
-        )
         val rawData = UtilityString.parseXmlExt(regexpList, html)
         val temp2List = UtilityString.parseXmlValue(rawData[0])
         val temp3List = UtilityString.parseXmlValue(rawData[1])
-        val time2List = UtilityString.parseXml(rawData[2], "start-valid-time")
+        val time2List = UtilityString.parseXml(rawData[2], "start-valid-time").toTypedArray()
         val temp4List = UtilityString.parseXmlValue(rawData[3])
         val temp5List = UtilityString.parseXmlValue(rawData[4])
         var sb = ""
-        val year = ObjectDateTime.getYear()
         val temp2Len = temp2List.size
         val temp3Len = temp3List.size
         val temp4Len = temp4List.size
         val temp5Len = temp5List.size
         for (j in 1 until temp2Len) {
-            time2List[j] = UtilityString.replaceAllRegexp(time2List[j], "-0[0-9]:00", "")
-            time2List[j] = UtilityString.replaceAllRegexp(time2List[j], "^.*?-", "")
-            time2List[j] = time2List[j].replace("T", " ")
-            time2List[j] = time2List[j].replace("00:00", "00")
-            val timeSplit = time2List[j].split(" ")
-            val timeSplit2 = timeSplit[0].split("-")
-            val month = To.int(timeSplit2[0])
-            val day = To.int(timeSplit2[1])
-            val dayOfTheWeek = ObjectDateTime.dayOfWeek(year, month, day)
             var temp3Val = "."
             var temp4Val = "."
             var temp5Val = "."
@@ -86,9 +68,8 @@ object UtilityHourlyOldApi {
             if (temp2Len <= temp5Len) {
                 temp5Val = temp5List[j]
             }
-            time2List[j] = time2List[j].replace(":00", "")
-            time2List[j] = time2List[j].strip()
-            sb += To.stringPadLeft(dayOfTheWeek + " " + time2List[j], 14)
+            val time = ObjectDateTime.translateTimeForHourly(time2List[j])
+            sb += To.stringPadLeft(time, 10)
             sb += "   "
             sb += To.stringPadLeft(temp2List[j], 8)
             sb += To.stringPadLeft(temp3Val, 8)
@@ -98,4 +79,12 @@ object UtilityHourlyOldApi {
         }
         return sb
     }
+
+    private val regexpList = listOf(
+        "<temperature type=.hourly.*?>(.*?)</temperature>",
+        "<temperature type=.dew point.*?>(.*?)</temperature>",
+        "<time-layout.*?>(.*?)</time-layout>",
+        "<probability-of-precipitation.*?>(.*?)</probability-of-precipitation>",
+        "<cloud-amount type=.total.*?>(.*?)</cloud-amount>"
+    )
 }

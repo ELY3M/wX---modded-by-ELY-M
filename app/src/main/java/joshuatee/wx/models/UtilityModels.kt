@@ -23,7 +23,9 @@ package joshuatee.wx.models
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.PointF
+import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import java.sql.Date
@@ -35,8 +37,10 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.ui.TouchImage
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
 
 object UtilityModels {
@@ -65,7 +69,7 @@ object UtilityModels {
                 om.animRan = false
                 if (!om.firstRun) {
                     (0 until om.numPanes).forEach {
-                        UtilityImg.imgRestorePosnZoom(context, om.displayData.image[it], om.modelProvider + om.numPanes.toString() + it.toString())
+                        om.displayData.image[it].imgRestorePosnZoom(om.modelProvider + om.numPanes.toString() + it.toString())
                     }
                     if (UIPreferences.fabInModels && om.numPanes < 2) {
                         om.fab1?.visibility = View.VISIBLE
@@ -122,7 +126,8 @@ object UtilityModels {
         UtilityShare.bitmap(activity, om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(), om.displayData.bitmaps[0])
     }
 
-    fun convertTimeRunToTimeString(runStr: String, timeStringOriginal: String, showDate: Boolean): String {
+    fun convertTimeRunToTimeString(runStrOriginal: String, timeStringOriginal: String, showDate: Boolean): String {
+        val runStr = runStrOriginal.takeLast(2)
         var timeStr = timeStringOriginal
         // in response to timeStr coming in as the following on rare occasions we need to truncate
         // 000 Wed 8pm
@@ -131,8 +136,8 @@ object UtilityModels {
         // 06 003
         // 006 009
         timeStr = timeStr.take(3)
-        val runInt = runStr.toIntOrNull() ?: 0
-        val timeInt = timeStr.toIntOrNull() ?: 0
+        val runInt = To.int(runStr)
+        val timeInt = To.int(timeStr)
         // realTimeGmt - the time in GMT as related to the current model run looking forward in hours
         val realTimeGmt = runInt + timeInt
         val tz = TimeZone.getDefault()
@@ -165,6 +170,7 @@ object UtilityModels {
         if (runInt >= 0 && runInt < -offsetFromUtc / 60 / 60 && hourOfDayLocal - offsetFromUtc / 60 / 60 >= 24) {
             day += 1
         }
+        // TODO FIXME
         var futureDay = ""
         when ((dayOfWeek + day) % 7) {
             Calendar.SUNDAY -> futureDay = "Sun"
@@ -183,6 +189,35 @@ object UtilityModels {
         }
     }
 
+//    fun convertTimeRunToTimeString(runStr: String, timeStrFunc: String, showDate: Boolean): String {
+//        val timeStr = timeStrFunc.split(" ")[0]
+//        val runInt = To.int(runStr)
+//        val timeInt = To.int(timeStr)
+//        val realTimeGmt = runInt + timeInt
+//        val offsetFromUtc = ObjectDateTime.offsetFromUtcInSeconds()
+//        val realTime = realTimeGmt + offsetFromUtc / 60 / 60
+//        var hourOfDay = realTime % 24
+//        var amPm: String
+//        if (hourOfDay > 11) {
+//            amPm = "pm"
+//            if (hourOfDay > 12) {
+//                hourOfDay -= 12
+//            }
+//        } else {
+//            amPm = "am"
+//        }
+//        var day = realTime / 24
+//        if (hourOfDay < 0) {
+//            hourOfDay += 12
+//            amPm = "pm"
+//            day -= 1
+//        }
+//        val objectDateTime = ObjectDateTime(runInt, 0)
+//        objectDateTime.addHours(timeInt.toLong() + offsetFromUtc / 60 / 60)
+//        println(objectDateTime.format("E") + " " + objectDateTime.toString() + " " + runStr + " " + timeStrFunc + " " +  realTime + " " + hourOfDay + " " + day + " "  +  ":::" + objectDateTime.format("E") + "  " + hourOfDay.toString() + amPm)
+//        return "${objectDateTime.format("E")}  $hourOfDay$amPm"
+//    }
+
     fun updateTime(runOriginal: String, modelCurrentTimeF: String, listTime: MutableList<String>, prefix: String, showDate: Boolean) {
         var run = runOriginal.replace("Z", "").replace("z", "")
         val modelCurrentTime = modelCurrentTimeF.replace("Z", "").replace("z", "")
@@ -194,27 +229,26 @@ object UtilityModels {
         // in response to time_str coming in as the following on rare occasions we need to truncate
         // 000 Wed 8pm
         if (modelCurrentTime != "") {
-            if ((run.toIntOrNull() ?: 0) > (modelCurrentTime.toIntOrNull() ?: 0)) {
-                run = ((run.toIntOrNull() ?: 0) - 24).toString()
+            if (To.int(run) > To.int(modelCurrentTime)) {
+                run = (To.int(run) - 24).toString()
             }
-            (0 until listTime.size).forEach {
+            listTime.indices.forEach {
                 val tmpStr = RegExp.space.split(listTime[it])[0].replace(prefix, "")
                 listTime[it] = prefix + tmpStr + " " + convertTimeRunToTimeString(run, tmpStr, showDate)
             }
-            //dataAdapterTime.notifyDataSetChanged()
         }
     }
 
-    fun setSubtitleRestoreZoom(img: MutableList<TouchImage>, toolbar: Toolbar, s: String) {
-        val x = FloatArray(img.size)
-        val y = FloatArray(img.size)
-        val z = FloatArray(img.size)
+    fun setSubtitleRestoreZoom(touchImages: List<TouchImage>, toolbar: Toolbar, s: String) {
+        val x = FloatArray(touchImages.size)
+        val y = FloatArray(touchImages.size)
+        val z = FloatArray(touchImages.size)
         val point = mutableListOf<PointF>()
-        if (img.size > 0) {
-            (0 until img.size).forEach {
-                z[it] = img[it].currentZoom
-                if (img[it].scrollPosition != null) {
-                    point.add(img[it].scrollPosition!!)
+        if (touchImages.isNotEmpty()) {
+            touchImages.indices.forEach {
+                z[it] = touchImages[it].currentZoom
+                if (touchImages[it].scrollPosition != null) {
+                    point.add(touchImages[it].scrollPosition!!)
                 } else {
                     point.add(PointF(0.5f, 0.5f))
                 }
@@ -222,9 +256,19 @@ object UtilityModels {
                 y[it] = point[it].y
             }
             toolbar.subtitle = s
-            (0 until img.size).filter { !x[it].isNaN() && !y[it].isNaN() }.forEach {
-                img[it].setZoom(z[it], x[it], y[it])
+            touchImages.indices.filter { !x[it].isNaN() && !y[it].isNaN() }.forEach {
+                touchImages[it].setZoom(z[it], x[it], y[it])
             }
         }
+    }
+
+    fun getAnimation(context: Context, om: ObjectModel, getImage: (Context, ObjectModel, String) -> Bitmap): AnimationDrawable = if (om.spinnerTimeValue == -1) {
+        AnimationDrawable()
+    } else {
+        val bitmaps = (om.timeIndex until om.times.size).map {
+            getImage(context, om, om.times[it].split(" ").getOrNull(0)
+                    ?: "")
+        }
+        UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

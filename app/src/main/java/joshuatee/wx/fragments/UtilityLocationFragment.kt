@@ -26,12 +26,12 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.Route
-import joshuatee.wx.radar.WXGLRender
+import joshuatee.wx.radar.NexradRender
 import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.To
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMath
-import java.util.*
+import java.util.Locale
 import java.util.regex.Pattern
 
 object UtilityLocationFragment {
@@ -56,6 +56,7 @@ object UtilityLocationFragment {
     private val sevenDayWind7: Pattern = Pattern.compile("around ([0-9]*) mph")
     private val sevenDayWind8: Pattern = Pattern.compile("Winds could gust as high as ([0-9]*) mph\\.")
     private val sevenDayWind9: Pattern = Pattern.compile(" ([0-9]*) to ([0-9]*) mph.")
+    private val sevenDayWinddir0: Pattern = Pattern.compile("Light (.*?) wind increasing")
     private val sevenDayWinddir1: Pattern = Pattern.compile("\\. (\\w+\\s?\\w*) wind ")
     private val sevenDayWinddir2: Pattern = Pattern.compile("wind becoming (.*?) [0-9]")
     private val sevenDayWinddir3: Pattern = Pattern.compile("wind becoming (\\w+\\s?\\w*) around")
@@ -93,22 +94,22 @@ object UtilityLocationFragment {
     private val ca7DayWindspd3: Pattern = Pattern.compile("gusting to ([0-9]{2,3})")
 
     private val windDirectionMap = mapOf(
-            "north" to "N",
-            "north northeast" to "NNE",
-            "northeast" to "NE",
-            "east northeast" to "ENE",
-            "east" to "E",
-            "east southeast" to "ESE",
-            "south southeast" to "SSE",
-            "southeast" to "SE",
-            "south" to "S",
-            "south southwest" to "SSW",
-            "southwest" to "SW",
-            "west southwest" to "WSW",
-            "west" to "W",
-            "west northwest" to "WNW",
-            "northwest" to "NW",
-            "north northwest" to "NNW"
+        "north" to "N",
+        "north northeast" to "NNE",
+        "northeast" to "NE",
+        "east northeast" to "ENE",
+        "east" to "E",
+        "east southeast" to "ESE",
+        "south southeast" to "SSE",
+        "southeast" to "SE",
+        "south" to "S",
+        "south southwest" to "SSW",
+        "southwest" to "SW",
+        "west southwest" to "WSW",
+        "west" to "W",
+        "west northwest" to "WNW",
+        "northwest" to "NW",
+        "north northwest" to "NNW"
     )
 
     fun extract7DayMetrics(chunk: String): String {
@@ -157,9 +158,10 @@ object UtilityLocationFragment {
         }
     }
 
-    fun setNwsIconSize() = (MyApplication.dm.widthPixels * (UIPreferences.nwsIconSize / 100.0f)).toInt()
+    fun setNwsIconSize(): Int = (MyApplication.dm.widthPixels * (UIPreferences.nwsIconSize / 100.0f)).toInt()
 
     fun extractWindDirection(chunk: String): String {
+        val windDir0 = chunk.parseLastMatch(sevenDayWinddir0)
         val windDir1 = chunk.parseLastMatch(sevenDayWinddir1)
         val windDir2 = chunk.parseLastMatch(sevenDayWinddir2)
         val windDir3 = chunk.parseLastMatch(sevenDayWinddir3)
@@ -169,6 +171,7 @@ object UtilityLocationFragment {
         val windDir7 = chunk.parseLastMatch(sevenDayWinddir7)
         var retStr = ""
         when {
+            windDir0 != "" -> retStr = windDir0
             windDir4 != "" -> retStr = windDir4
             windDir3 != "" -> retStr = windDir3
             windDir2 != "" -> retStr = windDir2
@@ -189,21 +192,22 @@ object UtilityLocationFragment {
         }
     }
 
+    val tempList = listOf(
+        nws7DayTemp1,
+        nws7DayTemp2,
+        nws7DayTemp3,
+        nws7DayTemp4,
+        nws7DayTemp5,
+        nws7DayTemp6,
+        nws7DayTemp7,
+        nws7DayTemp8,
+        nws7DayTemp9,
+        nws7DayTemp10,
+        nws7DayTemp11
+    )
+
     fun extractTemperature(blob: String): String {
-        val list = listOf(
-                nws7DayTemp1,
-                nws7DayTemp2,
-                nws7DayTemp3,
-                nws7DayTemp4,
-                nws7DayTemp5,
-                nws7DayTemp6,
-                nws7DayTemp7,
-                nws7DayTemp8,
-                nws7DayTemp9,
-                nws7DayTemp10,
-                nws7DayTemp11
-        )
-        list.forEach {
+        tempList.forEach {
             val temp = blob.parse(it)
             if (temp != "") {
                 return if (UIPreferences.unitsF) {
@@ -292,23 +296,23 @@ object UtilityLocationFragment {
         }
     }
 
-    fun handleIconTap(stringName: String, wxglRender: WXGLRender?, activityReference: Context, fnRefresh: () -> Unit, fnResetRadarView: () -> Unit, fnGetRadars: () -> Unit) {
+    fun handleIconTap(s: String, wxglRender: NexradRender?, activityReference: Context, fnRefresh: () -> Unit, fnResetRadarView: () -> Unit, fnGetRadars: () -> Unit) {
         when {
-            stringName.contains("Edit Location..") -> Route.locationEdit(activityReference, Location.currentLocationStr)
-            stringName.contains("Force Data Refresh") -> fnRefresh()
-            stringName.contains("Radar type: Reflectivity") -> {
-                wxglRender?.product = "N0Q"
+            s.contains("Edit Location..") -> Route.locationEdit(activityReference, Location.currentLocationStr)
+            s.contains("Force Data Refresh") -> fnRefresh()
+            s.contains("Radar type: Reflectivity") -> {
+                wxglRender?.state?.product = "N0Q"
                 fnGetRadars()
             }
-            stringName.contains("Radar type: Velocity") -> {
-                wxglRender?.product = "N0U"
+            s.contains("Radar type: Velocity") -> {
+                wxglRender?.state?.product = "N0U"
                 fnGetRadars()
             }
-            stringName.contains("Reset zoom and center") -> fnResetRadarView()
+            s.contains("Reset zoom and center") -> fnResetRadarView()
             else -> {
-                val radarSite = stringName.split(":")[0]
-                val state = Utility.getRadarSiteName(radarSite).split(",")[0]
-                Route.radar(activityReference, arrayOf(radarSite, state, wxglRender!!.product, ""))
+                val radarSite = s.split(":")[0]
+                val state = UtilityLocation.getRadarSiteName(radarSite).split(",")[0]
+                Route.radar(activityReference, arrayOf(radarSite, state, wxglRender!!.state.product, ""))
             }
         }
     }

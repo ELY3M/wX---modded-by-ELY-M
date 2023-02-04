@@ -79,9 +79,7 @@ class ObjectAnimate(val context: Context, val image: TouchImage) {
         animationDrawable = getAnimationDrawableFromUrlList(context, urls)
     }
 
-    fun isRunning(): Boolean {
-        return animationDrawable.isRunning
-    }
+    fun isRunning(): Boolean = animationDrawable.isRunning
 
     fun animateClicked(getContent: () -> Unit, getFn: () -> List<String>) {
         if (isRunning() || isPaused) {

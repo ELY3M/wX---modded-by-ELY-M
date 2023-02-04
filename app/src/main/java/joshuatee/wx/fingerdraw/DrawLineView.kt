@@ -32,8 +32,8 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.To
-import joshuatee.wx.util.Utility
 import kotlin.math.*
 
 // this class implements the radial distance tool available in single pane radar
@@ -47,7 +47,6 @@ class DrawLineView : View {
     private val drawListener = DrawListener()
     private val paint = Paint()
     private val paintText = Paint()
-    private val textSize = UIPreferences.textSizeLarge
     private var xMiddle = 0.0f
     private var yMiddle = 0.0f
     private var centerX = 0.0f
@@ -77,8 +76,8 @@ class DrawLineView : View {
         this.mPositionY = mPositionY
         this.ortInt = ortInt
         this.oneDegreeScaleFactor = oneDegreeScaleFactor
-        val xStr = Utility.getRadarSiteX(radarSite)
-        val yStr = Utility.getRadarSiteY(radarSite)
+        val xStr = UtilityLocation.getRadarSiteX(radarSite)
+        val yStr = UtilityLocation.getRadarSiteY(radarSite)
         centerX = To.float(xStr)
         centerY = To.float(yStr)
         xMiddle = width / 2.0f
@@ -90,29 +89,36 @@ class DrawLineView : View {
         isFocusable = true
         isFocusableInTouchMode = true
         this.setOnTouchListener(drawListener)
-        paint.color = RadarPreferences.drawToolColor
-        paint.isAntiAlias = true
-        paint.strokeWidth = RadarPreferences.drawToolSize.toFloat()
-        paint.textSize = textSize
-        paintText.color = Color.WHITE
-        if (!RadarPreferences.blackBg) {
-            paintText.color = Color.BLACK
+        with (paint) {
+            color = RadarPreferences.drawToolColor
+            isAntiAlias = true
+            strokeWidth = RadarPreferences.drawToolSize.toFloat()
+            this.textSize = UIPreferences.textSizeLarge
         }
-        paintText.isAntiAlias = true
-        paintText.strokeWidth = 4.5f
-        paintText.textSize = textSize
+        with (paintText) {
+            color = if (!RadarPreferences.blackBg) {
+                Color.BLACK
+            } else {
+                Color.WHITE
+            }
+            isAntiAlias = true
+            strokeWidth = 4.5f
+            this.textSize = UIPreferences.textSizeLarge
+        }
     }
 
     public override fun onDraw(canvas: Canvas) {
         val distance = distanceBetweenTwoPoints(startX, startY, endX, endY)
         paint.alpha = 255
-        canvas.drawLine(startX, startY, endX, endY, paint)
-        canvas.drawText("mi: " + round(calcMiles()).toString(), startX, startY - 25, paintText)
-        val circleEndRadius = 10.0f
-        canvas.drawCircle(startX, startY, circleEndRadius, paint)
-        canvas.drawCircle(endX, endY, circleEndRadius, paint)
-        paint.alpha = 50
-        canvas.drawCircle(startX, startY, distance, paint)
+        with (canvas) {
+            drawLine(startX, startY, endX, endY, paint)
+            drawText("mi: " + round(calcMiles()).toString(), startX, startY - 25, paintText)
+            val circleEndRadius = 10.0f
+            drawCircle(startX, startY, circleEndRadius, paint)
+            drawCircle(endX, endY, circleEndRadius, paint)
+            paint.alpha = 50
+            drawCircle(startX, startY, distance, paint)
+        }
     }
 
     private fun calcMiles(): Float {
@@ -134,8 +140,8 @@ class DrawLineView : View {
         return LatLon.distance(LatLon(newY, newX * -1.0f), LatLon(newY2, newX2 * -1.0f), DistanceUnit.MILE).toFloat()
     }
 
-    private fun distanceBetweenTwoPoints(x1: Float, y1: Float, x2: Float, y2: Float) =
-        sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)).toDouble()).toFloat()
+    private fun distanceBetweenTwoPoints(x1: Float, y1: Float, x2: Float, y2: Float): Float =
+        sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 
     private inner class DrawListener : OnTouchListener {
         override fun onTouch(view: View, event: MotionEvent): Boolean {

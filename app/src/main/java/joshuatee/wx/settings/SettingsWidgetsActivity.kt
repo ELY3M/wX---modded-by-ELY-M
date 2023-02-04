@@ -27,55 +27,74 @@ import android.widget.CompoundButton
 import androidx.appcompat.widget.SwitchCompat
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityWXJobService
-import joshuatee.wx.objects.WidgetFile
-import joshuatee.wx.ui.*
-import joshuatee.wx.ui.ObjectNumberPicker
+import joshuatee.wx.widgets.WidgetFile
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ObjectSpinner
+import joshuatee.wx.ui.Switch
+import joshuatee.wx.ui.VBox
+import joshuatee.wx.ui.NumberPicker
 import joshuatee.wx.util.Utility
 
 class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
-    private val sectors = listOf("regional", "usa")
-    private val nexradCenterList = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")
     private lateinit var box: VBox
-    private lateinit var abSwitch: SwitchCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
-        setTitle("Widgets", "Please tap on text for additional help.")
+        setTitle("Widgets", GlobalVariables.preferencesHelpTitle)
         box = VBox.fromResource(this)
-        abSwitch = findViewById(R.id.abSwitch)
+        addTopSwitch()
+        addSwitch()
+        addSpinner()
+        addNumberPicker()
+    }
+
+    private fun addTopSwitch() {
+        val abSwitch: SwitchCompat = findViewById(R.id.abSwitch)
+        abSwitch.setOnCheckedChangeListener(this)
+        abSwitch.isChecked = Utility.readPref(this, "WIDGETS_ENABLED", "false").startsWith("t")
+    }
+
+    private fun addSwitch() {
+        val configs = listOf(
+                Switch(this, "Do not show 7day in CC widget", "WIDGET_CC_DONOTSHOW_7_DAY", R.string.cc_widget_show_sevenday),
+                Switch(this, "Download AFD", WidgetFile.AFD.prefString, R.string.loc1_txt_label),
+                Switch(this, "Download HWO", WidgetFile.HWO.prefString, R.string.loc1_txt_hwo_label),
+                Switch(this, "Download mosaics", WidgetFile.VIS.prefString, R.string.loc1_mosaics_label),
+                Switch(this, "Download nexrad radar", WidgetFile.NEXRAD_RADAR.prefString, R.string.loc1_radar_label),
+                Switch(this, "Download radar mosaic", WidgetFile.MOSAIC_RADAR.prefString, R.string.loc1_mosaics_rad_label),
+        )
+        configs.forEach {
+            box.addWidget(it)
+        }
+    }
+
+    private fun addSpinner() {
+        val sectors = listOf("regional", "usa")
         val locations = (1..Location.numLocations).map {
             "$it: " + Utility.readPref(this, "LOC" + it + "_LABEL", "").take(20)
         }
-        val configs = listOf(
-            ObjectSwitch(this, "Do not show 7day in CC widget", "WIDGET_CC_DONOTSHOW_7_DAY", R.string.cc_widget_show_sevenday),
-            ObjectSwitch(this, "Download AFD", WidgetFile.AFD.prefString, R.string.loc1_txt_label),
-            ObjectSwitch(this, "Download HWO", WidgetFile.HWO.prefString, R.string.loc1_txt_hwo_label),
-            ObjectSwitch(this, "Download mosaics", WidgetFile.VIS.prefString, R.string.loc1_mosaics_label),
-            ObjectSwitch(this, "Download nexrad radar", WidgetFile.NEXRAD_RADAR.prefString, R.string.loc1_radar_label),
-            ObjectSwitch(this, "Download radar mosaic", WidgetFile.MOSAIC_RADAR.prefString, R.string.loc1_mosaics_rad_label),
-        )
-        configs.forEach {
-            box.addWidget(it.get())
-        }
+        val nexradCenterList = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")
         val spinners = listOf(
-            ObjectSpinner(this, "Radar mosaic level", "WIDGET_RADAR_LEVEL", "1km", R.string.widget_nexrad_size_label, sectors),
-            ObjectSpinner(this, "Location", "WIDGET_LOCATION", "", R.string.spinner_location_label, locations),
-            ObjectSpinner(this, "Nexrad centered at:", "WIDGET_NEXRAD_CENTER", "", R.string.nexrad_center_label, nexradCenterList),
+                ObjectSpinner(this, "Radar mosaic level", "WIDGET_RADAR_LEVEL", "1km", R.string.widget_nexrad_size_label, sectors),
+                ObjectSpinner(this, "Location", "WIDGET_LOCATION", "", R.string.spinner_location_label, locations),
+                ObjectSpinner(this, "Nexrad centered at:", "WIDGET_NEXRAD_CENTER", "", R.string.nexrad_center_label, nexradCenterList),
         )
         spinners.forEach {
-            box.addWidget(it.get())
+            box.addWidget(it)
         }
+    }
+
+    private fun addNumberPicker() {
         val numberPickers = listOf(
-            ObjectNumberPicker(this,"Widget check interval in minutes", "CC_NOTIFICATION_INTERVAL", R.string.cc_interval_np_label, 30, 1, 120),
-            ObjectNumberPicker(this, "Widget nexrad size", "WIDGET_NEXRAD_SIZE", R.string.widget_nexrad_size_label, 10, 1, 15)
+                NumberPicker(this,"Widget check interval in minutes", "CC_NOTIFICATION_INTERVAL", R.string.cc_interval_np_label, 30, 1, 120),
+                NumberPicker(this, "Widget nexrad size", "WIDGET_NEXRAD_SIZE", R.string.widget_nexrad_size_label, 10, 1, 15)
         )
         numberPickers.forEach {
-            box.addWidget(it.get())
+            box.addWidget(it)
         }
-        abSwitch.setOnCheckedChangeListener(this)
-        abSwitch.isChecked = Utility.readPref(this, "WIDGETS_ENABLED", "false").startsWith("t")
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {

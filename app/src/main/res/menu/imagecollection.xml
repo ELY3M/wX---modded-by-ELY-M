@@ -30,6 +30,10 @@
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_rtma"
+        android:title="RTMA"
+        app:showAsAction="never" />
 </menu>
 
 

@@ -22,7 +22,7 @@
 package joshuatee.wx.models
 
 import android.util.SparseArray
-import joshuatee.wx.ui.ObjectMenuTitle
+import joshuatee.wx.ui.MenuTitle
 import joshuatee.wx.util.Group
 
 object UtilityModelSpcSrefInterface {
@@ -30,17 +30,17 @@ object UtilityModelSpcSrefInterface {
     val models = listOf("SREF")
 
     private val titles = listOf(
-            ObjectMenuTitle("SPC Guidance", 11),
-            ObjectMenuTitle("Overview", 24),
-            ObjectMenuTitle("Moisture", 23),
-            ObjectMenuTitle("Instability", 40),
-            ObjectMenuTitle("Kinematic", 34),
-            ObjectMenuTitle("Lift", 10),
-            ObjectMenuTitle("Precip", 43),
-            ObjectMenuTitle("Severe", 45),
-            ObjectMenuTitle("Winter", 38),
-            ObjectMenuTitle("Fire", 48),
-            ObjectMenuTitle("Aviation", 9)
+        MenuTitle("SPC Guidance", 11),
+        MenuTitle("Overview", 24),
+        MenuTitle("Moisture", 23),
+        MenuTitle("Instability", 40),
+        MenuTitle("Kinematic", 34),
+        MenuTitle("Lift", 10),
+        MenuTitle("Precip", 43),
+        MenuTitle("Severe", 45),
+        MenuTitle("Winter", 38),
+        MenuTitle("Fire", 48),
+        MenuTitle("Aviation", 9)
     )
 
     val params = listOf(
@@ -371,7 +371,7 @@ object UtilityModelSpcSrefInterface {
         "SREF_maxtop_prob_high_"
     )
 
-    private val labels = listOf(
+    val labels = listOf(
         "[PR]:3hr Calibrated Thunderstorm",
         "[PR]:3hr Calibrated Severe Thunderstorm",
         "[PR]:3hr Calibrated Conditional Severe Tstm",
@@ -708,10 +708,10 @@ object UtilityModelSpcSrefInterface {
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(
+            for (j in (MenuTitle.getStart(
                 titles,
                 index
-            ) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+            ) until titles[index].count + MenuTitle.getStart(titles, index))) {
                 group.children.add(labels[j])
                 shortCodes[index][m] = params[k]
                 longCodes[index][m] = labels[k]

@@ -22,6 +22,7 @@
 package joshuatee.wx.radar
 
 import joshuatee.wx.settings.Location
+import joshuatee.wx.util.To
 
 class NexradArgumentsMultipane : NexradArguments() {
 
@@ -30,15 +31,19 @@ class NexradArgumentsMultipane : NexradArguments() {
     var numberOfPanes = 0
     var arguments: Array<String>? = null
 
-    fun processArguments(arguments: Array<String>?) {
+    fun process(arguments: Array<String>?) {
         this.arguments = arguments
         if (arguments != null && arguments.size > 3 ) {
             if (arguments[3] == "true") { // invoked from single pane radar
                 doNotSavePref = true
                 useSinglePanePref = true
             }
+            if (arguments[3] == "false") { // invoked from single pane when single pane is invoked from an alert
+                doNotSavePref = true
+                useSinglePanePref = false
+            }
         }
-        numberOfPanes = arguments!![2].toIntOrNull() ?: 0
+        numberOfPanes = To.int(arguments!![2])
         locXCurrent = Location.latLon.lat
         locYCurrent = Location.latLon.lon
     }

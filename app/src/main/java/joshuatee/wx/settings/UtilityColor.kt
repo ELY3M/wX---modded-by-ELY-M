@@ -23,11 +23,11 @@
 package joshuatee.wx.settings
 
 import android.graphics.Color
-import joshuatee.wx.objects.ObjectPolygonWarning
+import joshuatee.wx.objects.PolygonWarning
 
 internal object UtilityColor {
 
-    fun setColor(prefVal: String) = when (prefVal) {
+    fun setColor(prefVal: String): Int = when (prefVal) {
         "RADAR_COLOR_HW" -> if (RadarPreferences.blackBg) {
             Color.BLUE
         } else {
@@ -67,7 +67,7 @@ internal object UtilityColor {
         "NEXRAD_RADAR_BACKGROUND_COLOR" -> Color.BLACK
         else -> {
             var color = Color.BLACK
-            ObjectPolygonWarning.polygonDataByType.values.forEach {
+            PolygonWarning.byType.values.forEach {
                 if (it.prefTokenColor == prefVal) {
                     color = it.color
                 }

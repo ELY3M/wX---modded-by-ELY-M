@@ -77,39 +77,37 @@ class ObjectWarning() {
     }
 
     fun getClosestRadar(): String {
-        var data = polygon
-        data = data.replace("[", "")
-        data = data.replace("]", "")
-        data = data.replace(",", " ")
-        data = data.replace("-", "")
+        val data = polygon
+                    .replace("[", "")
+                    .replace("]", "")
+                    .replace(",", " ")
+                    .replace("-", "")
         val points = data.split(" ")
         return getClosestRadarCompute(points)
     }
 
     fun getPolygonAsLatLons(multiplier: Int): List<LatLon> {
-        var polygonTmp = polygon
-        polygonTmp = polygonTmp.replace("[", "")
-        polygonTmp = polygonTmp.replace("]", "")
-        polygonTmp = polygonTmp.replace(",", " ")
+        val polygonTmp = polygon
+                            .replace("[", "")
+                            .replace("]", "")
+                            .replace(",", " ")
         return LatLon.parseStringToLatLons(polygonTmp, multiplier.toDouble(), true)
     }
 
     companion object {
 
-        fun getClosestRadarCompute(points: List<String>): String {
-            return if (points.size > 2) {
-                val lat = points[1]
-                val lon = "-" + points[0]
-                val latLon = LatLon(lat, lon)
-                val radarSites = UtilityLocation.getNearestRadarSites(latLon, 1, false)
-                if (radarSites.isEmpty()) {
-                    ""
-                } else {
-                    radarSites[0].name
-                }
-            } else {
+        fun getClosestRadarCompute(points: List<String>): String = if (points.size > 2) {
+            val lat = points[1]
+            val lon = "-" + points[0]
+            val latLon = LatLon(lat, lon)
+            val radarSites = UtilityLocation.getNearestRadarSites(latLon, 1, false)
+            if (radarSites.isEmpty()) {
                 ""
+            } else {
+                radarSites[0].name
             }
+        } else {
+            ""
         }
 
         fun parseJson(htmlF: String): List<ObjectWarning> {
@@ -122,13 +120,13 @@ class ObjectWarning() {
             val expiresList = UtilityString.parseColumn(html, "\"expires\": \"(.*?)\"")
             val eventList = UtilityString.parseColumn(html, "\"event\": \"(.*?)\"")
             val senderNameList = UtilityString.parseColumn(html, "\"senderName\": \"(.*?)\"")
-            var data = html
-            data = data.replace("\n", "")
-            data = data.replace(" ", "")
+            val data = html
+                        .replace("\n", "")
+                        .replace(" ", "")
             val listOfPolygonRaw = UtilityString.parseColumn(data, RegExp.warningLatLonPattern)
             val vtecs = UtilityString.parseColumn(html, RegExp.warningVtecPattern)
             val geometryList = UtilityString.parseColumn(html, "\"geometry\": (.*?),")
-            for (index in urlList.indices) {
+            urlList.indices.forEach { index ->
                 warnings.add(ObjectWarning(
                         Utility.safeGet(urlList, index),
                         Utility.safeGet(titleList, index),
@@ -139,13 +137,9 @@ class ObjectWarning() {
                         Utility.safeGet(senderNameList, index),
                         Utility.safeGet(listOfPolygonRaw, index),
                         Utility.safeGet(vtecs, index),
-                        Utility.safeGet(geometryList, index)
-                ))
+                        Utility.safeGet(geometryList, index)))
             }
             return warnings
         }
-
-//        fun getStormCountGeneric(data: String) = data.parseColumn("(\"id\": \"https://api.weather.gov/alerts/urn:oid)").size
-
     }
 }

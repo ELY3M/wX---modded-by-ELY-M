@@ -29,17 +29,12 @@ import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
-class VBox(val context: Context) {
+class VBox(val context: Context) : Widget {
 
     private var linearLayout = LinearLayout(context)
 
     init {
         linearLayout.orientation = LinearLayout.VERTICAL
-    }
-
-    constructor(context: Context, parentView: LinearLayout) : this(context) {
-        linearLayout.orientation = LinearLayout.VERTICAL
-        parentView.addView(linearLayout)
     }
 
     constructor(context: Context, orientation: Int, parentView: LinearLayout) : this(context) {
@@ -76,13 +71,21 @@ class VBox(val context: Context) {
         linearLayout.addView(child)
     }
 
-    fun addLayout(child: LinearLayout) {
-        linearLayout.addView(child)
+    fun addWidget(child: Widget) {
+        linearLayout.addView(child.getView())
     }
 
-    fun addWidgets(children: List<View>) {
+    fun addLayout(child: HBox) {
+        linearLayout.addView(child.get())
+    }
+
+    fun addLayout(child: VBox) {
+        linearLayout.addView(child.get())
+    }
+
+    fun addWidgets(children: List<Widget>) {
         children.forEach {
-            linearLayout.addView(it)
+            linearLayout.addView(it.getView())
         }
     }
 
@@ -112,13 +115,11 @@ class VBox(val context: Context) {
 
     fun get() = linearLayout
 
+    override fun getView() = linearLayout
+
     var visibility
         get() = linearLayout.visibility
         set(value) { linearLayout.visibility = value }
-
-//    var isBaselineAligned
-//        get() = linearLayout.isBaselineAligned
-//        set(value) { linearLayout.isBaselineAligned = value }
 
     var orientation
         get() = linearLayout.orientation

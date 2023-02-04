@@ -34,8 +34,8 @@ import okhttp3.Request
 
 object UtilityNetworkIO {
 
-    fun getStringFromUrl(url: String): String {
-        UtilityLog.d("wx", "getStringFromUrl: $url")
+    private fun getStringFromUrlNew(url: String, withNewLine: Boolean): String {
+        Utility.logDownload("getStringFromUrlNew $withNewLine: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).build()
@@ -44,7 +44,11 @@ object UtilityNetworkIO {
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
-                out.append(line)
+                if (withNewLine) {
+                    out.append(line + GlobalVariables.newline)
+                } else {
+                    out.append(line)
+                }
                 line = bufferedReader.readLine()
             }
             bufferedReader.close()
@@ -56,36 +60,24 @@ object UtilityNetworkIO {
         return out.toString()
     }
 
-    fun getStringFromUrlWithNewLine(url: String): String {
-        UtilityLog.d("wx", "getStringFromUrlWithNewLine: $url")
-        val out = StringBuilder(5000)
-        try {
-            val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body!!.byteStream())
-            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-            var line: String? = bufferedReader.readLine()
-            while (line != null) {
-                out.append(line + GlobalVariables.newline)
-                line = bufferedReader.readLine()
-            }
-            bufferedReader.close()
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        } catch (e: OutOfMemoryError) {
-            UtilityLog.handleException(e)
-        }
-        return out.toString()
-    }
+    // String.getHtml()
+    // output has newlines removed
+    fun getStringFromUrl(url: String): String = getStringFromUrlNew(url, false)
 
+    // String.getHtmlWithNewLine()
+    fun getStringFromUrlWithNewLine(url: String): String = getStringFromUrlNew(url, true)
+
+    // String.getHtmlSep()
+    // output has newlines removed and a different separator added
     fun getStringFromUrlWithSeparator(url: String): String {
-        UtilityLog.d("wx", "getStringFromUrlWithSeparator: $url")
+        Utility.logDownload("getStringFromUrlWithSeparator: $url")
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            val bufferedReader = BufferedReader(InputStreamReader(BufferedInputStream(response.body!!.byteStream())))
+            val inputStream = BufferedInputStream(response.body!!.byteStream())
+            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
                 out.append(line)
@@ -99,40 +91,33 @@ object UtilityNetworkIO {
         return out.toString().replace(breakStr, "<br>")
     }
 
+    // String.getImage()
     fun getBitmapFromUrl(url: String): Bitmap = try {
-            UtilityLog.d("wx", "getBitmapFromUrl: $url")
-            val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-            if (url.contains("hazards_d8_14_contours.png")) {
-                val options = BitmapFactory.Options()
-                options.inPreferredConfig = Bitmap.Config.RGB_565
-                BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()), null, options)!!
-            } else {
-                BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()))
-            }
-        } catch (e: Exception) {
-            UtilityImg.getBlankBitmap()
-        } catch (e: OutOfMemoryError) {
-            UtilityImg.getBlankBitmap()
-        }
-
-   /* fun getBitmapFromUrlUnsafe(url: String): Bitmap = try {
-            val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClientUnsafe!!.newCall(request).execute()
+        Utility.logDownload("getBitmapFromUrl: $url")
+        val request = Request.Builder().url(url).build()
+        val response = MyApplication.httpClient.newCall(request).execute()
+        if (url.contains("hazards_d8_14_contours.png")) {
+            val options = BitmapFactory.Options()
+            options.inPreferredConfig = Bitmap.Config.RGB_565
+            BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()), null, options)!!
+        } else {
             BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()))
+        }
     } catch (e: Exception) {
-            UtilityImg.getBlankBitmap()
-        } catch (e: OutOfMemoryError) {
-            UtilityImg.getBlankBitmap()
-        }*/
+        UtilityImg.getBlankBitmap()
+    } catch (e: OutOfMemoryError) {
+        UtilityImg.getBlankBitmap()
+    }
 
+    // String.getInputStream()
+    // raw downloads - nexrad radar files, etc
     fun getInputStreamFromUrl(url: String): InputStream? = try {
-            UtilityLog.d("wx", "getInputStreamFromUrl: $url")
-            val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-            response.body!!.byteStream()
+        Utility.logDownload("getInputStreamFromUrl: $url")
+        val request = Request.Builder().url(url).build()
+        val response = MyApplication.httpClient.newCall(request).execute()
+        response.body!!.byteStream()
     } catch (e: IOException) {
-            UtilityLog.handleException(e)
-            null
+        UtilityLog.handleException(e)
+        null
     }
 }

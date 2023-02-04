@@ -25,7 +25,7 @@ import java.util.regex.Pattern
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.common.GlobalVariables
-import java.util.*
+import java.util.Locale
 
 object UtilityString {
 
@@ -61,232 +61,187 @@ object UtilityString {
         return String(chars)
     }
 
-    fun getHtmlAndParse(url: String, match: String) = url.getHtml().parse(match)
+    fun getHtmlAndParseLastMatch(url: String, match: String): String =
+            url.getHtml().parseLastMatch(match)
 
-    fun getHtmlAndParseLastMatch(url: String, match: String) = url.getHtml().parseLastMatch(match)
+    fun getHtmlAndParseLastMatch(url: String, pattern: Pattern): String =
+            url.getHtml().parseLastMatch(pattern)
 
-    fun getHtmlAndParseLastMatch(url: String, pattern: Pattern) = url.getHtml().parseLastMatch(pattern)
-
-    fun parseLastMatch(str: String, pattern: Pattern): String {
+    fun parseLastMatch(s: String, pattern: Pattern): String = try {
         var content = ""
-        try {
-            val m = pattern.matcher(str)
-            while (m.find()) content = m.group(1)!!
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val m = pattern.matcher(s)
+        while (m.find()) {
+            content = m.group(1)!!
         }
-        return content
+        content
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        ""
     }
 
-    fun parseLastMatch(string: String, match: String): String {
+    fun parseLastMatch(s: String, match: String): String = try {
         var content = ""
-        try {
-            val p = Pattern.compile(match)
-            val m = p.matcher(string)
-            while (m.find()) content = m.group(1)!!
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val p = Pattern.compile(match)
+        val m = p.matcher(s)
+        while (m.find()) {
+            content = m.group(1)!!
         }
-        return content
+        content
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        ""
     }
 
-    fun parse(data: String, match: String): String {
+    fun parse(s: String, match: String): String = try {
         var content = ""
-        try {
-            val p = Pattern.compile(match)
-            val m = p.matcher(data)
-            if (m.find()) content = m.group(1)!!
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val p = Pattern.compile(match)
+        val m = p.matcher(s)
+        if (m.find()) {
+            content = m.group(1)!!
         }
-        return content
+        content
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        ""
     }
 
-    internal fun parseAcrossLines(data: String, match: String): String {
+    internal fun parseAcrossLines(s: String, match: String): String = try {
         var content = ""
-        try {
-            val pattern = Pattern.compile(match, Pattern.DOTALL)
-            val m = pattern.matcher(data)
-            if (m.find()) content = m.group(1)!!
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val pattern = Pattern.compile(match, Pattern.DOTALL)
+        val m = pattern.matcher(s)
+        if (m.find()) {
+            content = m.group(1)!!
         }
-        return content
+        content
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        ""
     }
 
-    fun parse(data: String, pattern: Pattern): String {
+    fun parse(s: String, pattern: Pattern): String = try {
         var content = ""
-        try {
-            val m = pattern.matcher(data)
-            if (m.find()) content = m.group(1)!!
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val m = pattern.matcher(s)
+        if (m.find()) {
+            content = m.group(1)!!
         }
-        return content
+        content
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        ""
     }
 
-    fun getHtmlAndParseSep(url: String, match: String) = url.getHtmlSep().parse(match)
-
-    internal fun getHtmlAndParseSep(url: String, pattern: Pattern) = url.getHtmlSep().parse(pattern)
-
-    fun parseMultiple(data: String, match: String, number: Int): MutableList<String> {
+    fun parseMultiple(s: String, match: String, number: Int): List<String> = try {
         val result = MutableList(number) { "" }
-        try {
-            val pattern = Pattern.compile(match)
-            val m = pattern.matcher(data)
-            while (m.find()) {
-                (0 until number).forEach { result[it] = m.group(it + 1)!! }
+        val pattern = Pattern.compile(match)
+        val m = pattern.matcher(s)
+        while (m.find()) {
+            (0 until number).forEach {
+                result[it] = m.group(it + 1)!!
             }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
         }
-        return result
+        result
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        List(number) { "" }
     }
 
-    fun parseMultiple(data: String, pattern: Pattern, number: Int): MutableList<String> {
+    fun parseMultiple(s: String, pattern: Pattern, number: Int): List<String> = try {
         val result = MutableList(number) { "" }
-        try {
-            val m = pattern.matcher(data)
-            while (m.find()) {
-                (0 until number).forEach { result[it] = m.group(it + 1)!! }
+        val m = pattern.matcher(s)
+        while (m.find()) {
+            (0 until number).forEach {
+                result[it] = m.group(it + 1)!!
             }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
         }
-        return result
+        result
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        List(number) { "" }
     }
 
-    fun parseColumn(data: String, match: String): List<String> {
+    fun parseColumn(s: String, match: String): List<String> = try {
         val result = mutableListOf<String>()
-        try {
-            val pattern = Pattern.compile(match)
-            val m = pattern.matcher(data)
-            while (m.find()) result.add(m.group(1)!!)
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val pattern = Pattern.compile(match)
+        val m = pattern.matcher(s)
+        while (m.find()) {
+            result.add(m.group(1)!!)
         }
-        return result
+        result
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        emptyList()
     }
 
-    fun parseColumnMutable(data: String, match: String): MutableList<String> {
+    fun parseColumn(s: String, pattern: Pattern): List<String> = try {
         val result = mutableListOf<String>()
-        try {
-            val pattern = Pattern.compile(match)
-            val m = pattern.matcher(data)
-            while (m.find()) result.add(m.group(1)!!)
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val m = pattern.matcher(s)
+        while (m.find()) {
+            result.add(m.group(1)!!)
         }
-        return result
+        result
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        emptyList()
     }
 
-    fun parseColumnMutable(data: String, pattern: Pattern): MutableList<String> {
+    fun parseColumnAcrossLines(s: String, match: String): List<String> = try {
         val result = mutableListOf<String>()
-        try {
-            val m = pattern.matcher(data)
-            while (m.find()) result.add(m.group(1)!!)
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val pattern = Pattern.compile(match, Pattern.DOTALL)
+        val m = pattern.matcher(s)
+        while (m.find()) {
+            result.add(m.group(1)!!)
         }
-        return result
+        result
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        emptyList()
     }
 
-    fun parseColumn(data: String, pattern: Pattern): List<String> {
+    fun parseColumnAll(s: String, pattern: Pattern): List<String> = try {
         val result = mutableListOf<String>()
-        try {
-            val m = pattern.matcher(data)
-            while (m.find()) result.add(m.group(1)!!)
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
+        val m = pattern.matcher(s)
+        while (m.find()) {
+            result.add(m.group())
         }
-        return result
+        result
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        emptyList()
     }
 
-    fun parseColumnAl(data: String, pattern: Pattern): MutableList<String> {
-        val result = mutableListOf<String>()
-        try {
-            val m = pattern.matcher(data)
-            while (m.find()) result.add(m.group(1)!!)
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return result
-    }
-
-    fun parseColumnAll(data: String, pattern: Pattern): List<String> {
-        val result = mutableListOf<String>()
-        try {
-            val m = pattern.matcher(data)
-            while (m.find()) result.add(m.group())
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return result
-    }
-
-    fun parseAndCount(data: String, match: String): Int {
-        var i = 0
-        try {
-            val p = Pattern.compile(match)
-            val m = p.matcher(data)
-            while (m.find()) i += 1
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return i
-    }
-
-    fun getLastXChars(s: String, x: Int) = when {
+    fun getLastXChars(s: String, x: Int): String = when {
         s.length == x -> s
         s.length > x -> s.substring(s.length - x)
         else -> s
     }
 
-    fun addPeriodBeforeLastTwoChars(string: String) = StringBuilder(string).insert(string.length - 2, ".").toString()
+    fun addPeriodBeforeLastTwoChars(string: String): String =
+        StringBuilder(string).insert(string.length - 2, ".").toString()
 
-    fun replaceAllRegexp(s: String, a: String, b: String) = s.replace(Regex(a), b)
+    fun replaceAllRegexp(s: String, a: String, b: String): String = s.replace(Regex(a), b)
 
     //
     // Legacy forecast support
     //
-    fun parseXml(payloadF: String?, delimF: String?): Array<String> {
-        var payload = payloadF
-        var delim = delimF
-        if ( payloadF == null ) {
-            payload = ""
-        }
-        if ( delimF == null ) {
-            delim = ""
-        }
+    fun parseXml(payloadF: String?, delimF: String?): List<String> {
+        var payload = payloadF ?: ""
+        val delim = delimF ?: ""
         if (delim == "start-valid-time") {
-            payload = payload!!.replace( "<end-valid-time>.*?</end-valid-time>".toRegex() , "").replace( "<layout-key>.*?</layout-key>".toRegex() , "")
+            payload = payload.replace( "<end-valid-time>.*?</end-valid-time>".toRegex() , "")
+                             .replace( "<layout-key>.*?</layout-key>".toRegex() , "")
         }
-        payload = payload!!.replace( "<name>.*?</name>".toRegex() , "").replace( "</" + delim + ">".toRegex() , "")
-        return payload.split("<$delim>").toTypedArray()
+        payload = payload.replace( "<name>.*?</name>".toRegex() , "")
+                         .replace( "</" + delim + ">".toRegex() , "")
+        return payload.split("<$delim>")
     }
 
-    fun parseXmlValue(payloadF: String?): Array<String> {
-        var payload = payloadF
-        if (payload == null ) {
-            payload = ""
-        }
-        payload = payload.replace("<name>.*?</name>".toRegex() , "").replace( "</value>" , "")
-        return GlobalVariables.xmlValuePattern.split(payload)
+    fun parseXmlValue(payloadF: String?): List<String> {
+        var payload = payloadF ?: ""
+        payload = payload.replace("<name>.*?</name>".toRegex() , "")
+                         .replace( "</value>" , "")
+        return GlobalVariables.xmlValuePattern.split(payload).toList()
     }
 
-    fun parseXmlExt (regexpList: Array<String>, html: String): Array<String> {
-        val items = Array(regexpList.size) {""}
-        var p: Pattern
-        for (i in regexpList.indices) {
-            try {
-                p = Pattern.compile(regexpList[i], Pattern.DOTALL)
-                val m = p.matcher(html)
-                while (m.find()) {
-                    items[i] = m.group(1) ?: ""
-                }
-            } catch (e: Exception) {
-            }
-        }
-        return items
-    }
+    fun parseXmlExt (regexpList: List<String>, html: String): List<String> =
+            regexpList.map { parseAcrossLines(html, it) }
 }

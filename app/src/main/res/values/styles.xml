@@ -174,6 +174,7 @@
         <item name="android:buttonBarNegativeButtonStyle">@style/Alert.Button.Negative</item>
         <item name="android:buttonBarNeutralButtonStyle">@style/Alert.Button.Neutral</item>
     </style>
+
     <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/black</item>
     </style>
@@ -185,13 +186,26 @@
     </style>
 
     <style name="PickerDialogThemeDark" parent="Theme.MaterialComponents.Dialog.Bridge">
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorPrimary">@color/off_white</item>
+        <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/white</item>
         <item name="android:windowBackground">@color/black</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="colorControlActivated">@color/gray_normal</item>
+        <item name="colorControlActivated">@color/off_white</item>
+
+        <item name="android:buttonBarPositiveButtonStyle">@style/Alert.Button.Positive.Dark</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/Alert.Button.Negative.Dark</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/Alert.Button.Neutral.Dark</item>
+    </style>
+    <style name="Alert.Button.Positive.Dark" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Alert.Button.Negative.Dark" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Alert.Button.Neutral.Dark" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="AppCompatAlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
@@ -219,14 +233,14 @@
         <item name="android:background">@color/black</item>
     </style>
 
-    <style name="AppCompatAlertDialogStyleWhite" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
-        <item name="colorAccent">@color/black</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textColorSecondary">@color/black</item>
-        <item name="android:background">@color/white</item>
-    </style>
+<!--    <style name="AppCompatAlertDialogStyleWhite" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">-->
+<!--        <item name="colorAccent">@color/black</item>-->
+<!--        <item name="colorOnSecondary">@color/black</item>-->
+<!--        <item name="android:textColor">@color/black</item>-->
+<!--        <item name="android:textColorPrimary">@color/black</item>-->
+<!--        <item name="android:textColorSecondary">@color/black</item>-->
+<!--        <item name="android:background">@color/white</item>-->
+<!--    </style>-->
 
     <style name="MyCustomTheme_mixedBlue_NOAB" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/bg_blue</item>
@@ -321,6 +335,9 @@
         <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
+
+        <item name="android:datePickerDialogTheme">@style/PickerDialogThemeDark</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogThemeDark</item>
     </style>
 
     <style name="MyCustomTheme_Holo_Darkest_NOAB" parent="Theme.Material3.Dark.NoActionBar">
@@ -342,6 +359,9 @@
         <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
+
+        <item name="android:datePickerDialogTheme">@style/PickerDialogThemeDark</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogThemeDark</item>
     </style>
 
     <style name="MyCustomTheme_Green_NOAB" parent="Theme.Material3.Dark.NoActionBar">
@@ -433,37 +453,7 @@
         <item name="android:background">@color/black</item>
     </style>    
 
-    <style name="MyCustomTheme_BlackAqua_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
-        <item name="colorPrimary">@color/black</item>
-        <item name="android:buttonTint">@color/aqua</item>
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/aqua</item>
-        <item name="android:statusBarColor">@color/black</item>
-        <item name="android:windowBackground">@color/black</item>
-        <item name="android:colorBackgroundCacheHint">@color/black</item>
-        <item name="android:textColor">@color/aqua</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlackAqua</item>
-        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
-        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
-    </style>
-
-    <style name="MyCustomTheme_BlackNeonGreen_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
-        <item name="colorPrimary">@color/black</item>
-        <item name="android:buttonTint">@color/lime</item>
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/lime</item>
-        <item name="android:statusBarColor">@color/black</item>
-        <item name="android:windowBackground">@color/black</item>
-        <item name="android:colorBackgroundCacheHint">@color/black</item>
-        <item name="android:textColor">@color/lime</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlackNeonGreen</item>
-        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
-        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
-    </style>
-
-    <style name="MyCustomTheme_BlackAqua3" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="MyCustomTheme_BlackAqua" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:textColor">@color/aqua</item>
         <item name="colorPrimary">@color/black</item>
         <item name="android:buttonTint">@color/aqua</item>
@@ -481,7 +471,7 @@
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>        
 
-    <style name="MyCustomTheme_BlackNeonGreen3" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="MyCustomTheme_BlackNeonGreen" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:textColor">@color/lime</item>
         <item name="colorPrimary">@color/black</item>
         <item name="android:buttonTint">@color/lime</item>

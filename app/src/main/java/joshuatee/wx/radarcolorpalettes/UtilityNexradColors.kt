@@ -26,29 +26,30 @@ import kotlin.math.absoluteValue
 
 internal object UtilityNexradColors {
 
-    private fun interpolate(a: Float, b: Float, proportion: Float) = a + (b - a) * proportion
+    private fun interpolate(a: Float, b: Float, proportion: Float): Float = a + (b - a) * proportion
 
     private fun interpolateHue(a: Float, b: Float, proportion: Float): Float {
         val diff = b - a
-        val fudgeFactor = 0.01
+        val fudgeFactor = 0.01f
         var transformedColor: Float
-        val total = 360.0f // hue ranges from 0-360
-        return if (diff > ((total / 2.0) - fudgeFactor)) {
-            transformedColor = (total - (b - a)) * -1
-            if (transformedColor < 0) {
+        // hue ranges from 0-360
+        val total = 360.0f
+        return if (diff > ((total / 2.0f) - fudgeFactor)) {
+            transformedColor = (total - (b - a)) * -1.0f
+            if (transformedColor < 0.0f) {
                 transformedColor += total
                 transformedColor
             } else {
                 transformedColor
             }
         } else {
-            if ( b > a) {
+            if (b > a) {
                 transformedColor = (a + (b - a) * proportion).absoluteValue
                 transformedColor
             } else {
                 transformedColor = a + (b - a) * proportion
-                if ( a > 270.0 && b < 90.0) {
-                    transformedColor = (a + (360 - a + b) * proportion)
+                if ( a > 270.0f && b < 90.0f) {
+                    transformedColor = a + (360.0f - a + b) * proportion
                 }
                 transformedColor
             }

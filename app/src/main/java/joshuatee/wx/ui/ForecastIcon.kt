@@ -35,7 +35,7 @@ class ForecastIcon {
     private var canvas: Canvas
     private var context: Context
     private val paint = ObjectPaint()
-    private val paintStripe = ObjectPaintStripe()
+    private val paintStripe = PaintStripe()
     private val nullImage = R.drawable.white_box
 
     constructor(context: Context, weatherCondition: String) {
@@ -107,9 +107,7 @@ class ForecastIcon {
         }
     }
 
-    fun get(): Bitmap {
-        return bitmap
-    }
+    fun get() = bitmap
 
     companion object {
 
@@ -122,9 +120,7 @@ class ForecastIcon {
         private const val middlePointInt = 45
         private const val yText = 84.0f
 
-        fun blankBitmap() : Bitmap {
-            return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
-        }
+        fun blankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
     }
 }
 

@@ -22,7 +22,6 @@
 package joshuatee.wx.objects
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.R
 import joshuatee.wx.models.ObjectModel
@@ -30,7 +29,11 @@ import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.UtilityImg
 
-class DisplayData(context: Context, activity: Activity, numPanes: Int, om: ObjectModel) {
+//
+// used in Models and SPC Meso to make multipane easier
+//
+
+class DisplayData(activity: Activity, numPanes: Int, om: ObjectModel) {
 
     var animDrawable = MutableList(numPanes) { AnimationDrawable() }
     var param = MutableList(numPanes) {""}
@@ -43,7 +46,7 @@ class DisplayData(context: Context, activity: Activity, numPanes: Int, om: Objec
         val resourceId = listOf(R.id.iv1, R.id.iv2)
         (0 until numPanes).forEach { index ->
             image.add(TouchImage(activity, resourceId[index]))
-            objectAnimates.add(ObjectAnimate(context, image.last()))
+            objectAnimates.add(ObjectAnimate(activity, image.last()))
         }
         if (numPanes > 1) {
             image[0].connect2 { image[1].setZoom(image[0]) }
@@ -51,7 +54,7 @@ class DisplayData(context: Context, activity: Activity, numPanes: Int, om: Objec
         }
         (0 until numPanes).forEach {
             if (om.prefModel != "") { // Don't use in SPC Meso
-                image[it].connect(object : OnSwipeTouchListener(context) {
+                image[it].connect(object : OnSwipeTouchListener(activity) {
                     override fun onSwipeLeft() {
                         if (image[0].currentZoom < 1.01f) om.rightClick()
                     }

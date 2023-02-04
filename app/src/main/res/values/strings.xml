@@ -41,7 +41,7 @@
     <string name="title_activity_settings_ui">User Interface Settings</string>
     <string name="title_activity_text_screen">wX</string>
     <string name="about_wx">wX is an efficient and configurable method to access weather content from the NWS,
-        Environment Canada, NSSL WRF, and blitzortung.org.
+        Environment Canada, and NSSL WRF.
         Additional software and tools are used from Telecine, GraphView,
         bzip2, TouchImageView, OkHttp, ImageMap, HoloColorPicker, and OpenStreetMaps.
         Software is provided \"as is\". Use at your own risk. Use for educational purposes and non-commercial purposes only.
@@ -128,6 +128,7 @@
     <string name="title_activity_nhc">NHC</string>
     <string name="title_activity_settings_colors">Colors</string>
     <string name="title_activity_sndadd_fav">Add SND</string>
+    <string name="title_activity_spc_meso">SPC Meso</string>
     <string name="label_playlist">Add to PlayList</string>
     <string name="label_share">Share</string>
     <string name="label_share_and_tools">Share/Drawing Tools</string>
@@ -144,18 +145,13 @@
     <string name="menu_regions">Regions</string>
     <string name="action_radar_site_status_l3">Level 3 Radar Status</string>
     <string name="action_radar_site_status_l2">Level 2 Radar Status</string>
-    <string name="notif_add">Add Notification</string>
-    <string name="notif_remove">Remove Notification</string>
+    <string name="notif_add">Add notification</string>
+    <string name="notif_remove">Remove notification</string>
     <string name="label_all">All</string>
     <string name="label_text">Text</string>
     <string name="label_image">Image</string>
     <string name="label_url">URL</string>
     <string name="label_blank"> </string>
-    <string name="label_min_15">15 min</string>
-    <string name="label_hr_2">2 hrs</string>
-    <string name="label_hr_12">12 hrs</string>
-    <string name="label_hr_24">24 hrs</string>
-    <string name="label_hr_48">48 hrs</string>
     <string name="label_layers">Layers</string>
     <string name="label_cwa">CWA Boundaries</string>
     <string name="label_cities">Cities</string>
@@ -169,7 +165,6 @@
     <string name="label_delete_location">Delete location</string>
     <string name="label_ca_via_map">Canada via map</string>
     <string name="label_show_location_on_map">Show Current Location on Map</string>
-    <string name="label_radar_jellybean_drawtools">Draw/Distance Tool</string>
 
     <!-- telecine -->
     <string name="clear">Clear</string>
@@ -196,8 +191,6 @@
     <string name="toast_format_string">%1$s!</string>
     <string name="item_format_string">%2$s</string>
     <string name="header_format_string">%1$d\u00B0 in %2$s</string>
-    <string name="right_arrow">Right Arrow</string>
-    <string name="left_arrow">Left Arrow</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="play_list">Play List</string>
@@ -209,7 +202,6 @@
     <string name="color_palette">Color Palette</string>
     <string name="esrl_hrrr_rap">ESRL HRRR/RAP</string>
     <string name="excessive_rainfall_outlook">Excessive Rainfall Outlook</string>
-    <string name="glcfs">GLCFS</string>
     <string name="global_satellite">Global Satellite</string>
     <string name="goes_conus_water_vapor">GOES Conus Water Vapor</string>
     <string name="lightning">Lightning</string>
@@ -244,11 +236,11 @@
     <string name="us_alerts">US Alerts</string>
     <string name="wpc_gefs">WPC GEFS</string>
     <string name="aurora">Aurora Forecast</string>
-    <string name="tab_1">Tab 1</string>
+    <string name="tab_1">Tab 1 Label</string>
     <string name="local">LOCAL</string>
-    <string name="tab_2">Tab 2</string>
+    <string name="tab_2">Tab 2 Label</string>
     <string name="spc">SPC</string>
-    <string name="tab_3">Tab 3</string>
+    <string name="tab_3">Tab 3 Label</string>
     <string name="misc">MISC</string>
     <string name="significant_weather_discussion_paspc">Significant Weather Discussion, PASPC</string>
     <string name="fxcn01_d1_3_west">FXCN01 D1–3 West</string>
@@ -335,7 +327,6 @@
     <string name="web">Web</string>
     <string name="add_img">Add img</string>
     <string name="set_to_default">Set to default</string>
-    <string name="set_to_default_canada">Set to default (Canada)</string>
     <string name="load_from_file">Load from file</string>
     <string name="map">Map</string>
     <string name="mute_notification">Mute notification</string>
@@ -376,7 +367,7 @@
     <string name="infrared_nws">Infrared (NWS)</string>
     <string name="visible">Visible</string>
     <string name="water_vapor">Water Vapor</string>
-    <string name="text_prod_by_state">Text Prod by state</string>
+    <string name="text_prod_by_state">Text product by state</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
     <string name="nws_office_website">NWS Office website</string>

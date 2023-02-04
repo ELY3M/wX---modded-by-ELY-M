@@ -26,29 +26,36 @@ import android.view.View
 import java.util.regex.Pattern
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.util.*
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityDownloadNws
+import joshuatee.wx.util.UtilityImgAnim
+import joshuatee.wx.util.UtilityNetworkIO
+import joshuatee.wx.util.UtilityString
 
 fun Array<String>.safeGet(index: Int) = Utility.safeGet(this, index)
 
 fun List<String>.safeGet(index: Int) = Utility.safeGet(this, index)
 
-fun String.parse(match: String) = UtilityString.parse(this, match)
-
-fun String.strip() = this.trim()
-
-//fun String.ljust(padding: Int) = String.format("%-" + padding.toString() + "s", this)
-
 fun String.condenseSpace()= this.replace("\\s+".toRegex(), " ")
 
 fun String.removeHtml() = this.replace(Regex("\\<[^>]*>"),"")
 
-fun String.removeLineBreaks() = this.replace("\n", "ABC123").replace("ABC123ABC123", "\n")
+fun String.removeLineBreaks() = this.replace("\n", "ABC123")
+        .replace("ABC123ABC123", "\n")
         .replace("ABC123", " ")
         .replace("  ", " ")
+
+fun String.removeLineBreaksCap() = this.replace("\\n\\n", "ABC123")
+        .replace("\\n", " ")
+        .replace("ABC123", "\n\n")
 
 fun String.insert(index: Int, string: String) = StringBuilder(this).insert(index, string).toString()
 
 fun String.parse(pattern: Pattern) = UtilityString.parse(this, pattern)
+
+fun String.parse(match: String) = UtilityString.parse(this, match)
+
+fun String.parseAcrossLines(match: String) = UtilityString.parseAcrossLines(this, match)
 
 fun String.parseFirst(pattern: String) = UtilityString.parse(this, pattern)
 
@@ -58,7 +65,7 @@ fun String.parseColumn(match: String) = UtilityString.parseColumn(this, match)
 
 fun String.parseColumn(pattern: Pattern) = UtilityString.parseColumn(this, pattern)
 
-fun String.parseColumnMutable(match: String) = UtilityString.parseColumnMutable(this, match)
+fun String.parseColumnAcrossLines(match: String) = UtilityString.parseColumnAcrossLines(this, match)
 
 fun String.getImage() = UtilityNetworkIO.getBitmapFromUrl(this)
 
@@ -66,7 +73,7 @@ fun String.getHtml() = UtilityNetworkIO.getStringFromUrl(this)
 
 fun String.getHtmlWithNewLine() = UtilityNetworkIO.getStringFromUrlWithNewLine(this)
 
-fun String.getNwsHtml() = UtilityDownloadNws.getStringFromUrl(this)
+fun String.getNwsHtml() = UtilityDownloadNws.getStringFromUrlBaseNoAcceptHeader1(this)
 
 fun String.getHtmlSep() = UtilityNetworkIO.getStringFromUrlWithSeparator(this)
 
@@ -91,3 +98,9 @@ fun Int.isEven() = this and 1 == 0
 fun AnimationDrawable.startAnimation(img: TouchImageView2) = UtilityImgAnim.startAnimation(this, img)
 
 fun AnimationDrawable.startAnimation(img: TouchImage) = UtilityImgAnim.startAnimation(this, img)
+
+fun <T> MutableList<T>.swap(index1: Int, index2: Int){
+    val tmp = this[index1]
+    this[index1] = this[index2]
+    this[index2] = tmp
+}

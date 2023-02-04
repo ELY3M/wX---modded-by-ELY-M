@@ -73,14 +73,26 @@ internal object Level2 {
             while (true) {
                 val r = Level2Record.factory(ucarRandomAccessFile, recordNumber, messageOffset31) ?: break
                 recordNumber += 1
-                if (r.messageType.toInt() == 31) messageOffset31 += (r.messageSize * 2 + 12 - 2432)
-                if (r.messageType.toInt() != 1 && r.messageType.toInt() != 31) continue
-                if (vcp == 0) vcp = r.vcp.toInt()
-                if (first == null) first = r
                 if (r.messageType.toInt() == 31) {
-                    if (r.hasHighResREFData) highReflectivity.add(r)
+                    messageOffset31 += (r.messageSize * 2 + 12 - 2432)
                 }
-                if (r.hasHighResVELData) highVelocity.add(r)
+                if (r.messageType.toInt() != 1 && r.messageType.toInt() != 31) {
+                    continue
+                }
+                if (vcp == 0) {
+                    vcp = r.vcp.toInt()
+                }
+                if (first == null) {
+                    first = r
+                }
+                if (r.messageType.toInt() == 31) {
+                    if (r.hasHighResREFData) {
+                        highReflectivity.add(r)
+                    }
+                }
+                if (r.hasHighResVELData) {
+                    highVelocity.add(r)
+                }
             }
             val numberOfRadials = 720
             days.position(0)

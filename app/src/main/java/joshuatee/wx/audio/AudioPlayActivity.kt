@@ -48,6 +48,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
 
     protected lateinit var toolbar: Toolbar
     protected lateinit var toolbarBottom: Toolbar
+    protected lateinit var objectToolbar: ObjectToolbar
     protected lateinit var objectToolbarBottom: ObjectToolbar
     private lateinit var pause: MenuItem
     private var ttsProd = ""
@@ -65,6 +66,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         toolbarBottom = findViewById(R.id.toolbar_bottom)
+        objectToolbar = ObjectToolbar(toolbar)
         objectToolbarBottom = ObjectToolbar(toolbarBottom)
         if (UIPreferences.iconsEvenSpaced) {
             UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, menuResId)
@@ -94,14 +96,14 @@ abstract class AudioPlayActivity : AppCompatActivity() {
     }
 
     private fun initBottomToolbar() {
-        val menu = toolbarBottom.menu
-        pause = menu.findItem(R.id.action_stop)
-        val playlist = menu.findItem(R.id.action_playlist)
-        playlist.let { playlist.setIcon(R.drawable.ic_playlist_add_24dp) }
-        if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
+        pause = objectToolbarBottom.find(R.id.action_stop)
+        val playlist = objectToolbarBottom.find(R.id.action_playlist)
+        playlist.setIcon(R.drawable.ic_playlist_add_24dp)
+        if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             pause.setIcon(pausePressedIcon)
-        else
+        } else {
             pause.setIcon(GlobalVariables.ICON_PAUSE)
+        }
     }
 
     protected fun audioPlayMenu(item: Int, txt: String, prod: String, playlistToken: String): Boolean {

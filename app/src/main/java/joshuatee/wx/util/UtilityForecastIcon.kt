@@ -32,13 +32,12 @@ object UtilityForecastIcon {
     //  https://api.weather.gov/icons/land/day/rain_showers,60/rain_showers,30?size=medium
     //  https://api.weather.gov/icons/land/night/bkn?size=medium
     //  https://api.weather.gov/icons/land/day/tsra_hi,40?size=medium
-    fun getIcon(context: Context, url: String): Bitmap {
-        if (url == "NULL" || url == "") {
-            return ForecastIcon.blankBitmap()
-        }
+    fun getIcon(context: Context, url: String): Bitmap = if (url == "NULL" || url == "") {
+        ForecastIcon.blankBitmap()
+    } else {
         val fileName = getFilename(url)
         val fileId = UtilityNwsIcon.iconMap["$fileName.png"]
-        return if (fileId == null || fileName.contains(",")) {
+        if (fileId == null || fileName.contains(",")) {
             parseBitmapString(context, fileName)
         } else {
             UtilityImg.loadBitmap(context, fileId, false)
@@ -50,36 +49,34 @@ object UtilityForecastIcon {
     // input examples
     //  rain_showers,70/tsra,80
     //  ntsra,80
-    private fun parseBitmapString(context: Context, url: String): Bitmap {
-        // legacy: i=nsn;j=nsn;ip=60;jp=30
-        // legacy add - 2nd condition
-        return if (url.contains("/") || url.contains(";j=") || (url.contains("i=") && url.contains("j="))) {
-            val conditions = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
-            if (conditions.size > 1) {
-                getDualBitmapWithNumbers(context, conditions[0], conditions[1])
-            } else {
-                // legacy add
-                var urlTmp = url.replace("i=", "")
-                urlTmp = urlTmp.replace("j=", "")
-                urlTmp = urlTmp.replace("ip=", "")
-                urlTmp = urlTmp.replace("jp=", "")
-                val items = urlTmp.split(";")
-                return if (items.size > 3) {
-                    getDualBitmapWithNumbers(context, items[0] + items[2], items[1] + items[3])
-                } else if (items.size > 2) {
-                    if (url.contains(";jp=")) {
-                         getDualBitmapWithNumbers(context, items[0], items[1] + items[2])
-                    } else {
-                         getDualBitmapWithNumbers(context, items[0] + items[2], items[1])
-                    }
-                } else {
-                     getDualBitmapWithNumbers(context, items[0], items[1])
-                }
-                // legacy add end
-            }
+    //  legacy: i=nsn;j=nsn;ip=60;jp=30
+    //  legacy add - 2nd condition
+    private fun parseBitmapString(context: Context, url: String): Bitmap = if (url.contains("/") || url.contains(";j=") || (url.contains("i=") && url.contains("j="))) {
+        val conditions = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
+        if (conditions.size > 1) {
+            getDualBitmapWithNumbers(context, conditions[0], conditions[1])
         } else {
-            getBitmapWithOneNumber(context, url)
+            // legacy add
+            val urlTmp = url.replace("i=", "")
+                            .replace("j=", "")
+                            .replace("ip=", "")
+                            .replace("jp=", "")
+            val items = urlTmp.split(";")
+            if (items.size > 3) {
+                getDualBitmapWithNumbers(context, items[0] + items[2], items[1] + items[3])
+            } else if (items.size > 2) {
+                if (url.contains(";jp=")) {
+                     getDualBitmapWithNumbers(context, items[0], items[1] + items[2])
+                } else {
+                     getDualBitmapWithNumbers(context, items[0] + items[2], items[1])
+                }
+            } else {
+                 getDualBitmapWithNumbers(context, items[0], items[1])
+            }
+            // legacy add end
         }
+    } else {
+        getBitmapWithOneNumber(context, url)
     }
 
     // Given two strings return a custom bitmap made of two bitmaps with optional numeric label
@@ -153,18 +150,18 @@ object UtilityForecastIcon {
 
     private fun getFilename(url: String): String {
         var fileName = url.replace("?size=medium", "")
-        fileName = fileName.replace("?size=small", "")
-        fileName = fileName.replace("https://api.weather.gov/icons/land/", "")
-        fileName = fileName.replace("http://api.weather.gov/icons/land/", "")
-        fileName = fileName.replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
-        fileName = fileName.replace("day/", "")
-        // legacy add
-        fileName = fileName.replace("http://forecast.weather.gov/newimages/medium/", "")
-        fileName = fileName.replace("https://forecast.weather.gov/newimages/medium/", "")
-        fileName = fileName.replace(".png", "")
-        fileName = fileName.replace("http://forecast.weather.gov/DualImage.php?", "")
-        fileName = fileName.replace("https://forecast.weather.gov/DualImage.php?", "")
-        fileName = fileName.replace("&amp", "")
+                            .replace("?size=small", "")
+                            .replace("https://api.weather.gov/icons/land/", "")
+                            .replace("http://api.weather.gov/icons/land/", "")
+                            .replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
+                            .replace("day/", "")
+                            // legacy add
+                            .replace("http://forecast.weather.gov/newimages/medium/", "")
+                            .replace("https://forecast.weather.gov/newimages/medium/", "")
+                            .replace(".png", "")
+                            .replace("http://forecast.weather.gov/DualImage.php?", "")
+                            .replace("https://forecast.weather.gov/DualImage.php?", "")
+                            .replace("&amp", "")
         // legacy add end
         if (fileName.contains("night")) {
             fileName = fileName.replace("night/", "n").replace("/", "/n")

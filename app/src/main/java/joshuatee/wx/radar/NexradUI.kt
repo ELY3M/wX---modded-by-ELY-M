@@ -18,22 +18,91 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.radar
 
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.*
+import android.view.WindowManager
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectImageMap
+import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFavorites
-import joshuatee.wx.util.UtilityLog
-import java.io.File
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityImageMap
+import joshuatee.wx.util.UtilityFileManagement
 
-class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePane, private val nexradSubmenu: NexradSubmenu) {
+class NexradUI(
+        val activity: VideoRecordActivity,
+        val nexradState: NexradStatePane,
+        private val nexradSubmenu: NexradSubmenu,
+        val nexradArguments: NexradArguments,
+        val getContent: () -> Unit
+) {
+
+    //elys mod - location bug
+    companion object {
+        var bearingCurrent = 0.0f
+        var speedCurrent = 0.0f
+    }
+
+    // auto update interval, 180 seconds by default
+    var interval = 180000
+    // delay between animation frames
+    var delay = 0
+    val objectImageMap = ObjectImageMap(activity, R.id.map, activity.objectToolbar, activity.objectToolbarBottom, nexradState.wxglSurfaceViews)
+    // auto refresh and GPS location
+    val handler = Handler(Looper.getMainLooper())
+    private var locationManager: LocationManager? = null
+    var loopCount = 0
+    // animation processing
+    var inOglAnim = false
+    var inOglAnimPaused = false
+    var animTriggerDownloads = false
+    //
+    var settingsVisited = false
+
+    init {
+        objectImageMap.connect(::mapSwitch, UtilityImageMap::mapToRid)
+        UtilityToolbar.transparentToolbars(activity.objectToolbar, activity.objectToolbarBottom)
+        activity.objectToolbar.setTextColor(Color.WHITE)
+        activity.objectToolbar.connectClick { Route.severeDash(activity) }
+        UtilityFileManagement.deleteCacheFiles(activity)
+        delay = UtilityImg.animInterval(activity)
+
+        if (nexradState.numberOfPanes == 1) {
+            if (UIPreferences.radarStatusBarTransparent) {
+//            This constant was deprecated in API level 30.
+//            Use Window#setStatusBarColor(int) with a half-translucent color instead.
+//            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//            window.statusBarColor = Color.TRANSPARENT
+                if (Build.VERSION.SDK_INT >= 30) {
+                    activity.window.statusBarColor = Color.TRANSPARENT
+                    WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+                } else {
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                }
+            }
+        }
+    }
 
     fun getContentPrep() {
         nexradState.radarSitesForFavorites = UtilityFavorites.setupMenu(activity, nexradState.radarSite, FavoriteType.RID)
@@ -53,7 +122,7 @@ class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePa
         activity.invalidateOptionsMenu()
     }
 
-    fun showTdwrDialog(mapSwitch: (String) -> Unit) {
+    fun showTdwrDialog() {
         val objectDialogue = ObjectDialogue(activity, GlobalArrays.tdwrRadars)
         objectDialogue.connectCancel { dialog, _ ->
             dialog.dismiss()
@@ -61,8 +130,7 @@ class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePa
         }
         objectDialogue.connect { dialog, itemIndex ->
             val s = GlobalArrays.tdwrRadars[itemIndex]
-            nexradState.radarSite = s.split(" ")[0]
-//            nexradState.product = "TZL"
+            nexradState.radarSite = s.split(":")[0]
             mapSwitch(nexradState.radarSite)
             dialog.dismiss()
         }
@@ -71,21 +139,21 @@ class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePa
 
     fun showRadarScanInfo() {
         if (nexradState.numberOfPanes == 1) {
-            ObjectDialogue(activity, WXGLNexrad.getRadarInfo(activity, ""))
+            ObjectDialogue(activity, NexradUtil.getRadarInfo(activity, ""))
         } else {
-            val scanInfoList = nexradState.wxglRenders.indices.map { WXGLNexrad.getRadarInfo(activity, (it + 1).toString()) }
+            val scanInfoList = nexradState.wxglRenders.indices.map { NexradUtil.getRadarInfo(activity, (it + 1).toString()) }
             ObjectDialogue(activity, scanInfoList.joinToString(GlobalVariables.newline + GlobalVariables.newline))
         }
     }
 
     fun setTitleWithWarningCounts() {
         if (RadarPreferences.warnings) {
-            activity.title = nexradState.product + " " + WXGLPolygonWarnings.getCountString()
+            activity.title = nexradState.product + " " + Warnings.getCountString()
         }
     }
 
     fun setSubTitle() {
-        val items = WXGLNexrad.getRadarInfo(activity,"").split(" ")
+        val items = NexradUtil.getRadarInfo(activity,"").split(" ")
         if (items.size > 3) {
             activity.toolbar.subtitle = items[3]
             if (ObjectDateTime.isRadarTimeOld(items[3]))
@@ -111,69 +179,12 @@ class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePa
     // multipane end
     //
 
-    // used by animation
-    fun progressUpdate(vararg values: String) {
-        if ((values[1].toIntOrNull() ?: 0) > 1) {
-            val list = WXGLNexrad.getRadarInfo(activity, "").split(" ")
-            if (list.size > 3)
-                activity.toolbar.subtitle = list[3] + " (" + values[0] + "/" + values[1] + ")"
-            else
-                activity.toolbar.subtitle = ""
-        } else {
-            activity.toolbar.subtitle = "Problem downloading"
-        }
-    }
-
-    fun animateDownloadFiles(frameCount: Int): List<String> {
-        val animArray = WXGLDownload.getRadarFilesForAnimation(activity, frameCount, nexradState.radarSite, nexradState.product)
-        try {
-            animArray.indices.forEach {
-                val file = File(activity.filesDir, animArray[it])
-                activity.deleteFile("nexrad_anim$it")
-                if (!file.renameTo(File(activity.filesDir, "nexrad_anim$it")))
-                    UtilityLog.d("wx", "Problem moving to nexrad_anim$it")
-            }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return animArray
-    }
-
-    //
-    // multipane
-    //
-    fun animateDownloadFilesMultiPane(frameCount: Int): Array<Array<String>> {
-        val animArray = Array(nexradState.numberOfPanes) { Array(frameCount) { "" } }
-        nexradState.wxglRenders.forEachIndexed { z, wxglRender ->
-            animArray[z] = WXGLDownload.getRadarFilesForAnimation(activity, frameCount, wxglRender.rid, wxglRender.product).toTypedArray()
-            try {
-                animArray[z].indices.forEach { r ->
-                    val file = File(activity.filesDir, animArray[z][r])
-                    activity.deleteFile((z + 1).toString() + wxglRender.product + "nexrad_anim" + r.toString())
-                    if (!file.renameTo(File(activity.filesDir, (z + 1).toString() + wxglRender.product + "nexrad_anim" + r.toString())))
-                        UtilityLog.d("wx", "Problem moving to " + (z + 1).toString() + wxglRender.product + "nexrad_anim" + r.toString())
-                }
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-        }
-        return animArray
-    }
-
-    fun progressUpdateMultiPane(vararg values: String) {
-        if ((values[1].toIntOrNull() ?: 0) > 1) {
-            setSubTitleMultiPane(values[0], values[1])
-        } else {
-            activity.toolbar.subtitle = "Problem downloading"
-        }
-    }
-
     fun setSubTitleMultiPane(a: String = "", b: String = "") {
         // take each radar timestamp and split into a list
         // make sure the list is the correct size (more then 3 elements)
         // create another list consisting of the 4th item of each list (the HH:MM:SS)
         // set the subtitle to a string which is the new list joined by "/"
-        val radarInfoList = nexradState.wxglRenders.indices.map { WXGLNexrad.getRadarInfo(activity, (it + 1).toString()) }
+        val radarInfoList = nexradState.wxglRenders.indices.map { NexradUtil.getRadarInfo(activity, (it + 1).toString()) }
         val tmpArray = radarInfoList.map { it.split(" ") }
         if (tmpArray.all { it.size > 3}) {
             val tmpArray2 = tmpArray.map { it[3] }
@@ -202,4 +213,192 @@ class NexradUI(val activity: VideoRecordActivity, val nexradState: NexradStatePa
     Radar Lat: 32.573
     Radar Lon: -97.303]
      */
+
+    fun hideMap() {
+        objectImageMap.hideMap()
+    }
+
+    fun showMap() {
+        objectImageMap.showMap(nexradState.wxglTextObjects)
+    }
+
+    fun checkForAutoRefresh() {
+        if (RadarPreferences.wxoglRadarAutoRefresh || RadarPreferences.locationDotFollowsGps) {
+            interval = 60000 * Utility.readPrefInt(activity, "RADAR_REFRESH_INTERVAL", 3)
+            locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            ) {
+                val gpsEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                if (gpsEnabled != null && gpsEnabled) {
+                    locationManager?.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            (RadarPreferences.locationUpdateInterval * 1000).toLong(),
+                            NexradUtil.radarLocationUpdateDistanceInMeters,
+                            locationListener
+                    )
+                }
+            }
+            activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            startRepeatingTask()
+	        //elys mod
+            //download latest conus image
+            UtilityConusRadar.getConusImage()
+        }
+    }
+
+    val runnable: Runnable = object : Runnable {
+        override fun run() {
+            if (loopCount > 0) {
+                if (inOglAnim) {
+                    animTriggerDownloads = true
+                } else {
+                    getContent()
+                }
+            }
+            loopCount += 1
+            handler.postDelayed(this, interval.toLong())
+        }
+    }
+
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            if (RadarPreferences.locationDotFollowsGps && !nexradArguments.archiveMode) {
+                makeUseOfNewLocation(location)
+            }
+        }
+
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+
+        override fun onProviderEnabled(provider: String) {}
+
+        override fun onProviderDisabled(provider: String) {}
+    }
+
+    private fun makeUseOfNewLocation(location: Location) {
+        nexradState.latD = location.latitude
+        nexradState.lonD = location.longitude
+        //elys mod
+        bearingCurrent = location.bearing
+        speedCurrent = location.speed
+        getGPSFromDouble()
+        nexradState.updateLocationDots(nexradArguments)
+    }
+
+    fun getGPSFromDouble() {
+        if (!nexradArguments.archiveMode) {
+            nexradArguments.locXCurrent = nexradState.latD
+            nexradArguments.locYCurrent = nexradState.lonD
+        }
+    }
+
+    private fun startRepeatingTask() {
+        loopCount = 0
+        handler.removeCallbacks(runnable)
+        runnable.run()
+    }
+
+    fun stopRepeatingTask() {
+        handler.removeCallbacks(runnable)
+    }
+
+    fun onRestart() {
+        delay = UtilityImg.animInterval(activity)
+        inOglAnim = false
+        inOglAnimPaused = false
+        hideMap()
+    }
+
+    fun mapSwitch(newRadarSite: String) {
+        hideMap()
+        if (nexradState.numberOfPanes == 1) {
+            nexradState.adjustPaneTo(newRadarSite)
+        } else {
+            if (RadarPreferences.dualpaneshareposn) {
+                nexradState.adjustAllPanesTo(newRadarSite)
+            } else {
+                nexradState.adjustOnePaneTo(nexradState.curRadar, newRadarSite)
+            }
+        }
+        getContent()
+    }
+
+    fun onStop() {
+        // otherwise cpu will spin with no fix but to kill app
+        inOglAnim = false
+        stopRepeatingTask()
+        locationManager?.let {
+            if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            )
+                it.removeUpdates(locationListener)
+        }
+    }
+
+    fun stopAnimationAndGetContent() {
+        inOglAnim = false
+        inOglAnimPaused = false
+        // if an L2 anim is in process sleep for 1 second to let the current decode/render finish
+        // otherwise the new selection might overwrite in the OGLR object - hack
+        if (nexradState.numberOfPanes > 1) {
+            if (nexradState.wxglRenders[0].state.product.contains("L2") || nexradState.wxglRenders[1].state.product.contains("L2")) {
+                SystemClock.sleep(2000)
+            }
+        } else {
+            if (nexradState.product.contains("L2")) {
+                SystemClock.sleep(2000)
+            }
+            nexradSubmenu.setStarButton()
+        }
+        nexradSubmenu.setAnimateToPlay()
+        getContent()
+    }
+
+    fun pauseButtonTapped() {
+        if (inOglAnim) {
+            inOglAnimPaused = if (!inOglAnimPaused) {
+                nexradSubmenu.setAnimateToResume()
+                true
+            } else {
+                nexradSubmenu.setAnimateToPause()
+                false
+            }
+        }
+    }
+
+    fun longPressRadarSiteSwitch(s: String) {
+        nexradState.radarSite = s.split(" ")[0]
+        stopAnimation()
+        if (RadarPreferences.dualpaneshareposn && nexradState.numberOfPanes > 1) {
+            nexradState.setAllPanesTo(nexradState.radarSite)
+            mapSwitch(nexradState.radarSite)
+        } else {
+            mapSwitch(nexradState.radarSite)
+        }
+    }
+
+    fun stopAnimation() {
+        inOglAnim = false
+        inOglAnimPaused = false
+        nexradSubmenu.setAnimateToPlay()
+    }
+
+    // single pane only
+    fun actionToggleFavorite() {
+        if (inOglAnim) {
+            inOglAnimPaused = if (!inOglAnimPaused) {
+                nexradSubmenu.setAnimateToResume()
+                true
+            } else {
+                nexradSubmenu.setAnimateToPause()
+                false
+            }
+        } else {
+            toggleFavorite()
+        }
+    }
+
+    private fun toggleFavorite() {
+        UtilityFavorites.toggle(activity, nexradState.radarSite, nexradSubmenu.starButton, FavoriteType.RID)
+    }
 }

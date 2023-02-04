@@ -1,0 +1,136 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--    <item-->
+<!--        android:id="@+id/action_animate"-->
+<!--        android:icon="@drawable/ic_play_arrow_24dp"-->
+<!--        android:title="@string/animate_icon"-->
+<!--        app:showAsAction="always"/>-->
+<!--    <item-->
+<!--        android:id="@+id/action_pause"-->
+<!--        android:icon="@drawable/ic_pause_24dp"-->
+<!--        android:title="@string/label_pause"-->
+<!--        app:showAsAction="always" />-->
+    <item
+        android:id="@+id/action_time"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="@string/label_share"
+        app:showAsAction="ifRoom" />
+
+    <group android:id="@+id/sectors">
+
+        <item
+            android:id="@+id/action_alaska"
+            android:title="Alaska"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_ca"
+            android:title="California"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_co"
+            android:title="Colorado"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_fl"
+            android:title="Florida"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_guam"
+            android:title="Guam"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_gulf_coast"
+            android:title="Gulf Coast"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_mi"
+            android:title="Michigan"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_mid_atl"
+            android:title="Mid Atlantic"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_mid_west"
+            android:title="Mid West"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_mt"
+            android:title="Montana"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_nc_sc"
+            android:title="North/South Carolina"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_nd_sd"
+            android:title="North/South Dakota"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_new_eng"
+            android:title="New England"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_nw_pacific"
+            android:title="NW Pacific"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_ohio_valley"
+            android:title="Ohio Valley"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_sw_us"
+            android:title="SW US"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_tx"
+            android:title="Texas"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_wi"
+            android:title="Wisconsin"
+            app:showAsAction="never" />
+
+    </group>
+</menu>

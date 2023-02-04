@@ -27,16 +27,19 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
-import java.util.Locale
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
-import joshuatee.wx.util.ObjectCurrentConditions
-import joshuatee.wx.util.ObjectHazards
-import joshuatee.wx.util.ObjectSevenDay
+import joshuatee.wx.util.CurrentConditions
+import joshuatee.wx.util.Hazards
+import joshuatee.wx.util.SevenDay
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.LatLon
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.CardCurrentConditions
+import joshuatee.wx.ui.CardHazards
+import joshuatee.wx.ui.PopupMessage
+import joshuatee.wx.ui.SevenDayCollection
+import joshuatee.wx.ui.VBox
 
 class ForecastActivity : BaseActivity() {
 
@@ -49,15 +52,15 @@ class ForecastActivity : BaseActivity() {
     companion object { const val URL = "" }
 
     private var latLon = LatLon()
-    private var objectCurrentConditions = ObjectCurrentConditions()
-    private var objectHazards = ObjectHazards()
-    private var objectSevenDay = ObjectSevenDay()
-    private lateinit var objectCardCurrentConditions: ObjectCardCurrentConditions
+    private var currentConditions = CurrentConditions()
+    private var hazards = Hazards()
+    private var sevenDay = SevenDay()
+    private lateinit var cardCurrentConditions: CardCurrentConditions
     private lateinit var boxForecast: VBox
     private lateinit var boxHazards: VBox
-    private val hazardCards = mutableListOf<CardText>()
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
+    private lateinit var sevenDayCollection: SevenDayCollection
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.adhoc_forecast, menu)
@@ -70,13 +73,22 @@ class ForecastActivity : BaseActivity() {
         val arguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(arguments[0], arguments[1])
         setTitle("Forecast for", latLon.prettyPrint())
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
-        objectCardCurrentConditions = ObjectCardCurrentConditions(this, 2)
-        box.addWidget(objectCardCurrentConditions.get())
-        boxHazards = VBox(this, box.get())
-        boxForecast = VBox(this, box.get())
-        getContent()
+        cardCurrentConditions = CardCurrentConditions(this, 2)
+        boxHazards = VBox(this)
+        boxForecast = VBox(this)
+        sevenDayCollection = SevenDayCollection(this, boxForecast, scrollView)
+        with (box) {
+            addWidget(cardCurrentConditions)
+            addLayout(boxHazards)
+            addLayout(boxForecast)
+        }
     }
 
     override fun onRestart() {
@@ -91,52 +103,34 @@ class ForecastActivity : BaseActivity() {
     }
 
     private fun downloadCc() {
-        objectCurrentConditions = ObjectCurrentConditions(this, latLon)
-        objectCurrentConditions.timeCheck(this)
+        currentConditions = CurrentConditions(this, latLon)
+        currentConditions.timeCheck(this)
     }
 
     private fun updateCc() {
-        objectCardCurrentConditions.update(objectCurrentConditions, true)
+        cardCurrentConditions.update(currentConditions, true)
     }
 
     private fun downloadHazards() {
-        objectHazards = ObjectHazards(latLon)
+        hazards = Hazards(latLon)
     }
 
     private fun updateHazards() {
-        if (objectHazards.titles.isEmpty()) {
+        if (hazards.titles.isEmpty()) {
             boxHazards.removeChildrenAndLayout()
             boxHazards.visibility = View.GONE
         } else {
             boxHazards.visibility = View.VISIBLE
-            setupHazardCards()
+            CardHazards(this, boxHazards, hazards)
         }
     }
 
     private fun download7Day() {
-        objectSevenDay = ObjectSevenDay(latLon)
+        sevenDay = SevenDay(latLon)
     }
 
     private fun update7Day() {
-        boxForecast.removeChildrenAndLayout()
-        objectSevenDay.icons.forEachIndexed { index, iconUrl ->
-            val sevenDayCard = SevenDayCard(this, iconUrl, true, objectSevenDay.forecastList[index])
-            sevenDayCard.connect { scrollView.smoothScrollTo(0, 0) }
-            boxForecast.addWidget(sevenDayCard.get())
-        }
-        boxForecast.addWidget(SunRiseCard(this, latLon, scrollView).get())
-    }
-
-    private fun setupHazardCards() {
-        boxHazards.removeChildrenAndLayout()
-        hazardCards.clear()
-        objectHazards.titles.indices.forEach { z ->
-            hazardCards.add(CardText(this))
-            hazardCards.last().setupHazard()
-            hazardCards.last().text = objectHazards.titles[z].uppercase(Locale.US)
-            hazardCards.last().connect { Route.hazard(this, objectHazards.urls[z]) }
-            boxHazards.addWidget(hazardCards.last().get())
-        }
+        sevenDayCollection.update(sevenDay, latLon, true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -149,6 +143,6 @@ class ForecastActivity : BaseActivity() {
 
     private fun saveLocation() {
         val message = Location.save(this, latLon)
-        ObjectPopupMessage(box.get(), message)
+        PopupMessage(box.get(), message)
     }
 }

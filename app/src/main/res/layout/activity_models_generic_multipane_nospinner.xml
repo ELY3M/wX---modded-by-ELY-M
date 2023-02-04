@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:stretchColumns="*">
+                >
 
                 <joshuatee.wx.ui.TouchImageView2
                     android:id="@+id/iv1"
@@ -89,7 +89,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="?attr/colorPrimary"
-        android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>

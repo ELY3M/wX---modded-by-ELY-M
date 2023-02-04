@@ -51,7 +51,7 @@ class ImageShowActivity : BaseActivity() {
     private var urls = listOf<String>()
     private var shareTitle = ""
     private var needsWhiteBackground = false
-    private lateinit var image: TouchImage
+    private lateinit var touchImage: TouchImage
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.image_show_activity, menu)
@@ -67,7 +67,7 @@ class ImageShowActivity : BaseActivity() {
             needsWhiteBackground = arguments[2] == "true"
         }
         setTitle("Image Viewer", shareTitle)
-        image = TouchImage(this, toolbar, R.id.iv)
+        touchImage = TouchImage(this, toolbar, R.id.iv)
         when {
             // TODO FIXME is "file:" used anymore, think not
             url.contains("file:") -> {
@@ -84,7 +84,7 @@ class ImageShowActivity : BaseActivity() {
 
     private fun loadRawBitmap() {
         val bitmap = UtilityImg.loadBitmap(this, R.drawable.radar_legend, false)
-        image.set(bitmap)
+        touchImage.set(bitmap)
     }
 
     override fun onRestart() {
@@ -101,16 +101,16 @@ class ImageShowActivity : BaseActivity() {
         if (needsWhiteBackground) {
             bitmap = UtilityImg.addColorBackground(this, bitmap, Color.WHITE)
         }
-        image.set(bitmap)
+        touchImage.set(bitmap)
     }
 
     private fun getContentFromStorage() {
-        image.set(UtilityIO.bitmapFromInternalStorage(this, urls[1]))
+        touchImage.set(UtilityIO.bitmapFromInternalStorage(this, urls[1]))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, shareTitle, image)
+            R.id.action_share -> UtilityShare.bitmap(this, shareTitle, touchImage)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

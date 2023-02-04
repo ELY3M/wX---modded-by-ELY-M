@@ -34,7 +34,9 @@ import android.widget.Toast
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
+import joshuatee.wx.widgets.UtilityWidget
 import java.util.Random
 
 /**
@@ -157,7 +159,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
         fun buildLayout(context: Context, appWidgetId: Int, largeLayout: Boolean): RemoteViews {
             val remoteViews: RemoteViews
             val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-            val widgetLocNumInt = (widgetLocNum.toIntOrNull() ?: 0) - 1
+            val widgetLocNumInt = To.int(widgetLocNum) - 1
             if (largeLayout) {
                 // Specify the service to provide data for the collection widget.  Note that we need to
                 // embed the appWidgetId via the data otherwise it will be ignored.

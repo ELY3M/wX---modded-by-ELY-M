@@ -60,11 +60,9 @@ class Drawer(
             navigationView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
         }
         headerLayout = navigationView.getHeaderView(0)
-
         val color = UtilityTheme.getPrimaryColorFromSelectedTheme(activity, 0)
         tint = ColorStateList.valueOf(color)
         headerLayout.setBackgroundColor(color)
-
         if (UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB || UIPreferences.themeInt == R.style.MyCustomTheme_NOAB) {
             val colorForWhite = ContextCompat.getColor(activity, R.color.primary_blue)
             headerLayout.setBackgroundColor(colorForWhite)
@@ -80,11 +78,7 @@ class Drawer(
         addSecondaryItems()
     }
 
-    fun addItem(
-            buttonId: Int,
-            textId: Int,
-            fn: () -> Unit
-    ) {
+    fun addItem(buttonId: Int, textId: Int, fn: () -> Unit) {
         headerItems.add(DrawerHeaderItem(drawerLayout, headerLayout, buttonId, textId, tint, gravityForDrawer, fn))
     }
 

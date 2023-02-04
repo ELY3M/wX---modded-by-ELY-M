@@ -21,13 +21,11 @@
 
 package joshuatee.wx.models
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
+import android.content.Context
 import java.util.Locale
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.util.UtilityImgAnim
 import java.util.regex.Pattern
 
 internal object UtilityModelNcepInputOutput {
@@ -54,7 +52,7 @@ internal object UtilityModelNcepInputOutput {
         return runData
     }
 
-    fun getImage(om: ObjectModel, time: String): Bitmap {
+    fun getImage(@Suppress("UNUSED_PARAMETER") context: Context, om: ObjectModel, time: String): Bitmap {
         val modifiedTime = if (om.model == "HRRR" && time.length == 3) {
             time + "00"
         } else {
@@ -70,14 +68,5 @@ internal object UtilityModelNcepInputOutput {
                     "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }
         return imgUrl.getImage()
-    }
-
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
-        }
-        val timeList = om.times
-        val bitmaps = (om.spinnerTimeValue until timeList.size).map { getImage(om, timeList[it].split(" ").getOrNull(0) ?: "") }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

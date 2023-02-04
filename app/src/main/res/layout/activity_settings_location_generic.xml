@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="@dimen/padding_ll"
-                    android:stretchColumns="*">
+                    >
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv1"
@@ -92,12 +92,18 @@
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/notif_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="@string/notifications"
                         android:textSize="@dimen/large_text" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/notif_text_perm"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Please make sure notifications are explicitly allowed if you enable any items below. If using Android 13 or higher, tap here to allow permissions."
+                        />
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>

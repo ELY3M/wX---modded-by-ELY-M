@@ -23,6 +23,7 @@ import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.util.To
 
 /**
  * A dummy class that we are going to use internally to store weather data.  Generally, this data
@@ -77,7 +78,7 @@ class WeatherDataProvider : ContentProvider() {
         // assert(uri.pathSegments.size == 1)
         // In this sample, we only update the content provider individually for each row with new
         // temperature values.
-        val index = uri.pathSegments[0].toIntOrNull() ?: 0
+        val index = To.int(uri.pathSegments[0])
         //val c = MatrixCursor(arrayOf(Columns.ID, Columns.DAY, Columns.TEMPERATURE))
         //assert(0 <= index && index < sData.size)
         if (weatherDataPoints.size > index) {

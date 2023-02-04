@@ -25,11 +25,11 @@ import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.UtilitySpotter
-import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectRecyclerViewGeneric
+import joshuatee.wx.ui.RecyclerViewGeneric
 
 class SpotterReportsActivity : BaseActivity() {
 
@@ -37,13 +37,13 @@ class SpotterReportsActivity : BaseActivity() {
     // Show active spotter reports
     //
 
-    private lateinit var objectRecyclerViewGeneric: ObjectRecyclerViewGeneric
+    private lateinit var recyclerViewGeneric: RecyclerViewGeneric
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
-        objectRecyclerViewGeneric = ObjectRecyclerViewGeneric(this, R.id.card_list)
+        recyclerViewGeneric = RecyclerViewGeneric(this, R.id.card_list)
         val adapterSpotterReports = AdapterSpotterReports(UtilitySpotter.reports)
-        objectRecyclerViewGeneric.adapter = adapterSpotterReports
+        recyclerViewGeneric.adapter = adapterSpotterReports
         updateTitles()
         adapterSpotterReports.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {
             override fun onItemClick(position: Int) { itemSelected(position) }
@@ -51,7 +51,7 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     override fun onRestart() {
-        objectRecyclerViewGeneric.adapter = AdapterSpotterReports(UtilitySpotter.reports)
+        recyclerViewGeneric.adapter = AdapterSpotterReports(UtilitySpotter.reports)
         updateTitles()
         super.onRestart()
     }
@@ -61,7 +61,7 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     private fun itemSelected(position: Int) {
-        val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(UtilitySpotter.reports[position].lat, UtilitySpotter.reports[position].lon))
-        Route.radar(this, arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.reports[position].uniq))
+        val radarSite = UtilityLocation.getNearestOffice(OfficeTypeEnum.RADAR, UtilitySpotter.reports[position].latLon)
+        Route.radarWithOneSpotter(this, radarSite, UtilitySpotter.reports[position].uniq)
     }
 }

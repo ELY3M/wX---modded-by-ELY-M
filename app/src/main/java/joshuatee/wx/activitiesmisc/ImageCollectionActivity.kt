@@ -24,6 +24,7 @@ package joshuatee.wx.activitiesmisc
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -31,9 +32,10 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.ObjectImagesCollection
-import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.ImagesCollection
+import joshuatee.wx.ui.NavDrawer
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImgAnim
@@ -48,9 +50,9 @@ class ImageCollectionActivity : VideoRecordActivity() {
 
     companion object { const val TYPE = "" }
 
-    private lateinit var image: TouchImage
-    private lateinit var objectNavDrawer: ObjectNavDrawer
-    private lateinit var imageCollection: ObjectImagesCollection
+    private lateinit var touchImage: TouchImage
+    private lateinit var navDrawer: NavDrawer
+    private lateinit var imageCollection: ImagesCollection
     // TODO FIXME use ObjectAnimate if possible
     private var animDrawable = AnimationDrawable()
 
@@ -62,8 +64,11 @@ class ImageCollectionActivity : VideoRecordActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
-        if (objectNavDrawer.url.contains("jma") && imageCollection.title == "GOESFD") {
+        if (navDrawer.url.contains("jma") && imageCollection.title == "GOESFD") {
             actionAnimate.isVisible = true
+        }
+        if (imageCollection.title != "Observations") {
+            menu.findItem(R.id.action_rtma).isVisible = false
         }
         return super.onPrepareOptionsMenu(menu)
     }
@@ -71,13 +76,18 @@ class ImageCollectionActivity : VideoRecordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.imagecollection, iconsEvenlySpaced = true, bottomToolbar = false)
         val arguments = intent.getStringArrayExtra(TYPE)!!
-        imageCollection = ObjectImagesCollection.map[arguments[0]]!!
-        objectNavDrawer = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContent)
-        image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, imageCollection.prefTokenIdx)
-        image.connect(objectNavDrawer, ::getContent)
-        objectNavDrawer.index = Utility.readPrefInt(this, imageCollection.prefTokenIdx, 0)
-        toolbar.setOnClickListener { objectNavDrawer.open() }
+        val typeOfCollection = arguments[0]
+        setupUI(typeOfCollection)
         getContent()
+    }
+
+    private fun setupUI(typeOfCollection: String) {
+        imageCollection = ImagesCollection.map[typeOfCollection]!!
+        navDrawer = NavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContent)
+        touchImage = TouchImage(this, toolbar, R.id.iv, navDrawer, imageCollection.prefTokenIdx)
+        touchImage.connect(navDrawer, ::getContent)
+        navDrawer.index = Utility.readPrefInt(this, imageCollection.prefTokenIdx, 0)
+        objectToolbar.connectClick { navDrawer.open() }
     }
 
     override fun onRestart() {
@@ -86,41 +96,44 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     private fun getContent() {
-        setTitle(imageCollection.title, objectNavDrawer.getLabel())
-        FutureBytes(this, objectNavDrawer.url, ::showImage)
+        setTitle(imageCollection.title, navDrawer.getLabel())
+        FutureBytes(this, navDrawer.url, ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {
-        if (objectNavDrawer.url.contains("large_latestsfc.gif")) {
-            image.setMaxZoom(16.0f)
-        } else {
-            image.setMaxZoom(4.0f)
+        with (touchImage) {
+            if (navDrawer.url.contains("large_latestsfc.gif")) {
+                setMaxZoom(16.0f)
+            } else {
+                setMaxZoom(4.0f)
+            }
+            set(bitmap)
+            firstRun(imageCollection.prefImagePosition)
         }
-        image.set(bitmap)
-        image.firstRun(imageCollection.prefImagePosition)
         invalidateOptionsMenu()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.syncState()
+        navDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.onConfigurationChanged(newConfig)
+        navDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.onOptionsItemSelected(item)) {
+        if (navDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
             R.id.action_animate -> getAnimate()
-            R.id.action_share -> if (UIPreferences.recordScreenShare) {
+            R.id.action_rtma -> Route.rtma(this)
+            R.id.action_share -> if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.bitmap(this, imageCollection.title, image)
+                    UtilityShare.bitmap(this, imageCollection.title, touchImage)
                 }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -128,13 +141,13 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     override fun onStop() {
-        image.imgSavePosnZoom(imageCollection.prefImagePosition)
+        touchImage.imgSavePosnZoom(imageCollection.prefImagePosition)
         super.onStop()
     }
 
     private fun getAnimate() {
         FutureVoid(this,
-            { animDrawable = UtilityGoesFullDisk.getAnimation(this, objectNavDrawer.url) })
-            { UtilityImgAnim.startAnimation(animDrawable, image) }
+            { animDrawable = UtilityGoesFullDisk.getAnimation(this, navDrawer.url) })
+            { UtilityImgAnim.startAnimation(animDrawable, touchImage) }
     }
 }

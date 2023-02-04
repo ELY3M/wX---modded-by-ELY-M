@@ -23,46 +23,76 @@
 package joshuatee.wx.settings
 
 import android.os.Bundle
+import androidx.core.app.NotificationManagerCompat
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityFileManagement
+import joshuatee.wx.util.UtilityMath
 
 class SettingsMainActivity : BaseActivity() {
 
     private lateinit var box: VBox
+    private var notifStatus = ""
+    private lateinit var notifCard: CardText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Settings", Utility.getVersion(this) + ", tap on text for additional help.")
+        setupUI()
+    }
+
+    private fun setupUI() {
         box = VBox.fromResource(this)
         UtilityTheme.setPrimaryColor(this)
+        addCards()
+        updateNotificationStatus()
+    }
+
+    private fun addCards() {
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
-        CardText(this, box, "About wX", textSize, SettingsAboutActivity::class.java, padding)
-        CardText(this, box, "Celsius to fahrenheit table", textSize,
-                { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") }, padding)
-        CardText(this, box, "Colors", textSize, SettingsColorsActivity::class.java, padding)
-        CardText(this, box, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding)
-        CardText(this, box, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding)
+        box.addWidget(CardText(this, "About wX", textSize, SettingsAboutActivity::class.java, padding))
+        box.addWidget(CardText(this, "Celsius to fahrenheit table", textSize,
+                { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") }, padding))
+        box.addWidget(CardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding))
+        box.addWidget(CardText(this, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding))
+        box.addWidget(CardText(this, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding))
         //elys mod
-	CardText(this, box, "Spotter Network Settings", textSize, SettingsSpotterNetwork::class.java, padding)
-        CardText(this, box, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
-        CardText(this, box, "PlayList", textSize, { Route.playlist(this) }, padding)
-        CardText(this, box, "Radar", textSize, SettingsRadarActivity::class.java, padding)
-        CardText(this, box, "User Interface", textSize, SettingsUIActivity::class.java, padding)
-        CardText(this, box, "Widgets", textSize, SettingsWidgetsActivity::class.java, padding)
+	box.addWidget(CardText(this, "Spotter Network Settings", textSize, SettingsSpotterNetwork::class.java, padding))
+        notifCard = CardText(this, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
+        box.addWidget(notifCard)
+        box.addWidget(CardText(this, "PlayList", textSize, { Route.playlist(this) }, padding))
+        box.addWidget(CardText(this, "Radar", textSize, SettingsRadarActivity::class.java, padding))
+        box.addWidget(CardText(this, "User Interface", textSize, SettingsUIActivity::class.java, padding))
+        box.addWidget(CardText(this, "Widgets", textSize, SettingsWidgetsActivity::class.java, padding))
         //elys mod
-        CardText(this, box, "Delete old radar files", textSize, UtilityFileManagement.deleteCacheFiles(this)::class.java, padding)
-        CardText(this, box, "Backup Settings", textSize, { UtilityBackupRestore.backupPrefs(this) }, padding)
-        CardText(this, box, "Restore Settings", textSize, { UtilityBackupRestore.restorePrefs(this) }, padding)
+        box.addWidget(CardText(this, "Delete old radar files", textSize, UtilityFileManagement.deleteCacheFiles(this)::class.java, padding))
+        box.addWidget(CardText(this, "Backup Settings", textSize, { UtilityBackupRestore.backupPrefs(this) }, padding))
+        box.addWidget(CardText(this, "Restore Settings", textSize, { UtilityBackupRestore.restorePrefs(this) }, padding))
         box.addWidget(
-            ObjectSwitch(this,"Check for Internet on startup","CHECKINTERNET", R.string.checkinternet_switch_label).get()
+            Switch(this,"Check for Internet on startup","CHECKINTERNET", R.string.checkinternet_switch_label)
         )
         //elys mod end
 
+    }
+
+    private fun updateNotificationStatus() {
+        val notificationManagerCompat = NotificationManagerCompat.from(this)
+        notifStatus = if (!notificationManagerCompat.areNotificationsEnabled()) {
+            " (blocked for app)"
+        } else {
+            ""
+        }
+        notifCard.text = "Notifications$notifStatus"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateNotificationStatus()
     }
 
     override fun onStop() {

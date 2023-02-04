@@ -29,9 +29,9 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.ObjectPolygonWatch
+import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.DownloadText
 import joshuatee.wx.util.UtilityImg
 
 internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) {
@@ -77,28 +77,14 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         }
     }
 
-//    fun getData(context: Context) {
-//        text = UtilityDownload.getTextProduct(context, prod)
-//        var textWithLatLon = text
-//        if (type == PolygonType.WATCH || type == PolygonType.WATCH_TORNADO) {
-//            textWithLatLon = ObjectPolygonWatch.getLatLonWatch(productNumber)
-//        }
-//        stringOfLatLon = UtilityNotification.storeWatchMcdLatLon(textWithLatLon).replace(":", "")
-//        latLons = stringOfLatLon.split(" ")
-//        bitmap = imgUrl.getImage()
-//        val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
-//        wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-//    }
-
     fun getText(context: Context) {
-        text = UtilityDownload.getTextProduct(context, prod)
+        text = DownloadText.byProduct(context, prod)
         var textWithLatLon = text
         if (type == PolygonType.WATCH || type == PolygonType.WATCH_TORNADO) {
-            textWithLatLon = ObjectPolygonWatch.getLatLonWatch(productNumber)
+            textWithLatLon = PolygonWatch.getLatLonWatch(productNumber)
         }
         stringOfLatLon = UtilityNotification.storeWatchMcdLatLon(textWithLatLon).replace(":", "")
         latLons = stringOfLatLon.split(" ")
-//        bitmap = imgUrl.getImage()
         val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
         wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
     }

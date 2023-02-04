@@ -28,10 +28,14 @@ import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.MyApplication
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.Extensions.parse
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.util.*
-import java.util.*
+import joshuatee.wx.util.ImageMap
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityIO
+import joshuatee.wx.util.UtilityImageMap
+import joshuatee.wx.util.UtilityImg
+import java.util.Locale
 
 class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 

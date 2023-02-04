@@ -26,23 +26,27 @@ import android.graphics.Color
 import android.os.Bundle
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.objects.ObjectPolygonWarning
+import joshuatee.wx.objects.PolygonWarning
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.radar.RadarGeometry
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectColorLabel
+import joshuatee.wx.ui.ColorLabel
 import joshuatee.wx.ui.VBox
 
 class SettingsColorsActivity : BaseActivity() {
 
-    private var objectSettingsColorLabels = listOf<ObjectColorLabel>()
+    private var objectSettingsColorLabels = listOf<ColorLabel>()
     private lateinit var box: VBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         box = VBox.fromResource(this)
         box.setBackgroundColor(Color.BLACK)
+        addCards()
+    }
+
+    private fun addCards() {
         val mapColorToPref = mutableMapOf(
             "Highway color" to "RADAR_COLOR_HW",
             "Secondary Highway color" to "RADAR_COLOR_HW_EXT",
@@ -64,7 +68,7 @@ class SettingsColorsActivity : BaseActivity() {
             "Hail marker color" to "RADAR_COLOR_HI",
             "Hail Text color" to "RADAR_COLOR_HI_TEXT",
             "Observations color" to "RADAR_COLOR_OBS",
-            "Windbarb color" to "RADAR_COLOR_OBS_WINDBARBS",
+            "Wind barb color" to "RADAR_COLOR_OBS_WINDBARBS",
             "Radar Legend Text Color" to "RADAR_SHOW_LEGEND_TEXTCOLOR",
             "Draw tool color" to "DRAW_TOOL_COLOR",
             "Widget Text color" to "WIDGET_TEXT_COLOR",
@@ -73,13 +77,16 @@ class SettingsColorsActivity : BaseActivity() {
             "NWS Forecast Icon Bottom color" to "NWS_ICON_BOTTOM_COLOR",
             "Nexrad Radar Background color" to "NEXRAD_RADAR_BACKGROUND_COLOR"
         )
-        ObjectPolygonWarning.polygonDataByType.values.forEach {
+        PolygonWarning.byType.values.forEach {
             if (it.type != PolygonWarningType.FlashFloodWarning &&  it.type != PolygonWarningType.ThunderstormWarning && it.type != PolygonWarningType.TornadoWarning) {
                 mapColorToPref[it.name + " color"] = it.prefTokenColor
             }
         }
         objectSettingsColorLabels = mapColorToPref.keys.sorted().map {
-            ObjectColorLabel(this, box, it, mapColorToPref[it]!!)
+            ColorLabel(this, it, mapColorToPref[it]!!)
+        }
+        objectSettingsColorLabels.forEach {
+            box.addWidget(it)
         }
     }
 

@@ -2,14 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion '31.0.0'
+    namespace 'joshuatee.wx'
+    compileSdkVersion 33
+    buildToolsVersion '33.0.0'
 
 
     defaultConfig {
         applicationId "joshuatee.wx"
         minSdkVersion 23
-        targetSdkVersion 32
+        targetSdkVersion 33
         // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -23,7 +24,7 @@ android {
     }
 
 
-    def ndkDir = "D:\\android-sdk\\android-ndk-r23b"
+    def ndkDir = "D:\\android-sdk\\android-ndk-r25b"
 
     task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
         commandLine "$ndkDir\\ndk-build.cmd",
@@ -82,10 +83,11 @@ android {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     // https://developer.android.com/jetpack/androidx/versions
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.media:media:1.6.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
@@ -97,13 +99,14 @@ dependencies {
     // https://developer.android.com/studio/write/java8-support
     // https://developer.android.com/studio/write/java8-support-table
     // https://developer.android.com/reference/java/time/package-summary
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.8'
     
     //elys mods
     implementation 'ch.acra:acra-mail:5.9.6'
     implementation 'ch.acra:acra-core:5.9.6'
-    implementation 'io.github.nishkarsh:android-permissions:0.1.7'
-    implementation 'org.shredzone.commons:commons-suncalc:2.6'
+    //implementation 'io.github.nishkarsh:android-permissions:0.1.7'
+    implementation 'io.github.nishkarsh:android-permissions:2.1.6'
+    implementation 'org.shredzone.commons:commons-suncalc:3.5'
 }
 
 repositories {

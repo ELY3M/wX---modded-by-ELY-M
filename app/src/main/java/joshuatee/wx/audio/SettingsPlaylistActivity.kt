@@ -22,7 +22,7 @@
 package joshuatee.wx.audio
 
 import android.Manifest
-import android.app.Activity
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
@@ -40,72 +40,93 @@ import joshuatee.wx.wpc.UtilityWpcText
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.PopupMessage
+import joshuatee.wx.ui.RecyclerViewGeneric
+import joshuatee.wx.ui.UtilityUI
 
 class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
+    //
+    // Interface to saved text products designed to be used with Text To Speech (TTS) capability
+    //
+
     private var playListItems = mutableListOf<String>()
-    private var ridFav = ""
+    private var playListString = ""
     private val prefToken = "PLAYLIST"
     private lateinit var adapter: PlayListAdapter
-    private lateinit var fabPause: ObjectFab
+    private lateinit var fabPause: Fab
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
+    private lateinit var recyclerView: RecyclerViewGeneric
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
         setTitle("PlayList", "Tap item to play, view, delete or move.")
-        toolbarBottom.setOnMenuItemClickListener(this)
-        ObjectFab(this, R.id.fab) { playAll() }
-        fabPause = ObjectFab(this, R.id.fab3) { playItemFab() }
+        playListString = Utility.readPref(this, prefToken, "")
+        updateList()
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
+        objectToolbarBottom.connect(this)
+        setupFab()
+        setupDialogue()
+        setupRecyclerView()
+        UtilityTts.initTts(this)
+    }
+
+    private fun setupFab() {
+        Fab(this, R.id.fab) { playAll() }
+        fabPause = Fab(this, R.id.fab3) { playItemFab() }
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             GlobalVariables.ICON_PAUSE_PRESSED
         } else {
             GlobalVariables.ICON_PAUSE_WHITE
         }
         fabPause.set(icon)
+    }
+
+    private fun setupDialogue() {
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        diaAfd.connect { dialog, which ->
-            val name = diaAfd.getItem(which)
-            val product = "AFD" + name.split(":").dropLastWhile { it.isEmpty() }[0].uppercase(Locale.US)
-            if (!ridFav.contains(product)) {
-                ridFav = "$ridFav:$product"
-                Utility.writePref(this, prefToken, ridFav)
-                UIPreferences.playlistStr = ridFav
-                playListItems.add(getLongString(product))
-                getContent()
-                dialog.dismiss()
-            } else {
-                dialog.dismiss()
-                val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
-                ObjectPopupMessage(rootView, "$product already in playlist")
-            }
-        }
+        diaAfd.connect2 { dialog, item -> addProductToPlayList(dialog, item, "AFD") }
+
         diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labels)
-        diaMain.connect { dialog, which ->
-            val name = diaMain.getItem(which)
-            val product = name.split(":").dropLastWhile { it.isEmpty() }[0].uppercase(Locale.US)
-            if (!ridFav.contains(product)) {
-                ridFav = "$ridFav:$product"
-                Utility.writePref(this, prefToken, ridFav)
-                playListItems.add(getLongString(product))
-                UIPreferences.playlistStr = ridFav
-                getContent()
-                dialog.dismiss()
-            } else {
-                dialog.dismiss()
-                val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
-                ObjectPopupMessage(rootView, "$product already in playlist")
-            }
+        diaMain.connect2 { dialog, item -> addProductToPlayList(dialog, item, "") }
+    }
+
+    private fun addProductToPlayList(dialog: DialogInterface, item: String, prefix: String) {
+        val product = prefix + item.split(":")[0].uppercase(Locale.US)
+        if (!playListString.contains(product)) {
+            updateFav(product)
+            dialog.dismiss()
+        } else {
+            showAlreadyThere(product, dialog)
         }
-        ridFav = Utility.readPref(this, prefToken, "")
-        updateList()
-        val recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
-        adapter = PlayListAdapter(playListItems)
+    }
+
+    private fun updateFav(product: String) {
+        playListString += ":$product"
+        Utility.writePref(this, prefToken, playListString)
+        playListItems.add(getLongString(product))
+        UIPreferences.playlistStr = playListString
+        getContent()
+    }
+
+    private fun showAlreadyThere(product: String, dialog: DialogInterface) {
+        dialog.dismiss()
+//        val rootView: View = window.decorView.findViewById(android.R.id.content)
+        PopupMessage(recyclerView.get(), "$product already in playlist", PopupMessage.short)
+    }
+
+    private fun setupRecyclerView() {
+        recyclerView = RecyclerViewGeneric(this, R.id.card_list)
+        adapter = PlayListAdapter(this, playListItems)
         recyclerView.adapter = adapter
         adapter.setListener(::itemSelected)
-        UtilityTts.initTts(this)
-        getContent()
     }
 
     private fun getContent() {
@@ -115,16 +136,16 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun updateList() {
-        UIPreferences.playlistStr = ridFav
-        val tempList = ridFav.split(":")
-        playListItems = (1 until tempList.size).map { getLongString(tempList[it]) }.toMutableList()
+        UIPreferences.playlistStr = playListString
+        val tempList = playListString.split(":").filter { it != "" }
+        playListItems = tempList.map { getLongString(it) }.toMutableList()
     }
 
     private fun updateListNoInit() {
-        UIPreferences.playlistStr = ridFav
-        val tempList = ridFav.split(":")
-        (1 until tempList.size).forEach {
-            playListItems[it - 1] = getLongString(tempList[it])
+        UIPreferences.playlistStr = playListString
+        val tempList = playListString.split(":").filter { it != "" }
+        tempList.indices.forEach {
+            playListItems[it] = getLongString(tempList[it])
         }
     }
 
@@ -142,11 +163,12 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getLongString(code: String) = "$code;" + Utility.readPref(
+    private fun getLongString(code: String): String =
+            "$code;" + Utility.readPref(
             this,
             "PLAYLIST_" + code + "_TIME",
             "unknown"
-    ) + "  (size: " + Utility.readPref(this, "PLAYLIST_$code", "").length + ")"
+            ) + "  (size: " + Utility.readPref(this, "PLAYLIST_$code", "").length + ")"
 
     private val isStoragePermissionGranted: Boolean
         get() {
@@ -201,12 +223,12 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun deleteItem(position: Int) {
-        ridFav = Utility.readPref(this, prefToken, "")
-        ridFav = ridFav.replace(":" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0], "")
-        Utility.writePref(this, prefToken, ridFav)
+        playListString = Utility.readPref(this, prefToken, "")
+        playListString = playListString.replace(":" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0], "")
+        Utility.writePref(this, prefToken, playListString)
         Utility.removePref(this, "PLAYLIST_" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0])
         adapter.deleteItem(position)
-        UIPreferences.playlistStr = ridFav
+        UIPreferences.playlistStr = playListString
     }
 
     private fun moveDownItem(position: Int) {

@@ -30,16 +30,14 @@ enum class FavoriteType {
     RID;
 
     companion object {
-        fun stringToType(typeAsString: String): FavoriteType {
-            return when (typeAsString) {
-                "SND" -> SND
-                "WFO" -> WFO
-                "SREF" -> SREF
-                "SPCMESO" -> SPCMESO
-                "NWS_TEXT" -> NWS_TEXT
-                "RID" -> RID
-                else -> RID
-            }
+        fun stringToType(typeAsString: String): FavoriteType = when (typeAsString) {
+            "SND" -> SND
+            "WFO" -> WFO
+            "SREF" -> SREF
+            "SPCMESO" -> SPCMESO
+            "NWS_TEXT" -> NWS_TEXT
+            "RID" -> RID
+            else -> RID
         }
     }
 }

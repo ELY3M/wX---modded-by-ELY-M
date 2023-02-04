@@ -62,17 +62,23 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
         product = UtilityWpcRainfallForecast.productCode[dayIndex]
         imageUrl = UtilityWpcRainfallForecast.urls[dayIndex]
         setTitle("Day " + (dayIndex + 1).toString() + " Excessive Rainfall Discussion", product)
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         box = VBox.fromResource(this)
         objectToolbarBottom.hideRadar()
         objectToolbarBottom.connect(this)
         image = if (tabletInLandscape) {
             box.makeHorizontal()
-            Image(this, box, UtilityImg.getBlankBitmap(), 2)
+            Image(this, UtilityImg.getBlankBitmap(), 2)
         } else {
-            Image(this, box)
+            Image(this)
         }
-        cardText = CardText(this, box, toolbar, toolbarBottom)
-        getContent()
+        box.addWidget(image)
+        cardText = CardText(this, toolbar, toolbarBottom)
+        box.addWidget(cardText)
     }
 
     private fun getContent() {

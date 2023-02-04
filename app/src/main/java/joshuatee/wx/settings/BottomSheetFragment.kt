@@ -83,7 +83,7 @@ class BottomSheetFragment(
                 functions[index](position)
                 dismiss()
             }
-            box.addView(item.get())
+            box.addView(item.getView())
         }
         return fragmentView
     }

@@ -23,12 +23,13 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import joshuatee.wx.Extensions.getHtmlSep
+import joshuatee.wx.Extensions.getHtmlWithNewLine
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.util.To
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.UtilityLog
-import okhttp3.internal.format
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,18 +56,17 @@ object UtilitySpotter {
     // thanks Landei
     // http://stackoverflow.com/questions/6720236/sorting-an-arraylist-of-objects-by-last-name-and-firstname-in-java
 
-    fun get(context: Context): MutableList<Spotter> {
+    fun get(context: Context): List<Spotter> {
         if (timer.isRefreshNeeded(context)) {
             spotterList.clear()
             reportsList.clear()
             val lats = mutableListOf<String>()
             val lons = mutableListOf<String>()
-            var html = ("http://www.spotternetwork.org/feeds/csv.txt").getHtmlSep()
+            var html = ("http://www.spotternetwork.org/feeds/csv.txt").getHtmlWithNewLine()
             val reportData = html.replace(".*?#storm reports".toRegex(), "")
-            Spotterlistbydist = html
             process(reportData)
             html = html.replace("#storm reports.*?$".toRegex(), "")
-            val lines = html.split("<br>").dropLastWhile { it.isEmpty() }
+            val lines = html.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
             lines.forEach { line ->
                 val items = line.split(";;").dropLastWhile { it.isEmpty() }
 
@@ -99,8 +99,8 @@ object UtilitySpotter {
                 x = DoubleArray(lats.size)
                 y = DoubleArray(lats.size)
                 lats.indices.forEach {
-                    x[it] = lats[it].toDoubleOrNull() ?: 0.0
-                    y[it] = (lons[it].toDoubleOrNull() ?: 0.0) * -1.0
+                    x[it] = To.double(lats[it])
+                    y[it] = To.double(lons[it]) * -1.0
                 }
             } else {
                 x = DoubleArray(1)
@@ -114,7 +114,7 @@ object UtilitySpotter {
 
     // need to return an array of x ( lat ) and an array of y ( lon ) where long is positive
     private fun process(text: String) {
-        val lines = text.split("<br>").dropLastWhile { it.isEmpty() }
+        val lines = text.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
         lines.forEach { line ->
             val items = line.split(";;").dropLastWhile { it.isEmpty() }
             if (items.size > 10 && !items[0].startsWith("#")) {
@@ -144,7 +144,7 @@ object UtilitySpotter {
         var SpotterInfoString = ""
         val spotterinfo = mutableListOf<Spotter>()
         text = text.replace("#storm reports.*?$".toRegex(), "")
-        val lines = text.split("<br>").dropLastWhile { it.isEmpty() }
+        val lines = text.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
         lines.forEach { line->
             var items = line.split(";;").dropLastWhile { it.isEmpty() }
             if (items.size > 15) {
@@ -174,7 +174,7 @@ object UtilitySpotter {
         var shortestDistance = 13.0
         var currentDistance: Double
         var bestSpotter = -1
-        var idleTime = ""
+        var idleTime: String
 
         spotterinfo.indices.forEach {
             currentDistance = LatLon.distance(location, LatLon(spotterinfo[it].lat, spotterinfo[it].lon), DistanceUnit.MILE)
@@ -199,6 +199,7 @@ object UtilitySpotter {
 
     }
 
+//TODO FIX ME
 fun countTime(reportAt: String): String {
     //get now date in GMT zone
     val cal: Calendar = Calendar.getInstance()

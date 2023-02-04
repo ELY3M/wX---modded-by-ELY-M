@@ -22,7 +22,7 @@
 package joshuatee.wx.radar
 
 open class NexradArguments {
-
     var locXCurrent = 0.0
     var locYCurrent = 0.0
+    var archiveMode = false
 }

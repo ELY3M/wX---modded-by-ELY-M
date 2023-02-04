@@ -25,11 +25,13 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.WidgetFile.MOSAIC_RADAR
+import joshuatee.wx.widgets.WidgetFile
+import joshuatee.wx.widgets.UtilityWidget
+import joshuatee.wx.widgets.UtilityWidgetDownload
 
 class WidgetMosaicsRad : AppWidgetProvider() {
 
-    private val type = MOSAIC_RADAR
+    private val type = WidgetFile.MOSAIC_RADAR
 
     override fun onDisabled(context: Context) {
         UtilityWidget.disableWidget(context, type)

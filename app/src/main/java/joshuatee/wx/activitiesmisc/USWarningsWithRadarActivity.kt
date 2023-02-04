@@ -29,11 +29,11 @@ import android.view.MenuItem
 import android.widget.ScrollView
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureBytes
-import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectAlertSummary
-import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.AlertSummary
+import joshuatee.wx.ui.NavDrawer
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityDownloadNws
 
@@ -49,14 +49,13 @@ class USWarningsWithRadarActivity : BaseActivity() {
 
     companion object { const val URL = "" }
 
-    private var html = ""
     private var usDownloaded = false
-    private var usDataStr = ""
+    private var usData = ""
     private var filter = ""
     private var region = ""
     private var firstRun = true
-    private lateinit var objectNavDrawer: ObjectNavDrawer
-    private lateinit var objectAlertSummary: ObjectAlertSummary
+    private lateinit var navDrawer: NavDrawer
+    private lateinit var alertSummary: AlertSummary
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
 
@@ -70,23 +69,31 @@ class USWarningsWithRadarActivity : BaseActivity() {
         val arguments = intent.getStringArrayExtra(URL)!!
         filter = arguments[0]
         region = arguments[1]
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
-        objectAlertSummary = ObjectAlertSummary(this, box, scrollView)
-        objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())
-        objectNavDrawer.connect { _, _, position, _ ->
-            objectNavDrawer.setItemChecked(position)
-            objectNavDrawer.close()
-            if (objectAlertSummary.filterArray[position].length != 2) {
-                filter = "^" + objectAlertSummary.filterArray[position]
-                region = "us"
-            } else {
-                filter = ".*?"
-                region = objectAlertSummary.filterArray[position].lowercase(Locale.US)
-            }
-            getContent()
+        alertSummary = AlertSummary(this, box, scrollView)
+        setupNavDrawer()
+        objectToolbar.connectClick { navDrawer.open() }
+    }
+
+    private fun setupNavDrawer() {
+        navDrawer = NavDrawer(this, alertSummary.filterArray)
+        navDrawer.connect(::navDrawerSelected)
+    }
+
+    private fun navDrawerSelected(position: Int) {
+        if (alertSummary.filterArray[position].length != 2) {
+            filter = "^" + alertSummary.filterArray[position]
+            region = "us"
+        } else {
+            filter = ".*?"
+            region = alertSummary.filterArray[position].lowercase(Locale.US)
         }
-        toolbar.setOnClickListener { objectNavDrawer.open() }
         getContent()
     }
 
@@ -96,43 +103,45 @@ class USWarningsWithRadarActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, ::downloadText, ::updateText)
-        FutureBytes(this, "https://forecast.weather.gov/wwamap/png/US.png", objectAlertSummary::updateImage)
+        FutureText2(this, ::downloadText, ::updateText)
+        FutureBytes(this, "https://forecast.weather.gov/wwamap/png/US.png", alertSummary::updateImage)
     }
 
-    private fun downloadText() {
+    private fun downloadText(): String {
+        val html: String
         if (region == "us" && usDownloaded) {
-            html = usDataStr
+            html = usData
         } else {
             html = UtilityDownloadNws.getCap(region)
             if (region == "us") {
-                usDataStr = html
+                usData = html
                 usDownloaded = true
             }
         }
+        return html
     }
 
-    private fun updateText() {
-        objectAlertSummary.updateContent(html, filter, firstRun)
-        title = objectAlertSummary.getTitle(region)
+    private fun updateText(html: String) {
+        alertSummary.updateContent(html, filter, firstRun)
+        title = alertSummary.getTitle(region)
         if (firstRun) {
-            objectNavDrawer.updateLists(objectAlertSummary.navList.toList())
+            navDrawer.updateLists(alertSummary.navList)
             firstRun = false
         }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.syncState()
+        navDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.onConfigurationChanged(newConfig)
+        navDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.onOptionsItemSelected(item)) {
+        if (navDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {

@@ -17,6 +17,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  -->
+<!-- Modded by ELY M. -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -35,6 +36,24 @@
         android:icon="@drawable/bv"
         android:title="@string/label_bv"
         app:showAsAction="always" />
+
+    <item android:id="@+id/action_n0s"
+        android:title="@string/label_srm"
+        android:icon="@drawable/srm"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_n0b"
+        android:icon="@drawable/br_super"
+        android:title="@string/label_n0b"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_n0g"
+        android:icon="@drawable/bv_super"
+        android:title="@string/label_n0g"
+        app:showAsAction="always" />
+		
     <item
         android:id="@+id/action_a"
         android:icon="@drawable/ic_play_arrow_24dp_white"
@@ -173,34 +192,18 @@
                 android:id="@+id/action_tz0"
                 android:title="@string/label_tz0"
                 app:showAsAction="ifRoom" />
-            <!--<item
-                android:id="@+id/action_tr0"
-                android:title="@string/label_tr0"
-                app:showAsAction="ifRoom" />-->
             <item
                 android:id="@+id/action_tv0"
                 android:title="@string/label_tv0"
                 app:showAsAction="never" />
-            <!--<item
-                android:id="@+id/action_dhr"
-                android:title="@string/label_dhr"
-                app:showAsAction="never" />-->
-            <!--<item
-                android:id="@+id/action_n1p"
-                android:title="@string/label_n1p"
-                app:showAsAction="never" />
             <item
-                android:id="@+id/action_ntp"
-                android:title="@string/label_ntp"
-                app:showAsAction="never" />-->
-            <!--<item
                 android:id="@+id/action_et"
                 android:title="@string/label_et"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_vil"
                 android:title="@string/label_vil"
-                app:showAsAction="never" />-->
+                app:showAsAction="never" />
             <item
                 android:id="@+id/action_tdwr_blank"
                 android:title="@string/label_blank"

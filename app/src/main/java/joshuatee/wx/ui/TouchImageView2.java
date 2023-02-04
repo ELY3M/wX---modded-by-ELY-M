@@ -1333,7 +1333,6 @@ public class TouchImageView2 extends AppCompatImageView {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private class CompatScroller {
         //Scroller scroller;
         final OverScroller overScroller;
@@ -1368,7 +1367,6 @@ public class TouchImageView2 extends AppCompatImageView {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void compatPostOnAnimation(Runnable runnable) {
         postOnAnimation(runnable);
     }

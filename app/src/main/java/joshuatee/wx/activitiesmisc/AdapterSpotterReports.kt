@@ -59,11 +59,13 @@ internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) 
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        holder.type.text = dataSet[position].type
-        holder.time.text = dataSet[position].time
-        holder.city.text = dataSet[position].city.replace(GlobalVariables.newline, " ")
-        holder.name.text = dataSet[position].lastName + ", " + dataSet[position].firstName
-        holder.summary.text = dataSet[position].narrative
+        with (holder) {
+            type.text = dataSet[position].type
+            time.text = dataSet[position].time
+            city.text = dataSet[position].city.replace(GlobalVariables.newline, " ")
+            name.text = dataSet[position].lastName + ", " + dataSet[position].firstName
+            summary.text = dataSet[position].narrative
+        }
     }
 
     override fun getItemCount() = dataSet.size

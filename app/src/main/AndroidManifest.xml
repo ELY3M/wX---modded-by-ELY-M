@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55688"
-    android:versionName="55688-elys"
+    android:versionCode="55783"
+    android:versionName="55783-elys"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -31,7 +31,8 @@
  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-<!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
+ <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+ <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/> <!-- https://developer.android.com/develop/ui/views/notifications/notification-permission -->
 
  <!-- add for Telecine -->
  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -65,7 +66,7 @@
      android:icon="@drawable/ic_launcher_elys"
      android:label="@string/app_name"
      android:largeHeap="true"
-     android:theme="@style/MyCustomTheme_BlackAqua_NOAB"
+     android:theme="@style/MyCustomTheme_BlackAqua"
      android:name="MyApplication"
      android:supportsRtl="false"
      android:resizeableActivity="true"
@@ -90,13 +91,9 @@
       android:name="joshuatee.wx.WX"
       android:label="@string/app_name"
       android:launchMode="singleTop"
-      android:theme="@style/MyCustomTheme_BlackAqua_NOAB"
+      android:theme="@style/MyCustomTheme_BlackAqua"
       >
   </activity>
-<!--  <activity-->
-<!--      android:name="joshuatee.wx.ui.CommonActionBarFragment"-->
-<!--      android:parentActivityName="WX" >-->
-<!--  </activity>-->
   <activity
       android:name=".settings.SettingsMainActivity"
       android:label="@string/title_activity_settings_main"
@@ -117,14 +114,15 @@
       android:name=".radar.SpotterNetworkPositionReportService"
       android:enabled="true" >
   </service>
+  <activity
+      android:name=".activitiesmisc.RtmaActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
   <service
       android:name=".notifications.AlertService"
       android:enabled="true" >
   </service>
-<!--  <service-->
-<!--      android:name=".util.CreateAnimatedGifService"-->
-<!--      android:enabled="true" >-->
-<!--  </service>-->
   <service
       android:name=".audio.StopAudioService"
       android:enabled="true" >
@@ -230,7 +228,6 @@
       android:name=".spc.SpcSwoStateGraphicsActivity"
       android:parentActivityName="WX" >
   </activity>
-
   <activity
       android:name=".spc.SpcMcdWatchShowSummaryActivity"
       android:parentActivityName="WX" >
@@ -251,20 +248,12 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".models.ModelsSpcHrrrActivity"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
       android:name=".models.ModelsSpcHrefActivity"
       android:parentActivityName="WX" >
   </activity>
   <activity
       android:name=".spc.SpcMesoActivity"
-      android:label=""
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
-      android:name=".models.ModelsSpcSrefActivity"
+      android:label="@string/title_activity_spc_meso"
       android:parentActivityName="WX" >
   </activity>
   <activity
@@ -354,16 +343,10 @@
       android:name=".activitiesmisc.ImageShowActivity"
       android:parentActivityName="WX" >
   </activity>
-  <activity
-      android:name=".activitiesmisc.LightningActivity"
-      android:parentActivityName="WX" >
-  </activity>
-
   <receiver android:name="joshuatee.wx.Widget" android:exported="true">
    <intent-filter>
     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
    </intent-filter>
-
    <meta-data
        android:name="android.appwidget.provider"
        android:resource="@xml/widget_info" />
@@ -373,7 +356,6 @@
    <intent-filter>
     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
    </intent-filter>
-
    <meta-data
        android:name="android.appwidget.provider"
        android:resource="@xml/widget_cc_info" />
@@ -384,43 +366,42 @@
    <intent-filter>
     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
    </intent-filter>
-
    <meta-data
        android:name="android.appwidget.provider"
        android:resource="@xml/widget_nexrad_info" />
   </receiver>
+
   <receiver android:name="joshuatee.wx.WidgetMosaics" android:exported="true">
    <intent-filter>
     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
    </intent-filter>
-
    <meta-data
        android:name="android.appwidget.provider"
        android:resource="@xml/widget_mosaics_info" />
   </receiver>
+
   <receiver android:name="joshuatee.wx.WidgetMosaicsRad" android:exported="true">
    <intent-filter>
     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
    </intent-filter>
-
    <meta-data
        android:name="android.appwidget.provider"
        android:resource="@xml/widget_mosaicsrad_info" />
   </receiver>
+
   <receiver android:name="joshuatee.wx.WidgetTextProd" android:exported="true">
    <intent-filter>
     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
    </intent-filter>
-
    <meta-data
        android:name="android.appwidget.provider"
        android:resource="@xml/widget_textprod_info" />
   </receiver>
+
   <receiver android:name="joshuatee.wx.WidgetTextHWO" android:exported="true">
    <intent-filter>
     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
    </intent-filter>
-
    <meta-data
        android:name="android.appwidget.provider"
        android:resource="@xml/widget_texthwo_info" />

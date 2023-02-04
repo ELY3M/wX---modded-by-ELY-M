@@ -23,6 +23,7 @@ package joshuatee.wx.radar
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -31,8 +32,10 @@ import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.objects.ObjectAnimate
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.Location
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
+import joshuatee.wx.ui.NavDrawer
+import joshuatee.wx.ui.TouchImage
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityShare
 
 class RadarMosaicNwsActivity : VideoRecordActivity() {
 
@@ -47,11 +50,11 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     companion object { const val URL = "" }
 
     private lateinit var objectAnimate: ObjectAnimate
-    private lateinit var image: TouchImage
-    private lateinit var objectNavDrawer: ObjectNavDrawer
+    private lateinit var touchImage: TouchImage
+    private lateinit var navDrawer: NavDrawer
     private val prefImagePosition = "RADARMOSAICNWS"
     private val prefTokenSector = "REMEMBER_NWSMOSAIC_SECTOR"
-    private var sector = UtilityNwsRadarMosaic.getNearestMosaic(Location.latLon)
+    private var sector = UtilityNwsRadarMosaic.getNearest(Location.latLon)
     private var saveLocation = false
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,18 +70,22 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.radarnwsmosaic, iconsEvenlySpaced = true, bottomToolbar = false)
         val arguments = intent.getStringArrayExtra(URL)!!
-        objectNavDrawer = ObjectNavDrawer(this, UtilityNwsRadarMosaic.labels, UtilityNwsRadarMosaic.sectors) { getContent() }
-        image = TouchImage(this, toolbar, R.id.iv, objectNavDrawer, "")
-        objectAnimate = ObjectAnimate(this, image)
-        toolbar.setOnClickListener { objectNavDrawer.open() }
-        image.setMaxZoom(8.0f)
-        image.connect(objectNavDrawer) { getContent() }
+        setupUI()
         if (arguments.isNotEmpty() && arguments[0] != "") {
             sector = Utility.readPref(this, prefTokenSector, sector)
             saveLocation = true
         }
-        objectNavDrawer.index = UtilityNwsRadarMosaic.sectors.indexOf(sector)
+        navDrawer.index = UtilityNwsRadarMosaic.sectors.indexOf(sector)
         getContent()
+    }
+
+    private fun setupUI() {
+        navDrawer = NavDrawer(this, UtilityNwsRadarMosaic.labels, UtilityNwsRadarMosaic.sectors) { getContent() }
+        touchImage = TouchImage(this, toolbar, R.id.iv, navDrawer, "")
+        objectAnimate = ObjectAnimate(this, touchImage)
+        objectToolbar.connectClick { navDrawer.open() }
+        touchImage.setMaxZoom(8.0f)
+        touchImage.connect(navDrawer) { getContent() }
     }
 
     override fun onRestart() {
@@ -88,50 +95,48 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
 
     private fun getContent() {
         objectAnimate.stop()
-        title = objectNavDrawer.url
-        FutureBytes(this, UtilityNwsRadarMosaic.get(objectNavDrawer.url), ::showImage)
+        title = navDrawer.url
+        FutureBytes(this, UtilityNwsRadarMosaic.get(navDrawer.url), ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {
-        image.set(bitmap)
-        image.firstRun(prefImagePosition)
+        touchImage.set(bitmap)
+        touchImage.firstRun(prefImagePosition)
         if (saveLocation) {
-            Utility.writePref(this, prefTokenSector, objectNavDrawer.url)
+            Utility.writePref(this, prefTokenSector, navDrawer.url)
         }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.syncState()
+        navDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.onConfigurationChanged(newConfig)
+        navDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.onOptionsItemSelected(item)) {
+        if (navDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
-            R.id.action_animate -> objectAnimate.animateClicked(::getContent) { UtilityNwsRadarMosaic.getAnimation(objectNavDrawer.url) }
+            R.id.action_animate -> objectAnimate.animateClicked(::getContent) { UtilityNwsRadarMosaic.getAnimation(navDrawer.url) }
             R.id.action_stop -> objectAnimate.stop()
             R.id.action_pause -> objectAnimate.pause()
-            R.id.action_share -> {
-                if (UIPreferences.recordScreenShare) {
+            R.id.action_share -> if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.bitmap(this, "NWS mosaic", image)
+                    UtilityShare.bitmap(this, "NWS mosaic", touchImage)
                 }
-            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
     override fun onStop() {
-        image.imgSavePosnZoom(prefImagePosition)
+        touchImage.imgSavePosnZoom(prefImagePosition)
         super.onStop()
     }
 }

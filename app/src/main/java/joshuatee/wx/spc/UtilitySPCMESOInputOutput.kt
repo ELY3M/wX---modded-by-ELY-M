@@ -30,64 +30,62 @@ import android.graphics.drawable.Drawable
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.util.Utility
+import joshuatee.wx.ui.ObjectToolbar
 
 object UtilitySpcMesoInputOutput {
 
-    fun getImage(context: Context, param: String, sector: String): Bitmap {
-        val prefModel = "SPCMESO"
-        var showRadar = Utility.readPref(context, prefModel + "_SHOW_RADAR", "false").startsWith("t")
-        val showOutlook = Utility.readPref(context, prefModel + "_SHOW_OUTLOOK", "false").startsWith("t")
-        val showWatchWarn = Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
-        val showTopography = Utility.readPref(context, prefModel + "_SHOW_TOPO", "false").startsWith("t")
-        val showCounty = Utility.readPref(context, prefModel + "_SHOW_COUNTY", "false").startsWith("t")
+    fun getLayers(context: Context, objectToolbar: ObjectToolbar? = null, getFunction: () -> Unit = {}): Map<SpcMesoLayerType, SpcMesoLayer> {
+        val layers = mutableMapOf<SpcMesoLayerType, SpcMesoLayer>()
+        SpcMesoLayerType.values().forEach {
+            layers[it] = SpcMesoLayer(context, it, objectToolbar, getFunction)
+        }
+        return layers
+    }
 
+    fun getImage(context: Context, param: String, sector: String, layers: Map<SpcMesoLayerType, SpcMesoLayer>): Bitmap {
         val drawables = mutableListOf<Drawable>()
-        val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !showRadar) "_sf.gif" else ".gif"
+        val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !layers[SpcMesoLayerType.Radar]!!.isEnabled) {
+            "_sf.gif"
+        } else {
+            ".gif"
+        }
         val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
-        val radImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
-        val outlookImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
-        val watchWarningImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/warns/warns.gif"
-        val topographyImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
-        val countyImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/cnty/cnty.gif"
-
-        var bitmap = imgUrl.getImage()
+        val bitmap = imgUrl.getImage()
         drawables.add(ColorDrawable(Color.WHITE))
-
         if (param == "hodo" || param.startsWith("skewt")) {
-            showRadar = true
+            layers[SpcMesoLayerType.Radar]!!.isEnabled = true
         }
-        if (showCounty) {
-            drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(countyImgUrl.getImage(), -1)))
-        }
-        if (showTopography) {
-            drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(topographyImgUrl.getImage(), -1)))
-        }
-        if (showRadar) {
-            val bitmapRadar = radImgUrl.getImage()
-            bitmap = UtilityImg.eraseBackground(bitmap, -1)
-            drawables.add(BitmapDrawable(context.resources, bitmapRadar))
+        listOf(
+            SpcMesoLayerType.Population,
+            SpcMesoLayerType.Topography,
+            SpcMesoLayerType.County,
+            SpcMesoLayerType.Radar,
+            SpcMesoLayerType.Observations,
+        ).forEach {
+            if (layers[it]!!.isEnabled) {
+                drawables.add(getDrawable(context, layers[it]!!.getUrl(sector)))
+            }
         }
         drawables.add(BitmapDrawable(context.resources, bitmap))
-        if (showOutlook) {
-            drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(outlookImgUrl.getImage(), -1)))
-        }
-        if (showWatchWarn) {
-            drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(watchWarningImgUrl.getImage(), -1)))
+        listOf(SpcMesoLayerType.Outlook, SpcMesoLayerType.Watwarn).forEach {
+            if (layers[it]!!.isEnabled) {
+                drawables.add(getDrawable(context, layers[it]!!.getUrl(sector)))
+            }
         }
         return UtilityImg.layerDrawableToBitmap(drawables)
     }
 
+    private fun getDrawable(context: Context, url: String): BitmapDrawable =
+        BitmapDrawable(context.resources, UtilityImg.eraseBackground(url.getImage(), -1))
+
     fun getAnimation(product: String, sector: String, frameCount: Int): List<String> {
-        var urls = listOf<String>()
         val timeList = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
-//        val delay = UtilityImg.animInterval(context)
-        if (timeList.size > frameCount) {
-            urls = (frameCount - 1 downTo 0).map {
+        return if (timeList.size > frameCount) {
+            (frameCount - 1 downTo 0).map {
                 "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + product + "/" + product + "_" + timeList[it] + ".gif"
             }
+        } else {
+            emptyList()
         }
-        return urls
-        //return UtilityImgAnim.getAnimationDrawableFromUrlListWhiteBackground(context, urls, delay)
     }
 }

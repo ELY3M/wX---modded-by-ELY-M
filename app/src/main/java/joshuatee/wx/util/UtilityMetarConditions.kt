@@ -297,7 +297,6 @@ object UtilityMetarConditions {
             "Lightning Observed" to "hi_tsra",
             "Cumulonimbus Clouds, Lightning Observed" to "hi_tsra",
             "Cumulonimbus Clouds, Towering Cumulus Clouds Observed" to "hi_tsra",
-            // FIXME
             //"Thunderstorm in Vicinity Haze" to "hi_tsra",
             "Cumulonimbus Clouds Observed" to "tsra_hi",
             "Towering Cumulus Clouds Observed" to "tsra_hi",

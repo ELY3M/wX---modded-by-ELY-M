@@ -25,7 +25,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import kotlinx.coroutines.*
 
-// , val uiDispatcher: MainCoroutineDispatcher
 class FutureBytes2(val context: Context, val downloadFunc: () -> Bitmap, val updateFunc: (Bitmap) -> Unit) {
 
     init {

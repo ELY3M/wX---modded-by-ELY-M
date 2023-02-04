@@ -25,7 +25,7 @@ import android.app.Activity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class ObjectRecyclerView(activity: Activity, resourceId: Int, list: MutableList<String>, fn: (Int) -> Unit) {
+class ObjectRecyclerView(activity: Activity, resourceId: Int, list: MutableList<String>, fn: (Int) -> Unit) : Widget {
 
     private val recyclerView: RecyclerView = activity.findViewById(resourceId)
     private var adapter = SingleTextAdapterList(list)
@@ -54,13 +54,13 @@ class ObjectRecyclerView(activity: Activity, resourceId: Int, list: MutableList<
         adapter.setItem(index, str)
     }
 
-    fun getItem(index: Int) = adapter.getItem(index)
+    fun getItem(index: Int): String = adapter.getItem(index)
 
     fun deleteItem(index: Int) {
         adapter.deleteItem(index)
     }
 
-    fun get() = recyclerView
+    override fun getView() = recyclerView
 
-    override fun toString() = adapter.toString()
+    override fun toString(): String = adapter.toString()
 }

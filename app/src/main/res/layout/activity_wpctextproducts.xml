@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="@dimen/padding_ll"
-                    android:stretchColumns="*">
+                    >
 
                 </LinearLayout>
             </ScrollView>
@@ -61,8 +61,7 @@
         android:layout_width="480dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/primary_dark_blue"
-        android:choiceMode="singleChoice"
+        android:background="?attr/colorPrimary"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>

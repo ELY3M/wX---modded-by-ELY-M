@@ -35,13 +35,14 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.radar.WXGLNexrad
-import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
+import joshuatee.wx.radar.NexradUtil
+import joshuatee.wx.radarcolorpalettes.ColorPalette
 import joshuatee.wx.radarcolorpalettes.UtilityColorPalette
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.ObjectFab
+import joshuatee.wx.ui.Fab
+//elys mod - leave this alone
 import joshuatee.wx.util.*
 import java.io.File
 
@@ -62,23 +63,13 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_color_palette_editor, R.menu.settings_color_palette_editor, true)
-        palTitle = findViewById(R.id.palTitle)
-        palContent = findViewById(R.id.palContent)
-        toolbarBottom.setOnMenuItemClickListener(this)
-        ObjectFab(this, R.id.fab) { fabSavePalette(this) }
-        Card(this, R.id.cv1)
-        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
-            listOf(palTitle, palContent).forEach {
-                it.setTextColor(Color.BLACK)
-                it.setHintTextColor(Color.GRAY)
-            }
-        }
+
         showLoadFromFileMenuItem()
         arguments = intent.getStringArrayExtra(URL)!!
         type = arguments[0]
         typeAsInt = type.toIntOrNull() ?: 94
-        title = "Palette Editor"
-        toolbar.subtitle = WXGLNexrad.productCodeStringToName[typeAsInt]
+        setTitle("Palette Editor", NexradUtil.productCodeStringToName[typeAsInt]!!)
+        setupUI()
         formattedDate = ObjectDateTime.getDateAsString("MMdd")
         name = if (arguments[2].contains("false")) {
             arguments[1]
@@ -86,8 +77,22 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             arguments[1] + "_" + formattedDate
         }
         palTitle.setText(name)
-        palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
         palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1]))
+    }
+
+    private fun setupUI() {
+        palTitle = findViewById(R.id.palTitle)
+        palContent = findViewById(R.id.palContent)
+        toolbarBottom.setOnMenuItemClickListener(this)
+        Fab(this, R.id.fab) { fabSavePalette(this) }
+        Card(this, R.id.cv1)
+        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
+            listOf(palTitle, palContent).forEach {
+                it.setTextColor(Color.BLACK)
+                it.setHintTextColor(Color.GRAY)
+            }
+        }
+        palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
         palContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
     }
 
@@ -99,9 +104,9 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             textToSave = textToSave.replace(",,".toRegex(), ",")
             palContent.setText(textToSave)
             Utility.writePref(context, "RADAR_COLOR_PAL_" + type + "_" + palTitle.text.toString(), textToSave)
-            if (!ObjectColorPalette.radarColorPaletteList[typeAsInt]!!.contains(palTitle.text.toString())) {
-                ObjectColorPalette.radarColorPaletteList[typeAsInt] = ObjectColorPalette.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text.toString()
-                Utility.writePref(context, "RADAR_COLOR_PALETTE_" + type + "_LIST", ObjectColorPalette.radarColorPaletteList[typeAsInt]!!)
+            if (!ColorPalette.radarColorPaletteList[typeAsInt]!!.contains(palTitle.text.toString())) {
+                ColorPalette.radarColorPaletteList[typeAsInt] = ColorPalette.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text.toString()
+                Utility.writePref(context, "RADAR_COLOR_PALETTE_" + type + "_LIST", ColorPalette.radarColorPaletteList[typeAsInt]!!)
             }
 	    //elys mod
             savepalfile(palTitle.text.toString()+"_"+type+".txt", textToSave)
@@ -132,17 +137,17 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 lineCount += 1
                 try {
                     if (list.size > 4) {
-                        if (priorValue >= (list[1].toDoubleOrNull() ?: 0.0)) {
+                        if (priorValue >= To.double(list[1])) {
                             errors += "The following lines do not have dbz values in increasing order: " + GlobalVariables.newline + priorValue + " " + list[1] + GlobalVariables.newline
                         }
-                        priorValue = list[1].toDoubleOrNull() ?: 0.0
-                        if ((list[2].toDoubleOrNull() ?: 0.0) > 255 || (list[2].toDoubleOrNull() ?: 0.0) < 0) {
+                        priorValue = To.double(list[1])
+                        if (To.double(list[2]) > 255.0 || To.double(list[2]) < 0.0) {
                             errors = errors + "Red value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
-                        if ((list[3].toDoubleOrNull() ?: 0.0) > 255 || (list[3].toDoubleOrNull() ?: 0.0) < 0) {
+                        if (To.double(list[3]) > 255.0 || To.double(list[3]) < 0.0) {
                             errors += "Green value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
-                        if ((list[4].toDoubleOrNull() ?: 0.0) > 255 || (list[4].toDoubleOrNull() ?: 0.0) < 0) {
+                        if (To.double(list[4]) > 255.0 || To.double(list[4]) < 0.0) {
                             errors += "Blue value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
                     } else {
@@ -171,10 +176,11 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         return true
     }
 
-    override fun onBackPressed() {
+    override fun onStop() {
         UtilityFileManagement.deleteFile(this, "colormap" + type + palTitle.text.toString())
-        super.onBackPressed()
+        super.onStop()
     }
+
 
     private fun showLoadFromFileMenuItem() {
         toolbarBottom.menu.findItem(R.id.action_load).isVisible = true
@@ -189,24 +195,25 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun convertPalette(txt: String): String {
-        var txtLocal = Utility.fromHtml(txt)
-        txtLocal = txtLocal.replace("color", "Color")
-        txtLocal = txtLocal.replace("product", "#product")
-        txtLocal = txtLocal.replace("unit", "#unit")
-        txtLocal = txtLocal.replace("step", "#step")
-        txtLocal = txtLocal.replace(":", " ")
-        txtLocal = txtLocal.trim { it <= ' ' }.replace(" +".toRegex(), " ")
-        txtLocal = txtLocal.trim { it <= ' ' }.replace(" ".toRegex(), ",")
-        txtLocal = txtLocal.replace("\\s".toRegex(), "")
+        var txtLocal = txt
+                        .replace("color", "Color")
+                        .replace("product", "#product")
+                        .replace("unit", "#unit")
+                        .replace("step", "#step")
+                        .replace(":", " ")
+                        .trim { it <= ' ' }.replace(" +".toRegex(), " ")
+                        .trim { it <= ' ' }.replace(" ".toRegex(), ",")
+                        .replace("\\s".toRegex(), "")
         val lines = txtLocal.split(GlobalVariables.newline.toRegex()).dropLastWhile { it.isEmpty() }
-        if (lines.size < 3) txtLocal = txtLocal.replace("Color", GlobalVariables.newline + "Color")
+        if (lines.size < 3) {
+            txtLocal = txtLocal.replace("Color", GlobalVariables.newline + "Color")
+        }
         txtLocal = txtLocal.replace("Step", GlobalVariables.newline + "#Step")
-        txtLocal = txtLocal.replace("Units", GlobalVariables.newline + "#Units")
-        txtLocal = txtLocal.replace("ND", GlobalVariables.newline + "#ND")
-        txtLocal = txtLocal.replace("RF", GlobalVariables.newline + "#RF")
+                           .replace("Units", GlobalVariables.newline + "#Units")
+                           .replace("ND", GlobalVariables.newline + "#ND")
+                           .replace("RF", GlobalVariables.newline + "#RF")
         return txtLocal
     }
-
     /**
      * Fires an intent to spin up the "file chooser" UI and select an image.
      */

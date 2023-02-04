@@ -29,23 +29,25 @@ import joshuatee.wx.Extensions.setPadding
 import joshuatee.wx.fragments.UtilityLocationFragment
 import joshuatee.wx.settings.UIPreferences
 
-class Photo(context: Context) {
+class Photo(context: Context) : Widget {
 
     private val imageView = ImageView(context)
 
     fun set(bitmap: Bitmap) {
-        imageView.setImageBitmap(bitmap)
-        imageView.setPadding(UIPreferences.paddingSmall)
-        val layoutParams = imageView.layoutParams
-        val imageSize = UtilityLocationFragment.setNwsIconSize()
-        layoutParams.width = imageSize
-        layoutParams.height = imageSize
-        imageView.layoutParams = layoutParams
+        with (imageView) {
+            setImageBitmap(bitmap)
+            setPadding(UIPreferences.paddingSmall)
+            val layoutParams = this.layoutParams
+            val imageSize = UtilityLocationFragment.setNwsIconSize()
+            layoutParams.width = imageSize
+            layoutParams.height = imageSize
+            this.layoutParams = layoutParams
+        }
     }
 
     fun connect(fn: View.OnClickListener) {
         imageView.setOnClickListener(fn)
     }
 
-    fun get() = imageView
+    override fun getView() = imageView
 }

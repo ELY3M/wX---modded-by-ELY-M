@@ -23,16 +23,17 @@
 package joshuatee.wx.fragments
 
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.activitiesmisc.*
+import joshuatee.wx.activitiesmisc.ImageCollectionActivity
+import joshuatee.wx.activitiesmisc.NwsObsSitesActivity
+import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
+import joshuatee.wx.activitiesmisc.WebView
+import joshuatee.wx.activitiesmisc.WebViewTwitter
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.radar.AwcRadarMosaicActivity
@@ -52,15 +53,7 @@ class MiscFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_recyclerview, container, false)
-        val gridLayoutManager = GridLayoutManager(activity, UIPreferences.tilesPerRow)
-        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = gridLayoutManager
-        val tileAdapter = TileAdapter(requireContext(), tileObjects, UIPreferences.tilesPerRow, "FRAGMENT_MISC_ORDER")
-        recyclerView.adapter = tileAdapter
-        val callback = SimpleItemTouchHelperCallback(tileAdapter)
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recyclerView)
+        TabScreen(requireActivity(), view, "FRAGMENT_MISC_ORDER", tileObjects)
         return view
     }
 
@@ -126,23 +119,13 @@ class MiscFragment : Fragment() {
                     arrayOf("CONUS", "9"),
                     "goes", "GOES"
             )
-            if (UIPreferences.lightningUseGoes) {
-                hm["lightning"] = TileObject(
-                    R.drawable.lightning,
-                    GoesActivity::class.java,
-                    GoesActivity.RID,
-                    arrayOf("CONUS", "23"),
-                    "lightning", "lightning"
-                )
-            } else {
-                hm["lightning"] = TileObject(
-                    R.drawable.lightning,
-                    LightningActivity::class.java,
-                    "",
-                    arrayOf(),
-                    "lightning", "lightning"
-                )
-            }
+            hm["lightning"] = TileObject(
+                R.drawable.lightning,
+                GoesActivity::class.java,
+                GoesActivity.RID,
+                arrayOf("CONUS", "23"),
+                "lightning", "lightning"
+            )
             hm["wpcimages"] = TileObject(
                     R.drawable.fmap,
                     WpcImagesActivity::class.java,

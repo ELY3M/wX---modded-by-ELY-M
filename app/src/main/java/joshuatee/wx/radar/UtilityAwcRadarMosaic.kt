@@ -139,6 +139,6 @@ object UtilityAwcRadarMosaic {
                         + sector
                         + imageType + ")."
         )
-        return urls.map { (baseUrl + baseAddOn + it) }
+        return urls.map { baseUrl + baseAddOn + it }
     }
 }

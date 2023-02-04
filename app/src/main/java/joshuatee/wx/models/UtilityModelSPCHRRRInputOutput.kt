@@ -28,14 +28,13 @@ import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.Date
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.util.To
 
 internal object UtilityModelSpcHrrrInputOutput {
 
@@ -45,14 +44,9 @@ internal object UtilityModelSpcHrrrInputOutput {
             val htmlRunStatus = (GlobalVariables.nwsSPCwebsitePrefix + "/exper/hrrr/data/hrrr3/cron.log").getHtml()
             runData.validTime = htmlRunStatus.parse("Latest Run: ([0-9]{10})")
             runData.mostRecentRun = runData.validTime
-            runData.listRunAdd(runData.mostRecentRun)
             val runTimes = htmlRunStatus.parseColumn("Run: ([0-9]{8}/[0-9]{4})")
-            for (time in runTimes.reversed()) {
-                var t = time.replace("/", "")
-                if (t != (runData.mostRecentRun + "00")) {
-                    t = t.dropLast(2)
-                    runData.listRunAdd(t)
-                }
+            runTimes.reversed().filterNot { it.contains("Latest Run:") }.forEach {
+                runData.listRunAdd(it.replace("/", "").dropLast(2))
             }
             return runData
         }
@@ -75,35 +69,28 @@ internal object UtilityModelSpcHrrrInputOutput {
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun getAnimation(context: Context, om: ObjectModel, overlayImg: List<String>): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
+    fun getAnimation(context: Context, om: ObjectModel, overlayImg: List<String>): AnimationDrawable = if (om.spinnerTimeValue == -1) {
+        AnimationDrawable()
+    } else {
+        val bitmaps = (om.timeIndex until om.times.size).map { k ->
+            getImage(context, om, om.times[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0)
+                    ?: "", overlayImg)
         }
-        val bitmaps = (om.spinnerTimeValue until om.times.size).map { k ->
-            getImage(context, om, om.times[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0) ?: "", overlayImg)
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
+        UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 
-    private fun getSectorCode(sectorName: String) =
-        (UtilityModelSpcHrrrInterface.sectors.indices)
+    private fun getSectorCode(sectorName: String): String =
+        UtilityModelSpcHrrrInterface.sectors.indices
             .firstOrNull { sectorName == UtilityModelSpcHrrrInterface.sectors[it] }
             ?.let { UtilityModelSpcHrrrInterface.sectorCodes[it] }
             ?: "S19"
 
     private fun getValidTime(run: String, validTimeForecast: String): String {
-        val format = SimpleDateFormat("yyyyMMddHH", Locale.US)
-        val parsed: Date
-        val oneMinuteInMillis: Long = 60000
-        try {
-            parsed = format.parse(run)!!
-            val t = parsed.time
-            return format.format(Date(t  + 60 * oneMinuteInMillis * validTimeForecast.toLong()))
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return ""
+        val timeFormatString = "yyyyMMddHH"
+        val time = ObjectDateTime.parse(run, timeFormatString)
+        time.addHours(To.int(validTimeForecast).toLong())
+        return time.format(timeFormatString)
     }
 
-    private fun formatTime(time: String) = "0$time"
+    private fun formatTime(time: String): String = "0$time"
 }

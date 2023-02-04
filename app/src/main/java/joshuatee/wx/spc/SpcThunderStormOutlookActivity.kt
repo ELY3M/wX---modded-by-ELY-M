@@ -29,7 +29,9 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ImageSummary
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
@@ -42,7 +44,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     private var bitmaps = mutableListOf<Bitmap>()
     private var urls = listOf<String>()
     private lateinit var box: VBox
-    private lateinit var objectImageSummary: ObjectImageSummary
+    private lateinit var imageSummary: ImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.shared_multigraphics, menu)
@@ -62,21 +64,21 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, { urls = UtilitySpc.thunderStormOutlookUrls }, ::getImages)
+        FutureVoid(this, { urls = UtilitySpc.thunderStormOutlookUrls() }, ::getImages)
     }
 
     private fun getImages() {
         bitmaps = MutableList(urls.size) { UtilityImg.getBlankBitmap() }
         box.removeChildrenAndLayout()
-        objectImageSummary = ObjectImageSummary(this, box, bitmaps)
+        imageSummary = ImageSummary(this, box, bitmaps)
         urls.forEachIndexed { index, url ->
             FutureVoid(this, { bitmaps[index] = url.getImage() }, { update(index) })
         }
     }
 
     private fun update(index: Int) {
-        objectImageSummary.set(index, bitmaps[index])
-        objectImageSummary.connect(index) { Route.image(this, urls[index], "") }
+        imageSummary.set(index, bitmaps[index])
+        imageSummary.connect(index) { Route.image(this, urls[index], "") }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

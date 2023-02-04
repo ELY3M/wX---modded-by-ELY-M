@@ -30,6 +30,7 @@ object UtilityFileManagement {
         var fileList = ""
         val files = context.fileList()
         files.forEach {
+            UtilityLog.d("WXRADAR", it)
             if (!it.contains("colormap") && !it.contains("shared")) {
                 fileList += "$it "
                 context.deleteFile(it)
@@ -42,7 +43,8 @@ object UtilityFileManagement {
         context.deleteFile(fileName)
     }
 
-    fun internalFileExist(context: Context, path: String) = context.getFileStreamPath(path).exists()
+    fun internalFileExist(context: Context, path: String): Boolean =
+            context.getFileStreamPath(path).exists()
 
     fun moveFile(context: Context, src: String, target: String) {
         val file = File(context.filesDir, src)

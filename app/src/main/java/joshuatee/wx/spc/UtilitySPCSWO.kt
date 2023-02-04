@@ -27,7 +27,8 @@ import joshuatee.wx.common.GlobalVariables
 
 internal object UtilitySpcSwo {
 
-    fun getSwoStateUrl(state: String, day: String) = "${GlobalVariables.nwsSPCwebsitePrefix}/public/state/images/" + state + "_swody" + day + ".png"
+    fun getSwoStateUrl(state: String, day: String): String =
+            "${GlobalVariables.nwsSPCwebsitePrefix}/public/state/images/" + state + "_swody" + day + ".png"
 
     fun getImages(day: String, getAllImages: Boolean): List<Bitmap> {
         val imgUrls = mutableListOf<String>()
@@ -62,32 +63,29 @@ internal object UtilitySpcSwo {
     }
 
     fun getUrls(day: String): List<String> {
-        val imgUrls = mutableListOf<String>()
         if (day == "4-8" || day == "48" || day == "4") {
-            (4..8).forEach {
-                imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/day4-8/day" + it.toString() + "prob.gif")
-            }
-            return imgUrls
+            return (4..8).map { "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/day4-8/day" + it.toString() + "prob.gif" }
         } else {
             val html = ("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day" + day + "otlk.html").getHtml()
             val time = html.parse("show_tab\\(.otlk_([0-9]{4}).\\)")
-            when (day) {
+            return when (day) {
                 "1", "2" -> {
-                    imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day${day}otlk_$time.gif")
-                    imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day${day}probotlk_" + time + "_torn.gif")
-                    imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day${day}probotlk_" + time + "_hail.gif")
-                    imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day${day}probotlk_" + time + "_wind.gif")
+                    val day1BaseUrl = GlobalVariables.nwsSPCwebsitePrefix + "/products/outlook/day" + day + "probotlk_"
+                    val day1Urls = listOf("_torn.gif", "_hail.gif", "_wind.gif")
+                    val urls = mutableListOf(GlobalVariables.nwsSPCwebsitePrefix + "/products/outlook/day" + day + "otlk_" + time + ".gif")
+                    urls += day1Urls.map { day1BaseUrl + time + it }
+                    urls
                 }
                 "3" -> {
-                    imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day3otlk_$time.gif")
-                    imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day3prob_$time.gif")
+                    listOf("otlk_", "prob_").map {
+                        GlobalVariables.nwsSPCwebsitePrefix + "/products/outlook/day" + day + it + time + ".gif"
+                    }
                 }
-                else -> {
-                }
+                else -> emptyList()
             }
-            return imgUrls
         }
     }
 
-    fun getImageUrlsDays48(day: String) = GlobalVariables.nwsSPCwebsitePrefix + "/products/exper/day4-8/day" + day + "prob.gif"
+    fun getImageUrlsDays48(day: String): String =
+            GlobalVariables.nwsSPCwebsitePrefix + "/products/exper/day4-8/day" + day + "prob.gif"
 }

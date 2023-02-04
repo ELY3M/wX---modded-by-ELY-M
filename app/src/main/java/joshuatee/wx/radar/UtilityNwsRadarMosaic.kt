@@ -21,40 +21,31 @@
 
 package joshuatee.wx.radar
 
-import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.To
 
 object UtilityNwsRadarMosaic {
 
-    const val baseUrl = "https://radar.weather.gov/ridge/lite/"
+    const val baseUrl = "https://radar.weather.gov/ridge/standard/"
 
-    fun getNearestMosaic(latLon: LatLon): String {
-        val sites = mutableListOf<RID>()
-        cityToLatLon.forEach { m ->
-            sites.add(RID(m.key, m.value, LatLon.distance(latLon, m.value, DistanceUnit.MILE)))
-        }
-        sites.sortBy { it.distance }
-        return sites[0].name
-    }
+    fun getNearest(latLon: LatLon): String = UtilityLocation.getNearest(latLon, cityToLatLon)
 
-    fun get(sector: String): String {
-        if (sector == "CONUS") {
-            return "https://radar.weather.gov/ridge/lite/CONUS-LARGE_0.gif"
-        }
-        return baseUrl + sector + "_0.gif"
+    fun get(sector: String): String = if (sector == "CONUS") {
+        baseUrl + "CONUS-LARGE_0.gif"
+    } else {
+        baseUrl + sector + "_0.gif"
     }
 
     fun getAnimation(sector: String): List<String> {
-        val urls = mutableListOf<String>()
-        var add = ""
-        if (sector == "CONUS") {
-            add = "-LARGE"
+        val add = if (sector == "CONUS") {
+            "-LARGE"
+        } else {
+            ""
         }
-        for (index in 9 downTo 0) {
-            urls.add(baseUrl + sector + add + "_" + To.string(index) + ".gif")
+        return (9 downTo 0).map {
+            baseUrl + sector + add + "_" + To.string(it) + ".gif"
         }
-        return urls
     }
 
     val sectors = listOf(
@@ -104,7 +95,7 @@ object UtilityNwsRadarMosaic {
         "PACNORTHWEST" to LatLon(43.1995, -118.9174),
         "PACSOUTHWEST" to LatLon(35.8313, -119.2245),
         "SOUTHEAST"    to LatLon(30.2196, -82.1522),
-        "SOUTHMISSVLY" to LatLon(30.2196, -82.1522),
+        "SOUTHMISSVLY" to LatLon(33.2541, -89.8034),
         "SOUTHPLAINS"  to LatLon(32.4484, -99.7781),
         "SOUTHROCKIES" to LatLon(33.2210, -110.3162),
         "UPPERMISSVLY" to LatLon(42.9304, -95.7488)

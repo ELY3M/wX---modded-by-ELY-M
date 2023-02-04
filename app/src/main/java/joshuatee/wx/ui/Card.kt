@@ -25,13 +25,13 @@ import android.app.Activity
 import android.content.Context
 import androidx.cardview.widget.CardView
 import android.view.View
+import android.view.ViewGroup
 import joshuatee.wx.settings.UIPreferences
 
-class Card {
+class Card : Widget {
 
     companion object { private const val padding = 2 }
 
-//    private val card: MaterialCardView
     private val card: CardView
 
     constructor(context: Context) {
@@ -40,12 +40,14 @@ class Card {
     }
 
     private fun setupCard() {
-        card.setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
-        card.cardElevation = UIPreferences.cardElevation
-        card.setContentPadding(padding, padding, padding, padding)
-        card.radius = UIPreferences.cardCorners
-        card.useCompatPadding = true
-        card.preventCornerOverlap = true
+        with (card) {
+            setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
+            cardElevation = UIPreferences.cardElevation
+            setContentPadding(padding, padding, padding, padding)
+            radius = UIPreferences.cardCorners
+            useCompatPadding = true
+            preventCornerOverlap = true
+        }
     }
 
     constructor(context: Context, color: Int) : this(context) {
@@ -70,12 +72,20 @@ class Card {
         card.setCardBackgroundColor(color)
     }
 
+    var layoutParams: ViewGroup.LayoutParams
+        get() = card.layoutParams
+        set(newValue) { card.layoutParams = newValue }
+
     var visibility: Int
         get() = card.visibility
         set(newValue) { card.visibility = newValue }
 
     fun addWidget(view: View) {
         card.addView(view)
+    }
+
+    fun addWidget(view: Widget) {
+        card.addView(view.getView())
     }
 
     fun addLayout(objectLinearLayout: VBox) {
@@ -94,9 +104,13 @@ class Card {
         card.id = id
     }
 
+    fun removeAllViews() {
+        card.removeAllViews()
+    }
+
     fun setCardBackgroundColor(color: Int) {
         card.setCardBackgroundColor(color)
     }
 
-    fun get() = card
+    override fun getView() = card
 }

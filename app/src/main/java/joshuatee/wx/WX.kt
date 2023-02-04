@@ -40,7 +40,14 @@ import joshuatee.wx.fragments.LocationFragment
 import joshuatee.wx.fragments.ViewPagerAdapter
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.spc.UtilitySpc
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.CommonActionBarFragment
+import joshuatee.wx.ui.Drawer
+import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectToolbar
+import joshuatee.wx.ui.PopupMessage
+import joshuatee.wx.ui.UtilityTheme
+import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 
 class WX : CommonActionBarFragment() {
@@ -51,11 +58,23 @@ class WX : CommonActionBarFragment() {
     private var tabIndex = 0
     private lateinit var slidingTabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
+    private lateinit var toolbarBottom: Toolbar
     private lateinit var objectToolbarBottom: ObjectToolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
+        setupUI()
+        setupToolbars()
+        setupVr()
+        setupFab()
+        setupTabs()
+        setupNavDrawer()
+	    checkinternet()
+        refreshDynamicContent()
+    }
+
+    private fun setupUI() {
         val layoutId = if (UIPreferences.navDrawerMainScreen) {
             if (UIPreferences.navDrawerMainScreenOnRight) {
                 R.layout.activity_main_drawer_right
@@ -69,10 +88,13 @@ class WX : CommonActionBarFragment() {
         slidingTabLayout = findViewById(R.id.slidingTabLayout)
         viewPager = findViewById(R.id.viewPager)
         UtilityTheme.setPrimaryColor(this)
+    }
+
+    private fun setupToolbars() {
         //
         // Toolbar (bottom) setup
         //
-        val toolbarBottom: Toolbar = findViewById(R.id.toolbar_bottom)
+        toolbarBottom = findViewById(R.id.toolbar_bottom)
         objectToolbarBottom = ObjectToolbar(toolbarBottom)
         // used in CommonActionBarFragment
         view = findViewById(android.R.id.content)
@@ -82,69 +104,77 @@ class WX : CommonActionBarFragment() {
         } else {
             toolbarBottom.inflateMenu(R.menu.cab)
         }
-
-        //elys mod
-        if (UIPreferences.checkinternet) {
-            Utility.checkInternet(this)
-        }
-
         objectToolbarBottom.connect(this)
         objectToolbarBottom.connectClick { toolbarBottom.showOverflowMenu() }
+    }
+
+    private fun setupVr() {
         //
         // optional voice recognition icon
         //
         voiceRecognitionIcon = objectToolbarBottom.find(R.id.action_vr)
         voiceRecognitionIcon.isVisible = UIPreferences.vrButton
+    }
+
+    private fun setupFab() {
         //
         // radar floating action button unless disabled
         //
-        val fab = ObjectFab(this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
+        val fab = Fab(this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
         if (UIPreferences.mainScreenRadarFab || UIPreferences.navDrawerMainScreen) {
             objectToolbarBottom.hideRadar()
         } else {
             fab.visibility = View.GONE
         }
+    }
+
+    private fun setupTabs() {
         //
         // Tab setup
         //
         viewPager.offscreenPageLimit = 4
         vpa = ViewPagerAdapter(this)
         viewPager.adapter = vpa
-        slidingTabLayout.tabGravity = TabLayout.GRAVITY_FILL
-        TabLayoutMediator(slidingTabLayout, viewPager) { tab, position ->
-            tab.text = "OBJECT ${(position + 1)}"
-        }.attach()
-        slidingTabLayout.elevation = UIPreferences.elevationPref
-        if (UIPreferences.simpleMode || UIPreferences.hideTopToolbar || UIPreferences.navDrawerMainScreen) {
-            slidingTabLayout.visibility = View.GONE
+        with (slidingTabLayout) {
+            tabGravity = TabLayout.GRAVITY_FILL
+            TabLayoutMediator(this, viewPager) { tab, position ->
+                tab.text = "OBJECT ${(position + 1)}"
+            }.attach()
+            elevation = UIPreferences.elevationPref
+            if (UIPreferences.simpleMode || UIPreferences.hideTopToolbar || UIPreferences.navDrawerMainScreen) {
+                visibility = View.GONE
+            }
+            //
+            // Tab indicator color
+            //
+            setSelectedTabIndicatorColor(UtilityTheme.getPrimaryColorFromSelectedTheme(this@WX, 0))
         }
-        //
-        // Tab indicator color
-        //
-        slidingTabLayout.setSelectedTabIndicatorColor(UtilityTheme.getPrimaryColorFromSelectedTheme(this, 0))
+    }
+
+    private fun setupNavDrawer() {
         //
         // Navigation Drawer (if enabled) setup
         //
         if (UIPreferences.navDrawerMainScreen) {
             toolbarBottom.visibility = View.GONE
             val drawer = Drawer(this)
-            ObjectFab(this, R.id.fab2, GlobalVariables.ICON_ADD2) {
+            Fab(this, R.id.fab2, GlobalVariables.ICON_ADD2) {
                 val statusList = UtilitySpc.checkSpc()
                 val headerSize = drawer.setStatusText(statusList[0], statusList[1])
                 drawer.setHeaderHeight(headerSize)
                 drawer.openDrawer()
             }
         }
-        refreshDynamicContent()
     }
 
     //
     // On the main screen prevent back button from closing app unless user changes pref
     //
+    // TODO FIXME deprecate in 2023
     override fun onBackPressed() {
         if (UIPreferences.prefPreventAccidentalExit) {
             if (backButtonCounter < 1) {
-                ObjectPopupMessage(slidingTabLayout, "Please tap the back button one more time to close wX.")
+                PopupMessage(slidingTabLayout, "Please tap the back button one more time to close wX.")
                 backButtonCounter += 1
             } else {
                 finish()
@@ -159,10 +189,12 @@ class WX : CommonActionBarFragment() {
             val tabStr = UtilitySpc.checkSpc()
             vpa.setTabTitles(1, tabStr[0])
             vpa.setTabTitles(2, tabStr[1])
-            if (slidingTabLayout.tabCount > 2) {
-                slidingTabLayout.getTabAt(0)!!.text = UIPreferences.tabHeaders[0]
-                slidingTabLayout.getTabAt(1)!!.text = vpa.tabTitles[1]
-                slidingTabLayout.getTabAt(2)!!.text = vpa.tabTitles[2]
+            with (slidingTabLayout) {
+                if (tabCount > 2) {
+                    getTabAt(0)!!.text = UIPreferences.tabHeaders[0]
+                    getTabAt(1)!!.text = vpa.tabTitles[1]
+                    getTabAt(2)!!.text = vpa.tabTitles[2]
+                }
             }
         }
     }
@@ -186,6 +218,13 @@ class WX : CommonActionBarFragment() {
         voiceRecognitionIcon.isVisible = UIPreferences.vrButton
         backButtonCounter = 0
         refreshDynamicContent()
+    }
+    
+    //elys mod
+    fun checkinternet() {
+        if (UIPreferences.checkinternet) {
+            Utility.checkInternet(this)
+        }
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {

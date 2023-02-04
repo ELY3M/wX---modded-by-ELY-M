@@ -153,5 +153,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
         android:layout_margin="2dip"
-        android:gravity="start" />
+        android:gravity="start"
+        android:textColor="@color/white"
+        />
 </LinearLayout>

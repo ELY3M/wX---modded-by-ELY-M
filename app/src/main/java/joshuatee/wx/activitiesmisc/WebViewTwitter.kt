@@ -30,12 +30,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
+//import androidx.activity.addCallback
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.Location
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 
 class WebViewTwitter : BaseActivity() {
@@ -62,14 +65,6 @@ class WebViewTwitter : BaseActivity() {
     val prefToken = "STATE_CODE"
     private lateinit var webView: WebView
 
-    override fun onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.webscreen_ab_state, menu)
         return true
@@ -88,14 +83,22 @@ class WebViewTwitter : BaseActivity() {
         sectorList = GlobalArrays.states + canadianSectors
         sector = Utility.readPref(this, prefToken, Location.state)
         val webSettings = webView.settings
-        webSettings.javaScriptEnabled = true
-        if (UtilityUI.isTablet()) {
-            webSettings.textZoom = (120 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
-        } else {
-            webSettings.textZoom = (100 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
+        with (webSettings) {
+            javaScriptEnabled = true
+            textZoom = if (UtilityUI.isTablet()) {
+                (120 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
+            } else {
+                (100 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
+            }
         }
         webView.webViewClient = WebViewClient()
         getContent()
+
+//        onBackPressedDispatcher.addCallback(this) {
+//            if (webView.canGoBack()) {
+//                webView.goBack()
+//            }
+//        }
     }
 
     fun getContent(index: Int) {
@@ -131,5 +134,13 @@ class WebViewTwitter : BaseActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

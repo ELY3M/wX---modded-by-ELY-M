@@ -30,10 +30,12 @@ class ObjectPaint {
     private val paint = Paint()
 
     init {
-        paint.color = UIPreferences.nwsIconTextColor
-        paint.textSize = 14.0f
-        paint.typeface = Typeface.DEFAULT_BOLD
-        paint.isAntiAlias = true
+        with (paint) {
+            color = UIPreferences.nwsIconTextColor
+            textSize = 14.0f
+            typeface = Typeface.DEFAULT_BOLD
+            isAntiAlias = true
+        }
     }
 
     fun get() = paint

@@ -25,11 +25,13 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.WidgetFile.CONUSWV
+import joshuatee.wx.widgets.WidgetFile
+import joshuatee.wx.widgets.UtilityWidget
+import joshuatee.wx.widgets.UtilityWidgetDownload
 
 class WidgetCONUSWV : AppWidgetProvider() {
 
-    private val type = CONUSWV
+    private val type = WidgetFile.CONUSWV
 
     override fun onDisabled(context: Context) {
         UtilityWidget.disableWidget(context, type)

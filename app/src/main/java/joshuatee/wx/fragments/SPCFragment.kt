@@ -22,18 +22,13 @@
 package joshuatee.wx.fragments
 
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import joshuatee.wx.R
-import joshuatee.wx.models.ModelsSpcHrrrActivity
-import joshuatee.wx.models.ModelsSpcSrefActivity
+import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.models.ModelsSpcHrefActivity
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.spc.SpcCompmapActivity
 import joshuatee.wx.spc.SpcFireOutlookSummaryActivity
 import joshuatee.wx.spc.SpcMcdWatchShowSummaryActivity
@@ -50,15 +45,7 @@ class SpcFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_recyclerview, container, false)
-        val gridLayoutManager = GridLayoutManager(activity, UIPreferences.tilesPerRow)
-        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = gridLayoutManager
-        val tileAdapter = TileAdapter(requireContext(), tileObjects, UIPreferences.tilesPerRow, "FRAGMENT_SPC_ORDER")
-        recyclerView.adapter = tileAdapter
-        val callback = SimpleItemTouchHelperCallback(tileAdapter)
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recyclerView)
+        TabScreen(requireActivity(), view, "FRAGMENT_SPC_ORDER", tileObjects)
         return view
     }
 
@@ -66,8 +53,8 @@ class SpcFragment : Fragment() {
         get() {
             hm["spcsref"] = TileObject(
                     R.drawable.spcsref,
-                    ModelsSpcSrefActivity::class.java,
-                    ModelsSpcSrefActivity.INFO,
+                    ModelsSpcHrefActivity::class.java,
+                    ModelsSpcHrefActivity.INFO,
                     arrayOf("1", "SPCSREF", "SPCSREF"),
                     "spcsref", "SREF"
             )
@@ -140,8 +127,8 @@ class SpcFragment : Fragment() {
             )
             hm["spchrrr"] = TileObject(
                     R.drawable.spchrrr,
-                    ModelsSpcHrrrActivity::class.java,
-                    "",
+                    ModelsGenericActivity::class.java,
+                    ModelsGenericActivity.INFO,
                     arrayOf("1", "SPCHRRR", "SPC HRRR"),
                     "spchrrr", "HRRR"
             )

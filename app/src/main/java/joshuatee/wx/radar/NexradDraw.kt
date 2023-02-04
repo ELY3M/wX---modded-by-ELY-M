@@ -18,13 +18,16 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//Modded by ELY M. 
+//modded by ELY M. 
 
 package joshuatee.wx.radar
 
 import android.opengl.GLSurfaceView
 import android.view.View
-import joshuatee.wx.objects.*
+import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.PolygonWarning
+import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.UtilityLog
@@ -34,17 +37,18 @@ internal object NexradDraw {
     fun initGlviewMainScreen(
             index: Int,
             nexradState: NexradStateMainScreen,
-            changeListener: WXGLSurfaceView.OnProgressChangeListener
+            changeListener: NexradRenderSurfaceView.OnProgressChangeListener
     ): Boolean {
-        nexradState.wxglSurfaceViews[index].setEGLContextClientVersion(2)
-        nexradState.wxglTextObjects[index].setWXGLRender(nexradState.wxglRenders[index])
-        nexradState.wxglRenders[index].indexString = index.toString()
-        nexradState.wxglSurfaceViews[index].setRenderer(nexradState.wxglRenders[index])
-        nexradState.wxglSurfaceViews[index].setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews)
-        nexradState.wxglSurfaceViews[index].renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-        nexradState.wxglSurfaceViews[index].setOnProgressChangeListener(changeListener)
-        nexradState.wxglRenders[index].zoom = RadarPreferences.wxoglSize / 10.0f
-        nexradState.wxglSurfaceViews[index].scaleFactor = RadarPreferences.wxoglSize / 10.0f
+        with (nexradState) {
+            wxglSurfaceViews[index].setEGLContextClientVersion(2)
+            wxglRenders[index].state.indexString = index.toString()
+            wxglSurfaceViews[index].setRenderer(nexradState.wxglRenders[index])
+            wxglSurfaceViews[index].setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews)
+            wxglSurfaceViews[index].renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+            wxglSurfaceViews[index].setOnProgressChangeListener(changeListener)
+            wxglRenders[index].state.zoom = RadarPreferences.wxoglSize / 10.0f
+            wxglSurfaceViews[index].scaleFactor = RadarPreferences.wxoglSize / 10.0f
+        }
         return true
     }
 
@@ -52,45 +56,47 @@ internal object NexradDraw {
             index: Int,
             nexradState: NexradState,
             activity: VideoRecordActivity,
-            changeListener: WXGLSurfaceView.OnProgressChangeListener,
+            changeListener: NexradRenderSurfaceView.OnProgressChangeListener,
             archived: Boolean = false
     ) {
-        nexradState.wxglSurfaceViews[index].setEGLContextClientVersion(2)
-        nexradState.wxglSurfaceViews[index].setRenderer(nexradState.wxglRenders[index])
-        nexradState.wxglSurfaceViews[index].setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews, activity)
-        nexradState.wxglSurfaceViews[index].fullScreen = true
-        nexradState.wxglSurfaceViews[index].setOnProgressChangeListener(changeListener)
-        nexradState.wxglSurfaceViews[index].renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-        nexradState.wxglSurfaceViews[index].toolbar = activity.toolbar
-        nexradState.wxglSurfaceViews[index].toolbarBottom = activity.toolbarBottom
-        nexradState.wxglSurfaceViews[index].archiveMode = archived
+        with (nexradState.wxglSurfaceViews[index]) {
+            setEGLContextClientVersion(2)
+            setRenderer(nexradState.wxglRenders[index])
+            setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews, activity)
+            fullScreen = true
+            setOnProgressChangeListener(changeListener)
+            renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+            toolbar = activity.toolbar
+            toolbarBottom = activity.toolbarBottom
+            archiveMode = archived
+        }
     }
 
     fun initGeom(
             index: Int,
             oldRadarSites: Array<String>,
-            wxglRenders: List<WXGLRender>,
-            wxglTextObjects: List<WXGLTextObject>,
+            wxglRenders: List<NexradRender>,
+            wxglTextObjects: List<NexradRenderTextObject>,
             imageMap: ObjectImageMap?,
-            wxglSurfaceViews: List<WXGLSurfaceView>,
+            wxglSurfaceViews: List<NexradRenderSurfaceView>,
             fnGps: () -> Unit,
             fnGetLatLon: () -> LatLon,
             archived: Boolean,
             forceReset: Boolean
     ) {
         wxglRenders[index].initializeGeometry()
-        if (forceReset || (oldRadarSites[index] != wxglRenders[index].rid)) {
+        if (forceReset || (oldRadarSites[index] != wxglRenders[index].state.rid)) {
             wxglRenders[index].setChunkCount(0)
-            wxglRenders[index].setChunkCountSti(0)
+            wxglRenders[index].construct.setChunkCountSti(0)
             //elys mod
-            UtilityLog.d("hail", "before setHiInit")
-            wxglRenders[index].setHiInit(false) //crashing???
-            //wxglRenders[index].clearHailList()
-            wxglRenders[index].setTvsInit(false)
+            wxglRenders[index].construct.setHiInit(false)
+            //elys mod	    
+            wxglRenders[index].construct.setTvsInit(false)
+            wxglRenders[index].construct.setUserPointsInit(false)
             RadarGeometry.orderedTypes.forEach {
                 Thread {
                     if (RadarGeometry.dataByType[it]!!.isEnabled) {
-                        wxglRenders[index].constructGeographic(wxglRenders[index].geographicBuffers[it]!!, forceReset)
+                        wxglRenders[index].construct.geographic(wxglRenders[index].data.geographicBuffers[it]!!, forceReset)
                         try {
                             wxglSurfaceViews[index].requestRender()
                         } catch (e: Exception) {
@@ -100,10 +106,8 @@ internal object NexradDraw {
                 }.start()
             }
             wxglTextObjects[index].addLabels()
-            oldRadarSites[index] = wxglRenders[index].rid
+            oldRadarSites[index] = wxglRenders[index].state.rid
         }
-
-
 	    //elys mod
         //conus radar
         Thread {
@@ -115,28 +119,23 @@ internal object NexradDraw {
                     UtilityLog.handleException(e)
                 }
             }
-
 	        else {
                 wxglRenders[index].deconstructConusRadar()
               }
-
         }.start()
-
-
         Thread {
-            ObjectPolygonWarning.polygonDataByType.values.forEach {
+            PolygonWarning.byType.values.forEach {
                 if (it.isEnabled) {
-                    wxglRenders[index].constructWarningLines(it.type)
+                    wxglRenders[index].construct.warningLines(it.type)
                 }
             }
             if (PolygonType.MCD.pref) {
-                wxglRenders[index].constructLines(wxglRenders[index].polygonBuffers[PolygonType.WATCH]!!)
-                wxglRenders[index].constructLines(wxglRenders[index].polygonBuffers[PolygonType.WATCH_TORNADO]!!)
-                wxglRenders[index].constructLines(wxglRenders[index].polygonBuffers[PolygonType.MCD]!!)
-
+                wxglRenders[index].construct.lines(wxglRenders[index].data.polygonBuffers[PolygonType.WATCH]!!)
+                wxglRenders[index].construct.lines(wxglRenders[index].data.polygonBuffers[PolygonType.WATCH_TORNADO]!!)
+                wxglRenders[index].construct.lines(wxglRenders[index].data.polygonBuffers[PolygonType.MCD]!!)
             }
             if (PolygonType.MPD.pref) {
-                wxglRenders[index].constructLines(wxglRenders[index].polygonBuffers[PolygonType.MPD]!!)
+                wxglRenders[index].construct.lines(wxglRenders[index].data.polygonBuffers[PolygonType.MPD]!!)
             }
             try {
                 wxglSurfaceViews[index].requestRender()
@@ -149,14 +148,8 @@ internal object NexradDraw {
         }
         if (PolygonType.LOCDOT.pref || RadarPreferences.locationDotFollowsGps) {
             val latLon = fnGetLatLon()
-            wxglRenders[index].constructLocationDot(latLon.lat, latLon.lon, archived)
-        } else {
-            wxglRenders[index].deconstructLocationDot()
+            wxglRenders[index].construct.locationDot(latLon.lat, latLon.lon, archived)
         }
-	    //elys mod
-        //if (PolygonType.TVS.pref) wxglRender.constructTvs() else wxglRender.deconstructTvs()
-        //if (PolygonType.HI.pref) wxglRender.constructHi() else wxglRender.deconstructHi()
-        if (PolygonType.USERPOINTS.pref) wxglRenders[index].constructUserPoints() else wxglRenders[index].deconstructUserPoints()
         if ((imageMap != null) && (imageMap.visibility != View.VISIBLE)) {
             wxglSurfaceViews.forEach {
                 it.visibility = View.VISIBLE
@@ -164,33 +157,33 @@ internal object NexradDraw {
         }
     }
 
-    fun plotWarningPolygon(polygonWarningType: PolygonWarningType, wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender) {
+    fun plotWarningPolygon(polygonWarningType: PolygonWarningType, wxglSurfaceView: NexradRenderSurfaceView, wxglRender: NexradRender) {
         Thread {
-            wxglRender.constructWarningLines(polygonWarningType)
+            wxglRender.construct.warningLines(polygonWarningType)
             wxglSurfaceView.requestRender()
         }.start()
     }
 
-    fun plotPolygons(polygonType: PolygonType, wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender) {
+    fun plotPolygons(polygonType: PolygonType, wxglSurfaceView: NexradRenderSurfaceView, wxglRender: NexradRender) {
         Thread {
             if (polygonType.pref) {
-                wxglRender.constructLines(wxglRender.polygonBuffers[polygonType]!!)
+                wxglRender.construct.lines(wxglRender.data.polygonBuffers[polygonType]!!)
             }
             //
             // PolygonType.WATCH and PolygonType.WATCH_TORNADO need to be handled together
             //
             if (polygonType == PolygonType.WATCH && polygonType.pref) {
-                wxglRender.constructLines(wxglRender.polygonBuffers[PolygonType.WATCH_TORNADO]!!)
+                wxglRender.construct.lines(wxglRender.data.polygonBuffers[PolygonType.WATCH_TORNADO]!!)
             }
             wxglSurfaceView.requestRender()
         }.start()
     }
 
-    fun plotWpcFronts(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender) {
+    fun plotWpcFronts(wxglSurfaceView: NexradRenderSurfaceView, wxglRender: NexradRender) {
         Thread {
             if (PolygonType.WPC_FRONTS.pref) {
                 try {
-                    wxglRender.constructWpcFronts()
+                    wxglRender.construct.wpcFronts()
                     wxglSurfaceView.requestRender()
                 } catch (e: Exception) {
                     UtilityLog.handleException(e)
@@ -199,25 +192,22 @@ internal object NexradDraw {
         }.start()
     }
 
-    fun plotRadar(wxglRender: WXGLRender, url: String, fnGps: () -> Unit, fnGetLatLon: () -> LatLon, archived: Boolean) {
-        wxglRender.constructPolygons("", url, true)
+    fun plotRadar(wxglRender: NexradRender, fnGps: () -> Unit, fnGetLatLon: () -> LatLon, archived: Boolean, url: String = "") {
+        wxglRender.constructPolygons("", true, url)
         // work-around for a bug in which raster doesn't show on first launch
-        if (wxglRender.product == "NCR" || wxglRender.product == "NCZ") {
-            wxglRender.constructPolygons("", url, true)
+        if (wxglRender.state.product == "NCR" || wxglRender.state.product == "NCZ") {
+            wxglRender.constructPolygons("", true, url)
         }
         if (RadarPreferences.locationDotFollowsGps) {
             fnGps()
         }
         if (PolygonType.LOCDOT.pref || RadarPreferences.locationDotFollowsGps) {
             val latLon = fnGetLatLon()
-            wxglRender.constructLocationDot(latLon.lat, latLon.lon, archived)
-        } else {
-            wxglRender.deconstructLocationDot()
+            wxglRender.construct.locationDot(latLon.lat, latLon.lon, archived)
         }
     }
 
-    // TODO FIXME move to NexradState
-    fun resetGlview(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender) {
+    fun resetGlview(wxglSurfaceView: NexradRenderSurfaceView, wxglRender: NexradRender) {
         wxglSurfaceView.scaleFactor = RadarPreferences.wxoglSize / 10.0f
         wxglRender.setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
         wxglSurfaceView.requestRender()

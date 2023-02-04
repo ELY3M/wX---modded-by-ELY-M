@@ -32,39 +32,32 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 
+// https://www.weather.gov/documentation/services-web-api
+// default format via accept header is GeoJSON: application/geo+json
+
 object UtilityDownloadNws {
 
-    private const val USER_AGENT_STR = "Android ${GlobalVariables.packageNameAsString} ${GlobalVariables.emailAsString}"
-    private const val ACCEPT_STR = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
+    private const val userAgent = "Android ${GlobalVariables.packageNameAsString} ${GlobalVariables.emailAsString}"
+    private const val acceptHeader = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
 
-    var forecastZone = ""
+    fun getHazardData(url: String): String = url.getNwsHtml()
 
-    fun getHazardData(url: String) = getStringFromUrlJson(url)
-
-    fun getCap(sector: String) = if (sector == "us") {
+    // used for USWarningsWithRadarActivity / AlertSummary / CapAlert.initializeFromCap (XML) - CONUS wide alerts activity
+    fun getCap(sector: String): String = if (sector == "us") {
         getStringFromUrlXml(GlobalVariables.nwsApiUrl + "/alerts/active?region_type=land")
     } else {
         getStringFromUrlXml(GlobalVariables.nwsApiUrl + "/alerts/active/area/" + sector.uppercase(Locale.US))
     }
 
-    // https://forecast-v3.weather.gov/documentation?redirect=legacy
-    // http://www.nws.noaa.gov/os/notification/pns16-35forecastgov.htm
-
-    fun getStringFromUrl(url: String) = getStringFromUrlBaseNoAcceptHeader(url)
-
-    private fun getStringFromUrlJson(url: String) = getStringFromUrlBaseNoAcceptHeader(url)
-
-    fun getStringFromUrlNoAcceptHeader(url: String) = getStringFromUrlBaseNoHeader(url)
-
-    private fun getStringFromURLBase(url: String, header: String): String {
-        UtilityLog.d("wx", "getStringFromURLBase: $url")
+    // used for CapAlert (XML)
+    private fun getStringFromUrlXml(url: String): String {
+        Utility.logDownload("getStringFromURLBase: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
                     .url(url)
-                    .header("User-Agent", USER_AGENT_STR)
-                    //.addHeader("Accept", ACCEPT_STR)
-                    .addHeader("Accept", header)
+                    .header("User-Agent", userAgent)
+                    .addHeader("Accept", "application/atom+xml")
                     .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
@@ -81,14 +74,15 @@ object UtilityDownloadNws {
         return out.toString()
     }
 
-    private fun getStringFromUrlBaseNoAcceptHeader(url: String): String {
-        UtilityLog.d("wx", "getStringFromUrlBaseNoAcceptHeader: $url")
+    // target for String.getNwsHtml()
+    fun getStringFromUrlBaseNoAcceptHeader1(url: String): String {
+        Utility.logDownload("getStringFromUrlBaseNoAcceptHeader1 getNwsHtml: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", USER_AGENT_STR)
-                    .build()
+                                 .url(url)
+                                 .header("User-Agent", userAgent)
+                                 .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -104,15 +98,17 @@ object UtilityDownloadNws {
         return out.toString()
     }
 
-    private fun getStringFromUrlBaseNoHeader(url: String): String {
-        UtilityLog.d("wx", "getStringFromUrlBaseNoHeader: $url")
+    // PolygonWarning.kt
+    // FYI - this is probably not needed and could use getStringFromUrlBaseNoAcceptHeader1 instead
+    fun getStringFromUrlBaseNoHeader1(url: String): String {
+        Utility.logDownload("getStringFromUrlBaseNoHeader1: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", USER_AGENT_STR)
-                    .addHeader("Accept", ACCEPT_STR)
-                    .build()
+                                 .url(url)
+                                 .header("User-Agent", userAgent)
+                                 .addHeader("Accept", acceptHeader)
+                                 .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -128,16 +124,17 @@ object UtilityDownloadNws {
         return out.toString()
     }
 
+    // used by CapAlert.kt
     fun getStringFromUrlSep(url: String): String {
-        UtilityLog.d("wx", "getStringFromUrlBaseNoHeader: $url")
+        Utility.logDownload("getStringFromUrlSep: $url")
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", USER_AGENT_STR)
-                    .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1")
-                    .build()
+                                 .url(url)
+                                 .header("User-Agent", userAgent)
+                                 .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1") // TODO FIXME, not valid defaulting to application/geo+json
+                                 .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -154,24 +151,20 @@ object UtilityDownloadNws {
         return out.toString().replace(breakStr, "<br>")
     }
 
-    private fun getStringFromUrlXml(url: String) = getStringFromURLBase(url, "application/atom+xml")
-
     fun getHourlyData(latLon: LatLon): String {
         val pointsData = getLocationPointData(latLon)
         val hourlyUrl = pointsData.parse("\"forecastHourly\": \"(.*?)\"")
         return hourlyUrl.getNwsHtml()
     }
 
-    fun get7DayData(latLon: LatLon) =
-            if (UIPreferences.useNwsApi) {
-                val pointsData = getLocationPointData(latLon)
-                val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
-                // set static var at object level for use elsewhere
-                forecastZone = forecastUrl
-                forecastUrl.getNwsHtml()
-            } else {
-                UtilityUS.getLocationHtml(latLon.latString, latLon.lonString)
-            }
+    fun get7DayData(latLon: LatLon): String = if (UIPreferences.useNwsApi) {
+        val pointsData = getLocationPointData(latLon)
+        val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
+        forecastUrl.getNwsHtml()
+    } else {
+        UtilityUS.getLocationHtml(latLon.latString, latLon.lonString)
+    }
 
-    private fun getLocationPointData(latLon: LatLon) = (GlobalVariables.nwsApiUrl + "/points/" + latLon.latString + "," + latLon.lonString).getNwsHtml()
+    private fun getLocationPointData(latLon: LatLon): String =
+            (GlobalVariables.nwsApiUrl + "/points/" + latLon.latString + "," + latLon.lonString).getNwsHtml()
 }

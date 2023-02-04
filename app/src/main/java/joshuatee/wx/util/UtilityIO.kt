@@ -29,7 +29,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.util.bzip2.Compression
+import joshuatee.wx.externalBzip2.Compression
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.BufferedReader
@@ -48,11 +48,7 @@ object UtilityIO {
             // while (dis.readUnsignedShort() != 16) {
         }
         dis.skipBytes(100)
-        val magic = ByteArray(3)
-        magic[0] = 'B'.code.toByte()
-        magic[1] = 'Z'.code.toByte()
-        magic[2] = 'h'.code.toByte()
-        val compression = Compression.getCompression(magic)
+        val compression = Compression.getCompression(byteArrayOf('B'.code.toByte(), 'Z'.code.toByte(), 'h'.code.toByte()))
         val compressedFileSize = dis.length() - dis.filePointer
         val buf = ByteArray(compressedFileSize.toInt())
         dis.read(buf)
@@ -79,7 +75,7 @@ object UtilityIO {
 
     fun getFilePath(context: Context, fileName: String): String = context.getFileStreamPath(fileName).absolutePath
 
-    fun readTextFileFromRaw(resources: Resources, fileRaw: Int) = readTextFile(resources.openRawResource(fileRaw))
+    fun readTextFileFromRaw(resources: Resources, fileRaw: Int): String = readTextFile(resources.openRawResource(fileRaw))
     //elys mod - cant be private. it is used in other file.  
     fun readTextFile(inputStream: InputStream): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
@@ -156,6 +152,5 @@ object UtilityIO {
         }
         return content
     }
-
     fun getHtml(url: String) = UtilityNetworkIO.getStringFromUrl(url)
 }

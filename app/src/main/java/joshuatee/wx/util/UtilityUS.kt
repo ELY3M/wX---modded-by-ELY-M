@@ -22,33 +22,24 @@
 package joshuatee.wx.util
 
 import android.content.Context
-import android.graphics.Color
-import androidx.core.app.NotificationCompat
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.Extensions.getHtmlWithNewLine
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.CapAlert
-import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.notifications.*
-import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.NotificationPreferences
 import java.util.regex.Matcher
-import kotlin.collections.ArrayList
 
 object UtilityUS {
 
-    var obsClosestClass = ""
-    private val OBS_CODE_TO_LOCATION = mutableMapOf<String, String>()
+    private val obsCodeToLocation = mutableMapOf<String, String>()
 
-    internal fun getStatusViaMetar(context: Context, conditionsTimeStr: String): String {
-        var locationName: String? = OBS_CODE_TO_LOCATION[obsClosestClass]
+    internal fun getStatusViaMetar(context: Context, conditionsTimeStr: String, obsSite: String): String {
+        var locationName: String? = obsCodeToLocation[obsSite]
         if (locationName == null) {
-            locationName = findObsName(context, obsClosestClass)
-            if (locationName != "" && obsClosestClass != "") {
-                OBS_CODE_TO_LOCATION[obsClosestClass] = locationName
+            locationName = findObsName(context, obsSite)
+            if (locationName != "" && obsSite != "") {
+                obsCodeToLocation[obsSite] = locationName
             }
         }
-        return conditionsTimeStr + " " + UtilityString.capitalizeString(locationName).trim { it <= ' ' } + " (" + obsClosestClass + ") "
+        return conditionsTimeStr + " " + UtilityString.capitalizeString(locationName).trim { it <= ' ' } + " (" + obsSite + ") "
     }
 
     private fun findObsName(context: Context, obsShortCode: String): String {
@@ -63,107 +54,28 @@ object UtilityUS {
         }
     }
 
-    fun checkForNotifications(context: Context, currentLoc: Int, inBlackout: Boolean, tornadoWarningString: String): String {
-        var html = ObjectHazards.getHazardsHtml(Location.getLatLon(currentLoc))
-        var notificationUrls = ""
-        val locationLabelString = "(" + Location.getName(currentLoc) + ") "
-        val ids = html.parseColumn("\"@id\": \"(.*?)\"")
-        val hazardTitles = html.parseColumn("\"event\": \"(.*?)\"")
-        var i = 0
-        hazardTitles.forEach { title ->
-            if (ids.size > i) {
-                val url = ids[i]
-                val ca = CapAlert.createFromUrl(url)
-                if (UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) {
-                    html = "$html<b>$title</b><br>"
-                    html = html + "<b>Counties: " + ca.area + "</b><br>"
-                    html = html + ca.summary + "<br><br><br>"
-                    val noMain = locationLabelString + title
-                    val noBody = title + " " + ca.area + " " + ca.summary
-                    val noSummary = title + ": " + ca.area + " " + ca.summary
-                    val objectPendingIntents = ObjectPendingIntents(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url, ""), arrayOf(url, "sound"))
-                    val tornadoWarningPresent = title.contains(tornadoWarningString)
-                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
-                        val sound = Location.locations[currentLoc].sound && !inBlackout || Location.locations[currentLoc].sound
-                                && tornadoWarningPresent && NotificationPreferences.alertBlackoutTornado
-                        val objectNotification = ObjectNotification(
-                                context,
-                                sound,
-                                noMain,
-                                noBody,
-                                objectPendingIntents.resultPendingIntent,
-                                GlobalVariables.ICON_ALERT,
-                                noSummary,
-                                NotificationCompat.PRIORITY_HIGH,
-                                Color.BLUE,
-                                GlobalVariables.ICON_ACTION,
-                                objectPendingIntents.resultPendingIntent2,
-                                context.resources.getString(R.string.read_aloud)
-                        )
-                        val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
-                        objectNotification.sendNotification(context, url, 1, notification)
-                    }
-                    notificationUrls += url + NotificationPreferences.notificationStrSep
-                }
-            }
-            i += 1
-        }
-        return notificationUrls
-    }
-
     //
     // Legacy forecast support
     //
-    fun getLocationHtml(x: String, y: String) =
-        UtilityNetworkIO.getStringFromUrlWithNewLine("https://forecast.weather.gov/MapClick.php?lat=$x&lon=$y&unit=0&lg=english&FcstType=dwml")
+    fun getLocationHtml(x: String, y: String): String =
+        "https://forecast.weather.gov/MapClick.php?lat=$x&lon=$y&unit=0&lg=english&FcstType=dwml".getHtmlWithNewLine()
 
-    fun getCurrentConditionsUS(html: String): Array<String> {
-        val result = Array(6) {""}
-        val regexpList = arrayOf(
-                "<temperature type=.apparent. units=.Fahrenheit..*?>(.*?)</temperature>",
-                "<temperature type=.dew point. units=.Fahrenheit..*?>(.*?)</temperature>",
-                "<direction type=.wind.*?>(.*?)</direction>",
-                "<wind-speed type=.gust.*?>(.*?)</wind-speed>",
-                "<wind-speed type=.sustained.*?>(.*?)</wind-speed>",
-                "<pressure type=.barometer.*?>(.*?)</pressure>",
-                "<visibility units=.*?>(.*?)</visibility>",
-                "<weather-conditions weather-summary=.(.*?)./>.*?<weather-conditions>",
-                "<temperature type=.maximum..*?>(.*?)</temperature>",
-                "<temperature type=.minimum..*?>(.*?)</temperature>",
-                "<conditions-icon type=.forecast-NWS. time-layout=.k-p12h-n1[0-9]-1..*?>(.*?)</conditions-icon>",
-                "<wordedForecast time-layout=.k-p12h-n1[0-9]-1..*?>(.*?)</wordedForecast>",
-                "<data type=.current observations.>.*?<area-description>(.*)</area-description>.*?</location>",
-                "<moreWeatherInformation applicable-location=.point1.>http://www.nws.noaa.gov/data/obhistory/(.*).html</moreWeatherInformation>",
-                "<data type=.current observations.>.*?<start-valid-time period-name=.current.>(.*)</start-valid-time>",
-                "<time-layout time-coordinate=.local. summarization=.12hourly.>.*?<layout-key>k-p12h-n1[0-9]-1</layout-key>(.*?)</time-layout>",
-                "<time-layout time-coordinate=.local. summarization=.12hourly.>.*?<layout-key>k-p24h-n[678]-1</layout-key>(.*?)</time-layout>",
-                "<time-layout time-coordinate=.local. summarization=.12hourly.>.*?<layout-key>k-p24h-n[678]-2</layout-key>(.*?)</time-layout>",
-                "<weather time-layout=.k-p12h-n1[0-9]-1.>.*?<name>.*?</name>(.*)</weather>", // 3 to [0-9] 3 places
-                "<hazards time-layout.*?>(.*)</hazards>.*?<wordedF",
-                "<data type=.forecast.>.*?<area-description>(.*?)</area-description>",
-                "<humidity type=.relative..*?>(.*?)</humidity>"
-        )
+    fun getSevenDayLegacy(html: String): SevenDayDataLegacy {
         val rawData = UtilityString.parseXmlExt(regexpList, html)
-        result[0] = rawData[10]
-        result[2] = get7Day(rawData)
-        result[3] = get7DayExt(rawData)
-        return result
+        return SevenDayDataLegacy(rawData[10], get7Day(rawData), get7DayExt(rawData))
     }
 
-    private fun get7DayExt(rawData: Array<String>): String {
+    private fun get7DayExt(rawData: List<String>): String {
         val forecast = UtilityString.parseXml(rawData[11], "text")
-        val timeP12n13List = UtilityString.parseColumnMutable(rawData[15], GlobalVariables.utilUSPeriodNamePattern)
-        timeP12n13List.add(0, "")
-        var forecastString = ""
-        for (j in 1 until forecast.size) {
-            forecastString += timeP12n13List[j].replace("\"", "")
-            forecastString += ": "
-            forecastString += forecast[j]
+        val timeP12n13List = listOf("") + UtilityString.parseColumn(rawData[15], GlobalVariables.utilUSPeriodNamePattern)
+        return (1 until forecast.size).joinToString("") {
+            timeP12n13List[it].replace("\"", "") + ": " + forecast[it]
         }
-        return forecastString
     }
 
-    private fun get7Day(raw_data: Array<String>): String {
+    // TODO FIXME it would be nice to get rid of this
+    // used in the legacy cc widget and 7 day notification
+    private fun get7Day(raw_data: List<String>): String {
         val dayHash = mapOf(
             "Sun" to "Sat",
             "Mon" to "Sun",
@@ -180,8 +92,8 @@ object UtilityUS {
         val timeP12n13List = ArrayList<String>(14)
         val timeP24n7List = ArrayList<String>(8)
         val weatherSummaryList = ArrayList<String>(14)
-        val maxTemp = UtilityString.parseXmlValue(raw_data[8])
-        val minTemp = UtilityString.parseXmlValue(raw_data[9])
+        val maxTemp = UtilityString.parseXmlValue(raw_data[8]).toTypedArray()
+        val minTemp = UtilityString.parseXmlValue(raw_data[9]).toTypedArray()
         var m: Matcher
         try {
             m = GlobalVariables.utilUSWeatherSummaryPattern.matcher(raw_data[18])
@@ -190,6 +102,7 @@ object UtilityUS {
                 weatherSummaryList.add((m.group(1) ?: "").replace("\"",""))
             }
         } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
         try {
             m = GlobalVariables.utilUSPeriodNamePattern.matcher(raw_data[15])
@@ -198,6 +111,7 @@ object UtilityUS {
                 timeP12n13List.add((m.group(1) ?: "").replace("\"",""))
             }
         } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
         try {
             m = GlobalVariables.utilUSPeriodNamePattern.matcher(raw_data[16])
@@ -206,6 +120,7 @@ object UtilityUS {
                 timeP24n7List.add((m.group(1) ?: "").replace("\"",""))
             }
         } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
         if (timeP24n7List.size > 1 && timeP24n7List[1].contains("night")) {
             minTemp[1] = minTemp[1].replace("\\s*".toRegex(),"")
@@ -246,16 +161,14 @@ object UtilityUS {
                 }
             }
             sb.append(": ")
-            sb.append(UtilityMath.unitsTemp(Utility.safeGet(maxTemp, maxCnt)))
+            sb.append(UtilityMath.unitsTemp(Utility.safeGet(maxTemp, maxCnt).trim()))
             sb.append("/")
-            sb.append(UtilityMath.unitsTemp(minTemp[j]))
+            sb.append(UtilityMath.unitsTemp(minTemp[j]).trim())
             sb.append(" (")
-            // sb.append(weatherSummaryList[k])
-            sb.append(Utility.safeGet(weatherSummaryList, k))
+            sb.append(Utility.safeGet(weatherSummaryList, k).trim())
             k += 1
             sb.append(" / ")
-            // sb.append(weatherSummaryList[k])
-            sb.append(Utility.safeGet(weatherSummaryList, k))
+            sb.append(Utility.safeGet(weatherSummaryList, k).trim())
             k += 1
             sb.append(")")
             sb.append(GlobalVariables.newline)
@@ -273,4 +186,29 @@ object UtilityUS {
         sb.append(")")
         return sb.toString().replace("Chance","Chc").replace("Thunderstorms","Tstorms")
     }
+
+    private val regexpList = listOf(
+        "<temperature type=.apparent. units=.Fahrenheit..*?>(.*?)</temperature>",
+        "<temperature type=.dew point. units=.Fahrenheit..*?>(.*?)</temperature>",
+        "<direction type=.wind.*?>(.*?)</direction>",
+        "<wind-speed type=.gust.*?>(.*?)</wind-speed>",
+        "<wind-speed type=.sustained.*?>(.*?)</wind-speed>",
+        "<pressure type=.barometer.*?>(.*?)</pressure>",
+        "<visibility units=.*?>(.*?)</visibility>",
+        "<weather-conditions weather-summary=.(.*?)./>.*?<weather-conditions>",
+        "<temperature type=.maximum..*?>(.*?)</temperature>",
+        "<temperature type=.minimum..*?>(.*?)</temperature>",
+        "<conditions-icon type=.forecast-NWS. time-layout=.k-p12h-n1[0-9]-1..*?>(.*?)</conditions-icon>", // index 10
+        "<wordedForecast time-layout=.k-p12h-n1[0-9]-1..*?>(.*?)</wordedForecast>",                       // index 11
+        "<data type=.current observations.>.*?<area-description>(.*)</area-description>.*?</location>",
+        "<moreWeatherInformation applicable-location=.point1.>http://www.nws.noaa.gov/data/obhistory/(.*).html</moreWeatherInformation>",
+        "<data type=.current observations.>.*?<start-valid-time period-name=.current.>(.*)</start-valid-time>",
+        "<time-layout time-coordinate=.local. summarization=.12hourly.>.*?<layout-key>k-p12h-n1[0-9]-1</layout-key>(.*?)</time-layout>", // index 15
+        "<time-layout time-coordinate=.local. summarization=.12hourly.>.*?<layout-key>k-p24h-n[678]-1</layout-key>(.*?)</time-layout>",
+        "<time-layout time-coordinate=.local. summarization=.12hourly.>.*?<layout-key>k-p24h-n[678]-2</layout-key>(.*?)</time-layout>",
+        "<weather time-layout=.k-p12h-n1[0-9]-1.>.*?<name>.*?</name>(.*)</weather>", // 3 to [0-9] 3 places
+        "<hazards time-layout.*?>(.*)</hazards>.*?<wordedF",
+        "<data type=.forecast.>.*?<area-description>(.*?)</area-description>",
+        "<humidity type=.relative..*?>(.*?)</humidity>"
+    )
 }

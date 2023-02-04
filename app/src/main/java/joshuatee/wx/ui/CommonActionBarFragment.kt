@@ -35,12 +35,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.*
-import joshuatee.wx.audio.SettingsPlaylistActivity
+import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.audio.UtilityVoiceCommand
 import joshuatee.wx.objects.Route
-import joshuatee.wx.settings.*
+import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.SettingsAboutActivity
 import joshuatee.wx.settings.UtilityHomeScreen
 
 open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListener {
@@ -102,12 +102,11 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         return true
     }
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        result: ActivityResult ->
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            ObjectPopupMessage(view, thingsYouSaid!![0])
+            PopupMessage(view, thingsYouSaid!![0])
             val string = thingsYouSaid[0]
             UtilityVoiceCommand.processCommand(this, string, Location.rid, Location.wfo, Location.state)
         }
@@ -139,8 +138,8 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     fun openActivity(context: Context, activityName: String) {
         Route(context,
-                UtilityHomeScreen.HM_CLASS[activityName]!!,
-                UtilityHomeScreen.HM_CLASS_ID[activityName]!!,
-                UtilityHomeScreen.HM_CLASS_ARGS[activityName]!!)
+            UtilityHomeScreen.classes[activityName]!!,
+            UtilityHomeScreen.classId[activityName]!!,
+            UtilityHomeScreen.classArgs[activityName]!!)
     }
 }

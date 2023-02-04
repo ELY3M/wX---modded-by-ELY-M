@@ -46,13 +46,21 @@ class HBox(val context: Context) {
         linearLayout.addView(child)
     }
 
+    fun addWidget(child: Widget) {
+        linearLayout.addView(child.getView())
+    }
+
     fun addLayout(objectLinearLayout: VBox) {
         linearLayout.addView(objectLinearLayout.get())
     }
 
-    fun addWidgets(children: List<View>) {
+    fun addLayout(child: HBox) {
+        linearLayout.addView(child.get())
+    }
+
+    fun addWidgets(children: List<Widget>) {
         children.forEach {
-            linearLayout.addView(it)
+            linearLayout.addView(it.getView())
         }
     }
 

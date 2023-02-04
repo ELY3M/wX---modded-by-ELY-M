@@ -47,14 +47,20 @@ class FavAddActivity : BaseActivity() {
     private var data = listOf<String>()
     private var dataTokens = listOf<String>()
     private lateinit var type: FavoriteType
+    var verboseTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         type = FavoriteType.stringToType(intent.getStringArrayExtra(TYPE)!![0])
-        var verboseTitle = ""
+        setupVars()
+        setTitle("Add Favorite", verboseTitle)
+        ObjectRecyclerView(this, R.id.card_list, data.toMutableList(), ::itemClicked)
+    }
+
+    private fun setupVars() {
         when (type) {
             FavoriteType.SND -> {
-                data = GlobalArrays.soundingSites.map { "$it " + Utility.getSoundingSiteName(it) }
+                data = GlobalArrays.soundingSites.map { "$it " + UtilityLocation.getSoundingSiteName(it) }
                 verboseTitle = "sounding site"
             }
             FavoriteType.WFO -> {
@@ -79,40 +85,25 @@ class FavAddActivity : BaseActivity() {
                 verboseTitle = "parameter"
             }
         }
-        setTitle("Add Favorite", verboseTitle)
-        ObjectRecyclerView(this, R.id.card_list, data.toMutableList(), ::itemClicked)
     }
 
     private fun itemClicked(position: Int) {
         val item = data[position]
         var favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.initialValue)
-        val tmpArr = when (type) {
-            FavoriteType.SPCMESO -> {
-                if (dataTokens[position].contains(":")) {
-                    dataTokens[position].split(":").dropLastWhile { it.isEmpty() }
-                } else {
-                    dataTokens[position].split(" ").dropLastWhile { it.isEmpty() }
-                }
-            }
-            FavoriteType.SND -> {
-                if (GlobalArrays.soundingSites[position].contains(":")) {
-                    GlobalArrays.soundingSites[position].split(":").dropLastWhile { it.isEmpty() }
-                } else {
-                    GlobalArrays.soundingSites[position].split(" ").dropLastWhile { it.isEmpty() }
-                }
-            }
-            else -> {
-                if (data[position].contains(":")) {
-                    data[position].split(":").dropLastWhile { it.isEmpty() }
-                } else {
-                    data[position].split(" ").dropLastWhile { it.isEmpty() }
-                }
-            }
+        val sourceString = when (type) {
+            FavoriteType.SPCMESO -> dataTokens[position]
+            FavoriteType.SND -> GlobalArrays.soundingSites[position]
+            else -> data[position]
         }
-        if (!favoriteString.contains(tmpArr[0])) {
+        val tokens = if (sourceString.contains(":")) {
+            sourceString.split(":").dropLastWhile { it.isEmpty() }
+        } else {
+            sourceString.split(" ").dropLastWhile { it.isEmpty() }
+        }
+        if (!favoriteString.contains(tokens[0])) {
             favoriteString += when (type) {
                 FavoriteType.SPCMESO -> UtilitySpcMeso.params[position] + ":"
-                else -> tmpArr[0] + ":"
+                else -> tokens[0] + ":"
             }
             Utility.writePref(this, UtilityFavorites.getPrefToken(type), favoriteString)
             UIPreferences.favorites[type] = favoriteString

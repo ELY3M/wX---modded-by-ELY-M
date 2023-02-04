@@ -33,20 +33,20 @@
         android:orientation="vertical"
         tools:context=".Main">
 
-        <joshuatee.wx.ui.ColorPicker
+        <joshuatee.wx.externalColorChooser.ColorPicker
             android:id="@+id/colorPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-        <joshuatee.wx.ui.ValueBar
+        <joshuatee.wx.externalColorChooser.ValueBar
             android:id="@+id/vBar"
             android:layout_width="322dp"
             android:layout_height="112dp"
             android:layout_gravity="center"
             android:layout_margin="8dip" />
 
-        <joshuatee.wx.ui.SaturationBar
+        <joshuatee.wx.externalColorChooser.SaturationBar
             android:id="@+id/sBar"
             android:layout_width="322dp"
             android:layout_height="112dp"

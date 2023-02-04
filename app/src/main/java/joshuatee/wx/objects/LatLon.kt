@@ -30,7 +30,7 @@ import kotlin.math.sin
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
-import joshuatee.wx.radar.UtilityCanvasProjection
+import joshuatee.wx.radar.Projection
 
 class LatLon() {
 
@@ -113,15 +113,15 @@ class LatLon() {
             lonNum = To.double(newValue)
         }
 
-    fun asList() = listOf(lat, lon)
+    fun asList(): List<Double> = listOf(lat, lon)
 
-    fun asPoint() = ExternalPoint(this)
+    fun asPoint(): ExternalPoint = ExternalPoint(this)
 
-    override fun toString() = "$latString:$lonString"
+    override fun toString(): String = "$latString:$lonString"
 
-    fun print()= "$latString $lonString "
+    fun print(): String = "$latString $lonString "
 
-    fun prettyPrint()= "${latString.take(6)}, ${lonString.take(7)}"
+    fun prettyPrint(): String = "${latString.take(6)}, ${lonString.take(7)}"
 
     companion object {
         // 1.1515 is the number of statute miles in a nautical mile
@@ -133,12 +133,11 @@ class LatLon() {
             dist = acos(dist)
             dist = UtilityMath.rad2deg(dist)
             dist *= 60.0 * 1.1515
-            when (unit) {
-                DistanceUnit.KM -> dist *= 1.609344
-                DistanceUnit.NAUTICAL_MILE -> dist *= 0.8684
-                else -> {}
+            return when (unit) {
+                DistanceUnit.KM -> dist * 1.609344
+                DistanceUnit.NAUTICAL_MILE -> dist * 0.8684
+                else -> dist
             }
-            return dist
         }
 
         // take a space separated list of numbers and return a list of LatLon, list is of the format
@@ -150,14 +149,24 @@ class LatLon() {
             val y = mutableListOf<Double>()
             list.indices.forEach { i ->
                 if (isWarning) {
-                    if (i.isEven()) y.add(To.double(list[i]) * multiplier) else x.add(To.double(list[i]))
+                    if (i.isEven()) {
+                        y.add(To.double(list[i]) * multiplier)
+                    } else {
+                        x.add(To.double(list[i]))
+                    }
                 } else {
-                    if (i.isEven()) x.add(To.double(list[i])) else y.add(To.double(list[i]) * multiplier)
+                    if (i.isEven()) {
+                        x.add(To.double(list[i]))
+                    } else {
+                        y.add(To.double(list[i]) * multiplier)
+                    }
                 }
             }
             val latLons = mutableListOf<LatLon>()
             if (y.size > 3 && x.size > 3 && x.size == y.size) {
-                x.forEachIndexed { index, _ -> latLons.add(LatLon(x[index], y[index])) }
+                x.indices.forEach {
+                    latLons.add(LatLon(x[it], y[it]))
+                }
             }
             return latLons
         }
@@ -165,10 +174,10 @@ class LatLon() {
         fun latLonListToListOfDoubles(latLons: List<LatLon>, projectionNumbers: ProjectionNumbers): List<Double> {
             val warningList = mutableListOf<Double>()
             if (latLons.isNotEmpty()) {
-                val startCoordinates = UtilityCanvasProjection.computeMercatorNumbers(latLons[0], projectionNumbers).toList()
+                val startCoordinates = Projection.computeMercatorNumbers(latLons[0], projectionNumbers).toList()
                 warningList += startCoordinates
                 (1 until latLons.size).forEach { index ->
-                    val coordinates = UtilityCanvasProjection.computeMercatorNumbers(latLons[index], projectionNumbers).toList()
+                    val coordinates = Projection.computeMercatorNumbers(latLons[index], projectionNumbers).toList()
                     warningList += coordinates
                     warningList += coordinates
                 }

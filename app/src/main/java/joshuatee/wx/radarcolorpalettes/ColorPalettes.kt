@@ -26,33 +26,33 @@ import android.content.Context
 internal object ColorPalettes {
 
     fun initialize(context: Context) {
-        val cm94 = ObjectColorPalette(context, 94)
-        ObjectColorPalette.colorMap[94] = cm94
-        ObjectColorPalette.colorMap[94]!!.initialize()
-        ObjectColorPalette.colorMap[153] = cm94
-        ObjectColorPalette.colorMap[180] = cm94
-        ObjectColorPalette.colorMap[186] = cm94
-        ObjectColorPalette.colorMap[2153] = cm94
-        val cm99 = ObjectColorPalette(context, 99)
-        ObjectColorPalette.colorMap[99] = cm99
-        ObjectColorPalette.colorMap[99]!!.initialize()
-        ObjectColorPalette.colorMap[154] = cm99
-        ObjectColorPalette.colorMap[182] = cm99
-        ObjectColorPalette.colorMap[2154] = cm99
-        val cm172 = ObjectColorPalette(context, 172)
-        ObjectColorPalette.colorMap[172] = cm172
-        ObjectColorPalette.colorMap[172]!!.initialize()
-        ObjectColorPalette.colorMap[170] = cm172
+        val cm94 = ColorPalette(context, 94)
+        ColorPalette.colorMap[94] = cm94
+        ColorPalette.colorMap[94]!!.initialize()
+        ColorPalette.colorMap[153] = cm94
+        ColorPalette.colorMap[180] = cm94
+        ColorPalette.colorMap[186] = cm94
+        ColorPalette.colorMap[2153] = cm94
+        val cm99 = ColorPalette(context, 99)
+        ColorPalette.colorMap[99] = cm99
+        ColorPalette.colorMap[99]!!.initialize()
+        ColorPalette.colorMap[154] = cm99
+        ColorPalette.colorMap[182] = cm99
+        ColorPalette.colorMap[2154] = cm99
+        val cm172 = ColorPalette(context, 172)
+        ColorPalette.colorMap[172] = cm172
+        ColorPalette.colorMap[172]!!.initialize()
+        ColorPalette.colorMap[170] = cm172
         listOf(30, 56, 134, 135, 159, 161, 163, 165).forEach {
-            ObjectColorPalette.colorMap[it] = ObjectColorPalette(context, it)
-            ObjectColorPalette.colorMap[it]!!.initialize()
+            ColorPalette.colorMap[it] = ColorPalette(context, it)
+            ColorPalette.colorMap[it]!!.initialize()
         }
-        val cm19 = ObjectColorPalette(context, 19)
-        ObjectColorPalette.colorMap[19] = cm19
-        ObjectColorPalette.colorMap[19]!!.initialize()
-        ObjectColorPalette.colorMap[181] = cm19
+        val cm19 = ColorPalette(context, 19)
+        ColorPalette.colorMap[19] = cm19
+        ColorPalette.colorMap[19]!!.initialize()
+        ColorPalette.colorMap[181] = cm19
         // below 2 composite reflectivity
-        ObjectColorPalette.colorMap[37] = cm19
-        ObjectColorPalette.colorMap[38] = cm19
+        ColorPalette.colorMap[37] = cm19
+        ColorPalette.colorMap[38] = cm19
     }
 }

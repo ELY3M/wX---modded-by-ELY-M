@@ -29,7 +29,7 @@ import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCanadaWarnings
+import joshuatee.wx.ui.CanadaWarnings
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
@@ -37,7 +37,7 @@ import joshuatee.wx.util.Utility
 class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private var firstTime = true
-    private lateinit var objectCanadaWarnings: ObjectCanadaWarnings
+    private lateinit var canadaWarnings: CanadaWarnings
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
 
@@ -47,8 +47,8 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
         toolbarBottom.setOnMenuItemClickListener(this)
-        objectCanadaWarnings = ObjectCanadaWarnings(this, box, toolbar)
-        objectCanadaWarnings.province = Utility.readPref(this, "CA_ALERTS_PROV", objectCanadaWarnings.province)
+        canadaWarnings = CanadaWarnings(this, box, toolbar)
+        canadaWarnings.province = Utility.readPref(this, "CA_ALERTS_PROV", canadaWarnings.province)
         title = "Canada Alerts"
         getContent()
     }
@@ -60,37 +60,37 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun getContent() {
         scrollView.smoothScrollTo(0, 0)
-        FutureVoid(this, objectCanadaWarnings::getData, ::showText)
+        FutureVoid(this, canadaWarnings::getData, ::showText)
     }
 
     private fun showText() {
-        objectCanadaWarnings.showData()
+        canadaWarnings.showData()
         if (firstTime) {
             UtilityToolbar.fullScreenMode(toolbar)
             firstTime = false
         }
-        Utility.writePref(this@CanadaAlertsActivity, "CA_ALERTS_PROV", objectCanadaWarnings.province)
-        toolbar.subtitle = objectCanadaWarnings.title
+        Utility.writePref(this@CanadaAlertsActivity, "CA_ALERTS_PROV", canadaWarnings.province)
+        toolbar.subtitle = canadaWarnings.title
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_ca -> objectCanadaWarnings.province = "ca"
-            R.id.action_ab -> objectCanadaWarnings.province = "ab"
-            R.id.action_bc -> objectCanadaWarnings.province = "bc"
-            R.id.action_mb -> objectCanadaWarnings.province = "mb"
-            R.id.action_nb -> objectCanadaWarnings.province = "nb"
-            R.id.action_nl -> objectCanadaWarnings.province = "nl"
-            R.id.action_ns -> objectCanadaWarnings.province = "ns"
-            R.id.action_nt -> objectCanadaWarnings.province = "nt"
-            R.id.action_nu -> objectCanadaWarnings.province = "nt"
-            R.id.action_son -> objectCanadaWarnings.province = "son"
-            R.id.action_non -> objectCanadaWarnings.province = "non"
-            R.id.action_pei -> objectCanadaWarnings.province = "pei"
-            R.id.action_sqc -> objectCanadaWarnings.province = "sqc"
-            R.id.action_nqc -> objectCanadaWarnings.province = "nqc"
-            R.id.action_sk -> objectCanadaWarnings.province = "sk"
-            R.id.action_yt -> objectCanadaWarnings.province = "yt"
+            R.id.action_ca -> canadaWarnings.province = "ca"
+            R.id.action_ab -> canadaWarnings.province = "ab"
+            R.id.action_bc -> canadaWarnings.province = "bc"
+            R.id.action_mb -> canadaWarnings.province = "mb"
+            R.id.action_nb -> canadaWarnings.province = "nb"
+            R.id.action_nl -> canadaWarnings.province = "nl"
+            R.id.action_ns -> canadaWarnings.province = "ns"
+            R.id.action_nt -> canadaWarnings.province = "nt"
+            R.id.action_nu -> canadaWarnings.province = "nt"
+            R.id.action_son -> canadaWarnings.province = "son"
+            R.id.action_non -> canadaWarnings.province = "non"
+            R.id.action_pei -> canadaWarnings.province = "pei"
+            R.id.action_sqc -> canadaWarnings.province = "sqc"
+            R.id.action_nqc -> canadaWarnings.province = "nqc"
+            R.id.action_sk -> canadaWarnings.province = "sk"
+            R.id.action_yt -> canadaWarnings.province = "yt"
             else -> return super.onOptionsItemSelected(item)
         }
         getContent()

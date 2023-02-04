@@ -22,7 +22,7 @@
 package joshuatee.wx.objects
 
 import android.content.Context
-import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.DownloadText
 import kotlinx.coroutines.*
 
 class FutureText(val context: Context, val arg1: String, val updateFunc: (String) -> Unit) {
@@ -32,7 +32,7 @@ class FutureText(val context: Context, val arg1: String, val updateFunc: (String
     }
 
     private fun getContent() = GlobalScope.launch(Dispatchers.Main) {
-        val s = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(context, arg1) }
+        val s = withContext(Dispatchers.IO) { DownloadText.byProduct(context, arg1) }
         updateFunc(s)
     }
 }

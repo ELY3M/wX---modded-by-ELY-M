@@ -2,7 +2,7 @@
 
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
 
-    This file is part of wX.4
+    This file is part of wX.
 
     wX is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,30 +20,30 @@
 */
 //Modded by ELY M.
 //Hail Labels
+//User Points
 
 package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.ObjectPolygonWarning
-import joshuatee.wx.objects.ObjectPolygonWatch
+import joshuatee.wx.objects.PolygonWarning
+import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.PolygonType
 
 object NexradLayerDownload {
 
     fun download(
             context: Context,
-            numberOfPanes: Int,
-            wxglRender: WXGLRender,
-            wxglSurfaceView: WXGLSurfaceView,
-            wxglTextObjects: List<WXGLTextObject>,
+            wxglRender: NexradRender,
+            wxglSurfaceView: NexradRenderSurfaceView,
+            wxglTextObjects: List<NexradRenderTextObject>,
             radarUpdateFn: () -> Unit,
             showWpcFronts: Boolean = true
     ) {
         //
         // Warnings
         //
-        ObjectPolygonWarning.polygonDataByType.values.forEach {
+        PolygonWarning.byType.values.forEach {
             if (it.isEnabled) {
                 FutureVoid(context, it::download) {
                     NexradDraw.plotWarningPolygon(it.type, wxglSurfaceView, wxglRender)
@@ -56,7 +56,7 @@ object NexradLayerDownload {
         //
         listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
             if (it.pref) {
-                FutureVoid(context, { ObjectPolygonWatch.polygonDataByType[it]!!.download(context) }) {
+                FutureVoid(context, { PolygonWatch.byType[it]!!.download(context) }) {
                     NexradDraw.plotPolygons(it, wxglSurfaceView, wxglRender)
                 }
             }
@@ -66,9 +66,9 @@ object NexradLayerDownload {
         //
         if (showWpcFronts) {
             if (PolygonType.WPC_FRONTS.pref) {
-                FutureVoid(context, { UtilityWpcFronts.get(context) }, {
+                FutureVoid(context, { WpcFronts.get(context) }, {
                     NexradDraw.plotWpcFronts(wxglSurfaceView, wxglRender)
-                    UtilityWXGLTextObject.updateWpcFronts(numberOfPanes, wxglTextObjects)
+                    NexradRenderTextObject.updateWpcFronts(wxglTextObjects)
                 })
             }
         }
@@ -76,8 +76,8 @@ object NexradLayerDownload {
         // SPC Convective Outlook
         //
         if (PolygonType.SWO.pref) {
-            FutureVoid(context, { UtilitySwoDayOne.get(context) }) {
-                wxglRender.constructSwoLines()
+            FutureVoid(context, { SwoDayOne.get(context) }) {
+                wxglRender.construct.swoLines()
                 wxglSurfaceView.requestRender()
             }
         }
@@ -85,12 +85,12 @@ object NexradLayerDownload {
         // Wind barbs and observations
         //
         if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) {
-            FutureVoid(context, { UtilityMetar.getStateMetarArrayForWXOGL(context, wxglRender.rid, wxglRender.paneNumber) }) {
+            FutureVoid(context, { Metar.get(context, wxglRender.state.rid, wxglRender.paneNumber) }) {
                 if (PolygonType.WIND_BARB.pref) {
-                    wxglRender.constructWindBarbs()
+                    wxglRender.construct.windBarbs()
                 }
                 if (PolygonType.OBS.pref) {
-                    UtilityWXGLTextObject.updateObservations(numberOfPanes, wxglTextObjects)
+                    NexradRenderTextObject.updateObservations(wxglTextObjects)
                 }
                 wxglSurfaceView.requestRender()
             }
@@ -99,7 +99,9 @@ object NexradLayerDownload {
         // TVS
         //
         if (PolygonType.TVS.pref) {
-            FutureVoid(context, { wxglRender.constructTvs() }) {
+            FutureVoid(context, {
+                wxglRender.construct.tvs()
+            }) {
                 wxglSurfaceView.requestRender()
             }
         }
@@ -107,32 +109,25 @@ object NexradLayerDownload {
         // Hail Index (HI)
         //
         if (PolygonType.HI.pref) {
-            FutureVoid(context, { wxglRender.constructHi() }) {
+            FutureVoid(context, {
+                wxglRender.construct.hailIndex()
+            }) {
                 wxglSurfaceView.requestRender()
-                //elys mod - Hail Labels
-                if (PolygonType.HAIL_LABELS.pref) {
-                    UtilityWXGLTextObject.updateHailLabels(numberOfPanes, wxglTextObjects)
-                }
             }
         }
-
+        //elys mod
+        // User Points
         //
-        // FIXME TODO future use, incorporate spotter as well
-        //
-//        listOf(PolygonType.TVS, PolygonType.HI).forEach {
-//            if (it.pref) {
-//                FutureVoid(context, { wxglRender.constructTrianglesGeneric(it) }) {
-//                    wxglSurfaceView.requestRender()
-//                }
-//            }
-//        }
-
+        if (PolygonType.USERPOINTS.pref) {
+            FutureVoid(context, { wxglRender.construct.userPoints() }) {
+                wxglSurfaceView.requestRender()
+            }
+        }
         //
         // Storm Tracks (STI)
         //
         if (PolygonType.STI.pref) {
-            // FutureVoid(context, { wxglRender.constructStiLines() }) {
-            FutureVoid(context, { wxglRender.constructLines(wxglRender.stiBuffers) }) {
+            FutureVoid(context, { wxglRender.construct.lines(wxglRender.data.stiBuffers) }) {
                 wxglSurfaceView.requestRender()
             }
         }
@@ -140,10 +135,12 @@ object NexradLayerDownload {
         // Spotters
         //
         if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
-            FutureVoid(context, { wxglRender.constructSpotters() }) {
+            FutureVoid(context, {
+                wxglRender.construct.spotters()
+            }) {
                 wxglSurfaceView.requestRender()
                 if (PolygonType.SPOTTER_LABELS.pref) {
-                    UtilityWXGLTextObject.updateSpotterLabels(numberOfPanes, wxglTextObjects)
+                    NexradRenderTextObject.updateSpotterLabels(wxglTextObjects)
                 }
             }
         }

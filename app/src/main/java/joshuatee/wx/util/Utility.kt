@@ -24,23 +24,22 @@ package joshuatee.wx.util
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.os.Build
-import androidx.preference.PreferenceManager
-import android.text.Html
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
+import android.text.Html
+import androidx.preference.PreferenceManager
+import joshuatee.wx.Extensions.parse
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.radar.NexradRenderUI
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.radar.UtilityRadar
-import joshuatee.wx.radar.UtilityRadarUI
 import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.ui.UtilityUI
 import kotlin.system.exitProcess
-import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
 import android.net.ConnectivityManager
+import joshuatee.wx.ui.ObjectDialogue
 
 object Utility {
 
@@ -58,39 +57,16 @@ object Utility {
         return diagnostics
     }
 
-    fun getRadarSiteName(radarSite: String) = UtilityRadar.radarIdToName[radarSite] ?: ""
-
-    fun getRadarSiteX(radarSite: String) = UtilityRadar.radarSiteToLat[radarSite] ?: ""
-
-    fun getRadarSiteY(radarSite: String) = UtilityRadar.radarSiteToLon[radarSite] ?: ""
-
-    fun getWfoSiteX(site: String) = UtilityRadar.wfoSiteToLat[site] ?: ""
-
-    fun getWfoSiteY(site: String) = UtilityRadar.wfoSiteToLon[site] ?: ""
-
-    fun getWfoSiteName(wfo: String) = UtilityRadar.wfoIdToName[wfo] ?: ""
-
-    fun getSoundingSiteX(site: String) = UtilityRadar.soundingSiteToLat[site] ?: ""
-
-    fun getSoundingSiteY(site: String) = UtilityRadar.soundingSiteToLon[site] ?: ""
-
-    fun getSoundingSiteName(wfo: String): String {
-        var site = UtilityRadar.wfoIdToName[wfo] ?: ""
-        if (site == "") {
-            site = UtilityRadar.soundingIdToName[wfo] ?: ""
-        }
-        return site
+    fun logDownload(s: String) {
+        UtilityLog.d("WXDOWNLOAD", s)
     }
 
-    fun getVersion(context: Context): String {
-        var version = ""
-        try {
-            version = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+    fun getVersion(context: Context): String = try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
         } catch (e: Exception) {
             UtilityLog.handleException(e)
+            ""
         }
-        return version
-    }
 
     @SuppressLint("ApplySharedPref")
     fun commitPref(context: Context) {
@@ -139,30 +115,20 @@ object Utility {
         MyApplication.editor.apply()
     }
 
-    fun readPref(context: Context, key: String, value: String): String {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        return preferences.getString(key, value)!!
-    }
+    fun readPref(context: Context, key: String, value: String): String =
+        PreferenceManager.getDefaultSharedPreferences(context).getString(key, value)!!
 
-    fun readPrefInt(context: Context, key: String, value: Int): Int {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        return preferences.getInt(key, value)
-    }
+    fun readPrefInt(context: Context, key: String, value: Int): Int =
+        PreferenceManager.getDefaultSharedPreferences(context).getInt(key, value)
 
-    fun readPrefFloat(context: Context, key: String, value: Float): Float {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        return preferences.getFloat(key, value)
-    }
+    fun readPrefFloat(context: Context, key: String, value: Float): Float =
+        PreferenceManager.getDefaultSharedPreferences(context).getFloat(key, value)
 
-    fun readPrefLong(context: Context, key: String, value: Long): Long {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        return preferences.getLong(key, value)
-    }
+    fun readPrefLong(context: Context, key: String, value: Long): Long =
+        PreferenceManager.getDefaultSharedPreferences(context).getLong(key, value)
 
-    fun readPrefWithNull(context: Context, key: String, value: String?): String? {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        return preferences.getString(key, value)
-    }
+    fun readPrefWithNull(context: Context, key: String, value: String?): String? =
+        PreferenceManager.getDefaultSharedPreferences(context).getString(key, value)
 
     fun removePref(context: Context, key: String) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -170,9 +136,9 @@ object Utility {
     }
 
     // FIXME deprecate these
-    fun readPref(key: String, value: String) = MyApplication.preferences.getString(key, value)!!
+    fun readPref(key: String, value: String): String = MyApplication.preferences.getString(key, value)!!
 
-    fun theme(themeStr: String) = when {
+    fun theme(themeStr: String): Int = when {
         themeStr.startsWith("blue") -> R.style.MyCustomTheme_NOAB
         themeStr == "black" -> R.style.MyCustomTheme_Holo_Dark_NOAB
         themeStr == "allBlack" -> R.style.MyCustomTheme_Holo_Darkest_NOAB
@@ -184,15 +150,13 @@ object Utility {
         themeStr.startsWith("whiteNew") -> R.style.MyCustomTheme_whiter_NOAB
         themeStr.startsWith("allWhite") -> R.style.MyCustomTheme_whitest_NOAB
         themeStr.startsWith("orange") -> R.style.MyCustomTheme_orange_NOAB
-        themeStr.startsWith("BlackAqua") -> R.style.MyCustomTheme_BlackAqua_NOAB
-        themeStr.startsWith("BlackAqua3") -> R.style.MyCustomTheme_BlackAqua3	
-        themeStr.startsWith("BlackNeonGreen") -> R.style.MyCustomTheme_BlackNeonGreen_NOAB
-        themeStr.startsWith("BlackNeonGreen3") -> R.style.MyCustomTheme_BlackNeonGreen3
+        themeStr.startsWith("BlackAqua") -> R.style.MyCustomTheme_BlackAqua
+        themeStr.startsWith("BlackNeonGreen") -> R.style.MyCustomTheme_BlackNeonGreen
         themeStr.startsWith("WhiteToolbar") -> R.style.MyCustomTheme_white_NOAB
         else -> R.style.MyCustomTheme_NOAB
     }
 
-    fun isThemeMaterial3() = when (UIPreferences.themeInt) {
+    fun isThemeMaterial3(): Boolean = when (UIPreferences.themeInt) {
         R.style.MyCustomTheme_whiter_NOAB -> true
         R.style.MyCustomTheme_NOAB -> true
         R.style.MyCustomTheme_Green_NOAB -> true
@@ -203,105 +167,107 @@ object Utility {
         R.style.MyCustomTheme_mixedBlue_NOAB -> true
         R.style.MyCustomTheme_DarkBlue_NOAB -> true
         R.style.MyCustomTheme_whitest_NOAB -> true
-        R.style.MyCustomTheme_BlackAqua3 -> true
-        R.style.MyCustomTheme_BlackNeonGreen3 -> true
+        R.style.MyCustomTheme_BlackAqua -> true
+        R.style.MyCustomTheme_BlackNeonGreen -> true
         else -> false
     }
 
-    fun isThemeAllBlack() = UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Dark_NOAB || UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Darkest_NOAB
+    fun isThemeAllBlack(): Boolean =
+            UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Dark_NOAB || UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Darkest_NOAB
 
-    fun isThemeAllWhite() = UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB
+    fun isThemeAllWhite(): Boolean =
+            UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB
 
-    fun getHazards(url: String) = url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
+    // TODO FIXME remove
+    fun getHazards(url: String): String = url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
 
-    fun fromHtml(source: String) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    fun fromHtml(source: String): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY).toString()
     } else {
         Html.fromHtml(source).toString()
     }
 
-    fun safeGet(list: List<String>, index: Int) = if (list.size <= index || index < 0) "" else list[index]
-
-    fun safeGet(list: Array<String>, index: Int) = if (list.size <= index) "" else list[index]
-
-    fun showVersion(activity: Activity): String {
-        var version = ""
-        try {
-            version = activity.packageManager.getPackageInfo(activity.packageName, 0).versionName
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        var string = activity.resources.getString(R.string.about_wx) +
-                GlobalVariables.newline + "Version " + version + GlobalVariables.newline + GlobalVariables.newline +
-                "Use alt-? on the main screen and in nexrad radar to show keyboard shortcuts"
-        string += GlobalVariables.newline + GlobalVariables.newline + "Diagnostics information:" + GlobalVariables.newline
-        string += readPref(activity, "JOBSERVICE_TIME_LAST_RAN", "") + "  Last background update" + GlobalVariables.newline
-        string += UtilityRadarUI.getLastRadarTime(activity) + "  Last radar update" + GlobalVariables.newline
-        string += showDiagnostics(activity)
-        string += "Tablet: " + UtilityUI.isTablet().toString() + GlobalVariables.newline
-        string += "Forecast zone: " + UtilityDownloadNws.forecastZone + GlobalVariables.newline
-        string += "Notification Cancel String: " + readPref(activity, "NOTIF_STR", "") + GlobalVariables.newline
-        return string
+    fun safeGet(list: List<String>, index: Int): String = if (list.size <= index || index < 0) {
+        ""
+    } else {
+        list[index]
     }
 
-    fun showMainScreenShortCuts() = "Ctrl-r: Nexrad radar" + GlobalVariables.newline +
-                "Ctrl-m: Show submenu" + GlobalVariables.newline +
-                "Ctrl-d: Severe Dashboard" + GlobalVariables.newline +
-                "Ctrl-c: Goes Viewer" + GlobalVariables.newline +
-                "Ctrl-a: Local text product viewer" + GlobalVariables.newline +
-                "Ctrl-s: Settings" + GlobalVariables.newline +
-                "Ctrl-2: Dual Pane Radar" + GlobalVariables.newline +
-                "Ctrl-4: Quad Pane Radar" + GlobalVariables.newline +
-                "Ctrl-e: SPC Mesoanalysis" + GlobalVariables.newline +
-                "Ctrl-n: NCEP Models" + GlobalVariables.newline +
-                "Ctrl-h: Hourly" + GlobalVariables.newline +
-                "Ctrl-o: NHC" + GlobalVariables.newline +
-                "Ctrl-l: Show locations" + GlobalVariables.newline +
-                "Ctrl-i: National images" + GlobalVariables.newline +
-                "Ctrl-z: National text discussions" + GlobalVariables.newline +
-                "Ctrl-j: Previous tab" + GlobalVariables.newline +
-                "Ctrl-k: Next tab" + GlobalVariables.newline
+    fun safeGet(list: Array<String>, index: Int): String = if (list.size <= index) {
+        ""
+    } else {
+        list[index]
+    }
 
-    fun showRadarShortCuts() = "Ctrl-l: Show map" + GlobalVariables.newline +
-                "Ctrl-m: Show submenu" + GlobalVariables.newline +
-                "Ctrl-a: Animate / stop animate" + GlobalVariables.newline +
-                "Ctrl-r: Show reflectivity" + GlobalVariables.newline +
-                "Ctrl-v: Show velocity" + GlobalVariables.newline +
-                "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
-                "Ctrl-2: Show dual pane radar" + GlobalVariables.newline +
-                "Ctrl-4: Show quad pane radar" + GlobalVariables.newline +
-                "Ctrl-UpArrow: Zoom out" + GlobalVariables.newline +
-                "Ctrl-DownArrow: Zoom in" + GlobalVariables.newline +
-                "Arrow keys: pan radar" + GlobalVariables.newline +
-                "Reload key: reload radar" + GlobalVariables.newline
+    fun showVersion(activity: Activity): String {
+        var s = activity.resources.getString(R.string.about_wx) +
+                GlobalVariables.newline + "Version " + getVersion(activity) + GlobalVariables.newline + GlobalVariables.newline +
+                "Use alt-? on the main screen and in nexrad radar to show keyboard shortcuts"
+        s += GlobalVariables.newline + GlobalVariables.newline + "Diagnostics information:" + GlobalVariables.newline
+        s += readPref(activity, "JOBSERVICE_TIME_LAST_RAN", "") + "  Last background update" + GlobalVariables.newline
+        s += NexradRenderUI.getLastRadarTime(activity) + "  Last radar update" + GlobalVariables.newline
+        s += showDiagnostics(activity)
+        s += "Tablet: " + UtilityUI.isTablet().toString() + GlobalVariables.newline
+        s += "Notification Cancel String: " + readPref(activity, "NOTIF_STR", "") + GlobalVariables.newline
+        return s
+    }
 
-    fun showWfoTextShortCuts() = "Ctrl-l: Show map" + GlobalVariables.newline +
-                "Ctrl-m: Show submenu" + GlobalVariables.newline +
-                "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
-                "Ctrl-p: Play audio - TTS" + GlobalVariables.newline +
-                "Ctrl-s: Stop audio - TTS" + GlobalVariables.newline +
-                "Ctrl-d: Show navigation drawer" + GlobalVariables.newline
+    fun showMainScreenShortCuts(): String =
+        "Ctrl-r: Nexrad radar" + GlobalVariables.newline +
+        "Ctrl-m: Show submenu" + GlobalVariables.newline +
+        "Ctrl-d: Severe Dashboard" + GlobalVariables.newline +
+        "Ctrl-c: Goes Viewer" + GlobalVariables.newline +
+        "Ctrl-a: Local text product viewer" + GlobalVariables.newline +
+        "Ctrl-s: Settings" + GlobalVariables.newline +
+        "Ctrl-2: Dual Pane Radar" + GlobalVariables.newline +
+        "Ctrl-4: Quad Pane Radar" + GlobalVariables.newline +
+        "Ctrl-e: SPC Mesoanalysis" + GlobalVariables.newline +
+        "Ctrl-n: NCEP Models" + GlobalVariables.newline +
+        "Ctrl-h: Hourly" + GlobalVariables.newline +
+        "Ctrl-o: NHC" + GlobalVariables.newline +
+        "Ctrl-l: Show locations" + GlobalVariables.newline +
+        "Ctrl-i: National images" + GlobalVariables.newline +
+        "Ctrl-z: National text discussions" + GlobalVariables.newline +
+        "Ctrl-j: Previous tab" + GlobalVariables.newline +
+        "Ctrl-k: Next tab" + GlobalVariables.newline
 
-    fun showLocationEditShortCuts() = "Ctrl-g: Use GPS to find location" + GlobalVariables.newline + "Ctrl-m: Show submenu" + GlobalVariables.newline
+    fun showRadarShortCuts(): String =
+        "Ctrl-l: Show map" + GlobalVariables.newline +
+        "Ctrl-m: Show submenu" + GlobalVariables.newline +
+        "Ctrl-a: Animate / stop animate" + GlobalVariables.newline +
+        "Ctrl-r: Show reflectivity" + GlobalVariables.newline +
+        "Ctrl-v: Show velocity" + GlobalVariables.newline +
+        "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
+        "Ctrl-2: Show dual pane radar" + GlobalVariables.newline +
+        "Ctrl-4: Show quad pane radar" + GlobalVariables.newline +
+        "Ctrl-UpArrow: Zoom out" + GlobalVariables.newline +
+        "Ctrl-DownArrow: Zoom in" + GlobalVariables.newline +
+        "Arrow keys: pan radar" + GlobalVariables.newline +
+        "Reload key: reload radar" + GlobalVariables.newline
+
+    fun showWfoTextShortCuts(): String =
+        "Ctrl-l: Show map" + GlobalVariables.newline +
+        "Ctrl-m: Show submenu" + GlobalVariables.newline +
+        "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
+        "Ctrl-p: Play audio - TTS" + GlobalVariables.newline +
+        "Ctrl-s: Stop audio - TTS" + GlobalVariables.newline +
+        "Ctrl-d: Show navigation drawer" + GlobalVariables.newline
+
+    fun showLocationEditShortCuts(): String =
+        "Ctrl-g: Use GPS to find location" + GlobalVariables.newline + "Ctrl-m: Show submenu" + GlobalVariables.newline
 
     fun restart() {
         exitProcess(0)
     }
-
     //elys mod    
     fun checkInternet(context: Context) {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.activeNetworkInfo
         if (netInfo != null && netInfo.isConnected) {
             UtilityLog.d("wx", "network state = true")
-
         } else {
             UtilityLog.d("wx", "network state = false")
-            showDialogueWithContext("No Network Connection.\nCheck your internet on your device!", context)
-            ///UtilityAlertDialog.showDialogBox("No Network Connection", R.drawable.wx, "Check your internet on your device!", context)
+            ObjectDialogue(context, "No Network Connection.\nCheck your internet on your device!")
         }
-
-    }
-    
-    
+    } 
 }

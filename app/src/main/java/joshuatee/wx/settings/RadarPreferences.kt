@@ -26,12 +26,12 @@ package joshuatee.wx.settings
 import android.content.Context
 import android.graphics.Color
 import joshuatee.wx.MyApplication
-import joshuatee.wx.objects.ObjectPolygonWarning
-import joshuatee.wx.objects.ObjectPolygonWatch
+import joshuatee.wx.objects.PolygonWarning
+import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.radar.*
-import joshuatee.wx.radar.UtilityMetar
-import joshuatee.wx.radar.UtilitySwoDayOne
+import joshuatee.wx.radar.Metar
+import joshuatee.wx.radar.UtilitySpotter
+import joshuatee.wx.radar.SwoDayOne
 import joshuatee.wx.ui.UtilityUI
 
 object RadarPreferences {
@@ -53,6 +53,7 @@ object RadarPreferences {
     var dualpaneshareposn = false
     var spotters = false
     var spottersLabel = false
+    var spottersLabelLastName = false
     var hailSizeLabel = false
     var obs = false
     var obsWindbarbs = false
@@ -172,6 +173,7 @@ object RadarPreferences {
         dualpaneshareposn = getInitialPreference("DUALPANE_SHARE_POSN", "true")
         spotters = getInitialPreference("WXOGL_SPOTTERS", "false")
         spottersLabel = getInitialPreference("WXOGL_SPOTTERS_LABEL", "false")
+        spottersLabelLastName = getInitialPreference("WXOGL_SPOTTERS_LABEL_LASTNAME", "false")
         hailSizeLabel = getInitialPreference("WXOGL_HAIL_LABEL", "false")
         obs = getInitialPreference("WXOGL_OBS", "false")
         obsWindbarbs = getInitialPreference("WXOGL_OBS_WINDBARBS", "false")
@@ -220,11 +222,6 @@ object RadarPreferences {
         defaultLinesize = getInitialPreference("RADAR_DEFAULT_LINESIZE", 1)
         warnLineSize = getInitialPreference("RADAR_WARN_LINESIZE", warnLineSizeDefault).toFloat()
         watchMcdLineSize = getInitialPreference("RADAR_WATMCD_LINESIZE", watchMcdLineSizeDefault).toFloat()
-        stateLineSize = getInitialPreference("RADAR_STATE_LINESIZE", 2)
-        countyLineSize = getInitialPreference("RADAR_COUNTY_LINESIZE", 2)
-        hwLineSize = getInitialPreference("RADAR_HW_LINESIZE", 2)
-        hwExtLineSize = getInitialPreference("RADAR_HWEXT_LINESIZE", 2)
-        lakeLineSize = getInitialPreference("RADAR_LAKE_LINESIZE", 2)
         gpsCircleLineSize = getInitialPreference("RADAR_GPSCIRCLE_LINESIZE", 5)
         stiLineSize = getInitialPreference("RADAR_STI_LINESIZE", 3)
         swoLineSize = getInitialPreference("RADAR_SWO_LINESIZE", 3)
@@ -279,26 +276,30 @@ object RadarPreferences {
     }
 
     fun initGenericRadarWarnings(context: Context) {
-        ObjectPolygonWarning.load(context)
+        PolygonWarning.load(context)
     }
 
     private fun resetTimerOnRadarPolygons() {
-        ObjectPolygonWatch.polygonDataByType[PolygonType.MCD]?.timer?.resetTimer()
-        ObjectPolygonWatch.polygonDataByType[PolygonType.MPD]?.timer?.resetTimer()
-        ObjectPolygonWatch.polygonDataByType[PolygonType.WATCH]?.timer?.resetTimer()
-        ObjectPolygonWarning.polygonDataByType.values.forEach {
+        PolygonWatch.byType[PolygonType.MCD]?.timer?.resetTimer()
+        PolygonWatch.byType[PolygonType.MPD]?.timer?.resetTimer()
+        PolygonWatch.byType[PolygonType.WATCH]?.timer?.resetTimer()
+        PolygonWarning.byType.values.forEach {
             it.timer.resetTimer()
         }
-        UtilityMetar.timer.resetTimer()
+        Metar.timer.resetTimer()
         UtilitySpotter.timer.resetTimer()
-        UtilitySwoDayOne.timer.resetTimer()
+        SwoDayOne.timer.resetTimer()
     }
 
-    private fun getInitialPreference(pref: String, initValue: Int) = MyApplication.preferences.getInt(pref, initValue)
+    private fun getInitialPreference(pref: String, initValue: Int): Int =
+            MyApplication.preferences.getInt(pref, initValue)
 
-    private fun getInitialPreference(pref: String, initValue: Float) = MyApplication.preferences.getFloat(pref, initValue)
+    private fun getInitialPreference(pref: String, initValue: Float): Float =
+            MyApplication.preferences.getFloat(pref, initValue)
 
-    private fun getInitialPreference(pref: String, initValue: String) = (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
+    private fun getInitialPreference(pref: String, initValue: String): Boolean =
+            (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
 
-    private fun getInitialPreferenceString(pref: String, initValue: String) = MyApplication.preferences.getString(pref, initValue) ?: initValue
+    private fun getInitialPreferenceString(pref: String, initValue: String): String =
+            MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

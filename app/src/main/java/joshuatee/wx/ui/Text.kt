@@ -32,7 +32,7 @@ import joshuatee.wx.Extensions.setPadding
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 
-class Text(val context: Context) {
+class Text(val context: Context) : Widget {
 
     private var tv = AppCompatTextView(context)
 
@@ -49,9 +49,11 @@ class Text(val context: Context) {
         set(value) { tv.visibility = value }
 
     init {
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-        tv.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
-        tv.gravity = Gravity.START
+        with (tv) {
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+            setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
+            gravity = Gravity.START
+        }
     }
 
     constructor(context: Context, text: String) : this(context) {
@@ -108,6 +110,14 @@ class Text(val context: Context) {
         refreshTextSize(size)
     }
 
+    fun setTextSize(unit: Int, size: Float) {
+        tv.setTextSize(unit, size)
+    }
+
+    fun setSizeHourly() {
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(14, context))
+    }
+
     var color
         get() = tv.currentTextColor
         set(newValue) { tv.setTextColor(newValue) }
@@ -154,5 +164,5 @@ class Text(val context: Context) {
         tv.setTextColor(color)
     }
 
-    fun get() = tv
+    override fun getView() = tv
 }

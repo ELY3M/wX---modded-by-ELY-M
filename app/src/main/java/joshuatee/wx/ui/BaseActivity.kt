@@ -21,7 +21,6 @@
 
 package joshuatee.wx.ui
 
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -32,6 +31,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected lateinit var toolbar: Toolbar
     protected lateinit var toolbarBottom: Toolbar
+    protected lateinit var objectToolbar: ObjectToolbar
     protected lateinit var objectToolbarBottom: ObjectToolbar
 
     protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, bottomToolbar: Boolean) {
@@ -51,8 +51,9 @@ abstract class BaseActivity : AppCompatActivity() {
             toolbar.setOnClickListener { toolbarBottom.showOverflowMenu() }
             toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         } else {
-            toolbarBottom = Toolbar(this as Context)
+            toolbarBottom = Toolbar(this)
         }
+        objectToolbar = ObjectToolbar(toolbar)
         objectToolbarBottom = ObjectToolbar(toolbarBottom)
         UtilityToolbar.setElevation(toolbar)
     }

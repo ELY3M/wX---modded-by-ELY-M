@@ -23,7 +23,7 @@
 
 package joshuatee.wx.fragments
 
-import android.content.*
+import android.content.Context
 import java.util.Locale
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
@@ -31,19 +31,39 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
 import android.widget.RelativeLayout
 import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.util.*
-import joshuatee.wx.notifications.UtilityNotificationTools
+//elys mod - leave this alone
 import joshuatee.wx.objects.*
 import joshuatee.wx.radar.*
-import joshuatee.wx.settings.*
-import joshuatee.wx.ui.*
+import joshuatee.wx.radar.NexradDraw
+import joshuatee.wx.util.CurrentConditions
+import joshuatee.wx.util.DownloadImage
+import joshuatee.wx.util.Hazards
+import joshuatee.wx.util.SevenDay
+import joshuatee.wx.util.Utility
+import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.settings.UtilityHomeScreen
+import joshuatee.wx.ui.CanadaLegal
+import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.CardCurrentConditions
+import joshuatee.wx.ui.CardHazards
+import joshuatee.wx.ui.CardHazardsCA
+import joshuatee.wx.ui.CardHSImage
+import joshuatee.wx.ui.CardHSText
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.SevenDayCard
+import joshuatee.wx.ui.SevenDayCollection
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.VBox
 
 class LocationFragment : Fragment() {
 
@@ -55,39 +75,30 @@ class LocationFragment : Fragment() {
     private lateinit var scrollView: ScrollView
     private lateinit var locationDialogue: ObjectDialogue
     private lateinit var locationLabel: CardText
-    private var lastRefresh = 0.toLong()
+    private var downloadTimer = DownloadTimer("HOMESCREEN")
     private var currentConditionsTime = ""
     private var radarTime = ""
-    private var x = ""
-    private var y = ""
     private var glviewInitialized = false
-    private var sevenDayExtShown = false
-    private var objectCardCurrentConditions: ObjectCardCurrentConditions? = null
+    private var cardCurrentConditions: CardCurrentConditions? = null
     private lateinit var box: VBox
-    private var homescreenFavLocal = ""
     private val sevenDayCards = mutableListOf<SevenDayCard>()
-    private val homeScreenTextCards = mutableListOf<CardHSText>()
-    private val homeScreenImageCards = mutableListOf<CardHSImage>()
-    private val homeScreenWebCards = mutableListOf<Card>()
-    private val homeScreenWebViews = mutableListOf<WebView>()
-    private val radarLocationChangedAl = mutableListOf<Boolean>()
+    private val textCards = mutableListOf<CardHSText>()
+    private val imageCards = mutableListOf<CardHSImage>()
+    private val radarLocationChangedList = mutableListOf<Boolean>()
     // used to track the wxogl # for the wxogl that is tied to current location
-    private var oglrIdx = -1
-    // total # of wxogl
-    private var oglrCount = 0
+    private var radarForLocation = -1
     private var needForecastData = false
     private var boxForecast: VBox? = null
+    private var sevenDayCollection: SevenDayCollection? = null
     private var boxHazards: VBox? = null
     private val hazardsCards = mutableListOf<CardText>()
-    private val hazardsExpandedList = mutableListOf<Boolean>()
     private var dataNotInitialized = true
-    private var alertDialogStatus: ObjectDialogue? = null
-    private val alertDialogStatusList = mutableListOf<String>()
-    private var objectHazards = ObjectHazards()
-    private var objectSevenDay = ObjectSevenDay()
-    private var locationChangedSevenDay = false
-    private var locationChangedHazards = false
-    private var objectCurrentConditions = ObjectCurrentConditions()
+    private var locationStatusDialogue: ObjectDialogue? = null
+    private val locationStatusDialogueList = mutableListOf<String>()
+    private var hazards = Hazards()
+    private var sevenDay = SevenDay()
+    private var locationChanged = false
+    private var currentConditions = CurrentConditions()
     private lateinit var nexradState: NexradStateMainScreen
     private lateinit var nexradLongPressMenu: NexradLongPressMenu
     private lateinit var nexradArguments: NexradArguments
@@ -96,128 +107,135 @@ class LocationFragment : Fragment() {
         var currentConditionsAdded = false
         var sevenDayAdded = false
         val cards = mutableListOf<Card>()
-        val homeScreenTokens = homescreenFavLocal.split(":").dropLastWhile { it.isEmpty() }
+        val homeScreenTokens = UIPreferences.homescreenFav.split(":").dropLastWhile { it.isEmpty() }
+        initNexrad(homeScreenTokens)
+        homeScreenTokens.forEach { token ->
+            when {
+                token == "TXT-CC" || token == "TXT-CC2" -> {
+                    if (!currentConditionsAdded && cardCurrentConditions != null) {
+                        box.addWidget(cardCurrentConditions!!)
+                        currentConditionsAdded = true
+                    }
+                }
+                token == "TXT-HAZ" -> {
+                    boxHazards = VBox(activityReference)
+                    box.addWidget(boxHazards!!.get())
+                }
+                token == "TXT-7DAY" || token == "TXT-7DAY2" -> {
+                    if (!sevenDayAdded) {
+                        box.addLayout(boxForecast!!)
+                        sevenDayAdded = true
+                    }
+                }
+                token == "OGL-RADAR" || token.contains("NXRD-") -> {
+                    if (token == "OGL-RADAR") {
+                        radarForLocation = radarLocationChangedList.size
+                    }
+                    cards.add(Card(activityReference))
+                    cards.last().addWidget(nexradState.relativeLayouts[radarLocationChangedList.size])
+                    cards.last().layoutParams = RelativeLayout.LayoutParams(
+                            MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt(),
+                            MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt())
+                    box.addWidget(cards.last())
+                    radarLocationChangedList.add(false)
+                }
+                token.contains("TXT-") -> {
+                    val card = CardHSText(activityReference, token.replace("TXT-", ""))
+                    box.addWidget(card)
+                    textCards.add(card)
+                    card.connect { card.toggleText() }
+                }
+                token.contains("IMG-") -> {
+                    val card = CardHSImage(activityReference, token.replace("IMG-", ""))
+                    box.addWidget(card)
+                    imageCards.add(card)
+                }
+            }
+        }
+        setImageOnClick()
+    }
+
+    private fun initNexrad(homeScreenTokens: List<String>) {
         val numberOfRadars = homeScreenTokens.count { it == "OGL-RADAR" || it.contains("NXRD-") }
         nexradArguments = NexradArguments()
         nexradArguments.locXCurrent = Location.latLon.lat
         nexradArguments.locYCurrent = Location.latLon.lon
         nexradState = NexradStateMainScreen(MyApplication.appContext, numberOfRadars, homeScreenTokens)
         nexradLongPressMenu = NexradLongPressMenu(activityReference, nexradState, nexradArguments, ::longPressRadarSiteSwitch)
-        var index = 0
-        homeScreenTokens.forEach { token ->
-            if (token == "TXT-CC" || token == "TXT-CC2") {
-                if (!currentConditionsAdded && objectCardCurrentConditions != null) {
-                    box.addWidget(objectCardCurrentConditions!!.get())
-                    currentConditionsAdded = true
-                }
-            } else if (token == "TXT-HAZ") {
-                boxHazards = VBox(activityReference)
-                box.addWidget(boxHazards!!.get())
-            } else if (token == "TXT-7DAY" || token == "TXT-7DAY2") {
-                if (!sevenDayAdded) {
-                    box.addLayout(boxForecast!!.get())
-                    sevenDayAdded = true
-                }
-            } else if (token == "OGL-RADAR" || token.contains("NXRD-")) {
-                if (token == "OGL-RADAR") {
-                    oglrIdx = oglrCount
-                }
-                oglrCount += 1
-                cards.add(Card(activityReference))
-                radarLocationChangedAl.add(false)
-                cards.last().addWidget(nexradState.relativeLayouts[index])
-                cards.last().get().layoutParams = RelativeLayout.LayoutParams(
-                        MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt(),
-                        MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt())
-                box.addWidget(cards.last().get())
-                index += 1
-            } else if (token.contains("TXT-")) {
-                val hsText = CardHSText(activityReference, token.replace("TXT-", ""))
-                box.addWidget(hsText.get())
-                homeScreenTextCards.add(hsText)
-                hsText.connect { hsText.toggleText() }
-            } else if (token.contains("IMG-")) {
-                val hsImage = CardHSImage(activityReference, token.replace("IMG-", ""))
-                box.addWidget(hsImage.get())
-                homeScreenImageCards.add(hsImage)
-                setImageOnClick()
-            } else if (token.contains("WEB-")) {
-                if (token == "WEB-7DAY") {
-                    val webView = WebView(activityReference)
-                    homeScreenWebCards.add(Card(activityReference))
-                    homeScreenWebViews.add(webView)
-                    homeScreenWebCards.last().addWidget(homeScreenWebViews.last())
-                    box.addWidget(homeScreenWebCards.last().get())
-                }
-            }
-        } // end of loop over HM tokens
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        setupAlertDialogStatus()
         val view = inflater.inflate(R.layout.fragment_location, container, false)
-        homescreenFavLocal = UIPreferences.homescreenFav
-        if (homescreenFavLocal.contains("TXT-CC") || homescreenFavLocal.contains("TXT-HAZ") || homescreenFavLocal.contains("TXT-7DAY")) {
+        if (UIPreferences.homescreenFav.contains("TXT-CC") ||
+                UIPreferences.homescreenFav.contains("TXT-HAZ") ||
+                UIPreferences.homescreenFav.contains("TXT-7DAY")) {
             needForecastData = true
         }
-        // The dialogue that opens when the user wants to change location
-        locationDialogue = ObjectDialogue(activityReference, "Select location:", Location.listOf)
-        locationDialogue.connect { dialog, locationIndex ->
-            changeLocation(locationIndex)
-            dialog.dismiss()
-        }
-        // The main LinearLayout that holds all content
         box = VBox.fromViewResource(view)
-        // The button the user will tap to change the current location
-        locationLabel = CardText(activityReference, box.get(), Location.name, TextSize.MEDIUM)
-        val locationLabelPadding = if (UtilityUI.isTablet()) {
-            10
-        } else {
-            20
-        }
-        locationLabel.setPaddingAmount(locationLabelPadding)
-        locationLabel.setTextColor(UIPreferences.textHighlightColor)
-        locationLabel.connect { locationDialogue.show() }
-        if (homescreenFavLocal.contains("TXT-CC2")) {
-            objectCardCurrentConditions = ObjectCardCurrentConditions(activityReference, 2)
-            objectCardCurrentConditions?.connect(alertDialogStatus, alertDialogStatusList, ::radarTimestamps)
-        } else {
-            objectCardCurrentConditions = ObjectCardCurrentConditions(activityReference, 1)
-        }
-        if (homescreenFavLocal.contains("TXT-7DAY")) {
-            boxForecast = VBox(activityReference)
-        }
+        scrollView = view.findViewById(R.id.sv)
+        setupLocationLabel()
+        setupLocationStatusDialogue()
+        setupForecastUI()
         addDynamicCards()
-        getContent()
-        if (UIPreferences.locDisplayImg) {
+        if (UIPreferences.isNexradOnMainScreen) {
             nexradState.wxglSurfaceViews.indices.forEach {
                 nexradState.wxglSurfaceViews[it].index = it
                 glviewInitialized = NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
             }
         }
-        scrollView = view.findViewById(R.id.sv)
         return view
     }
 
+    private fun setupLocationLabel() {
+        // The dialogue that opens when the user wants to change location
+        locationDialogue = ObjectDialogue(activityReference, "Select location:", Location.listOf)
+        locationDialogue.connect { dialog, index ->
+            changeLocation(index)
+            dialog.dismiss()
+        }
+        // The button the user will tap to change the current location
+        locationLabel = CardText(activityReference, Location.name, TextSize.MEDIUM)
+        box.addWidget(locationLabel)
+        val locationLabelPadding = if (UtilityUI.isTablet()) {
+            10
+        } else {
+            20
+        }
+        with (locationLabel) {
+            setPaddingAmount(locationLabelPadding)
+            setTextColor(UIPreferences.textHighlightColor)
+            connect { locationDialogue.show() }
+        }
+    }
+
+    private fun setupForecastUI() {
+        if (UIPreferences.homescreenFav.contains("TXT-CC2")) {
+            cardCurrentConditions = CardCurrentConditions(activityReference, 2)
+            cardCurrentConditions!!.connect(locationStatusDialogue, locationStatusDialogueList, ::radarTimestamps)
+        } else {
+            cardCurrentConditions = CardCurrentConditions(activityReference, 1)
+        }
+        if (UIPreferences.homescreenFav.contains("TXT-7DAY")) {
+            boxForecast = VBox(activityReference)
+            sevenDayCollection = SevenDayCollection(activityReference, boxForecast!!, scrollView)
+        }
+    }
+
     private fun changeLocation(position: Int) {
-        locationChangedHazards = true
-        locationChangedSevenDay = true
+        locationChanged = true
+        // If user did not choose the last option "Add Location..."
         if (position != Location.numLocations) {
-            Utility.writePref(activityReference, "CURRENT_LOC_FRAGMENT", (position + 1).toString())
-            Location.currentLocationStr = (position + 1).toString()
-            x = Location.x
-            y = Location.y
-            if (oglrIdx != -1) {
-                radarLocationChangedAl[oglrIdx] = false
+            Location.setCurrentLocationStr(activityReference, (position + 1).toString())
+            if (UIPreferences.isNexradOnMainScreen && radarForLocation != -1) {
+                radarLocationChangedList[radarForLocation] = false
+                nexradState.wxglSurfaceViews[radarForLocation].scaleFactor = RadarPreferences.wxoglSize / 10.0f
+                nexradState.wxglRenders[radarForLocation].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
             }
-            if (UIPreferences.locDisplayImg && oglrIdx != -1) {
-                nexradState.wxglSurfaceViews[oglrIdx].scaleFactor = RadarPreferences.wxoglSize / 10.0f
-                nexradState.wxglRenders[oglrIdx].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
-            }
-            homeScreenImageCards.forEach {
+            imageCards.forEach {
                 it.resetZoom()
             }
             setImageOnClick()
+            downloadTimer.resetTimer()
             getContent()
         } else {
             Route.locationEdit(activityReference, (position + 1).toString())
@@ -227,30 +245,20 @@ class LocationFragment : Fragment() {
 
     fun getContent() {
         locationLabel.text = Location.name
-        sevenDayExtShown = false
         if (needForecastData) {
             getForecastData()
         }
-        homeScreenTextCards.forEach {
+        textCards.forEach {
             FutureText(MyApplication.appContext, it.product, it::setup)
         }
-        homeScreenImageCards.forEach {
+        imageCards.forEach {
             FutureBytes2(MyApplication.appContext,
-                    { UtilityDownload.getImageProduct(MyApplication.appContext, it.product) },
+                    { DownloadImage.byProduct(MyApplication.appContext, it.product) },
                     it::set)
         }
-        repeat(homeScreenWebViews.size) {
-            getWebProduct()
-        }
-        x = Location.x
-        y = Location.y
-        if (UIPreferences.locDisplayImg) {
+        if (UIPreferences.isNexradOnMainScreen) {
             getAllRadars()
         }
-        val currentTime = ObjectDateTime.currentTimeMillis()
-        lastRefresh = currentTime / 1000
-        // TODO FIXME what is this for?
-        Utility.writePrefLong(MyApplication.appContext, "LOC_LAST_UPDATE", lastRefresh)
     }
 
     override fun onResume() {
@@ -258,25 +266,9 @@ class LocationFragment : Fragment() {
         if (glviewInitialized) {
             nexradState.onResume()
         }
-        objectCardCurrentConditions?.refreshTextSize()
-        locationLabel.refreshTextSize(TextSize.MEDIUM)
         locationLabel.text = Location.name
-        sevenDayCards.forEach {
-            it.refreshTextSize()
-        }
-        homeScreenTextCards.forEach {
-            it.refreshTextSize()
-        }
-        hazardsCards.forEach {
-            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-        }
-        // TODO use a Timer class to handle the data refresh stuff
-        val currentTime = ObjectDateTime.currentTimeMillis()
-        val currentTimeSec = currentTime / 1000
-        val refreshIntervalSec = (UIPreferences.refreshLocMin * 60).toLong()
-        val xOld = x
-        val yOld = y
-        if (UIPreferences.locDisplayImg) {
+        refreshTextSize()
+        if (UIPreferences.isNexradOnMainScreen) {
             if (!glviewInitialized) {
                 nexradState.wxglSurfaceViews.indices.forEach {
                     glviewInitialized = NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
@@ -284,19 +276,33 @@ class LocationFragment : Fragment() {
             }
         }
         if (UIPreferences.refreshLocMin != 0 || dataNotInitialized) {
-            if (currentTimeSec > lastRefresh + refreshIntervalSec || Location.x != xOld || Location.y != yOld) {
+            if (downloadTimer.isRefreshNeeded(MyApplication.appContext) || currentConditions.latLon.toString() != Location.latLon.toString()) {
                 getContent()
             }
             dataNotInitialized = false
         }
     }
 
+    private fun refreshTextSize() {
+        cardCurrentConditions?.refreshTextSize()
+        locationLabel.refreshTextSize(TextSize.MEDIUM)
+        sevenDayCards.forEach {
+            it.refreshTextSize()
+        }
+        textCards.forEach {
+            it.refreshTextSize()
+        }
+        hazardsCards.forEach {
+            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+        }
+    }
+
     private fun getRadar(idx: Int) {
-        var radarTimeStampLocal = ""
-        if (oglrIdx != -1)
-            if (!radarLocationChangedAl[oglrIdx]) {
-                nexradState.wxglRenders[oglrIdx].rid = Location.rid
-            }
+        // if radarForLocation is not equal to -1 it means the user has a radar for the current location (default)
+        //if (radarForLocation != -1)
+        if (radarForLocation != -1 && !radarLocationChangedList[radarForLocation]) {
+            nexradState.wxglRenders[radarForLocation].state.rid = Location.rid
+        }
         nexradState.adjustForTdwr(idx)
         NexradDraw.initGeom(
                 idx,
@@ -309,23 +315,17 @@ class LocationFragment : Fragment() {
                 ::getLatLon,
                 archived = false, forceReset = false)
         FutureVoid(MyApplication.appContext, {
-            // attempted bugfix for most plentiful crash
-            //kotlin.KotlinNullPointerException:
-            //at joshuatee.wx.fragments.LocationFragment.getActivityReference (LocationFragment.kt:783)
-            //at joshuatee.wx.fragments.LocationFragment.access$getActivityReference$p (LocationFragment.kt:65)
-            //at joshuatee.wx.fragments.LocationFragment$getRadar$1$3.invokeSuspend (LocationFragment.kt:440)
             if (Location.isUS && mActivity != null) {
                 NexradDraw.plotRadar(
                         nexradState.wxglRenders[idx],
-                        "",
                         ::getGPSFromDouble,
                         ::getLatLon,
                         false)
             }
         }) {
-            if (idx == oglrIdx) {
-                radarTimeStampLocal = getRadarTimeStampForHomescreen(nexradState.wxglRenders[oglrIdx].rid)
-            }
+            //if (idx == oglrIdx) {
+            //    radarTimeStampLocal = getRadarTimeStampForHomescreen(nexradState.wxglRenders[oglrIdx].rid)
+            //}
             // NOTE: below was backed out, data structures for these features only support one radar site
             // so locfrag and multi-pane don't current support. Would be nice to fix someday.
             // Show extras a few lines above was changed from false to true along with few lines added below
@@ -335,23 +335,23 @@ class LocationFragment : Fragment() {
 	    
 	        //elys mod - not removing those!!!  unless crashing....
 	        if (PolygonType.HAIL_LABELS.pref) {
-	    	    UtilityWXGLTextObject.updateHailLabels(idx, nexradState.wxglTextObjects) //was numberOfRadars
+	    	    NexradRenderTextObject.updateHailLabels(nexradState.wxglTextObjects) //was numberOfRadars
             }
 
             if (Location.isUS && idx == 0) {
                 if (PolygonType.SPOTTER_LABELS.pref) {
-                    UtilityWXGLTextObject.updateSpotterLabels(idx, nexradState.wxglTextObjects) //was numberOfRadars
+                    NexradRenderTextObject.updateSpotterLabels(nexradState.wxglTextObjects)
                 }
             }
             if (PolygonType.OBS.pref) {
-                UtilityWXGLTextObject.updateObservationsSinglePane(idx, nexradState.wxglTextObjects)
+                NexradRenderTextObject.updateObservations(nexradState.wxglTextObjects)
             }
             ////////
 
             nexradState.wxglSurfaceViews[idx].requestRender()
-            if (idx == oglrIdx) {
-                radarTime = radarTimeStampLocal
-                objectCardCurrentConditions?.setStatus(currentConditionsTime + radarTime)
+            if (idx == radarForLocation) {
+                radarTime = getRadarTimeStampForHomescreen(nexradState.wxglRenders[radarForLocation].state.rid)
+                cardCurrentConditions?.setStatus(currentConditionsTime + radarTime)
             }
             if (RadarPreferences.wxoglCenterOnLocation) {
                 nexradState.wxglSurfaceViews[idx].resetView()
@@ -359,7 +359,6 @@ class LocationFragment : Fragment() {
         }
         NexradLayerDownload.download(
                 MyApplication.appContext,
-                1,
                 nexradState.wxglRenders[idx],
                 nexradState.wxglSurfaceViews[idx],
                 nexradState.wxglTextObjects,
@@ -367,39 +366,34 @@ class LocationFragment : Fragment() {
                 false)
     }
 
-    private fun getWebProduct() {
-        val forecastUrl = "https://forecast.weather.gov/MapClick.php?lat=" + Location.x + "&lon=" + Location.y + "&unit=0&lg=english&FcstType=text&TextType=2"
-        homeScreenWebViews.last().loadUrl(forecastUrl)
-    }
-
     private fun getRadarTimeStampForHomescreen(radarSite: String): String {
-        var timestamp = ""
-        val tokens = WXGLNexrad.getRadarInfo(radarSite).split(" ")
-        if (tokens.size > 3) {
-            timestamp = tokens[3]
+        val tokens = NexradUtil.getRadarInfo(MyApplication.appContext, radarSite).split(" ")
+        val timestamp = if (tokens.size > 3) {
+            tokens[3]
+        } else {
+            ""
         }
-        return if (oglrIdx != -1) {
-            " " + nexradState.radarSite + ": " + timestamp
+        return if (radarForLocation != -1) {
+            " " + nexradState.wxglRenders[radarForLocation].state.rid + ": " + timestamp
         } else {
             ""
         }
     }
 
     private fun getRadarTimeStamp(string: String, j: Int): String {
-        var timestamp = ""
         val tokens = string.split(" ")
-        if (tokens.size > 3) {
-            timestamp = tokens[3]
+        val timestamp = if (tokens.size > 3) {
+            tokens[3]
+        } else {
+            ""
         }
-        return nexradState.wxglRenders[j].rid + ": " + timestamp + " (" + Utility.getRadarSiteName(nexradState.wxglRenders[j].rid) + ")"
+        return nexradState.wxglRenders[j].state.rid + ": " + timestamp + " (" + UtilityLocation.getRadarSiteName(nexradState.wxglRenders[j].state.rid) + ")"
     }
 
     private fun getGPSFromDouble() {}
 
     // main screen will not show GPS so if configured just show it off the screen
-    // NOTE - this was backed out as it's not a good solution when user enables "center radar on location"
-//    private fun getLatLon() = LatLon(0.0, 0.0)
-
+    // NOTE - this was backed out as it's not a good solution when user enables "center radar on location", removed private fun getLatLon() = LatLon(0.0, 0.0)
     private fun getLatLon() = LatLon(Location.x, Location.y)
 
     override fun onPause() {
@@ -410,35 +404,7 @@ class LocationFragment : Fragment() {
     }
 
     private fun setImageOnClick() {
-        homeScreenImageCards.indices.forEach { ii ->
-            val cl = UtilityHomeScreen.HM_CLASS[homeScreenImageCards[ii].product]
-            val id = UtilityHomeScreen.HM_CLASS_ID[homeScreenImageCards[ii].product]
-            val argsOrig = UtilityHomeScreen.HM_CLASS_ARGS[homeScreenImageCards[ii].product]
-            homeScreenImageCards[ii].connect {
-                if (argsOrig != null) {
-                    val args = argsOrig.copyOf(argsOrig.size)
-                    args.indices.forEach { z ->
-                        if (args[z] == "WFO_FOR_SND")
-                            args[z] = UtilityLocation.getNearestSoundingSite(LatLon(Location.x, Location.y))
-                        if (args[z] == "WFO_FOR_GOES")
-                            args[z] = Location.wfo.lowercase(Locale.US)
-                        if (args[z] == "STATE_LOWER")
-                            args[z] = Location.state.lowercase(Locale.US)
-                        if (args[z] == "STATE_UPPER")
-                            args[z] = Location.state
-                        if (args[z] == "RID_FOR_CA")
-                            args[z] = Location.rid
-                    }
-                    if (cl != null && id != null) {
-                        val intent = Intent(MyApplication.appContext, cl)
-                        intent.putExtra(id, args)
-                        startActivity(intent)
-                    }
-                } else {
-                    Route.vis(activityReference)
-                }
-            }
-        }
+        UtilityHomeScreen.launch(activityReference, imageCards)
     }
 
     private fun getAllRadars() {
@@ -447,36 +413,20 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun radarTimestamps(): List<String> {
-        return (0 until nexradState.wxglSurfaceViews.size).map { getRadarTimeStamp(nexradState.wxglRenders[it].wxglNexradLevel3.timestamp, it) }
-    }
+    private fun radarTimestamps(): List<String> =
+            (0 until nexradState.wxglSurfaceViews.size).map { getRadarTimeStamp(nexradState.wxglRenders[it].wxglNexradLevel3.timestamp, it) }
 
-    private fun setupHazardCardsCA(hazUrl: String) {
-        boxHazards?.removeChildrenAndLayout()
-        hazardsExpandedList.clear()
-        hazardsCards.clear()
-        hazardsExpandedList.add(false)
-        hazardsCards.add(CardText(activityReference))
-        hazardsCards[0].setupHazard()
-        hazardsCards[0].text = hazUrl
-        val hazUrlCa = objectHazards.hazards
-        hazardsCards[0].connect { Route.text(activityReference, Utility.fromHtml(hazUrlCa), hazUrl) }
-        if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) {
-            boxHazards?.addWidget(hazardsCards[0].get())
-        }
-    }
-
-    private fun setupAlertDialogStatus() {
-        alertDialogStatus = ObjectDialogue(activityReference, alertDialogStatusList)
-        alertDialogStatus!!.connect { dialog, which ->
-            val strName = alertDialogStatusList[which]
+    private fun setupLocationStatusDialogue() {
+        locationStatusDialogue = ObjectDialogue(activityReference, locationStatusDialogueList)
+        locationStatusDialogue!!.connect { dialog, index ->
+            val item = locationStatusDialogueList[index]
             val renderOrNull = if (nexradState.wxglRenders.size > 0) {
                 nexradState.wxglRenders[0]
             } else {
                 null
             }
             UtilityLocationFragment.handleIconTap(
-                    strName,
+                    item,
                     renderOrNull,
                     activityReference,
                     ::getContent,
@@ -488,17 +438,103 @@ class LocationFragment : Fragment() {
 
     private fun longPressRadarSiteSwitch(s: String) {
         val newRadarSite = s.split(" ")[0]
-        val oldRidIdx = nexradState.radarSite
+        val oldRadarSite = nexradState.radarSite
         nexradState.adjustPaneTo(nexradState.curRadar, newRadarSite)
-        if (nexradState.curRadar != oglrIdx) {
-            UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace("NXRD-$oldRidIdx", "NXRD-" + nexradState.radarSite)
+        // if user changes any non-location based nexrad this change will be permanent via homescreen string change
+        if (nexradState.curRadar != radarForLocation) {
+            UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace("NXRD-$oldRadarSite", "NXRD-" + nexradState.radarSite)
             Utility.writePref(activityReference, "HOMESCREEN_FAV", UIPreferences.homescreenFav)
         }
-        radarLocationChangedAl[nexradState.curRadar] = true
+        radarLocationChangedList[nexradState.curRadar] = true
         getRadar(nexradState.curRadar)
     }
 
-    private var mActivity: FragmentActivity? = null
+    private fun getForecastData() {
+        if (locationChanged) {
+            boxForecast?.removeChildren()
+            boxHazards?.removeChildren()
+            boxHazards?.visibility = View.GONE
+            locationChanged = false
+        }
+        FutureVoid(MyApplication.appContext, ::getCc, ::updateCc)
+        FutureVoid(MyApplication.appContext, ::get7day, ::update7day)
+        FutureVoid(MyApplication.appContext, ::getHazards, ::updateHazards)
+    }
+
+    private fun getCc() {
+        currentConditions = CurrentConditions(MyApplication.appContext, Location.currentLocation)
+        currentConditions.timeCheck(MyApplication.appContext)
+    }
+
+    private fun updateCc() {
+        if (isAdded) {
+            cardCurrentConditions?.let {
+                currentConditionsTime = currentConditions.status
+                if (UIPreferences.homescreenFav.contains("TXT-CC2")) {
+                    it.update(currentConditions, Location.isUS, radarTime)
+                } else {
+                    it.setTopLine(currentConditions.data)
+                    it.setStatus(currentConditionsTime + radarTime)
+                }
+            }
+        }
+    }
+
+    private fun get7day() {
+        sevenDay = SevenDay(Location.currentLocation)
+        Utility.writePref(MyApplication.appContext, "FCST", sevenDay.sevenDayLong)
+    }
+
+    private fun update7day() {
+        if (isAdded) {
+            if (UIPreferences.homescreenFav.contains("TXT-7DAY")) {
+                sevenDayCollection?.update(sevenDay, Location.latLon, Location.isUS)
+                if (!Location.isUS) {
+                    CanadaLegal(activityReference, boxForecast!!, UtilityCanada.getLocationUrl(Location.x, Location.y))
+                }
+            }
+        }
+    }
+
+    private fun getHazards() {
+        hazards = if (Location.isUS(Location.currentLocation)) {
+            Hazards(Location.currentLocation)
+        } else {
+            val html = UtilityCanada.getLocationHtml(Location.getLatLon(Location.currentLocation))
+            Hazards(html)
+        }
+    }
+
+    private fun updateHazards() {
+        if (isAdded) {
+            if (Location.isUS) {
+                if (hazards.titles.isEmpty()) {
+                    if (UIPreferences.homescreenFav.contains("TXT-HAZ")) {
+                        boxHazards?.removeChildrenAndLayout()
+                        boxHazards?.visibility = View.GONE
+                    }
+                } else {
+                    if (UIPreferences.homescreenFav.contains("TXT-HAZ")) {
+                        boxHazards?.visibility = View.VISIBLE
+                        CardHazards(activityReference, boxHazards, hazards)
+                    }
+                }
+            } else {
+                if (hazards.getHazardsShort() != "") {
+                    val hazardsSum = hazards.getHazardsShort().uppercase(Locale.US)
+                    if (UIPreferences.homescreenFav.contains("TXT-HAZ")) {
+                        boxHazards?.visibility = View.VISIBLE
+                        CardHazardsCA(activityReference, boxHazards, hazards, hazardsSum)
+                    }
+                }
+            }
+        }
+    }
+
+    // used in WX.kt keyboard shortcut
+    fun showLocations() {
+        locationDialogue.show()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -512,139 +548,7 @@ class LocationFragment : Fragment() {
         mActivity = null
     }
 
-    private fun setupHazardCards() {
-        boxHazards?.removeChildrenAndLayout()
-        hazardsExpandedList.clear()
-        hazardsCards.clear()
-        objectHazards.titles.indices.forEach { z ->
-            if (UtilityNotificationTools.nwsLocalAlertNotFiltered(activityReference, objectHazards.titles[z])) {
-                hazardsExpandedList.add(false)
-                hazardsCards.add(CardText(activityReference))
-                hazardsCards[z].setupHazard()
-                hazardsCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
-                hazardsCards[z].connect { Route.hazard(activityReference, objectHazards.urls[z]) }
-                boxHazards?.addWidget(hazardsCards[z].get())
-            } else {
-                hazardsExpandedList.add(false)
-                hazardsCards.add(CardText(activityReference))
-            }
-        }
-    }
-
-    private fun getForecastData() {
-        FutureVoid(MyApplication.appContext, ::getCc, ::updateCc)
-        if (locationChangedSevenDay) {
-            boxForecast?.removeChildren()
-            locationChangedSevenDay = false
-        }
-        FutureVoid(MyApplication.appContext, ::get7day, ::update7day)
-        if (locationChangedHazards) {
-            boxHazards?.removeChildren()
-            boxHazards?.visibility = View.GONE
-            locationChangedHazards = false
-        }
-        FutureVoid(MyApplication.appContext, ::getHazards, ::updateHazards)
-    }
-
-    private fun getCc() {
-        try {
-            objectCurrentConditions = ObjectCurrentConditions(MyApplication.appContext, Location.currentLocation)
-            objectCurrentConditions.timeCheck(MyApplication.appContext)
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-    }
-
-    private fun updateCc() {
-        if (isAdded) {
-            objectCardCurrentConditions?.let {
-                if (homescreenFavLocal.contains("TXT-CC2")) {
-                    currentConditionsTime = objectCurrentConditions.status
-                    it.update(objectCurrentConditions, Location.isUS, radarTime)
-                } else {
-                    it.setTopLine(objectCurrentConditions.data)
-                    currentConditionsTime = objectCurrentConditions.status
-                    it.setStatus(currentConditionsTime + radarTime)
-                }
-            }
-        }
-    }
-
-    private fun get7day() {
-        try {
-            objectSevenDay = ObjectSevenDay(Location.currentLocation)
-            Utility.writePref(MyApplication.appContext, "FCST", objectSevenDay.sevenDayLong)
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        Utility.writePref(MyApplication.appContext, "FCST", objectSevenDay.sevenDayLong)
-    }
-
-    private fun update7day() {
-        if (isAdded) {
-            if (homescreenFavLocal.contains("TXT-7DAY")) {
-                boxForecast?.removeChildren()
-                sevenDayCards.clear()
-                objectSevenDay.icons.forEachIndexed { index, iconUrl ->
-                    val objectCard7Day = SevenDayCard(activityReference, iconUrl, Location.isUS, objectSevenDay.forecastList[index])
-                    objectCard7Day.connect { scrollView.smoothScrollTo(0, 0) }
-                    boxForecast?.addWidget(objectCard7Day.get())
-                    sevenDayCards.add(objectCard7Day)
-                }
-                if (Location.isUS) {
-                    val sunRiseCard = SunRiseCard(activityReference, Location.latLon, scrollView)
-                    boxForecast?.addWidget(sunRiseCard.get())
-                }
-            }
-            if (!Location.isUS && homescreenFavLocal.contains("TXT-7DAY2")) {
-                ObjectCALegal(activityReference, boxForecast!!.get(), UtilityCanada.getLocationUrl(Location.x, Location.y))
-            }
-        }
-    }
-
-    private fun getHazards() {
-        try {
-            objectHazards = if (Location.isUS(Location.currentLocation)) {
-                ObjectHazards(Location.currentLocation)
-            } else {
-                val html = UtilityCanada.getLocationHtml(Location.getLatLon(Location.currentLocation))
-                ObjectHazards(html)
-            }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-    }
-
-    private fun updateHazards() {
-        if (isAdded) {
-            if (Location.isUS) {
-                if (objectHazards.titles.isEmpty()) {
-                    if (homescreenFavLocal.contains("TXT-HAZ")) {
-                        boxHazards?.removeChildrenAndLayout()
-                        boxHazards?.visibility = View.GONE
-                    }
-                } else {
-                    if (homescreenFavLocal.contains("TXT-HAZ")) {
-                        boxHazards?.visibility = View.VISIBLE
-                        setupHazardCards()
-                    }
-                }
-            } else {
-                if (objectHazards.getHazardsShort() != "") {
-                    val hazardsSum = objectHazards.getHazardsShort().uppercase(Locale.US)
-                    if (homescreenFavLocal.contains("TXT-HAZ")) {
-                        boxHazards?.visibility = View.VISIBLE
-                        setupHazardCardsCA(hazardsSum)
-                    }
-                }
-            }
-        }
-    }
-
-    // used in WX.kt keyboard shortcut
-    fun showLocations() {
-        locationDialogue.show()
-    }
+    private var mActivity: FragmentActivity? = null
 
     // FIXME duplicate for 2 other areas
     private val activityReference: FragmentActivity

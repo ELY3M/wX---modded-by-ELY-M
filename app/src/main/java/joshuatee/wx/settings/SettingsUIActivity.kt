@@ -27,13 +27,20 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.TextView
 import androidx.core.app.NavUtils
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
-import joshuatee.wx.ui.*
-import joshuatee.wx.ui.ObjectNumberPicker
+import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectSpinner
+import joshuatee.wx.ui.Switch
+import joshuatee.wx.ui.VBox
+import joshuatee.wx.ui.NumberPicker
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityLog
 
 class SettingsUIActivity : BaseActivity() {
@@ -51,9 +58,7 @@ class SettingsUIActivity : BaseActivity() {
             "allWhite",
             "orange",
 	        "BlackAqua",
-	        "BlackAqua3",
 	        "BlackNeonGreen",
-            "BlackNeonGreen3"
     )
     private var tilesPerRowStart = 0
     private var navDrawerMainScreen = false
@@ -65,21 +70,19 @@ class SettingsUIActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_ui, null, false)
-        setTitle("User Interface", "Please tap on text for additional help.")
+        setTitle("User Interface", GlobalVariables.preferencesHelpTitle)
         box = VBox.fromResource(this)
-        et1 = findViewById(R.id.et1)
-        et2 = findViewById(R.id.et2)
-        et3 = findViewById(R.id.et3)
         tilesPerRowStart = UIPreferences.tilesPerRow
         navDrawerMainScreen = UIPreferences.navDrawerMainScreen
         navDrawerMainScreenOnRight = UIPreferences.navDrawerMainScreenOnRight
-        val textSize = UIPreferences.textSizeLarge
-        val padding = UIPreferences.paddingSettings
-        if (UIPreferences.navDrawerMainScreen) {
-            CardText(this, box, "Navigation Drawer Configuration", textSize, SettingsNavDrawerActivity::class.java, padding)
-        }
-        Card(this, R.id.cv_tab_labels)
-        setupEditText()
+        addEditText()
+        addCards()
+        addSwitchTheme()
+        addSwitch()
+        addNumberPickers()
+    }
+
+    private fun addSwitchTheme() {
         box.addWidget(
                 ObjectSpinner(
                         this,
@@ -88,62 +91,77 @@ class SettingsUIActivity : BaseActivity() {
                         "BlackAqua",
                         R.string.spinner_theme_label,
                         colorArr
-                ).get()
+                )
         )
+    }
+
+    private fun addCards() {
+        val textSize = UIPreferences.textSizeLarge
+        val padding = UIPreferences.paddingSettings
+        var navDrawerStatus = " (disabled)"
+        if (UIPreferences.navDrawerMainScreen) {
+            navDrawerStatus = ""
+        }
+        box.addWidget(CardText(this, "Navigation Drawer Configuration$navDrawerStatus", textSize, SettingsNavDrawerActivity::class.java, padding))
+        Card(this, R.id.cv_tab_labels)
+    }
+
+    private fun addSwitch() {
         val configs = listOf(
-                ObjectSwitch(this, "Check for SPC MCD/Watches", "CHECKSPC", R.string.checkspc_switch_label),
-                ObjectSwitch(this, "Check for WPC MPDs", "CHECKWPC", R.string.checkwpc_switch_label),
-                ObjectSwitch(this, "Check for TOR,TST,FFW", "CHECKTOR", R.string.checktor_switch_label),
-                ObjectSwitch(this, "Dual-pane radar from main screen", "DUALPANE_RADAR_ICON", R.string.dualpane_radar_icon_tv),
-                ObjectSwitch(this, "Fahrenheit in current conditions/7day", "UNITS_F", R.string.units_f_label),
-                ObjectSwitch(this, "Fullscreen mode", "FULLSCREEN_MODE", R.string.fullscreen_mode_label),
-                ObjectSwitch(this, "GOES GLM for lightning (requires restart)", "LIGHTNING_USE_GOES", R.string.use_goes_for_lightning),
-                ObjectSwitch(this, "Hide top toolbar (restarts app)", "HIDE_TOP_TOOLBAR", R.string.hide_top_toolbar_label),
-                ObjectSwitch(this, "Icons evenly spaced", "UI_ICONS_EVENLY_SPACED", R.string.icons_spacing_label),
-                ObjectSwitch(this, "Lock toolbars", "LOCK_TOOLBARS", R.string.lock_toolbars_label),
-                ObjectSwitch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.mainscreen_radar_button),
-                ObjectSwitch(this, "Media control notification", "MEDIA_CONTROL_NOTIF", R.string.media_control_notif_tv),
-                ObjectSwitch(this, "Millibars in current conditions", "UNITS_M", R.string.units_m_label),
-                ObjectSwitch(this, "Models: use FAB", "FAB_IN_MODELS", R.string.fab_in_models_label),
-                ObjectSwitch(this, "Navigation drawer on main screen", "NAV_DRAWER_MAIN_SCREEN", R.string.nav_drawer_main_screen_label),
-                ObjectSwitch(this, "Navigation drawer on main screen is on right side", "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", R.string.nav_drawer_main_screen_on_right_label),
-                ObjectSwitch(this, "NWS Text: remove line breaks", "NWS_TEXT_REMOVELINEBREAKS", R.string.nws_text_removelinebreak_label),
-                ObjectSwitch(this, "Prevent accidental exit", "PREF_PREVENT_ACCIDENTAL_EXIT", R.string.prevent_accidental_exit_label),
-                ObjectSwitch(this, "Radar: immersive mode", "RADAR_IMMERSIVE_MODE", R.string.radar_immersive_mode_label),
-                ObjectSwitch(this, "Radar: transparent status bar", "RADAR_STATUSBAR_TRANSPARENT", R.string.radar_statusbar_transparent_label),
-                ObjectSwitch(this, "Radar: transparent toolbars", "RADAR_TOOLBAR_TRANSPARENT", R.string.radar_toolbar_transparent_label),
-                ObjectSwitch(this, "Record screen for sharing", "RECORD_SCREEN_SHARE", R.string.record_screen_share_label),
-                ObjectSwitch(this, "Simple mode (restarts app)", "SIMPLE_MODE", R.string.simple_mode_label),
-                ObjectSwitch(this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label),
-                ObjectSwitch(this, "Translate abbreviations", "TRANSLATE_TEXT", R.string.translate_text_label),
-                ObjectSwitch(this, "Use AWC Radar Mosaic", "USE_AWC_MOSAIC", R.string.use_awc_mosaic),
-                ObjectSwitch(this, "Use new NWS API for 7 day", "USE_NWS_API_SEVEN_DAY", R.string.use_nws_api),
-                ObjectSwitch(this, "Use new NWS API for Hourly", "USE_NWS_API_HOURLY", R.string.use_nws_api_hourly),
-                ObjectSwitch(this, "WFO: remember location", "WFO_REMEMBER_LOCATION", R.string.wfo_remember),
-                ObjectSwitch(this, "Widgets: prevent opening app on tap", "UI_WIDGET_PREVENT_TAP", R.string.widget_prevent_tap),
+                Switch(this, "Check for SPC MCD/Watches", "CHECKSPC", R.string.checkspc_switch_label),
+                Switch(this, "Check for WPC MPDs", "CHECKWPC", R.string.checkwpc_switch_label),
+                Switch(this, "Check for TOR,TST,FFW", "CHECKTOR", R.string.checktor_switch_label),
+                Switch(this, "Dual-pane radar from main screen", "DUALPANE_RADAR_ICON", R.string.dualpane_radar_icon_tv),
+                Switch(this, "Fahrenheit in current conditions/7day", "UNITS_F", R.string.units_f_label),
+                Switch(this, "Fullscreen mode", "FULLSCREEN_MODE", R.string.fullscreen_mode_label),
+//                Switch(this, "GOES GLM for lightning (requires restart)", "LIGHTNING_USE_GOES", R.string.use_goes_for_lightning),
+                Switch(this, "Hide top toolbar (restarts app)", "HIDE_TOP_TOOLBAR", R.string.hide_top_toolbar_label),
+                Switch(this, "Icons evenly spaced", "UI_ICONS_EVENLY_SPACED", R.string.icons_spacing_label),
+                Switch(this, "Lock toolbars", "LOCK_TOOLBARS", R.string.lock_toolbars_label),
+                Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.mainscreen_radar_button),
+                Switch(this, "Media control notification", "MEDIA_CONTROL_NOTIF", R.string.media_control_notif_tv),
+                Switch(this, "Millibars in current conditions", "UNITS_M", R.string.units_m_label),
+                Switch(this, "Models: use FAB", "FAB_IN_MODELS", R.string.fab_in_models_label),
+                Switch(this, "Navigation drawer on main screen", "NAV_DRAWER_MAIN_SCREEN", R.string.nav_drawer_main_screen_label),
+                Switch(this, "Navigation drawer on main screen is on right side", "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", R.string.nav_drawer_main_screen_on_right_label),
+                Switch(this, "NWS Text: remove line breaks", "NWS_TEXT_REMOVELINEBREAKS", R.string.nws_text_removelinebreak_label),
+                Switch(this, "Prevent accidental exit", "PREF_PREVENT_ACCIDENTAL_EXIT", R.string.prevent_accidental_exit_label),
+                Switch(this, "Radar: immersive mode", "RADAR_IMMERSIVE_MODE", R.string.radar_immersive_mode_label),
+                Switch(this, "Radar: transparent status bar", "RADAR_STATUSBAR_TRANSPARENT", R.string.radar_statusbar_transparent_label),
+                Switch(this, "Radar: transparent toolbars", "RADAR_TOOLBAR_TRANSPARENT", R.string.radar_toolbar_transparent_label),
+                Switch(this, "Record screen for sharing", "RECORD_SCREEN_SHARE", R.string.record_screen_share_label),
+                Switch(this, "Simple mode (restarts app)", "SIMPLE_MODE", R.string.simple_mode_label),
+                Switch(this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label),
+                Switch(this, "Translate abbreviations", "TRANSLATE_TEXT", R.string.translate_text_label),
+                Switch(this, "Use AWC Radar Mosaic", "USE_AWC_MOSAIC", R.string.use_awc_mosaic),
+                Switch(this, "Use new NWS API for 7 day", "USE_NWS_API_SEVEN_DAY", R.string.use_nws_api),
+                Switch(this, "Use new NWS API for Hourly", "USE_NWS_API_HOURLY", R.string.use_nws_api_hourly),
+                Switch(this, "WFO: remember location", "WFO_REMEMBER_LOCATION", R.string.wfo_remember),
+                Switch(this, "Widgets: prevent opening app on tap", "UI_WIDGET_PREVENT_TAP", R.string.widget_prevent_tap),
         )
         configs.forEach {
-            box.addWidget(it.get())
+            box.addWidget(it)
         }
+    }
 
+    private fun addNumberPickers() {
         val numberPickers = listOf(
-            ObjectNumberPicker(this, "Animation - frames for toolbar icon", "UI_ANIM_ICON_FRAMES", R.string.np_anim_generic_label, 10, 2, 40),
-            ObjectNumberPicker(this, "Card corner radius", "CARD_CORNER_RADIUS", R.string.card_corner_radius_np_label, 0, 0, 10),
-            ObjectNumberPicker(this, "Home screen text length", "HOMESCREEN_TEXT_LENGTH_PREF", R.string.homescreen_text_length_np_label, 500, 50, 1000),
-            ObjectNumberPicker(this, "Image tiles per row", "UI_TILES_PER_ROW", R.string.tiles_per_row_label, UIPreferences.tilesPerRowDefault, 3, 10),
-            ObjectNumberPicker(this, "NWS icon size", "NWS_ICON_SIZE_PREF", R.string.nws_icon_size_np_label, UIPreferences.nwsIconSizeDefault, 1, 50),
-            ObjectNumberPicker(this, "Refresh interval for location in minutes", "REFRESH_LOC_MIN", R.string.refresh_loc_min_np_label, 10, 0, 120),
-            ObjectNumberPicker(this, "Text size", "TEXTVIEW_FONT_SIZE", R.string.textview_fontsize_np_label, UIPreferences.normalTextSizeDefault, 12, 25),
-            ObjectNumberPicker(this, "Text to speech speed, requires app restart","TTS_SPEED_PREF", R.string.tts_speed_np_label, 10, 1, 20),
-            ObjectNumberPicker(this, "UI elevation height", "ELEVATION_PREF", R.string.elevation_np_label, UIPreferences.elevationPrefDefault, 0, 30),
+                NumberPicker(this, "Animation - frames for toolbar icon", "UI_ANIM_ICON_FRAMES", R.string.np_anim_generic_label, 10, 2, 40),
+                NumberPicker(this, "Card corner radius", "CARD_CORNER_RADIUS", R.string.card_corner_radius_np_label, 0, 0, 10),
+                NumberPicker(this, "Home screen text length", "HOMESCREEN_TEXT_LENGTH_PREF", R.string.homescreen_text_length_np_label, 500, 50, 1000),
+                NumberPicker(this, "Image tiles per row", "UI_TILES_PER_ROW", R.string.tiles_per_row_label, UIPreferences.tilesPerRowDefault, 3, 10),
+                NumberPicker(this, "NWS icon size", "NWS_ICON_SIZE_PREF", R.string.nws_icon_size_np_label, UIPreferences.nwsIconSizeDefault, 1, 50),
+                NumberPicker(this, "Refresh interval for location in minutes", "REFRESH_LOC_MIN", R.string.refresh_loc_min_np_label, 10, 0, 120),
+                NumberPicker(this, "Text size", "TEXTVIEW_FONT_SIZE", R.string.textview_fontsize_np_label, UIPreferences.normalTextSizeDefault, 12, 25),
+                NumberPicker(this, "Text to speech speed, requires app restart","TTS_SPEED_PREF", R.string.tts_speed_np_label, 10, 1, 20),
+                NumberPicker(this, "UI elevation height", "ELEVATION_PREF", R.string.elevation_np_label, UIPreferences.elevationPrefDefault, 0, 30),
         )
         numberPickers.forEach {
-            box.addWidget(it.get())
+            box.addWidget(it)
         }
     }
 
     override fun onStop() {
-        super.onStop()
         UIPreferences.tabHeaders[0] = et1.text.toString()
         UIPreferences.tabHeaders[1] = et2.text.toString()
         UIPreferences.tabHeaders[2] = et3.text.toString()
@@ -151,9 +169,21 @@ class SettingsUIActivity : BaseActivity() {
         Utility.writePref(this, "TAB2_HEADER", et2.text.toString())
         Utility.writePref(this, "TAB3_HEADER", et3.text.toString())
         MyApplication.initPreferences(this)
+        UIPreferences.navDrawerMainScreen = Utility.readPref(this@SettingsUIActivity, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
+        UIPreferences.navDrawerMainScreenOnRight = Utility.readPref(this@SettingsUIActivity, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
+        if ((UIPreferences.tilesPerRow != tilesPerRowStart)
+                || (UIPreferences.navDrawerMainScreen != navDrawerMainScreen)
+                || (UIPreferences.navDrawerMainScreenOnRight != navDrawerMainScreenOnRight)
+        ) {
+            Utility.restart()
+        }
+        super.onStop()
     }
 
-    private fun setupEditText() {
+    private fun addEditText() {
+        et1 = findViewById(R.id.et1)
+        et2 = findViewById(R.id.et2)
+        et3 = findViewById(R.id.et3)
         et1.setText(UIPreferences.tabHeaders[0])
         et2.setText(UIPreferences.tabHeaders[1])
         et3.setText(UIPreferences.tabHeaders[2])
@@ -163,19 +193,14 @@ class SettingsUIActivity : BaseActivity() {
                 it.setHintTextColor(Color.GRAY)
             }
         }
-    }
 
-    override fun onBackPressed() {
-        UIPreferences.navDrawerMainScreen = Utility.readPref(this, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
-        UIPreferences.navDrawerMainScreenOnRight = Utility.readPref(this, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
-        if ((UIPreferences.tilesPerRow != tilesPerRowStart)
-                || (UIPreferences.navDrawerMainScreen != navDrawerMainScreen)
-                || (UIPreferences.navDrawerMainScreenOnRight != navDrawerMainScreenOnRight)
-        ) {
-            Utility.restart()
-        } else {
-            super.onBackPressed()
-        }
+        val label1: TextView = findViewById(R.id.tab1_et_label)
+        val label2: TextView = findViewById(R.id.tab2_et_label)
+        val label3: TextView = findViewById(R.id.tab3_et_label)
+
+        label1.setOnClickListener { ObjectDialogue(this, "Change the textual label for the 1st tab. The default is Local.") }
+        label2.setOnClickListener { ObjectDialogue(this, "Change the textual label for the 2nd tab. The default is SPC (NWS Storm Prediction Center).") }
+        label3.setOnClickListener { ObjectDialogue(this, "Change the textual label for the 3rd tab. The default is MISC for miscellaneous.") }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

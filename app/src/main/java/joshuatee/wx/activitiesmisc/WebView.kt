@@ -29,6 +29,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
+//import androidx.activity.addCallback
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.Route
@@ -49,14 +50,6 @@ class WebView : BaseActivity() {
     private var url = ""
     private lateinit var webView: WebView
 
-    override fun onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.webscreen_ab_state, menu)
         return true
@@ -70,17 +63,19 @@ class WebView : BaseActivity() {
         title = arguments[1]
         webView = findViewById(R.id.webView)
         val webSettings = webView.settings
-        webSettings.javaScriptEnabled = true
-        if (arguments.size > 2) {
-            webSettings.builtInZoomControls = true
-            webSettings.displayZoomControls = false
-            webSettings.useWideViewPort = true
-            webSettings.loadWithOverviewMode = true
-        }
-        if (UtilityUI.isTablet()) {
-            webSettings.textZoom = (120 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
-        } else {
-            webSettings.textZoom = (100 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
+        with (webSettings) {
+            javaScriptEnabled = true
+            if (arguments.size > 2) {
+                builtInZoomControls = true
+                displayZoomControls = false
+                useWideViewPort = true
+                loadWithOverviewMode = true
+            }
+            textZoom = if (UtilityUI.isTablet()) {
+                (120 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
+            } else {
+                (100 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
+            }
         }
         webView.webViewClient = WebViewClient()
         if (url.startsWith("http")) {
@@ -88,6 +83,12 @@ class WebView : BaseActivity() {
         } else {
             webView.loadData(url, "text/html", null)
         }
+
+//        onBackPressedDispatcher.addCallback(this) {
+//            if (webView.canGoBack()) {
+//                webView.goBack()
+//            }
+//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -96,5 +97,13 @@ class WebView : BaseActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

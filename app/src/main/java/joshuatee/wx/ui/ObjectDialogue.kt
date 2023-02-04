@@ -98,7 +98,6 @@ class ObjectDialogue {
 
     constructor(context: Context, text: String) {
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item)
-//        alertDialog = AlertDialog.Builder(context)
         alertDialog = if (Utility.isThemeMaterial3()) {
             MaterialAlertDialogBuilder(context)
         } else {
@@ -132,6 +131,13 @@ class ObjectDialogue {
         alertDialog.setSingleChoiceItems(arrayAdapter, checkedItem, listener)
     }
 
+    fun connect2(fn: (DialogInterface, String) -> Unit) {
+        alertDialog.setSingleChoiceItems(arrayAdapter, checkedItem) { dialog, index ->
+            val s = arrayAdapter.getItem(index) ?: ""
+            fn(dialog, s)
+        }
+    }
+
     fun connectCancel(listener: DialogInterface.OnClickListener) {
         alertDialog.setNegativeButton("Cancel", listener)
     }
@@ -140,5 +146,5 @@ class ObjectDialogue {
         alertDialog.setTitle(title)
     }
 
-    fun getItem(index: Int) = arrayAdapter.getItem(index) ?: ""
+    fun getItem(index: Int): String = arrayAdapter.getItem(index) ?: ""
 }

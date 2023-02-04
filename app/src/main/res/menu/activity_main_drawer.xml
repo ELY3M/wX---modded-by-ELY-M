@@ -9,10 +9,6 @@
         android:id="@+id/rainfall_outlook"
         android:icon="@drawable/wpc_rainfall"
         android:title="@string/excessive_rainfall_outlook" />
-<!--    <item-->
-<!--        android:id="@+id/glcfs"-->
-<!--        android:icon="@drawable/glcfs"-->
-<!--        android:title="@string/glcfs" />-->
     <item
         android:id="@+id/goes_global"
         android:icon="@drawable/goesfulldisk"

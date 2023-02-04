@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginEnd="@dimen/fab_margin_mini_2"
-                android:layout_marginBottom="@dimen/fab_margin_bottom_mini"
+                android:layout_marginBottom="@dimen/fab_margin"
                 app:elevation="@dimen/fab_elevation"
                 app:fabSize="mini"
                 app:layout_anchor="@id/card_list"

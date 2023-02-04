@@ -29,12 +29,14 @@ internal class TileAdapter(
         val layoutParams = holder.imageView.layoutParams
         layoutParams.width = MyApplication.dm.widthPixels / tilesPerRow
         layoutParams.height = layoutParams.width * bitmap.height / bitmap.width
-        holder.imageView.layoutParams = layoutParams
-        holder.imageView.setImageBitmap(bitmap)
-        holder.imageView.contentDescription = itemList[position].description
+        with (holder) {
+            imageView.layoutParams = layoutParams
+            imageView.setImageBitmap(bitmap)
+            imageView.contentDescription = itemList[position].description
+        }
     }
 
-    override fun getItemCount() = this.itemList.size
+    override fun getItemCount(): Int = this.itemList.size
     
     override fun onItemDismiss(position: Int) {
         itemList.removeAt(position)

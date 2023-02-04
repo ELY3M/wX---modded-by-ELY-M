@@ -21,24 +21,20 @@
 
 package joshuatee.wx.notifications
 
-import android.graphics.Color
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.NotificationCompat
-import joshuatee.wx.R
+import androidx.core.app.NotificationManagerCompat
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.objects.*
+import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
-import joshuatee.wx.spc.SpcMcdWatchShowActivity
-import joshuatee.wx.objects.PolygonType.MCD
-import joshuatee.wx.objects.PolygonType.MPD
-import joshuatee.wx.objects.PolygonType.WATCH
 import joshuatee.wx.settings.NotificationPreferences
-import joshuatee.wx.util.*
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.widgets.UtilityWidgetDownload
 import kotlinx.coroutines.*
 
 class BackgroundFetch(val context: Context) {
@@ -46,205 +42,76 @@ class BackgroundFetch(val context: Context) {
     // This is the main code that handles notifications (formerly in AlertReceiver)
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    val timer = DownloadTimer("NOTIFICATIONS_MAIN")
 
     private fun getNotifications() {
         var notificationUrls = ""
-        var cancelStr: String
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
-        val locationNeedsMcd = UtilityNotificationSpc.locationNeedsMcd()
-        val locationNeedsSwo = UtilityNotificationSpc.locationNeedsSwo()
-        val locationNeedsSpcFw = UtilityNotificationSpcFireWeather.locationNeedsSpcFireWeather()
-        val locationNeedsWpcMpd = UtilityNotificationWpc.locationNeedsMpd()
+        val locationNeedsMcd = NotificationMcd.locationNeedsMcd()
+        val locationNeedsSwo = NotificationSwo.locationNeedsSwo()
+        val locationNeedsSpcFw = NotificationSpcFireWeather.locationNeedsSpcFireWeather()
+        val locationNeedsWpcMpd = NotificationMpd.locationNeedsMpd()
+        //
+        // iterate over locations and if enabled check for alerts
+        //
         (1..Location.numLocations).forEach {
             val requestID = ObjectDateTime.currentTimeMillis().toInt()
-            notificationUrls += UtilityNotification.send(context, it.toString(), requestID + 1)
+            notificationUrls += NotificationLocal.send(context, it.toString(), requestID + 1)
         }
-        // Think this is no longer needed
-//        RadarPreferences.radarWarningPolygons.forEach {
-//            if (it.isEnabled) {
-//                it.storage.valueSet(context, UtilityDownloadWarnings.getVtecByType(it.type))
-//            } else {
-//                it.storage.valueSet(context, "")
-//            }
-//        }
-        if (NotificationPreferences.alertTornadoNotification || UIPreferences.checktor || PolygonType.TST.pref) {
-            try {
-//                UtilityDownloadWarnings.getForNotification(context)
-                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.FlashFloodWarning]!!.download()
-                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.TornadoWarning]!!.download()
-                ObjectPolygonWarning.polygonDataByType[PolygonWarningType.ThunderstormWarning]!!.download()
-                if (NotificationPreferences.alertTornadoNotification) {
-//                    notificationUrls += UtilityNotificationTornado.checkAndSend(context, ObjectPolygonWarning.severeDashboardTor.value)
-                    notificationUrls += UtilityNotificationTornado.checkAndSend(context, ObjectPolygonWarning.polygonDataByType[PolygonWarningType.TornadoWarning]!!.getData())
-                }
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-        } else {
-//            ObjectPolygonWarning.severeDashboardTor.valueSet(context, "")
-//            ObjectPolygonWarning.severeDashboardTst.valueSet(context, "")
-//            ObjectPolygonWarning.severeDashboardFfw.valueSet(context, "")
-        }
-        if (NotificationPreferences.alertSpcMcdNotification || UIPreferences.checkspc || MCD.pref || locationNeedsMcd) {
-            try {
-//                val mcdData = UtilityDownloadMcd.getMcd(context)
-                val mcdData = ObjectPolygonWatch.polygonDataByType[MCD]!!.getImmediate(context)
-                mcdData.numberList.forEachIndexed { index, mcdNumber ->
-                    if (NotificationPreferences.alertSpcMcdNotification) {
-                        val noMain = "SPC MCD #$mcdNumber"
-                        val mcdPreModified = mcdData.htmlList[index].replace("<.*?>".toRegex(), " ")
-                        val polygonType = MCD
-                        val objectPendingIntents = ObjectPendingIntents(
-                                context,
-                                SpcMcdWatchShowActivity::class.java,
-                                SpcMcdWatchShowActivity.NUMBER,
-                                arrayOf(mcdNumber, polygonType.toString()),
-                                arrayOf(mcdNumber, polygonType.toString(), "sound")
-                        )
-                        cancelStr = "usspcmcd$mcdNumber"
-                        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
-                            val sound = NotificationPreferences.alertNotificationSoundSpcmcd && !inBlackout
-                            val notificationObj = ObjectNotification(
-                                    context,
-                                    sound,
-                                    noMain,
-                                    mcdPreModified,
-                                    objectPendingIntents.resultPendingIntent,
-                                    GlobalVariables.ICON_MCD,
-                                    mcdPreModified,
-                                    NotificationCompat.PRIORITY_HIGH,
-                                    Color.YELLOW,
-                                    GlobalVariables.ICON_ACTION,
-                                    objectPendingIntents.resultPendingIntent2,
-                                    context.resources.getString(R.string.read_aloud)
-                            )
-                            val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
-                            notificationObj.sendNotification(context, cancelStr, 1, notification)
-                        }
-                        notificationUrls += cancelStr + NotificationPreferences.notificationStrSep
-                    }
-                } // end while find
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-        } else {
-            ObjectPolygonWatch.polygonDataByType[MCD]!!.storage.valueSet(context, "")
-            // end of if to test if alerts_spcmcd are enabled
-        }
-        if (NotificationPreferences.alertWpcMpdNotification || UIPreferences.checkwpc || MPD.pref || locationNeedsWpcMpd) {
-            try {
-                val mpdData = ObjectPolygonWatch.polygonDataByType[MPD]!!.getImmediate(context)
-                mpdData.numberList.forEachIndexed { index, mpdNumber ->
-                    if (NotificationPreferences.alertWpcMpdNotification) {
-                        val noMain = "WPC MPD #$mpdNumber"
-                        val mcdPreModified = mpdData.htmlList[index].replace("<.*?>".toRegex(), " ")
-                        val polygonType = MPD
-                        val objectPendingIntents = ObjectPendingIntents(
-                                context,
-                                SpcMcdWatchShowActivity::class.java,
-                                SpcMcdWatchShowActivity.NUMBER,
-                                arrayOf(mpdNumber, polygonType.toString()),
-                                arrayOf(mpdNumber, polygonType.toString(), "sound")
-                        )
-                        cancelStr = "uswpcmpd$mpdNumber"
-                        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
-                            val sound = NotificationPreferences.alertNotificationSoundWpcmpd && !inBlackout
-                            val notificationObj = ObjectNotification(
-                                    context,
-                                    sound,
-                                    noMain,
-                                    mcdPreModified,
-                                    objectPendingIntents.resultPendingIntent,
-                                    GlobalVariables.ICON_MPD,
-                                    mcdPreModified,
-                                    NotificationCompat.PRIORITY_HIGH,
-                                    Color.GREEN,
-                                    GlobalVariables.ICON_ACTION,
-                                    objectPendingIntents.resultPendingIntent2,
-                                    context.resources.getString(R.string.read_aloud)
-                            )
-                            val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
-                            notificationObj.sendNotification(context, cancelStr, 1, notification)
-                        }
-                        notificationUrls += cancelStr + NotificationPreferences.notificationStrSep
-                    }
-
-                } // end forEach
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-        } else {
-            ObjectPolygonWatch.polygonDataByType[MPD]!!.storage.valueSet(context, "")
-            // end of if to test if alerts_wpcmpd are enabled
-        }
-        if (NotificationPreferences.alertSpcWatchNotification || UIPreferences.checkspc || MCD.pref) {
-            try {
-//                val watchData = UtilityDownloadWatch.getWatch(context)
-                val watchData = ObjectPolygonWatch.polygonDataByType[WATCH]!!.getImmediate(context)
-                watchData.numberList.forEachIndexed { index, watchNumber ->
-                    if (NotificationPreferences.alertSpcWatchNotification) {
-                        val noMain = "SPC Watch #$watchNumber"
-                        val mcdPreModified = watchData.htmlList[index].replace("<.*?>".toRegex(), " ")
-                        val polygonType = WATCH
-                        val objectPendingIntents = ObjectPendingIntents(
-                                context,
-                                SpcMcdWatchShowActivity::class.java,
-                                SpcMcdWatchShowActivity.NUMBER,
-                                arrayOf(watchNumber, "", polygonType.toString()),
-                                arrayOf(watchNumber, "sound", polygonType.toString())
-                        )
-                        cancelStr = "usspcwat$watchNumber"
-                        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
-                            val sound = NotificationPreferences.alertNotificationSoundSpcwat && !inBlackout
-                            val notificationObj = ObjectNotification(
-                                    context,
-                                    sound,
-                                    noMain,
-                                    mcdPreModified,
-                                    objectPendingIntents.resultPendingIntent,
-                                    GlobalVariables.ICON_ALERT_2,
-                                    mcdPreModified,
-                                    NotificationCompat.PRIORITY_HIGH,
-                                    Color.YELLOW,
-                                    GlobalVariables.ICON_ACTION,
-                                    objectPendingIntents.resultPendingIntent2,
-                                    context.resources.getString(R.string.read_aloud)
-                            )
-                            val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
-                            notificationObj.sendNotification(context, cancelStr, 1, notification)
-                        }
-                        notificationUrls += cancelStr + NotificationPreferences.notificationStrSep
-                    }
-                } // end forEach
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-        } else {
-            ObjectPolygonWatch.polygonDataByType[WATCH]!!.storage.valueSet(context, "")
-            // end of if to test if alerts_spcwat are enabled
-        }
+        //
+        // Check for CONUS Tornado alerts
+        // This code also runs if users has enabled tab headers for warnings
+        //
+        notificationUrls += NotificationTornado.send(context)
+        //
+        // Check for CONUS wide MCD or MCD specific to a location if configured
+        //
+        notificationUrls += NotificationMcd.send(context)
+        //
+        // Check for CONUS wide MPD or MCD specific to a location if configured
+        //
+        notificationUrls += NotificationMpd.send(context)
+        //
+        // Check for CONUS wide Watch
+        //
+        notificationUrls += NotificationWatch.send(context)
+        //
+        // Let the main program know to update tab headers
+        //
         LocalBroadcastManager.getInstance(context).sendBroadcast(Intent("notifran"))
-        notificationUrls += UtilityNotificationSpc.sendSwoNotifications(context, inBlackout)
+        //
+        // SPC SWO outlook notification check
+        //
+        notificationUrls += NotificationSwo.send(context, inBlackout)
+        //
+        // NHC
+        //
         if (NotificationPreferences.alertNhcEpacNotification || NotificationPreferences.alertNhcAtlNotification) {
-            notificationUrls += UtilityNotificationNhc.send(
-                    context,
-                    NotificationPreferences.alertNhcEpacNotification,
-                    NotificationPreferences.alertNhcAtlNotification)
+            notificationUrls += NotificationNhc.send(context)
         }
         // send 7day and current conditions notifications for locations
         (1..Location.numLocations).forEach {
             val requestID = ObjectDateTime.currentTimeMillis().toInt()
-            notificationUrls += UtilityNotification.sendNotificationCurrentConditions(context, it.toString(), requestID, requestID + 1)
+            notificationUrls += NotificationLocal.sendCurrentConditionsAnd7Day(context, it.toString(), requestID)
         }
         // check for any text prod notifications
-        UtilityNotificationTextProduct.notifyOnAll(context)
-        if (locationNeedsMcd) notificationUrls += UtilityNotificationSpc.sendMcdLocationNotifications(context)
-        if (locationNeedsSwo) {
-            notificationUrls += UtilityNotificationSpc.sendSwoLocationNotifications(context)
-            notificationUrls += UtilityNotificationSpc.sendSwoD48LocationNotifications(context)
+        NotificationTextProduct.notifyOnAll(context)
+        //
+        // Check for location specific mcd/swo/spcfw/mpd alerts
+        //
+        if (locationNeedsMcd) {
+            notificationUrls += NotificationMcd.sendLocation(context)
         }
-        if (locationNeedsSpcFw) notificationUrls += UtilityNotificationSpcFireWeather.sendSpcFireWeatherD12LocationNotifications(context)
-        if (locationNeedsWpcMpd) notificationUrls += UtilityNotificationWpc.sendMpdLocationNotifications(context)
+        if (locationNeedsSwo) {
+            notificationUrls += NotificationSwo.sendLocation(context)
+            notificationUrls += NotificationSwo.sendD48Location(context)
+        }
+        if (locationNeedsSpcFw) {
+            notificationUrls += NotificationSpcFireWeather.sendD12Location(context)
+        }
+        if (locationNeedsWpcMpd) {
+            notificationUrls += NotificationMpd.sendLocation(context)
+        }
         cancelOldNotifications(notificationUrls)
     }
 
@@ -259,7 +126,19 @@ class BackgroundFetch(val context: Context) {
         Utility.writePref(context, "NOTIF_STR", notificationString)
     }
 
-    fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { getNotifications() }
+    @Synchronized fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
+            if (timer.isRefreshNeeded(context)) {
+                // https://developer.android.com/develop/ui/views/notifications/notification-permission
+                val notificationManagerCompat = NotificationManagerCompat.from(context)
+                val areNotificationsEnabled = notificationManagerCompat.areNotificationsEnabled()
+                UtilityLog.d("WXRADAR", "notifications enabled: $areNotificationsEnabled")
+                if (areNotificationsEnabled || UIPreferences.checkspc) {
+                    UtilityLog.d("WXRADAR", "checking for notifications to send")
+                    getNotifications()
+                }
+                UtilityWidgetDownload.getWidgetData(context)
+            }
+        }
     }
 }

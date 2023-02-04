@@ -28,7 +28,7 @@ import android.speech.RecognizerIntent
 import android.view.View
 import android.widget.Toast
 import joshuatee.wx.settings.Location
-import joshuatee.wx.ui.ObjectPopupMessage
+import joshuatee.wx.ui.PopupMessage
 
 class VoiceCommandActivity : Activity() {
 
@@ -55,7 +55,7 @@ class VoiceCommandActivity : Activity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == requestOk && resultCode == RESULT_OK) {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            ObjectPopupMessage(mainView, thingsYouSaid!![0])
+            PopupMessage(mainView, thingsYouSaid!![0])
             val address = thingsYouSaid[0]
             val gotHit = UtilityVoiceCommand.processCommand(this, address, Location.rid, Location.wfo, Location.state)
             if (!gotHit) {

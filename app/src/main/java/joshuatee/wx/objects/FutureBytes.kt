@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import joshuatee.wx.Extensions.getImage
 import kotlinx.coroutines.*
 
-// , val uiDispatcher: MainCoroutineDispatcher
 class FutureBytes(val context: Context, val url: String, val updateFunc: (Bitmap) -> Unit) {
 
     init {

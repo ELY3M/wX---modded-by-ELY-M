@@ -49,14 +49,11 @@ class DrawView : View {
     /** hold a list of segments that are on the screen  */
     private val segments = mutableListOf<Segment>()
 
-    /** hold a list of segments removed from the screen  */
-    //private final List<Segment> deletedSegments = new mutableListOf<>();
-
     /** keep track to determine if we last added or deleted  */
     private val actions = mutableListOf<Int>()
 
-    //listers to process the correct events
-    //when we change modes, we swap out the listeners
+    // listeners to process the correct events
+    // when we change modes, we swap out the listeners
     private val drawListener = DrawListener()
 
     /** this constructor allows us to use this in an xml layout  */
@@ -82,20 +79,19 @@ class DrawView : View {
      * in our case we need to draw all the lines we've stored
      */
     public override fun onDraw(canvas: Canvas) {
-
-        //draw the line segments
+        // draw the line segments
         for (segment in segments) {
             val points = segment.points
             for (i in 0 until points.lastIndex) {
                 val start = points[i]
                 val end = points[i + 1]
-                //simply draw lines between all points on a segment
+                // simply draw lines between all points on a segment
                 canvas.drawLine(start.x, start.y, end.x, end.y, paint)
             }
         }
-        //either enable or disable the undo button
+        // either enable or disable the undo button
         if (undoButton != null)
-        //if there are actions recorded enable the undo button
+        // if there are actions recorded enable the undo button
             undoButton.isEnabled = actions.size > 0
     }
 
@@ -103,26 +99,26 @@ class DrawView : View {
     private inner class DrawListener : OnTouchListener {
         override fun onTouch(view: View, event: MotionEvent): Boolean {
             if (event.action == MotionEvent.ACTION_DOWN) {
-                //action down is fired when your finger hits the screen
+                // action down is fired when your finger hits the screen
                 if (segments.size == 0 || segments.last().points.size != 0) {
-                    //when you put your finger down, we'll start a new segment
+                    // when you put your finger down, we'll start a new segment
                     segments.add(Segment())
-                    //and we'll indicate that the last action was a draw
+                    // and we'll indicate that the last action was a draw
                     actions.add(ACTION_ADDSEGMENT)
                 }
 
             } else if (event.action == MotionEvent.ACTION_MOVE) {
-                //action move is fired over and over as your finger is
-                //dragged across the screen
-                //here we add a point to the last segment
+                // action move is fired over and over as your finger is
+                // dragged across the screen
+                // here we add a point to the last segment
                 val point = Point(event.x, event.y)
                 segments[segments.lastIndex].points.add(point)
-                invalidate() //time to redraw
+                invalidate() // time to redraw
             }
-            //else if(event.getAction() == MotionEvent.ACTION_UP)
-            //we do nothing, but we could do something
-            //if we wanted to.
-            return true //let the OS know this touch event was handled
+            // else if(event.getAction() == MotionEvent.ACTION_UP)
+            // we do nothing, but we could do something
+            // if we wanted to.
+            return true // let the OS know this touch event was handled
         }
     }
 }
@@ -139,7 +135,7 @@ internal class Point {
 
     constructor()
 
-    //overwrote toString to represent the points coordinates
+    // overwrote toString to represent the points coordinates
     override fun toString() = "$x,$y"
 }
 
@@ -147,7 +143,7 @@ internal class Segment {
 
     val points = mutableListOf<Point>()
 
-    //overwrote toString to printout a list of points for debugging
+    // overwrote toString to printout a list of points for debugging
     override fun toString(): String {
         val buffer = StringBuilder()
         for (p in points) {

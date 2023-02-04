@@ -26,7 +26,6 @@ import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.textview.MaterialTextView
 import joshuatee.wx.Extensions.setPadding
@@ -35,39 +34,34 @@ import joshuatee.wx.audio.UtilityTtsTranslations
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.TextSize
 
-class CardText(context: Context) {
+class CardText(context: Context) : Widget {
 
     private val card = Card(context)
     private val tv = MaterialTextView(context)
     private var padding = UIPreferences.padding
 
     init {
-        tv.setPadding(padding)
-        tv.gravity = Gravity.START
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
-        tv.setTextColor(UIPreferences.backgroundColor)
-        tv.setTextIsSelectable(true)
-        tv.isFocusable = false
-        card.addWidget(tv)
+        with (tv) {
+            setPadding(padding)
+            gravity = Gravity.START
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+            setTextColor(UIPreferences.backgroundColor)
+            setTextIsSelectable(true)
+            isFocusable = false
+            card.addWidget(this)
+        }
     }
 
-    constructor(context: Context, box: VBox) : this(context) {
-        box.addWidget(get())
-    }
-
-    constructor(context: Context, box: VBox, toolbar: Toolbar, toolbarBottom: Toolbar) : this(context) {
-        box.addWidget(get())
+    constructor(context: Context, toolbar: Toolbar, toolbarBottom: Toolbar) : this(context) {
         connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
-    constructor(context: Context, box: VBox, toolbar: Toolbar, toolbarBottom: Toolbar, textValue: String) : this(context) {
-        box.addWidget(get())
+    constructor(context: Context, toolbar: Toolbar, toolbarBottom: Toolbar, textValue: String) : this(context) {
         connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
         text = textValue
     }
 
-    constructor(context: Context, box: VBox, toolbar: Toolbar) : this(context) {
-        box.addWidget(get())
+    constructor(context: Context, toolbar: Toolbar) : this(context) {
         connect { UtilityToolbar.showHide(toolbar) }
     }
 
@@ -76,60 +70,27 @@ class CardText(context: Context) {
         tv.isFocusable = false
     }
 
-    constructor(context: Context, box: VBox, text: String) : this(context) {
-        tv.text = text
-        tv.isFocusable = false
-        box.addWidget(get())
-    }
-
     constructor(context: Context, text: String, textSize: Float) : this(context, text) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
     }
 
-    constructor(context: Context, text: String, textSize: Float, padding: Int) : this(context, text) {
-        tv.text = text
-        tv.setPadding(padding)
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-        tv.isFocusable = false
-    }
-
-    constructor(context: Context, box: LinearLayout, text: String, textSize: Float) : this(
-            context,
-            text,
-            textSize
-    ) {
-        tv.text = text
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-        tv.isFocusable = false
-        box.addView(get())
-    }
-
-    constructor(context: Context, box: LinearLayout, text: String, textSize: TextSize) : this(
-            context,
-            text
-    ) {
+    constructor(context: Context, text: String, textSize: TextSize) : this(context, text) {
         refreshTextSize(textSize)
         tv.isFocusable = false
-        box.addView(get())
     }
 
     // used in SettingsNotificationsActivity
-    constructor(context: Context, box: VBox, text: String, textSize: Float, padding: Int) : this(
-            context,
-            text,
-            textSize
-    ) {
+    constructor(context: Context, text: String, textSize: Float, padding: Int) : this(context, text, textSize) {
         this.padding = padding
         tv.setPadding(padding)
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        box.addWidget(get())
     }
 
-    constructor(context: Context, box: VBox, text: String, textSize: Float, fn: () -> Unit, padding: Int) : this(
+    constructor(context: Context, text: String, textSize: Float, fn: () -> Unit, padding: Int) : this(
             context,
             text,
             textSize
@@ -139,12 +100,11 @@ class CardText(context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        box.addWidget(get())
         connect { fn() }
     }
 
     // used in settings main
-    constructor(context: Context, box: VBox, text: String, textSize: Float, clazz: Class<*>, padding: Int) : this(
+    constructor(context: Context, text: String, textSize: Float, clazz: Class<*>, padding: Int) : this(
             context,
             text
     ) {
@@ -153,7 +113,6 @@ class CardText(context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        box.addWidget(get())
         connect { Route(context, clazz) }
     }
 
@@ -164,34 +123,6 @@ class CardText(context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        connect { Route(context, clazz) }
-    }
-
-    constructor(context: Context, box: LinearLayout, text: String, textSize: Float, clazz: Class<*>) : this(
-            context,
-            text,
-            textSize,
-            clazz
-    ) {
-        tv.text = text
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-        tv.isFocusable = false
-        box.addView(get())
-        connect { Route(context, clazz) }
-    }
-
-    constructor(context: Context, box: LinearLayout, text: String, textSize: Float, clazz: Class<*>, padding: Int) : this(
-            context,
-            text,
-            textSize,
-            clazz
-    ) {
-        this.padding = padding
-        tv.setPadding(padding)
-        tv.text = text
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-        tv.isFocusable = false
-        box.addView(get())
         connect { Route(context, clazz) }
     }
 
@@ -233,7 +164,7 @@ class CardText(context: Context) {
         tv.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
     }
 
-    fun get() = card.get()
+    override fun getView() = card.getView()
 
     var visibility
         get() = card.visibility

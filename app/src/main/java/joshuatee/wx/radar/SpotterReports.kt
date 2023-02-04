@@ -21,11 +21,13 @@
 
 package joshuatee.wx.radar
 
+import joshuatee.wx.objects.LatLon
+
 class SpotterReports internal constructor(
     val firstName: String,
     lastName: String,
-    val lat: String,
-    val lon: String,
+    lat: String,
+    lon: String,
     val narrative: String,
     val uniq: String,
     val type: String,
@@ -34,5 +36,6 @@ class SpotterReports internal constructor(
 ) {
 
     val lastName = lastName.replace("^ ".toRegex(), "")
+    val latLon = LatLon(lat, lon)
 
 }

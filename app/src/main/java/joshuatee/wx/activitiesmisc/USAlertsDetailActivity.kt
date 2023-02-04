@@ -29,7 +29,7 @@ import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
-import joshuatee.wx.ui.ObjectAlertDetail
+import joshuatee.wx.ui.AlertDetail
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
@@ -49,7 +49,7 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private var alertUrl = ""
     private var capAlert = CapAlert()
-    private lateinit var objectAlertDetail: ObjectAlertDetail
+    private lateinit var alertDetail: AlertDetail
     private lateinit var box: VBox
     private lateinit var arguments: Array<String>
 
@@ -57,12 +57,16 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.usalerts_detail)
         arguments = intent.getStringArrayExtra(URL)!!
         alertUrl = arguments[0]
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         box = VBox.fromResource(this)
         Card(this, R.id.cardView)
         objectToolbarBottom.hide(R.id.action_playlist)
         objectToolbarBottom.connect(this)
-        objectAlertDetail = ObjectAlertDetail(this, box)
-        getContent()
+        alertDetail = AlertDetail(this, box)
     }
 
     override fun onRestart() {
@@ -78,9 +82,9 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (capAlert.getClosestRadar() == "") {
             objectToolbarBottom.hideRadar()
         }
-        objectAlertDetail.updateContent(capAlert, alertUrl)
-        setTitle(objectAlertDetail.title, objectAlertDetail.wfoTitle)
-        UtilityTts.conditionalPlay(arguments, 1, applicationContext, Utility.fromHtml(capAlert.text), "alert")
+        alertDetail.updateContent(capAlert, alertUrl)
+        setTitle(alertDetail.title, alertDetail.wfoTitle)
+        UtilityTts.conditionalPlay(arguments, 1, applicationContext, capAlert.text, "alert")
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

@@ -35,7 +35,8 @@ import joshuatee.wx.ui.TouchImage
 
 object UtilityShare {
 
-    fun prepTextForShare(text: String) = text.replace(GlobalVariables.newline, GlobalVariables.newline + GlobalVariables.newline)
+    fun prepTextForShare(text: String): String =
+        text.replace(GlobalVariables.newline, GlobalVariables.newline + GlobalVariables.newline)
 
     fun textAsAttachment(context: Context, subject: String, text: String, filename: String) {
         val dir = File(context.filesDir.toString() + "/shared")
@@ -53,19 +54,22 @@ object UtilityShare {
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         } finally {
-            if (fos != null)
+            if (fos != null) {
                 try {
                     fos.close()
                 } catch (e: Exception) {
                     UtilityLog.handleException(e)
                 }
+            }
         }
         val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val intentBuilder = IntentBuilder(context)
-        intentBuilder.setSubject("$subject $formattedDate")
-        intentBuilder.addEmailTo("")
-        intentBuilder.setText(text)
-        intentBuilder.setStream(imgUri)
+        with (intentBuilder) {
+            setSubject("$subject $formattedDate")
+            addEmailTo("")
+            setText(text)
+            setStream(imgUri)
+        }
         val sharingIntent = intentBuilder.intent
         sharingIntent.data = imgUri
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -75,9 +79,11 @@ object UtilityShare {
     fun text(context: Context, subject: String, text: String) {
         val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val sharingIntent = Intent(Intent.ACTION_SEND)
-        sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, text)
+        with (sharingIntent) {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
@@ -109,11 +115,13 @@ object UtilityShare {
         }
         val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val intentBuilder = IntentBuilder(context)
-        intentBuilder.setSubject("$subject $formattedDate")
-        intentBuilder.addEmailTo("")
-        intentBuilder.setText(text)
-        intentBuilder.setStream(imgUri)
-        intentBuilder.setType("image/png")
+        with (intentBuilder) {
+            setSubject("$subject $formattedDate")
+            addEmailTo("")
+            setText(text)
+            setStream(imgUri)
+            setType("image/png")
+        }
         val sharingIntent = intentBuilder.intent
         sharingIntent.data = imgUri
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

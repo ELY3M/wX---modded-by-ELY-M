@@ -29,16 +29,17 @@ import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.NavDrawer
 import joshuatee.wx.ui.TouchImage
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 
 class SpcCompmapActivity : BaseActivity() {
 
-    private var layerStr = ""
-    private lateinit var image: TouchImage
-    private lateinit var objectNavDrawer: ObjectNavDrawer
+    private var layerString = ""
+    private lateinit var touchImage: TouchImage
+    private lateinit var navDrawer: NavDrawer
     private val paramList = UtilitySpcCompmap.labels.toMutableList()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -48,31 +49,36 @@ class SpcCompmapActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
-        objectNavDrawer = ObjectNavDrawer(this, paramList)
-        objectNavDrawer.connect { _, _, position, _ ->
-            objectNavDrawer.setItemChecked(position)
-            objectNavDrawer.close()
-            val positionStr = UtilitySpcCompmap.urlIndex[position]
-            if (paramList[position].contains("(on)")) {
-                paramList[position] = paramList[position].replace("\\(on\\) ".toRegex(), "")
-                layerStr = layerStr.replace("a$positionStr:", "")
-            } else {
-                paramList[position] = "(on) " + paramList[position]
-                layerStr = layerStr + "a" + positionStr + ":"
-            }
-            getContent()
-        }
-        toolbar.setOnClickListener { objectNavDrawer.open() }
-        image = TouchImage(this, R.id.iv)
-        layerStr = Utility.readPref(this, "SPCCOMPMAP_LAYERSTR", "a7:a19:") // mslp, hpc fronts
+        setupUI()
         setupLayerString()
         getContent()
     }
 
+    private fun setupUI() {
+        touchImage = TouchImage(this, R.id.iv)
+        navDrawer = NavDrawer(this, paramList)
+        navDrawer.connect(::navDrawerSelected)
+        objectToolbar.connectClick { navDrawer.open() }
+    }
+
+    private fun navDrawerSelected(position: Int) {
+        val positionStr = UtilitySpcCompmap.urlIndex[position]
+        if (paramList[position].contains("(on)")) {
+            paramList[position] = paramList[position].replace("\\(on\\) ".toRegex(), "")
+            layerString = layerString.replace("a$positionStr:", "")
+        } else {
+            paramList[position] = "(on) " + paramList[position]
+            layerString = layerString + "a" + positionStr + ":"
+        }
+        getContent()
+        navDrawer.updateLists(paramList)
+    }
+
     private fun setupLayerString() {
-        val items = layerStr.split(":").dropLastWhile { it.isEmpty() }
+        layerString = Utility.readPref(this, "SPCCOMPMAP_LAYERSTR", "a7:a19:") // mslp, hpc fronts
+        val items = layerString.split(":").dropLastWhile { it.isEmpty() }
         items.forEach {
-            selectItemNoGet(it.replace("a", "").toIntOrNull() ?: 0)
+            selectItemNoGet(To.int(it.replace("a", "")))
         }
     }
 
@@ -84,8 +90,8 @@ class SpcCompmapActivity : BaseActivity() {
                 break
             }
         }
-        objectNavDrawer.setItemChecked(position)
-        objectNavDrawer.close()
+        navDrawer.setItemChecked(position)
+        navDrawer.close()
         if (!paramList[position].contains("(on)")) {
             paramList[position] = "(on) " + paramList[position]
         }
@@ -97,38 +103,38 @@ class SpcCompmapActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureBytes2(this, { UtilitySpcCompmap.getImage(this@SpcCompmapActivity, layerStr) }, ::showImage)
+        FutureBytes2(this, { UtilitySpcCompmap.getImage(this, layerString) }, ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {
-        image.set(bitmap)
-        image.firstRun("SPCCOMPMAP")
-        Utility.writePref(this, "SPCCOMPMAP_LAYERSTR", layerStr)
+        touchImage.set(bitmap)
+        touchImage.firstRun("SPCCOMPMAP")
+        Utility.writePref(this, "SPCCOMPMAP_LAYERSTR", layerString)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        objectNavDrawer.syncState()
+        navDrawer.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        objectNavDrawer.onConfigurationChanged(newConfig)
+        navDrawer.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.onOptionsItemSelected(item)) {
+        if (navDrawer.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, "SPC Compmap", image)
+            R.id.action_share -> UtilityShare.bitmap(this, "SPC Compmap", touchImage)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
     override fun onStop() {
-        image.imgSavePosnZoom("SPCCOMPMAP")
+        touchImage.imgSavePosnZoom("SPCCOMPMAP")
         super.onStop()
     }
 }

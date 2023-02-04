@@ -28,22 +28,18 @@ import android.util.TypedValue
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import kotlin.math.sqrt
-import kotlin.math.pow
+import joshuatee.wx.Extensions.swap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
+import kotlin.math.pow
+import kotlin.math.sqrt
+
 
 object UtilityUI {
 
-    // https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
     fun immersiveMode(activity: Activity) {
         if (UIPreferences.radarImmersiveMode) {
-//            activity.window.decorView.systemUiVisibility =
-//                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-//                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or
-//                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-
             WindowCompat.setDecorFitsSystemWindows(activity.window, false)
             WindowInsetsControllerCompat(activity.window,  activity.window.decorView).let { controller ->
                 controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -52,37 +48,29 @@ object UtilityUI {
         }
     }
 
-    fun moveUp(context: Context, prefToken: String, itemList: MutableList<String>, position: Int): String {
-        if (position != 0) {
-            val tmp = itemList[position - 1]
-            itemList[position - 1] = itemList[position]
-            itemList[position] = tmp
+    fun moveUp(context: Context, prefToken: String, itemList: MutableList<String>, pos: Int): String {
+        if (pos != 0) {
+            itemList.swap(pos, pos - 1)
         } else {
-            val tmp = itemList.last()
-            itemList[itemList.lastIndex] = itemList[position]
-            itemList[0] = tmp
-        }
-        var ridFav = ""
-        itemList.indices.forEach { item ->
-            ridFav = ridFav + ":" + itemList[item].split(";").dropLastWhile { it.isEmpty() }[0]
-        }
-        Utility.writePref(context, prefToken, ridFav)
-        return ridFav
-    }
-
-    fun moveDown(context: Context, prefToken: String, itemList: MutableList<String>, position: Int): String {
-        if (position != itemList.lastIndex) {
-            val tmp = itemList[position + 1]
-            itemList[position + 1] = itemList[position]
-            itemList[position] = tmp
-        } else {
-            val tmp = itemList.first()
-            itemList[0] = itemList[position]
-            itemList[itemList.lastIndex] = tmp
+            itemList.swap(0, itemList.lastIndex)
         }
         var value = ""
-        itemList.indices.forEach { item ->
-            value = value + ":" + itemList[item].split(";").dropLastWhile { it.isEmpty() }[0]
+        itemList.forEach { item ->
+            value += ":" + item.split(";").dropLastWhile { it.isEmpty() }[0]
+        }
+        Utility.writePref(context, prefToken, value)
+        return value
+    }
+
+    fun moveDown(context: Context, prefToken: String, itemList: MutableList<String>, pos: Int): String {
+        if (pos != itemList.lastIndex) {
+            itemList.swap(pos, pos + 1)
+        } else {
+            itemList.swap(0, itemList.lastIndex)
+        }
+        var value = ""
+        itemList.forEach { item ->
+            value += ":" + item.split(";").dropLastWhile { it.isEmpty() }[0]
         }
         Utility.writePref(context, prefToken, value)
         return value
@@ -97,16 +85,23 @@ object UtilityUI {
         }
     }
 
+    // only used to size multipane radar
     fun navigationBarHeight(context: Context): Int {
         val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        // assume no nav bar in Android 13
+//        if (Build.VERSION.SDK_INT > 32) {
+//            return 0
+//        }
         return if (resourceId > 0) {
-            context.resources.getDimensionPixelSize(resourceId)
+            // context.resources.getDimensionPixelSize(resourceId)
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, context.resources.getDimensionPixelSize(resourceId).toFloat(), MyApplication.dm).toInt()
         } else {
             0
         }
     }
 
-    fun spToPx(sp: Int, context: Context) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
+    fun spToPx(sp: Int, context: Context): Float =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
 
     fun isTablet(): Boolean {
         val displayMetrics = MyApplication.dm
@@ -116,5 +111,6 @@ object UtilityUI {
         return screenDiagonal >= 7.0
     }
 
-    fun isLandScape(context: Context) = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    fun isLandScape(context: Context): Boolean =
+        context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }

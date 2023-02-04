@@ -21,17 +21,22 @@
 
 package joshuatee.wx.models
 
-import joshuatee.wx.util.Utility
+import android.app.Activity
 import android.content.Context
+import joshuatee.wx.util.Utility
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
+import android.util.SparseArray
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.objects.DisplayData
-import joshuatee.wx.ui.ObjectFab
+import joshuatee.wx.objects.Route
+import joshuatee.wx.ui.Fab
+import joshuatee.wx.util.Group
+import joshuatee.wx.util.To
 
-class ObjectModel(val context: Context, var prefModel: String, numPanesStr: String) {
+class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: String) {
 
     var run = "00Z"
     var time = "00"
@@ -57,14 +62,22 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
     var prefModelIndex = "MODEL_$prefModel${numPanesStr}_INDEX"
     private var modelIndex = 0
     var rtd = RunTimeData()
-    lateinit var displayData: DisplayData
+    val displayData: DisplayData
     var sectors = listOf("")
+    var sectorsLong = listOf("")
     var labels = listOf("")
     var params = listOf("")
     var models = listOf("")
     var ncepRuns = mutableListOf("")
     var times = mutableListOf("")
     var timeIndex = 0
+    // HREF SREF
+    var createDataFn: () -> Unit = {}
+    var shortCodes = arrayOf<Array<String>>()
+    var longCodes = arrayOf<Array<String>>()
+    var groups = SparseArray<Group>()
+    var routeFn: (Context) -> Unit = {}
+    //
     private var defaultModel = ""
     var spinnerTimeValue = 0
     var animRan = false
@@ -72,12 +85,12 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
     var imageLoaded = false
     lateinit var miStatusParam1: MenuItem
     lateinit var miStatusParam2: MenuItem
-    var fab1: ObjectFab? = null
-    var fab2: ObjectFab? = null
+    var fab1: Fab? = null
+    var fab2: Fab? = null
     lateinit var toolbar: Toolbar
     lateinit var getContent: () -> Unit
 
-    fun setUiElements(toolbar: Toolbar, fab1: ObjectFab?, fab2: ObjectFab?, miStatusParam1: MenuItem, miStatusParam2: MenuItem, getContent: () -> Unit) {
+    fun setUiElements(toolbar: Toolbar, fab1: Fab?, fab2: Fab?, miStatusParam1: MenuItem, miStatusParam2: MenuItem, getContent: () -> Unit) {
         this.miStatusParam1 = miStatusParam1
         this.miStatusParam2 = miStatusParam2
         this.fab1 = fab1
@@ -87,7 +100,8 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
     }
 
     init {
-        numPanes = numPanesStr.toIntOrNull() ?: 0
+        numPanes = To.int(numPanesStr)
+        displayData = DisplayData(activity, numPanes, this)
         when (prefModel) {
             "WPCGEFS" -> {
                 modelType = ModelType.WPCGEFS
@@ -116,16 +130,29 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                 startStep = 0
                 endStep = 88
                 stepAmount = 3
+                createDataFn = UtilityModelSpcSrefInterface::createData
+                groups = UtilityModelSpcSrefInterface.groups
+                longCodes = UtilityModelSpcSrefInterface.longCodes
+                shortCodes = UtilityModelSpcSrefInterface.shortCodes
+                params = UtilityModelSpcSrefInterface.params
+                labels = UtilityModelSpcSrefInterface.labels
+                routeFn = { c -> Route.spcSrefDualPane(c) }
             }
             "SPCHREF" -> {
                 modelType = ModelType.SPCHREF
                 models = UtilityModelSpcHrefInterface.models
                 sectors = UtilityModelSpcHrefInterface.sectors
+                sectorsLong = UtilityModelSpcHrefInterface.sectorsLong
                 defaultModel = "HREF"
                 timeTruncate = 2
                 startStep = 1
                 endStep = 49
                 stepAmount = 1
+                createDataFn = UtilityModelSpcHrefInterface::createData
+                groups = UtilityModelSpcHrefInterface.groups
+                longCodes = UtilityModelSpcHrefInterface.longCodes
+                shortCodes = UtilityModelSpcHrefInterface.shortCodes
+                routeFn = { c -> Route.spcHrefDualPane(c) }
             }
             "SPCHRRR" -> {
                 modelType = ModelType.SPCHRRR
@@ -139,41 +166,41 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                 endStep = 14
             }
         }
-        model = Utility.readPref(context, prefModel, defaultModel)
+        model = Utility.readPref(activity, prefModel, defaultModel)
         prefSector = "MODEL_" + prefModel + numPanesStr + "_SECTOR_LAST_USED"
         prefParam = "MODEL_" + prefModel + numPanesStr + "_PARAM_LAST_USED"
         prefParamLabel = "MODEL_" + prefModel + numPanesStr + "_PARAM_LAST_USED_LABEL"
         prefRunPosn = "MODEL_" + prefModel + numPanesStr + "_RUN_POSN"
         modelProvider = "MODEL_$prefModel"
         prefModelIndex = "MODEL_$prefModel${numPanesStr}_INDEX"
-        modelIndex = Utility.readPrefInt(context, prefModelIndex, 0)
+        modelIndex = Utility.readPrefInt(activity, prefModelIndex, 0)
         setParams(modelIndex)
-        sector = Utility.readPref(context, prefSector, sectors[0])
+        sector = Utility.readPref(activity, prefSector, sectors[0])
     }
 
     fun getImage(index: Int, overlayImg: List<String>): Bitmap {
         currentParam = displayData.param[index]
         return when (modelType) {
-            ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.getImage(this, time)
-            ModelType.ESRL -> UtilityModelEsrlInputOutput.getImage(this, time)
-            ModelType.NSSL -> UtilityModelNsslWrfInputOutput.getImage(context, this, time)
-            ModelType.NCEP -> UtilityModelNcepInputOutput.getImage(this, time)
-            ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.getImage(context, this, time)
-            ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.getImage(context, this, time)
-            ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.getImage(context, this, time, overlayImg)
+            ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.getImage(activity,this, time)
+            ModelType.ESRL -> UtilityModelEsrlInputOutput.getImage(activity,this, time)
+            ModelType.NSSL -> UtilityModelNsslWrfInputOutput.getImage(activity, this, time)
+            ModelType.NCEP -> UtilityModelNcepInputOutput.getImage(activity,this, time)
+            ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.getImage(activity, this, time)
+            ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.getImage(activity, this, time)
+            ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.getImage(activity, this, time, overlayImg)
         }
     }
 
     fun getAnimate(index: Int, overlayImg: List<String>): AnimationDrawable {
         currentParam = displayData.param[index]
         return when (modelType) {
-            ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.getAnimation(context, this)
-            ModelType.ESRL -> UtilityModelEsrlInputOutput.getAnimation(context, this)
-            ModelType.NSSL -> UtilityModelNsslWrfInputOutput.getAnimation(context, this)
-            ModelType.NCEP -> UtilityModelNcepInputOutput.getAnimation(context, this)
-            ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.getAnimation(context, this)
-            ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.getAnimation(context, this)
-            ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.getAnimation(context, this, overlayImg)
+            ModelType.WPCGEFS -> UtilityModels.getAnimation(activity, this, UtilityModelWpcGefsInputOutput::getImage)
+            ModelType.ESRL -> UtilityModels.getAnimation(activity, this, UtilityModelEsrlInputOutput::getImage)
+            ModelType.NSSL -> UtilityModels.getAnimation(activity, this, UtilityModelNsslWrfInputOutput::getImage)
+            ModelType.NCEP -> UtilityModels.getAnimation(activity, this, UtilityModelNcepInputOutput::getImage)
+            ModelType.SPCSREF -> UtilityModels.getAnimation(activity, this, UtilityModelSpcSrefInputOutput::getImage)
+            ModelType.SPCHREF -> UtilityModels.getAnimation(activity, this, UtilityModelSpcHrefInputOutput::getImage)
+            ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.getAnimation(activity, this, overlayImg)
         }
     }
 
@@ -189,7 +216,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
 
     fun setParams(selectedItemPosition: Int) {
         modelIndex = selectedItemPosition
-        Utility.writePrefInt(context, prefModelIndex, modelIndex)
+        Utility.writePrefInt(activity, prefModelIndex, modelIndex)
         when (modelType) {
             ModelType.SPCHRRR -> {
                 when (selectedItemPosition) {
@@ -339,10 +366,10 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         numberRuns = 4
                     }
                     0 -> {
-                        model = "ESTOFS"
-                        params = UtilityModelNcepInterface.paramsEstofs
-                        labels = UtilityModelNcepInterface.labelsEstofs
-                        sectors = UtilityModelNcepInterface.sectorsEstofs
+                        model = "STOFS"
+                        params = UtilityModelNcepInterface.paramsStofs
+                        labels = UtilityModelNcepInterface.labelsStofs
+                        sectors = UtilityModelNcepInterface.sectorsStofs
                         startStep = 0
                         endStep = 181
                         stepAmount = 1
@@ -374,7 +401,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         labels = UtilityModelNcepInterface.labelsHref
                         sectors = UtilityModelNcepInterface.sectorsHref
                         startStep = 0
-                        endStep = 36
+                        endStep = 48
                         stepAmount = 1
                         numberRuns = 4
                     }
@@ -451,17 +478,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.ESRL -> {
                 when (selectedItemPosition) {
                     1 -> {
-                        model = "RAP"
-                        params = UtilityModelEsrlInterface.paramsRap
-                        labels = UtilityModelEsrlInterface.labelsRap
-                        sectors = UtilityModelEsrlInterface.sectorsRap
-                        startStep = 0
-                        endStep = 39
-                        stepAmount = 1
-                        format = "%03d"
-                        timeTruncate = 3
-                    }
-                    2 -> {
                         model = "RAP_NCEP"
                         params = UtilityModelEsrlInterface.paramsRap
                         labels = UtilityModelEsrlInterface.labelsRap
@@ -490,26 +506,26 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
     }
 
     fun getTimeLabel() = if (timeIndex > -1 && timeIndex < times.size) {
-            times[timeIndex]
-        } else {
-            ""
-        }
+        times[timeIndex]
+    } else {
+        ""
+    }
 
     fun setTimeIdx(timeIdx: Int) {
         if (timeIdx > -1 && timeIdx < times.size) {
-            this.timeIndex = timeIdx
-            this.time = this.times[timeIdx]
+            timeIndex = timeIdx
+            time = times[timeIdx]
         }
     }
 
     private fun timeIdxIncr() {
-        this.timeIndex += 1
-        this.time = this.times.safeGet(timeIndex)
+        timeIndex += 1
+        time = times.safeGet(timeIndex)
     }
 
     private fun timeIdxDecr() {
-        this.timeIndex -= 1
-        this.time = this.times.safeGet(timeIndex)
+        timeIndex -= 1
+        time = times.safeGet(timeIndex)
     }
 
     fun leftClick() {
@@ -528,5 +544,20 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             timeIdxIncr()
         }
         getContent()
+    }
+
+    fun imgSavePosnZoom() {
+        (0 until numPanes).forEach {
+            displayData.image[it].imgSavePosnZoom(modelProvider + numPanes.toString() + it.toString())
+        }
+        Utility.writePrefInt(activity, prefRunPosn, timeIndex)
+    }
+
+    fun setSubtitleRestoreZoom() {
+        UtilityModels.setSubtitleRestoreZoom(
+                displayData.image,
+                toolbar,
+                "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1]
+        )
     }
 }

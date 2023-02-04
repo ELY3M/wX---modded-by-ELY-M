@@ -19,10 +19,6 @@
 <!-- modded by ELY M. -->
 <resources>
 
-        <string name="use_goes_for_lightning">
-         Use GOES GLM for lightning.
-</string>
-
     <string name="use_nws_api">
          Use the new NWS API for 7 day forecasts. If having issues with 7 day forecasts you can turn this off to use the older method.
 </string>
@@ -93,10 +89,6 @@ Show the media control notification in status bar.
 Allows one to hide or show the voice recognition icon on the main screen. Off by default.
 </string>
 
-   <!-- <string name="help_models_nssl_wrf">
-Interface for the NSSL WRF Forecasts found at http://wrf.nssl.noaa.gov/newsite/
-</string>-->
-
     <string name="obs_ext_zoom_label">
 With observations or wind barbs enabled if you zoom in closely on an obs site the detailed METAR will appear.
          This setting controls how close you need to zoom. Lower numbers will show detailed METAR without having to zoom in as far. Default is 7.
@@ -157,8 +149,6 @@ Show nearby wind barbs for the state the currently selected radar is in.
     <string name="drawtool_size_label">
 Set the line width for the drawing and distance tools available in radar. Default is 3.
 </string>
-
-
 
     <string name="showlegendwidth">
 Set the color legend width in radar. Default is 50.
@@ -222,7 +212,9 @@ Turn on your Spotter Network Location reporting.</string>
     <string name="spotters_label_label">
 Determines whether storm spotter labels are shown along with radar.
 </string>
-
+    <string name="spotters_label_lastname">
+if set to true, The Spotter labels will show Last names only instead of both first and last names.
+</string>
 
     <string name="spotter_size_label">
 Configure size of storm spotters on radar.
@@ -487,9 +479,6 @@ Use Millibars instead of inches.</string>
  Interval for updating current conditions and seven day for selected location. Setting this to 0 will disable updates on the homescreen.
     The only way to trigger updates aside from app restarts would be to touch the status text under the current conditions.
     </string>
-   <!-- <string name="roaming_location_distance_check_np_label">
-If using a roaming location the amount of miles traveled before a location change is checked for.
-    </string>-->
 
     <string name="cc_interval_np_label">
         Check interval for widget data in minutes.
@@ -511,9 +500,6 @@ Controls whether WFO HWO data should be downloaded.</string>
 Choose which location is used for widget data.</string>
     <string name="nexrad_center_label">
 Center the nexrad site in a specific quadrant of the image.</string>
-    <string name="tile_img_resize_label">
-Controls whether the tile images in each tab are scaled down to save memory. Should not be needed on modern hardware.</string>
-
     <string name="alert_switch_text">
 Show NWS weather alerts for this location.</string>
     <string name="alert_cc_switch_text">
@@ -593,16 +579,12 @@ Launch the application directly into the radar interface.</string>
 Control how much elevation is present in the UI. Default is 3.</string>
 
     <string name="homescreen_help_label">
-This activity is used to manage the cards ( if enabled ) on the \"home page\" (the first screen shown when the app is launched).
-By default when this activity is started the delete mode is enabled which means you can tap any entry to delete it. The up and down
-    arrows can be used to reorder entries. The plus floating action button is used to add text products while the map icon is used to add
+This activity is used to manage the cards on the \"home page\" (the first screen shown when the app is launched).
+Tap on any entry to delete or move up and down. The plus floating action button is used to add text products while the map icon is used to add
     image based products. The \"i\" with a circle around it is used to add an AFD product for a specific location that will not change when
     the selected location is changed. The lightning bolt allows you to add additional OpenGL based nexrad radars. You can reset the cards shown to the default with the last entry under the submenu. Please note that any change in this list
     will require an app restart and after restart  you will be in the main settings activity.
 </string>
-
-    <string name="loc1_radar_warnings_label">
-Show warnings and watches in radar mosaic products.</string>
 
     <string name="tts_speed_np_label">
 Controls the speed of text to speech, higher is faster. Default is 10.</string>

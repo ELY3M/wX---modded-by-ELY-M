@@ -30,7 +30,7 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.CardText
-import joshuatee.wx.ui.ObjectPopupMessage
+import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFileManagement
@@ -53,21 +53,28 @@ class SettingsAboutActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.generic_about, false)
         box = VBox.fromResource(this)
         setTitle("About wX", "version " + Utility.getVersion(this))
+        addCards()
+    }
 
-        val faqButton = CardText(this, box, "View FAQ (current app issues listed at top)")
+    private fun addCards() {
+        val faqButton = CardText(this, "View FAQ (current app issues listed at top)")
         faqButton.setTextColor(UIPreferences.textHighlightColor)
         faqButton.connect { Route.web(this, faqUrl) }
 
-        val releaseNotesButton = CardText(this, box, "View release notes")
+        val releaseNotesButton = CardText(this, "View release notes")
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
         releaseNotesButton.connect { Route.web(this, releaseNotesUrl) }
 
-        cardText = CardText(this, box, Utility.showVersion(this))
+        cardText = CardText(this, Utility.showVersion(this))
         val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
         cardDeleteFiles.connect {
-            ObjectPopupMessage(box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
+            PopupMessage(box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         }
-        box.addWidget(cardDeleteFiles.get())
+
+        box.addWidget(faqButton)
+        box.addWidget(releaseNotesButton)
+        box.addWidget(cardText)
+        box.addWidget(cardDeleteFiles)
     }
 
     override fun onRestart() {

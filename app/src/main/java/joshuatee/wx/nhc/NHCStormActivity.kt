@@ -27,12 +27,19 @@ import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
-import joshuatee.wx.notifications.UtilityNotificationNhc
+import joshuatee.wx.notifications.NotificationNhc
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.HBox
+import joshuatee.wx.ui.Image
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityShare
 
 class NhcStormActivity : BaseActivity() {
 
@@ -46,7 +53,7 @@ class NhcStormActivity : BaseActivity() {
 
     companion object { const val URL = "" }
 
-    private lateinit var stormData: ObjectNhcStormDetails
+    private lateinit var stormData: NhcStormDetails
     private var product = ""
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var cardText: CardText
@@ -68,6 +75,7 @@ class NhcStormActivity : BaseActivity() {
     )
     private var textProductUrl = ""
     private var office = "MIA"
+    private var downloadTimer = DownloadTimer("NHC_ACTIVITY_STORM")
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.nhc_storm, menu)
@@ -76,11 +84,13 @@ class NhcStormActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc_storm, false)
-        stormData = intent.getSerializableExtra(URL) as ObjectNhcStormDetails
+        stormData = intent.getSerializableExtra(URL) as NhcStormDetails
         setTitle(stormData.name + " " + stormData.classification, stormData.forTopHeader())
         box = VBox.fromResource(this)
-        boxImage = VBox(this, box.get())
-        boxText = VBox(this, box.get())
+        boxImage = VBox(this)
+        boxText = VBox(this)
+        box.addLayout(boxImage)
+        box.addLayout(boxText)
         product = "MIATCP${stormData.binNumber}"
         textProductUrl = stormData.advisoryNumber
         if (textProductUrl.startsWith("HFO")) {
@@ -98,8 +108,10 @@ class NhcStormActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, ::downloadImages, ::showImages)
-        FutureText(this, textProductUrl, ::showText)
+        if (downloadTimer.isRefreshNeeded(this)) {
+            FutureVoid(this, ::downloadImages, ::showImages)
+            FutureText(this, textProductUrl, ::showText)
+        }
     }
 
     private fun downloadImages() {
@@ -115,25 +127,29 @@ class NhcStormActivity : BaseActivity() {
 
     fun showImages() {
         boxImage.removeChildrenAndLayout()
-        bitmaps.filter { it.width > 100 }.forEachIndexed { index, bitmap ->
-            if (index % imagesPerRow == 0) {
-                boxRows.add(HBox(this, boxImage.get()))
-            }
-            val image = Image(this, boxRows.last(), bitmap, imagesPerRow)
-            image.connect {
-                var url = stormData.baseUrl
-                if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") {
-                    url = url.dropLast(2)
+        bitmaps.forEachIndexed { index, bitmap ->
+            if (bitmap.width > 100) {
+                if (index % imagesPerRow == 0) {
+                    boxRows.add(HBox(this, boxImage.get()))
                 }
-                val fullUrl = url + imageUrls[index]
-                Route.image(this, fullUrl, "")
+                val image = Image(this, bitmap, imagesPerRow)
+                boxRows.last().addWidget(image)
+                image.connect {
+                    var url = stormData.baseUrl
+                    if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") {
+                        url = url.dropLast(2)
+                    }
+                    val fullUrl = url + imageUrls[index]
+                    Route.image(this, fullUrl, "")
+                }
             }
         }
     }
 
     fun showText(s: String) {
         boxText.removeChildrenAndLayout()
-        cardText = CardText(this, boxText, toolbar, toolbarBottom)
+        cardText = CardText(this, toolbar, toolbarBottom)
+        boxText.addWidget(cardText)
         if (s.contains("<")) {
             cardText.text = Utility.fromHtml(s)
         } else {
@@ -149,7 +165,7 @@ class NhcStormActivity : BaseActivity() {
             R.id.action_MIATCMEP2 -> Route.wpcText(this, "${office}TCM${stormData.binNumber}")
             R.id.action_MIATCDEP2 -> Route.wpcText(this, "${office}TCD${stormData.binNumber}")
             R.id.action_MIAPWSEP2 -> Route.wpcText(this, "${office}PWS${stormData.binNumber}")
-            R.id.action_mute_notification -> UtilityNotificationNhc.muteNotification(this, stormData.id)
+            R.id.action_mute_notification -> NotificationNhc.muteNotification(this, stormData.id)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

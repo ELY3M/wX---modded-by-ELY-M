@@ -18,135 +18,183 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-//modded by ELY M.
 
 package joshuatee.wx.settings
 
-import joshuatee.wx.activitiesmisc.LightningActivity
+import android.content.Context
+import android.content.Intent
+import joshuatee.wx.MyApplication
+import joshuatee.wx.activitiesmisc.RtmaActivity
 import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
+import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.radar.RadarMosaicNwsActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
-import joshuatee.wx.spc.*
+import joshuatee.wx.spc.SpcSwoActivity
+import joshuatee.wx.spc.SpcStormReportsActivity
+import joshuatee.wx.spc.SpcMesoActivity
+import joshuatee.wx.spc.SpcSoundingsActivity
+import joshuatee.wx.spc.SpcThunderStormOutlookActivity
+import joshuatee.wx.ui.CardHSImage
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.wpc.WpcImagesActivity
 import joshuatee.wx.wpc.WpcTextProductsActivity
+import java.util.Locale
 
 internal object UtilityHomeScreen {
 
-    val HM_CLASS = mutableMapOf<String, Class<*>>()
-    val HM_CLASS_ARGS = mutableMapOf<String, Array<String>>()
-    val HM_CLASS_ID = mutableMapOf<String, String>()
+    val classes = mutableMapOf<String, Class<*>>()
+    val classArgs = mutableMapOf<String, Array<String>>()
+    val classId = mutableMapOf<String, String>()
     
     val localChoicesText = listOf(
-            "CC: Current Conditions",
-            "CC2: Current Conditions with image",
-            "HAZ: Hazards",
-            "7DAY2: 7 Day Forecast with images",
-            "AFDLOC: Area Forecast Discussion",
-            "HWOLOC: Hazardous Weather Outlook",
-            "VFDLOC: Aviation only Area Forecast Discussion",
-            "HOURLY: Hourly Forecast",
-            "CTOF: Celsius to Fahrenheit table",
-	    "AURORA: Aurora Forecast"
+        "CC: Current Conditions",
+        "CC2: Current Conditions with image",
+        "HAZ: Hazards",
+        "7DAY2: 7 Day Forecast with images",
+        "AFDLOC: Area Forecast Discussion",
+        "HWOLOC: Hazardous Weather Outlook",
+        "VFDLOC: Aviation only Area Forecast Discussion",
+        "HOURLY: Hourly Forecast",
+        "CTOF: Celsius to Fahrenheit table"
     )
+
     val localChoicesImg = listOf(
-            "RADAR: Local NEXRAD Radar",
-            "WEATHERSTORY: Local NWS Weather Story",
-            "WFOWARNINGS: Local NWS Office Warnings"
+        "RADAR: Local NEXRAD Radar",
+        "WEATHERSTORY: Local NWS Weather Story",
+        "WFOWARNINGS: Local NWS Office Warnings",
+        "RTMA_DEW: Real-Time Mesoscale Analysis Dew Point",
+        "RTMA_TEMP: Real-Time Mesoscale Analysis Temperature",
+        "RTMA_WIND: Real-Time Mesoscale Analysis Wind"
     )
-    val localChoicesWeb = listOf(
-            "7DAY: 7 Day Forecast",
-    )
+
+    fun launch(context: Context, homeScreenImageCards: List<CardHSImage>) {
+        homeScreenImageCards.indices.forEach { ii ->
+            val cl = classes[homeScreenImageCards[ii].product]
+            val id = classId[homeScreenImageCards[ii].product]
+            val argsOrig = classArgs[homeScreenImageCards[ii].product]
+            homeScreenImageCards[ii].connect {
+                if (argsOrig != null) {
+                    val args = argsOrig.copyOf(argsOrig.size)
+                    args.indices.forEach { z ->
+                        if (args[z] == "WFO_FOR_SND")
+                            args[z] = UtilityLocation.getNearestSoundingSite(LatLon(Location.x, Location.y))
+                        if (args[z] == "WFO_FOR_GOES")
+                            args[z] = Location.wfo.lowercase(Locale.US)
+                        if (args[z] == "STATE_LOWER")
+                            args[z] = Location.state.lowercase(Locale.US)
+                        if (args[z] == "STATE_UPPER")
+                            args[z] = Location.state
+                        if (args[z] == "RID_FOR_CA")
+                            args[z] = Location.rid
+                    }
+                    if (cl != null && id != null) {
+                        val intent = Intent(MyApplication.appContext, cl)
+                        intent.putExtra(id, args)
+                        context.startActivity(intent)
+                    }
+                } else {
+                    Route.vis(context)
+                }
+            }
+        }
+    }
 
     fun setupMap() {
         (1..3).forEach {
             val number = it.toString()
             val token = "SWOD$number"
-            HM_CLASS[token] = SpcSwoActivity::class.java
-            HM_CLASS_ARGS[token] = arrayOf(number, "")
-            HM_CLASS_ID[token] = SpcSwoActivity.NUMBER
+            classes[token] = SpcSwoActivity::class.java
+            classArgs[token] = arrayOf(number, "")
+            classId[token] = SpcSwoActivity.NUMBER
         }
         (1..6).forEach {
             val number = it.toString()
             val token = "SPCMESO$number"
-            HM_CLASS[token] = SpcMesoActivity::class.java
-            HM_CLASS_ARGS[token] = arrayOf(token, "1", "SPCMESO")
-            HM_CLASS_ID[token] = SpcMesoActivity.INFO
+            classes[token] = SpcMesoActivity::class.java
+            classArgs[token] = arrayOf(token, "1", "SPCMESO")
+            classId[token] = SpcMesoActivity.INFO
         }
 
-        HM_CLASS["RADAR_DUAL_PANE"] = WXGLRadarActivityMultiPane::class.java
-        HM_CLASS_ID["RADAR_DUAL_PANE"] = WXGLRadarActivityMultiPane.RID
-        HM_CLASS_ARGS["RADAR_DUAL_PANE"] = arrayOf("", "", "2")
+        classes["RADAR_DUAL_PANE"] = WXGLRadarActivityMultiPane::class.java
+        classId["RADAR_DUAL_PANE"] = WXGLRadarActivityMultiPane.RID
+        classArgs["RADAR_DUAL_PANE"] = arrayOf("", "", "2")
 
-        HM_CLASS["RADAR_QUAD_PANE"] = WXGLRadarActivityMultiPane::class.java
-        HM_CLASS_ID["RADAR_QUAD_PANE"] = WXGLRadarActivityMultiPane.RID
-        HM_CLASS_ARGS["RADAR_QUAD_PANE"] = arrayOf("", "", "4")
+        classes["RADAR_QUAD_PANE"] = WXGLRadarActivityMultiPane::class.java
+        classId["RADAR_QUAD_PANE"] = WXGLRadarActivityMultiPane.RID
+        classArgs["RADAR_QUAD_PANE"] = arrayOf("", "", "4")
 
-        HM_CLASS["WPCIMG"] = WpcImagesActivity::class.java
-        HM_CLASS_ID["WPCIMG"] = WpcImagesActivity.URL
-        HM_CLASS_ARGS["WPCIMG"] = arrayOf()
+        classes["WPCIMG"] = WpcImagesActivity::class.java
+        classId["WPCIMG"] = WpcImagesActivity.URL
+        classArgs["WPCIMG"] = arrayOf()
 
-        HM_CLASS["WPCTEXT"] = WpcTextProductsActivity::class.java
-        HM_CLASS_ID["WPCTEXT"] = WpcTextProductsActivity.URL
-        HM_CLASS_ARGS["WPCTEXT"] = arrayOf("pmdspd", "Short Range Forecast Discussion")
+        classes["WPCTEXT"] = WpcTextProductsActivity::class.java
+        classId["WPCTEXT"] = WpcTextProductsActivity.URL
+        classArgs["WPCTEXT"] = arrayOf("pmdspd", "Short Range Forecast Discussion")
 
-        HM_CLASS["NHC"] = NhcActivity::class.java
-        HM_CLASS_ID["NHC"] = ""
-        HM_CLASS_ARGS["NHC"] = arrayOf()
+        classes["NHC"] = NhcActivity::class.java
+        classId["NHC"] = ""
+        classArgs["NHC"] = arrayOf()
 
-        HM_CLASS["MODEL_NCEP"] = ModelsGenericActivity::class.java
-        HM_CLASS_ID["MODEL_NCEP"] = ModelsGenericActivity.INFO
-        HM_CLASS_ARGS["MODEL_NCEP"] = arrayOf("1", "NCEP", "NCEP")
+        classes["MODEL_NCEP"] = ModelsGenericActivity::class.java
+        classId["MODEL_NCEP"] = ModelsGenericActivity.INFO
+        classArgs["MODEL_NCEP"] = arrayOf("1", "NCEP", "NCEP")
 
-        HM_CLASS["SPC_TST"] = SpcThunderStormOutlookActivity::class.java
-        HM_CLASS_ARGS["SPC_TST"] = arrayOf("")
-        HM_CLASS_ID["SPC_TST"] = ""
+        classes["SPC_TST"] = SpcThunderStormOutlookActivity::class.java
+        classArgs["SPC_TST"] = arrayOf("")
+        classId["SPC_TST"] = ""
 
-        HM_CLASS["STRPT"] = SpcStormReportsActivity::class.java
-        HM_CLASS_ARGS["STRPT"] = arrayOf("today")
-        HM_CLASS_ID["STRPT"] = SpcStormReportsActivity.DAY
+        classes["STRPT"] = SpcStormReportsActivity::class.java
+        classArgs["STRPT"] = arrayOf("today")
+        classId["STRPT"] = SpcStormReportsActivity.DAY
 
-        if (UIPreferences.lightningUseGoes) {
-            HM_CLASS["LTG"] = GoesActivity::class.java
-            HM_CLASS_ARGS["LTG"] = arrayOf("CONUS", "21")
-            HM_CLASS_ID["LTG"] = GoesActivity.RID
-        } else {
-            HM_CLASS["LTG"] = LightningActivity::class.java
-            HM_CLASS_ARGS["LTG"] = arrayOf("")
-            HM_CLASS_ID["LTG"] = ""
-        }
+        classes["LTG"] = GoesActivity::class.java
+        classArgs["LTG"] = arrayOf("CONUS", "21")
+        classId["LTG"] = GoesActivity.RID
 
-        HM_CLASS["CONUSWV"] = GoesActivity::class.java
-        HM_CLASS_ARGS["CONUSWV"] = arrayOf("CONUS", "09")
-        HM_CLASS_ID["CONUSWV"] = GoesActivity.RID
+        classes["CONUSWV"] = GoesActivity::class.java
+        classArgs["CONUSWV"] = arrayOf("CONUS", "09")
+        classId["CONUSWV"] = GoesActivity.RID
 
-        HM_CLASS["VIS_CONUS"] = GoesActivity::class.java
-        HM_CLASS_ARGS["VIS_CONUS"] = arrayOf("CONUS", "02")
-        HM_CLASS_ID["VIS_CONUS"] = GoesActivity.RID
+        classes["VIS_CONUS"] = GoesActivity::class.java
+        classArgs["VIS_CONUS"] = arrayOf("CONUS", "02")
+        classId["VIS_CONUS"] = GoesActivity.RID
 
-        HM_CLASS["GOES16"] = GoesActivity::class.java
-        HM_CLASS_ARGS["GOES16"] = arrayOf("")
-        HM_CLASS_ID["GOES16"] = GoesActivity.RID
+        classes["GOES16"] = GoesActivity::class.java
+        classArgs["GOES16"] = arrayOf("")
+        classId["GOES16"] = GoesActivity.RID
 
-        HM_CLASS["SND"] = SpcSoundingsActivity::class.java
-        HM_CLASS_ARGS["SND"] = arrayOf("WFO_FOR_SND", "")
-        HM_CLASS_ID["SND"] = SpcSoundingsActivity.URL
+        classes["SND"] = SpcSoundingsActivity::class.java
+        classArgs["SND"] = arrayOf("WFO_FOR_SND", "")
+        classId["SND"] = SpcSoundingsActivity.URL
 
-        HM_CLASS["OBS"] = SpcSoundingsActivity::class.java
-        HM_CLASS_ARGS["OBS"] = arrayOf("STATE_LOWER", "")
-        HM_CLASS_ID["OBS"] = SpcSoundingsActivity.URL
+        classes["OBS"] = SpcSoundingsActivity::class.java
+        classArgs["OBS"] = arrayOf("STATE_LOWER", "")
+        classId["OBS"] = SpcSoundingsActivity.URL
+
+        classes["RTMA_DEW"] = RtmaActivity::class.java
+        classArgs["RTMA_DEW"] = arrayOf("2m_dwpt")
+        classId["RTMA_DEW"] = RtmaActivity.RID
+
+        classes["RTMA_TEMP"] = RtmaActivity::class.java
+        classArgs["RTMA_TEMP"] = arrayOf("2m_temp")
+        classId["RTMA_TEMP"] = RtmaActivity.RID
+
+        classes["RTMA_WIND"] = RtmaActivity::class.java
+        classArgs["RTMA_WIND"] = arrayOf("10m_wnd")
+        classId["RTMA_WIND"] = RtmaActivity.RID
 
         if (UIPreferences.useAwcMosaic) {
-            HM_CLASS["RAD_2KM"] = AwcRadarMosaicActivity::class.java
-            HM_CLASS_ARGS["RAD_2KM"] = arrayOf("")
-            HM_CLASS_ID["RAD_2KM"] = AwcRadarMosaicActivity.URL
+            classes["RAD_2KM"] = AwcRadarMosaicActivity::class.java
+            classArgs["RAD_2KM"] = arrayOf("")
+            classId["RAD_2KM"] = AwcRadarMosaicActivity.URL
         } else {
-            HM_CLASS["RAD_2KM"] = RadarMosaicNwsActivity::class.java
-            HM_CLASS_ARGS["RAD_2KM"] = arrayOf("")
-            HM_CLASS_ID["RAD_2KM"] = RadarMosaicNwsActivity.URL
+            classes["RAD_2KM"] = RadarMosaicNwsActivity::class.java
+            classArgs["RAD_2KM"] = arrayOf("")
+            classId["RAD_2KM"] = RadarMosaicNwsActivity.URL
         }
 
         listOf(
@@ -177,18 +225,18 @@ internal object UtilityHomeScreen {
             "QPF1-5",
             "QPF1-7"
         ).forEach {
-            HM_CLASS[it] = WpcImagesActivity::class.java
-            HM_CLASS_ARGS[it] = arrayOf("HS", it)
-            HM_CLASS_ID[it] = WpcImagesActivity.URL
+            classes[it] = WpcImagesActivity::class.java
+            classArgs[it] = arrayOf("HS", it)
+            classId[it] = WpcImagesActivity.URL
         }
         listOf(
             "USWARN",
             "AKWARN",
             "HIWARN"
         ).forEach {
-            HM_CLASS[it] = USWarningsWithRadarActivity::class.java
-            HM_CLASS_ARGS[it] = arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
-            HM_CLASS_ID[it] = USWarningsWithRadarActivity.URL
+            classes[it] = USWarningsWithRadarActivity::class.java
+            classArgs[it] = arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
+            classId[it] = USWarningsWithRadarActivity.URL
         }
         listOf(
             "NHC2ATL",
@@ -198,9 +246,9 @@ internal object UtilityHomeScreen {
             "NHC2CPAC",
             "NHC5CPAC"
         ).forEach {
-            HM_CLASS[it] = NhcActivity::class.java
-            HM_CLASS_ID[it] = ""
-            HM_CLASS_ARGS[it] = arrayOf()
+            classes[it] = NhcActivity::class.java
+            classId[it] = ""
+            classArgs[it] = arrayOf()
         }
     }
 }

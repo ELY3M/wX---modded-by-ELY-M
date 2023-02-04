@@ -22,16 +22,34 @@
 
 package joshuatee.wx.radar
 
+import joshuatee.wx.objects.LatLon
+
 // I reordered and added all requests for later like add a icon for live camera etc
 // ELY M.
 //#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
 
-class Spotter internal constructor(uniq: String, icon: String, camera: String, reportAt: String, lat: String, lon: String, callsign: String, active: String, moving: String, dir: String, phone: String, email: String, freq: String, note: String, firstName: String, lastName: String) {
+class Spotter internal constructor(
+    unique: String,
+    icon: String,
+    camera: String,
+    reportAt: String,
+    lat: String, 
+    lon: String, 
+    callsign: String, 
+    active: String, 
+    moving: String, 
+    dir: String, 
+    phone: String, 
+    email: String, 
+    freq: String, 
+    note: String, 
+    firstName: String, 
+    lastName: String
+) {    
     var unique = ""
     var camera = ""
     var icon = ""
     var reportAt = ""
-    // FIXME use LatLon instead
     var lat = ""
     var lon = ""
     var callsign = ""
@@ -44,11 +62,13 @@ class Spotter internal constructor(uniq: String, icon: String, camera: String, r
     var note = ""
     var firstName = ""
     var lastName = ""
-
+/*
     var latD = 0.0
         private set
     var lonD = 0.0
         private set
+*/	
+    val latLon = LatLon(lat, lon)
 
     init {
         this.unique = unique
@@ -66,11 +86,9 @@ class Spotter internal constructor(uniq: String, icon: String, camera: String, r
         this.freq = freq
         this.note = note
         this.firstName = firstName
-        //this.lastName = lastName.replace("^ ".toRegex(), "")
 	    this.lastName = lastName
-
-        latD = lat.toDoubleOrNull() ?: 0.0
-        lonD = -1.0 * (lon.toDoubleOrNull() ?: 0.0)
+        //latD = lat.toDoubleOrNull() ?: 0.0
+        //lonD = -1.0 * (lon.toDoubleOrNull() ?: 0.0)
     }
 
     override fun toString() = "$firstName $lastName"

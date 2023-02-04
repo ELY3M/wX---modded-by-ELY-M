@@ -24,8 +24,8 @@ package joshuatee.wx.settings
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.objects.Route
-import joshuatee.wx.radar.WXGLNexrad
-import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
+import joshuatee.wx.radar.NexradUtil
+import joshuatee.wx.radarcolorpalettes.ColorPalette
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.VBox
@@ -38,21 +38,26 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         box = VBox.fromResource(this)
-        WXGLNexrad.colorPaletteProducts.filter { it != 165 }.forEach { product ->
-            val card = CardText(this, box,
-                    WXGLNexrad.productCodeStringToName[product] + ": " + ObjectColorPalette.radarColorPalette[product],
+        setupUI()
+    }
+
+    private fun setupUI() {
+        NexradUtil.colorPaletteProducts.filter { it != 165 }.forEach { product ->
+            val card = CardText(this,
+                    NexradUtil.productCodeStringToName[product] + ": " + ColorPalette.radarColorPalette[product],
                     UIPreferences.textSizeNormal,
                     { Route(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString())) },
                     UIPreferences.paddingSettings
             )
+            box.addWidget(card)
             cardColorPalettes.add(card)
         }
     }
 
     override fun onRestart() {
         cardColorPalettes.indices.forEach {
-            val product = WXGLNexrad.productCodeStringToName[WXGLNexrad.colorPaletteProducts[it]] ?: "Reflectivity"
-            val label = product + ": " + ObjectColorPalette.radarColorPalette[WXGLNexrad.colorPaletteProducts[it]]
+            val product = NexradUtil.productCodeStringToName[NexradUtil.colorPaletteProducts[it]] ?: "Reflectivity"
+            val label = product + ": " + ColorPalette.radarColorPalette[NexradUtil.colorPaletteProducts[it]]
             cardColorPalettes[it].text = label
         }
         super.onRestart()

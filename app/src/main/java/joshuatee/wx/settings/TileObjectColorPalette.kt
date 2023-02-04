@@ -25,8 +25,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.appcompat.widget.Toolbar
-import joshuatee.wx.radar.UtilityUSImgWX
-import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
+import joshuatee.wx.radar.CanvasCreate
+import joshuatee.wx.radarcolorpalettes.ColorPalette
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
@@ -37,30 +37,33 @@ internal class TileObjectColorPalette(
         val toolbar: Toolbar,
         val prefToken: String,
         context: Context,
-        product: String, val builtin: Boolean
+        product: String,
+        val builtin: Boolean
 ) {
 
     internal val bitmapWithText: Bitmap
 
     init {
-        val oldMap: String
-        val bitmap: Bitmap
-        val textColor = if (builtin) Color.YELLOW else Color.WHITE
         val productAsInt = product.toIntOrNull() ?: 94
         if (UtilityFileManagement.internalFileExist(context, "colormap" + product + this.colorMapLabel)) {
             bitmapWithText = UtilityIO.bitmapFromInternalStorage(context, "colormap" + product + this.colorMapLabel)
         } else {
-            oldMap = ObjectColorPalette.radarColorPalette[productAsInt]!!
-            ObjectColorPalette.radarColorPalette[productAsInt] = colorMapLabel
+            val oldMap = ColorPalette.radarColorPalette[productAsInt]!!
+            ColorPalette.radarColorPalette[productAsInt] = colorMapLabel
             try {
-                ObjectColorPalette.loadColorMap(context, productAsInt)
+                ColorPalette.loadColorMap(context, productAsInt)
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
-            bitmap = UtilityUSImgWX.bitmapForColorPalette(context, productAsInt)
+            val bitmap = CanvasCreate.bitmapForColorPalette(context, productAsInt)
+            val textColor = if (builtin) {
+                Color.YELLOW
+            } else {
+                Color.WHITE
+            }
             bitmapWithText = UtilityImg.drawTextToBitmap(context, bitmap, colorMapLabel, textColor)
             UtilityIO.bitmapToInternalStorage(context, bitmapWithText, "colormap$product$colorMapLabel")
-            ObjectColorPalette.radarColorPalette[productAsInt] = oldMap
+            ColorPalette.radarColorPalette[productAsInt] = oldMap
         }
     }
 }

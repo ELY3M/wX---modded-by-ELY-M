@@ -25,9 +25,8 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import joshuatee.wx.objects.TextSize
 
-class CardVerticalText(context: Context, numberOfColumns: Int) {
+class CardVerticalText(context: Context, numberOfColumns: Int) : Widget {
 
     private val card = Card(context)
     private val textViews = mutableListOf<Text>()
@@ -40,17 +39,18 @@ class CardVerticalText(context: Context, numberOfColumns: Int) {
         repeat(numberOfColumns) {
             val hbox = HBox(context)
             hbox.wrap()
-            box.addWidget(hbox.get())
+            box.addLayout(hbox)
             val textView = Text(context)
-            textViews.add(textView)
-            textView.gravity = Gravity.START
-            textView.wrap()
-            hbox.addWidget(textView.get())
+            with (textView) {
+                textViews.add(this)
+                gravity = Gravity.START
+                wrap()
+                hbox.addWidget(this)
+            }
         }
     }
 
-    constructor(context: Context, numberOfColumns: Int, box: VBox, toolbar: Toolbar) : this(context, numberOfColumns) {
-        box.addWidget(get())
+    constructor(context: Context, numberOfColumns: Int, toolbar: Toolbar) : this(context, numberOfColumns) {
         connect { UtilityToolbar.showHide(toolbar) }
     }
 
@@ -58,12 +58,12 @@ class CardVerticalText(context: Context, numberOfColumns: Int) {
         if (list.size == textViews.size) {
             list.indices.forEach {
                 textViews[it].text = list[it]
-                textViews[it].refreshTextSize(TextSize.SMALL)
+                textViews[it].setSizeHourly()
             }
         }
     }
 
-    private fun get() = card.get()
+    override fun getView() = card.getView()
 
     fun connect(fn: View.OnClickListener) {
         card.connect(fn)

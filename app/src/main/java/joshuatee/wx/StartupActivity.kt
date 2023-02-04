@@ -11,9 +11,11 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.intentfilter.androidpermissions.PermissionManager
+import com.intentfilter.androidpermissions.models.DeniedPermissions
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
@@ -24,6 +26,7 @@ import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.settings.UtilityStorePreferences
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
@@ -56,8 +59,9 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         }
 
         //storage permission so we can run checkfiles for custom icons//
-        val storagepermissionManager = PermissionManager.getInstance(this)
-        storagepermissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
+        val storagepermissionManager = PermissionManager.getInstance(applicationContext)
+        storagepermissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), object :
+            PermissionManager.PermissionRequestListener {
             override fun onPermissionGranted() {
 
                 //FUCK YOU GOOGLE!!!!!!  They kept changing their code to "secure" the storage   FUCK YOU
@@ -81,25 +85,39 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
             }
 
-            override fun onPermissionDenied() {
+            override fun onPermissionDenied(deniedPermissions: DeniedPermissions) {
                 UtilityLog.d("wx", "Storage Permissions Denied")
             }
         })
 
-
-        //location permission//  this is needed!
-        val locationpermissionManager = PermissionManager.getInstance(this)
-        locationpermissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), object : PermissionManager.PermissionRequestListener {
+        //location permission
+        val permissionManager = PermissionManager.getInstance(applicationContext)
+        permissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), object :
+            PermissionManager.PermissionRequestListener {
             override fun onPermissionGranted() {
                 UtilityLog.d("wx", "Location Permissions Granted")
+                //getLocation()
             }
 
-            override fun onPermissionDenied() {
+            override fun onPermissionDenied(deniedPermissions: DeniedPermissions) {
                 UtilityLog.d("wx", "Location Permissions Denied")
+
             }
         })
 
+        //background location permission
+        val bgpermissionManager = PermissionManager.getInstance(applicationContext)
+        bgpermissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_BACKGROUND_LOCATION), object :
+            PermissionManager.PermissionRequestListener {
+            override fun onPermissionGranted() {
+                Log.d("owntracker", "Great!!! Got Background Location Perms!. :)")
+            }
 
+            override fun onPermissionDenied(deniedPermissions: DeniedPermissions) {
+                Log.d("owntracker", "Permissions Denied")
+
+            }
+        })
 
         finish()
     }
@@ -162,7 +180,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             Route(this, WX::class.java)
         } else {
             val wfo = Location.wfo
-            val state = Utility.getWfoSiteName(wfo).split(",")[0]
+            val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
             val radarSite = Location.getRid(this, Location.currentLocationStr)
             Route.radar(this, arrayOf(radarSite, state))
         }

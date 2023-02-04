@@ -33,20 +33,22 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
-class ObjectSpinner(context: Context, label: String, pref: String, prefInit: String, strId: Int, spinnerArr: List<String>) {
+class ObjectSpinner(context: Context, label: String, pref: String, prefInit: String, strId: Int, spinnerArr: List<String>) : Widget {
 
     private val card = Card(context)
 
     init {
         val text = Text(context)
-        text.setPadding(UIPreferences.paddingSettings)
-        text.wrap()
-        text.text = label
-        text.gravity = Gravity.CENTER_VERTICAL
-        text.connect { ObjectDialogue(context, context.resources.getString(strId)) }
+        with (text) {
+            setPadding(UIPreferences.paddingSettings)
+            wrap()
+            text.text = label
+            gravity = Gravity.CENTER_VERTICAL
+            connect { ObjectDialogue(context, context.resources.getString(strId)) }
+        }
         val hbox = HBox(context, Gravity.CENTER_VERTICAL)
         hbox.matchParent()
-        hbox.addWidget(text.get())
+        hbox.addWidget(text)
         val spinner = AppCompatSpinner(context)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             setupSpinner(spinner, false)
@@ -80,7 +82,7 @@ class ObjectSpinner(context: Context, label: String, pref: String, prefInit: Str
         card.addLayout(hbox)
     }
 
-    fun get() = card.get()
+    override fun getView() = card.getView()
 
     companion object {
 

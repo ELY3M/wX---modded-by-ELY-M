@@ -28,6 +28,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
@@ -50,7 +51,8 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     protected var showDistanceTool = "false"
     lateinit var toolbar: Toolbar
     lateinit var toolbarBottom: Toolbar
-    protected lateinit var objectToolbarBottom: ObjectToolbar
+    lateinit var objectToolbar: ObjectToolbar
+    lateinit var objectToolbarBottom: ObjectToolbar
 
     protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, iconsEvenlySpaced: Boolean, bottomToolbar: Boolean) {
         setTheme(UIPreferences.themeInt)
@@ -62,8 +64,9 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         toolbarBottom = if (bottomToolbar) {
             findViewById(R.id.toolbar_bottom)
         } else {
-            Toolbar(this as Context)
+            Toolbar(this)
         }
+        objectToolbar = ObjectToolbar(toolbar)
         objectToolbarBottom = ObjectToolbar(toolbarBottom)
         // for model activities need to force false regardless of user setting
         if (menuResId != null && bottomToolbar) {
@@ -106,11 +109,17 @@ abstract class VideoRecordActivity : AppCompatActivity() {
             }
         }
         if (requestCode == CREATE_SCREEN_CAPTURE && resultCode == Activity.RESULT_OK) {
-            val intent = TelecineService.newIntent(applicationContext, resultCode, data)
-            intent.putExtra("show_distance_tool", showDistanceTool)
-            intent.putExtra("show_recording_tools", "true")
-            startService(intent)
-
+            if (Build.VERSION.SDK_INT > 32) {
+                val intent = TelecineService.newIntent(this, 1, Intent())
+                intent.putExtra("show_distance_tool", showDistanceTool)
+                intent.putExtra("show_recording_tools", "false")
+                startService(intent)
+            } else {
+                val intent = TelecineService.newIntent(applicationContext, resultCode, data)
+                intent.putExtra("show_distance_tool", showDistanceTool)
+                intent.putExtra("show_recording_tools", "true")
+                startService(intent)
+            }
             // draw tools only?
 //            val intent = TelecineService.newIntent(this, 1, Intent())
 //            intent.putExtra("show_distance_tool", showDistanceTool)

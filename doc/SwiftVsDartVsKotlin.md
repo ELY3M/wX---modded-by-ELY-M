@@ -223,3 +223,5 @@ TODOS: default variables in methods
 TODOS: class initializers
 TODOS: enum
 TODOS: extensions
+
+kotlin s.trim() (remove whitespace on both ends)

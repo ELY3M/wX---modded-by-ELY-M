@@ -23,13 +23,12 @@ package joshuatee.wx.models
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import java.util.Locale
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 
@@ -43,8 +42,7 @@ internal object UtilityModelSpcHrefInputOutput {
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
-            runData.listRunAdd(mostRecentRun)
-            runData.listRunAddAll(ObjectDateTime.genModelRuns(mostRecentRun, 12, "yyyyMMddHH"))
+            runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRun, 12,"yyyyMMddHH","yyyyMMddHH", 4))
             runData.mostRecentRun = mostRecentRun
             return runData
         }
@@ -68,10 +66,11 @@ internal object UtilityModelSpcHrefInputOutput {
         val hour = om.run.substring(8, 10)
         val products = om.currentParam.split(",")
         val bitmaps = mutableListOf<Bitmap>()
-        val urls = mutableListOf(
-                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/spc_white_1050px.png",
-                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/noaa_overlay_1050px.png"
-        )
+        val urls = mutableListOf<String>()
+//        val urls = mutableListOf(
+//                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/spc_white_1050px.png",
+//                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/noaa_overlay_1050px.png"
+//        )
         products.forEach {
             val url = if (it.contains("cref_members")) {
                 val paramArr = it.split(" ")
@@ -84,26 +83,32 @@ internal object UtilityModelSpcHrefInputOutput {
                         "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + it +
                         "." + sector.lowercase(Locale.US) + ".f0" + time + "00.png"
             }
+            if (it.contains("cref_members")) {
+                val paramArr = it.split(" ")
+                val infoUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
+                        "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" +
+                        paramArr[0] + "." + sector.lowercase(Locale.US) + ".f0" + time +
+                        "00.png"
+                urls.add(infoUrl)
+            }
             urls.add(url)
         }
-        urls.add("${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.png")
+        if (products.contains("cref_ps")) {
+            urls.add("${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.ps.href.png")
+        } else {
+            urls.add("${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.png")
+        }
         urls.forEach {
             bitmaps.add(it.getImage())
         }
         val layers = mutableListOf<Drawable>()
+        val resIds = listOf(R.drawable.spc_white_1050px, R.drawable.noaa_overlay_1050px)
+        resIds.forEach {
+            layers.add(BitmapDrawable(context.resources, UtilityImg.loadBitmap(context, it, false)))
+        }
         bitmaps.forEach {
             layers.add(BitmapDrawable(context.resources, it))
         }
         return UtilityImg.layerDrawableToBitmap(layers)
-    }
-
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
-        }
-        val bitmaps = (om.spinnerTimeValue until om.times.size).map {
-            getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

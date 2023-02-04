@@ -24,6 +24,7 @@ package joshuatee.wx.spc
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
+import joshuatee.wx.Extensions.removeHtml
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
@@ -59,17 +60,9 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
-        box = VBox.fromResource(this)
-        objectToolbarBottom.connect(this)
-        image = if (tabletInLandscape) {
-            box.makeHorizontal()
-            Image(this, box, UtilityImg.getBlankBitmap(), 2)
-        } else {
-            Image(this, box)
-        }
-        cardText = CardText(this, box, toolbar, toolbarBottom)
         arguments = intent.getStringArrayExtra(NUMBER)!!
         number = arguments[0]
+        setupUI()
         objectWatchProduct = when (arguments[1]) {
             "MCD" -> ObjectWatchProduct(PolygonType.MCD, number)
             "WATCH" -> ObjectWatchProduct(PolygonType.WATCH, number)
@@ -77,6 +70,20 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             else -> ObjectWatchProduct(PolygonType.MPD, number)
         }
         getContent()
+    }
+
+    private fun setupUI() {
+        box = VBox.fromResource(this)
+        objectToolbarBottom.connect(this)
+        image = if (tabletInLandscape) {
+            box.makeHorizontal()
+            Image(this, UtilityImg.getBlankBitmap(), 2)
+        } else {
+            Image(this)
+        }
+        cardText = CardText(this, toolbar, toolbarBottom)
+        box.addWidget(image)
+        box.addWidget(cardText)
     }
 
     override fun onRestart() {
@@ -90,7 +97,12 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun updateText() {
-        cardText.text = Utility.fromHtml(objectWatchProduct.text)
+//        cardText.text = Utility.fromHtml(objectWatchProduct.text)
+        cardText.text = objectWatchProduct.text
+                .replace("\n\n", "ABC_123")
+                .replace("\n", "")
+                .replace("ABC_123", "\n")
+                .removeHtml()
         setTitle(objectWatchProduct.title, objectWatchProduct.textForSubtitle)
         UtilityTts.conditionalPlay(arguments, 2, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
@@ -110,8 +122,8 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         when (item.itemId) {
             R.id.action_radar -> Route.radarBySite(this, objectWatchProduct.getClosestRadar())
-            R.id.action_share_all -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap, Utility.fromHtml(objectWatchProduct.text))
-            R.id.action_share_text -> UtilityShare.text(this, objectWatchProduct.title, Utility.fromHtml(objectWatchProduct.text))
+            R.id.action_share_all -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap, objectWatchProduct.text)
+            R.id.action_share_text -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.text)
             R.id.action_share_url -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.textUrl)
             R.id.action_share_image -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap)
             else -> return super.onOptionsItemSelected(item)

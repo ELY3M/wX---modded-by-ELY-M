@@ -48,7 +48,7 @@ object GlobalVariables {
     //const val nwsConusRadar = "https://atlas.niu.edu/analysis/radar/CONUS/usrad_current_b.gif"  //backup url
     //const val nwsConusRadar = "https://www.aviationweather.gov/data/obs/radar/rad_rala_us.gif"
     //testing//
-    const val nwsConusRadar = "https://radar.weather.gov/ridge/lite/CONUS-LARGE_0.gif"
+    const val nwsConusRadar = "https://radar.weather.gov/ridge/standard/CONUS-LARGE_0.gif"
     const val conusImageName = "conus.gif"
 
     //testing
@@ -77,7 +77,7 @@ object GlobalVariables {
     const val pre2Pattern = "<pre>(.*?)</pre>"
 
     const val ICON_ALERT_2 = R.drawable.ic_report_24dp
-    const val ICON_MAP = R.drawable.ic_public_24dp
+    const val ICON_MAP = R.drawable.ic_public_24dp_white
     const val ICON_MPD = R.drawable.ic_brightness_7_24dp
     const val ICON_TORNADO = R.drawable.ic_flash_off_24dp
     const val ICON_MCD = R.drawable.ic_directions_24dp
@@ -108,9 +108,10 @@ object GlobalVariables {
     const val ICON_SKIP_BACK = R.drawable.ic_skip_previous_24dp
     const val ICON_SKIP_FORWARD = R.drawable.ic_skip_next_24dp
 
-    const val DEGREE_SYMBOL = "\u00B0"
+    const val degreeSymbol = "\u00B0"
     const val prefSeparator = " : : :"
     const val WIDGET_FILE_BAK = "BAK"
+    const val preferencesHelpTitle = "Please tap on text for additional help."
 
     //
     // Legacy forecast support

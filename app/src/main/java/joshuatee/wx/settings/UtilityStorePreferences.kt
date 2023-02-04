@@ -33,62 +33,36 @@ object UtilityStorePreferences {
         val value = preferences.getString("ALERT1_NOTIFICATION", null)
         if (value == null) {
             // Define the default location
-            val stateDefault = "Oklahoma"
-            val themeBlueDefault = "BlackAqua"
-            val locNumIntDefault = 1
-            val loc1LabelDefault = "home"
-            val alerts1Default = "true"
-            val alertNotificationDefault = "false"
-            val alertCcNotificationDefault = "false"
-            val alert7Day1NotificationDefault = "false"
-            val alertNotificationSoundDefault = "false"
-            val alertNotificationRadarDefault = "false"
-            val alertNotificationIntervalDefault = 12
-            val alertBlackoutDefault = "false"
-            val alertBlackoutAmDefault = 7
-            val alertBlackoutPmDefault = 22
-            val alertBlackoutTornadoDefault = "true"
-            val current1Default = "true"
-            val county1Default = "Cleveland"
-            val zone1Default = "OKC027"
-            val stateCodeDefault = "OK"
-            val loc1XDefault = "35.231"
-            val loc1YDefault = "-97.451"
-            val loc1NwsDefault = "OUN"
-            val wfoDefault = "OUN"
-            val radarSiteDefault = "TLX"
-            val nws1DefaultState = "OK"
-            val nwsRadarBgBlack = "true"
             editor.putString("ALERT_ONLYONCE", "true")
             editor.putString("ALERT_AUTOCANCEL", "true")
             editor.putString("LOCK_TOOLBARS", "true")
             editor.putString("RADAR_SHOW_COUNTY", "true")
-            editor.putString("ALERT1_NOTIFICATION", alertNotificationDefault)
-            editor.putString("ALERT_CC1_NOTIFICATION", alertCcNotificationDefault)
-            editor.putString("ALERT_7DAY_1_NOTIFICATION", alert7Day1NotificationDefault)
-            editor.putString("ALERT_NOTIFICATION_RADAR1", alertNotificationRadarDefault)
-            editor.putString("ALERT_NOTIFICATION_SOUND1", alertNotificationSoundDefault)
-            editor.putInt("ALERT_NOTIFICATION_INTERVAL", alertNotificationIntervalDefault)
-            editor.putString("ALERT_BLACKOUT", alertBlackoutDefault)
-            editor.putInt("ALERT_BLACKOUT_AM", alertBlackoutAmDefault)
-            editor.putInt("ALERT_BLACKOUT_PM", alertBlackoutPmDefault)
-            editor.putString("ALERT_BLACKOUT_TORNADO", alertBlackoutTornadoDefault)
-            editor.putInt("LOC_NUM_INT", locNumIntDefault)
-            editor.putString("LOC1_X", loc1XDefault)
-            editor.putString("LOC1_Y", loc1YDefault)
-            editor.putString("LOC1_NWS", loc1NwsDefault)
-            editor.putString("LOC1_LABEL", loc1LabelDefault)
-            editor.putString("COUNTY1", county1Default)
-            editor.putString("ZONE1", zone1Default)
-            editor.putString("ALERTS1", alerts1Default)
-            editor.putString("CURRENT1", current1Default)
-            editor.putString("STATE", stateDefault)
-            editor.putString("STATE_CODE", stateCodeDefault)
-            editor.putString("NWS1", wfoDefault)
-            editor.putString("RID1", radarSiteDefault)
-            editor.putString("NWS1_STATE", nws1DefaultState)
-            editor.putString("THEME_BLUE", themeBlueDefault)
-            editor.putString("NWS_RADAR_BG_BLACK", nwsRadarBgBlack)
+            editor.putString("ALERT1_NOTIFICATION", "false")
+            editor.putString("ALERT_CC1_NOTIFICATION", "false")
+            editor.putString("ALERT_7DAY_1_NOTIFICATION", "false")
+            editor.putString("ALERT_NOTIFICATION_RADAR1", "false")
+            editor.putString("ALERT_NOTIFICATION_SOUND1", "false")
+            editor.putInt("ALERT_NOTIFICATION_INTERVAL", 12)
+            editor.putString("ALERT_BLACKOUT", "false")
+            editor.putInt("ALERT_BLACKOUT_AM", 7)
+            editor.putInt("ALERT_BLACKOUT_PM", 22)
+            editor.putString("ALERT_BLACKOUT_TORNADO", "true")
+            editor.putInt("LOC_NUM_INT", 1)
+            editor.putString("LOC1_X", "35.231")
+            editor.putString("LOC1_Y", "-97.451")
+            editor.putString("LOC1_NWS", "OUN")
+            editor.putString("LOC1_LABEL", "home")
+            editor.putString("COUNTY1", "Cleveland")
+            editor.putString("ZONE1", "OKC027") // TODO FIXME not used by still managed in Location code
+            editor.putString("ALERTS1", "true") // TODO FIXME does not do anything anymore?
+            editor.putString("CURRENT1", "true") // TODO FIXME does not do anything anymore?
+            editor.putString("STATE", "Oklahoma")
+            editor.putString("STATE_CODE", "OK")
+            editor.putString("NWS1", "OUN")
+            editor.putString("RID1", "TLX")
+            editor.putString("NWS1_STATE", "OK")
+            editor.putString("THEME_BLUE", "BlackAqua")
+            editor.putString("NWS_RADAR_BG_BLACK", "true")
             // NCEP default to GFS
             editor.putInt("MODEL_NCEP1_INDEX", 4)
             editor.putInt("MODEL_NCEP2_INDEX", 4)

@@ -9,7 +9,7 @@ class ViewPagerAdapter(activity: FragmentActivity?) : FragmentStateAdapter(activ
 
     val tabTitles = arrayOf("LOCAL", "SPC", "MISC")
 
-    override fun getItemCount() = if (UIPreferences.simpleMode || UIPreferences.navDrawerMainScreen) {
+    override fun getItemCount(): Int = if (UIPreferences.simpleMode || UIPreferences.navDrawerMainScreen) {
         1
     } else {
         tabTitles.size

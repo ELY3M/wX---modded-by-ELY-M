@@ -1,25 +1,119 @@
 
-# wX ChangeLog
+# wX ChangeLog for users
 
 Service outages with NWS data will be posted in the [FAQ](https://gitlab.com/joshua.tee/wxl23/-/tree/master/doc/FAQ.md) as I become aware of them.
 FAQ can be accessed via Settings -> About
 
 Please also review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md) impacting all or some users.
 
-## 55681 2022_08_27 (BETA)
-This beta is the 3rd beta release that has been impacted by a significant re-write (ie refactor) of many parts of the program.
+## 55782 (BETA) 2023_01_23
+* [FIX] SPC Storm reports: minor change in date picker accent color used in darker themes
+* [FIX] crash in RTMA when network is down
+* [ADD] NCEP Models (MISC Tab, upper left) has replaced model "ESTOFS" with "STOFS" (v1.1.1) per https://mag.ncep.noaa.gov/version_updates.php
+
+## 55780 (BETA) 2023_01_16
+* [ADD] Add more verbiage to tab label edit area in Settings -> UI
+* [ADD] Tap on label "Tab 1 Label" (and 2,3) in Settings -> UI now shows popup with brief description.
+* [ADD] In the location editor change the label from "Conditions" to "Current Conditions" to add clarity on what this notifications for.
+  As an FYI, you can tap on the textual label for all notifications for a greater description.
+* [ADD] In the location editor change the label from "Radar" to "Radar image with alert" to add clarity on what this notifications for.
+* [ADD] In the location editor change the label from "Sound" to "Play sound for alert notification" to add clarity on what this notifications for.
+* [ADD] Weather conditions notifications will fall back to 2nd closest observation point if primary obs point is not updating in the past 2 hours (similar to main screen)
+* [FIX] date picker in SPC Storm reports had incorrect color when using dark themes
+* [FIX] Settings -> HomeScreen , if one taps top back arrow after making changes it now restarts app properly similar to tapping bottom arrow
+
+## 55758 2023_01_04
+* [ADD] Text widgets AFD/HWO/National Text now match formatting as seen within the main app
+* [FIX] SPC Storm report share was not including full detail
+* [FIX] Settings -> Playlist: buttons were not aligned correctly
+* [FIX] Nexrad - crash if enabling a geometry such as county lines
+* [REF] DownloadText - remove QPFPFD, product is no longer offered and was removed from WpcText some time ago
+* [FIX] Local text product viewer navigation drawer background color was not consistent with rest of app
+* [ADD] RTMA_TEMP (Real-Time Mesoscale Analysis) as a Homescreen option in the generic images menu
+
+        more details on the product: [https://nws.weather.gov/products/viewItem.php?selrow=539](https://nws.weather.gov/products/viewItem.php?selrow=539)
+
+        graphics are from here: [https://mag.ncep.noaa.gov/observation-type-area.php](https://mag.ncep.noaa.gov/observation-type-area.php)
+* [ADD] RTMA accessible via Observations (main submenu)
+* [FIX] TVS was not working
+* [ADD] Hourly using old API no longer shows the date, just weekday/hour similar to Hourly with new API (uses ObjectDateTime.translateTimeForHourly)
+* [FIX] ESRL RAP model was not working correctly
+* [FIX] NSSL WRF (and other NSSL models) run only once per day, not twice
+* [ADD] NCEP HREF now goes out to 48 hours (was 36)
+* [ADD] color and spacing changes for navigation drawer in SPC Meso, SPC SREF, WPC Images, National Text
+* [ADD] Dawn/Dusk to sunrise card on main screen
+* [ADD] SPC HREF now has image layers stored in the application bundle so response should be slightly better with less data downloaded.
+* [ADD] bring back SPC HREF "Reflectivity: stamps" including proper background
+* [ADD] remove option in Settings->UI, "GOES GLM for lightning (requires restart)". Lightning Maps is being phased out and is no longer an option.
+* [ADD] back SPC HREF reflectivity under heading "member viewer" including an additional layer that shows the colormap and time
+* [FIX] from the national text product viewer remove the following which retired some time ago: "pmdsa: South American Synoptic Discussion"
+* [ADD] SPC Fire Sum, SPC Swo Sum/Day, NHC, and WPC Rainfall Sum - avoid unnecessary downloads when switching back from other apps or power on/off
+* [FIX] NWS radar mosaic sector was not being properly detected for locations in scope of sector SOUTHMISSVLY
+
+## 55721 2022_10_01
+This releases has been impacted by a significant re-write (ie refactor) of many parts of the program.
 This was necessary to make the code base easier to understand/maintain and be more consistent with newer versions such as the
 desktop versions. As a result, in some areas the program should appear faster and be efficient with respect data data download.
 This especially holds true with Nexrad radar and the "Severe Dashboard". In addition, limitations present for many years have been
 fixed. As with any major work, new bugs might have been introduced.
 Please email me if something seems not right.
+
+For users who have upgraded to Android 13 (API33) or have a fresh install of wX onto a device with Android 13 you'll need to understand
+some potential changes. First, if your widgets stop working please just remove and re-add them. I have researched, not sure why that would be
+needed. Second, despite what I have read about permission to send notifications being carried over, if you are using notifications you should make sure
+wX is allowed to send notifications either via "App Info" in Android or just navigating to Settings->Notifications. Upon entry to that screen if
+Notifications are not allowed you can allow them. As mentioned in the "upcoming changes document" for various reasons widgets and notifications
+are at the bottom of the "service priority" list.
+
+Further, the settings "Prevent accidental exit" (where you need to hit the back button twice from the main screen) in Settings->UI will be retired
+at some point next year due to Android's long term strategy for the back button outline [here](https://developer.android.com/guide/navigation/predictive-back-gesture)
+
+* [FIX] NHCStorm images 3,4 don't work in ImageViewer (filter causes some images to be skipped)
+* [FIX] In the main nexrad viewer (lightning icon), if you access settings->radar->colors and change the nexrad background the change will be immediate
+* [FIX] In multipane radar if animate and then long press to switch radar site, animation keeps playing old site after switch
+* [FIX] Hourly will remain a small text size regardless of text size chosen in settings->UI (which can lead to an unusable display of text if too large)
+* [FIX] attempted fix for quad pane nexrad frame sizing issue
+* [ADD] Settings -> Playlist, if user adds a product that is already there, have the popup notification close after 3 sec instead of requiring user to close
+* [ADD] Add location screen, save status popup now closes automatically after 3 seconds
+* [ADD] bring back prior back button handling in web based activities
+* [FIX] if multiple nexrad on homescreen in some situations radar label in top current conditions card was not fully correct
+* [FIX] nexrad - not all storm tracks were being drawn if enabled
+* [FIX] model animations now start from current time position (not start) till end
+* [FIX] seven day notification and legacy cc/7day widget has errant newlines in 7 day listing
+* [FIX] legacy widget timestamp had dark text making it mostly invisible
+* [FIX] legacy widget icons are not the same color (white vs off-white)
+* [FIX] update NWS Radar Mosaic URL in response to [PNS22-09](https://www.weather.gov/media/notification/pdf2/pns22-09_ridge_ii_public_local_standard_radar_pages_aaa.pdf)
+* [ADD] The location based "7day" notification will now open a normal forecast view instead of a plain text 7 day listing
+* [FIX] SPC Meso multipane not saving x/y/zoom on exit
+* [FIX] nexrad invoked from alert will not keep site when jump to multipane
+* [FIX] SPC Compmap navigation drawer on/off for each parameter was not showing correctly
+* [FIX] SPC Meso - layers topo and county were not working together
+* [ADD] SPC Meso - add more layers: Observations/Population (Topo and Population can't be shown together)
+* [ADD] Settings -> UI "Navigation Drawer Configuration" will show regardless of whether or not drawer is enabled
+* [ADD] Settings->Main, update Notifications label if App not allowed to send
+* [FIX] SPC convective outlook notif icon was displaying as all black
+* [FIX] SPC MPD / Watch notification action was not working
+* [ADD] Add Location - add label that if notifications are blocked will be displayed. If on Android 13 you can tap on it to open the perm dialogue
+* [FIX] Nexrad radar - if map is shown and then app is switched or screen is turned off, when returning to nexrad, hide the map
+* [ADD] If running Android 13, screen recording is regrettably no longer working. Updated Nexrad to only show drawing tools. Updated all other image based activities
+  to offer normal image sharing. Updated FAQ and Upcoming Changes
+* [FIX] In Settings->Homescreen remove the "Web" option from the menu. This is meant as a workaround when NWS 7 day is not working. However, the web widget appears to no longer be working either.
+* [ADD] [Target Android 13](https://developer.android.com/google/play/requirements/target-sdk)
+* [ADD] recent changes in how polygon data is being downloaded and cached no longer require the background job to fetch it
+* [ADD] DownloadTimer set warnings to 3 min instead of based off a variable that doesn't necessarily relate to it
+* [ADD] In activity to add or edit location, place cursor at end of text in label field
+* [ADD] Settings -> location add # of locations in title
+* [FIX] settings -> location truncates actual stored lat / lon too much - add a few more characters
+* [ADD] Settings->Radar has been split it two activities. The line/marker (tvs/hail) size settings can now be accessed
+  via a second activity accessible from the "Line / Marker sizes" button 3rd from the top
+* [FIX] SPC SREF - when using left/right button to move through model images, image was download twice instead of just once
+* [ADD] In US Alerts submenu, show Alaska instead of AK (and same for HI)
+* [FIX] In nexrad widget, draw county line below state-line
 * [ADD] long press radar status message shows nearest radar to where long press occurred - not radar currently selected
 * [FIX] handle RSM (radar status message) better for terminal radars
 * [FIX] SPC SWO Day X State graphic - don't like AK/HI in menu as SPC only covers CONUS
 * [FIX] Revert this change as it breaks the radar on the main screen when "center on location" is enabled: location dot on main screen will continue to be dot with circle around it (for now)
 * [ADD] Nexrad radar widget now respects geographic line size setting as used for the main program Nexrad
-
-## 55679 2022_08_25 (BETA)
 * [ADD] Nexrad multipane, if you tap on the text in the upper left that lists radar site/product it will take you to severe dashboard (similar to single pane)
 * [ADD] Nexrad multipane, if warnings(tor/ffw/tst) enabled, show in top toolbar similar to single pane
 * [FIX] tap on any NHC notification would cause a crash (user reported)
@@ -57,8 +151,6 @@ Please email me if something seems not right.
 * [FIX] if user chose to not use main screen radar floating action button and also chose to use a navigation drawer, the radar FAB would not show
 * [FIX] adhoc forecast via long press in nexrad was not showing correct sunrise/sunset data
 * [FIX] If audio was previously paused, going into another activity with text to speech controls shows text "stop button" instead of icon
-
-## 55655 2022_08_11 (BETA)
 * [ADD] Material3 "You" partial implementation for all themes
 * [FIX] TouchImageView2.java, add try/catch in onDraw to handle images that are to large. Show nothing but don't crash
 * [FIX] WPC Rainfall discussion, hide radar icon as it serves no purpose in this activity
@@ -90,11 +182,7 @@ Please email me if something seems not right.
 * [ADD] Settings->Notification: alphabetize with logical groups
 * [ADD] Settings: alphabetize
 * [FIX] In usalerts for sps (special weather statement) and other alerts - don't show radar button if no polygon data is present
-
-## 55627 2022_07_20 (BETA)
 * [FIX] Nexrad: if non-default option to use hi-res State lines data, not all lines were showing
-
-## 55625 2022_07_20 (BETA)
 * [ADD] In GOES, AWC, and NWS radar mosaic if you touch blank space in the top toolbar or the label to the left it will open the navigation drawer
 * [FIX] remove deprecated option in settings->widgets (show warnings in radar mosaic)
 * [ADD] minor alphabetization in settings->widgets
@@ -104,8 +192,6 @@ Please email me if something seems not right.
 * [FIX] new NWS Radar Mosaic - remove menu with products that aren't available
 * [FIX] NHC now shows complete summary information and text products for Central Pacific "CP" hurricanes
 * [ADD] Radar settings - mostly alphabetized now with common options listed at top
-
-## 55615 2022_07_16 (BETA)
 * [REF] Refactor some parts of the code base to make it more maintainable - you should not notice anything
 * [ADD] (main screen tabs) Switch to ViewPager2 and use FragmentStateAdapter since Google deprecated ViewPager - you should not notice anything
 * [ADD] Option to use new NWS Radar Mosaic (restart required). This is a temporary option as it appears likely the default mosaic will switch to NWS (away from AWC) later this year. Note the behavior may change slightly as the feature is refined
@@ -114,8 +200,6 @@ Please email me if something seems not right.
 * [ADD] NWS Radar Mosaic - play icon toggles to stop and add ability to stop animation via button
 * [ADD] Nexrad radar long press - shorten verbiage
 * [FIX] partial - For NHC central pacific storms (images show but not text product - work in progress)
-
-## 55607 2022_07_09 (BETA)
 * [FIX] NHC notifications will now alert for ATL or EPAC depending on which is selected
 * [ADD] In the US Alert viewer, show warning types and states in sorted manner
 * [ADD] Settings -> UI alphabetize
@@ -124,8 +208,6 @@ Please email me if something seems not right.
 * [ADD] remove option "Show VR button on main screen" VR_BUTTON
 * [ADD] Target the latest version of Android (this is periodically required to be compliant with Google Play Store)
 * [ADD] Upgrade software component required by wX (okhttp)
-
-## 55603 2022_06_29 (BETA)
 * [FIX] terminal radar TICH (Wichita, KS) was not properly coded (was TICT), it is now available for use
 * [FIX] prevent nexrad radar from showing stale SWO data (earlier fix was not good)
 * [ADD] SPC Meso additions

@@ -217,13 +217,14 @@ object UtilityCanada {
         return newName
     }
 
-    fun getProvidenceHtml(prov: String) = (GlobalVariables.canadaEcSitePrefix + "/forecast/canada/index_e.html?id=$prov").getHtmlSep()
+    fun getProvidenceHtml(prov: String): String =
+            (GlobalVariables.canadaEcSitePrefix + "/forecast/canada/index_e.html?id=$prov").getHtmlWithNewLine()
 
     fun getLocationHtml(location: LatLon): String {
         val prov = location.latString.split(":").dropLastWhile { it.isEmpty() }
         val id = location.lonString.split(":").dropLastWhile { it.isEmpty() }
         return if (prov.size > 1 && id.isNotEmpty()) {
-            (GlobalVariables.canadaEcSitePrefix + "/rss/city/" + prov[1].lowercase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
+            (GlobalVariables.canadaEcSitePrefix + "/rss/city/" + prov[1].lowercase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlWithNewLine()
         } else {
             ""
         }
@@ -245,7 +246,7 @@ object UtilityCanada {
         val url = (GlobalVariables.canadaEcSitePrefix + "/city/pages/"
                 + x.split(":").dropLastWhile { it.isEmpty() }[1].lowercase(Locale.US) + "-"
                 + y.split(":").dropLastWhile { it.isEmpty() }[0] + "_metric_e.html")
-        val html = url.getHtmlSep()
+        val html = url.getHtmlWithNewLine()
         return html.parse("<a href=./radar/index_e.html.id=([a-z]{3})..*?>Weather Radar</a>").uppercase(Locale.US)
     }
 
@@ -257,13 +258,13 @@ object UtilityCanada {
         val rh = html.parse("<b>Temperature:</b> .*?&deg;C <br/>.*?<b>Humidity:</b> (.*?) %<br/>.*?<b>Dewpoint:</b> .*?&deg;C <br/>")
         val dew = html.parse("<b>Temperature:</b> .*?&deg;C <br/>.*?<b>Humidity:</b> .*? %<br/>.*?<b>Dewpoint:</b> (.*?)&deg;C <br/>")
         val wind = Utility.fromHtml(html.parse("<b>Wind:</b> (.*?)<br/>")).replace(GlobalVariables.newline, "")
-        return temp + GlobalVariables.DEGREE_SYMBOL + " / " + dew + GlobalVariables.DEGREE_SYMBOL + " (" + rh + "%) - " + pressure + "kPa - " + wind + " - " + vis + " - " + sum + " "
+        return temp + GlobalVariables.degreeSymbol + " / " + dew + GlobalVariables.degreeSymbol + " (" + rh + "%) - " + pressure + "kPa - " + wind + " - " + vis + " - " + sum + " "
     }
 
     fun get7Day(html: String): String {
-        val stringList = html.parseColumn("<category term=\"Weather Forecasts\"/><br> <summary type=\"html\">(.*?\\.) Forecast.*?</summary>")
+        val stringList = html.parseColumnAcrossLines("<category term=\"Weather Forecasts\"/>. <summary type=\"html\">(.*?\\.) Forecast.*?</summary>")
         var sevenDayForecast = ""
-        val resultListDay = html.parseColumn("<title>(.*?)</title>")
+        val resultListDay = html.parseColumnAcrossLines("<title>(.*?)</title>")
         var j = 0
         for (i in 2 until resultListDay.size) {
             if (resultListDay[i].contains("Current Conditions")) {

@@ -75,7 +75,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             STI.pref = RadarPreferences.sti
             TVS.pref = RadarPreferences.tvs
             HI.pref = RadarPreferences.hi
-	    HAIL_LABELS.pref = RadarPreferences.hailSizeLabel
+	        HAIL_LABELS.pref = RadarPreferences.hailSizeLabel
             OBS.pref = RadarPreferences.obs
             SWO.pref = RadarPreferences.swo
             USERPOINTS.pref = RadarPreferences.userPoints

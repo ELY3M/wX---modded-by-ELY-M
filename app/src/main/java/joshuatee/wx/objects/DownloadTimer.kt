@@ -23,25 +23,29 @@
 package joshuatee.wx.objects
 
 import android.content.Context
-import joshuatee.wx.util.Utility
+import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.util.UtilityLog
 
 //
 // Used as an object to determine when data should be downloaded again
 // particularly in nexrad radar
 //
 
-class DownloadTimer(private val identifier: String) {
+class DownloadTimer(private val identifier: String, private var refreshDataInMinutes: Int = 3) {
 
     private var initialized = false
     private var lastRefresh = 0.toLong()
 
-    fun isRefreshNeeded(context: Context): Boolean {
-        var refreshDataInMinutes: Int =
-            maxOf(Utility.readPrefInt(context, "RADAR_REFRESH_INTERVAL", 3), 6)
-        if (identifier.contains("WARNINGS"))
-            refreshDataInMinutes = Utility.readPrefInt(context, "RADAR_REFRESH_INTERVAL", 3)
-        if (identifier == "SEVERE_DASHBOARD_ACTIVITY") {
+    fun isRefreshNeeded(@Suppress("UNUSED_PARAMETER") context: Context): Boolean {
+        //var refreshDataInMinutes: Int = maxOf(Utility.readPrefInt(context, "RADAR_REFRESH_INTERVAL", 3), 6)
+        if (identifier.contains("WARNINGS")) {
             refreshDataInMinutes = 3
+        }
+        if (identifier == "NOTIFICATIONS_MAIN") {
+            refreshDataInMinutes = 1
+        }
+        if (identifier == "HOMESCREEN") {
+            refreshDataInMinutes = UIPreferences.refreshLocMin
         }
         //elys mod --- 5 mins for now for SN Auto Report
         if (identifier == "SpotterNetworkPositionReport") {
@@ -56,7 +60,7 @@ class DownloadTimer(private val identifier: String) {
             initialized = true
             lastRefresh = currentTime / 1000
         }
-//        UtilityLog.d("wxWARN2_DEBUG", "TIMER: $identifier $refreshNeeded")
+        UtilityLog.d("WXRADAR", "TIMER: $identifier $refreshNeeded min: $refreshDataInMinutes")
         return refreshNeeded
     }
 

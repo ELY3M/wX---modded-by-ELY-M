@@ -9,31 +9,26 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.LinearLayout
-
+import androidx.core.view.get
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.Card
-import joshuatee.wx.ui.ObjectSwitch
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 
 
 class SettingsSpotterNetwork : BaseActivity() {
 
-
+    private lateinit var box: VBox
     lateinit var sn_key_edit: EditText
-
 
     var TAG = "spotternetworksettings"
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_spotternetwork, null, false)
-        Card(this, R.id.cv_sn_label)
+        setTitle("Spotter Network Settings", "Add your SN Key for Location Auto Report")
+        box = VBox.fromResource(this)
         setupEditText()
-
-        val ll: LinearLayout = findViewById(R.id.sn_settings)
-        ll.addView(ObjectSwitch(this, "Spotter Network Location Report", "SN_LOCATIONREPORT", R.string.sn_locationreport).get())
-
+        box.addWidget(Switch(this, "Spotter Network Location Report", "SN_LOCATIONREPORT", R.string.sn_locationreport))
 
     }
 

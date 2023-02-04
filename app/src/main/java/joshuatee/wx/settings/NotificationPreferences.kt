@@ -23,7 +23,7 @@ package joshuatee.wx.settings
 
 import android.provider.Settings
 import joshuatee.wx.MyApplication
-import joshuatee.wx.notifications.UtilityNotificationTextProduct
+import joshuatee.wx.notifications.NotificationTextProduct
 
 object NotificationPreferences {
 
@@ -84,13 +84,15 @@ object NotificationPreferences {
         if (notifSoundUri == "") {
             notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
         }
-        notifTextProdStr = getInitialPreferenceString(UtilityNotificationTextProduct.PREF_TOKEN, "")
-
+        notifTextProdStr = getInitialPreferenceString(NotificationTextProduct.PREF_TOKEN, "")
     }
 
-    private fun getInitialPreference(pref: String, initValue: Int) = MyApplication.preferences.getInt(pref, initValue)
+    private fun getInitialPreference(pref: String, initValue: Int): Int =
+            MyApplication.preferences.getInt(pref, initValue)
 
-    private fun getInitialPreference(pref: String, initValue: String) = (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
+    private fun getInitialPreference(pref: String, initValue: String): Boolean =
+            (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
 
-    private fun getInitialPreferenceString(pref: String, initValue: String) = MyApplication.preferences.getString(pref, initValue) ?: initValue
+    private fun getInitialPreferenceString(pref: String, initValue: String): String =
+            MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

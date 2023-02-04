@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="0dp"
-            android:stretchColumns="*">
+            >
 
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_ab"

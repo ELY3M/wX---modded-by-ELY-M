@@ -24,7 +24,7 @@ package joshuatee.wx.wpc
 import android.util.SparseArray
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.util.Group
-import joshuatee.wx.ui.ObjectMenuTitle
+import joshuatee.wx.ui.MenuTitle
 
 internal object UtilityWpcText {
 
@@ -47,17 +47,17 @@ internal object UtilityWpcText {
     }
 
     private val titles = listOf(
-        ObjectMenuTitle("General Forecast Discussions", 10),
-        ObjectMenuTitle("Precipitation Discussions", 2),
-        ObjectMenuTitle("Hazards", 7),
-        ObjectMenuTitle("Ocean Weather", 36),
-        ObjectMenuTitle("Misc North American Weather", 5),
-        ObjectMenuTitle("Misc Intl Weather", 4),
-        ObjectMenuTitle("SPC", 8),
-        ObjectMenuTitle("NHC", 7),
-        ObjectMenuTitle("Great Lakes", 7),
-        ObjectMenuTitle("Space Weather", 6),
-        ObjectMenuTitle("Canada", 11)
+        MenuTitle("General Forecast Discussions", 9),
+        MenuTitle("Precipitation Discussions", 2),
+        MenuTitle("Hazards", 7),
+        MenuTitle("Ocean Weather", 36),
+        MenuTitle("Misc North American Weather", 5),
+        MenuTitle("Misc Intl Weather", 4),
+        MenuTitle("SPC", 8),
+        MenuTitle("NHC", 7),
+        MenuTitle("Great Lakes", 7),
+        MenuTitle("Space Weather", 6),
+        MenuTitle("Canada", 11)
     )
 
     val labels = listOf(
@@ -66,7 +66,7 @@ internal object UtilityWpcText {
 
         "pmdhi: Hawaii Extended Forecast Discussion",
         "pmdak: Alaska Extended Forecast Discussion",
-        "pmdsa: South American Synoptic Discussion",
+//        "pmdsa: South American Synoptic Discussion",
         "pmdca: Tropical Discussion",
         "pmdmrd: Prognostic disc for 6-10 and 8-14 Day Outlooks",
         "pmd30d: Prognostic disc for Monthly Outlook",
@@ -186,10 +186,10 @@ internal object UtilityWpcText {
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(
+            for (j in (MenuTitle.getStart(
                     titles,
                     index
-            ) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+            ) until titles[index].count + MenuTitle.getStart(titles, index))) {
                 group.children.add(labels[j])
                 shortCodes[index][m] = labels[k].split(":")[0]
                 longCodes[index][m] = labels[k]

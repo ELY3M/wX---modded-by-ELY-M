@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.  
 
 package joshuatee.wx
 
@@ -30,17 +31,20 @@ import android.util.DisplayMetrics
 import android.util.TypedValue
 import java.util.concurrent.TimeUnit
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.objects.ObjectPolygonWatch
+import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.RadarGeometry
-import joshuatee.wx.radar.SpotterNetworkPositionReport
-import joshuatee.wx.radar.WXGLNexrad
+import joshuatee.wx.radar.NexradUtil
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
-import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
-import joshuatee.wx.settings.*
+import joshuatee.wx.radarcolorpalettes.ColorPalette
+import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.NotificationPreferences
+import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityHomeScreen
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import org.acra.BuildConfig
 import org.acra.config.mailSender
 import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
@@ -90,7 +94,6 @@ class MyApplication : Application() {
         contentResolverLocal = contentResolver
         val res = resources
         dm = res.displayMetrics
-
         UIPreferences.deviceScale = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, dm)
         UIPreferences.padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, res.getDimension(R.dimen.padding_dynamic_tv), dm).toInt()
         UIPreferences.paddingSettings = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, res.getDimension(R.dimen.padding_dynamic_tv_settings), dm).toInt()
@@ -100,7 +103,6 @@ class MyApplication : Application() {
         if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             UIPreferences.actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, res.displayMetrics)
         }
-
         initPreferences(this)
         Location.refreshLocationData(this)
         UtilityTts.loadTts(applicationContext)
@@ -121,10 +123,10 @@ class MyApplication : Application() {
             response
         }
         val httpClient = OkHttpClient.Builder()
-        .connectTimeout(15, TimeUnit.SECONDS)
-        .readTimeout(15, TimeUnit.SECONDS)
-        .addInterceptor(okHttp3Interceptor)
-        .build()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(okHttp3Interceptor)
+            .build()
 
         lateinit var preferences: SharedPreferences
         private lateinit var preferencesTelecine: SharedPreferences
@@ -139,17 +141,16 @@ class MyApplication : Application() {
             UtilityHomeScreen.setupMap()
             RadarPreferences.radarGeometrySetColors()
             NotificationPreferences.initPreferences()
-            WXGLNexrad.colorPaletteProducts.forEach {
-                ObjectColorPalette.radarColorPalette[it] = getInitialPreferenceString("RADAR_COLOR_PALETTE_$it", "CODENH")
-                ObjectColorPalette.radarColorPaletteList[it] = getInitialPreferenceString("RADAR_COLOR_PALETTE_" + it + "_LIST", "")
+            NexradUtil.colorPaletteProducts.forEach {
+                ColorPalette.radarColorPalette[it] = getInitialPreferenceString("RADAR_COLOR_PALETTE_$it", "CODENH")
+                ColorPalette.radarColorPaletteList[it] = getInitialPreferenceString("RADAR_COLOR_PALETTE_" + it + "_LIST", "")
             }
             UIPreferences.cardCorners = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(), dm)
             UIPreferences.telecineVideoSizePercentage = preferencesTelecine.getInt("video-size", 100)
             UIPreferences.telecineSwitchShowCountdown = preferencesTelecine.getBoolean("show-countdown", false)
             UIPreferences.telecineSwitchRecordingNotification = preferencesTelecine.getBoolean("recording-notification", false)
             Location.currentLocationStr = getInitialPreferenceString("CURRENT_LOC_FRAGMENT", "1")
-
-            ObjectPolygonWatch.load(context)
+            PolygonWatch.load(context)
         }
 
         fun loadGeomAndColorBuffers(context: Context) {
@@ -164,10 +165,10 @@ class MyApplication : Application() {
             loadedBuffers = true
             ColorPalettes.initialize(context)
             RadarPreferences.initGenericRadarWarnings(context)
-//            GeographyType.refresh()
             RadarGeometry.initialize(context)
         }
 
-        private fun getInitialPreferenceString(pref: String, initValue: String) = preferences.getString(pref, initValue) ?: initValue
+        private fun getInitialPreferenceString(pref: String, initValue: String): String =
+                preferences.getString(pref, initValue) ?: initValue
     }
 }

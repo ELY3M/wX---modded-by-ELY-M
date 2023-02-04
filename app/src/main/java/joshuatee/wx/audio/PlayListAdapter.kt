@@ -1,5 +1,6 @@
 package joshuatee.wx.audio
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,7 @@ import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.Text
 import joshuatee.wx.util.Utility
 
-internal class PlayListAdapter(private val dataSet: MutableList<String>) : RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
+internal class PlayListAdapter(val context: Context, private val dataSet: MutableList<String>) : RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
 
     private val maxLength = 400
 
@@ -41,10 +42,15 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) : Recyc
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
         val items = dataSet[position].split(";")
-        holder.label.text = items[0]
-        holder.timeAndSize.text = items[1]
-        val string = Utility.fromHtml(Utility.readPref("PLAYLIST_" + items[0], ""))
-        holder.contentPreview.text = string.replace(GlobalVariables.newline, " ").take(maxLength)
+        with (holder) {
+            label.text = items[0]
+            timeAndSize.text = items[1]
+//            val string = Utility.fromHtml(Utility.readPref(context, "PLAYLIST_" + items[0], ""))
+//            val s = Utility.readPref(context, "PLAYLIST_" + items[0], "")
+            contentPreview.text = Utility.readPref(context, "PLAYLIST_" + items[0], "")
+                                            .replace(GlobalVariables.newline, " ")
+                                            .take(maxLength)
+        }
     }
 
     fun deleteItem(index: Int) {

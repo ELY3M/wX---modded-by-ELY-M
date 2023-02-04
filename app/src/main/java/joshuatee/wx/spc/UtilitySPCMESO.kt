@@ -25,24 +25,24 @@ import android.util.SparseArray
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.ui.ObjectMenuTitle
+import joshuatee.wx.ui.MenuTitle
 import joshuatee.wx.util.Group
 
 object UtilitySpcMeso {
 
     private val titles = listOf(
-        ObjectMenuTitle("Observations", 3),
-        ObjectMenuTitle("Surface", 15),
-        ObjectMenuTitle("Upper Air", 25),
-        ObjectMenuTitle("Thermodynamics", 20),
-        ObjectMenuTitle("Wind Shear", 20),
-        ObjectMenuTitle("Composite Indices", 23),
-        ObjectMenuTitle("Multi-Parameter Fields", 11),
-        ObjectMenuTitle("Heavy Rain", 8),
-        ObjectMenuTitle("Winter Weather", 15),
-        ObjectMenuTitle("Fire Weather", 6),
-        ObjectMenuTitle("Classic", 3),
-        ObjectMenuTitle("Beta", 10)
+        MenuTitle("Observations", 3),
+        MenuTitle("Surface", 15),
+        MenuTitle("Upper Air", 25),
+        MenuTitle("Thermodynamics", 20),
+        MenuTitle("Wind Shear", 20),
+        MenuTitle("Composite Indices", 23),
+        MenuTitle("Multi-Parameter Fields", 11),
+        MenuTitle("Heavy Rain", 8),
+        MenuTitle("Winter Weather", 15),
+        MenuTitle("Fire Weather", 6),
+        MenuTitle("Classic", 3),
+        MenuTitle("Beta", 10)
     )
 
     fun getLabelFromParam(param: String): String {
@@ -141,23 +141,20 @@ object UtilitySpcMeso {
         "peff",
         "fzlv",
         "les1",
-        "tadv_925",
-//        "7tad",
-//        "tadv"
+        "tadv_925"
     )
 
     internal fun setParamFromFav(token: String): String {
-        var param = ""
         val tmpArr = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":").dropLastWhile { it.isEmpty() }
-        when (token) {
-            "SPCMESO1" -> param = if (tmpArr.size > 3) tmpArr[3] else "500mb"
-            "SPCMESO2" -> param = if (tmpArr.size > 4) tmpArr[4] else "pmsl"
-            "SPCMESO3" -> param = if (tmpArr.size > 5) tmpArr[5] else "ttd"
-            "SPCMESO4" -> param = if (tmpArr.size > 6) tmpArr[6] else "rgnlrad"
-            "SPCMESO5" -> param = if (tmpArr.size > 7) tmpArr[7] else "lllr"
-            "SPCMESO6" -> param = if (tmpArr.size > 8) tmpArr[8] else "laps"
+        return when (token) {
+            "SPCMESO1" -> if (tmpArr.size > 3) tmpArr[3] else "500mb"
+            "SPCMESO2" -> if (tmpArr.size > 4) tmpArr[4] else "pmsl"
+            "SPCMESO3" -> if (tmpArr.size > 5) tmpArr[5] else "ttd"
+            "SPCMESO4" -> if (tmpArr.size > 6) tmpArr[6] else "rgnlrad"
+            "SPCMESO5" -> if (tmpArr.size > 7) tmpArr[7] else "lllr"
+            "SPCMESO6" -> if (tmpArr.size > 8) tmpArr[8] else "laps"
+            else -> ""
         }
-        return param
     }
 
     var shortCodes: Array<Array<String>> = Array(12) { Array(25) { "" } }
@@ -169,10 +166,10 @@ object UtilitySpcMeso {
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(
+            for (j in (MenuTitle.getStart(
                     titles,
                     index
-            ) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+            ) until titles[index].count + MenuTitle.getStart(titles, index))) {
                 group.children.add(labels[j])
                 shortCodes[index][m] = params[k]
                 longCodes[index][m] = labels[k]

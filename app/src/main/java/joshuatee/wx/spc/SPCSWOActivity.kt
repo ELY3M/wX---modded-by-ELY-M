@@ -30,10 +30,15 @@ import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.HBox
+import joshuatee.wx.ui.Image
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityImg
 
 class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
@@ -43,6 +48,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // Arguments
     //
     // 1: day
+    // 2: "sound" (optional)
     //
 
     companion object { const val NUMBER = "" }
@@ -56,13 +62,20 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var box: VBox
     private val images = mutableListOf<Image>()
     private var imagesPerRow = 2
-    private var imageLabel = ""
+    private lateinit var downloadTimer: DownloadTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcswo)
         arguments = intent.getStringArrayExtra(NUMBER)!!
         day = arguments[0]
         title = "Day $day Convective Outlook"
+        downloadTimer = DownloadTimer("ACTIVITY_SPC_SWO_SUMMARY_$day")
+        setupUI()
+        setupShareMenu()
+        getContent()
+    }
+
+    private fun setupUI() {
         box = VBox.fromResource(this)
         if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) {
             imagesPerRow = 4
@@ -73,30 +86,25 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             if (it % imagesPerRow == 0) {
                 boxRows.add(HBox(this, box.get()))
             }
-            images.add(Image(this, boxRows.last()))
+            images.add(Image(this))
+            boxRows.last().addWidget(images.last())
             images[it].visibility = View.GONE
         }
-        cardText = CardText(this, box, toolbar, toolbarBottom)
-        setupShareMenu()
-        getContent()
+        cardText = CardText(this, toolbar, toolbarBottom)
+        box.addWidget(cardText)
     }
 
     private fun setupShareMenu() {
-        // FIXME TODO refactor
-        val menu = toolbarBottom.menu
-        val miTornado = menu.findItem(R.id.action_share_tornado)
-        val miHail = menu.findItem(R.id.action_share_hail)
-        val miWind = menu.findItem(R.id.action_share_wind)
-        val miCategorical = menu.findItem(R.id.action_share_categorical)
-        val miProbabilistic = menu.findItem(R.id.action_share_probabilistic)
-        val miDay4Img = menu.findItem(R.id.action_share_d4)
-        val miDay5Img = menu.findItem(R.id.action_share_d5)
-        val miDay6Img = menu.findItem(R.id.action_share_d6)
-        val miDay7Img = menu.findItem(R.id.action_share_d7)
-        val miDay8Img = menu.findItem(R.id.action_share_d8)
-        listOf(miDay4Img, miDay5Img, miDay6Img, miDay7Img, miDay8Img).forEach {
-            it.isVisible = false
-        }
+        val miTornado = objectToolbarBottom.find(R.id.action_share_tornado)
+        val miHail = objectToolbarBottom.find(R.id.action_share_hail)
+        val miWind = objectToolbarBottom.find(R.id.action_share_wind)
+        val miCategorical = objectToolbarBottom.find(R.id.action_share_categorical)
+        val miProbabilistic = objectToolbarBottom.find(R.id.action_share_probabilistic)
+        val miDay4Img = objectToolbarBottom.find(R.id.action_share_d4)
+        val miDay5Img = objectToolbarBottom.find(R.id.action_share_d5)
+        val miDay6Img = objectToolbarBottom.find(R.id.action_share_d6)
+        val miDay7Img = objectToolbarBottom.find(R.id.action_share_d7)
+        val miDay8Img = objectToolbarBottom.find(R.id.action_share_d8)
         if (day == "1" || day == "2") {
             miProbabilistic.isVisible = false
         } else {
@@ -108,15 +116,12 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             playlistProd = "swod48"
             miProbabilistic.isVisible = false
             miCategorical.isVisible = false
+            objectToolbarBottom.hide(R.id.action_state_graphics)
         } else {
-            playlistProd = "swody$day"
-        }
-        if (day == "4-8") {
-            val state = menu.findItem(R.id.action_state_graphics)
-            state.isVisible = false
             listOf(miDay4Img, miDay5Img, miDay6Img, miDay7Img, miDay8Img).forEach {
-                it.isVisible = true
+                it.isVisible = false
             }
+            playlistProd = "swody$day"
         }
     }
 
@@ -126,21 +131,21 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        var textUrl = "SWODY$day"
-        imageLabel = "Day $day Convective Outlook"
-        if (day == "4-8") {
-            textUrl = "SWOD48"
+        if (downloadTimer.isRefreshNeeded(this)) {
+            val textUrl = if (day == "4-8") {
+                "SWOD48"
+            } else {
+                "SWODY$day"
+            }
+            FutureVoid(this, ::downloadImages) {}
+            FutureText(this, textUrl, ::showText)
         }
-        FutureVoid(this, ::downloadImages) {}
-        FutureText(this, textUrl, ::showText)
     }
 
     private fun showText(html: String) {
         cardText.text = html
         toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
-        if (arguments.size > 1 && arguments[1] == "sound") {
-            UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
-        }
+        UtilityTts.conditionalPlay(arguments, 1, applicationContext, html, "spcswo")
     }
 
     private fun downloadImages() {
@@ -153,7 +158,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun showImage(index: Int) {
         images[index].visibility = View.VISIBLE
         images[index].set(bitmaps[index], imagesPerRow)
-        images[index].connect { Route.image(this, urls[index], imageLabel) }
+        images[index].connect { Route.image(this, urls[index], "Day $day Convective Outlook") }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

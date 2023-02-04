@@ -24,9 +24,7 @@ package joshuatee.wx.models
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.AnimationDrawable
 import java.util.Locale
-import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.ObjectDateTime
@@ -43,8 +41,7 @@ internal object UtilityModelNsslWrfInputOutput {
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
-            runData.listRunAdd(mostRecentRun)
-            runData.listRunAddAll(ObjectDateTime.genModelRuns(mostRecentRun, 12, "yyyyMMddHH"))
+            runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRun, 24, "yyyyMMddHH","yyyyMMddHH", 4))
             runData.mostRecentRun = mostRecentRun
             return runData
         }
@@ -79,15 +76,5 @@ internal object UtilityModelNsslWrfInputOutput {
         } else {
             UtilityImg.getBlankBitmap()
         }
-    }
-
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
-        }
-        val bitmaps = (om.spinnerTimeValue until om.times.size).map {
-            getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

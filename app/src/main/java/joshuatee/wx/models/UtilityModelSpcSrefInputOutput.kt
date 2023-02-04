@@ -23,33 +23,28 @@ package joshuatee.wx.models
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 
 internal object UtilityModelSpcSrefInputOutput {
 
-    private const val pattern1 = "([0-9]{2}z)"
-    private const val pattern2 = "([0-9]{10}z</a>&nbsp in through <b>f[0-9]{3})"
-    private const val pattern3 = "<tr><td class=.previous.><a href=.sref.php\\?run=[0-9]{10}&id=SREF_H5__.>([0-9]{10}z)</a></td></tr>"
+    private const val pattern1 = "([0-9]{10}z</a>&nbsp in through <b>f[0-9]{3})"
+    private const val pattern2 = "<tr><td class=.previous.><a href=.sref.php\\?run=[0-9]{10}&id=SREF_H5__.>([0-9]{10}z)</a></td></tr>"
 
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
             val html = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/".getHtml()
-            val tmpTxt = html.parse(pattern2)
-            val result = html.parseColumn(pattern3)
+            val tmpTxt = html.parse(pattern1)
+            val runTimes = html.parseColumn(pattern2)
             val latestRunAl = tmpTxt.split("</a>").dropLastWhile { it.isEmpty() }
             if (latestRunAl.isNotEmpty()) {
                 runData.listRunAdd(latestRunAl[0])
             }
-            if (result.isNotEmpty()) {
-                result.forEach { runData.listRunAdd(it) }
-            }
+            runData.listRunAddAll(runTimes)
             runData.imageCompleteStr = tmpTxt
-            runData.mostRecentRun = tmpTxt.parseLastMatch(pattern1)
+            runData.mostRecentRun = runData.listRun.first()
             return runData
         }
 
@@ -57,15 +52,5 @@ internal object UtilityModelSpcSrefInputOutput {
         val run = om.run.replace("z", "")
         val url = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
         return UtilityImg.getBitmapAddWhiteBackground(context, url)
-    }
-
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
-        }
-        val bitmaps = (om.spinnerTimeValue until om.times.size).map {
-            getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

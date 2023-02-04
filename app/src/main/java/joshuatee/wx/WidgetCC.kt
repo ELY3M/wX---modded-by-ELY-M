@@ -25,8 +25,9 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import joshuatee.wx.notifications.UtilityWXJobService
-import joshuatee.wx.objects.WidgetFile.*
+import joshuatee.wx.widgets.WidgetFile
 import joshuatee.wx.util.Utility
+import joshuatee.wx.widgets.UtilityWidget
 
 class WidgetCC : AppWidgetProvider() {
 
@@ -37,6 +38,6 @@ class WidgetCC : AppWidgetProvider() {
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        UtilityWidget.update(context, CC)
+        UtilityWidget.update(context, WidgetFile.CC)
     }
 }

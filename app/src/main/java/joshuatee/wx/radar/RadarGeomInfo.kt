@@ -34,10 +34,12 @@ import java.nio.ByteOrder
 
 class RadarGeomInfo(val context: Context, private val type: RadarGeometryTypeEnum) {
 
+    //
     // radar geometry files are in: ./app/src/main/res/raw/
     // count values below are file size in bytes divided by 4 as these files contain binary packed floats
+    //
 
-    var isEnabled = Utility.readPref(prefToken[type]!!, defaultPref[type]!!).startsWith("t")
+    var isEnabled = Utility.readPref(context, prefToken[type]!!, defaultPref[type]!!).startsWith("t")
     private val lineSizeDefault = 2
     var lineSize = Utility.readPrefInt(context, prefTokenLineSize[type]!!, lineSizeDefault).toFloat()
     var colorInt = Utility.readPrefInt(context, prefTokenColorInt[type]!!, prefTokenColorIntDefault[type]!!)
@@ -46,7 +48,10 @@ class RadarGeomInfo(val context: Context, private val type: RadarGeometryTypeEnu
     var fileId = typeToFileName[type]!!
 
     fun update() {
-        isEnabled = Utility.readPref(prefToken[type]!!, defaultPref[type]!!).startsWith("t")
+        isEnabled = Utility.readPref(context, prefToken[type]!!, defaultPref[type]!!).startsWith("t")
+        if (isEnabled && lineData.capacity() == 0) {
+            loadData(context)
+        }
         lineSize = Utility.readPrefInt(context, prefTokenLineSize[type]!!, lineSizeDefault).toFloat()
         colorInt = Utility.readPrefInt(context, prefTokenColorInt[type]!!, prefTokenColorIntDefault[type]!!)
     }
@@ -63,7 +68,7 @@ class RadarGeomInfo(val context: Context, private val type: RadarGeometryTypeEnu
             try {
                 val inputStream = context.resources.openRawResource(fileId)
                 val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
-                repeat(count) {
+                for (unused in 0 until count) {
                     lineData.putFloat(dataInputStream.readFloat())
                 }
                 dataInputStream.close()

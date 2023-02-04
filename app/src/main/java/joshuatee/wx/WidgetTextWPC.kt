@@ -25,11 +25,13 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.WidgetFile.TEXT_WPC
+import joshuatee.wx.widgets.WidgetFile
+import joshuatee.wx.widgets.UtilityWidget
+import joshuatee.wx.widgets.UtilityWidgetDownload
 
 class WidgetTextWPC : AppWidgetProvider() {
 
-    private val type = TEXT_WPC
+    private val type = WidgetFile.TEXT_WPC
 
     override fun onDisabled(context: Context) {
         UtilityWidget.disableWidget(context, type)

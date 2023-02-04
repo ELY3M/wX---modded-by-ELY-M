@@ -32,7 +32,7 @@ import joshuatee.wx.util.UtilityDownloadNws
 
 object UtilityUSHourly {
 
-    internal fun getStringForActivity(html: String): ObjectHourly {
+    internal fun getStringForActivity(html: String): Hourly {
         val startTimes = html.parseColumn("\"startTime\": \"(.*?)\",")
         val temperatures = html.parseColumn("\"temperature\": (.*?),")
         val windSpeeds = html.parseColumn("\"windSpeed\": \"(.*?)\"")
@@ -55,29 +55,30 @@ object UtilityUSHourly {
             windDirData += windDirection + GlobalVariables.newline
             conditionData += shortenConditions(shortForecast) + GlobalVariables.newline
         }
-        return ObjectHourly(timeData, tempData, windSpeedData, windDirData, conditionData)
+        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData)
     }
 
-    internal fun getStringForActivityFromOldApi(html: String): ObjectHourly {
+    internal fun getStringForActivityFromOldApi(html: String): Hourly {
         var timeData = "Time" + GlobalVariables.newline
         var tempData = "Temp" + GlobalVariables.newline
         var windSpeedData = "Dew" + GlobalVariables.newline
         var windDirData = "Precip%" + GlobalVariables.newline
         var conditionData = "Cloud%" + GlobalVariables.newline
-        html.split(GlobalVariables.newline).forEach {
+        html.split(GlobalVariables.newline).drop(2).forEach {
             val items = it.split("\\s+".toRegex())
-            if (items.size > 6) {
-                timeData += items[0] + " " + items[1] + " " + items[2] + GlobalVariables.newline
-                tempData += items[3] + GlobalVariables.newline
-                windSpeedData += items[4] + GlobalVariables.newline
-                windDirData += items[5] + GlobalVariables.newline
-                conditionData += items[6] + GlobalVariables.newline
+            if (items.size > 5) {
+                timeData += items[0] + " " + " " + items[1] + GlobalVariables.newline
+                tempData += items[2] + GlobalVariables.newline
+                windSpeedData += items[3] + GlobalVariables.newline
+                windDirData += items[4] + GlobalVariables.newline
+                conditionData += items[5] + GlobalVariables.newline
             }
         }
-        return ObjectHourly(timeData, tempData, windSpeedData, windDirData, conditionData)
+        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData)
     }
 
-    private fun shortenConditions(s: String) = s.replace("Showers And Thunderstorms", "Sh/Tst")
+    private fun shortenConditions(s: String) =
+            s.replace("Showers And Thunderstorms", "Sh/Tst")
             .replace("Chance", "Chc")
             .replace("Slight", "Slt")
             .replace("Light", "Lgt")
@@ -89,12 +90,11 @@ object UtilityUSHourly {
             .replace("Freezing", "Frz")
             .replace("T-storms", "Tst")
 
-    fun get(locationNumber: Int): List<String> {
-        if (UIPreferences.useNwsApiForHourly) {
-            return getString(locationNumber)
-        }
+    fun get(locationNumber: Int): List<String> = if (UIPreferences.useNwsApiForHourly) {
+        getString(locationNumber)
+    } else {
         val data = UtilityHourlyOldApi.getHourlyString(locationNumber)
-        return listOf(data, data)
+        listOf(data, data)
     }
 
     private fun getString(locationNumber: Int): List<String> {
@@ -118,20 +118,12 @@ object UtilityUSHourly {
         val shortForecast = html.parseColumn("\"shortForecast\": \"(.*?)\"")
         var content = ""
         startTime.indices.forEach {
-            val time = ObjectDateTime.translateTimeForHourly(startTime[it].replace(Regex("-0[0-9]:00"), ""))
+            val time = ObjectDateTime.translateTimeForHourly(startTime[it]) //.replace(Regex("-0[0-9]:00"), ""))
             content += To.stringPadLeft(time, 8)
-            if (temperature.size > it) {
-                content += To.stringPadLeft(temperature[it].replace("\"",""), 5)
-            }
-            if (windSpeed.size > it) {
-                content += To.stringPadLeft(windSpeed[it], 9)
-            }
-            if (windDirection.size > it) {
-                content += To.stringPadLeft(windDirection[it], 7)
-            }
-            if (shortForecast.size > it) {
-                content += To.stringPadLeft(shortenConditions(shortForecast[it]), 12)
-            }
+            if (temperature.size > it)   content += To.stringPadLeft(temperature[it].replace("\"",""), 5)
+            if (windSpeed.size > it)     content += To.stringPadLeft(windSpeed[it], 9)
+            if (windDirection.size > it) content += To.stringPadLeft(windDirection[it], 7)
+            if (shortForecast.size > it) content += To.stringPadLeft(shortenConditions(shortForecast[it]), 12)
             content += GlobalVariables.newline
         }
         return content

@@ -82,7 +82,6 @@ object UIPreferences {
     var navDrawerMainScreenOnRight = true
     var useNwsApi = false
     var useNwsApiForHourly = true
-    var lightningUseGoes = true
     var useAwcMosaic = true
     var tabHeaders = arrayOf("", "", "")
     var widgetPreventTap = false
@@ -109,7 +108,7 @@ object UIPreferences {
     var checktor = false
     var vrButton = false
     var homescreenFav = ""
-    var locDisplayImg = false
+    var isNexradOnMainScreen = false
     var favorites = mutableMapOf<FavoriteType, String>()
     var wfoTextFav = ""
     var wpcTextFav = ""
@@ -123,12 +122,11 @@ object UIPreferences {
     var textSizeLarge = 0.0f
 
     const val animationIntervalDefault = 8
-    const val HOMESCREEN_FAV_DEFAULT = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
+    const val homeScreenFavDefault = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
 
     fun initPreferences(context: Context) {
         useNwsApi = Utility.readPref(context,"USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
         useNwsApiForHourly = Utility.readPref(context,"USE_NWS_API_HOURLY", "true").startsWith("t")
-        lightningUseGoes = Utility.readPref(context,"LIGHTNING_USE_GOES", "true").startsWith("t")
         useAwcMosaic = Utility.readPref(context,"USE_AWC_MOSAIC", "true").startsWith("t")
         navDrawerMainScreen = Utility.readPref(context,"NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
         navDrawerMainScreenOnRight = Utility.readPref(context,"NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
@@ -204,8 +202,8 @@ object UIPreferences {
             nwsIconSizeDefault = 6
         }
         nwsIconSize = MyApplication.preferences.getInt("NWS_ICON_SIZE_PREF", nwsIconSizeDefault)
-        homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT)
-        locDisplayImg = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
+        homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", homeScreenFavDefault)
+        isNexradOnMainScreen = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
         FavoriteType.values().forEach {
             favorites[it] = getInitialPreferenceString(UtilityFavorites.getPrefToken(it), GlobalVariables.prefSeparator)
         }
@@ -222,10 +220,12 @@ object UIPreferences {
         }
     }
 
-    private fun getInitialPreference(pref: String, initValue: Int) = MyApplication.preferences.getInt(pref, initValue)
+    private fun getInitialPreference(pref: String, initValue: Int): Int =
+            MyApplication.preferences.getInt(pref, initValue)
 
-    private fun getInitialPreference(pref: String, initValue: String) = (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
+    private fun getInitialPreference(pref: String, initValue: String): Boolean =
+            (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
 
-    private fun getInitialPreferenceString(pref: String, initValue: String) = MyApplication.preferences.getString(pref, initValue) ?: initValue
-
+    private fun getInitialPreferenceString(pref: String, initValue: String): String =
+            MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

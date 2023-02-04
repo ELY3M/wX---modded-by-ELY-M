@@ -26,8 +26,11 @@ import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.ObjectCurrentConditions
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.PopupMessage
+import joshuatee.wx.ui.RecyclerViewGeneric
+import joshuatee.wx.util.CurrentConditions
 import joshuatee.wx.util.To
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
@@ -37,38 +40,44 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     //
 
     private var locations = mutableListOf<String>()
-    private lateinit var recyclerView: ObjectRecyclerViewGeneric
+    private lateinit var recyclerView: RecyclerViewGeneric
     private lateinit var settingsLocationAdapterList: SettingsLocationAdapterList
-    private var currentConditions = mutableListOf<ObjectCurrentConditions>()
+    private var currentConditionsList = mutableListOf<CurrentConditions>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
-        ObjectFab(this, R.id.fab_add) { addLocation() }
-        toolbar.subtitle = "Tap location to edit, delete, or move."
+        Fab(this, R.id.fab_add) { addLocation() }
         updateList()
-        recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
-        settingsLocationAdapterList = SettingsLocationAdapterList(locations)
-        recyclerView.adapter = settingsLocationAdapterList
+        setupUI()
         updateTitle()
-        settingsLocationAdapterList.setListener(::itemSelected)
         getContent()
     }
 
+    private fun setupUI() {
+        settingsLocationAdapterList = SettingsLocationAdapterList(locations)
+        settingsLocationAdapterList.setListener(::itemSelected)
+        recyclerView = RecyclerViewGeneric(this, R.id.card_list)
+        recyclerView.adapter = settingsLocationAdapterList
+    }
+
     private fun getContent() {
-        currentConditions.clear()
+        currentConditionsList.clear()
         FutureVoid(this, ::download, ::update)
     }
 
     private fun download() {
         Location.locations.indices.forEach { index ->
-            val objectForecastPackageCurrentConditions = ObjectCurrentConditions(this, index)
-            currentConditions.add(objectForecastPackageCurrentConditions)
-            objectForecastPackageCurrentConditions.format()
+            currentConditionsList.add(CurrentConditions(this, index))
+            currentConditionsList.last().format()
         }
     }
 
     private fun update() {
-        updateListWithCurrentConditions()
+        locations.clear()
+        Location.locations.forEachIndexed { index, location ->
+            location.updateObservation(currentConditionsList[index].topLine)
+            locations.add(currentConditionsList[index].topLine)
+        }
         settingsLocationAdapterList.notifyDataSetChanged()
     }
 
@@ -76,14 +85,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         locations = MutableList(Location.numLocations) { "" }
         Location.locations.forEach {
             it.updateObservation("")
-        }
-    }
-
-    private fun updateListWithCurrentConditions() {
-        locations.clear()
-        Location.locations.forEachIndexed { index, location ->
-            location.updateObservation(currentConditions[index].topLine)
-            locations.add(currentConditions[index].topLine)
         }
     }
 
@@ -98,7 +99,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun updateTitle() {
-        title = "Locations (" + To.string(Location.numLocations) + ")"
+        setTitle("Locations (" + To.string(Location.numLocations) + ")", "Tap location to edit, delete, or move.")
     }
 
     private fun itemSelected(position: Int) {
@@ -120,7 +121,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             updateTitle()
             UtilityWXJobService.startService(this)
         } else {
-            ObjectPopupMessage(recyclerView.get(), "Must have at least one location.")
+            PopupMessage(recyclerView.get(), "Must have at least one location.")
         }
     }
 

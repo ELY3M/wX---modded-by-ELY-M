@@ -21,6 +21,8 @@
 
 package joshuatee.wx.spc
 
+import joshuatee.wx.common.GlobalVariables
+
 class StormReport(
     val title: String = "",
     val lat: String = "",
@@ -31,4 +33,7 @@ class StormReport(
     val city: String = "",
     val state: String = "",
     val description: String = ""
-)
+) {
+    override fun toString(): String =
+        listOf(title, lat, lon, time, magnitude, address, city, state, description).joinToString(",") + GlobalVariables.newline
+}

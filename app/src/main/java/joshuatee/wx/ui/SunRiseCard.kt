@@ -18,31 +18,26 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M. 
+//modded by ELY M. - removed center()
 
 package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.ScrollView
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityTimeSunMoon
 
-class SunRiseCard(context: Context, latLon: LatLon, scrollView: ScrollView) {
+class SunRiseCard(context: Context, latLon: LatLon, scrollView: ScrollView) : Widget {
 
     val sunriseCard = CardText(context)
 
     init {
-        ///sunriseCard.center()
-        sunriseCard.connect { scrollView.smoothScrollTo(0, 0) }
-        sunriseCard.text = UtilityTimeSunMoon.getForHomeScreen(context)
-        /*
-        UtilityTimeSunMoon.getSunriseSunset(context, Location.currentLocationStr, false) +
-                GlobalVariables.newline + ObjectDateTime.gmtTime() + "AAA\n" +
-         */
+        with (sunriseCard) {
+            ///center()
+            connect { scrollView.smoothScrollTo(0, 0) }
+            text = UtilityTimeSunMoon.getForHomeScreen(context, latLon)
+        }
     }
 
-    fun get() = sunriseCard.get()
+    override fun getView() = sunriseCard.getView()
 }

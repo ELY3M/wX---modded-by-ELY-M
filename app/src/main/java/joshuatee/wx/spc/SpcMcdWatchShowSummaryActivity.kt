@@ -31,10 +31,15 @@ import joshuatee.wx.ui.CardText
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.*
+import joshuatee.wx.objects.DownloadTimer
+import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.Route
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.To
 
 class SpcMcdWatchShowSummaryActivity : BaseActivity() {
 
@@ -105,9 +110,10 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
         mcdList = url.getHtml().parseColumn(patternStr)
         mcdList.forEach {
             if (number.contains("at")) {
-                val mcdNo2 = String.format("%4s", it).replace(' ', '0')
-                val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNo2 + "_radar.gif"
-                mcdNumbers.add(mcdNo2)
+//                val mcdNo2 = String.format("%4s", it).replace(' ', '0')
+                val mcdNumber = To.stringPadLeftZeros(To.int(it), 4)
+                val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNumber + "_radar.gif"
+                mcdNumbers.add(mcdNumber)
                 bitmaps.add(imgUrl.getImage())
             } else {
                 val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$it.gif"
@@ -120,13 +126,15 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
     private fun update() {
         box.removeChildren()
         mcdList.indices.forEach { index ->
-            val image = Image(this, box, bitmaps[index])
+            val image = Image(this, bitmaps[index])
+            box.addWidget(image)
             image.connect { Route.mcd(this, mcdNumbers[index], polygonType.toString()) }
         }
         titleString = "$activityLabel " + mcdNumbers.toString().replace("[{}]".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", "")
         title = titleString
         if (mcdList.isEmpty()) {
-            val nothingCard = CardText(this, box.get(), nothingPresentStr, TextSize.MEDIUM)
+            val nothingCard = CardText(this, nothingPresentStr, TextSize.MEDIUM)
+            box.addWidget(nothingCard)
             nothingCard.setPaddingAmount(UIPreferences.padding)
             nothingCard.setTextColor(UIPreferences.textHighlightColor)
         }

@@ -21,6 +21,7 @@
 
 package joshuatee.wx.radar
 
+import android.os.Build
 import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
@@ -45,12 +46,14 @@ class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState:
 
     init {
         starButton = objectToolbarBottom.getFavIcon()
-        animateButton = objectToolbarBottom.find(R.id.action_a)
-        tiltMenu = objectToolbarBottom.find(R.id.action_tilt)
-        tiltMenuOption4 = objectToolbarBottom.find(R.id.action_tilt4)
-        l3Menu = objectToolbarBottom.find(R.id.action_l3)
-        l2Menu = objectToolbarBottom.find(R.id.action_l2)
-        tdwrMenu = objectToolbarBottom.find(R.id.action_tdwr)
+        with (objectToolbarBottom) {
+            animateButton = find(R.id.action_a)
+            tiltMenu = find(R.id.action_tilt)
+            tiltMenuOption4 = find(R.id.action_tilt4)
+            l3Menu = find(R.id.action_l3)
+            l2Menu = find(R.id.action_l2)
+            tdwrMenu = find(R.id.action_tdwr)
+        }
         if (nexradState.numberOfPanes == 2) {
             val rad3 = objectToolbarBottom.find(R.id.action_radar3)
             val rad4 = objectToolbarBottom.find(R.id.action_radar4)
@@ -61,16 +64,21 @@ class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState:
             quadPaneJump.isVisible = false
         }
         if (!UIPreferences.radarImmersiveMode) {
-            objectToolbarBottom.hide(R.id.action_blank)
-            objectToolbarBottom.hide(R.id.action_level3_blank)
-            objectToolbarBottom.hide(R.id.action_level2_blank)
-            objectToolbarBottom.hide(R.id.action_animate_blank)
-            objectToolbarBottom.hide(R.id.action_tilt_blank)
-            objectToolbarBottom.hide(R.id.action_tools_blank)
+            with (objectToolbarBottom) {
+                hide(R.id.action_blank)
+                hide(R.id.action_level3_blank)
+                hide(R.id.action_level2_blank)
+                hide(R.id.action_animate_blank)
+                hide(R.id.action_tilt_blank)
+                hide(R.id.action_tools_blank)
+            }
         }
         // FIXME TODO disable new Level3 super-res until NWS is past deployment phase
         objectToolbarBottom.hide(R.id.action_n0b)
         objectToolbarBottom.hide(R.id.action_n0g)
+        if (Build.VERSION.SDK_INT > 32) {
+            objectToolbarBottom.find(R.id.action_share).title = "Drawing Tools"
+        }
     }
 
     fun adjustTiltAndProductMenus() {

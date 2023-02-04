@@ -28,12 +28,11 @@ class NexradArgumentsSinglePane : NexradArguments() {
 
     var urlStr = ""
     var fixedSite = false
-    var archiveMode = false
     // set when fixedSite is true
     var originalRadarSite = ""
     var arguments: Array<String>? = null
 
-    fun processArguments(arguments: Array<String>?) {
+    fun process(arguments: Array<String>?) {
         this.arguments = arguments
         // set static var to false on start of activity
         WXGLRadarActivity.spotterShowSelected = false

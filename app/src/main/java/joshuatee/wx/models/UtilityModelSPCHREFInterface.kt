@@ -22,7 +22,7 @@
 package joshuatee.wx.models
 
 import android.util.SparseArray
-import joshuatee.wx.ui.ObjectMenuTitle
+import joshuatee.wx.ui.MenuTitle
 import joshuatee.wx.util.Group
 
 internal object UtilityModelSpcHrefInterface {
@@ -30,13 +30,14 @@ internal object UtilityModelSpcHrefInterface {
     val models = listOf("HREF")
 
     private val titles = listOf(
-            ObjectMenuTitle("SPC Guidance", 10),
-            ObjectMenuTitle("Synoptic", 8),
-            ObjectMenuTitle("Severe", 12),
-            ObjectMenuTitle("Winter", 26),
-            ObjectMenuTitle("Fire", 12),
-            ObjectMenuTitle("Precipitation", 16),
-            ObjectMenuTitle("Storm Attributes", 16)
+            MenuTitle("SPC Guidance", 10),
+            MenuTitle("Synoptic", 8),
+            MenuTitle("Severe", 12),
+            MenuTitle("Winter", 26),
+            MenuTitle("Fire", 12),
+            MenuTitle("Precipitation", 16),
+            MenuTitle("Storm Attributes", 17),
+            MenuTitle("Member Viewer", 5)
     )
 
     var shortCodes = Array(13) { Array(30) { "" } }
@@ -48,10 +49,10 @@ internal object UtilityModelSpcHrefInterface {
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(
+            for (j in (MenuTitle.getStart(
                     titles,
                     index
-            ) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+            ) until titles[index].count + MenuTitle.getStart(titles, index))) {
                 group.children.add(labels[j])
                 shortCodes[index][m] = params[k]
                 longCodes[index][m] = labels[k]
@@ -179,6 +180,7 @@ internal object UtilityModelSpcHrefInterface {
             "qpf_012h_pmm",
             "qpf_012h_ps",
 
+            "cref_ps",
             "ref1km_004hmax_max",
             "ref1km_024hmax_max",
             "uh25_004hmax_max",
@@ -194,7 +196,15 @@ internal object UtilityModelSpcHrefInterface {
             "wspd_004hmax_max",
             "wspd_004hmax_pb30_members",
             "wspd_024hmax_max",
-            "wspd_024hmax_pb30_members"
+            "wspd_024hmax_pb30_members",
+
+            "cref_members hrrr",
+            "cref_members hrwnssl",
+            "cref_members hrwarw",
+            "cref_members hrwfv3",
+            "cref_members namnest",
+//            "cref_pb40_members",
+//            "cref_ps",
     )
 
     private val labels = listOf(
@@ -288,6 +298,7 @@ internal object UtilityModelSpcHrefInterface {
             "24-hr QPF: pmm",
             "24-hr QPF: stamps",
 
+            "Reflectivity: stamps",
             "4-hr max Reflectivity: max",
             "24-hr max Reflectivity: max",
             "4-hr max Updraft Helicity (2-5 km): max",
@@ -303,6 +314,14 @@ internal object UtilityModelSpcHrefInterface {
             "10m 4-hr max Wind Speed: max",
             "10m 4-hr max Wind Speed: PB[>30]",
             "10m 24-hr max Wind Speed: max",
-            "10m 24-hr max Wind Speed: PB[>30]"
+            "10m 24-hr max Wind Speed: PB[>30]",
+
+            "Reflectivity: hrrr",
+            "Reflectivity: hrwnssl",
+            "Reflectivity: hrwarw",
+            "Reflectivity: hrwfv3",
+            "Reflectivity: namnest",
+//            "Reflectivity: PB{>40}",
+//            "Reflectivity: stamps",
     )
 }

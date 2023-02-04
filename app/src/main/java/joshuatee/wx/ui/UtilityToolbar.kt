@@ -30,11 +30,10 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.radar.VideoRecordActivity
 
 object UtilityToolbar {
 
-    fun transparentToolbars(toolbar: Toolbar, toolbarBottom: Toolbar) {
+    fun transparentToolbars(toolbar: ObjectToolbar, toolbarBottom: ObjectToolbar) {
         if (UIPreferences.radarToolbarTransparent) {
             toolbar.background.mutate().alpha = 0
             toolbarBottom.background.mutate().alpha = 0
@@ -48,10 +47,6 @@ object UtilityToolbar {
             toolbar.visibility = View.GONE
             toolbarBottom.visibility = View.GONE
         }
-    }
-
-    fun fullScreenMode(activity: VideoRecordActivity) {
-        fullScreenMode(activity.toolbar, activity.toolbarBottom)
     }
 
     fun fullScreenMode(toolbar: Toolbar) {

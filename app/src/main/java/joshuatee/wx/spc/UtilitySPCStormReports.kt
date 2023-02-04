@@ -23,7 +23,7 @@ package joshuatee.wx.spc
 
 internal object UtilitySpcStormReports {
 
-    fun process(linesOfData: List<String>): MutableList<StormReport> {
+    fun process(linesOfData: List<String>): List<StormReport> {
         val stormReports = mutableListOf<StormReport>()
         linesOfData.forEach { line ->
             val items: List<String>

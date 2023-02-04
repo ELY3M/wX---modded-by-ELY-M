@@ -67,6 +67,6 @@
         app:layout_anchorGravity="bottom|right"
         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
         app:srcCompat="@drawable/ic_play_arrow_24dp"
-        android:contentDescription="@string/radar_icon" />
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

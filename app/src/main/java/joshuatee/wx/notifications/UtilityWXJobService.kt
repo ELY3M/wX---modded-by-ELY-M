@@ -63,7 +63,11 @@ object UtilityWXJobService {
                 .build()
             val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
             val result = scheduler.schedule(jobInfo)
-            if (result == JobScheduler.RESULT_SUCCESS) UtilityLog.d("wx", "Job scheduled successfully - jobService")
+            if (result == JobScheduler.RESULT_SUCCESS) {
+                UtilityLog.d("wx", "Job scheduled successfully - jobService")
+            } else {
+                UtilityLog.d("wx", "Job scheduled with error - jobService")
+            }
         }
     }
 }

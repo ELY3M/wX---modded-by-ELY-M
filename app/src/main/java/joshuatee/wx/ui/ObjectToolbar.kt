@@ -21,6 +21,7 @@
 
 package joshuatee.wx.ui
 
+import android.graphics.drawable.Drawable
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -51,4 +52,19 @@ class ObjectToolbar(private val toolbar: Toolbar) {
     fun connectClick(fn: View.OnClickListener) {
         toolbar.setOnClickListener(fn)
     }
+
+    fun setTextColor(color: Int) {
+        toolbar.setTitleTextColor(color)
+    }
+
+    fun setBackgroundColor(color: Int) {
+        toolbar.setTitleTextColor(color)
+    }
+
+    var background: Drawable
+        get() = toolbar.background
+        set(value) { toolbar.background = value }
+
+    val height: Int
+        get() = toolbar.height
 }

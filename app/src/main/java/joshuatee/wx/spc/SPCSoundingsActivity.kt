@@ -36,19 +36,27 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.objects.Route
-import joshuatee.wx.settings.*
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
+import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectImageMap
+import joshuatee.wx.ui.TouchImage
+import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityFavorites
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityImageMap
+import joshuatee.wx.util.UtilityShare
 
 class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
     private var imgUrl = ""
-    private lateinit var image: TouchImage
+    private lateinit var touchImage: TouchImage
     private lateinit var imageMap: ObjectImageMap
     private var office = ""
-    private var mapShown = false
     private var firstTime = true
     private lateinit var star: MenuItem
     private var locations = listOf<String>()
@@ -66,13 +74,17 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
+        setupUI()
+        getContent()
+    }
+
+    private fun setupUI() {
         objectToolbarBottom.connect(this)
         star = objectToolbarBottom.getFavIcon()
-        image = TouchImage(this, toolbar, toolbarBottom, R.id.iv)
+        touchImage = TouchImage(this, toolbar, toolbarBottom, R.id.iv)
         office = UtilityLocation.getNearestSoundingSite(Location.latLon)
-        imageMap = ObjectImageMap(this, R.id.map, toolbar, toolbarBottom, listOf<View>(image.get()))
+        imageMap = ObjectImageMap(this, R.id.map, objectToolbar, objectToolbarBottom, listOf<View>(touchImage.get()))
         imageMap.connect(::mapSwitch, UtilityImageMap::mapToSnd)
-        getContent()
     }
 
     override fun onRestart() {
@@ -92,15 +104,11 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun showImage(bitmap: Bitmap) {
-        image.visibility = View.VISIBLE
-        image.set(bitmap)
-        image.setMaxZoom(4f)
-        image.firstRun("SOUNDING")
+        touchImage.visibility = View.VISIBLE
+        touchImage.set(bitmap)
+        touchImage.setMaxZoom(4f)
+        touchImage.firstRun("SOUNDING")
         Utility.writePref(this, "SOUNDING_SECTOR", office)
-    }
-
-    private fun getContentSPCPlot() {
-        FutureBytes2(this, ::downloadSpcPlot, ::showSpcPlot)
     }
 
     private fun downloadSpcPlot(): Bitmap {
@@ -111,14 +119,14 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun showSpcPlot(bitmap: Bitmap) {
-        image.visibility = View.VISIBLE
-        image.set(bitmap)
-        image.setMaxZoom(4f)
+        touchImage.visibility = View.VISIBLE
+        touchImage.set(bitmap)
+        touchImage.setMaxZoom(4f)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.bitmap(this, "$office sounding", image)
+            R.id.action_share -> UtilityShare.bitmap(this, "$office sounding", touchImage)
             R.id.action_250mb -> setPlotAndGet("250")
             R.id.action_300mb -> setPlotAndGet("300")
             R.id.action_500mb -> setPlotAndGet("500")
@@ -136,14 +144,13 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun setPlotAndGet(upperAir: String) {
         this.upperAir = upperAir
-        getContentSPCPlot()
+        FutureBytes2(this, ::downloadSpcPlot, ::showSpcPlot)
     }
 
     private fun mapSwitch(location: String) {
         office = location
-        mapShown = false
         getContent()
-        image.resetZoom()
+        touchImage.resetZoom()
     }
 
     private fun toggleFavorite() {
@@ -162,10 +169,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
                     when (it) {
                         1 -> Route.favoriteAdd(this, FavoriteType.SND)
                         2 -> Route.favoriteRemove(this, FavoriteType.SND)
-                        else -> {
-                            office = locations[it].split(" ").getOrNull(0) ?: ""
-                            //getContent()
-                        }
+                        else -> office = locations[it].split(" ").getOrNull(0) ?: ""
                     }
                 }
             }
@@ -175,7 +179,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onStop() {
-        image.imgSavePosnZoom("SOUNDING")
+        touchImage.imgSavePosnZoom("SOUNDING")
         super.onStop()
     }
 }

@@ -25,7 +25,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectSwitch
+import joshuatee.wx.ui.Switch
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 
@@ -39,20 +39,27 @@ class SettingsNavDrawerActivity : BaseActivity() {
         setTitle("Navigation Drawer", "Turn items off or on for the main screen nav drawer.")
         box = VBox.fromResource(this)
         tokenList = UtilityNavDrawer.getNavDrawerTokenList(this)
+        addCards()
+    }
+
+    private fun addCards() {
         UtilityNavDrawer.labels.forEach {
             box.addWidget(
-                    ObjectSwitch(
+                    Switch(
                             this,
                             it,
                             UtilityNavDrawer.getPrefVar(UtilityNavDrawer.labelToTokenMap[it] ?: ""),
-                            R.string.nav_drawer_main_screen_toggle).get()
+                            R.string.nav_drawer_main_screen_toggle)
             )
         }
     }
 
-    override fun onBackPressed() {
+    override fun onStop() {
         UtilityNavDrawer.generateNewTokenList(this)
-        Utility.restart()
+        if (UIPreferences.navDrawerMainScreen) {
+            Utility.restart()
+        }
+        super.onStop()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

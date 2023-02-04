@@ -32,11 +32,11 @@ class NexradColorLegend(val activity: VideoRecordActivity, val nexradState: Nexr
 
     init {
         if (RadarPreferences.showLegend) {
-            showLegend()
+            show()
         }
     }
 
-    fun showLegend() {
+    fun show() {
         if (!legendShown) {
             if (nexradState.product == "DSA" || nexradState.product == "DAA") {
                 WXGLRadarActivity.dspLegendMax = (255.0f / nexradState.render.wxglNexradLevel3.halfword3132) * 0.01f
@@ -58,7 +58,7 @@ class NexradColorLegend(val activity: VideoRecordActivity, val nexradState: Nexr
         }
     }
 
-    private fun updateLegend() {
+    private fun update() {
         nexradState.relativeLayouts[0].removeView(legend)
         val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)
@@ -66,15 +66,15 @@ class NexradColorLegend(val activity: VideoRecordActivity, val nexradState: Nexr
         nexradState.relativeLayouts[0].addView(legend, layoutParams)
     }
 
-    fun updateLegendAfterDownload() {
+    fun updateAfterDownload() {
         if (legendShown && nexradState.product != nexradState.oldProd && nexradState.product != "DSA" && nexradState.product != "DAA") {
-            updateLegend()
+            update()
         }
         if (legendShown && (nexradState.product == "DSA" || nexradState.product == "DAA" || nexradState.product == "N0U")) {
             WXGLRadarActivity.dspLegendMax = (255.0f / nexradState.render.wxglNexradLevel3.halfword3132) * 0.01f
             WXGLRadarActivity.velMax = nexradState.render.wxglNexradLevel3.halfword48
             WXGLRadarActivity.velMin = nexradState.render.wxglNexradLevel3.halfword47
-            updateLegend()
+            update()
         }
     }
 }

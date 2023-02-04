@@ -70,7 +70,6 @@ internal class ExternalLine(val start: ExternalPoint, val end: ExternalPoint) {
         val minX = if (start.x < end.x) start.x else end.x
         val maxY = if (start.y > end.y) start.y else end.y
         val minY = if (start.y < end.y) start.y else end.y
-        //return if (point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY) {
         return point.x in minX..maxX && point.y >= minY && point.y <= maxY
     }
 }

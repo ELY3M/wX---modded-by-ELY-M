@@ -31,8 +31,9 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.objects.FutureBytes
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.Utility
+import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.TouchImage
 
 class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
@@ -46,9 +47,8 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     companion object { const val NO = "" }
 
     private var day = ""
-    private lateinit var image: TouchImage
+    private lateinit var touchImage: TouchImage
     private var state = ""
-    private var firstTime = true
     private val imgPrefToken = "SWO_STATE"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -64,8 +64,8 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, iconsEvenlySpaced = true, bottomToolbar = false)
         day = intent.getStringArrayExtra(NO)!![0]
-        state = Utility.getWfoSiteName(Location.wfo).split(",")[0]
-        image = TouchImage(this, toolbar, R.id.iv)
+        state = UtilityLocation.getWfoSiteName(Location.wfo).split(",")[0]
+        touchImage = TouchImage(this, toolbar, R.id.iv)
         getContent()
     }
 
@@ -77,36 +77,31 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     private fun getContent() {
         title = "SWO D$day"
         invalidateOptionsMenu()
-        val imgUrl = UtilitySpcSwo.getSwoStateUrl(state, day)
-        FutureBytes(this, imgUrl, ::showImage)
+        FutureBytes(this, UtilitySpcSwo.getSwoStateUrl(state, day), ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {
-        image.set(bitmap)
-        image.firstRun(imgPrefToken)
+        touchImage.set(bitmap)
+        touchImage.firstRun(imgPrefToken)
     }
+
+    private val statesLower48
+        get() = GlobalArrays.states.filter { !it.startsWith("AK") && !it.startsWith("HI") }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_sector -> ObjectDialogue.generic(this,
-                    GlobalArrays.states.filter { !it.startsWith("AK") && !it.startsWith("HI") },
-                    ::getContent) {
-                if (firstTime) {
-                    UtilityToolbar.fullScreenMode(this)
-                    firstTime = false
-                }
-                image.setZoom(1.0f)
-                state = GlobalArrays.states.filter { state ->
-                    !state.startsWith("AK") && !state.startsWith("HI") }[it].split(":")[0]
+            R.id.action_sector -> ObjectDialogue.generic(this, statesLower48, ::getContent) {
+                touchImage.setZoom(1.0f)
+                state = statesLower48[it].split(":")[0]
             }
-            R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", image)
+            R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", touchImage)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
     override fun onStop() {
-        image.imgSavePosnZoom(imgPrefToken)
+        touchImage.imgSavePosnZoom(imgPrefToken)
         super.onStop()
     }
 }

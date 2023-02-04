@@ -26,10 +26,13 @@ import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.ShortcutType
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ImageSummary
+import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
@@ -38,7 +41,8 @@ class SpcSwoSummaryActivity : BaseActivity() {
 
     private val bitmaps = MutableList(8) { UtilityImg.getBlankBitmap() }
     private lateinit var box: VBox
-    private lateinit var objectImageSummary: ObjectImageSummary
+    private lateinit var imageSummary: ImageSummary
+    private var downloadTimer = DownloadTimer("ACTIVITY_SPC_SWO_SUMMARY")
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spc_swo_summary, menu)
@@ -50,7 +54,7 @@ class SpcSwoSummaryActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.spc_swo_summary, false)
         setTitle("Convective Outlooks", "SPC")
         box = VBox.fromResource(this)
-        objectImageSummary = ObjectImageSummary(this, box, bitmaps)
+        imageSummary = ImageSummary(this, box, bitmaps)
         getContent()
     }
 
@@ -60,11 +64,13 @@ class SpcSwoSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        (0..2).forEach {
-            FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage() }) { update(it) }
-        }
-        (3..7).forEach {
-            FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage() }) { update(it) }
+        if (downloadTimer.isRefreshNeeded(this)) {
+            (0..2).forEach {
+                FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage() }) { update(it) }
+            }
+            (3..7).forEach {
+                FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage() }) { update(it) }
+            }
         }
     }
 
@@ -74,8 +80,8 @@ class SpcSwoSummaryActivity : BaseActivity() {
         } else {
             "4-8"
         }
-        objectImageSummary.set(index, bitmaps[index])
-        objectImageSummary.connect(index) { Route.spcSwo(this, day) }
+        imageSummary.set(index, bitmaps[index])
+        imageSummary.connect(index) { Route.spcSwo(this, day) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -31,31 +31,31 @@ import android.widget.TextView
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.radar.UtilitySpotter
-import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectFab
-import joshuatee.wx.ui.ObjectRecyclerViewGeneric
+import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.RecyclerViewGeneric
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
-import java.util.*
+import java.util.Locale
 
 class SpottersActivity : BaseActivity() {
 
     //
     // Show active spotters
-    // can tape on name to open bottom sheet
-    // can tap on email or phone to respectively email or call the individual
+    // tap on name to open bottom sheet
+    // tap on email or phone to respectively email or call the individual
     //
 
     private lateinit var adapter: AdapterSpotter
     private var spotterList = mutableListOf<Spotter>()
     private var spotterList2 = mutableListOf<Spotter>()
-    private lateinit var recyclerView: ObjectRecyclerViewGeneric
+    private lateinit var recyclerView: RecyclerViewGeneric
     private var firstTime = true
     private val titleString = "Spotters active"
 
@@ -86,8 +86,8 @@ class SpottersActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab, null, false)
         setTitle(titleString, "Tap on name for actions.")
-        ObjectFab(this, R.id.fab, R.drawable.ic_info_outline_24dp_white) { reportFAB() }
-        recyclerView = ObjectRecyclerViewGeneric(this, R.id.card_list)
+        Fab(this, R.id.fab, R.drawable.ic_info_outline_24dp_white) { reportFAB() }
+        recyclerView = RecyclerViewGeneric(this, R.id.card_list)
         getContent()
     }
 
@@ -96,7 +96,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, { spotterList = UtilitySpotter.get(this) }, ::showText)
+        FutureVoid(this, { spotterList = UtilitySpotter.get(this).toMutableList() }, ::showText)
     }
 
     private fun showText() {
@@ -126,7 +126,9 @@ class SpottersActivity : BaseActivity() {
         val filteredModelList = mutableListOf<Spotter>()
         models.forEach {
             val text = it.lastName.lowercase(Locale.US)
-            if (text.contains(queryLocal)) filteredModelList.add(it)
+            if (text.contains(queryLocal)) {
+                filteredModelList.add(it)
+            }
         }
         return filteredModelList
     }
@@ -162,20 +164,22 @@ class SpottersActivity : BaseActivity() {
 
     private fun itemClicked(position: Int) {
         val bottomSheetFragment = BottomSheetFragment(this, position, adapter.getItem(position).toString(), false)
-        bottomSheetFragment.functions = listOf(::showItemOnRadar, ::showItemOnMap, ::toggleFavorite)
-        bottomSheetFragment.labelList = listOf("Show on radar", "Show on map", "Toggle favorite")
-        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+        with (bottomSheetFragment) {
+            functions = listOf(::showItemOnRadar, ::showItemOnMap, ::toggleFavorite)
+            labelList = listOf("Show on radar", "Show on map", "Toggle favorite")
+            show(supportFragmentManager, bottomSheetFragment.tag)
+        }
     }
 
     private fun showItemOnMap(position: Int) {
         Route.webView(this,
-                UtilityMap.getUrl(spotterList[position].lat, spotterList[position].lon, "9"),
+                UtilityMap.getUrl(spotterList[position].latLon, "9"),
                 spotterList[position].lastName + ", " + spotterList[position].firstName)
     }
 
     private fun showItemOnRadar(position: Int) {
-        val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(spotterList[position].lat, spotterList[position].lon))
-        Route.radar(this, arrayOf(radarSite, "", "N0Q", "", spotterList[position].unique))
+        val radarSite = UtilityLocation.getNearestOffice(OfficeTypeEnum.RADAR, spotterList[position].latLon)
+        Route.radarWithOneSpotter(this, radarSite, spotterList[position].unique)
     }
 
     private fun toggleFavorite(position: Int) { checkFavorite(position) }

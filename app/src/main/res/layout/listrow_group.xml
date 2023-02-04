@@ -3,10 +3,16 @@
     android:layout_width="wrap_content"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:layout_marginStart="8dp"
-    android:background="@color/primary_dark_blue"
+    android:background="?attr/colorPrimary"
     android:focusable="false"
     android:gravity="start"
     android:paddingStart="32dp"
     android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:textColor="#fff"
     android:textSize="@dimen/normal_text" />
+
+
+<!--
+android:background="@color/primary_dark_blue"
+-->

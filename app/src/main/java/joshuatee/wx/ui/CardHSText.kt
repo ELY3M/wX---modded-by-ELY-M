@@ -28,7 +28,7 @@ import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
-class CardHSText(context: Context, val product: String) {
+class CardHSText(context: Context, val product: String) : Widget {
 
     private val card = Card(context)
     private val text = Text(context)
@@ -37,7 +37,7 @@ class CardHSText(context: Context, val product: String) {
     private var textShownSmall = true
 
     init {
-        card.addWidget(text.get())
+        card.addWidget(text)
     }
 
     fun toggleText() {
@@ -92,5 +92,5 @@ class CardHSText(context: Context, val product: String) {
         text.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
     }
 
-    fun get() = card.get()
+    override fun getView() = card.getView()
 }
