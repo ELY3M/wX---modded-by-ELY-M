@@ -264,9 +264,9 @@ object Utility {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.activeNetworkInfo
         if (netInfo != null && netInfo.isConnected) {
-            UtilityLog.d("wx", "network state = true")
+            UtilityLog.d("wx-elys", "network state = true")
         } else {
-            UtilityLog.d("wx", "network state = false")
+            UtilityLog.d("wx-elys", "network state = false")
             ObjectDialogue(context, "No Network Connection.\nCheck your internet on your device!")
         }
     } 

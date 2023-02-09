@@ -49,6 +49,7 @@ import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 class WX : CommonActionBarFragment() {
 
@@ -64,6 +65,7 @@ class WX : CommonActionBarFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
+        UtilityLog.d("wx-elys", "WX.kt - going to run stuff")
         setupUI()
         setupToolbars()
         setupVr()
@@ -72,6 +74,7 @@ class WX : CommonActionBarFragment() {
         setupNavDrawer()
 	    checkinternet()
         refreshDynamicContent()
+        UtilityLog.d("wx-elys", "WX.kt - stuff ran")
     }
 
     private fun setupUI() {

@@ -5,6 +5,7 @@ package joshuatee.wx
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
@@ -13,9 +14,9 @@ import android.os.Environment
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import com.intentfilter.androidpermissions.PermissionManager
-import com.intentfilter.androidpermissions.models.DeniedPermissions
+import androidx.core.content.ContextCompat
+import com.markodevcic.peko.PermissionRequester
+import com.markodevcic.peko.PermissionResult
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
@@ -23,20 +24,18 @@ import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.SpotterNetworkPositionReportService
 import joshuatee.wx.radar.UtilityConusRadar
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
-import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.settings.UtilityStorePreferences
+import joshuatee.wx.settings.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.*
 import java.nio.charset.Charset
-import java.util.Collections.singleton
 import kotlin.system.exitProcess
 
 
-class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCallback {
+class StartupActivity : Activity() {
 
     //
     // This activity is the first activity started when the app starts.
@@ -45,86 +44,96 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
     // and display the version in the title.
     //
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        UtilityLog.d("wx", "StartupActivity onCreate()")
         super.onCreate(savedInstanceState)
+        initPreferences()
+        askPerms()
+        initBackgroundJobs()
+        startInitialActivity()
+        finish()
+    }
+    
+
+    private fun initPreferences() {
         if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) {
             UtilityStorePreferences.setDefaults(this)
         }
         MyApplication.initPreferences(this)
         Location.refreshLocationData(this)
-        println("UtilityWXJobService started")
+    }
+
+    private fun initBackgroundJobs() {
         UtilityWXJobService.startService(this)
         if (UIPreferences.mediaControlNotif) {
             UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
+    }
+    
+    private fun startInitialActivity() {
+        if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
+            Route(this, WX::class.java)
+        } else {
+            val wfo = Location.wfo
+            val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
+            val radarSite = Location.getRid(this, Location.currentLocationStr)
+            Route.radar(this, arrayOf(radarSite, state))
+        }
+    }
 
-        //storage permission so we can run checkfiles for custom icons//
-        val storagepermissionManager = PermissionManager.getInstance(applicationContext)
-        storagepermissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), object :
-            PermissionManager.PermissionRequestListener {
-            override fun onPermissionGranted() {
-
-                //FUCK YOU GOOGLE!!!!!!  They kept changing their code to "secure" the storage   FUCK YOU
-                //my ass will be at your new HQ offices and chewing you out for what you did to me.  I fucking hate companies that censor.
-                //I will make you pay my fucking income!!!!  FUCK YOU!!!!
-                //Google company Execs need metal pipes in their asses for breaking their promoise not to censor!!!!!
-                //file access permission functions moved to WX.kt
-                if(SDK_INT >= 30) {
-                    if(!Environment.isExternalStorageManager()) {
-                        Toast.makeText(applicationContext, "This app need access to your phone memory or SD Card to make files and write files (/wX/ on your phone memory or sd card)\nThe all file access settings will open. Make sure to toggle it on to enable all files access for this app to function fully.\n You need to restart the app after you enabled the all files access for this app in the settings.\n", Toast.LENGTH_LONG).show()
-                        val intent = Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-                        startActivity(intent)
-                        //force restart :/
-                        exitProcess(0)
-                    } else {
-                        runme()
+    private fun askPerms() {
+        PermissionRequester.initialize(applicationContext)
+        val requester = PermissionRequester.instance()
+        if(SDK_INT >= 30) {
+            CoroutineScope(Dispatchers.Main).launch {
+                requester.request(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ).collect { p ->
+                    when (p) {
+                        is PermissionResult.Granted -> {
+                            askExternalStorageManager()
+                        }
+                        else -> {}
                     }
-                } else {
-                    runme()
+
                 }
-
             }
-
-            override fun onPermissionDenied(deniedPermissions: DeniedPermissions) {
-                UtilityLog.d("wx", "Storage Permissions Denied")
+        } else {
+            CoroutineScope(Dispatchers.Main).launch {
+                requester.request(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).collect { p ->
+                    when (p) {
+                        is PermissionResult.Granted -> {
+                            runme()
+                        }
+                        else -> {}
+                    }
+                }
             }
-        })
+        }
+    }
 
-        //location permission
-        val permissionManager = PermissionManager.getInstance(applicationContext)
-        permissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), object :
-            PermissionManager.PermissionRequestListener {
-            override fun onPermissionGranted() {
-                UtilityLog.d("wx", "Location Permissions Granted")
-                //getLocation()
+
+    fun askExternalStorageManager() {
+        if(SDK_INT >= 30) {
+            if (Environment.isExternalStorageManager()) {
+                Log.i("wx-elys", "ExternalStorageManager Perms are already granted :)")
+                runme()
+            } else {
+                Toast.makeText(applicationContext, "This app need access to your phone memory or SD Card to make files and write files (/wX/ on your phone memory or sd card)\nThe all file access settings will open. Make sure to toggle it on to enable all files access for this app to function fully.\n You need to restart the app after you enabled the all files access for this app in the settings.\n", Toast.LENGTH_LONG).show()
+                val permissionIntent = Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                startActivity(permissionIntent)
+                Thread.sleep(13000) //sleep for 13 secs and force restart
+                exitProcess(0)
             }
-
-            override fun onPermissionDenied(deniedPermissions: DeniedPermissions) {
-                UtilityLog.d("wx", "Location Permissions Denied")
-
-            }
-        })
-
-        //background location permission
-        val bgpermissionManager = PermissionManager.getInstance(applicationContext)
-        bgpermissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_BACKGROUND_LOCATION), object :
-            PermissionManager.PermissionRequestListener {
-            override fun onPermissionGranted() {
-                Log.d("owntracker", "Great!!! Got Background Location Perms!. :)")
-            }
-
-            override fun onPermissionDenied(deniedPermissions: DeniedPermissions) {
-                Log.d("owntracker", "Permissions Denied")
-
-            }
-        })
-
-        finish()
+        }
     }
 
     fun runme() {
-
-        UtilityLog.d("wx", "Storage Permissions Granted")
+        UtilityLog.d("wx-elys", "runme()")
         checkfiles(R.drawable.headingbug, "headingbug.png")
         checkfiles(R.drawable.star_cyan, "star_cyan.png")
         checkfiles(R.drawable.location, "location.png")
@@ -168,58 +177,54 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         ColorPalettes.initialize(applicationContext)
 
         //make to download new conus everytime the app start...
-        UtilityLog.d("wx", "downloading conus on start....")
+        UtilityLog.d("wx-elys", "downloading conus on start....")
         UtilityConusRadar.getConusImage()
 
         //start service for Spotter Network Location Auto Reporting
         if (RadarPreferences.sn_locationreport) {
+            Log.d("wx-elys", "SN Auto Location Report started")
             applicationContext.startService(Intent(applicationContext, SpotterNetworkPositionReportService::class.java))
-        }
-
-        if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
-            Route(this, WX::class.java)
-        } else {
-            val wfo = Location.wfo
-            val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
-            val radarSite = Location.getRid(this, Location.currentLocationStr)
-            Route.radar(this, arrayOf(radarSite, state))
         }
 
     }
 
 
     fun checkfiles(drawable: Int, filename: String) {
-        UtilityLog.d("wx", "running files check on " + GlobalVariables.FilesPath)
-        val dir = File(GlobalVariables.FilesPath)
-        if (!dir.exists()) {
-            UtilityLog.d("wx", "making dir")
-            dir.mkdirs()
-        }
+        Log.d("wx-elys", "running files check on " + GlobalVariables.FilesPath)
+        try {
+            val dir = File(GlobalVariables.FilesPath)
+            if (!dir.exists()) {
+                Log.d("wx-elys", "making dir")
+                dir.mkdirs()
+            }
 
-        var file = File(GlobalVariables.FilesPath + filename)
-        var fileExists = file.exists()
-        if(!fileExists)
-        {
-            //need to copy files!
-            UtilityLog.d("wx", filename + " does not exist.")
-            var bitmap: Bitmap = BitmapFactory.decodeResource(resources, drawable)
-            saveBitmapToFile(filename, bitmap)
+            var file = File(GlobalVariables.FilesPath + filename)
+            var fileExists = file.exists()
+            if (!fileExists) {
+                //need to copy files!
+                Log.d("wx-elys", filename + " does not exist.")
+                var bitmap: Bitmap = BitmapFactory.decodeResource(resources, drawable)
+                saveBitmapToFile(filename, bitmap)
 
-        } else {
-            UtilityLog.d("wx", filename + " are there!")
+            } else {
+                Log.d("wx-elys", filename + " are there!")
+            }
+        } catch (e: Exception) {
+            Log.d("wx-elys", "checkfiles - caught Exception!")
+            e.printStackTrace()
         }
     }
 
     fun saveBitmapToFile(fileName: String, bm: Bitmap) {
-        val file = File(GlobalVariables.FilesPath, fileName)
         try {
+            val file = File(GlobalVariables.FilesPath, fileName)
             val out = FileOutputStream(file)
             bm.compress(Bitmap.CompressFormat.PNG, 100, out)
             out.flush()
             out.close()
-            UtilityLog.d("wx", fileName + " copied!")
+            Log.d("wx-elys", fileName + " copied!")
         } catch (e: Exception) {
-            UtilityLog.d("wx", "checkfiles Exception!")
+            Log.d("wx-elys", "saveBitmapToFile - caught Exception!")
             e.printStackTrace()
         }
 
@@ -228,31 +233,40 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
     //check colortable files and copy if any missing//
     fun checkpalfiles(resourceId: Int, filename: String) {
-        UtilityLog.d("wx", "running files check on " + GlobalVariables.PalFilesPath)
-        val dir = File(GlobalVariables.PalFilesPath)
-        if (!dir.exists()) {
-            UtilityLog.d("wx", "making dir")
-            dir.mkdirs()
-        }
+        Log.d("wx-elys", "running files check on " + GlobalVariables.PalFilesPath)
+        try {
+            val dir = File(GlobalVariables.PalFilesPath)
+            if (!dir.exists()) {
+                Log.d("wx-elys", "making dir")
+                dir.mkdirs()
+            }
 
-        var file = File(GlobalVariables.PalFilesPath + filename)
-        var fileExists = file.exists()
-        if(!fileExists)
-        {
-            //need to copy files!
-            UtilityLog.d("wx", filename + " does not exist.")
-            saveRawToFile(filename, resourceId)
-        } else {
-            UtilityLog.d("wx", filename + " are there!")
+            var file = File(GlobalVariables.PalFilesPath + filename)
+            var fileExists = file.exists()
+            if (!fileExists) {
+                //need to copy files!
+                Log.d("wx-elys", filename + " does not exist.")
+                saveRawToFile(filename, resourceId)
+            } else {
+                Log.d("wx-elys", filename + " are there!")
+            }
+        } catch (e: Exception) {
+            Log.d("wx-elys", "checkpalfiles - caught Exception!")
+            e.printStackTrace()
         }
     }
 
     private fun saveRawToFile(fileName: String, resourceId: Int) {
-        val dir = GlobalVariables.PalFilesPath
-        var ins:InputStream = resources.openRawResource(resourceId)
-        var content = ins.readBytes().toString(Charset.defaultCharset())
-        File("$dir/$fileName").printWriter().use {
-            it.println(content)
+        try {
+            val dir = GlobalVariables.PalFilesPath
+            var ins: InputStream = resources.openRawResource(resourceId)
+            var content = ins.readBytes().toString(Charset.defaultCharset())
+            File("$dir/$fileName").printWriter().use {
+                it.println(content)
+            }
+        } catch (e: Exception) {
+            Log.d("wx-elys", "saveRawToFile - caught Exception!")
+            e.printStackTrace()
         }
     }
 

@@ -139,7 +139,7 @@ internal object OpenGLShader {
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE.toFloat())
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE.toFloat())
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0)
-        ///UtilityLog.d("wx", "Loaded texture" + ":H:" + bmp.height + ":W:" + bmp.width)
+        ///UtilityLog.d("wx-elys", "Loaded texture" + ":H:" + bmp.height + ":W:" + bmp.width)
 
         try {
             bmp.recycle()
@@ -165,7 +165,7 @@ internal object OpenGLShader {
             //GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE.toFloat())
             //GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_T , GLES20.GL_CLAMP_TO_EDGE.toFloat())
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
-            //UtilityLog.d("wx", "Loaded texture" + ":H:" + img!!.height + ":W:" + img.width)
+            //UtilityLog.d("wx-elys", "Loaded texture" + ":H:" + img!!.height + ":W:" + img.width)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -201,7 +201,7 @@ internal object OpenGLShader {
     }
 
     fun RotateBitmap(imagefile: String, d: Double): Bitmap {
-        //UtilityLog.d("wx", "rotating bitmap: "+ imagefile + " to: "+d)
+        //UtilityLog.d("wx-elys", "rotating bitmap: "+ imagefile + " to: "+d)
         val bitmap: Bitmap? = LoadBitmap(imagefile)
         val matrix = Matrix()
         matrix.setRotate(d.toFloat())
@@ -219,7 +219,7 @@ internal object OpenGLShader {
             //GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE.toFloat())
             //GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_T , GLES20.GL_CLAMP_TO_EDGE.toFloat())
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
-            ///UtilityLog.d("wx","Loaded texture" + ":H:" + img.height + ":W:" + img.width)
+            ///UtilityLog.d("wx-elys","Loaded texture" + ":H:" + img.height + ":W:" + img.width)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }

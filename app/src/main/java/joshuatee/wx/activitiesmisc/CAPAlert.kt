@@ -119,11 +119,11 @@ class CapAlert {
             val capAlert = CapAlert()
             capAlert.url = url
             val html = UtilityDownloadNws.getStringFromUrlSep(url)
-//            UtilityLog.d("wx", ":::" + url)
+//            UtilityLog.d("wx-elys", ":::" + url)
 //            val html = if (url.contains("urn:oid")) {
 //                UtilityDownloadNws.getStringFromUrlSep(url)
 //            } else {
-//                UtilityLog.d("wx", "::: SEP")
+//                UtilityLog.d("wx-elys", "::: SEP")
 //                url.getHtmlSep()
 //            }
             capAlert.points = getWarningsFromJson(html)

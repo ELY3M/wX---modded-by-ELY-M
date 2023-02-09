@@ -32,16 +32,14 @@ http://bmx3r.com/wx/switch
 
 ## TO DO List: 
 
-* change up how Spotter icons is - green for active - yellow for idle - red for inactive based on their time of their last location report.  think I will use custom icon like in Pykl3
+* change up how Spotter icons is - green for active - yellow for idle based on their time of their last location report.
 * conus radar overlay when you zoom out like on pykl3   
 * add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs    
-* add warning list within radar  
 * add LSR reports from SN spotters/option to turn on/off LSR reports  
 * as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
 * move show color legend to bottom as a option.  there will be option to choose which side.     
 * rename application id and change icon color so someone can run both versions of wX   
 * 8-bit SRM like in pykl3  
-* fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
 * android wear support. I own android wear watches and love them.      
 * would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
 * make VAD Wind Profile more better and friendly  like the one at cod.edu    
@@ -51,7 +49,10 @@ http://bmx3r.com/wx/switch
 
 #
 ## DONE!
-==================================== 
+====================================
+* Fixed few bugs esp in Spotter functions.  
+* Re-did the permissions.  
+* added option to show both first name or only last name for Spotter labels.   
 * fixed bugs with sn key and report location. 
 * Added GOES Satellite and Radar Mosaic to the longpress menu in the Radar.   
 * added ACRA Crash Logger from https://www.acra.ch and updated privacy policy because of acra crash logger.  This is temporary.  

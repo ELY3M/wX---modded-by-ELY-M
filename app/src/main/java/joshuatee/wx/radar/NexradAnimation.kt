@@ -48,7 +48,7 @@ class NexradAnimation(
                     val fileName = getFilename(paneIndex, frameIndex, wxglRender.state)
                     activity.deleteFile(fileName)
                     if (!file.renameTo(File(activity.filesDir, fileName))) {
-                        UtilityLog.d("wx", "Problem moving to $fileName")
+                        UtilityLog.d("wx-elys", "Problem moving to $fileName")
                     }
                 }
             } catch (e: Exception) {

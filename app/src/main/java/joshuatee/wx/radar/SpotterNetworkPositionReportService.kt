@@ -26,14 +26,14 @@ class SpotterNetworkPositionReportService : Service() {
     private var runnable: Runnable = object : Runnable {
         override fun run() {
             // Repeat every 5 mins
-            Log.i("wx","Spotter Service Ran")
+            Log.i("wx-elys","Spotter Service Ran")
             SpotterNetworkPositionReport.SendPosition(MyApplication.appContext)
             handler.postDelayed(this, 300000)
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.i("wx","Spotter onStartCommand")
+        Log.i("wx-elys","Spotter onStartCommand")
         handler.post(runnable)
         return START_STICKY
     }

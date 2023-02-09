@@ -402,11 +402,11 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         //TODO try to use real plotting without adding usa map....
         //hack job!!!
         if (!state.displayHold) {
-            //UtilityLog.d("wx", "zoom: " + state.zoom)
-            //UtilityLog.d("wx", "zoom setting: "+RadarPreferences.conusRadarZoom+ " math: "+(RadarPreferences.conusRadarZoom / 1000.0))
+            //UtilityLog.d("wx-elys", "zoom: " + state.zoom)
+            //UtilityLog.d("wx-elys", "zoom setting: "+RadarPreferences.conusRadarZoom+ " math: "+(RadarPreferences.conusRadarZoom / 1000.0))
             if (RadarPreferences.conusRadar) {
                 if (state.zoom < (RadarPreferences.conusRadarZoom / 1000.0).toFloat()) {
-                    UtilityLog.d("wx", "zoom out to conusradar")
+                    UtilityLog.d("wx-elys", "zoom out to conusradar")
                     displayConus = true
                 } else { 
 		displayConus = false 
@@ -441,15 +441,15 @@ private fun drawConusRadarTest(buffers: OglBuffers) {
         val conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
         val ridx = Utility.readPref(context, "RID_" + state.rid + "_X", "0.0f").toFloat()
         val ridy = Utility.readPref(context, "RID_" + state.rid + "_Y", "0.0f").toFloat() / -1.0
-        UtilityLog.d("wx", state.rid + " rid x: " + ridx + " y: " + ridy)
+        UtilityLog.d("wx-elys", state.rid + " rid x: " + ridx + " y: " + ridy)
 /*
 
-            UtilityLog.d("wx", "gfw1: " + UtilityConusRadar.gfw1)
-            UtilityLog.d("wx", "gfw2: " + UtilityConusRadar.gfw2)
-            UtilityLog.d("wx", "gfw3: " + UtilityConusRadar.gfw3)
-            UtilityLog.d("wx", "gfw4: " + UtilityConusRadar.gfw4)
-            UtilityLog.d("wx", "gfw5: " + UtilityConusRadar.gfw5)
-            UtilityLog.d("wx", "gfw6: " + UtilityConusRadar.gfw6)
+            UtilityLog.d("wx-elys", "gfw1: " + UtilityConusRadar.gfw1)
+            UtilityLog.d("wx-elys", "gfw2: " + UtilityConusRadar.gfw2)
+            UtilityLog.d("wx-elys", "gfw3: " + UtilityConusRadar.gfw3)
+            UtilityLog.d("wx-elys", "gfw4: " + UtilityConusRadar.gfw4)
+            UtilityLog.d("wx-elys", "gfw5: " + UtilityConusRadar.gfw5)
+            UtilityLog.d("wx-elys", "gfw6: " + UtilityConusRadar.gfw6)
             degreesPerPixellon = UtilityConusRadar.gfw1.toDouble()
             degreesPerPixellat = UtilityConusRadar.gfw4.toDouble()
             west = UtilityConusRadar.gfw5.toDouble()
@@ -458,10 +458,10 @@ private fun drawConusRadarTest(buffers: OglBuffers) {
             east = west + conusbitmap!!.width.toDouble() * degreesPerPixellon
 
 
-            UtilityLog.d("wx", "north: " + north)
-            UtilityLog.d("wx", "south: " + south)
-            UtilityLog.d("wx", "west: " + west)
-            UtilityLog.d("wx", "east: " + east)
+            UtilityLog.d("wx-elys", "north: " + north)
+            UtilityLog.d("wx-elys", "south: " + south)
+            UtilityLog.d("wx-elys", "west: " + west)
+            UtilityLog.d("wx-elys", "east: " + east)
 
             //from aweather
             //https://github.com/Andy753421/AWeather
@@ -473,12 +473,12 @@ private fun drawConusRadarTest(buffers: OglBuffers) {
             val midofwest = awest + UtilityConusRadar.gfw1.toDouble() * conusbitmap.width.toDouble() / 2
             val midofsouth = anorth - UtilityConusRadar.gfw1.toDouble() * conusbitmap.height.toDouble() / 2
 
-            UtilityLog.d("wx", "awest: " + awest)
-            UtilityLog.d("wx", "anorth: " + anorth)
-            UtilityLog.d("wx", "asouth: " + asouth)
-            UtilityLog.d("wx", "aeast: " + aeast)
-            UtilityLog.d("wx", "midofwest: " + midofwest)
-            UtilityLog.d("wx", "midofsouth: " + midofsouth)
+            UtilityLog.d("wx-elys", "awest: " + awest)
+            UtilityLog.d("wx-elys", "anorth: " + anorth)
+            UtilityLog.d("wx-elys", "asouth: " + asouth)
+            UtilityLog.d("wx-elys", "aeast: " + aeast)
+            UtilityLog.d("wx-elys", "midofwest: " + midofwest)
+            UtilityLog.d("wx-elys", "midofsouth: " + midofsouth)
 */
 
 
@@ -495,7 +495,7 @@ private fun drawConusRadarTest(buffers: OglBuffers) {
 
 
         //val riddist = LatLon.distance(LatLon(ridx.toDouble(), ridy.toDouble()), LatLon(south, west), DistanceUnit.MILE)
-        //UtilityLog.d("wx", "riddist: " + riddist)
+        //UtilityLog.d("wx-elys", "riddist: " + riddist)
         //getNewConusPoint(south, west, riddist)
 
 
@@ -526,10 +526,10 @@ g_free(clear);
         val base = RectF(-conusbitmap!!.width.toFloat(), conusbitmap.height.toFloat(), conusbitmap.width.toFloat(), -conusbitmap.height.toFloat())
         val scale = 3.0f //was 2.0f
 
-        UtilityLog.d("wx", "left: " + base.left)
-        UtilityLog.d("wx", "right: " + base.right)
-        UtilityLog.d("wx", "bottom: " + base.bottom)
-        UtilityLog.d("wx", "top: " + base.top)
+        UtilityLog.d("wx-elys", "left: " + base.left)
+        UtilityLog.d("wx-elys", "right: " + base.right)
+        UtilityLog.d("wx-elys", "bottom: " + base.bottom)
+        UtilityLog.d("wx-elys", "top: " + base.top)
 
         val left = base.left * scale
         val right = base.right * scale
@@ -542,10 +542,10 @@ g_free(clear);
         val eastsouth = LatLon(east, south)
         val eastnorth = LatLon(east, north)
 
-        UtilityLog.d("wx", "westnorth: " + westnorth)
-        UtilityLog.d("wx", "westsouth: " + westsouth)
-        UtilityLog.d("wx", "eastsouth: " + eastsouth)
-        UtilityLog.d("wx", "eastnorth: " + eastnorth)
+        UtilityLog.d("wx-elys", "westnorth: " + westnorth)
+        UtilityLog.d("wx-elys", "westsouth: " + westsouth)
+        UtilityLog.d("wx-elys", "eastsouth: " + eastsouth)
+        UtilityLog.d("wx-elys", "eastnorth: " + eastnorth)
         */
 
 

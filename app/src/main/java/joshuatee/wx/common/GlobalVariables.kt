@@ -39,8 +39,7 @@ object GlobalVariables {
     val PalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/pal/"
     val BackupFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/"
     val BackupPalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/pal/"
-	
-	
+
 	//conus radar for zoom out
     //const val nwsConusRadar = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
     //const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"

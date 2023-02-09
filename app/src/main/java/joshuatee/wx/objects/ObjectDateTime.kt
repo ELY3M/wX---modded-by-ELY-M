@@ -71,7 +71,7 @@ class ObjectDateTime() {
         fun parse(timeString: String, pattern: String): ObjectDateTime = try {
             ObjectDateTime(LocalDateTime.parse(timeString, DateTimeFormatter.ofPattern(pattern)))
         } catch (e: Exception) {
-            UtilityLog.d("wx", "failed to parse:$timeString $pattern")
+            UtilityLog.d("wx-elys", "failed to parse:$timeString $pattern")
             UtilityLog.handleException(e)
             ObjectDateTime()
         }

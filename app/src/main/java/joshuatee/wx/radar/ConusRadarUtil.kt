@@ -353,7 +353,7 @@ public object UtilityConusRadar {
 
                 //READ and parase GFW file....
                 var gfw = (urlgfw).getHtmlSep()
-                UtilityLog.d("wx", "gfw: " + gfw)
+                UtilityLog.d("wx-elys", "gfw: " + gfw)
                 val gfwArr = gfw.split("<br>").dropLastWhile { it.isEmpty() }
                 //var tmpArr: List<String>
                 gfwArr.forEach {
@@ -372,7 +372,7 @@ public object UtilityConusRadar {
 
             //TODO TESTING
             var teststr = gfw1 + "\n" + gfw2 + "\n" + gfw3 + "\n" + gfw4 + "\n" + gfw5 + "\n" + gfw6 + "\n"
-            UtilityLog.d("wx", "conus gfw: " + teststr)
+            UtilityLog.d("wx-elys", "conus gfw: " + teststr)
 
 
         }
@@ -387,7 +387,7 @@ public object UtilityConusRadar {
             //val dir = File(context.filesDir.toString())
             val dir = File(GlobalVariables.FilesPath)
             //if (!dir.mkdirs())
-            //    UtilityLog.d("wx", "failed to mkdir: " + context.filesDir)
+            //    UtilityLog.d("wx-elys", "failed to mkdir: " + context.filesDir)
             val file = File(dir, fileName)
             fos = FileOutputStream(file)
         } catch (e: Exception) {
@@ -460,8 +460,8 @@ public object UtilityConusRadar {
 
         }
 
-        UtilityLog.d("wx", "bitmap size: "+bitmap.width +" "+bitmap.height)
-        UtilityLog.d("wx", "bitmapcanvas size: "+bitmapCanvas.width +" "+bitmapCanvas.height)
+        UtilityLog.d("wx-elys", "bitmap size: "+bitmap.width +" "+bitmap.height)
+        UtilityLog.d("wx-elys", "bitmapcanvas size: "+bitmapCanvas.width +" "+bitmapCanvas.height)
         layers.add(BitmapDrawable(context.resources, bitmap))
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         //val finalbitmap: Bitmap = UtilityImg.layerDrawableToBitmap(layers)
@@ -550,7 +550,7 @@ public object UtilityConusRadar {
         try {
             nwsConusRadarWithMapSquare(MyApplication.appContext)
         } catch (e: Exception) {
-        UtilityLog.d("wx", "getConusImage() failed! error: "+e.toString())
+        UtilityLog.d("wx-elys", "getConusImage() failed! error: "+e.toString())
         UtilityLog.handleException(e)
     }
         }

@@ -27,11 +27,17 @@ import joshuatee.wx.Extensions.getHtmlWithNewLine
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.DownloadTimer
-import joshuatee.wx.util.To
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+
 
 object UtilitySpotter {
 
@@ -136,17 +142,20 @@ object UtilitySpotter {
         }
     }
 
+
 //LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
 //#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
-
     fun findClosestSpotter(location: LatLon): String {
-        var text = Spotterlistbydist
+        var text = ""
         var SpotterInfoString = ""
         val spotterinfo = mutableListOf<Spotter>()
-        text = text.replace("#storm reports.*?$".toRegex(), "")
+        val html = ("http://www.spotternetwork.org/feeds/csv.txt").getHtmlWithNewLine()
+        val reportData = html.replace(".*?#storm reports".toRegex(), "")
+        process(reportData)
+        text = html.replace("#storm reports.*?$".toRegex(), "")
         val lines = text.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
         lines.forEach { line->
-            var items = line.split(";;").dropLastWhile { it.isEmpty() }
+            val items = line.split(";;").dropLastWhile { it.isEmpty() }
             if (items.size > 15) {
                 spotterinfo.add(
 		Spotter(
@@ -171,7 +180,7 @@ object UtilitySpotter {
             }
         }
 
-        var shortestDistance = 13.0
+        var shortestDistance = 10.0
         var currentDistance: Double
         var bestSpotter = -1
         var idleTime: String
@@ -189,28 +198,31 @@ object UtilitySpotter {
 
             }
         }
-        UtilityLog.d("wx", "Spotter Info: "+SpotterInfoString)
+        UtilityLog.d("wx-elys", "Spotter Info: "+SpotterInfoString)
         return if (bestSpotter == -1) {
             "Spotter Info not available!"
         } else {
             SpotterInfoString
         }
-
-
     }
 
-//TODO FIX ME
+
 fun countTime(reportAt: String): String {
     //get now date in GMT zone
     val cal: Calendar = Calendar.getInstance()
-    val format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-    format.setTimeZone(TimeZone.getTimeZone("GMT"))
-    val nowDateTime = format.format(cal.getTime())
-    UtilityLog.d("wx", "Spotter reportAt: "+reportAt)
-    UtilityLog.d("wx", "Spotter Now Time: "+nowDateTime)
+    val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
+    //force all times to be GMT
+    format.setTimeZone(TimeZone.getTimeZone("GMT"))
+
+    val nowDateTime = format.format(cal.getTime())
     val reporttime = format.parse(reportAt)
-    var now = format.parse(nowDateTime)
+    val now = format.parse(nowDateTime)
+
+    UtilityLog.d("wx-elys", "Spotter reportAt: "+reportAt)
+    UtilityLog.d("wx-elys", "Spotter Now Time: "+nowDateTime)
+    UtilityLog.d("wx-elys", "Spotter reporttime: "+reporttime)
+    UtilityLog.d("wx-elys", "Spotter now: "+now)
 
     //in milliseconds
     val diff = now.getTime() - reporttime.getTime()
@@ -219,10 +231,9 @@ fun countTime(reportAt: String): String {
     val diffHours = diff / (60 * 60 * 1000) % 24
     val diffDays = diff / (24 * 60 * 60 * 1000)
     val idleDateTime = "$diffDays days, $diffHours hrs, $diffMinutes mins, $diffSeconds secs"
-    UtilityLog.d("wx", "Spotter Idle Time: "+idleDateTime)
+    UtilityLog.d("wx-elys", "Spotter Idle Time: "+idleDateTime)
     return idleDateTime
 }
-
 
     val reports: List<SpotterReports>
         get() = reportsList

@@ -206,7 +206,7 @@ class SettingsUIActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                UtilityLog.d("wx", "DEBUG - home")
+                UtilityLog.d("wx-elys", "DEBUG - home")
                 UIPreferences.navDrawerMainScreen = Utility.readPref(this, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
                 UIPreferences.navDrawerMainScreenOnRight = Utility.readPref(this, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
                 if ((UIPreferences.tilesPerRow != tilesPerRowStart)

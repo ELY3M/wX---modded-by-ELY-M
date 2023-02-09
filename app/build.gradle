@@ -86,7 +86,8 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     // https://developer.android.com/jetpack/androidx/versions
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.8.0'
+    //implementation 'androidx.activity:activity-ktx:1.7.0-alpha04'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.media:media:1.6.0'
@@ -99,13 +100,12 @@ dependencies {
     // https://developer.android.com/studio/write/java8-support
     // https://developer.android.com/studio/write/java8-support-table
     // https://developer.android.com/reference/java/time/package-summary
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.8'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     
     //elys mods
-    implementation 'ch.acra:acra-mail:5.9.6'
-    implementation 'ch.acra:acra-core:5.9.6'
-    //implementation 'io.github.nishkarsh:android-permissions:0.1.7'
-    implementation 'io.github.nishkarsh:android-permissions:2.1.6'
+    implementation 'ch.acra:acra-mail:5.9.7'
+    implementation 'ch.acra:acra-core:5.9.7'
+    implementation 'com.markodevcic:peko:3.0.1'
     implementation 'org.shredzone.commons:commons-suncalc:3.5'
 }
 

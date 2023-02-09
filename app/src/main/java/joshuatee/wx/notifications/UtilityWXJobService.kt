@@ -42,7 +42,7 @@ object UtilityWXJobService {
                 } else {
                     val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
                     scheduler.cancelAll()
-                    UtilityLog.d("wx", "job cancel all")
+                    UtilityLog.d("wx-elys", "job cancel all")
                 }
             } else {
                 context.startService(Intent(context, AlertService::class.java))
@@ -64,9 +64,9 @@ object UtilityWXJobService {
             val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
             val result = scheduler.schedule(jobInfo)
             if (result == JobScheduler.RESULT_SUCCESS) {
-                UtilityLog.d("wx", "Job scheduled successfully - jobService")
+                UtilityLog.d("wx-elys", "Job scheduled successfully - jobService")
             } else {
-                UtilityLog.d("wx", "Job scheduled with error - jobService")
+                UtilityLog.d("wx-elys", "Job scheduled with error - jobService")
             }
         }
     }

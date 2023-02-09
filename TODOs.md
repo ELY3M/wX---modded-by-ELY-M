@@ -19,7 +19,9 @@
 
 #
 ## DONE!
-==================================== 
+====================================
+* Fixed few bugs esp in Spotter functions.  
+* Re-did the permissions.  
 * added option to show both first name or only last name for Spotter labels.   
 * fixed bugs with sn key and report location. 
 * Added GOES Satellite and Radar Mosaic to the longpress menu in the Radar.   

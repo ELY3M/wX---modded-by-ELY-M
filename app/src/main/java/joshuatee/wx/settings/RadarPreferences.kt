@@ -97,11 +97,6 @@ object RadarPreferences {
     var hwEnhExt = false
     var camxBorders = false
     var iconsLevel2 = false
-    var stateLineSize = 0
-    var countyLineSize = 0
-    var hwLineSize = 0
-    var hwExtLineSize = 0
-    var lakeLineSize = 0
     var gpsCircleLineSize = 0
     var stiLineSize = 0
     var swoLineSize = 0

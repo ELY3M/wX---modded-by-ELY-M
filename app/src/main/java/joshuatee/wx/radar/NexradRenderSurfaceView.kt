@@ -135,7 +135,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
 	            //elys mod
                 //3 fingers press to show conus
                 val count = event.pointerCount
-                //UtilityLog.d("wx", "Fingers Count: "+count)
+                //UtilityLog.d("wx-elys", "Fingers Count: "+count)
                 if (count == 3) {
                     if (!locationFragment) {
                         wxglRenders.forEachIndexed { index, wxgl ->

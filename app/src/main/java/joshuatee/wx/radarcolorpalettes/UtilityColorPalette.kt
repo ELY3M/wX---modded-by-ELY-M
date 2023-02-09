@@ -22,17 +22,33 @@
 
 package joshuatee.wx.radarcolorpalettes
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
+import android.os.Environment
+import android.provider.Settings
+import android.widget.Toast
+import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
-import joshuatee.wx.common.GlobalVariables.PalFilesPath
+import androidx.core.content.ContextCompat.startActivity
+import com.markodevcic.peko.PermissionRequester
+import com.markodevcic.peko.PermissionResult
+import joshuatee.wx.StartupActivity
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.*
+import kotlin.system.exitProcess
 
 
-object UtilityColorPalette {
+object UtilityColorPalette  {
 
 
     //TODO Where is one for SRM (code 56)
@@ -40,12 +56,15 @@ object UtilityColorPalette {
 
     fun getColorMapStringFromDisk(context: Context, product: Int, code: String): String {
 
-        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED|| ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            UtilityLog.d("wx", "stupid permission!!!!!!!!!!!!!  FUCK YOU GOOGLE!!!!")
 
+        /*
+        if (SDK_INT <= 30) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            UtilityLog.d("wx-elys", "UtilityColorPalette - storage permissions denied")
+            //requestPermissions(StartupActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), GlobalVariables.StoragePerms)
         }
-
-
+        }
+        */
 
         //TODO TESTING scan dir for *_94.txt files....
         //scanfor94pal()
@@ -113,12 +132,12 @@ object UtilityColorPalette {
         //Log.i(TAG, "trying to open "+palfile)
         var text = ""
         try {
-            val initialFile = File(PalFilesPath + palfile)
+            val initialFile = File(GlobalVariables.PalFilesPath + palfile)
             val getpalfile = FileInputStream(initialFile)
             text = UtilityIO.readTextFile(getpalfile)
             //Log.i(TAG, palfile + ": " + text + "\n")
         } catch (e: IOException) {
-            UtilityLog.d("wx", "failed to open file "+palfile+"\nopenpalfile error: "+e.message)
+            UtilityLog.d("wx-elys", "failed to open file "+palfile+"\nopenpalfile error: "+e.message)
             }
         return text
     }
@@ -137,5 +156,8 @@ object UtilityColorPalette {
         }
     }
 */
+
+
+
 
 }

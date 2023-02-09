@@ -50,7 +50,7 @@ import joshuatee.wx.wpc.UtilityWpcImages
 internal object UtilityWidgetDownload {
 
     fun getWidgetData(context: Context) {
-        UtilityLog.d("WX", "background widget download")
+        UtilityLog.d("wx-elys", "background widget download")
         (1..Location.numLocations).forEach {
             val locNum = it.toString()
             val locNumInt = To.int(locNum) - 1

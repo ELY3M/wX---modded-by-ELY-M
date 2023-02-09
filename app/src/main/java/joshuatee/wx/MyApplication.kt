@@ -22,19 +22,33 @@
 
 package joshuatee.wx
 
+import android.Manifest
 import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build.VERSION.SDK_INT
+import android.os.Environment
+import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import androidx.preference.PreferenceManager
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.widget.Toast
+import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.content.ContextCompat
 import java.util.concurrent.TimeUnit
 import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.RadarGeometry
 import joshuatee.wx.radar.NexradUtil
+import joshuatee.wx.radar.SpotterNetworkPositionReportService
+import joshuatee.wx.radar.UtilityConusRadar
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.radarcolorpalettes.ColorPalette
 import joshuatee.wx.settings.Location
@@ -42,20 +56,27 @@ import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityHomeScreen
+import joshuatee.wx.util.UtilityLog
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.acra.BuildConfig
 import org.acra.config.mailSender
 import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.system.exitProcess
 
 //
 // Class that has methods that run at app start and store critical preference data structures
 //
 class MyApplication : Application() {
 
+/*
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         initAcra {
@@ -80,13 +101,15 @@ class MyApplication : Application() {
                 //defaults to empty
                 body = ""
             }
-
-
-
         }
     }
+*/
+
+
+    
     override fun onCreate() {
         super.onCreate()
+        UtilityLog.d("wx-elys", "MyApplication onCreate()")
         appContext = applicationContext
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         editor = preferences.edit()
@@ -107,6 +130,8 @@ class MyApplication : Application() {
         Location.refreshLocationData(this)
         UtilityTts.loadTts(applicationContext)
         loadGeomAndColorBuffers(this)
+        UtilityLog.d("wx-elys", "MyApplication onCreate() end")
+
     }
 
     companion object {

@@ -57,7 +57,7 @@ object UtilityTts {
     fun loadTts(context: Context) {
         if (NotificationPreferences.notifTts) {
             initTts(context)
-            UtilityLog.d("wx", "DEBUG: TTS init for notif" )
+            UtilityLog.d("wx-elys", "DEBUG: TTS init for notif" )
         }
     }
 
