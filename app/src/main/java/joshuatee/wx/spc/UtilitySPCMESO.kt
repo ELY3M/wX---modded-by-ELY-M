@@ -277,7 +277,7 @@ object UtilitySpcMeso {
         "sigt1",
         "sigt2",
         "nstp",
-        "vtp",
+        "vtp3",
         "sigh",
         "sars1",
         "sars2",

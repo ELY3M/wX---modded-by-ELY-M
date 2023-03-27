@@ -126,7 +126,7 @@ class WebViewTwitter : BaseActivity() {
                 canadianSectors.forEach {
                     if (it.contains("$stateTmp:")) {
                         tail = ""
-                        stateTmp = stateTmp.replace("wx-elys", "")
+                        stateTmp = stateTmp.replace("wx", "")
                     }
                 }
                 Route(this, Intent.ACTION_VIEW, Uri.parse("http://twitter.com/hashtag/$stateTmp$tail"))

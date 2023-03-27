@@ -63,7 +63,7 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
                 prod = "SPCWAT$productNumber"
             }
             PolygonType.MCD -> {
-                imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$productNumber.gif"
+                imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$productNumber.png"
                 textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md$productNumber.html"
                 title = "MCD $productNumber"
                 prod = "SPCMCD$productNumber"

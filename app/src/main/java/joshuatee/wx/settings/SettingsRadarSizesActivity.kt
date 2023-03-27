@@ -69,7 +69,6 @@ class SettingsRadarSizesActivity : BaseActivity() {
             NumberPicker(this, "State line size", "RADAR_STATE_LINESIZE", R.string.state_linesize_np, 2, 1, 10),
             NumberPicker(this, "Storm spotter size", "RADAR_SPOTTER_SIZE", R.string.spotter_size_label, RadarPreferences.spotterSizeDefault, 1, 50),
             NumberPicker(this, "Storm tracks line size", "RADAR_STI_LINESIZE", R.string.sti_linesize_np, 3, 1, 10),
-            NumberPicker(this, "Text size", "RADAR_TEXT_SIZE", R.string.text_size_label, (RadarPreferences.textSizeDefault * 10).toInt(), 4, 40),
             //elys mod
             NumberPicker(this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530),
             NumberPicker(this, "Userpoints icon size", "RADAR_USERPOINT_SIZE", R.string.userpoints_size_np, 75, 1, 530),

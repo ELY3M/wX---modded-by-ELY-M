@@ -20,7 +20,6 @@
 */
 //modded by ELY M.  
 
-
 package joshuatee.wx.util
 
 import android.content.Context

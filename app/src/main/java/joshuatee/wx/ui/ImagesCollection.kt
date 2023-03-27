@@ -19,7 +19,7 @@
 
 */
 //Modded by ELY M. - Aurora Forecast
- 
+
 package joshuatee.wx.ui
 
 import joshuatee.wx.activitiesmisc.UtilityOpcImages

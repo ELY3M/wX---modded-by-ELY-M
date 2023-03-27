@@ -67,7 +67,7 @@ internal class SevereNotice(val type: PolygonType) {
                 // numbers[count] = To.stringPadLeftZeros(numbers[count], 4)
             }
             val url = when (type) {
-                PolygonType.MCD -> "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd" + numbers[count] + ".gif"
+                PolygonType.MCD -> "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd" + numbers[count] + ".png"
                 PolygonType.WATCH -> "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + numbers[count] + "_radar.gif"
                 PolygonType.MPD -> "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/images/mcd" + numbers[count] + ".gif"
                 else -> ""

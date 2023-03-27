@@ -36,7 +36,7 @@ internal object UtilityWpcImages {
         MenuTitle("National Digital Forecast Database", 15),
         MenuTitle("CPC Outlooks", 24),
         MenuTitle("Aviation", 16),
-        MenuTitle("Space Weather", 3)
+        MenuTitle("Space Weather", 2)
     )
 
     val labels = listOf(
@@ -179,7 +179,6 @@ internal object UtilityWpcImages {
 
         "Aurora Forecast - North",
         "Aurora Forecast - South",
-        "Estimated Planetary K index"
     )
 
     val urls = listOf(
@@ -325,7 +324,6 @@ internal object UtilityWpcImages {
 
         "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg",
         "https://services.swpc.noaa.gov/images/animations/ovation/south/latest.jpg",
-        "https://services.swpc.noaa.gov/images/planetary-k-index.gif"
     )
 
     val groups = SparseArray<Group>()

@@ -121,7 +121,6 @@ class SettingsRadarActivity : BaseActivity() {
 	    	    //elys mod
 	    	    Switch(this, "Conus Radar", "CONUS_RADAR", R.string.conus_radar_label),
 	    	    //elys mod end
-                Switch(this, "Convective Outlook Day One", "RADAR_SHOW_SWO", R.string.show_swo_label),
                 Switch(this, "Counties", "RADAR_SHOW_COUNTY", R.string.show_county_label),
                 Switch(this, "Counties use high resolution data", "RADAR_COUNTY_HIRES", R.string.county_hires_label),
                 Switch(this, "County labels", "RADAR_COUNTY_LABELS", R.string.show_county_labels_label),

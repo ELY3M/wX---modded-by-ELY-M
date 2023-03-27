@@ -80,7 +80,7 @@ object UtilityLocation {
                     break
             }
         } else {
-            UtilityLog.d("wx-elys", "WARNING: permission not granted for roaming location")
+            UtilityLog.d("wx", "WARNING: permission not granted for roaming location")
         }
         val gps = DoubleArray(2)
         location?.let {

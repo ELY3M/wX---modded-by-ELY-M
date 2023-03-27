@@ -6,6 +6,14 @@ FAQ can be accessed via Settings -> About
 
 Please also review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md) impacting all or some users.
 
+## 55787 (BETA) 2023_03_25
+* [FIX] NWS SPC has changed the URL/format type for SPC MCD and thus code updates were required
+* [FIX] SPC Meso Violent Tornado Parameter (VTP) was not working as SPC changed the product ID
+* [ADD] Widget with weather conditions will fall back to 2nd closest observation point if primary obs point is not updating in the past 2 hours (similar to main screen / notification)
+* [FIX] NWS Has removed static graphic for space weather: Estimated Planetary K index
+  and replaced with a web accessible version for this product at https://www.swpc.noaa.gov/products/planetary-k-index
+  if you use this data you could access via a browser, etc
+
 ## 55782 (BETA) 2023_01_23
 * [FIX] SPC Storm reports: minor change in date picker accent color used in darker themes
 * [FIX] crash in RTMA when network is down

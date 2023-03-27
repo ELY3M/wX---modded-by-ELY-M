@@ -116,7 +116,7 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
                 mcdNumbers.add(mcdNumber)
                 bitmaps.add(imgUrl.getImage())
             } else {
-                val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$it.gif"
+                val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$it.png"
                 mcdNumbers.add(it)
                 bitmaps.add(imgUrl.getImage())
             }

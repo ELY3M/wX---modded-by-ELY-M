@@ -2,8 +2,59 @@
 
 # Developer ChangeLog
 
-## 55783 2022_01_21
+## 55788 2022_03_24
 
+## 55787 2022_03_24
+* [FIX] NWS SPC has changed the URL/format type for SPC MCD and thus code updates were required
+* [ADD] dep updates
+```
+-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.8'
++    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+```
+
+## 55786 2022_03_21
+* [ADD] update NDK
+```
+     task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
+-        def ndkDir = "../../../android-ndk-r25b"
++        def ndkDir = "../../../android-ndk-r25c"
+
+     task cleanNative(type: Exec, description: 'Clean JNI object files') {
+-        def ndkDir = "../../../android-ndk-r25b"
++        def ndkDir = "../../../android-ndk-r25c"
+```
+
+## 55785 2022_03_17
+* [FIX] SPC Meso Violent Tornado Parameter (VTP) was not working as SPC changed the product ID
+* [ADD] dep updates
+```
+- implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0"
+-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
++    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+```
+
+## 55784 2022_03_16
+* [ADD] Widget with weather conditions will fall back to 2nd closest observation point if primary obs point is not updating in the past 2 hours (similar to main screen / notification)
+* [ADD] tooling updates:
+```
+-        classpath 'com.android.tools.build:gradle:7.4.1'
++        classpath 'com.android.tools.build:gradle:7.4.2'
+```
+## 55783 2022_02_12
+* [FIX] NWS Has removed static graphic for space weather: Estimated Planetary K index
+        and replaced with a web accessible version for this product at https://www.swpc.noaa.gov/products/planetary-k-index
+        if you use this data you could access via a browser, etc
+* [ADD] tooling updates:
+```
+-    implementation 'com.google.android.material:material:1.7.0'
++    implementation 'com.google.android.material:material:1.8.0'
+
+-        classpath 'com.android.tools.build:gradle:7.4.0'
+-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
++        classpath 'com.android.tools.build:gradle:7.4.1'
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0"
+```
 ## 55782 2022_01_21
 * [FIX] minor change in date picker accent color used in darker themes
 

@@ -51,7 +51,7 @@ object NotificationNhc {
                     if (!muteStr.contains(it.id)) {
                         notificationUrls += sendNotification(context, NotificationPreferences.alertNotificationSoundNhcAtl, it)
                     } else {
-                        UtilityLog.d("wx-elys", "blocking " + it.id)
+                        UtilityLog.d("wx", "blocking " + it.id)
                     }
                 }
             }
@@ -62,7 +62,7 @@ object NotificationNhc {
                     if (!muteStr.contains(it.id)) {
                         notificationUrls += sendNotification(context, NotificationPreferences.alertNotificationSoundNhcAtl, it)
                     } else {
-                        UtilityLog.d("wx-elys", "blocking " + it.id)
+                        UtilityLog.d("wx", "blocking " + it.id)
                     }
                 }
             }

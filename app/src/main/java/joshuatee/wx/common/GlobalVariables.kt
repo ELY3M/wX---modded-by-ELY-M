@@ -55,7 +55,6 @@ object GlobalVariables {
 	//end of elys mod 
 
 
-
     const val nwsRadarPub = "https://tgftp.nws.noaa.gov/"
     const val nwsSPCwebsitePrefix = "https://www.spc.noaa.gov"
     const val nwsWPCwebsitePrefix = "https://www.wpc.ncep.noaa.gov"

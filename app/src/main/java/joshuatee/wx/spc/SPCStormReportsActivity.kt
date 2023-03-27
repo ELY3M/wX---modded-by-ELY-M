@@ -228,7 +228,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cardText.text = mapOut
 //        textForShare.insert(0, Utility.fromHtml("<br><b>" + mapOut + GlobalVariables.newline + "</b><br>"))
         textForShare.insert(0, GlobalVariables.newline + mapOut + GlobalVariables.newline)
-        UtilityLog.d("wx-elys", ":::" + textForShare)
+        UtilityLog.d("wx", ":::" + textForShare)
         if (firstRun) {
             stateArray = mapState.keys.sorted().toList()
             val stateArrayLabel = mutableListOf<String>()

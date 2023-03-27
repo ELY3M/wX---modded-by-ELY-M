@@ -50,7 +50,7 @@ import joshuatee.wx.wpc.UtilityWpcImages
 internal object UtilityWidgetDownload {
 
     fun getWidgetData(context: Context) {
-        UtilityLog.d("wx-elys", "background widget download")
+        UtilityLog.d("WX", "background widget download")
         (1..Location.numLocations).forEach {
             val locNum = it.toString()
             val locNumInt = To.int(locNum) - 1
@@ -62,6 +62,7 @@ internal object UtilityWidgetDownload {
                 val lastUpdateTime = Utility.readPrefLong(context, "WIDGET_DOWNLOAD" + locNum + "_LAST_UPDATE", 0.toLong())
                 if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
                     val currentConditions = CurrentConditions(context, locNumInt)
+                    currentConditions.timeCheck(context)
                     val hazards = Hazards(locNumInt)
                     val sevenDay = SevenDay(locNumInt)
                     val updateTime = ObjectDateTime.currentTimeMillis()

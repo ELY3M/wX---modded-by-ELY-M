@@ -103,7 +103,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             MPD.size = RadarPreferences.watchMcdLineSize
             WATCH.size = RadarPreferences.watchMcdLineSize
             WATCH_TORNADO.size = RadarPreferences.watchMcdLineSize
-            WPC_FRONTS.size = RadarPreferences.wpcFrontLineSize.toFloat()
+            WPC_FRONTS.size = RadarPreferences.watchMcdLineSize
             TST.size = RadarPreferences.warnLineSize
             TOR.size = RadarPreferences.warnLineSize
             FFW.size = RadarPreferences.warnLineSize

@@ -381,7 +381,7 @@ internal class RecordingSession(
                         // write bitmap to a file
                         fos = FileOutputStream(outputFile!!)
                         croppedBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-                        //UtilityLog.d("wx-elys", outputFile.toString())
+                        //UtilityLog.d("wx", outputFile.toString())
                         val uri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", File(outputFile!!))
                         showScreenshotNotification(uri, null)
                     }

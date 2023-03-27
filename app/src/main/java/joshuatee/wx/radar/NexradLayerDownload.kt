@@ -113,6 +113,10 @@ object NexradLayerDownload {
                 wxglRender.construct.hailIndex()
             }) {
                 wxglSurfaceView.requestRender()
+                //elys mod
+                if (PolygonType.HAIL_LABELS.pref) {
+                    NexradRenderTextObject.updateHailLabels(wxglTextObjects)
+                }		
             }
         }
         //elys mod

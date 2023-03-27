@@ -34,7 +34,7 @@ class AlertReceiver : BroadcastReceiver() {
 
     override fun onReceive(context1: Context, intent1: Intent) {
         BackgroundFetch(context1).getContent()
-        UtilityLog.d("wx-elys", "job via AlertReceiver")
+        UtilityLog.d("wx", "job via AlertReceiver")
         Utility.writePref(context1, "JOBSERVICE_TIME_LAST_RAN", ObjectDateTime.getCurrentLocalTimeAsString())
     }
 }

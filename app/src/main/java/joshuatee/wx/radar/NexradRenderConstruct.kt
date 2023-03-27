@@ -370,9 +370,6 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
     }
 
 
-
-
-
     private fun wBCircle(paneNumber: Int) {
         val wbCircleBuffers = data.wbCircleBuffers
         wbCircleBuffers.lenInit = PolygonType.WIND_BARB_CIRCLE.size
@@ -484,6 +481,15 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         linesShort(data.wbGustsBuffers, NexradLevel3WindBarbs.decodeAndPlot(state.rid, state.projectionType, true, state.paneNumber))
         wBCircle(state.paneNumber)
     }
+
+    //elys mod - Conus Radar
+    fun ConusRadar() {
+        data.conusRadarBuffers.lenInit = 0f
+        data.conusRadarBuffers.isInitialized = true
+    }
+    //fun deconstructConusRadar() {
+    //    data.conusRadarBuffers.isInitialized = false
+    //}
 
     //elys mod - hail icon mod
     fun setHiInit(hiInit: Boolean) {

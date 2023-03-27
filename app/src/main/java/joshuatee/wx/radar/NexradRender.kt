@@ -845,7 +845,8 @@ g_free(clear);
 
 //TODO move....        
 //elys mod 
-//conus radar    
+//conus radar
+/*
     fun constructConusRadar() {
         data.conusRadarBuffers.lenInit = 0f
         data.conusRadarBuffers.isInitialized = true
@@ -855,7 +856,7 @@ g_free(clear);
     fun deconstructConusRadar() {
         data.conusRadarBuffers.isInitialized = false
     }
-    
+*/
     fun setChunkCount(chunkCount: Int) {
         this.chunkCount = chunkCount
     }

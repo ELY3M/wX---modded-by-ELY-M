@@ -118,7 +118,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                         UtilityNotification.createMediaControlNotification(applicationContext, "")
                     }
                 } else {
-                    UtilityLog.d("wx-elys", "perm to write to storage was not granted")
+                    UtilityLog.d("wx", "perm to write to storage was not granted")
                 }
             }
             R.id.action_stop -> {

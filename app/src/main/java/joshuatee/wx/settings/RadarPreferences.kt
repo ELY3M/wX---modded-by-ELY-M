@@ -60,7 +60,6 @@ object RadarPreferences {
     var swo = false
     var userPoints = false
     var cities = false
-    var hw = false
     var locDot = false
     var lakes = false
     var county = false
@@ -94,8 +93,6 @@ object RadarPreferences {
     const val warnLineSizeDefault = 5
     var watchMcdLineSize = 4.0f
     var watchMcdLineSizeDefault = 4
-    var hwEnhExt = false
-    var camxBorders = false
     var iconsLevel2 = false
     var gpsCircleLineSize = 0
     var stiLineSize = 0
@@ -108,9 +105,6 @@ object RadarPreferences {
     var aviationSizeDefault = 7
     var locationDotSizeDefault = 8
 
-    var colorHw = 0
-    var colorHwExt = 0
-    var colorState = 0
     var colorTstorm = 0
     var colorTstormWatch = 0
     var colorTor = 0
@@ -121,8 +115,6 @@ object RadarPreferences {
     var colorLocdot = 0
     var colorSpotter = 0
     var colorCity = 0
-    var colorLakes = 0
-    var colorCounty = 0
     var colorSti = 0
     var colorHi = 0
     //elys mod
@@ -138,7 +130,6 @@ object RadarPreferences {
     var useJni = false
     var drawToolColor = 0
     var blackBg = false
-
 
     var wxoglSize = 0
     var wxoglSizeDefault = 13
@@ -175,7 +166,6 @@ object RadarPreferences {
         swo = getInitialPreference("RADAR_SHOW_SWO", "false")
         userPoints = getInitialPreference("RADAR_USERPOINTS", "false")
         cities = getInitialPreference("COD_CITIES_DEFAULT", "")
-        hw = getInitialPreference("COD_HW_DEFAULT", "true")
         locDot = getInitialPreference("COD_LOCDOT_DEFAULT", "true")
         lakes = getInitialPreference("COD_LAKES_DEFAULT", "false")
         county = getInitialPreference("RADAR_SHOW_COUNTY", "true")
@@ -184,14 +174,12 @@ object RadarPreferences {
         sti = getInitialPreference("RADAR_SHOW_STI", "false")
         hi = getInitialPreference("RADAR_SHOW_HI", "false")
         tvs = getInitialPreference("RADAR_SHOW_TVS", "false")
-        hwEnhExt = getInitialPreference("RADAR_HW_ENH_EXT", "false")
-        camxBorders = getInitialPreference("RADAR_CAMX_BORDERS", "false")
         countyLabels = getInitialPreference("RADAR_COUNTY_LABELS", "false")
         countyHires = getInitialPreference("RADAR_COUNTY_HIRES", "false")
         stateHires = getInitialPreference("RADAR_STATE_HIRES", "false")
         iconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
         hideRadar = getInitialPreference("RADAR_HIDE_RADAR", "false")
-        showLegend = getInitialPreference("RADAR_SHOW_LEGEND", "true")
+        showLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
         showLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
         showLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)
         wxoglCenterOnLocation = getInitialPreference("RADAR_CENTER_ON_LOCATION", "false")
@@ -244,9 +232,6 @@ object RadarPreferences {
     }
 
     fun radarGeometrySetColors() {
-        colorHw = getInitialPreference("RADAR_COLOR_HW", Color.BLUE)
-        colorHwExt = getInitialPreference("RADAR_COLOR_HW_EXT", Color.BLUE)
-        colorState = getInitialPreference("RADAR_COLOR_STATE", Color.WHITE)
         colorTstorm = getInitialPreference("RADAR_COLOR_TSTORM", Color.YELLOW)
         colorTstormWatch = getInitialPreference("RADAR_COLOR_TSTORM_WATCH", Color.BLUE)
         colorTor = getInitialPreference("RADAR_COLOR_TOR", Color.RED)
@@ -257,8 +242,6 @@ object RadarPreferences {
         colorLocdot = getInitialPreference("RADAR_COLOR_LOCDOT", Color.WHITE)
         colorSpotter = getInitialPreference("RADAR_COLOR_SPOTTER", Color.GREEN)
         colorCity = getInitialPreference("RADAR_COLOR_CITY", Color.WHITE)
-        colorLakes = getInitialPreference("RADAR_COLOR_LAKES", Color.rgb(0, 0, 163))
-        colorCounty = getInitialPreference("RADAR_COLOR_COUNTY", Color.rgb(75, 75, 75))
         colorSti = getInitialPreference("RADAR_COLOR_STI", Color.WHITE)
         colorHi = getInitialPreference("RADAR_COLOR_HI", Color.GREEN)
         colorHiText = getInitialPreference("RADAR_COLOR_HI_TEXT", Color.GREEN)

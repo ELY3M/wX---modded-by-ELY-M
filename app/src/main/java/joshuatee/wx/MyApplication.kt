@@ -109,7 +109,6 @@ class MyApplication : Application() {
     
     override fun onCreate() {
         super.onCreate()
-        UtilityLog.d("wx-elys", "MyApplication onCreate()")
         appContext = applicationContext
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         editor = preferences.edit()
@@ -130,8 +129,6 @@ class MyApplication : Application() {
         Location.refreshLocationData(this)
         UtilityTts.loadTts(applicationContext)
         loadGeomAndColorBuffers(this)
-        UtilityLog.d("wx-elys", "MyApplication onCreate() end")
-
     }
 
     companion object {

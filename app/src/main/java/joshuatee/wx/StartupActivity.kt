@@ -46,7 +46,6 @@ class StartupActivity : Activity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        UtilityLog.d("wx", "StartupActivity onCreate()")
         super.onCreate(savedInstanceState)
         initPreferences()
         askPerms()
