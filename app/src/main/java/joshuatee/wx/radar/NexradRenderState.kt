@@ -52,7 +52,8 @@ class NexradRenderState(val paneNumber: Int, val data: NexradRenderData, val sca
     var zoom: Float = 1.0f
         set(scale) {
             field = scale
-            listOf(data.locationDotBuffers, data.spotterBuffers, data.tvsBuffers, data.wbCircleBuffers).forEach {
+            //elys mod - keep data.tvsbuffers out of here or multi tvs bug on zoom//
+            listOf(data.locationDotBuffers, data.spotterBuffers, data.wbCircleBuffers).forEach {
                 if (it.isInitialized) {
                     it.lenInit = it.type.size
                     it.lenInit = scaleLength(it.lenInit)

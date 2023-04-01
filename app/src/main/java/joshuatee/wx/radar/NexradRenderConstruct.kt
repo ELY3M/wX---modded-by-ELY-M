@@ -487,6 +487,7 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         data.conusRadarBuffers.lenInit = 0f
         data.conusRadarBuffers.isInitialized = true
     }
+
     //fun deconstructConusRadar() {
     //    data.conusRadarBuffers.isInitialized = false
     //}
