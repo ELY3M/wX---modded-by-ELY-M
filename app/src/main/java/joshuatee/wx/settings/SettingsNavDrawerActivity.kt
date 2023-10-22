@@ -68,6 +68,7 @@ class SettingsNavDrawerActivity : BaseActivity() {
                 UtilityNavDrawer.generateNewTokenList(this)
                 Utility.restart()
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

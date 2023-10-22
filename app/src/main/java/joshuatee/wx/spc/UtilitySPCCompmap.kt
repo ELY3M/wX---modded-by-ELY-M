@@ -27,7 +27,7 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import joshuatee.wx.Extensions.getInputStream
+import joshuatee.wx.getInputStream
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.external.ExternalGifDecoder
 import joshuatee.wx.util.UtilityImg
@@ -54,52 +54,52 @@ internal object UtilitySpcCompmap {
     }
 
     val labels = listOf(
-        "IR satellite",
-        "MAPS sea-level pressure (mb)",
-        "2-meter temperature  (F)",
-        "2-meter dewpoint temperature  (F)",
-        "10m Wind Barbs",
-        "CAPE/CINH",
-        "HLCY/SHEAR",
-        "3-hr surface pressure change",
-        "Boundary layer moisture (mixing ratio) convergence",
-        "K-Index and Precipitable Water (inches)",
-        "12-hr Total Precipitation",
-        "SFC OBS MAP",
-        "Lapse rates 500-850mb",
-        "850 WAA/WIND",
-        "700 INFO",
-        "700-500 mb layer average relative humidity",
-        "500 mb height and absolute vorticity (dashed) field",
-        "700-500 mb Upward Vertical Velocity",
-        "300mb winds",
-        "DAY 1 Outlook (94O)",
-        "HPC Fronts (90F)",
-        "HPC 6-hr QPF (92E)"
+            "IR satellite",
+            "MAPS sea-level pressure (mb)",
+            "2-meter temperature  (F)",
+            "2-meter dewpoint temperature  (F)",
+            "10m Wind Barbs",
+            "CAPE/CINH",
+            "HLCY/SHEAR",
+            "3-hr surface pressure change",
+            "Boundary layer moisture (mixing ratio) convergence",
+            "K-Index and Precipitable Water (inches)",
+            "12-hr Total Precipitation",
+            "SFC OBS MAP",
+            "Lapse rates 500-850mb",
+            "850 WAA/WIND",
+            "700 INFO",
+            "700-500 mb layer average relative humidity",
+            "500 mb height and absolute vorticity (dashed) field",
+            "700-500 mb Upward Vertical Velocity",
+            "300mb winds",
+            "DAY 1 Outlook (94O)",
+            "HPC Fronts (90F)",
+            "HPC 6-hr QPF (92E)"
     )
 
     val urlIndex = listOf(
-        "16",
-        "7",
-        "1",
-        "0",
-        "8",
-        "2",
-        "21",
-        "3",
-        "4",
-        "5",
-        "6",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "17",
-        "18",
-        "19",
-        "20"
+            "16",
+            "7",
+            "1",
+            "0",
+            "8",
+            "2",
+            "21",
+            "3",
+            "4",
+            "5",
+            "6",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "17",
+            "18",
+            "19",
+            "20"
     )
 }

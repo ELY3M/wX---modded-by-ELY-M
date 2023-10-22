@@ -9,7 +9,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import joshuatee.wx.MyApplication
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.*
 import joshuatee.wx.util.*
 import android.graphics.drawable.LayerDrawable
 import joshuatee.wx.common.GlobalVariables
@@ -399,7 +399,7 @@ public object UtilityConusRadar {
     // save image
     private fun saveImage(bitmap: Bitmap) {
         val fos = getFileOutputStream(GlobalVariables.conusImageName)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos!!)
         fos?.close()
     }
 

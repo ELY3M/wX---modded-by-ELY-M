@@ -26,6 +26,7 @@ import android.graphics.Bitmap
 import android.view.View
 import android.widget.TableLayout
 import androidx.appcompat.widget.Toolbar
+import joshuatee.wx.objects.BitmapAttr
 import joshuatee.wx.util.UtilityImg
 
 open class Image : Widget {
@@ -33,7 +34,6 @@ open class Image : Widget {
     protected val card: Card
     private val context: Context
     var img: TouchImageView2
-        internal set
     internal val layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
     var bitmap = UtilityImg.getBlankBitmap()
 
@@ -58,6 +58,15 @@ open class Image : Widget {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
+        card.addWidget(img)
+    }
+
+    constructor(context: Context, bitmapAttr: BitmapAttr, numberAcross: Int = 1) {
+        this.context = context
+        card = Card(context)
+        img = TouchImageView2(context)
+        img.layoutParams = layoutParams
+        UtilityImg.resizeViewSetImgInCard(bitmapAttr.bitmap, img, numberAcross)
         card.addWidget(img)
     }
 
@@ -96,7 +105,9 @@ open class Image : Widget {
 
     var visibility
         get() = card.visibility
-        set(newValue) { card.visibility = newValue }
+        set(newValue) {
+            card.visibility = newValue
+        }
 
     fun connect(fn: View.OnClickListener) {
         img.setOnClickListener(fn)

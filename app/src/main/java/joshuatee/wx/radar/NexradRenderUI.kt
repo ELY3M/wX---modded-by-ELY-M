@@ -49,21 +49,21 @@ internal object NexradRenderUI {
     fun getLastRadarTime(context: Context): String = Utility.readPref(context, lastRadarTimePref, "")
 
     fun showRadarStatus(activity: Activity, radarSite: String) {
-        FutureText2(activity,
+        FutureText2(
                 { DownloadText.radarStatusMessage(activity, radarSite) })
-                { s ->
-                    var radarStatus = s
-                    if (radarStatus == "") {
-                        radarStatus = "The current radar status for $radarSite is not available."
-                    }
-                    ObjectDialogue(activity, radarStatus)
-                }
+        { s ->
+            var radarStatus = s
+            if (radarStatus == "") {
+                radarStatus = "The current radar status for $radarSite is not available."
+            }
+            ObjectDialogue(activity, radarStatus)
+        }
     }
 
     fun showMetar(context: Context, latLon: LatLon) {
-        FutureText2(context,
+        FutureText2(
                 { Metar.findClosestMetar(context, latLon) })
-                { s -> ObjectDialogue(context, s) }
+        { s -> ObjectDialogue(context, s) }
     }
 
     fun showNearestMeteogram(context: Context, latLon: LatLon) {
@@ -90,14 +90,17 @@ internal object NexradRenderUI {
     }
 
     fun showImageForShare(activity: Activity, indexString: String, radarSite: String, product: String) {
-        FutureBytes2(activity, { CanvasCreate.layeredImageFromFile(activity,
-                radarSite,
-                product,
-                indexString)
-        }) { bitmapForShare -> UtilityShare.bitmap(activity,
-                radarSite + " (" + UtilityLocation.getRadarSiteName(radarSite) + ") " + product,
-                bitmapForShare
-        )}
+        FutureBytes2({
+            CanvasCreate.layeredImageFromFile(activity,
+                    radarSite,
+                    product,
+                    indexString)
+        }) { bitmapForShare ->
+            UtilityShare.bitmap(activity,
+                    radarSite + " (" + UtilityLocation.getRadarSiteName(radarSite) + ") " + product,
+                    bitmapForShare
+            )
+        }
     }
 
     fun showHelp(activity: Activity) {
@@ -114,10 +117,8 @@ internal object NexradRenderUI {
     //FIXME!!!!
 
     //elys mod
-    fun showSpotterInfo(activity: Activity, latLon: LatLon, context: Context) {
-        FutureText2(
-            context,
-            { UtilitySpotter.findClosestSpotter(latLon) },
+    fun showSpotterInfo(activity: Activity, latLon: LatLon) {
+        FutureText2({ UtilitySpotter.findClosestSpotter(latLon) },
             { s -> ObjectDialogue(activity, s) }
         )
     }
@@ -125,9 +126,7 @@ internal object NexradRenderUI {
 
     //UserPoints System
     fun showUserPointInfo(activity: Activity, context: Context, latLon: LatLon)  {
-        FutureText2(
-            context,
-            { UtilityUserPoints.findClosestUserPoint(context, latLon) },
+        FutureText2({ UtilityUserPoints.findClosestUserPoint(context, latLon) },
             { s -> ObjectDialogue(activity, s) }
         )
     }
@@ -139,9 +138,7 @@ internal object NexradRenderUI {
 
 
     fun deleteUserPoint(activity: Activity, context: Context, latLon: LatLon)  {
-        FutureText2(
-            context,
-            { UtilityUserPoints.deleteUserPoint(context, latLon) },
+        FutureText2({ UtilityUserPoints.deleteUserPoint(context, latLon) },
             { s -> ObjectDialogue(activity, s) }
         )
     }

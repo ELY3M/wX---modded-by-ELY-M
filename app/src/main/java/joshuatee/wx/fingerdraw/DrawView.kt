@@ -36,8 +36,8 @@ class DrawView : View {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         setMeasuredDimension(
-            MyApplication.dm.widthPixels,
-            MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) - UIPreferences.actionBarHeight
+                MyApplication.dm.widthPixels,
+                MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) - UIPreferences.actionBarHeight
         )
     }
 

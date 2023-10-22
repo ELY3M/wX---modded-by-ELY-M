@@ -124,16 +124,16 @@ object UtilityWidget {
         update(context, CC)
         updateSevenDay(context)
         listOf(
-            AFD,
-            HWO,
-            NEXRAD_RADAR,
-            MOSAIC_RADAR,
-            VIS,
-            SPCSWO,
-            SPCMESO,
-            CONUSWV,
-            STRPT,
-            WPCIMG
+                AFD,
+                HWO,
+                NEXRAD_RADAR,
+                MOSAIC_RADAR,
+                VIS,
+                SPCSWO,
+                SPCMESO,
+                CONUSWV,
+                STRPT,
+                WPCIMG
         ).forEach {
             if (Utility.readPref(context, it.prefString, "false").startsWith("t")) {
                 UtilityWidgetDownload.download(context, it)
@@ -193,11 +193,11 @@ object UtilityWidget {
         val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
         if (WeatherWidgetProvider.workerQueue != null) {
             WeatherWidgetProvider.weatherDataProviderObserver =
-                WeatherDataProviderObserver(widgetManager, componentName, WeatherWidgetProvider.workerQueue!!)
+                    WeatherDataProviderObserver(widgetManager, componentName, WeatherWidgetProvider.workerQueue!!)
             contentResolver.registerContentObserver(
-                WeatherDataProvider.CONTENT_URI,
-                true,
-                WeatherWidgetProvider.weatherDataProviderObserver!!
+                    WeatherDataProvider.CONTENT_URI,
+                    true,
+                    WeatherWidgetProvider.weatherDataProviderObserver!!
             )
         }
         val preferences = context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)

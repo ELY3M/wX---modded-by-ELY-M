@@ -119,11 +119,15 @@ class VBox(val context: Context) : Widget {
 
     var visibility
         get() = linearLayout.visibility
-        set(value) { linearLayout.visibility = value }
+        set(value) {
+            linearLayout.visibility = value
+        }
 
     var orientation
         get() = linearLayout.orientation
-        set(value) { linearLayout.orientation = value }
+        set(value) {
+            linearLayout.orientation = value
+        }
 
     private var gravityBacking = Gravity.START
 

@@ -32,12 +32,12 @@ import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.Route
+import joshuatee.wx.safeGet
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
@@ -101,7 +101,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         nexradState.initGlView(nexradLongPressMenu.changeListener)
         nexradState.readPreferences(nexradArguments)
         nexradColorLegend = NexradColorLegend(this, nexradState)
-        nexradAnimation = NexradAnimation(this, nexradState, nexradUI, nexradArguments)
+        nexradAnimation = NexradAnimation(this, nexradState, nexradUI) // removed nexradArguments as last arg
         getContent()
     }
 
@@ -126,10 +126,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    @Synchronized private fun getContent() {
+    @Synchronized
+    private fun getContent() {
         nexradUI.getContentPrep()
         initGeom()
-        FutureVoid(this, {
+        FutureVoid({
             NexradDraw.plotRadar(
                     nexradState.render,
                     nexradUI::getGPSFromDouble,
@@ -140,9 +141,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             nexradState.draw()
             nexradUI.setSubTitle()
             NexradRenderUI.updateLastRadarTime(this)
+            nexradColorLegend.updateAfterDownload()
+            nexradState.oldProd = nexradState.product
         })
-        nexradColorLegend.updateAfterDownload()
-        nexradState.oldProd = nexradState.product
+//        nexradColorLegend.updateAfterDownload()
+//        nexradState.oldProd = nexradState.product
         NexradLayerDownload.download(
                 this,
                 nexradState.render,
@@ -187,13 +190,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_help -> NexradRenderUI.showHelp(this)
             R.id.action_share -> startScreenRecord()
-            R.id.action_settings -> { nexradUI.settingsVisited = true; Route.settingsRadar(this) }
-            R.id.action_radar_markers -> Route.image(this,"raw:radar_legend", "Radar Markers")
+            R.id.action_settings -> {
+                nexradUI.settingsVisited = true; Route.settingsRadar(this)
+            }
+
+            R.id.action_radar_markers -> Route.image(this, "raw:radar_legend", "Radar Markers")
             R.id.action_radar_2 -> showMultipaneRadar(2)
             R.id.action_radar_4 -> showMultipaneRadar(4)
             R.id.action_radar_site_status_l3 -> Route.webView(this, "http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended")
             R.id.action_radar_site_status_l2 -> Route.webView(this, "http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended")
-            R.id.action_n0q, R.id.action_n0q_menu  -> nexradState.getReflectivity(::getContent)
+            R.id.action_n0q, R.id.action_n0q_menu -> nexradState.getReflectivity(::getContent)
             R.id.action_n0u, R.id.action_n0u_menu -> nexradState.getVelocity(::getContent)
             R.id.action_n0b -> changeProduct("N" + nexradState.tilt + "B")
             R.id.action_n0g -> changeProduct("N" + nexradState.tilt + "G")
@@ -235,7 +241,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_NVW -> getContentVwp()
             R.id.action_fav -> nexradUI.actionToggleFavorite()
             R.id.action_TDWR -> nexradUI.showTdwrDialog()
-            R.id.action_ridmap -> nexradUI.showMap()
+            //elys mod
+            //R.id.action_ridmap -> nexradUI.showMap()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -299,7 +306,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                                 if (nexradState.radarSitesForFavorites[it] == " ") {
                                     nexradState.radarSite = joshuatee.wx.settings.Location.rid
                                 } else {
-                                    nexradState.radarSite = nexradState.radarSitesForFavorites[it].split(" ").getOrNull(0) ?: ""
+                                    nexradState.radarSite = nexradState.radarSitesForFavorites[it].split(" ").getOrNull(0)
+                                            ?: ""
                                 }
                                 nexradUI.mapSwitch(nexradState.radarSite)
                             }
@@ -308,6 +316,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     UtilityUI.immersiveMode(this)
                 }
             }
+
             android.R.id.home -> {
                 if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
                     NavUtils.navigateUpFromSameTask(this)
@@ -315,6 +324,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     navigateUp()
                 }
             }
+
             else -> super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
@@ -331,12 +341,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
 /* orinigal 
     private fun getContentVwp() {
-        FutureText2(this,
+        FutureText2(
                 { NexradLevel3TextProduct.getVwp(nexradState.radarSite) })
-                { data -> Route.text(this, data, nexradState.radarSite + " VAD Wind Profile") }
+        { data -> Route.text(this, data, nexradState.radarSite + " VAD Wind Profile") }
     }
 */    
-
     //elys mod
     private fun getContentVwp() {
         var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+nexradState.radarSite+"-NVW"
@@ -373,15 +382,17 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showRadarShortCuts())
             KeyEvent.KEYCODE_REFRESH -> getContent()
             KeyEvent.KEYCODE_DPAD_UP -> if (event.isCtrlPressed) {
-                    nexradState.surface.zoomOutByKey()
-                } else {
-                    nexradState.surface.onScrollByKeyboard(0.0f, -20.0f)
-                }
+                nexradState.surface.zoomOutByKey()
+            } else {
+                nexradState.surface.onScrollByKeyboard(0.0f, -20.0f)
+            }
+
             KeyEvent.KEYCODE_DPAD_DOWN -> if (event.isCtrlPressed) {
-                    nexradState.surface.zoomInByKey()
-                } else {
-                    nexradState.surface.onScrollByKeyboard(0.0f, 20.0f)
-                }
+                nexradState.surface.zoomInByKey()
+            } else {
+                nexradState.surface.onScrollByKeyboard(0.0f, 20.0f)
+            }
+
             KeyEvent.KEYCODE_DPAD_LEFT -> nexradState.surface.onScrollByKeyboard(-20.0f, 0.0f)
             KeyEvent.KEYCODE_DPAD_RIGHT -> nexradState.surface.onScrollByKeyboard(20.0f, 0.0f)
             else -> return super.onKeyUp(keyCode, event)

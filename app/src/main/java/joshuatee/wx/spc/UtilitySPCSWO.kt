@@ -22,13 +22,38 @@
 package joshuatee.wx.spc
 
 import android.graphics.Bitmap
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
+import joshuatee.wx.parse
 
 internal object UtilitySpcSwo {
 
-    fun getSwoStateUrl(state: String, day: String): String =
-            "${GlobalVariables.nwsSPCwebsitePrefix}/public/state/images/" + state + "_swody" + day + ".png"
+    // https://www.spc.noaa.gov/partners/outlooks/state/images/MS_swody1_TORN.png
+    fun getSwoStateUrl(state: String, day: String): List<String> = when (day) {
+        "1", "2" -> listOf(
+                // "${GlobalVariables.nwsSPCwebsitePrefix}/public/state/images/" + state + "_swody" + day + ".png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + ".png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + "_TORN.png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + "_HAIL.png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + "_WIND.png",
+        )
+
+        "3" -> listOf(
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + ".png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + "_PROB.png",
+        )
+
+        "4-8" -> listOf(
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + "4" + "_PROB.png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + "5" + "_PROB.png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + "6" + "_PROB.png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + "7" + "_PROB.png",
+                "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + "8" + "_PROB.png",
+        )
+
+        else -> listOf()
+    }
 
     fun getImages(day: String, getAllImages: Boolean): List<Bitmap> {
         val imgUrls = mutableListOf<String>()
@@ -47,10 +72,12 @@ internal object UtilitySpcSwo {
                     imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day${day}probotlk_" + time + "_hail.gif")
                     imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day${day}probotlk_" + time + "_wind.gif")
                 }
+
                 "3" -> {
                     imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day3otlk_$time.gif")
                     imgUrls.add("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/day3prob_$time.gif")
                 }
+
                 else -> {
                 }
             }
@@ -76,11 +103,13 @@ internal object UtilitySpcSwo {
                     urls += day1Urls.map { day1BaseUrl + time + it }
                     urls
                 }
+
                 "3" -> {
                     listOf("otlk_", "prob_").map {
                         GlobalVariables.nwsSPCwebsitePrefix + "/products/outlook/day" + day + it + time + ".gif"
                     }
                 }
+
                 else -> emptyList()
             }
         }

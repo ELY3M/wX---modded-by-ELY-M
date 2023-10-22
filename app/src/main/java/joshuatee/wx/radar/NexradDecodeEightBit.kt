@@ -148,6 +148,7 @@ internal object NexradDecodeEightBit {
                 radarBlackHole = 1.0f
                 radarBlackHoleAdd = 0.0f
             }
+
             else -> {
                 radarBlackHole = 4.0f
                 radarBlackHoleAdd = 4.0f

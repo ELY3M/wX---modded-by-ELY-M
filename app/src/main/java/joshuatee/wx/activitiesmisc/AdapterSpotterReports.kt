@@ -48,10 +48,14 @@ internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) 
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
+        override fun onClick(v: View) {
+            myClickListener!!.onItemClick(layoutPosition)
+        }
     }
 
-    fun setOnItemClickListener(myClickListenerloc: MyClickListener) { myClickListener = myClickListenerloc }
+    fun setOnItemClickListener(myClickListenerloc: MyClickListener) {
+        myClickListener = myClickListenerloc
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_spotter_reports, parent, false)
@@ -59,7 +63,7 @@ internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) 
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        with (holder) {
+        with(holder) {
             type.text = dataSet[position].type
             time.text = dataSet[position].time
             city.text = dataSet[position].city.replace(GlobalVariables.newline, " ")
@@ -70,7 +74,11 @@ internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) 
 
     override fun getItemCount() = dataSet.size
 
-    interface MyClickListener { fun onItemClick(position: Int) }
+    interface MyClickListener {
+        fun onItemClick(position: Int)
+    }
 
-    companion object { private var myClickListener: MyClickListener? = null }
+    companion object {
+        private var myClickListener: MyClickListener? = null
+    }
 }

@@ -32,10 +32,10 @@ import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 import joshuatee.wx.settings.UIPreferences
 
 internal class OverlayView private constructor(
-    context: Context,
-    private val listener: Listener,
-    showDistanceTool: Boolean,
-    showRecordingTools: Boolean
+        context: Context,
+        private val listener: Listener,
+        showDistanceTool: Boolean,
+        showRecordingTools: Boolean
 ) : FrameLayout(context), View.OnClickListener {
 
     private val distanceToolView: View
@@ -60,6 +60,7 @@ internal class OverlayView private constructor(
         fun onStop()
 
         fun onScreenshot()
+
         /** Called when screenshot is clicked. This view will hide itself completely before invoking
          * this callback. It will reappear once the screenshot has been saved.
          */
@@ -101,16 +102,16 @@ internal class OverlayView private constructor(
             startView.visibility = View.GONE
             distanceToolView.visibility = View.VISIBLE
             drawToolView.background = UtilityImg.bitmapToLayerDrawable(
-                context,
-                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_edit_24dp, Color.YELLOW)
+                    context,
+                    UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_edit_24dp, Color.YELLOW)
             )
             distanceToolView.background = UtilityImg.bitmapToLayerDrawable(
-                context,
-                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_adjust_24dp, Color.YELLOW)
+                    context,
+                    UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_adjust_24dp, Color.YELLOW)
             )
             cancelView.background = UtilityImg.bitmapToLayerDrawable(
-                context,
-                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.YELLOW)
+                    context,
+                    UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.YELLOW)
             )
         }
         if (getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL) {
@@ -132,23 +133,28 @@ internal class OverlayView private constructor(
                 val centerY = (startView.y + startView.height / 2).toInt()
                 val reveal = createCircularReveal(recordingView, centerX, centerY, 0f, width / 2f)
                 reveal.addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) { buttonsView.visibility = View.GONE }
+                    override fun onAnimationEnd(animation: Animator) {
+                        buttonsView.visibility = View.GONE
+                    }
                 })
                 reveal.start()
                 postDelayed(
-                    { if (UIPreferences.telecineSwitchShowCountdown) showCountDown() else countdownComplete() },
-                    (if (UIPreferences.telecineSwitchShowCountdown) COUNTDOWN_DELAY else NON_COUNTDOWN_DELAY).toLong()
+                        { if (UIPreferences.telecineSwitchShowCountdown) showCountDown() else countdownComplete() },
+                        (if (UIPreferences.telecineSwitchShowCountdown) COUNTDOWN_DELAY else NON_COUNTDOWN_DELAY).toLong()
                 )
             }
+
             R.id.record_overlay_cancel -> animate().translationX(animationWidth.toFloat())
-                .setDuration(DURATION_ENTER_EXIT.toLong())
-                .setInterpolator(AccelerateInterpolator())
-                .withEndAction { listener.onCancel() }
+                    .setDuration(DURATION_ENTER_EXIT.toLong())
+                    .setInterpolator(AccelerateInterpolator())
+                    .withEndAction { listener.onCancel() }
+
             R.id.record_overlay_screenshot -> listener.onScreenshot()
             R.id.record_overlay_drawtool -> {
                 drawToolView.isActivated = !drawToolView.isActivated
                 listener.onDrawTool()
             }
+
             R.id.record_overlay_distancetool -> {
                 distanceToolView.isActivated = !distanceToolView.isActivated
                 listener.onDistanceTool()
@@ -186,10 +192,10 @@ internal class OverlayView private constructor(
         private const val DURATION_ENTER_EXIT = 300
 
         fun create(
-            context: Context,
-            listener: Listener,
-            showDistanceTool: Boolean,
-            showRecordingTools: Boolean
+                context: Context,
+                listener: Listener,
+                showDistanceTool: Boolean,
+                showRecordingTools: Boolean
         ): OverlayView = OverlayView(context, listener, showDistanceTool, showRecordingTools)
 
         fun createLayoutParams(context: Context): WindowManager.LayoutParams {
@@ -202,11 +208,11 @@ internal class OverlayView private constructor(
                 WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
             }
             val params = WindowManager.LayoutParams(
-                width,
-                height,
-                layoutFlag,
-                FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
-                TRANSLUCENT
+                    width,
+                    height,
+                    layoutFlag,
+                    FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
+                    TRANSLUCENT
             )
             params.gravity = Gravity.TOP or gravityEndLocaleHack()
             return params

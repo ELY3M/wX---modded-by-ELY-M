@@ -67,7 +67,7 @@ object SpotterNetworkPositionReport {
     private val locationListener: LocationListener = object : LocationListener {
 
         override fun onLocationChanged(location: Location) {
-            if (timer.isRefreshNeeded(MyApplication.appContext)) {
+            if (timer.isRefreshNeeded()) {
                 GetLocation(location)
                 Log.i(TAG, "Spotter onLocationChanged lat: " + location.latitude + " lon: " + location.longitude)
             } else {
@@ -165,7 +165,7 @@ object SpotterNetworkPositionReport {
         strgpsprovider = info[8].toString()
 
 
-        if (timer.isRefreshNeeded(MyApplication.appContext)) {
+        if (timer.isRefreshNeeded()) {
             Log.i(TAG, "Refresh needed!!!!")
         }
         Send_Location_Task()

@@ -47,7 +47,9 @@ class USWarningsWithRadarActivity : BaseActivity() {
     // 2: region ( "us" )
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private var usDownloaded = false
     private var usData = ""
@@ -103,8 +105,8 @@ class USWarningsWithRadarActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureText2(this, ::downloadText, ::updateText)
-        FutureBytes(this, "https://forecast.weather.gov/wwamap/png/US.png", alertSummary::updateImage)
+        FutureText2(::downloadText, ::updateText)
+        FutureBytes("https://forecast.weather.gov/wwamap/png/US.png", alertSummary::updateImage)
     }
 
     private fun downloadText(): String {

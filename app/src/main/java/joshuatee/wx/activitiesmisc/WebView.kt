@@ -45,7 +45,9 @@ class WebView : BaseActivity() {
     // arg1 Title
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private var url = ""
     private lateinit var webView: WebView
@@ -63,7 +65,7 @@ class WebView : BaseActivity() {
         title = arguments[1]
         webView = findViewById(R.id.webView)
         val webSettings = webView.settings
-        with (webSettings) {
+        with(webSettings) {
             javaScriptEnabled = true
             if (arguments.size > 2) {
                 builtInZoomControls = true
@@ -96,6 +98,7 @@ class WebView : BaseActivity() {
             Route(this, Intent.ACTION_VIEW, Uri.parse(url))
             true
         }
+
         else -> super.onOptionsItemSelected(item)
     }
 

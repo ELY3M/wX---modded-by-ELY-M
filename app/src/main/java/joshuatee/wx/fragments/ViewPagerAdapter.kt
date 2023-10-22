@@ -16,15 +16,15 @@ class ViewPagerAdapter(activity: FragmentActivity?) : FragmentStateAdapter(activ
     }
 
     override fun createFragment(position: Int): Fragment = if (UIPreferences.simpleMode || UIPreferences.navDrawerMainScreen) {
-            LocationFragment()
-        } else {
-            when (position) {
-                0 -> LocationFragment()
-                1 -> SpcFragment()
-                2 -> MiscFragment()
-                else -> LocationFragment()
-            }
+        LocationFragment()
+    } else {
+        when (position) {
+            0 -> LocationFragment()
+            1 -> SpcFragment()
+            2 -> MiscFragment()
+            else -> LocationFragment()
         }
+    }
 
     fun setTabTitles(index: Int, title: String) {
         tabTitles[index] = title

@@ -30,11 +30,11 @@ import joshuatee.wx.radar.NexradRenderTextObject
 import joshuatee.wx.util.Utility
 
 class ObjectImageMap(
-    val activity: Activity,
-    resId: Int,
-    val toolbar: ObjectToolbar,
-    val toolbarBottom: ObjectToolbar,
-    private val views: List<View>
+        val activity: Activity,
+        resId: Int,
+        val toolbar: ObjectToolbar,
+        val toolbarBottom: ObjectToolbar,
+        private val views: List<View>
 ) {
 
     private val map: ImageMap = activity.findViewById(resId)
@@ -104,17 +104,13 @@ class ObjectImageMap(
     }
 
     fun connect(fn: (String) -> Unit, mapFn: (Int) -> String) {
-        addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
-            override fun onImageMapClicked(id: Int, im2: ImageMap) {
-                im2.visibility = View.GONE
-                if (isRadarWithTransparent) {
-                    UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
-                }
-                fn(mapFn(id))
+        addOnImageMapClickedHandler { id, im2 ->
+            im2.visibility = View.GONE
+            if (isRadarWithTransparent) {
+                UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
             }
-
-            override fun onBubbleClicked(id: Int) {}
-        })
+            fn(mapFn(id))
+        }
     }
 
     private fun setupImageMap(toolbar: ObjectToolbar, toolbarBottom: ObjectToolbar) {
@@ -126,8 +122,10 @@ class ObjectImageMap(
 
     var visibility
         get() = map.visibility
-        set(value) { map.visibility = value }
+        set(value) {
+            map.visibility = value
+        }
 
-    val isHidden
-        get() = visibility == View.GONE
+//    val isHidden
+//        get() = visibility == View.GONE
 }

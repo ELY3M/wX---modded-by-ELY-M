@@ -28,9 +28,8 @@ import android.view.KeyEvent
 import android.view.Menu
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import android.view.View
 import joshuatee.wx.R
-import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.safeGet
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FavoriteType
@@ -57,11 +56,14 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     // arg3 - title string
     //
 
-    companion object { const val INFO = "" }
+    companion object {
+        const val INFO = ""
+    }
 
     // SREF ONLY
     private var favList = listOf<String>()
     private lateinit var star: MenuItem
+
     // END SREF ONLY
     private var fab1: Fab? = null
     private var fab2: Fab? = null
@@ -96,7 +98,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             arguments = arrayOf("1", "SPCHREF", "SPC HREF")
         }
         title = arguments[2]
-        objectModelLayout = ObjectModelLayout(this, arguments[1], arguments[0])
+        objectModelLayout = ObjectModelLayout(arguments[1], arguments[0])
         if (To.int(arguments[0]) == 1) {
             super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
@@ -113,7 +115,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun setupUI() {
         objectToolbarBottom.connect(this)
-        with (objectToolbarBottom) {
+        with(objectToolbarBottom) {
             timeMenuItem = find(R.id.action_time)
             runMenuItem = find(R.id.action_run)
             miStatusParam1 = find(R.id.action_status_param1)
@@ -123,17 +125,11 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             star = objectToolbarBottom.getFavIcon()
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
+        fab1 = Fab(this, R.id.fab1) { om.leftClick() }
+        fab2 = Fab(this, R.id.fab2) { om.rightClick() }
         if (om.numPanes < 2) {
-            fab1 = Fab(this, R.id.fab1) { om.leftClick() }
-            fab2 = Fab(this, R.id.fab2) { om.rightClick() }
             objectToolbarBottom.hide(R.id.action_img1)
             objectToolbarBottom.hide(R.id.action_img2)
-            if (UIPreferences.fabInModels) {
-                objectToolbarBottom.hide(R.id.action_back)
-                objectToolbarBottom.hide(R.id.action_forward)
-            }
-            fab1?.visibility = View.GONE
-            fab2?.visibility = View.GONE
             miStatusParam2.isVisible = false
         } else {
             objectToolbarBottom.hide(R.id.action_multipane)
@@ -145,7 +141,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         om.createDataFn()
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
-        navDrawerCombo = NavDrawerCombo(this, om.groups, om.longCodes, om.shortCodes,"")
+        navDrawerCombo = NavDrawerCombo(this, om.groups, om.longCodes, om.shortCodes, "")
         navDrawerCombo.connect(::navDrawerSelected)
     }
 
@@ -174,13 +170,13 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             defaultParam = "SREF_H5__"
             defaultLabel = "[MN]:500MB Height~Wind~Temp~Isotach"
         }
-        with (om.displayData) {
+        with(om.displayData) {
             (0 until om.numPanes).forEach {
                 param[it] = Utility.readPref(this@ModelsSpcHrefActivity, om.prefParam + it.toString(), defaultParam)
                 paramLabel[it] = Utility.readPref(this@ModelsSpcHrefActivity, om.prefParamLabel + it.toString(), defaultLabel)
             }
         }
-        FutureVoid(this, ::runStatusDownload, ::runStatusUpdate)
+        FutureVoid(::runStatusDownload, ::runStatusUpdate)
     }
 
     private fun runStatusDownload() {
@@ -191,11 +187,11 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (om.modelType == ModelType.SPCSREF) {
             (0 until om.times.size).forEach {
                 om.times[it] = om.times[it] + " " +
-                UtilityModels.convertTimeRunToTimeString(
-                        om.rtd.mostRecentRun.replace("z", ""),
-                        om.times[it].replace("f", ""),
-                        false
-                )
+                        UtilityModels.convertTimeRunToTimeString(
+                                om.rtd.mostRecentRun.replace("z", ""),
+                                om.times[it].replace("f", ""),
+                                false
+                        )
             }
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr.replace("</a>&nbsp in through <b>", " ")
             om.run = om.rtd.listRun.safeGet(0)
@@ -224,25 +220,26 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_back -> om.leftClick()
-            R.id.action_forward -> om.rightClick()
             R.id.action_img1 -> {
                 om.curImg = 0
                 om.setSubtitleRestoreZoom()
             }
+
             R.id.action_img2 -> {
                 om.curImg = 1
                 om.setSubtitleRestoreZoom()
             }
+
             R.id.action_multipane -> om.routeFn(this)
-            R.id.action_animate -> UtilityModels.getAnimate(this, om, listOf(""))
+            R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""))
             R.id.action_time -> ObjectDialogue.generic(this, om.times, ::getContent) { om.setTimeIdx(it) }
             R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) { om.run = om.rtd.listRun[it] }
             R.id.action_share -> if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
-                    checkOverlayPerms()
-                } else {
-                    UtilityModels.legacyShare(this, om)
-                }
+                checkOverlayPerms()
+            } else {
+                UtilityModels.legacyShare(this, om)
+            }
+
             R.id.action_fav -> toggleFavorite()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -288,6 +285,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     }
                 }
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

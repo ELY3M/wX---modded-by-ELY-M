@@ -120,7 +120,7 @@ class ObjectDialogue {
         } else {
             textView.setTextColor(Color.WHITE)
         }
-        textView.setPadding(20,10,20,10)
+        textView.setPadding(20, 10, 20, 10)
     }
 
     fun show() {

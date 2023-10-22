@@ -24,15 +24,15 @@
         android:id="@+id/action_back"
         android:icon="@drawable/ic_keyboard_arrow_left_24dp"
         android:title="@string/back_arrow"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_forward"
         android:icon="@drawable/ic_keyboard_arrow_right_24dp"
         android:title="@string/forward_arrow"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

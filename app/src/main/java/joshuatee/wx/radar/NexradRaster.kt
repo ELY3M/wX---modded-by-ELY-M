@@ -57,7 +57,7 @@ internal object NexradRaster {
                 radarBuffers.floatBuffer.putFloat((bin + 1.0f - halfPoint) * scaleFactor)
                 radarBuffers.floatBuffer.putFloat((rowNumber + 1.0f - halfPoint) * scaleFactor * yShift)
                 radarBuffers.floatBuffer.putFloat((bin + 1.0f - halfPoint) * scaleFactor)
-                radarBuffers.floatBuffer.putFloat((rowNumber  - halfPoint) * scaleFactor * yShift)
+                radarBuffers.floatBuffer.putFloat((rowNumber - halfPoint) * scaleFactor * yShift)
                 for (unused in 0..3) {
                     radarBuffers.colorBuffer.put(radarBuffers.colormap.redValues.get(curLevel and 0xFF))
                     radarBuffers.colorBuffer.put(radarBuffers.colormap.greenValues.get(curLevel and 0xFF))

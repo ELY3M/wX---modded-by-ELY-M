@@ -75,12 +75,7 @@ class NexradRenderState(val paneNumber: Int, val data: NexradRenderData, val sca
                 data.locIconBuffers.lenInit = 0f //was locationDotBuffers.lenInit
                 NexradRenderUtilities.genLocdot(data.locIconBuffers, projectionNumbers, gpsLatLon)
             }
-
         }
-
-
-
-
     var rid = ""
         set(rid) {
             field = rid
@@ -100,12 +95,16 @@ class NexradRenderState(val paneNumber: Int, val data: NexradRenderData, val sca
     var projectionNumbers = ProjectionNumbers()
     var gpsLatLon = LatLon(0.0, 0.0)
     var gpsLatLonTransformed = floatArrayOf(0.0f, 0.0f)
+
     // used in the filename for various radar files, possibly states at "1" and not "0"
     var indexString = "0"
+
     // this string is normally no string but for dual pane will be set to either 1 or 2 to differentiate timestamps
     var timeStampId = ""
+
     // list of radar sites when long press occurs
     var closestRadarSites = listOf<RID>()
+
     // is the user pressing and holding on the screen
     var displayHold = false
 }

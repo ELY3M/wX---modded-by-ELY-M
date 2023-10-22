@@ -26,7 +26,7 @@ import android.widget.ScrollView
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.SevenDay
 
-class SevenDayCollection(val context: Context, val boxForecast: VBox, val scrollView: ScrollView) {
+class SevenDayCollection(val context: Context, private val boxForecast: VBox, val scrollView: ScrollView) {
 
     fun update(sevenDay: SevenDay, latLon: LatLon, showSunriseCard: Boolean) {
 //        boxForecast.removeChildrenAndLayout()

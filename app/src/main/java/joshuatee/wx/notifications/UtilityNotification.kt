@@ -43,10 +43,10 @@ import android.app.NotificationChannel
 import android.graphics.Color
 import android.os.Build
 import joshuatee.wx.WX
-import joshuatee.wx.Extensions.*
 import android.media.AudioAttributes
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences
 

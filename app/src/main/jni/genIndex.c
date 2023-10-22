@@ -21,29 +21,34 @@
 
 #include "genIndex.h"
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(JNIEnv * env, jclass clazz, jobject index_buff, jint len, jint break_size) {
-	jshort* iBuff = (*env)->GetDirectBufferAddress(env, index_buff);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(
+	JNIEnv * env,
+	jclass clazz,
+	jobject indexBuffer,
+	jint len,
+	jint breakSize
+) {
+	jshort* iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
 	int i = 0;
 	int incr = 0;
 	int remainder = 0;
 	int chunk_count = 1;
 	int total_bins = len;
-	if (total_bins < break_size){
-		break_size = total_bins;
-		remainder = break_size;
+	if (total_bins < breakSize){
+		breakSize = total_bins;
+		remainder = breakSize;
 	} else {
-		chunk_count = total_bins / break_size;
-		remainder = total_bins - break_size*chunk_count;
+		chunk_count = total_bins / breakSize;
+		remainder = total_bins - breakSize * chunk_count;
 		chunk_count++;
 	}
 	int chunk_index = 0;
-	int j = 0;
 	for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
 		incr = 0;
-		if (chunk_index == (chunk_count - 1))
-			break_size = remainder;
-
-		for (j=0; j < break_size; j++) {
+		if (chunk_index == (chunk_count - 1)) {
+			breakSize = remainder;
+		}
+		for (int j = 0; j < breakSize; j++) {
 			iBuff[i++] = (short)(0 + incr);
 			iBuff[i++] = (short)(1 + incr);
 			iBuff[i++] = (short)(2 + incr);
@@ -55,29 +60,34 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(JNIEnv * env, jclass clazz
 	}
 }
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(JNIEnv * env, jclass clazz, jobject index_buff, jint len, jint break_size) {
-	jshort* iBuff = (*env)->GetDirectBufferAddress(env, index_buff);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(
+		JNIEnv * env,
+		jclass clazz,
+		jobject indexBuffer,
+		jint len,
+		jint breakSize
+) {
+	jshort* iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
 	int i = 0;
 	int incr = 0;
 	int remainder = 0;
 	int chunk_count = 1;
 	int total_bins = len / 4;
-	if (total_bins < break_size){
-		break_size = total_bins;
-		remainder = break_size;
+	if (total_bins < breakSize){
+		breakSize = total_bins;
+		remainder = breakSize;
 	} else {
-		chunk_count = total_bins / break_size;
-		remainder = total_bins - break_size*chunk_count;
+		chunk_count = total_bins / breakSize;
+		remainder = total_bins - breakSize * chunk_count;
 		chunk_count++;
 	}
 	int chunk_index = 0;
-	int j = 0;
-	for (chunk_index = 0; chunk_index < chunk_count; chunk_index++){
+	for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
 		incr = 0;
-		if (chunk_index == (chunk_count - 1))
-			break_size = remainder;
-
-		for (j = 0; j < break_size; j++){
+		if (chunk_index == (chunk_count - 1)) {
+			breakSize = remainder;
+		}
+		for (int j = 0; j < breakSize; j++) {
 			iBuff[i++] = (short)(0 + incr);
 			iBuff[i++] = (short)(1 + incr);
 			incr += 2;

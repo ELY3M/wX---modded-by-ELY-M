@@ -42,7 +42,9 @@ class RecyclerViewGeneric(activity: Activity, resourceId: Int) {
 
     var adapter
         get() = recyclerView.adapter
-        set(value) { recyclerView.adapter = value }
+        set(value) {
+            recyclerView.adapter = value
+        }
 
     fun get() = recyclerView
 }

@@ -36,7 +36,6 @@ import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.canada.UtilityCanada
 //elys mod - leave this alone
 import joshuatee.wx.objects.*
 import joshuatee.wx.radar.*
@@ -85,6 +84,7 @@ class LocationFragment : Fragment() {
     private val textCards = mutableListOf<CardHSText>()
     private val imageCards = mutableListOf<CardHSImage>()
     private val radarLocationChangedList = mutableListOf<Boolean>()
+
     // used to track the wxogl # for the wxogl that is tied to current location
     private var radarForLocation = -1
     private var needForecastData = false
@@ -117,16 +117,19 @@ class LocationFragment : Fragment() {
                         currentConditionsAdded = true
                     }
                 }
+
                 token == "TXT-HAZ" -> {
                     boxHazards = VBox(activityReference)
                     box.addWidget(boxHazards!!.get())
                 }
+
                 token == "TXT-7DAY" || token == "TXT-7DAY2" -> {
                     if (!sevenDayAdded) {
                         box.addLayout(boxForecast!!)
                         sevenDayAdded = true
                     }
                 }
+
                 token == "OGL-RADAR" || token.contains("NXRD-") -> {
                     if (token == "OGL-RADAR") {
                         radarForLocation = radarLocationChangedList.size
@@ -139,12 +142,14 @@ class LocationFragment : Fragment() {
                     box.addWidget(cards.last())
                     radarLocationChangedList.add(false)
                 }
+
                 token.contains("TXT-") -> {
                     val card = CardHSText(activityReference, token.replace("TXT-", ""))
                     box.addWidget(card)
                     textCards.add(card)
                     card.connect { card.toggleText() }
                 }
+
                 token.contains("IMG-") -> {
                     val card = CardHSImage(activityReference, token.replace("IMG-", ""))
                     box.addWidget(card)
@@ -180,7 +185,8 @@ class LocationFragment : Fragment() {
         if (UIPreferences.isNexradOnMainScreen) {
             nexradState.wxglSurfaceViews.indices.forEach {
                 nexradState.wxglSurfaceViews[it].index = it
-                glviewInitialized = NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
+                NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
+                glviewInitialized = true
             }
         }
         return view
@@ -201,7 +207,7 @@ class LocationFragment : Fragment() {
         } else {
             20
         }
-        with (locationLabel) {
+        with(locationLabel) {
             setPaddingAmount(locationLabelPadding)
             setTextColor(UIPreferences.textHighlightColor)
             connect { locationDialogue.show() }
@@ -252,7 +258,7 @@ class LocationFragment : Fragment() {
             FutureText(MyApplication.appContext, it.product, it::setup)
         }
         imageCards.forEach {
-            FutureBytes2(MyApplication.appContext,
+            FutureBytes2(
                     { DownloadImage.byProduct(MyApplication.appContext, it.product) },
                     it::set)
         }
@@ -271,12 +277,13 @@ class LocationFragment : Fragment() {
         if (UIPreferences.isNexradOnMainScreen) {
             if (!glviewInitialized) {
                 nexradState.wxglSurfaceViews.indices.forEach {
-                    glviewInitialized = NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
+                    NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
+                    glviewInitialized = true
                 }
             }
         }
         if (UIPreferences.refreshLocMin != 0 || dataNotInitialized) {
-            if (downloadTimer.isRefreshNeeded(MyApplication.appContext) || currentConditions.latLon.toString() != Location.latLon.toString()) {
+            if (downloadTimer.isRefreshNeeded() || currentConditions.latLon.toString() != Location.latLon.toString()) {
                 getContent()
             }
             dataNotInitialized = false
@@ -314,7 +321,7 @@ class LocationFragment : Fragment() {
                 ::getGPSFromDouble,
                 ::getLatLon,
                 archived = false, forceReset = false)
-        FutureVoid(MyApplication.appContext, {
+        FutureVoid({
             if (Location.isUS && mActivity != null) {
                 NexradDraw.plotRadar(
                         nexradState.wxglRenders[idx],
@@ -390,7 +397,9 @@ class LocationFragment : Fragment() {
         return nexradState.wxglRenders[j].state.rid + ": " + timestamp + " (" + UtilityLocation.getRadarSiteName(nexradState.wxglRenders[j].state.rid) + ")"
     }
 
-    private fun getGPSFromDouble() {}
+    @Suppress("EmptyMethod")
+    private fun getGPSFromDouble() {
+    }
 
     // main screen will not show GPS so if configured just show it off the screen
     // NOTE - this was backed out as it's not a good solution when user enables "center radar on location", removed private fun getLatLon() = LatLon(0.0, 0.0)
@@ -456,9 +465,9 @@ class LocationFragment : Fragment() {
             boxHazards?.visibility = View.GONE
             locationChanged = false
         }
-        FutureVoid(MyApplication.appContext, ::getCc, ::updateCc)
-        FutureVoid(MyApplication.appContext, ::get7day, ::update7day)
-        FutureVoid(MyApplication.appContext, ::getHazards, ::updateHazards)
+        FutureVoid(::getCc, ::updateCc)
+        FutureVoid(::get7day, ::update7day)
+        FutureVoid(::getHazards, ::updateHazards)
     }
 
     private fun getCc() {
@@ -490,7 +499,7 @@ class LocationFragment : Fragment() {
             if (UIPreferences.homescreenFav.contains("TXT-7DAY")) {
                 sevenDayCollection?.update(sevenDay, Location.latLon, Location.isUS)
                 if (!Location.isUS) {
-                    CanadaLegal(activityReference, boxForecast!!, UtilityCanada.getLocationUrl(Location.x, Location.y))
+                    CanadaLegal(activityReference, boxForecast!!, "")
                 }
             }
         }
@@ -500,8 +509,7 @@ class LocationFragment : Fragment() {
         hazards = if (Location.isUS(Location.currentLocation)) {
             Hazards(Location.currentLocation)
         } else {
-            val html = UtilityCanada.getLocationHtml(Location.getLatLon(Location.currentLocation))
-            Hazards(html)
+            Hazards()
         }
     }
 

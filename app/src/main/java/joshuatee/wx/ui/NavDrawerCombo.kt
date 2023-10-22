@@ -35,11 +35,11 @@ import joshuatee.wx.util.Group
 import joshuatee.wx.util.Utility
 
 class NavDrawerCombo(
-    activity: Activity,
-    items: SparseArray<Group>,
-    private val labels: Array<Array<String>>,
-    private val tokens: Array<Array<String>>,
-    prefPrefix: String
+        activity: Activity,
+        items: SparseArray<Group>,
+        private val labels: Array<Array<String>>,
+        private val tokens: Array<Array<String>>,
+        prefPrefix: String
 ) {
 
     private val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
@@ -56,10 +56,10 @@ class NavDrawerCombo(
         }
         listView.setAdapter(MyExpandableListAdapter(activity, items))
         actionBarDrawerToggle = ActionBarDrawerToggle(
-            activity,
-            drawerLayout,
-            R.string.drawer_open,
-            R.string.drawer_close
+                activity,
+                drawerLayout,
+                R.string.drawer_open,
+                R.string.drawer_close
         )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         if (prefPrefix != "") {
@@ -73,7 +73,7 @@ class NavDrawerCombo(
 
     fun getLabel(grp: Int, ch: Int): String = labels[grp][ch]
 
-    fun getToken(grp: Int, ch: Int): String = tokens[grp][ch]
+    private fun getToken(grp: Int, ch: Int): String = tokens[grp][ch]
 
     fun getUrl(): String = getToken(imgGroupIdx, imgIdx)
 

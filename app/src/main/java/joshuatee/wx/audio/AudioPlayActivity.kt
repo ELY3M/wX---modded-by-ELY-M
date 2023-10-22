@@ -23,6 +23,7 @@ package joshuatee.wx.audio
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -121,6 +122,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                     UtilityLog.d("wx", "perm to write to storage was not granted")
                 }
             }
+
             R.id.action_stop -> {
                 if (UtilityTts.mediaPlayer != null) {
                     UtilityTts.playMediaPlayer(1)
@@ -134,6 +136,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                     UtilityNotification.createMediaControlNotification(applicationContext, "")
                 }
             }
+
             R.id.action_playlist -> UtilityPlayList.add(this, view, playlistToken, txt)
             else -> return false
         }
@@ -156,6 +159,9 @@ abstract class AudioPlayActivity : AppCompatActivity() {
 
     private val isStoragePermissionGranted: Boolean
         get() {
+            if (Build.VERSION.SDK_INT >= 33) {
+                return true
+            }
             return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 true
             } else {

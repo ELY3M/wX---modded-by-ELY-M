@@ -24,7 +24,7 @@ package joshuatee.wx.spc
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureVoid
@@ -64,12 +64,12 @@ class SpcSwoSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        if (downloadTimer.isRefreshNeeded(this)) {
+        if (downloadTimer.isRefreshNeeded()) {
             (0..2).forEach {
-                FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage() }) { update(it) }
+                FutureVoid({ bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage() }) { update(it) }
             }
             (3..7).forEach {
-                FutureVoid(this, { bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage() }) { update(it) }
+                FutureVoid({ bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage() }) { update(it) }
             }
         }
     }

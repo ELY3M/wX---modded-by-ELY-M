@@ -22,7 +22,7 @@
 package joshuatee.wx.activitiesmisc
 
 import android.graphics.Bitmap
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.PolygonType

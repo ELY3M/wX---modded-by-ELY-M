@@ -42,6 +42,7 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.FabExtended
 //elys mod - leave this alone
 import joshuatee.wx.util.*
 import java.io.File
@@ -84,7 +85,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         palTitle = findViewById(R.id.palTitle)
         palContent = findViewById(R.id.palContent)
         toolbarBottom.setOnMenuItemClickListener(this)
-        Fab(this, R.id.fab) { fabSavePalette(this) }
+        FabExtended(this, R.id.fab, GlobalVariables.ICON_DONE, "Save") { savePalette(this) }
         Card(this, R.id.cv1)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             listOf(palTitle, palContent).forEach {
@@ -96,7 +97,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         palContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
     }
 
-    private fun fabSavePalette(context: Context) {
+    private fun savePalette(context: Context) {
         val date = ObjectDateTime.getDateAsString("HH:mm")
         val errorCheck = checkMapForErrors()
         if (errorCheck == "") {
@@ -196,22 +197,22 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     private fun convertPalette(txt: String): String {
         var txtLocal = txt
-                        .replace("color", "Color")
-                        .replace("product", "#product")
-                        .replace("unit", "#unit")
-                        .replace("step", "#step")
-                        .replace(":", " ")
-                        .trim { it <= ' ' }.replace(" +".toRegex(), " ")
-                        .trim { it <= ' ' }.replace(" ".toRegex(), ",")
-                        .replace("\\s".toRegex(), "")
+                .replace("color", "Color")
+                .replace("product", "#product")
+                .replace("unit", "#unit")
+                .replace("step", "#step")
+                .replace(":", " ")
+                .trim { it <= ' ' }.replace(" +".toRegex(), " ")
+                .trim { it <= ' ' }.replace(" ".toRegex(), ",")
+                .replace("\\s".toRegex(), "")
         val lines = txtLocal.split(GlobalVariables.newline.toRegex()).dropLastWhile { it.isEmpty() }
         if (lines.size < 3) {
             txtLocal = txtLocal.replace("Color", GlobalVariables.newline + "Color")
         }
         txtLocal = txtLocal.replace("Step", GlobalVariables.newline + "#Step")
-                           .replace("Units", GlobalVariables.newline + "#Units")
-                           .replace("ND", GlobalVariables.newline + "#ND")
-                           .replace("RF", GlobalVariables.newline + "#RF")
+                .replace("Units", GlobalVariables.newline + "#Units")
+                .replace("ND", GlobalVariables.newline + "#ND")
+                .replace("RF", GlobalVariables.newline + "#RF")
         return txtLocal
     }
     /**

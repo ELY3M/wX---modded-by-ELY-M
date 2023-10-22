@@ -25,8 +25,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import joshuatee.wx.objects.Route
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.parseColumn
+import joshuatee.wx.parseFirst
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.HBox
 import joshuatee.wx.ui.Image
@@ -85,6 +87,7 @@ class Nhc(val context: Context, box: VBox) {
             val nhcStormDetailsList = mutableListOf<NhcStormDetails>()
             val statusList = mutableListOf<String>()
             val publicAdvisories = mutableListOf<String>()
+            val publicAdvisoriesNumbers = mutableListOf<String>()
             val forecastAdvisories = mutableListOf<String>()
             val forecastDiscussions = mutableListOf<String>()
             val windSpeedProbabilities = mutableListOf<String>()
@@ -113,6 +116,8 @@ class Nhc(val context: Context, box: VBox) {
             for (chunk in publicAdvisoriesChunk) {
                 val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
                 publicAdvisories.add(token)
+                val tokenNum = UtilityString.parse(chunk, "\"advNum\": \"(.*?)\"")
+                publicAdvisoriesNumbers.add(tokenNum)
             }
             for (chunk in forecastAdvisoriesChunk) {
                 val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
@@ -149,9 +154,10 @@ class Nhc(val context: Context, box: VBox) {
                             intensities[index],
                             statusList[index],
                             Utility.safeGet(publicAdvisories, index),
-                            Utility.safeGet(forecastAdvisories, index),
-                            Utility.safeGet(forecastDiscussions, index),
-                            Utility.safeGet(windSpeedProbabilities, index),
+                            Utility.safeGet(publicAdvisoriesNumbers, index),
+//                            Utility.safeGet(forecastAdvisories, index),
+//                            Utility.safeGet(forecastDiscussions, index),
+//                            Utility.safeGet(windSpeedProbabilities, index),
                     )
                     nhcStormDetailsList.add(objectNhc)
                 }

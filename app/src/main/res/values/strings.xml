@@ -21,6 +21,11 @@
 <resources>
     <string name="label_pin">Add shortcut to home screen</string>
     <string name="radar_shortcut">Radar</string>
+    <string name="radarIcon">Radar Icon</string>
+    <string name="openNavigationDrawer">Open Navigation Drawer</string>
+    <string name="moveBackInTime">Move back in time</string>
+    <string name="moveForwardInTime">Move forward in time</string>
+    <string name="rtma">RTMA</string>
     <string name="spcmesoanalysis_shortcut">SPC Mesoanalysis</string>
     <string name="ncepModels_shortcut">NCEP Models</string>
     <string name="spchref_shortcut">SPC HREF</string>
@@ -40,8 +45,7 @@
     <string name="title_activity_settings_main">Settings</string>
     <string name="title_activity_settings_ui">User Interface Settings</string>
     <string name="title_activity_text_screen">wX</string>
-    <string name="about_wx">wX is an efficient and configurable method to access weather content from the NWS,
-        Environment Canada, and NSSL WRF.
+    <string name="about_wx">wX is an efficient and configurable method to access weather content from the National Weather Service and NSSL WRF.
         Additional software and tools are used from Telecine, GraphView,
         bzip2, TouchImageView, OkHttp, ImageMap, HoloColorPicker, and OpenStreetMaps.
         Software is provided \"as is\". Use at your own risk. Use for educational purposes and non-commercial purposes only.
@@ -124,7 +128,6 @@
     <string name="title_activity_settings_spotternetwork_key">Spotter Network Key</string>
     <string name="title_activity_settings_spotternetwork_key_hint">Put your Spotter Network key here</string>
     <string name="title_activity_settings_widgets">Widgets</string>
-    <string name="title_activity_canada_alerts">Alerts - Canada</string>
     <string name="title_activity_nhc">NHC</string>
     <string name="title_activity_settings_colors">Colors</string>
     <string name="title_activity_sndadd_fav">Add SND</string>
@@ -139,9 +142,8 @@
     <string name="animate_icon">Animate</string>
     <string name="uswarn_start_time">Start:&#160;%1$s</string>
     <string name="uswarn_end_time">End:&#160;&#160;&#160;%1$s</string>
-    <string name="settings_loc_generic_ca_x">CANADA:%1$s</string>
     <string name="help_menu_item">Help</string>
-    <string name="main_screen_ca_disclaimor">Data for Canada forecasts and radar provided by http://weather.gc.ca/canada_e.html. Touch to open external browser to this site.</string>
+    <string name="main_screen_ca_disclaimor">Support for Canada forecast data is now deprecated.</string>
     <string name="menu_regions">Regions</string>
     <string name="action_radar_site_status_l3">Level 3 Radar Status</string>
     <string name="action_radar_site_status_l2">Level 2 Radar Status</string>
@@ -163,7 +165,6 @@
     <string name="label_clear_all">Clear all</string>
     <string name="label_reset">Reset</string>
     <string name="label_delete_location">Delete location</string>
-    <string name="label_ca_via_map">Canada via map</string>
     <string name="label_show_location_on_map">Show Current Location on Map</string>
 
     <!-- telecine -->
@@ -187,9 +188,9 @@
     <string name="notification_screenshot_captured_title">wX screenshot captured.</string>
     <string name="notification_screenshot_captured_subtitle">Touch to view your screenshot.</string>
 
-    <!-- For google weatherlist widget demo -->
+    <!-- For google weather list widget demo -->
     <string name="toast_format_string">%1$s!</string>
-    <string name="item_format_string">%2$s</string>
+    <string name="item_format_string">%1$s</string>
     <string name="header_format_string">%1$d\u00B0 in %2$s</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
@@ -242,13 +243,6 @@
     <string name="spc">SPC</string>
     <string name="tab_3">Tab 3 Label</string>
     <string name="misc">MISC</string>
-    <string name="significant_weather_discussion_paspc">Significant Weather Discussion, PASPC</string>
-    <string name="fxcn01_d1_3_west">FXCN01 D1–3 West</string>
-    <string name="fxcn01_d4_7_west">FXCN01 D4–7 West</string>
-    <string name="fxcn01_d1_3_east">FXCN01 D1–3 East</string>
-    <string name="fxcn01_d4_7_east">FXCN01 D4–7 East</string>
-    <string name="uv_index_forecast">UV index forecast</string>
-    <string name="weather_summaries">Weather Summaries</string>
     <string name="full_disk_goes_east">Full Disk: GOES-East</string>
     <string name="full_disk_goes_west">Full Disk: GOES-West</string>
     <string name="conus_goes_east">CONUS: GOES-East</string>
@@ -325,7 +319,6 @@
     <string name="search">Search</string>
     <string name="locate">Locate</string>
     <string name="web">Web</string>
-    <string name="add_img">Add img</string>
     <string name="set_to_default">Set to default</string>
     <string name="load_from_file">Load from file</string>
     <string name="map">Map</string>
@@ -377,13 +370,11 @@
     <string name="latitude_you_are_not_required_to_enter">Latitude, you are not required to enter.</string>
     <string name="longitude_you_are_not_required_to_enter">Longitude, you are not required to enter.</string>
     <string name="notifications">Notifications</string>
-    <string name="radar_icon">Radar Icon</string>
     <string name="spc_convective_outlook_day_2">SPC Convective outlook day 2</string>
     <string name="spc_convective_outlook_day_1">SPC Convective outlook day 1</string>
     <string name="spc_convective_outlook_day_3">SPC Convective outlook day 3</string>
     <string name="spc_convective_outlook_day_4">SPC Convective outlook day 4</string>
     <string name="todo">TODO</string>
-    <string name="radar">Radar</string>
     <string name="search_by_name">Search by name</string>
     <string name="use_awc_mosaic">Use AWC for Radar Mosaic</string>
 </resources>

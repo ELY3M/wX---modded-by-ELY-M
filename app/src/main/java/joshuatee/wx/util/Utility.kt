@@ -29,7 +29,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.text.Html
 import androidx.preference.PreferenceManager
-import joshuatee.wx.Extensions.parse
+import joshuatee.wx.parse
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
@@ -62,11 +62,11 @@ object Utility {
     }
 
     fun getVersion(context: Context): String = try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-            ""
-        }
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName
+    } catch (e: Exception) {
+        UtilityLog.handleException(e)
+        ""
+    }
 
     @SuppressLint("ApplySharedPref")
     fun commitPref(context: Context) {
@@ -116,20 +116,21 @@ object Utility {
     }
 
     fun readPref(context: Context, key: String, value: String): String =
-        PreferenceManager.getDefaultSharedPreferences(context).getString(key, value)!!
+            PreferenceManager.getDefaultSharedPreferences(context).getString(key, value)!!
 
     fun readPrefInt(context: Context, key: String, value: Int): Int =
-        PreferenceManager.getDefaultSharedPreferences(context).getInt(key, value)
+            PreferenceManager.getDefaultSharedPreferences(context).getInt(key, value)
 
     fun readPrefFloat(context: Context, key: String, value: Float): Float =
-        PreferenceManager.getDefaultSharedPreferences(context).getFloat(key, value)
+            PreferenceManager.getDefaultSharedPreferences(context).getFloat(key, value)
 
     fun readPrefLong(context: Context, key: String, value: Long): Long =
-        PreferenceManager.getDefaultSharedPreferences(context).getLong(key, value)
+            PreferenceManager.getDefaultSharedPreferences(context).getLong(key, value)
 
     fun readPrefWithNull(context: Context, key: String, value: String?): String? =
-        PreferenceManager.getDefaultSharedPreferences(context).getString(key, value)
+            PreferenceManager.getDefaultSharedPreferences(context).getString(key, value)
 
+    @SuppressLint("ApplySharedPref")
     fun removePref(context: Context, key: String) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         preferences.edit().remove(key).commit()
@@ -181,11 +182,8 @@ object Utility {
     // TODO FIXME remove
     fun getHazards(url: String): String = url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
 
-    fun fromHtml(source: String): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY).toString()
-    } else {
-        Html.fromHtml(source).toString()
-    }
+    fun fromHtml(source: String): String =
+            Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY).toString()
 
     fun safeGet(list: List<String>, index: Int): String = if (list.size <= index || index < 0) {
         ""
@@ -213,48 +211,48 @@ object Utility {
     }
 
     fun showMainScreenShortCuts(): String =
-        "Ctrl-r: Nexrad radar" + GlobalVariables.newline +
-        "Ctrl-m: Show submenu" + GlobalVariables.newline +
-        "Ctrl-d: Severe Dashboard" + GlobalVariables.newline +
-        "Ctrl-c: Goes Viewer" + GlobalVariables.newline +
-        "Ctrl-a: Local text product viewer" + GlobalVariables.newline +
-        "Ctrl-s: Settings" + GlobalVariables.newline +
-        "Ctrl-2: Dual Pane Radar" + GlobalVariables.newline +
-        "Ctrl-4: Quad Pane Radar" + GlobalVariables.newline +
-        "Ctrl-e: SPC Mesoanalysis" + GlobalVariables.newline +
-        "Ctrl-n: NCEP Models" + GlobalVariables.newline +
-        "Ctrl-h: Hourly" + GlobalVariables.newline +
-        "Ctrl-o: NHC" + GlobalVariables.newline +
-        "Ctrl-l: Show locations" + GlobalVariables.newline +
-        "Ctrl-i: National images" + GlobalVariables.newline +
-        "Ctrl-z: National text discussions" + GlobalVariables.newline +
-        "Ctrl-j: Previous tab" + GlobalVariables.newline +
-        "Ctrl-k: Next tab" + GlobalVariables.newline
+            "Ctrl-r: Nexrad radar" + GlobalVariables.newline +
+                    "Ctrl-m: Show submenu" + GlobalVariables.newline +
+                    "Ctrl-d: Severe Dashboard" + GlobalVariables.newline +
+                    "Ctrl-c: Goes Viewer" + GlobalVariables.newline +
+                    "Ctrl-a: Local text product viewer" + GlobalVariables.newline +
+                    "Ctrl-s: Settings" + GlobalVariables.newline +
+                    "Ctrl-2: Dual Pane Radar" + GlobalVariables.newline +
+                    "Ctrl-4: Quad Pane Radar" + GlobalVariables.newline +
+                    "Ctrl-e: SPC Mesoanalysis" + GlobalVariables.newline +
+                    "Ctrl-n: NCEP Models" + GlobalVariables.newline +
+                    "Ctrl-h: Hourly" + GlobalVariables.newline +
+                    "Ctrl-o: NHC" + GlobalVariables.newline +
+                    "Ctrl-l: Show locations" + GlobalVariables.newline +
+                    "Ctrl-i: National images" + GlobalVariables.newline +
+                    "Ctrl-z: National text discussions" + GlobalVariables.newline +
+                    "Ctrl-j: Previous tab" + GlobalVariables.newline +
+                    "Ctrl-k: Next tab" + GlobalVariables.newline
 
     fun showRadarShortCuts(): String =
-        "Ctrl-l: Show map" + GlobalVariables.newline +
-        "Ctrl-m: Show submenu" + GlobalVariables.newline +
-        "Ctrl-a: Animate / stop animate" + GlobalVariables.newline +
-        "Ctrl-r: Show reflectivity" + GlobalVariables.newline +
-        "Ctrl-v: Show velocity" + GlobalVariables.newline +
-        "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
-        "Ctrl-2: Show dual pane radar" + GlobalVariables.newline +
-        "Ctrl-4: Show quad pane radar" + GlobalVariables.newline +
-        "Ctrl-UpArrow: Zoom out" + GlobalVariables.newline +
-        "Ctrl-DownArrow: Zoom in" + GlobalVariables.newline +
-        "Arrow keys: pan radar" + GlobalVariables.newline +
-        "Reload key: reload radar" + GlobalVariables.newline
+            "Ctrl-l: Show map" + GlobalVariables.newline +
+                    "Ctrl-m: Show submenu" + GlobalVariables.newline +
+                    "Ctrl-a: Animate / stop animate" + GlobalVariables.newline +
+                    "Ctrl-r: Show reflectivity" + GlobalVariables.newline +
+                    "Ctrl-v: Show velocity" + GlobalVariables.newline +
+                    "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
+                    "Ctrl-2: Show dual pane radar" + GlobalVariables.newline +
+                    "Ctrl-4: Show quad pane radar" + GlobalVariables.newline +
+                    "Ctrl-UpArrow: Zoom out" + GlobalVariables.newline +
+                    "Ctrl-DownArrow: Zoom in" + GlobalVariables.newline +
+                    "Arrow keys: pan radar" + GlobalVariables.newline +
+                    "Reload key: reload radar" + GlobalVariables.newline
 
     fun showWfoTextShortCuts(): String =
-        "Ctrl-l: Show map" + GlobalVariables.newline +
-        "Ctrl-m: Show submenu" + GlobalVariables.newline +
-        "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
-        "Ctrl-p: Play audio - TTS" + GlobalVariables.newline +
-        "Ctrl-s: Stop audio - TTS" + GlobalVariables.newline +
-        "Ctrl-d: Show navigation drawer" + GlobalVariables.newline
+            "Ctrl-l: Show map" + GlobalVariables.newline +
+                    "Ctrl-m: Show submenu" + GlobalVariables.newline +
+                    "Ctrl-f: Toggle favorite" + GlobalVariables.newline +
+                    "Ctrl-p: Play audio - TTS" + GlobalVariables.newline +
+                    "Ctrl-s: Stop audio - TTS" + GlobalVariables.newline +
+                    "Ctrl-d: Show navigation drawer" + GlobalVariables.newline
 
     fun showLocationEditShortCuts(): String =
-        "Ctrl-g: Use GPS to find location" + GlobalVariables.newline + "Ctrl-m: Show submenu" + GlobalVariables.newline
+            "Ctrl-g: Use GPS to find location" + GlobalVariables.newline + "Ctrl-m: Show submenu" + GlobalVariables.newline
 
     fun restart() {
         exitProcess(0)

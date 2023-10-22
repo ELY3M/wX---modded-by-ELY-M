@@ -25,8 +25,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
-import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.ui.TouchImageView2
+import joshuatee.wx.getImage
 import joshuatee.wx.ui.TouchImage
 
 object UtilityImgAnim {
@@ -60,17 +59,9 @@ object UtilityImgAnim {
         return animationDrawable
     }
 
-    fun startAnimation(animationDrawable: AnimationDrawable, img: TouchImageView2): Boolean {
+    fun startAnimation(animationDrawable: AnimationDrawable, img: TouchImage) {
         img.setImageDrawable(animationDrawable)
         animationDrawable.isOneShot = false
         animationDrawable.start()
-        return true
-    }
-
-    fun startAnimation(animationDrawable: AnimationDrawable, img: TouchImage): Boolean {
-        img.setImageDrawable(animationDrawable)
-        animationDrawable.isOneShot = false
-        animationDrawable.start()
-        return true
     }
 }

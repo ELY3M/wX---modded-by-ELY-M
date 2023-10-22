@@ -24,7 +24,7 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import joshuatee.wx.Extensions.parseMultiple
+import joshuatee.wx.parseMultiple
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.common.GlobalVariables
@@ -39,14 +39,14 @@ class CardAlertDetail(val context: Context) : Widget {
     private val textViewStart = Text(context, TextSize.SMALL)
     private val textViewEnd = Text(context, TextSize.SMALL)
     private val textViewBottom = Text(context, backgroundText = true)
-    private val radarButton = Button(context,"Radar", GlobalVariables.ICON_RADAR)
-    private val detailsButton = Button(context,"Details", GlobalVariables.ICON_CURRENT)
+    private val radarButton = Button(context, "Radar", GlobalVariables.ICON_RADAR)
+    private val detailsButton = Button(context, "Details", GlobalVariables.ICON_CURRENT)
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         vbox.addWidgets(listOf(textViewTop, textViewTitle, textViewStart, textViewEnd, textViewBottom))
         val hbox = HBox(context)
-        with (hbox) {
+        with(hbox) {
             wrap()
             addWidget(radarButton)
             addWidget(detailsButton)

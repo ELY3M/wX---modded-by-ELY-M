@@ -22,7 +22,7 @@
 package joshuatee.wx.notifications
 
 import android.content.Context
-import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
@@ -41,7 +41,9 @@ import joshuatee.wx.util.UtilityLog
 
 internal object NotificationMpd {
 
-    fun locationNeedsMpd() = (0 until Location.numLocations).any { Location.locations.getOrNull(it)?.notificationWpcMpd ?: false }
+    fun locationNeedsMpd() = (0 until Location.numLocations).any {
+        Location.locations.getOrNull(it)?.notificationWpcMpd ?: false
+    }
 
     fun send(context: Context): String {
         var notificationUrls = ""
@@ -70,8 +72,8 @@ internal object NotificationMpd {
             val latLons = LatLon.parseStringToLatLons(items[z], -1.0, false)
             if (latLons.isNotEmpty()) {
                 val poly2 = ExternalPolygon.Builder()
-                latLons.forEach {
-                    latLon -> poly2.addVertex(ExternalPoint(latLon))
+                latLons.forEach { latLon ->
+                    poly2.addVertex(ExternalPoint(latLon))
                 }
                 val polygon2 = poly2.build()
                 (1..Location.numLocations).forEach { n ->

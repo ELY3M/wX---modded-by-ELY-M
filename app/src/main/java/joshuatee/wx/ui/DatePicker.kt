@@ -42,7 +42,7 @@ class DatePicker(context: Context, var year: Int, var month: Int, var day: Int, 
     init {
         val datePickerDialog = DatePickerDialog(context, pDateSetListener, year, month, day)
         // 2011-05-27 was the earliest date for filtered, moved to non-filtered and can go back to 2004-03-23
-        with (datePickerDialog) {
+        with(datePickerDialog) {
             datePicker.minDate = ObjectDateTime.from(2004, 3, 24).toEpochMilli()
             datePicker.maxDate = ObjectDateTime.currentTimeMillis()
             setCanceledOnTouchOutside(true)

@@ -39,11 +39,13 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.util.UtilityLog
 
 abstract class VideoRecordActivity : AppCompatActivity() {
 
     companion object {
         private const val CREATE_SCREEN_CAPTURE = 4242
+
         /** code to post/handler request for permission  */
         private const val REQUEST_CODE_PERM = 999
     }
@@ -91,8 +93,12 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     }
 
     protected fun checkOverlayPerms() {
+        UtilityLog.d("wx", "checkOverlayPerms start")
         if (isStoragePermissionGranted) {
+            UtilityLog.d("wx", "checkOverlayPerms start, storage granted")
             checkDrawOverlayPermission()
+        } else {
+            UtilityLog.d("wx", "checkOverlayPerms start, storage not granted")
         }
     }
 
@@ -131,17 +137,22 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     private fun checkDrawOverlayPermission() {
         /** check if we already  have permission to draw over other apps  */
         if (!Settings.canDrawOverlays(this)) {
+            UtilityLog.d("wx", "checkDrawOverlayPermission - perm check")
             /** if not construct intent to request permission  */
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
             /** request permission via start activity for result  */
             startActivityForResult(intent, REQUEST_CODE_PERM)
         } else {
+            UtilityLog.d("wx", "checkDrawOverlayPermission - fireScreenCaptureIntent")
             fireScreenCaptureIntent()
         }
     }
 
     private val isStoragePermissionGranted: Boolean
         get() {
+            if (Build.VERSION.SDK_INT >= 33) {
+                return true
+            }
             return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 true
             } else {
@@ -149,6 +160,16 @@ abstract class VideoRecordActivity : AppCompatActivity() {
                 false
             }
         }
+
+//    private val isStoragePermissionGranted: Boolean
+//        get() {
+//            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                true
+//            } else {
+//                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+//                false
+//            }
+//        }
 
     // https://developer.android.com/training/permissions/requesting.html
 

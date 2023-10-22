@@ -152,7 +152,8 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
     // download/decode radar file
     // 2nd to final arg is whether or not to perform decompression
     // final arg is only used for level2 archive radar files from SPC Storm reports (deprecated)
-    @Synchronized fun constructPolygons(fileName: String, performDecomp: Boolean, urlStr: String = "") {
+    @Synchronized
+    fun constructPolygons(fileName: String, performDecomp: Boolean, urlStr: String = "") {
         totalBins = 0
         NexradRenderRadar.downloadRadarFile(context, data, state, fileName, urlStr)
         NexradRenderRadar.decodeRadarHeader(context, data, state, wxglNexradLevel2, wxglNexradLevel3, performDecomp)
@@ -180,8 +181,8 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         GLES20.glAttachShader(OpenGLShader.sp_SolidColor, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_SolidColor))
         GLES20.glLinkProgram(OpenGLShader.sp_SolidColor)
         GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-        val vertexShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShaderUniform.vs_SolidColorUnfiform)
-        val fragmentShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShaderUniform.fs_SolidColorUnfiform)
+        val vertexShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShaderUniform.vs_SolidColorUniform)
+        val fragmentShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShaderUniform.fs_SolidColorUniform)
         OpenGLShaderUniform.sp_SolidColorUniform = GLES20.glCreateProgram()
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, vertexShaderUniform)
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, fragmentShaderUniform)
@@ -242,7 +243,9 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
                     GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, data.radarBuffers.colorBuffer.slice())
                     triangleIndexBuffer.position(0)
                     GLES20.glDrawElements(GLES20.GL_TRIANGLES, radarChunkCnt, GLES20.GL_UNSIGNED_SHORT, triangleIndexBuffer.slice().asShortBuffer())
-                } catch (e: Exception) { UtilityLog.handleException(e) }
+                } catch (e: Exception) {
+                    UtilityLog.handleException(e)
+                }
             }
         }
         //
@@ -797,6 +800,7 @@ g_free(clear);
         }
     }
 
+    @Suppress("CatchMayIgnoreException")
     private fun drawElement(buffers: OglBuffers) {
         if (buffers.isInitialized) {
             (0 until buffers.chunkCount).forEach {
@@ -812,7 +816,8 @@ g_free(clear);
                     GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
                     GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice())
                     GLES20.glDrawElements(GLES20.GL_LINES, lineCnt, GLES20.GL_UNSIGNED_SHORT, lineIndexBuffer.slice().asShortBuffer())
-                } catch (e: Exception) { }
+                } catch (e: Exception) {
+                }
             }
         }
     }
@@ -843,20 +848,6 @@ g_free(clear);
         currentLength
     }
 
-//TODO move....        
-//elys mod 
-//conus radar
-/*
-    fun constructConusRadar() {
-        data.conusRadarBuffers.lenInit = 0f
-        data.conusRadarBuffers.isInitialized = true
-    }
-
-
-    fun deconstructConusRadar() {
-        data.conusRadarBuffers.isInitialized = false
-    }
-*/
     fun setChunkCount(chunkCount: Int) {
         this.chunkCount = chunkCount
     }

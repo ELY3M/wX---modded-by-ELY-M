@@ -33,6 +33,7 @@ internal class ExternalLine(val start: ExternalPoint, val end: ExternalPoint) {
      */
     var a = Float.NaN
         private set
+
     /**
      * y = Ax + **B**
      *
@@ -40,6 +41,7 @@ internal class ExternalLine(val start: ExternalPoint, val end: ExternalPoint) {
      */
     var b = Float.NaN
         private set
+
     /**
      * Indicate whereas the line is vertical. <br></br>
      * For example, line like x=1 is vertical, in other words parallel to axis Y. <br></br>
@@ -58,6 +60,7 @@ internal class ExternalLine(val start: ExternalPoint, val end: ExternalPoint) {
             isVertical = true
         }
     }
+
     /**
      * Indicate whereas the point lays on the line.
      *

@@ -48,7 +48,7 @@ internal object UtilityNexradColors {
                 transformedColor
             } else {
                 transformedColor = a + (b - a) * proportion
-                if ( a > 270.0f && b < 90.0f) {
+                if (a > 270.0f && b < 90.0f) {
                     transformedColor = a + (360.0f - a + b) * proportion
                 }
                 transformedColor

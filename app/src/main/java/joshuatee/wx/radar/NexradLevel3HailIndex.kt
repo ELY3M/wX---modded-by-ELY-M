@@ -24,8 +24,9 @@ package joshuatee.wx.radar
 
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.OfficeTypeEnum
+import joshuatee.wx.parseColumn
+import joshuatee.wx.parseColumnAll
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog

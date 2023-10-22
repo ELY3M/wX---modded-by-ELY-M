@@ -45,7 +45,7 @@ object NexradLayerDownload {
         //
         PolygonWarning.byType.values.forEach {
             if (it.isEnabled) {
-                FutureVoid(context, it::download) {
+                FutureVoid(it::download) {
                     NexradDraw.plotWarningPolygon(it.type, wxglSurfaceView, wxglRender)
                     radarUpdateFn()
                 }
@@ -56,7 +56,7 @@ object NexradLayerDownload {
         //
         listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
             if (it.pref) {
-                FutureVoid(context, { PolygonWatch.byType[it]!!.download(context) }) {
+                FutureVoid({ PolygonWatch.byType[it]!!.download(context) }) {
                     NexradDraw.plotPolygons(it, wxglSurfaceView, wxglRender)
                 }
             }
@@ -66,7 +66,7 @@ object NexradLayerDownload {
         //
         if (showWpcFronts) {
             if (PolygonType.WPC_FRONTS.pref) {
-                FutureVoid(context, { WpcFronts.get(context) }, {
+                FutureVoid({ WpcFronts.get() }, {
                     NexradDraw.plotWpcFronts(wxglSurfaceView, wxglRender)
                     NexradRenderTextObject.updateWpcFronts(wxglTextObjects)
                 })
@@ -76,7 +76,7 @@ object NexradLayerDownload {
         // SPC Convective Outlook
         //
         if (PolygonType.SWO.pref) {
-            FutureVoid(context, { SwoDayOne.get(context) }) {
+            FutureVoid({ SwoDayOne.get() }) {
                 wxglRender.construct.swoLines()
                 wxglSurfaceView.requestRender()
             }
@@ -85,7 +85,7 @@ object NexradLayerDownload {
         // Wind barbs and observations
         //
         if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) {
-            FutureVoid(context, { Metar.get(context, wxglRender.state.rid, wxglRender.paneNumber) }) {
+            FutureVoid({ Metar.get(context, wxglRender.state.rid, wxglRender.paneNumber) }) {
                 if (PolygonType.WIND_BARB.pref) {
                     wxglRender.construct.windBarbs()
                 }
@@ -99,7 +99,7 @@ object NexradLayerDownload {
         // TVS
         //
         if (PolygonType.TVS.pref) {
-            FutureVoid(context, {
+            FutureVoid({
                 wxglRender.construct.tvs()
             }) {
                 wxglSurfaceView.requestRender()
@@ -109,7 +109,7 @@ object NexradLayerDownload {
         // Hail Index (HI)
         //
         if (PolygonType.HI.pref) {
-            FutureVoid(context, {
+            FutureVoid({
                 wxglRender.construct.hailIndex()
             }) {
                 wxglSurfaceView.requestRender()
@@ -123,7 +123,7 @@ object NexradLayerDownload {
         // User Points
         //
         if (PolygonType.USERPOINTS.pref) {
-            FutureVoid(context, { wxglRender.construct.userPoints() }) {
+            FutureVoid({ wxglRender.construct.userPoints() }) {
                 wxglSurfaceView.requestRender()
             }
         }
@@ -131,7 +131,7 @@ object NexradLayerDownload {
         // Storm Tracks (STI)
         //
         if (PolygonType.STI.pref) {
-            FutureVoid(context, { wxglRender.construct.lines(wxglRender.data.stiBuffers) }) {
+            FutureVoid({ wxglRender.construct.lines(wxglRender.data.stiBuffers) }) {
                 wxglSurfaceView.requestRender()
             }
         }
@@ -139,7 +139,7 @@ object NexradLayerDownload {
         // Spotters
         //
         if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
-            FutureVoid(context, {
+            FutureVoid({
                 wxglRender.construct.spotters()
             }) {
                 wxglSurfaceView.requestRender()

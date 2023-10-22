@@ -45,10 +45,12 @@ import joshuatee.wx.util.UtilityLog
 internal object Level2 {
     /* added for high resolution message type 31 */
     private const val REFLECTIVITY_HIGH = 5
+
     /**
      * High Resolution Radial Velocity moment identifier
      */
     private const val VELOCITY_HIGH = 6
+
     /**
      * Size of the file header, aka title
      */
@@ -71,7 +73,8 @@ internal object Level2 {
             var messageOffset31: Long = 0
             var recordNumber = 0
             while (true) {
-                val r = Level2Record.factory(ucarRandomAccessFile, recordNumber, messageOffset31) ?: break
+                val r = Level2Record.factory(ucarRandomAccessFile, recordNumber, messageOffset31)
+                        ?: break
                 recordNumber += 1
                 if (r.messageType.toInt() == 31) {
                     messageOffset31 += (r.messageSize * 2 + 12 - 2432)

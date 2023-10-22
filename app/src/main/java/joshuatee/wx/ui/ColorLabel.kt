@@ -38,7 +38,7 @@ internal class ColorLabel(val context: Context, label: String, private val pref:
 
     init {
         refreshColor()
-        with (text) {
+        with(text) {
             setPadding(UIPreferences.paddingSettings)
             wrap()
             text = label

@@ -73,8 +73,8 @@ Show a floating action button on the main screen for access to radar.
 Hide the top toolbar on the main screen.
 </string>
 
-    <string name="wfo_remember">
-Remember the last WFO used for product viewer.
+    <string name="wfo_remember">Remember the last WFO (Weather Forecast Office) used for the WFO text product viewer. This viewer is accessed via the \"i\" with
+        circle around it in the toolbar or navigation drawer.
 </string>
 
     <string name="cc_widget_show_sevenday">
@@ -132,10 +132,6 @@ Use JNI ( native C code ) for performance sensitive areas in radar.
         It was helpful in the 2014-2017 time frame but as devices have gotten faster the need is not as great.
         All future development is occurring in the Kotlin code base.
      </string>
-
-    <string name="prevent_accidental_exit_label">
-If enabled, on the main screen if you tap the back arrow at the bottom left you will be required to tap this twice to exit the program.
-</string>
 
     <string name="obs_label">
 Show nearby observations for the state the currently selected radar is in.
@@ -602,7 +598,5 @@ Set the radius of any card widget. Larger numbers create a more rounded corner. 
     <string name="tiles_per_row_label">
 Set the number of images tiles in the 2nd and 3rd tab. Default is 3. Requires an app restart.</string>
 
-    <string name="fab_in_models_label">
-Show left and right arrow in model activities as larger floating action buttons instead of icons in the bottom toolbar.</string>
-
+    <string name="androidNotificationWarning">Please make sure notifications are explicitly allowed if you enable any items below. If using Android 13 or higher, tap here to allow permissions.</string>
 </resources>

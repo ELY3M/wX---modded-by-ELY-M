@@ -90,18 +90,21 @@ class NexradLevel3 internal constructor() {
                 radialStart = ByteBuffer.allocateDirect(4 * 360)
                 radialStart.order(ByteOrder.nativeOrder())
             }
+
             78, 80 -> {
                 binWord = ByteBuffer.allocateDirect(360 * 592)
                 binWord.order(ByteOrder.nativeOrder())
                 radialStart = ByteBuffer.allocateDirect(4 * 360)
                 radialStart.order(ByteOrder.nativeOrder())
             }
+
             37, 38, 41, 57 -> {
                 binWord = ByteBuffer.allocateDirect(464 * 464)
                 binWord.order(ByteOrder.nativeOrder())
                 radialStart = ByteBuffer.allocateDirect(4 * 360)
                 radialStart.order(ByteOrder.nativeOrder())
             }
+
             else -> {
                 binWord = ByteBuffer.allocateDirect(360 * 230)
                 binWord.order(ByteOrder.nativeOrder())
@@ -276,7 +279,7 @@ class NexradLevel3 internal constructor() {
             binSize = NexradUtil.getBinSize(productCode.toInt())
         } catch (e: IOException) {
             UtilityLog.handleException(e)
-        }  catch (e: Exception) {
+        } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
     }

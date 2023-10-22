@@ -38,8 +38,8 @@ internal object NexradDraw {
             index: Int,
             nexradState: NexradStateMainScreen,
             changeListener: NexradRenderSurfaceView.OnProgressChangeListener
-    ): Boolean {
-        with (nexradState) {
+    ) {
+        with(nexradState) {
             wxglSurfaceViews[index].setEGLContextClientVersion(2)
             wxglRenders[index].state.indexString = index.toString()
             wxglSurfaceViews[index].setRenderer(nexradState.wxglRenders[index])
@@ -49,7 +49,6 @@ internal object NexradDraw {
             wxglRenders[index].state.zoom = RadarPreferences.wxoglSize / 10.0f
             wxglSurfaceViews[index].scaleFactor = RadarPreferences.wxoglSize / 10.0f
         }
-        return true
     }
 
     fun initGlView(
@@ -59,7 +58,7 @@ internal object NexradDraw {
             changeListener: NexradRenderSurfaceView.OnProgressChangeListener,
             archived: Boolean = false
     ) {
-        with (nexradState.wxglSurfaceViews[index]) {
+        with(nexradState.wxglSurfaceViews[index]) {
             setEGLContextClientVersion(2)
             setRenderer(nexradState.wxglRenders[index])
             setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews, activity)

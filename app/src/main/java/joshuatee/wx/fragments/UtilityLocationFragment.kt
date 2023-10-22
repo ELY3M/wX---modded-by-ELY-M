@@ -23,9 +23,11 @@ package joshuatee.wx.fragments
 
 import android.content.Context
 import joshuatee.wx.MyApplication
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.Route
+import joshuatee.wx.parse
+import joshuatee.wx.parseLastMatch
+import joshuatee.wx.parseMultiple
 import joshuatee.wx.radar.NexradRender
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
@@ -94,22 +96,22 @@ object UtilityLocationFragment {
     private val ca7DayWindspd3: Pattern = Pattern.compile("gusting to ([0-9]{2,3})")
 
     private val windDirectionMap = mapOf(
-        "north" to "N",
-        "north northeast" to "NNE",
-        "northeast" to "NE",
-        "east northeast" to "ENE",
-        "east" to "E",
-        "east southeast" to "ESE",
-        "south southeast" to "SSE",
-        "southeast" to "SE",
-        "south" to "S",
-        "south southwest" to "SSW",
-        "southwest" to "SW",
-        "west southwest" to "WSW",
-        "west" to "W",
-        "west northwest" to "WNW",
-        "northwest" to "NW",
-        "north northwest" to "NNW"
+            "north" to "N",
+            "north northeast" to "NNE",
+            "northeast" to "NE",
+            "east northeast" to "ENE",
+            "east" to "E",
+            "east southeast" to "ESE",
+            "south southeast" to "SSE",
+            "southeast" to "SE",
+            "south" to "S",
+            "south southwest" to "SSW",
+            "southwest" to "SW",
+            "west southwest" to "WSW",
+            "west" to "W",
+            "west northwest" to "WNW",
+            "northwest" to "NW",
+            "north northwest" to "NNW"
     )
 
     fun extract7DayMetrics(chunk: String): String {
@@ -192,18 +194,18 @@ object UtilityLocationFragment {
         }
     }
 
-    val tempList = listOf(
-        nws7DayTemp1,
-        nws7DayTemp2,
-        nws7DayTemp3,
-        nws7DayTemp4,
-        nws7DayTemp5,
-        nws7DayTemp6,
-        nws7DayTemp7,
-        nws7DayTemp8,
-        nws7DayTemp9,
-        nws7DayTemp10,
-        nws7DayTemp11
+    private val tempList = listOf(
+            nws7DayTemp1,
+            nws7DayTemp2,
+            nws7DayTemp3,
+            nws7DayTemp4,
+            nws7DayTemp5,
+            nws7DayTemp6,
+            nws7DayTemp7,
+            nws7DayTemp8,
+            nws7DayTemp9,
+            nws7DayTemp10,
+            nws7DayTemp11
     )
 
     fun extractTemperature(blob: String): String {
@@ -304,10 +306,12 @@ object UtilityLocationFragment {
                 wxglRender?.state?.product = "N0Q"
                 fnGetRadars()
             }
+
             s.contains("Radar type: Velocity") -> {
                 wxglRender?.state?.product = "N0U"
                 fnGetRadars()
             }
+
             s.contains("Reset zoom and center") -> fnResetRadarView()
             else -> {
                 val radarSite = s.split(":")[0]

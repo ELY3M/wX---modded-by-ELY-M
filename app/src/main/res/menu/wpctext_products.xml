@@ -24,12 +24,12 @@
         android:id="@+id/action_read_aloud"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/read_aloud"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_stop"
         android:icon="@drawable/ic_stop_24dp"
         android:title="@string/stop_audio"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_star_outline_24dp"
@@ -39,7 +39,7 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_playlist"
         android:icon="@drawable/ic_queue_24dp"

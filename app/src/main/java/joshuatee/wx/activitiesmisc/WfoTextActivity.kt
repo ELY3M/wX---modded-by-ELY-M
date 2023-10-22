@@ -31,7 +31,7 @@ import android.view.View
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.view.GravityCompat
-import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.NotificationTextProduct
@@ -71,7 +71,9 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 2: product
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private lateinit var arguments: Array<String>
     private var product = ""
@@ -152,6 +154,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
                 getProduct(navDrawer.token.replace("ZZ", state))
             }
+
             else -> getProduct(navDrawer.token)
         }
     }
@@ -180,7 +183,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (wfo != oldWfo) {
             version = 1
         }
-        FutureText2(this, ::download, ::update)
+        FutureText2(::download, ::update)
     }
 
     private fun download(): String = when {
@@ -240,21 +243,25 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 version += 2
                 getContent()
             }
+
             R.id.action_forward -> {
                 if (version > 1) {
                     version -= 2
                 }
                 getContent()
             }
+
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
                 NotificationTextProduct.toggle(this, box.get(), product + wfo)
                 updateSubmenuNotificationText()
             }
+
             R.id.action_prod_by_state -> {
                 wfoByState()
                 getContentByState()
             }
+
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.AFD)
             R.id.action_website -> Route.webView(this, "https://www.weather.gov/" + wfo.lowercase(Locale.US), wfo, "extended")
@@ -308,7 +315,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         title = product
         wfoProd.clear()
-        FutureVoid(this, ::downloadState, ::updateState)
+        FutureVoid(::downloadState, ::updateState)
     }
 
     private fun downloadState() {
@@ -355,6 +362,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     }
                 }
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

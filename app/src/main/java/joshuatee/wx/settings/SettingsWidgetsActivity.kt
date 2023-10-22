@@ -89,7 +89,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
 
     private fun addNumberPicker() {
         val numberPickers = listOf(
-                NumberPicker(this,"Widget check interval in minutes", "CC_NOTIFICATION_INTERVAL", R.string.cc_interval_np_label, 30, 1, 120),
+                NumberPicker(this, "Widget check interval in minutes", "CC_NOTIFICATION_INTERVAL", R.string.cc_interval_np_label, 30, 1, 120),
                 NumberPicker(this, "Widget nexrad size", "WIDGET_NEXRAD_SIZE", R.string.widget_nexrad_size_label, 10, 1, 15)
         )
         numberPickers.forEach {

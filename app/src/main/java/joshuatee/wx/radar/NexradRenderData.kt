@@ -31,7 +31,7 @@ class NexradRenderData(val context: Context) {
 
     //elys mod - cant be private
     val zoomToHideMiscFeatures = 0.5f
-    val radarBuffers = OglRadarBuffers(context, RadarPreferences.nexradBackgroundColor)
+    val radarBuffers = OglRadarBuffers(RadarPreferences.nexradBackgroundColor)
     val geographicBuffers = mapOf(
             RadarGeometryTypeEnum.StateLines to OglBuffers(RadarGeometryTypeEnum.StateLines, 0.0f),
             RadarGeometryTypeEnum.CaLines to OglBuffers(RadarGeometryTypeEnum.CaLines, 0.0f),

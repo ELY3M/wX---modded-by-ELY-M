@@ -63,8 +63,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     private var toolbarsHidden = false
     private var mScaleFactor = 1.0f
     private var newX = 0.0
-    var newY = 0.0
-        private set
+    private var newY = 0.0
     private var centerX = 0.0f
     private var centerY = 0.0f
     private var xPos = 0.0f
@@ -81,7 +80,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     private var widthDivider = 0
     private var heightDivider = 2
     val cities = mutableListOf<TextView>()
-    val countyLabels= mutableListOf<TextView>()
+    val countyLabels = mutableListOf<TextView>()
     val observations = mutableListOf<TextView>()
     val pressureCenterLabels = mutableListOf<TextView>()
     val spotterLabels = mutableListOf<TextView>()
@@ -126,7 +125,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                         wxgl.state.displayHold = true
                     }
                 }
-                if (!locationFragment && wxglRenders.size == 1 && fullScreen ||(wxglRenders.size > 1 && !locationFragment)) {
+                if (!locationFragment && wxglRenders.size == 1 && fullScreen || (wxglRenders.size > 1 && !locationFragment)) {
                     UtilityUI.immersiveMode(activity!!)
                 }
             }
@@ -197,7 +196,8 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
 
     override fun onDown(event: MotionEvent): Boolean = true
 
-    override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean = true
+    // API34 changed first arg to Optional
+    override fun onFling(event1: MotionEvent?, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean = true
 
     override fun onLongPress(event: MotionEvent) {
         if (fullScreen) {
@@ -226,7 +226,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         listener?.onProgressChanged(index, index, idxInt)
     }
 
-    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
         var panned = false
         if (!locationFragment && !RadarPreferences.wxoglCenterOnLocation) {
             if (abs(distanceX) > 0.001f) {
@@ -468,10 +468,10 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
             }
         } else {
             width =
-                if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)
-                    MyApplication.dm.widthPixels / widthDivider
-                else
-                    MyApplication.dm.widthPixels / widthDivider
+                    if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)
+                        MyApplication.dm.widthPixels / widthDivider
+                    else
+                        MyApplication.dm.widthPixels / widthDivider
             if ((UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)) {
                 height = MyApplication.dm.heightPixels / heightDivider
                 if (wxglRenders.size == 2) {

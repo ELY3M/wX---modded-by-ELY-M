@@ -30,7 +30,4 @@ object UtilityMap {
 
     fun getUrl(x: String, y: String, zoomLevel: String): String =
             "http://www.openstreetmap.org/?mlat=${x}&mlon=${y}&zoom=$zoomLevel&layers=M"
-
-    fun getUrlFromAddress(streetAddress: String): String =
-        "http://www.openstreetmap.org/search?query=" + streetAddress.replace(",", "%2C").replace(" ", "%20")
 }

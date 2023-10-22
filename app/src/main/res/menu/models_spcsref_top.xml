@@ -23,7 +23,7 @@
     <item
         android:id="@+id/action_param"
         android:title="@string/fav"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>
 
 

@@ -41,22 +41,22 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     private val textFromLegend = 10.0f
     private val startHeight = UIPreferences.actionBarHeight.toFloat()
     private val h0CLabels = listOf(
-        "ND",
-        "BI",
-        "GC",
-        "IC",
-        "DS",
-        "WS",
-        "RA",
-        "HR",
-        "BD",
-        "GR",
-        "HA",
-        "",
-        "",
-        "",
-        "UK",
-        "RF"
+            "ND",
+            "BI",
+            "GC",
+            "IC",
+            "DS",
+            "WS",
+            "RA",
+            "HR",
+            "BD",
+            "GR",
+            "HA",
+            "",
+            "",
+            "",
+            "UK",
+            "RF"
     )
 
     init {
@@ -93,7 +93,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     }
 
     public override fun onDraw(canvas: Canvas) {
-        with (paintText) {
+        with(paintText) {
             style = Paint.Style.FILL
             strokeWidth = 1.0f
             textSize = RadarPreferences.showLegendTextSize.toFloat() //was 30f
@@ -118,6 +118,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
+
             "N0U", "L2VEL", "TV0" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(99, 255 - it)
@@ -131,6 +132,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
+
             "DVL" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(134, 255 - it)
@@ -144,6 +146,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
+
             "EET" -> {
                 scaledHeight = (screenHeight - 2 * startHeight) / 70.0f
                 (0..70).forEach {
@@ -158,6 +161,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
+
             "N0X" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(159, 255 - it)
@@ -169,6 +173,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     units = ""
                 }
             }
+
             "N0C" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(161, 255 - it)
@@ -182,6 +187,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
+
             "N0K" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(163, 255 - it)
@@ -193,6 +199,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     units = ""
                 }
             }
+
             "H0C" -> {
                 scaledHeight = (screenHeight - 2 * startHeight) / 160.0f
                 (0..159).forEach {
@@ -205,6 +212,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
+
             "DSA", "DAA" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(172, 255 - it)
@@ -214,11 +222,12 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 var j = WXGLRadarActivity.dspLegendMax
                 while (j > 0) {
                     drawText(canvas, j.toString().take(4) + units,
-                        255.0f / WXGLRadarActivity.dspLegendMax * scaledHeightVel * (WXGLRadarActivity.dspLegendMax - j) + heightFudge)
+                            255.0f / WXGLRadarActivity.dspLegendMax * scaledHeightVel * (WXGLRadarActivity.dspLegendMax - j) + heightFudge)
                     units = ""
                     j -= WXGLRadarActivity.dspLegendMax / 16.0f
                 }
             }
+
             else -> {}
         }
     }

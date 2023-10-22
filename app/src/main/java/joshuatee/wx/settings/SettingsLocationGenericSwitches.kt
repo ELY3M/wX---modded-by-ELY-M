@@ -21,7 +21,8 @@
 
 package joshuatee.wx.settings
 
-import android.content.Context
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.view.View
 import android.widget.EditText
 import joshuatee.wx.R
@@ -30,8 +31,9 @@ import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 
-class SettingsLocationGenericSwitches(context: Context, box: VBox, locationNumber: String, editTextLabel: EditText) {
-    
+@SuppressLint("SetTextI18n")
+class SettingsLocationGenericSwitches(context: Activity, box: VBox, locationNumber: String, editTextLabel: EditText) {
+
     private var alertRadar1Sw: Switch
     private var alertSoundSw: Switch
     private var alert7Day1Sw: Switch
@@ -41,7 +43,7 @@ class SettingsLocationGenericSwitches(context: Context, box: VBox, locationNumbe
     private var alertSwoSw: Switch
     private var alertSpcfwSw: Switch
     private var alertWpcmpdSw: Switch
-    
+
     init {
         var alertNotificationCurrent = Utility.readPref(context, "ALERT" + locationNumber + "_NOTIFICATION", "false")
         var alertNotificationRadarCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$locationNumber", "false")
@@ -123,7 +125,7 @@ class SettingsLocationGenericSwitches(context: Context, box: VBox, locationNumbe
                 alertSwoSw,
                 alertSpcfwSw,
                 alertWpcmpdSw
-        ).forEach{
+        ).forEach {
             box.addWidget(it)
         }
     }
@@ -138,7 +140,7 @@ class SettingsLocationGenericSwitches(context: Context, box: VBox, locationNumbe
                 alertSwoSw,
                 alertSpcfwSw,
                 alertWpcmpdSw
-        ).forEach{
+        ).forEach {
             it.visibility = visibility
         }
     }

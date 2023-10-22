@@ -41,7 +41,7 @@ class BottomSheetFragment(
         val position: Int,
         private val topLabel: String,
         private val usedForLocation: Boolean
-    ) : BottomSheetDialogFragment() {
+) : BottomSheetDialogFragment() {
 
     private lateinit var box: LinearLayout
     private lateinit var label: TextView
@@ -58,10 +58,12 @@ class BottomSheetFragment(
                 label.setTextColor(Color.BLACK)
                 label.setBackgroundColor(Color.LTGRAY)
             }
+
             Utility.isThemeAllBlack() -> {
                 label.setTextColor(Color.WHITE)
                 label.setBackgroundColor(Color.BLACK)
             }
+
             else -> {
                 label.setTextColor(Color.WHITE)
                 label.setBackgroundColor(Color.BLACK)
@@ -91,7 +93,7 @@ class BottomSheetFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (usedForLocation && Location.numLocations == 1) {
-            listOf(1, 2, 3).forEach{
+            listOf(1, 2, 3).forEach {
                 textViewList[it].visibility = View.INVISIBLE
             }
         }

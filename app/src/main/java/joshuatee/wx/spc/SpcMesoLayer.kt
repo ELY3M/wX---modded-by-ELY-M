@@ -88,6 +88,7 @@ class SpcMesoLayer(val context: Context, val type: SpcMesoLayerType, objectToolb
                 SpcMesoLayerType.Observations to "Observations",
                 SpcMesoLayerType.Population to "Population"
         )
+
         // val radImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
         val urlToken = mapOf(
                 SpcMesoLayerType.County to "cnty",

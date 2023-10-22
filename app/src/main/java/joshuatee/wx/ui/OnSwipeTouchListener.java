@@ -5,6 +5,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 // thanks Edward Brey http://stackoverflow.com/questions/4139288/android-how-to-handle-right-to-left-swipe-gestures
 
 /**
@@ -21,10 +23,12 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     }
 
     // keep these public contrary to what lint suggests
-    public void onSwipeLeft() {}
+    public void onSwipeLeft() {
+    }
 
     // keep these public contrary to what lint suggests
-    public void onSwipeRight() {}
+    public void onSwipeRight() {
+    }
 
     public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
@@ -36,12 +40,12 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
         @Override
-        public boolean onDown(MotionEvent e) {
+        public boolean onDown(@NonNull MotionEvent e) {
             return true;
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
             if (e1 == null || e2 == null) {
                 return false;
             }

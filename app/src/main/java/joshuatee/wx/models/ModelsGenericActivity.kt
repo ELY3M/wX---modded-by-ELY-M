@@ -29,7 +29,6 @@ import android.view.KeyEvent
 import android.view.Menu
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import android.view.View
 import androidx.core.view.GravityCompat
 import java.util.Locale
 import joshuatee.wx.R
@@ -57,7 +56,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
     // arg3 - title string
     //
 
-    companion object { const val INFO = "" }
+    companion object {
+        const val INFO = ""
+    }
 
     private var fab1: Fab? = null
     private var fab2: Fab? = null
@@ -102,7 +103,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             titleString = arguments[2]
         }
         title = titleString
-        objectModelLayout = ObjectModelLayout(this, prefModelToken, numberOfPanes)
+        objectModelLayout = ObjectModelLayout(prefModelToken, numberOfPanes)
         if (To.int(numberOfPanes) == 1) {
             super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, iconsEvenlySpaced = false, bottomToolbar = true)
         } else {
@@ -122,23 +123,17 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (om.modelType == ModelType.SPCHRRR) {
             overlayImg.addAll(listOf(*TextUtils.split(Utility.readPref(this, "SPCHRRR_OVERLAY", ""), ":")))
         }
-        with (objectToolbarBottom) {
+        with(objectToolbarBottom) {
             timeMenuItem = find(R.id.action_time)
             runMenuItem = find(R.id.action_run)
             miStatusParam1 = find(R.id.action_status_param1)
             miStatusParam2 = find(R.id.action_status_param2)
         }
+        fab1 = Fab(this, R.id.fab1) { om.leftClick() }
+        fab2 = Fab(this, R.id.fab2) { om.rightClick() }
         if (om.numPanes < 2) {
-            fab1 = Fab(this, R.id.fab1) { om.leftClick() }
-            fab2 = Fab(this, R.id.fab2) { om.rightClick() }
             objectToolbarBottom.hide(R.id.action_img1)
             objectToolbarBottom.hide(R.id.action_img2)
-            if (UIPreferences.fabInModels) {
-                objectToolbarBottom.hide(R.id.action_back)
-                objectToolbarBottom.hide(R.id.action_forward)
-            }
-            fab1?.visibility = View.GONE
-            fab2?.visibility = View.GONE
             miStatusParam2.isVisible = false
         } else {
             objectToolbarBottom.hide(R.id.action_multipane)
@@ -163,7 +158,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun setupModel() {
         if (om.modelType == ModelType.SPCHRRR) {
-            with (om.displayData) {
+            with(om.displayData) {
                 (0 until om.numPanes).forEach {
                     param[it] = om.params[0]
                     param[it] = Utility.readPref(this@ModelsGenericActivity, om.prefParam + it.toString(), param[it])
@@ -175,11 +170,11 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     }
                 }
             }
-            FutureVoid(this, ::runStatusDownload, ::runStatusUpdate)
+            FutureVoid(::runStatusDownload, ::runStatusUpdate)
         } else {
             val modelPosition = Utility.readPrefInt(this, om.prefModelIndex, 0)
             om.setParams(modelPosition)
-            with (om.displayData) {
+            with(om.displayData) {
                 (0 until om.numPanes).forEach {
                     param[it] = om.params[0]
                     param[it] = Utility.readPref(this@ModelsGenericActivity, om.prefParam + it.toString(), param[0])
@@ -213,6 +208,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                                 om.times.add(To.stringPadLeftZeros(it, 3) + "00")
                             }
                         }
+
                         "GEFS-SPAG", "GEFS-MEAN-SPRD" -> {
                             (0..181 step 6).forEach {
                                 om.times.add(To.stringPadLeftZeros(it, 3))
@@ -221,6 +217,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                                 om.times.add(To.stringPadLeftZeros(it, 3))
                             }
                         }
+
                         "GFS" -> {
                             (0..241 step 3).forEach {
                                 om.times.add(To.stringPadLeftZeros(it, 3))
@@ -229,17 +226,37 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                                 om.times.add(To.stringPadLeftZeros(it, 3))
                             }
                         }
+
+                        "GEFS-WAVE" -> {
+                            (0..239 step 3).forEach {
+                                om.times.add(To.stringPadLeftZeros(it, 3))
+                            }
+                            (240..384 step 6).forEach {
+                                om.times.add(To.stringPadLeftZeros(it, 3))
+                            }
+                        }
+
+                        "GFS-WAVE" -> {
+                            (0..71 step 3).forEach {
+                                om.times.add(To.stringPadLeftZeros(it, 3))
+                            }
+                            (72..180 step 6).forEach {
+                                om.times.add(To.stringPadLeftZeros(it, 3))
+                            }
+                        }
+
                         else -> (om.startStep..om.endStep step om.stepAmount).forEach {
                             om.times.add(String.format(Locale.US, om.format, it))
                         }
                     }
                 }
+
                 else -> (om.startStep..om.endStep step om.stepAmount).forEach {
                     om.times.add(String.format(Locale.US, om.format, it))
                 }
             }
             Utility.writePref(this, om.prefModel, om.model)
-            FutureVoid(this, ::runStatusDownload, ::runStatusUpdate)
+            FutureVoid(::runStatusDownload, ::runStatusUpdate)
         }
     }
 
@@ -257,7 +274,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             miStatus.isVisible = true
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             (om.startStep until om.endStep).forEach {
-                om.times.add(To.stringPadLeftZeros(it,2))
+                om.times.add(To.stringPadLeftZeros(it, 2))
             }
             UtilityModels.updateTime(UtilityString.getLastXChars(om.run, 2), om.rtd.mostRecentRun, om.times, "", false)
             om.setTimeIdx(Utility.readPrefInt(this, om.prefRunPosn, 1))
@@ -313,25 +330,26 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 UtilityModels.getContent(this, om, overlayImg)
             }
             // SPCHRRR END
-            R.id.action_back -> om.leftClick()
-            R.id.action_forward -> om.rightClick()
             R.id.action_time -> ObjectDialogue.generic(this, om.times, ::getContent) { om.setTimeIdx(it) }
             R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) { om.run = om.rtd.listRun[it] }
-            R.id.action_animate -> UtilityModels.getAnimate(this, om, listOf(""))
+            R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""))
             R.id.action_img1 -> {
                 om.curImg = 0
                 om.setSubtitleRestoreZoom()
             }
+
             R.id.action_img2 -> {
                 om.curImg = 1
                 om.setSubtitleRestoreZoom()
             }
+
             R.id.action_multipane -> Route.model(this, "2", prefModelToken, titleString)
             R.id.action_share -> if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
-                    checkOverlayPerms()
-                } else {
-                    UtilityModels.legacyShare(this, om)
-                }
+                checkOverlayPerms()
+            } else {
+                UtilityModels.legacyShare(this, om)
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -346,12 +364,14 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 om.sector = om.sectors[it]
                 om.sectorInt = it
             }
+
             R.id.action_model -> ObjectDialogue.generic(this, om.models, {}) {
                 om.model = om.models[it]
                 Utility.writePref(this, om.prefModel, om.model)
                 Utility.writePrefInt(this, om.prefModelIndex, it)
                 setupModel()
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -399,18 +419,21 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 om.ncepRuns.add("00Z")
                 om.ncepRuns.add("12Z")
             }
+
             4 -> {
                 om.ncepRuns.add("00Z")
                 om.ncepRuns.add("06Z")
                 om.ncepRuns.add("12Z")
                 om.ncepRuns.add("18Z")
             }
+
             5 -> {
                 om.ncepRuns.add("03Z")
                 om.ncepRuns.add("09Z")
                 om.ncepRuns.add("15Z")
                 om.ncepRuns.add("21Z")
             }
+
             24 -> (0..23).forEach {
                 om.ncepRuns.add(To.stringPadLeftZeros(it, 2) + "Z")
             }

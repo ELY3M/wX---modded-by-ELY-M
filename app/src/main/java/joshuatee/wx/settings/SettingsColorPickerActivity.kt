@@ -43,7 +43,9 @@ class SettingsColorPickerActivity : BaseActivity(), OnColorChangedListener {
     // arg2: title
     //
 
-    companion object { const val INFO = "" }
+    companion object {
+        const val INFO = ""
+    }
 
     private var color = 0
     private var prefVal = ""
@@ -67,8 +69,8 @@ class SettingsColorPickerActivity : BaseActivity(), OnColorChangedListener {
         buttonDefault = findViewById(R.id.buttonDefault)
         color = UtilityColor.setColor(prefVal)
         val currentColor = Utility.readPrefInt(this, prefVal, color)
-        buttonDefault.setTextColor(color)
-        with (colorPicker) {
+//        buttonDefault.setTextColor(color)
+        with(colorPicker) {
             oldCenterColor = currentColor
             this.color = currentColor
             addValueBar(vBar)

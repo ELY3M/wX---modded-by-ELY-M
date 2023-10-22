@@ -30,7 +30,9 @@ import joshuatee.wx.settings.UIPreferences
 
 class Card : Widget {
 
-    companion object { private const val padding = 2 }
+    companion object {
+        private const val padding = 2
+    }
 
     private val card: CardView
 
@@ -40,7 +42,7 @@ class Card : Widget {
     }
 
     private fun setupCard() {
-        with (card) {
+        with(card) {
             setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
             cardElevation = UIPreferences.cardElevation
             setContentPadding(padding, padding, padding, padding)
@@ -74,11 +76,15 @@ class Card : Widget {
 
     var layoutParams: ViewGroup.LayoutParams
         get() = card.layoutParams
-        set(newValue) { card.layoutParams = newValue }
+        set(newValue) {
+            card.layoutParams = newValue
+        }
 
     var visibility: Int
         get() = card.visibility
-        set(newValue) { card.visibility = newValue }
+        set(newValue) {
+            card.visibility = newValue
+        }
 
     fun addWidget(view: View) {
         card.addView(view)

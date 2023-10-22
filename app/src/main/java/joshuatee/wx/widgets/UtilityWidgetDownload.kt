@@ -26,7 +26,7 @@ import java.io.FileOutputStream
 import java.util.Locale
 import android.content.Context
 import android.graphics.Bitmap
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.nhc.Nhc
 import joshuatee.wx.objects.PolygonType
@@ -99,7 +99,7 @@ internal object UtilityWidgetDownload {
         //
         PolygonWarning.byType.values.forEach {
             if (it.isEnabled) {
-                 it.download()
+                it.download()
             }
         }
         //
@@ -153,10 +153,14 @@ internal object UtilityWidgetDownload {
     private fun saveImage(context: Context, bitmap: Bitmap, fileName: String) {
         UtilityLog.d("WXRADAR", "widget save attempt to $fileName")
         val fileOutputStream = getFileOutputStream(context, fileName)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+        if (fileOutputStream != null) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+        }
         fileOutputStream?.close()
         val fos2 = getFileOutputStream(context, GlobalVariables.WIDGET_FILE_BAK + fileName)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos2)
+        if (fos2 != null) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos2)
+        }
         fos2?.close()
     }
 
@@ -167,7 +171,7 @@ internal object UtilityWidgetDownload {
             wfo = Utility.readPref(context, "WFO_LAST_USED", wfo).uppercase(Locale.US)
         }
         val hwoText = DownloadText.byProduct(context, "HWO$wfo")
-            .replaceFirst("<BR>[A-Z][A-Z]Z.*?[0-9]{4}<BR>".toRegex(), "")
+                .replaceFirst("<BR>[A-Z][A-Z]Z.*?[0-9]{4}<BR>".toRegex(), "")
         Utility.writePref(context, "HWO_WIDGET", hwoText)
         Utility.commitPref(context)
     }

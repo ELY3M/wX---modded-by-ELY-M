@@ -28,7 +28,7 @@ import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.textview.MaterialTextView
-import joshuatee.wx.Extensions.setPadding
+import joshuatee.wx.setPadding
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.audio.UtilityTtsTranslations
 import joshuatee.wx.objects.Route
@@ -41,7 +41,7 @@ class CardText(context: Context) : Widget {
     private var padding = UIPreferences.padding
 
     init {
-        with (tv) {
+        with(tv) {
             setPadding(padding)
             gravity = Gravity.START
             setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
@@ -142,7 +142,9 @@ class CardText(context: Context) : Widget {
 
     var text
         get() = tv.text.toString()
-        set(newValue) { tv.text = newValue }
+        set(newValue) {
+            tv.text = newValue
+        }
 
     fun center() {
         tv.gravity = Gravity.CENTER
@@ -168,17 +170,19 @@ class CardText(context: Context) : Widget {
 
     var visibility
         get() = card.visibility
-        set(newValue) { card.visibility = newValue }
+        set(newValue) {
+            card.visibility = newValue
+        }
 
     fun connect(fn: View.OnClickListener) {
         tv.setOnClickListener(fn)
     }
 
     fun refreshTextSize(size: TextSize) = when (size) {
-            TextSize.SMALL -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
-            TextSize.MEDIUM -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-            TextSize.LARGE -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
-        }
+        TextSize.SMALL -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+        TextSize.MEDIUM -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+        TextSize.LARGE -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
+    }
 
     fun setupHazard() {
         setPaddingAmount(UIPreferences.paddingSettings)

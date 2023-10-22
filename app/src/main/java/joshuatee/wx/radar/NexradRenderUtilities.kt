@@ -312,6 +312,7 @@ internal object NexradRenderUtilities {
         }
     }
 
+    /*
     //elys mod - keeping this for now.
     fun generate4326Projection(inBuff: ByteBuffer, outBuff: ByteBuffer, pn: ProjectionNumbers, count: Int) {
         val pnXFloat = pn.xFloat
@@ -326,6 +327,7 @@ internal object NexradRenderUtilities {
             }
         }
     }
+    */
 
     //elys mods
     fun genConus(buffers: OglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {

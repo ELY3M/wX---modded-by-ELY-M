@@ -23,9 +23,9 @@
     <item
         android:id="@+id/action_model"
         android:title="@string/model"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_region"
         android:title="@string/region"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 </menu>

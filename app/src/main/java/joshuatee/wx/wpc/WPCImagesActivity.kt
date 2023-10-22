@@ -28,7 +28,7 @@ import android.os.Build
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureBytes2
@@ -43,7 +43,9 @@ import joshuatee.wx.util.UtilityShare
 
 class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private var timePeriod = 1
     private lateinit var navDrawerCombo: NavDrawerCombo
@@ -104,7 +106,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
             val subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
             setTitle("Images", subtitle)
         }
-        FutureBytes2(this, ::download, ::update)
+        FutureBytes2(::download, ::update)
     }
 
     private fun download(): Bitmap {
@@ -149,16 +151,19 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
                 timePeriod += 1
                 getContent()
             }
+
             R.id.action_back -> {
                 timePeriod -= 1
                 getContent()
             }
+
             R.id.action_share -> {
                 if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
                     checkOverlayPerms()
                 } else
                     UtilityShare.bitmap(this, navDrawerCombo.getLabel(), touchImage)
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

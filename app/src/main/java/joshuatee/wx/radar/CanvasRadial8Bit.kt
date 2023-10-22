@@ -92,20 +92,20 @@ internal object CanvasRadial8Bit {
             val path = Path()
             val angleV = 1.0f
             val colorMapProductCode = when (product) {
-                "L2REF" ->  94
-                "N0Q" ->  94
-                "L2VEL" ->  99
-                "N0U" ->  99
-                "EET" ->  135
-                "DVL" ->  134
-                "N0X" ->  159
-                "N0C" ->  161
-                "N0K" ->  163
-                "H0C" ->  165
-                "N0S" ->  56
-                "DAA" ->  172
-                "DSA" ->  172
-                else ->  94
+                "L2REF" -> 94
+                "N0Q" -> 94
+                "L2VEL" -> 99
+                "N0U" -> 99
+                "EET" -> 135
+                "DVL" -> 134
+                "N0X" -> 159
+                "N0C" -> 161
+                "N0K" -> 163
+                "H0C" -> 165
+                "N0S" -> 56
+                "DAA" -> 172
+                "DSA" -> 172
+                else -> 94
             }
             val bufR = ColorPalette.colorMap[colorMapProductCode]!!.redValues
             val bufG = ColorPalette.colorMap[colorMapProductCode]!!.greenValues
@@ -123,14 +123,14 @@ internal object CanvasRadial8Bit {
                         levelCount += 1
                     } else {
                         NexradDecodeEightBit.rect8bit(
-                            rBuff,
-                            binStart,
-                            binSize,
-                            levelCount,
-                            angle,
-                            angleV,
-                            centerX,
-                            centerY
+                                rBuff,
+                                binStart,
+                                binSize,
+                                levelCount,
+                                angle,
+                                angleV,
+                                centerX,
+                                centerY
                         )
                         if (level == 0)
                             paint.color = zeroColor
@@ -147,7 +147,7 @@ internal object CanvasRadial8Bit {
                         rBuff.position(0)
                         val x1 = rBuff.float
                         val y1 = rBuff.float
-                        with (path) {
+                        with(path) {
                             moveTo(x1, y1)
                             lineTo(rBuff.float, rBuff.float)
                             lineTo(rBuff.float, rBuff.float)

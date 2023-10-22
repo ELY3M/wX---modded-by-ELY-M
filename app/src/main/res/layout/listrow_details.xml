@@ -1,16 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:background="?attr/colorPrimary"
     android:clickable="false"
     android:orientation="vertical"
-    android:paddingStart="40dp">
-
-    <!--
-    android:layout_height="40dp"
-
-     -->
+    android:paddingStart="40dp"
+    tools:ignore="Overdraw">
 
     <TextView
         android:id="@+id/textView1"
@@ -25,18 +22,18 @@
         android:textColor="#fff"
         android:textSize="@dimen/normal_text" />
 
-<!--    <View-->
-<!--        android:id="@+id/spacing"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="1dp"-->
-<!--        android:background="?attr/colorPrimary"-->
-<!--        android:focusable="false" />-->
+    <!--    <View-->
+    <!--        android:id="@+id/spacing"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="1dp"-->
+    <!--        android:background="?attr/colorPrimary"-->
+    <!--        android:focusable="false" />-->
 </LinearLayout>
 
-<!--
-TextView
-android:drawablePadding="5dp"
+    <!--
+    TextView
+    android:drawablePadding="5dp"
 
-all three elements had
-android:background="@color/primary_dark_blue"
--->
+    all three elements had
+    android:background="@color/primary_dark_blue"
+    -->

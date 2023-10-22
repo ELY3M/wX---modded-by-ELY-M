@@ -19,6 +19,7 @@
  -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -32,32 +33,51 @@
 
         <include layout="@layout/widget_toolbar_top" />
 
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scrollbars="none">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_ll">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center">
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_above="@id/toolbar_bottom"
+                            android:orientation="vertical" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </ScrollView>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/padding_ll"
-                >
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center">
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_above="@id/toolbar_bottom"
-                        android:orientation="vertical" />
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-        </ScrollView>
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                app:elevation="@dimen/fab_elevation"
+                app:layout_anchor="@id/scrollView"
+                app:layout_anchorGravity="bottom|right"
+                app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+                app:srcCompat="@drawable/ic_play_arrow_24dp"
+                android:contentDescription="@string/play" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
 </RelativeLayout>

@@ -47,7 +47,9 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     // arg1: "sector" (optional) - if this arg is not a empty string then the last used location will be used
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private lateinit var objectAnimate: ObjectAnimate
     private lateinit var touchImage: TouchImage
@@ -96,7 +98,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     private fun getContent() {
         objectAnimate.stop()
         title = navDrawer.url
-        FutureBytes(this, UtilityNwsRadarMosaic.get(navDrawer.url), ::showImage)
+        FutureBytes(UtilityNwsRadarMosaic.get(navDrawer.url), ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {
@@ -126,10 +128,11 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
             R.id.action_stop -> objectAnimate.stop()
             R.id.action_pause -> objectAnimate.pause()
             R.id.action_share -> if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
-                    checkOverlayPerms()
-                } else {
-                    UtilityShare.bitmap(this, "NWS mosaic", touchImage)
-                }
+                checkOverlayPerms()
+            } else {
+                UtilityShare.bitmap(this, "NWS mosaic", touchImage)
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

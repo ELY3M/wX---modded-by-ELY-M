@@ -25,11 +25,19 @@
 // In addition, it intelligently detects when enough "chunks" have been downloaded to
 // assemble the lowest tilt for base reflectivity or base velocity
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decompress(JNIEnv * env, jclass clazz, jstring src, jstring dst, jobject i_buff, jobject o_buff, jint product_code) {
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decompress(
+	JNIEnv * env,
+	jclass clazz,
+	jstring src,
+	jstring dst,
+	jobject inputByteBuffer,
+	jobject outputByteBuffer,
+	jint productCode
+) {
 	const char *src_path = (*env)->GetStringUTFChars(env, src, NULL);
 	const char *dst_path = (*env)->GetStringUTFChars(env, dst, NULL);
-	jbyte* iBuff = (*env)->GetDirectBufferAddress(env, i_buff);
-	jbyte* oBuff = (*env)->GetDirectBufferAddress(env, o_buff);
+	jbyte* iBuff = (*env)->GetDirectBufferAddress(env, inputByteBuffer);
+	jbyte* oBuff = (*env)->GetDirectBufferAddress(env, outputByteBuffer);
 	FILE *fp_src;
 	FILE *fp_dst;
 	fp_src = fopen(src_path, "r");
@@ -55,7 +63,7 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decompress(JNIEnv * env, jcla
 	int loop_cnt_break = 0;
 	int ref_decomp_size = 0;
 	int vel_decomp_size = 0;
-	if (product_code == 153){
+	if (productCode == 153) {
 		loop_cnt_break = 5;
 	} else {
 		loop_cnt_break = 11;

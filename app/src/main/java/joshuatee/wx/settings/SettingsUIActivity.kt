@@ -114,30 +114,17 @@ class SettingsUIActivity : BaseActivity() {
                 Switch(this, "Dual-pane radar from main screen", "DUALPANE_RADAR_ICON", R.string.dualpane_radar_icon_tv),
                 Switch(this, "Fahrenheit in current conditions/7day", "UNITS_F", R.string.units_f_label),
                 Switch(this, "Fullscreen mode", "FULLSCREEN_MODE", R.string.fullscreen_mode_label),
-//                Switch(this, "GOES GLM for lightning (requires restart)", "LIGHTNING_USE_GOES", R.string.use_goes_for_lightning),
                 Switch(this, "Hide top toolbar (restarts app)", "HIDE_TOP_TOOLBAR", R.string.hide_top_toolbar_label),
-                Switch(this, "Icons evenly spaced", "UI_ICONS_EVENLY_SPACED", R.string.icons_spacing_label),
-                Switch(this, "Lock toolbars", "LOCK_TOOLBARS", R.string.lock_toolbars_label),
-                Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.mainscreen_radar_button),
-                Switch(this, "Media control notification", "MEDIA_CONTROL_NOTIF", R.string.media_control_notif_tv),
                 Switch(this, "Millibars in current conditions", "UNITS_M", R.string.units_m_label),
-                Switch(this, "Models: use FAB", "FAB_IN_MODELS", R.string.fab_in_models_label),
-                Switch(this, "Navigation drawer on main screen", "NAV_DRAWER_MAIN_SCREEN", R.string.nav_drawer_main_screen_label),
-                Switch(this, "Navigation drawer on main screen is on right side", "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", R.string.nav_drawer_main_screen_on_right_label),
-                Switch(this, "NWS Text: remove line breaks", "NWS_TEXT_REMOVELINEBREAKS", R.string.nws_text_removelinebreak_label),
-                Switch(this, "Prevent accidental exit", "PREF_PREVENT_ACCIDENTAL_EXIT", R.string.prevent_accidental_exit_label),
-                Switch(this, "Radar: immersive mode", "RADAR_IMMERSIVE_MODE", R.string.radar_immersive_mode_label),
-                Switch(this, "Radar: transparent status bar", "RADAR_STATUSBAR_TRANSPARENT", R.string.radar_statusbar_transparent_label),
-                Switch(this, "Radar: transparent toolbars", "RADAR_TOOLBAR_TRANSPARENT", R.string.radar_toolbar_transparent_label),
+                Switch(this, "Navigation Drawer on main screen", "NAV_DRAWER_MAIN_SCREEN", R.string.nav_drawer_main_screen_label),
+                Switch(this, "Navigation Drawer is on right side", "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", R.string.nav_drawer_main_screen_on_right_label),
                 Switch(this, "Record screen for sharing", "RECORD_SCREEN_SHARE", R.string.record_screen_share_label),
                 Switch(this, "Simple mode (restarts app)", "SIMPLE_MODE", R.string.simple_mode_label),
-                Switch(this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label),
                 Switch(this, "Translate abbreviations", "TRANSLATE_TEXT", R.string.translate_text_label),
-                Switch(this, "Use AWC Radar Mosaic", "USE_AWC_MOSAIC", R.string.use_awc_mosaic),
                 Switch(this, "Use new NWS API for 7 day", "USE_NWS_API_SEVEN_DAY", R.string.use_nws_api),
                 Switch(this, "Use new NWS API for Hourly", "USE_NWS_API_HOURLY", R.string.use_nws_api_hourly),
-                Switch(this, "WFO: remember location", "WFO_REMEMBER_LOCATION", R.string.wfo_remember),
-                Switch(this, "Widgets: prevent opening app on tap", "UI_WIDGET_PREVENT_TAP", R.string.widget_prevent_tap),
+                Switch(this, "WFO screen remembers location", "WFO_REMEMBER_LOCATION", R.string.wfo_remember),
+                Switch(this, "Widgets prevent opening app on tap", "UI_WIDGET_PREVENT_TAP", R.string.widget_prevent_tap),
         )
         configs.forEach {
             box.addWidget(it)
@@ -153,7 +140,7 @@ class SettingsUIActivity : BaseActivity() {
                 NumberPicker(this, "NWS icon size", "NWS_ICON_SIZE_PREF", R.string.nws_icon_size_np_label, UIPreferences.nwsIconSizeDefault, 1, 50),
                 NumberPicker(this, "Refresh interval for location in minutes", "REFRESH_LOC_MIN", R.string.refresh_loc_min_np_label, 10, 0, 120),
                 NumberPicker(this, "Text size", "TEXTVIEW_FONT_SIZE", R.string.textview_fontsize_np_label, UIPreferences.normalTextSizeDefault, 12, 25),
-                NumberPicker(this, "Text to speech speed, requires app restart","TTS_SPEED_PREF", R.string.tts_speed_np_label, 10, 1, 20),
+                NumberPicker(this, "Text to speech speed, requires app restart", "TTS_SPEED_PREF", R.string.tts_speed_np_label, 10, 1, 20),
                 NumberPicker(this, "UI elevation height", "ELEVATION_PREF", R.string.elevation_np_label, UIPreferences.elevationPrefDefault, 0, 30),
         )
         numberPickers.forEach {
@@ -217,6 +204,7 @@ class SettingsUIActivity : BaseActivity() {
                 else
                     NavUtils.navigateUpFromSameTask(this)
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

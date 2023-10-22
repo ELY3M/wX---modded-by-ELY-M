@@ -24,17 +24,18 @@ package joshuatee.wx.spc
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import joshuatee.wx.Extensions.removeHtml
+import joshuatee.wx.removeHtml
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.CardText
+import joshuatee.wx.ui.Fab
 import joshuatee.wx.ui.VBox
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
@@ -49,7 +50,9 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 2: type such as "MCD", "WATCH", "MPD"
     //
 
-    companion object { const val NUMBER = "" }
+    companion object {
+        const val NUMBER = ""
+    }
 
     private var number = ""
     private lateinit var arguments: Array<String>
@@ -59,7 +62,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var box: VBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar_with_fab, R.menu.spcmcdshowdetail)
         arguments = intent.getStringArrayExtra(NUMBER)!!
         number = arguments[0]
         setupUI()
@@ -75,6 +78,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun setupUI() {
         box = VBox.fromResource(this)
         objectToolbarBottom.connect(this)
+        Fab(this, R.id.fab, GlobalVariables.ICON_RADAR) { Route.radarBySite(this, objectWatchProduct.getClosestRadar()) }
         image = if (tabletInLandscape) {
             box.makeHorizontal()
             Image(this, UtilityImg.getBlankBitmap(), 2)
@@ -92,8 +96,8 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this, { objectWatchProduct.getText(this) }, ::updateText)
-        FutureVoid(this, { objectWatchProduct.getImage() }, ::updateImage)
+        FutureVoid({ objectWatchProduct.getText(this) }, ::updateText)
+        FutureVoid({ objectWatchProduct.getImage() }, ::updateImage)
     }
 
     private fun updateText() {
@@ -121,7 +125,6 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_radar -> Route.radarBySite(this, objectWatchProduct.getClosestRadar())
             R.id.action_share_all -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap, objectWatchProduct.text)
             R.id.action_share_text -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.text)
             R.id.action_share_url -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.textUrl)

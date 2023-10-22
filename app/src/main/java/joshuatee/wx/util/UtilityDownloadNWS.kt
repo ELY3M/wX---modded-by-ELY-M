@@ -28,9 +28,10 @@ import java.util.Locale
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.LatLon
 import okhttp3.Request
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getNwsHtml
+import joshuatee.wx.parse
 
 // https://www.weather.gov/documentation/services-web-api
 // default format via accept header is GeoJSON: application/geo+json
@@ -80,9 +81,9 @@ object UtilityDownloadNws {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                                 .url(url)
-                                 .header("User-Agent", userAgent)
-                                 .build()
+                    .url(url)
+                    .header("User-Agent", userAgent)
+                    .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -105,10 +106,10 @@ object UtilityDownloadNws {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                                 .url(url)
-                                 .header("User-Agent", userAgent)
-                                 .addHeader("Accept", acceptHeader)
-                                 .build()
+                    .url(url)
+                    .header("User-Agent", userAgent)
+                    .addHeader("Accept", acceptHeader)
+                    .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -131,10 +132,10 @@ object UtilityDownloadNws {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                                 .url(url)
-                                 .header("User-Agent", userAgent)
-                                 .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1") // TODO FIXME, not valid defaulting to application/geo+json
-                                 .build()
+                    .url(url)
+                    .header("User-Agent", userAgent)
+                    .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1") // TODO FIXME, not valid defaulting to application/geo+json
+                    .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))

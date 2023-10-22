@@ -9,7 +9,8 @@ TouchImageView is available under the MIT license. See the LICENSE file for more
  */
 package joshuatee.wx.ui;
 
-import android.annotation.TargetApi;
+//import android.annotation.TargetApi;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -19,7 +20,7 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
+//import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -29,8 +30,12 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.OverScroller;
+
 import joshuatee.wx.R;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+
 import joshuatee.wx.MyApplication;
 import joshuatee.wx.objects.ObjectDateTime;
 import joshuatee.wx.util.UtilityLog;
@@ -107,7 +112,6 @@ public class TouchImageView2 extends AppCompatImageView {
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mGestureDetector;
-    private final GestureDetector.OnDoubleTapListener doubleTapListener = null;
     private OnTouchListener userTouchListener = null;
     private OnTouchImageViewListener touchImageViewListener = null;
 
@@ -124,6 +128,9 @@ public class TouchImageView2 extends AppCompatImageView {
         configureImageView(context, attrs, defStyle);
     }
 
+    /**
+     * @noinspection resource
+     */
     private void configureImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         this.context = context;
 
@@ -158,14 +165,12 @@ public class TouchImageView2 extends AppCompatImageView {
 
         final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TouchImageView, defStyleAttr, 0);
         try {
-            if (attributes != null && !isInEditMode()) {
+            if (!isInEditMode()) {
                 setZoomEnabled(attributes.getBoolean(R.styleable.TouchImageView_zoom_enabled, true));
             }
         } finally {
             // release the TypedArray so that it can be reused.
-            if (attributes != null) {
-                attributes.recycle();
-            }
+            attributes.recycle();
         }
     }
 
@@ -337,6 +342,7 @@ public class TouchImageView2 extends AppCompatImageView {
      * Get the max zoom multiplier.
      *
      * @return max zoom multiplier.
+     * @noinspection unused
      */
     public float getMaxZoom() {
         return maxScale;
@@ -388,7 +394,7 @@ public class TouchImageView2 extends AppCompatImageView {
                 Drawable drawable = getDrawable();
                 int drawableWidth = drawable.getIntrinsicWidth();
                 int drawableHeight = drawable.getIntrinsicHeight();
-                if (drawable != null && drawableWidth > 0 && drawableHeight > 0) {
+                if (drawableWidth > 0 && drawableHeight > 0) {
                     float widthRatio = (float) viewWidth / drawableWidth;
                     float heightRatio = (float) viewHeight / drawableHeight;
                     if (mScaleType == ScaleType.CENTER) {
@@ -419,7 +425,6 @@ public class TouchImageView2 extends AppCompatImageView {
 
     /**
      * Set zoom to the specified scale. Image will be centered by default.
-     *
      * param scale
      */
     public void setZoom(float scale) {
@@ -431,7 +436,6 @@ public class TouchImageView2 extends AppCompatImageView {
      * (focusX, focusY). These floats range from 0 to 1 and denote the focus point
      * as a fraction from the left and top of the view. For example, the top left
      * corner of the image would be (0, 0). And the bottom right corner would be (1, 1).
-     *
      * param scale
      * param focusX
      * param focusY
@@ -445,7 +449,6 @@ public class TouchImageView2 extends AppCompatImageView {
      * (focusX, focusY). These floats range from 0 to 1 and denote the focus point
      * as a fraction from the left and top of the view. For example, the top left
      * corner of the image would be (0, 0). And the bottom right corner would be (1, 1).
-     *
      * param scale
      * param focusX
      * param focusY
@@ -472,7 +475,7 @@ public class TouchImageView2 extends AppCompatImageView {
             setScaleType(scaleType);
         }
         resetZoom();
-        scaleImage(scale, viewWidth / 2, viewHeight / 2, true);
+        scaleImage(scale, viewWidth / 2.0f, viewHeight / 2.0f, true);
         matrix.getValues(m);
         m[Matrix.MTRANS_X] = -((focusX * getImageWidth()) - (viewWidth * 0.5f));
         m[Matrix.MTRANS_Y] = -((focusY * getImageHeight()) - (viewHeight * 0.5f));
@@ -484,7 +487,6 @@ public class TouchImageView2 extends AppCompatImageView {
     /**
      * Set zoom parameters equal to another TouchImageView. Including scale, position,
      * and ScaleType.
-     *
      * param img
      */
     public void setZoom(TouchImageView2 img) {
@@ -790,20 +792,19 @@ public class TouchImageView2 extends AppCompatImageView {
 
     /**
      * Set view dimensions based on layout params
-     *
      * param mode
      * param size
      * param drawableWidth
      * return
      */
-    private int setViewSize(int mode, int size, int drawableWidth) {
+    private int setViewSize(int mode, int size, int drawSize) {
         int viewSize;
         switch (mode) {
             case MeasureSpec.AT_MOST:
-                viewSize = Math.min(drawableWidth, size);
+                viewSize = Math.min(drawSize, size);
                 break;
             case MeasureSpec.UNSPECIFIED:
-                viewSize = drawableWidth;
+                viewSize = drawSize;
                 break;
             default:
                 viewSize = size;
@@ -898,20 +899,17 @@ public class TouchImageView2 extends AppCompatImageView {
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            if (doubleTapListener != null) {
-                return doubleTapListener.onSingleTapConfirmed(e);
-            }
+        public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
             return performClick();
         }
 
         @Override
-        public void onLongPress(MotionEvent e) {
+        public void onLongPress(@NonNull MotionEvent e) {
             performLongClick();
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
             if (fling != null) {
                 //
                 // If a previous fling is still active, it should be cancelled so that two flings
@@ -925,12 +923,9 @@ public class TouchImageView2 extends AppCompatImageView {
         }
 
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
+        public boolean onDoubleTap(@NonNull MotionEvent e) {
             boolean consumed = false;
             if (isZoomEnabled()) {
-                if (doubleTapListener != null) {
-                    consumed = doubleTapListener.onDoubleTap(e);
-                }
                 if (state == State.NONE) {
                     float targetZoom = (normalizedScale == minScale) ? maxScale : minScale;
                     DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, e.getX(), e.getY(), false);
@@ -942,10 +937,7 @@ public class TouchImageView2 extends AppCompatImageView {
         }
 
         @Override
-        public boolean onDoubleTapEvent(MotionEvent e) {
-            if (doubleTapListener != null) {
-                return doubleTapListener.onDoubleTapEvent(e);
-            }
+        public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
             return false;
         }
     }
@@ -1036,7 +1028,7 @@ public class TouchImageView2 extends AppCompatImageView {
      */
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
+        public boolean onScaleBegin(@NonNull ScaleGestureDetector detector) {
             setState(State.ZOOM);
             return true;
         }
@@ -1055,7 +1047,7 @@ public class TouchImageView2 extends AppCompatImageView {
         }
 
         @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
+        public void onScaleEnd(@NonNull ScaleGestureDetector detector) {
             super.onScaleEnd(detector);
             setState(State.NONE);
             boolean animateToZoomBoundary = false;
@@ -1177,7 +1169,6 @@ public class TouchImageView2 extends AppCompatImageView {
          * Interpolate between where the image should start and end in order to translate
          * the image so that the point that is touched is what ends up centered at the end
          * of the zoom.
-         *
          * param t
          */
         private void translateImageToCenterTouchPosition(float t) {
@@ -1189,12 +1180,11 @@ public class TouchImageView2 extends AppCompatImageView {
 
         /**
          * Use interpolator to get t
-         *
          * return
          */
         private float interpolate() {
 //            long currTime =  UtilityTime.INSTANCE.currentTimeMillis();
-            long currTime =  ObjectDateTime.Companion.currentTimeMillis();
+            long currTime = ObjectDateTime.Companion.currentTimeMillis();
             float elapsed = (currTime - startTime) / ZOOM_TIME;
             elapsed = Math.min(1f, elapsed);
             return interpolator.getInterpolation(elapsed);
@@ -1203,7 +1193,6 @@ public class TouchImageView2 extends AppCompatImageView {
         /**
          * Interpolate the current targeted zoom and get the delta
          * from the current zoom.
-         *
          * param t
          * return
          */
@@ -1333,7 +1322,7 @@ public class TouchImageView2 extends AppCompatImageView {
         }
     }
 
-    private class CompatScroller {
+    private static class CompatScroller {
         //Scroller scroller;
         final OverScroller overScroller;
 
@@ -1371,7 +1360,7 @@ public class TouchImageView2 extends AppCompatImageView {
         postOnAnimation(runnable);
     }
 
-    private class ZoomVariables {
+    private static class ZoomVariables {
         final float scale;
         final float focusX;
         final float focusY;

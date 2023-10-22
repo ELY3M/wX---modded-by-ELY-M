@@ -52,10 +52,6 @@ object UtilityStorePreferences {
             editor.putString("LOC1_Y", "-97.451")
             editor.putString("LOC1_NWS", "OUN")
             editor.putString("LOC1_LABEL", "home")
-            editor.putString("COUNTY1", "Cleveland")
-            editor.putString("ZONE1", "OKC027") // TODO FIXME not used by still managed in Location code
-            editor.putString("ALERTS1", "true") // TODO FIXME does not do anything anymore?
-            editor.putString("CURRENT1", "true") // TODO FIXME does not do anything anymore?
             editor.putString("STATE", "Oklahoma")
             editor.putString("STATE_CODE", "OK")
             editor.putString("NWS1", "OUN")

@@ -23,7 +23,7 @@ package joshuatee.wx.models
 
 import android.content.Context
 import android.graphics.Bitmap
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 
@@ -54,7 +54,7 @@ internal object UtilityModelWpcGefsInputOutput {
             return runData
         }
 
-    fun getImage(@Suppress("UNUSED_PARAMETER") context: Context, om: ObjectModel, time: String): Bitmap {
+    fun getImage(@Suppress("UNUSED_PARAMETER") ignoredContext: Context, om: ObjectModel, time: String): Bitmap {
         val sectorAdd = if (om.sector == "AK") {
             "_ak"
         } else {

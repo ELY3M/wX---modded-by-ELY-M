@@ -33,7 +33,7 @@ class CanadaLegal(context: Context, box: VBox, url: String) {
     private val text = CardText(context)
 
     init {
-        with (text) {
+        with(text) {
             refreshTextSize(TextSize.SMALL)
             center()
             connect { Route(context, Intent.ACTION_VIEW, Uri.parse(url)) }

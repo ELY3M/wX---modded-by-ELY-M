@@ -42,12 +42,14 @@ class FavAddActivity : BaseActivity() {
     // arg1: type such as "SND", "WFO", "SREF", "SPCMESO", "NWSTEXT", and "RID"
     //
 
-    companion object { const val TYPE = "" }
+    companion object {
+        const val TYPE = ""
+    }
 
     private var data = listOf<String>()
     private var dataTokens = listOf<String>()
     private lateinit var type: FavoriteType
-    var verboseTitle = ""
+    private var verboseTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
@@ -63,22 +65,27 @@ class FavAddActivity : BaseActivity() {
                 data = GlobalArrays.soundingSites.map { "$it " + UtilityLocation.getSoundingSiteName(it) }
                 verboseTitle = "sounding site"
             }
+
             FavoriteType.WFO -> {
                 data = GlobalArrays.wfos
                 verboseTitle = "NWS office"
             }
+
             FavoriteType.RID -> {
                 data = GlobalArrays.radars + GlobalArrays.tdwrRadars
                 verboseTitle = "radar site"
             }
+
             FavoriteType.NWS_TEXT -> {
                 data = UtilityWpcText.labels
                 verboseTitle = "text product"
             }
+
             FavoriteType.SREF -> {
                 data = UtilityModelSpcSrefInterface.params
                 verboseTitle = "parameter"
             }
+
             FavoriteType.SPCMESO -> {
                 data = UtilitySpcMeso.labels
                 dataTokens = UtilitySpcMeso.params

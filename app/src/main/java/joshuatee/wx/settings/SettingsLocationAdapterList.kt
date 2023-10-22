@@ -26,11 +26,17 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
+        override fun onClick(v: View) {
+            myClickListener!!.onItemClick(layoutPosition)
+        }
     }
 
     fun setListener(fn: (Int) -> Unit) {
-        myClickListener = object : MyClickListener { override fun onItemClick(position: Int) { fn(position) } }
+        myClickListener = object : MyClickListener {
+            override fun onItemClick(position: Int) {
+                fn(position)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
@@ -52,7 +58,7 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
                 lon = lonArr[1]
             }
         }
-        with (holder) {
+        with(holder) {
             text1.text = Location.getName(position)
             if (UtilityLocation.hasAlerts(position)) {
                 text1.text = Location.getName(position) + " +Alert"
@@ -76,7 +82,9 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
 
     override fun getItemCount(): Int = dataSet.size
 
-    fun getItem(index: Int): String = dataSet[index]
+//    fun getItem(index: Int): String = dataSet[index]
 
-    interface MyClickListener { fun onItemClick(position: Int) }
+    interface MyClickListener {
+        fun onItemClick(position: Int)
+    }
 }

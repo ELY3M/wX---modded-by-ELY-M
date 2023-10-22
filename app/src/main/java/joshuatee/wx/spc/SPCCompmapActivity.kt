@@ -103,7 +103,7 @@ class SpcCompmapActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureBytes2(this, { UtilitySpcCompmap.getImage(this, layerString) }, ::showImage)
+        FutureBytes2({ UtilitySpcCompmap.getImage(this, layerString) }, ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {

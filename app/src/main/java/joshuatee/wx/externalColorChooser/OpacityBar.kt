@@ -159,39 +159,39 @@ class OpacityBar : View {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
+            context,
+            attrs,
+            defStyle
     ) {
         init(attrs, defStyle)
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         val a = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.ColorBars, defStyle, 0
+                attrs,
+                R.styleable.OpacityBar, defStyle, 0
         )
         val b = context.resources
 
         mBarThickness = a.getDimensionPixelSize(
-            R.styleable.ColorBars_bar_thickness,
-            b.getDimensionPixelSize(R.dimen.bar_thickness)
+                R.styleable.OpacityBar_obar_thickness,
+                b.getDimensionPixelSize(R.dimen.bar_thickness)
         )
         mBarLength = a.getDimensionPixelSize(
-            R.styleable.ColorBars_bar_length,
-            b.getDimensionPixelSize(R.dimen.bar_length)
+                R.styleable.OpacityBar_obar_length,
+                b.getDimensionPixelSize(R.dimen.bar_length)
         )
         mPreferredBarLength = mBarLength
         mBarPointerRadius = a.getDimensionPixelSize(
-            R.styleable.ColorBars_bar_pointer_radius,
-            b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
+                R.styleable.OpacityBar_obar_pointer_radius,
+                b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
         )
         mBarPointerHaloRadius = a.getDimensionPixelSize(
-            R.styleable.ColorBars_bar_pointer_halo_radius,
-            b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
+                R.styleable.OpacityBar_obar_pointer_halo_radius,
+                b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
         )
         mOrientation = a.getBoolean(
-            R.styleable.ColorBars_bar_orientation_horizontal, ORIENTATION_DEFAULT
+                R.styleable.OpacityBar_obar_orientation_horizontal, ORIENTATION_DEFAULT
         )
 
         a.recycle()
@@ -232,13 +232,13 @@ class OpacityBar : View {
         mBarLength = length - barPointerHaloRadiusx2
         if (mOrientation == ORIENTATION_VERTICAL) {
             setMeasuredDimension(
-                barPointerHaloRadiusx2,
-                mBarLength + barPointerHaloRadiusx2
+                    barPointerHaloRadiusx2,
+                    mBarLength + barPointerHaloRadiusx2
             )
         } else {
             setMeasuredDimension(
-                mBarLength + barPointerHaloRadiusx2,
-                barPointerHaloRadiusx2
+                    mBarLength + barPointerHaloRadiusx2,
+                    barPointerHaloRadiusx2
             )
         }
     }
@@ -253,43 +253,43 @@ class OpacityBar : View {
             y1 = mBarThickness
             mBarLength = w - mBarPointerHaloRadius * 2
             mBarRect.set(
-                mBarPointerHaloRadius.toFloat(),
-                (mBarPointerHaloRadius - mBarThickness / 2).toFloat(),
-                (mBarLength + mBarPointerHaloRadius).toFloat(),
-                (mBarPointerHaloRadius + mBarThickness / 2).toFloat()
+                    mBarPointerHaloRadius.toFloat(),
+                    (mBarPointerHaloRadius - mBarThickness / 2).toFloat(),
+                    (mBarLength + mBarPointerHaloRadius).toFloat(),
+                    (mBarPointerHaloRadius + mBarThickness / 2).toFloat()
             )
         } else {
             x1 = mBarThickness
             y1 = mBarLength + mBarPointerHaloRadius
             mBarLength = h - mBarPointerHaloRadius * 2
             mBarRect.set(
-                (mBarPointerHaloRadius - mBarThickness / 2).toFloat(),
-                mBarPointerHaloRadius.toFloat(),
-                (mBarPointerHaloRadius + mBarThickness / 2).toFloat(),
-                (mBarLength + mBarPointerHaloRadius).toFloat()
+                    (mBarPointerHaloRadius - mBarThickness / 2).toFloat(),
+                    mBarPointerHaloRadius.toFloat(),
+                    (mBarPointerHaloRadius + mBarThickness / 2).toFloat(),
+                    (mBarLength + mBarPointerHaloRadius).toFloat()
             )
         }
 
         // Update variables that depend of mBarLength.
         if (!isInEditMode) {
             shader = LinearGradient(
-                mBarPointerHaloRadius.toFloat(),
-                0f,
-                x1.toFloat(),
-                y1.toFloat(),
-                intArrayOf(Color.HSVToColor(0x00, mHSVColor), Color.HSVToColor(0xFF, mHSVColor)),
-                null,
-                Shader.TileMode.CLAMP
+                    mBarPointerHaloRadius.toFloat(),
+                    0f,
+                    x1.toFloat(),
+                    y1.toFloat(),
+                    intArrayOf(Color.HSVToColor(0x00, mHSVColor), Color.HSVToColor(0xFF, mHSVColor)),
+                    null,
+                    Shader.TileMode.CLAMP
             )
         } else {
             shader = LinearGradient(
-                mBarPointerHaloRadius.toFloat(),
-                0f,
-                x1.toFloat(),
-                y1.toFloat(),
-                intArrayOf(0x0081ff00, 0xff81ff00.toInt()),
-                null,
-                Shader.TileMode.CLAMP
+                    mBarPointerHaloRadius.toFloat(),
+                    0f,
+                    x1.toFloat(),
+                    y1.toFloat(),
+                    intArrayOf(0x0081ff00, 0xff81ff00.toInt()),
+                    null,
+                    Shader.TileMode.CLAMP
             )
             Color.colorToHSV(0xff81ff00.toInt(), mHSVColor)
         }
@@ -325,17 +325,17 @@ class OpacityBar : View {
 
         // Draw the pointer halo.
         canvas.drawCircle(
-            cX.toFloat(),
-            cY.toFloat(),
-            mBarPointerHaloRadius.toFloat(),
-            mBarPointerHaloPaint!!
+                cX.toFloat(),
+                cY.toFloat(),
+                mBarPointerHaloRadius.toFloat(),
+                mBarPointerHaloPaint!!
         )
         // Draw the pointer.
         canvas.drawCircle(
-            cX.toFloat(),
-            cY.toFloat(),
-            mBarPointerRadius.toFloat(),
-            mBarPointerPaint!!
+                cX.toFloat(),
+                cY.toFloat(),
+                mBarPointerRadius.toFloat(),
+                mBarPointerPaint!!
         )
     }
 
@@ -358,6 +358,7 @@ class OpacityBar : View {
                     invalidate()
                 }
             }
+
             MotionEvent.ACTION_MOVE -> {
                 if (mIsMovingPointer) {
                     // Move the the pointer on the bar.
@@ -386,6 +387,7 @@ class OpacityBar : View {
                     oldChangedListenerOpacity = opacity
                 }
             }
+
             MotionEvent.ACTION_UP -> mIsMovingPointer = false
         }
         return true
@@ -466,13 +468,13 @@ class OpacityBar : View {
 
             Color.colorToHSV(color, mHSVColor)
             shader = LinearGradient(
-                mBarPointerHaloRadius.toFloat(),
-                0f,
-                x1.toFloat(),
-                y1.toFloat(),
-                intArrayOf(Color.HSVToColor(0x00, mHSVColor), color),
-                null,
-                Shader.TileMode.CLAMP
+                    mBarPointerHaloRadius.toFloat(),
+                    0f,
+                    x1.toFloat(),
+                    y1.toFloat(),
+                    intArrayOf(Color.HSVToColor(0x00, mHSVColor), color),
+                    null,
+                    Shader.TileMode.CLAMP
             )
             mBarPaint!!.shader = shader
             calculateColor(mBarPointerPosition)

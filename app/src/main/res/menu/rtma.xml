@@ -20,16 +20,6 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<!--    <item-->
-<!--        android:id="@+id/action_animate"-->
-<!--        android:icon="@drawable/ic_play_arrow_24dp"-->
-<!--        android:title="@string/animate_icon"-->
-<!--        app:showAsAction="always"/>-->
-<!--    <item-->
-<!--        android:id="@+id/action_pause"-->
-<!--        android:icon="@drawable/ic_pause_24dp"-->
-<!--        android:title="@string/label_pause"-->
-<!--        app:showAsAction="always" />-->
     <item
         android:id="@+id/action_time"
         android:title=""
@@ -44,92 +34,92 @@
 
         <item
             android:id="@+id/action_alaska"
-            android:title="Alaska"
+            android:title="@string/alaska"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_ca"
-            android:title="California"
+            android:title="@string/california"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_co"
-            android:title="Colorado"
+            android:title="@string/colorado"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_fl"
-            android:title="Florida"
+            android:title="@string/florida"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_guam"
-            android:title="Guam"
+            android:title="@string/guam"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_gulf_coast"
-            android:title="Gulf Coast"
+            android:title="@string/gulfCoast"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_mi"
-            android:title="Michigan"
+            android:title="@string/michigan"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_mid_atl"
-            android:title="Mid Atlantic"
+            android:title="@string/midAtlantic"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_mid_west"
-            android:title="Mid West"
+            android:title="@string/midWest"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_mt"
-            android:title="Montana"
+            android:title="@string/montana"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_nc_sc"
-            android:title="North/South Carolina"
+            android:title="@string/northSouthCarolina"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_nd_sd"
-            android:title="North/South Dakota"
+            android:title="@string/northSouthDakota"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_new_eng"
-            android:title="New England"
+            android:title="@string/newEngland"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_nw_pacific"
-            android:title="NW Pacific"
+            android:title="@string/nwPacific"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_ohio_valley"
-            android:title="Ohio Valley"
+            android:title="@string/ohioValley"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_sw_us"
-            android:title="SW US"
+            android:title="@string/swUs"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_tx"
-            android:title="Texas"
+            android:title="@string/texas"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_wi"
-            android:title="Wisconsin"
+            android:title="@string/wisconsin"
             app:showAsAction="never" />
 
     </group>

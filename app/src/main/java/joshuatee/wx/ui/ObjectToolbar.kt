@@ -63,7 +63,9 @@ class ObjectToolbar(private val toolbar: Toolbar) {
 
     var background: Drawable
         get() = toolbar.background
-        set(value) { toolbar.background = value }
+        set(value) {
+            toolbar.background = value
+        }
 
     val height: Int
         get() = toolbar.height

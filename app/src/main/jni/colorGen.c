@@ -21,14 +21,20 @@
 
 #include "colorGen.h"
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_colorGen(JNIEnv * env, jclass clazz, jobject color_buff, jint len, jbyteArray col) {
-	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, color_buff);
-	jbyte* col_arr = (*env)->GetByteArrayElements(env, col, 0);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_colorGen(
+	JNIEnv * env,
+	jclass clazz,
+	jobject colorByteBuffer,
+	jint len,
+	jbyteArray colorByteArray
+) {
+	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, colorByteBuffer);
+	jbyte* col_arr = (*env)->GetByteArrayElements(env, colorByteArray, 0);
 	int count = 0;
 	for (int index = 0; index < len; index++) {
 		cBuff[count] = col_arr[0];
-		cBuff[count+1] = col_arr[1];
-		cBuff[count+2] = col_arr[2];
+		cBuff[count + 1] = col_arr[1];
+		cBuff[count + 2] = col_arr[2];
 		count += 3;
 	}
 }

@@ -20,6 +20,7 @@
 
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar_bottom"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -27,4 +28,5 @@
     android:background="?attr/colorPrimary"
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/MyLightToolbarStyle"
-    app:popupTheme="@style/MyLightToolbarStyle" />
+    app:popupTheme="@style/MyLightToolbarStyle"
+    tools:ignore="Overdraw" />

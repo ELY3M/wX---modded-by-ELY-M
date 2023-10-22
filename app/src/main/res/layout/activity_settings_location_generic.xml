@@ -49,8 +49,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_ll"
-                    >
+                    android:padding="@dimen/padding_ll">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv1"
@@ -98,18 +97,18 @@
                         android:layout_height="match_parent"
                         android:text="@string/notifications"
                         android:textSize="@dimen/large_text" />
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/notif_text_perm"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Please make sure notifications are explicitly allowed if you enable any items below. If using Android 13 or higher, tap here to allow permissions."
-                        />
+                        android:text="@string/androidNotificationWarning" />
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
     </RelativeLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

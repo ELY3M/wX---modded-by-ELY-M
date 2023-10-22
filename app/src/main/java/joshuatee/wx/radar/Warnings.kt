@@ -57,9 +57,9 @@ internal object Warnings {
 
     fun getCountString(): String =
             "(" +
-                getCount(PolygonWarningType.ThunderstormWarning).toString() + "," +
-                getCount(PolygonWarningType.TornadoWarning).toString() + "," +
-                getCount(PolygonWarningType.FlashFloodWarning).toString() + ")"
+                    getCount(PolygonWarningType.ThunderstormWarning).toString() + "," +
+                    getCount(PolygonWarningType.TornadoWarning).toString() + "," +
+                    getCount(PolygonWarningType.FlashFloodWarning).toString() + ")"
 
     fun arePresent(): Boolean {
         val tStormCount = getCount(PolygonWarningType.ThunderstormWarning)

@@ -50,7 +50,7 @@ class CardHSText(context: Context, val product: String) : Widget {
         }
     }
 
-    fun setText(s: String) {
+    private fun setText(s: String) {
         if (s.contains("<br>") || s.contains("<BR>")) {
             text.text = Utility.fromHtml(s)
         } else {
@@ -60,7 +60,7 @@ class CardHSText(context: Context, val product: String) : Widget {
 
     fun setup(longTextDownload: String) {
         var longText = longTextDownload
-        if (product=="NFDOFFN31" || product=="NFDOFFN32") {
+        if (product == "NFDOFFN31" || product == "NFDOFFN32") {
             longText = Utility.fromHtml(longTextDownload)
         }
         setTextLong(longText)

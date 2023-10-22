@@ -43,34 +43,42 @@ object CanvasMain {
                 xOffset = 0.0f
                 yOffset = 0.0f
             }
+
             "NW" -> {
                 xOffset = -85.0f
                 yOffset = -85.0f
             }
+
             "NE" -> {
                 xOffset = 85.0f
                 yOffset = -85.0f
             }
+
             "SW" -> {
                 xOffset = -85.0f
                 yOffset = 85.0f
             }
+
             "SE" -> {
                 xOffset = 85.0f
                 yOffset = 85.0f
             }
+
             "N" -> {
                 xOffset = 0.0f
                 yOffset = -85.0f
             }
+
             "E" -> {
                 xOffset = 85.0f
                 yOffset = 0.0f
             }
+
             "S" -> {
                 xOffset = 0.0f
                 yOffset = 85.0f
             }
+
             "W" -> {
                 xOffset = -85.0f
                 yOffset = 0.0f
@@ -93,10 +101,10 @@ object CanvasMain {
                 RadarGeometryTypeEnum.LakeLines
         ).forEach {
             CanvasDraw.geometry(
-                projectionType,
-                bitmapCanvas,
-                radarSite,
-                it, RadarGeometry.dataByType[it]!!.lineData
+                    projectionType,
+                    bitmapCanvas,
+                    radarSite,
+                    it, RadarGeometry.dataByType[it]!!.lineData
             )
         }
         if (PolygonType.LOCDOT.pref) {

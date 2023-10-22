@@ -51,7 +51,7 @@ class CardNhcStormReportItem(context: Context, stormData: NhcStormDetails) : Wid
         textViewMovement.text = "Moving: " + stormData.movement
         textViewPressure.text = "Min pressure: " + stormData.pressure
         textViewWindSpeed.text = "Max sustained: " + stormData.intensity
-        textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.id.uppercase(Locale.US)
+        textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.stormId.uppercase(Locale.US)
     }
 
     override fun getView() = card.getView()

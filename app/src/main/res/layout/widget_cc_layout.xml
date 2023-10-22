@@ -19,6 +19,7 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -55,7 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="1dip"
             android:orientation="vertical"
-            android:padding="0dip">
+            android:padding="0dip"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:id="@+id/iv"
@@ -75,7 +77,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:textColor="@color/white"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
         </LinearLayout>
 
         <LinearLayout
@@ -90,7 +93,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:textSize="23dp" />
+                android:textSize="23dp"
+                tools:ignore="SpUsage" />
 
             <TextView
                 android:id="@+id/bigdewpt"

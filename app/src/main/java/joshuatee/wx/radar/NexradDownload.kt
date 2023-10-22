@@ -27,11 +27,11 @@ import java.io.InputStream
 import java.util.Locale
 import joshuatee.wx.MyApplication
 import okhttp3.Request
-import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.Extensions.getHtmlWithNewLine
-import joshuatee.wx.Extensions.getInputStream
-import joshuatee.wx.Extensions.parseColumn
-import joshuatee.wx.Extensions.parseAcrossLines
+import joshuatee.wx.getHtml
+import joshuatee.wx.getHtmlWithNewLine
+import joshuatee.wx.getInputStream
+import joshuatee.wx.parseColumn
+import joshuatee.wx.parseAcrossLines
 import joshuatee.wx.common.GlobalDictionaries
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.To
@@ -48,6 +48,7 @@ class NexradDownload {
         // in response to 56+ hr maint on 2022-04-19 to nomads, change URL to backup
         // https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf
         private const val nwsRadarLevel2Pub = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+
         // private const val nwsRadarLevel2Pub = "https://ftpprd.ncep.noaa.gov/data/nccf/radar/nexrad_level2/"
         private val pattern1: Pattern = Pattern.compile(">(sn.[0-9]{4})</a>")
         private val pattern2: Pattern = Pattern.compile(".*?([0-9]{2}-[A-Za-z]{3}-[0-9]{4} [0-9]{2}:[0-9]{2}).*?")
@@ -220,6 +221,6 @@ class NexradDownload {
         }
 
         private fun getRadarDirectoryUrl(radarSite: String, product: String, ridPrefix: String): String =
-            GlobalVariables.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/"
+                GlobalVariables.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/"
     }
 }

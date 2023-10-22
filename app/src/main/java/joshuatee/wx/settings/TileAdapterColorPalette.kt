@@ -21,6 +21,7 @@
 
 package joshuatee.wx.settings
 
+import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,7 @@ import joshuatee.wx.ui.Card
 
 internal class TileAdapterColorPalette(private val itemList: List<TileObjectColorPalette>, private val tilesPerRow: Int) : RecyclerView.Adapter<TileAdapterColorPalette.RecyclerViewHoldersColorPalette>() {
 
+    var selectedListItem = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHoldersColorPalette {
         val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.cardview_tiles, null)
         return RecyclerViewHoldersColorPalette(layoutView)
@@ -44,12 +46,15 @@ internal class TileAdapterColorPalette(private val itemList: List<TileObjectColo
         layoutParams.height = layoutParams.width * bitmap.height / bitmap.width
         holder.imageView.layoutParams = layoutParams
         holder.imageView.setImageBitmap(bitmap)
+        if (selectedListItem == position) {
+            holder.itemView.setBackgroundColor(Color.YELLOW)
+        }
     }
 
     override fun getItemCount() = this.itemList.size
 
     internal inner class RecyclerViewHoldersColorPalette(itemView: View) :
-        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+            RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val imageView: ImageView
 
@@ -60,14 +65,24 @@ internal class TileAdapterColorPalette(private val itemList: List<TileObjectColo
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
+        override fun onClick(v: View) {
+            myClickListener!!.onItemClick(layoutPosition)
+        }
     }
 
     fun setListener(fn: (Int) -> Unit) {
-        myClickListener = object : MyClickListener { override fun onItemClick(position: Int) { fn(position) } }
+        myClickListener = object : MyClickListener {
+            override fun onItemClick(position: Int) {
+                selectedListItem = position
+                notifyItemRangeChanged(0, itemList.size)
+                fn(position)
+            }
+        }
     }
 
-    interface MyClickListener { fun onItemClick(position: Int) }
+    interface MyClickListener {
+        fun onItemClick(position: Int)
+    }
 
     companion object {
         private var myClickListener: MyClickListener? = null

@@ -58,10 +58,10 @@ class NavDrawer(val activity: Activity, private var labels: List<String>) {
             listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, labels)
         }
         actionBarDrawerToggle = ActionBarDrawerToggle(
-            activity,
-            drawerLayout,
-            R.string.drawer_open,
-            R.string.drawer_close
+                activity,
+                drawerLayout,
+                R.string.drawer_open,
+                R.string.drawer_close
         )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
     }

@@ -28,7 +28,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
 import android.content.Intent
@@ -69,9 +68,9 @@ class SettingsNotificationsActivity : BaseActivity() {
         box.addWidget(CardText(this, "Notification sound chooser", UIPreferences.textSizeNormal, { notifSoundPicker() }, UIPreferences.paddingSettings))
         box.addWidget(CardText(this, "WFO notification filter", UIPreferences.textSizeNormal, { showWFONotificationFilterDialogue() }, UIPreferences.paddingSettings))
         box.addWidget(CardText(this,
-            "Text product notifications: " + NotificationTextProduct.showAll(),
-            UIPreferences.textSizeNormal,
-            UIPreferences.paddingSettings
+                "Text product notifications: " + NotificationTextProduct.showAll(),
+                UIPreferences.textSizeNormal,
+                UIPreferences.paddingSettings
         ))
     }
 
@@ -93,8 +92,6 @@ class SettingsNotificationsActivity : BaseActivity() {
                 Switch(this, "Sound: Text products", "ALERT_NOTIFICATION_SOUND_TEXT_PROD", R.string.alert_sound_text_prod_label),
                 Switch(this, "Sound: US Tornado", "ALERT_NOTIFICATION_SOUND_TORNADO", R.string.alert_sound_tornado_label),
                 Switch(this, "Sound: WPC MPD Sound", "ALERT_NOTIFICATION_SOUND_WPCMPD", R.string.alert_sound_wpcmpd_label),
-                Switch(this, "Alert only once", "ALERT_ONLYONCE", R.string.alert_onlyonce_label),
-                Switch(this, "Auto cancel notifs", "ALERT_AUTOCANCEL", R.string.alert_autocancel_label),
                 Switch(this, "Blackout alert sounds", "ALERT_BLACKOUT", R.string.alert_blackout_label),
                 Switch(this, "Notif text to speech", "NOTIF_TTS", R.string.tv_notif_tts_label),
                 Switch(this, "Play sound repeatedly", "NOTIF_SOUND_REPEAT", R.string.tv_notif_sound_repeat_label),
@@ -124,12 +121,9 @@ class SettingsNotificationsActivity : BaseActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
-        if (NotificationPreferences.notifTts != Utility.readPref(this, "NOTIF_TTS", "false").startsWith("t")) {
-            showFileWritePermsDialogue()
-        }
         MyApplication.initPreferences(this)
         restartNotifications()
+        super.onStop()
     }
 
     private fun restartNotifications() {
@@ -150,22 +144,8 @@ class SettingsNotificationsActivity : BaseActivity() {
         startForResult.launch(intent)
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-//            val uri = data!!.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-//            if (uri != null) {
-//                NotificationPreferences.notifSoundUri = uri.toString()
-//                Utility.writePref(this, "NOTIF_SOUND_URI", NotificationPreferences.notifSoundUri)
-//            } else {
-//                NotificationPreferences.notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
-//                Utility.writePrefWithNull(this, "NOTIF_SOUND_URI", null)
-//            }
-//        }
-//    }
-
     // https://developer.android.com/training/basics/intents/result#register
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        result: ActivityResult ->
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val uri = data!!.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
@@ -180,7 +160,7 @@ class SettingsNotificationsActivity : BaseActivity() {
     }
 
     private fun showWFONotificationFilterDialogue() {
-        val items = listOf("Air Quality Alert", "Wind Advisory", "Lake Wind Advisory", "Child Abduction Emergency", "Freeze Warning")
+        val items = listOf("Air Quality Alert", "Wind Advisory", "Lake Wind Advisory", "Child Abduction Emergency", "Freeze Warning", "Test Message")
         val checkedItems = BooleanArray(items.size)
         val selectedItems = mutableListOf<Int>()
         val nwsWfoFilterStr = Utility.readPref(this, "NOTIF_WFO_FILTER", "")
@@ -219,24 +199,5 @@ class SettingsNotificationsActivity : BaseActivity() {
         alertDialog.setNegativeButton("Cancel") { _, _ -> }
         alertDialog.create()
         alertDialog.show()
-    }
-
-    private fun showFileWritePermsDialogue() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-        } else {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), fileWritePerm)
-            }
-        }
-    }
-
-    private val fileWritePerm = 5002
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        when (requestCode) {
-//            fileWritePerm -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//            }
-//        }
     }
 }

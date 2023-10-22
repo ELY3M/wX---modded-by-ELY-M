@@ -21,11 +21,10 @@
 
 package joshuatee.wx.objects
 
-import android.content.Context
 import android.graphics.Bitmap
 import kotlinx.coroutines.*
 
-class FutureBytes2(val context: Context, val downloadFunc: () -> Bitmap, val updateFunc: (Bitmap) -> Unit) {
+class FutureBytes2(val downloadFunc: () -> Bitmap, val updateFunc: (Bitmap) -> Unit) {
 
     init {
         getContent()

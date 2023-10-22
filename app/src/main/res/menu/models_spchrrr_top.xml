@@ -23,5 +23,5 @@
     <item
         android:id="@+id/action_region"
         android:title="@string/region"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

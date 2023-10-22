@@ -50,10 +50,10 @@ object UIPreferences {
     var actionBarHeight = 0
     var refreshLocMin = 0
     var translateText = false
-    var nwsTextRemovelinebreaks = false
+    private var nwsTextRemovelinebreaks = false
     var recordScreenShare = false
-    var prefPreventAccidentalExit = false
-    var fabInModels = false
+
+    //    var prefPreventAccidentalExit = false
     var backgroundColor = Color.WHITE
     var colorNotif = 0
     var colorBlack = 0
@@ -82,7 +82,6 @@ object UIPreferences {
     var navDrawerMainScreenOnRight = true
     var useNwsApi = false
     var useNwsApiForHourly = true
-    var useAwcMosaic = true
     var tabHeaders = arrayOf("", "", "")
     var widgetPreventTap = false
     var fullscreenMode = false
@@ -125,15 +124,14 @@ object UIPreferences {
     const val homeScreenFavDefault = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
 
     fun initPreferences(context: Context) {
-        useNwsApi = Utility.readPref(context,"USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
-        useNwsApiForHourly = Utility.readPref(context,"USE_NWS_API_HOURLY", "true").startsWith("t")
-        useAwcMosaic = Utility.readPref(context,"USE_AWC_MOSAIC", "true").startsWith("t")
-        navDrawerMainScreen = Utility.readPref(context,"NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
-        navDrawerMainScreenOnRight = Utility.readPref(context,"NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
+        useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
+        useNwsApiForHourly = Utility.readPref(context, "USE_NWS_API_HOURLY", "true").startsWith("t")
+        navDrawerMainScreen = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
+        navDrawerMainScreenOnRight = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
         if (UtilityUI.isTablet()) {
             normalTextSizeDefault = 18
         }
-        normalTextSize = Utility.readPrefInt(context,"TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
+        normalTextSize = Utility.readPrefInt(context, "TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
         textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, context)
         textSizeNormal = UtilityUI.spToPx(normalTextSize, context)
         textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, context)
@@ -144,9 +142,8 @@ object UIPreferences {
         translateText = Utility.readPref(context, "TRANSLATE_TEXT", "false").startsWith("t")
         nwsTextRemovelinebreaks = Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
         recordScreenShare = Utility.readPref(context, "RECORD_SCREEN_SHARE", "true").startsWith("t")
-        prefPreventAccidentalExit = Utility.readPref(context, "PREF_PREVENT_ACCIDENTAL_EXIT", "true").startsWith("t")
+//        prefPreventAccidentalExit = Utility.readPref(context, "PREF_PREVENT_ACCIDENTAL_EXIT", "true").startsWith("t")
         dualpaneRadarIcon = Utility.readPref(context, "DUALPANE_RADAR_ICON", "false").startsWith("t")
-        fabInModels = Utility.readPref(context, "FAB_IN_MODELS", "true").startsWith("t")
         hideTopToolbar = Utility.readPref(context, "HIDE_TOP_TOOLBAR", "false").startsWith("t")
         colorNotif = ContextCompat.getColor(context, R.color.primary_dark_blue)
         colorBlack = ContextCompat.getColor(context, R.color.black)
@@ -172,9 +169,9 @@ object UIPreferences {
             backgroundColor = Color.WHITE
             themeIsWhite = false
         }
-        tabHeaders[0] = Utility.readPref(context,"TAB1_HEADER", "LOCAL")
-        tabHeaders[1] = Utility.readPref(context,"TAB2_HEADER", "SPC")
-        tabHeaders[2] = Utility.readPref(context,"TAB3_HEADER", "MISC")
+        tabHeaders[0] = Utility.readPref(context, "TAB1_HEADER", "LOCAL")
+        tabHeaders[1] = Utility.readPref(context, "TAB2_HEADER", "SPC")
+        tabHeaders[2] = Utility.readPref(context, "TAB3_HEADER", "MISC")
         widgetPreventTap = getInitialPreference("UI_WIDGET_PREVENT_TAP", "")
         fullscreenMode = getInitialPreference("FULLSCREEN_MODE", "false")
         lockToolbars = getInitialPreference("LOCK_TOOLBARS", "false")

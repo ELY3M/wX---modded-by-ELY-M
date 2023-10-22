@@ -29,7 +29,7 @@ import android.graphics.drawable.AnimationDrawable
 import android.util.SparseArray
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
-import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.safeGet
 import joshuatee.wx.objects.DisplayData
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.Fab
@@ -71,12 +71,14 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
     var ncepRuns = mutableListOf("")
     var times = mutableListOf("")
     var timeIndex = 0
+
     // HREF SREF
     var createDataFn: () -> Unit = {}
     var shortCodes = arrayOf<Array<String>>()
     var longCodes = arrayOf<Array<String>>()
     var groups = SparseArray<Group>()
     var routeFn: (Context) -> Unit = {}
+
     //
     private var defaultModel = ""
     var spinnerTimeValue = 0
@@ -108,20 +110,24 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                 defaultModel = "WPCGEFS"
                 models = UtilityModelWpcGefsInterface.models
             }
+
             "NSSL" -> {
                 modelType = ModelType.NSSL
                 models = UtilityModelNsslWrfInterface.models
                 defaultModel = "WRF"
             }
+
             "ESRL" -> {
                 modelType = ModelType.ESRL
                 models = UtilityModelEsrlInterface.models
             }
+
             "NCEP" -> {
                 modelType = ModelType.NCEP
                 models = UtilityModelNcepInterface.models
                 defaultModel = "GFS"
             }
+
             "SPCSREF" -> {
                 modelType = ModelType.SPCSREF
                 models = UtilityModelSpcSrefInterface.models
@@ -138,6 +144,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                 labels = UtilityModelSpcSrefInterface.labels
                 routeFn = { c -> Route.spcSrefDualPane(c) }
             }
+
             "SPCHREF" -> {
                 modelType = ModelType.SPCHREF
                 models = UtilityModelSpcHrefInterface.models
@@ -154,6 +161,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                 shortCodes = UtilityModelSpcHrefInterface.shortCodes
                 routeFn = { c -> Route.spcHrefDualPane(c) }
             }
+
             "SPCHRRR" -> {
                 modelType = ModelType.SPCHRRR
                 models = UtilityModelSpcHrrrInterface.models
@@ -181,10 +189,10 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
     fun getImage(index: Int, overlayImg: List<String>): Bitmap {
         currentParam = displayData.param[index]
         return when (modelType) {
-            ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.getImage(activity,this, time)
-            ModelType.ESRL -> UtilityModelEsrlInputOutput.getImage(activity,this, time)
+            ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.getImage(activity, this, time)
+            ModelType.ESRL -> UtilityModelEsrlInputOutput.getImage(activity, this, time)
             ModelType.NSSL -> UtilityModelNsslWrfInputOutput.getImage(activity, this, time)
-            ModelType.NCEP -> UtilityModelNcepInputOutput.getImage(activity,this, time)
+            ModelType.NCEP -> UtilityModelNcepInputOutput.getImage(activity, this, time)
             ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.getImage(activity, this, time)
             ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.getImage(activity, this, time)
             ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.getImage(activity, this, time, overlayImg)
@@ -205,14 +213,14 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
     }
 
     fun getRunTime() = when (modelType) {
-            ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.runTime
-            ModelType.ESRL -> UtilityModelEsrlInputOutput.getRunTime(model, displayData.param[0])
-            ModelType.NSSL -> UtilityModelNsslWrfInputOutput.runTime
-            ModelType.NCEP -> UtilityModelNcepInputOutput.getRunTime(model, displayData.param[0], sector)
-            ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.runTime
-            ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.runTime
-            ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.runTime
-        }
+        ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.runTime
+        ModelType.ESRL -> UtilityModelEsrlInputOutput.getRunTime(model, displayData.param[0])
+        ModelType.NSSL -> UtilityModelNsslWrfInputOutput.runTime(this)
+        ModelType.NCEP -> UtilityModelNcepInputOutput.getRunTime(model, displayData.param[0], sector)
+        ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.runTime
+        ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.runTime
+        ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.runTime
+    }
 
     fun setParams(selectedItemPosition: Int) {
         modelIndex = selectedItemPosition
@@ -232,6 +240,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                     }
                 }
             }
+
             ModelType.NCEP -> {
                 timeTruncate = 3
                 when (selectedItemPosition) {
@@ -245,6 +254,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 3
                         numberRuns = 4
                     }
+
                     11 -> {
                         model = "NAM"
                         params = UtilityModelNcepInterface.paramsNam
@@ -255,6 +265,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 3
                         numberRuns = 4
                     }
+
                     15 -> {
                         model = "RAP"
                         params = UtilityModelNcepInterface.paramsRap
@@ -265,6 +276,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 24
                     }
+
                     6 -> {
                         model = "HRRR"
                         params = UtilityModelNcepInterface.paramsHrrr
@@ -275,6 +287,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 24
                     }
+
                     12 -> {
                         model = "NAM-HIRES"
                         params = UtilityModelNcepInterface.paramsNamHires
@@ -285,6 +298,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 4
                     }
+
                     9 -> {
                         model = "HRW-FV3"
                         params = UtilityModelNcepInterface.modelHrwFv3Params
@@ -295,6 +309,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 2
                     }
+
                     7 -> {
                         model = "HRW-ARW"
                         params = UtilityModelNcepInterface.paramsHrwNmm
@@ -305,6 +320,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 2
                     }
+
                     3 -> {
                         model = "GEFS-SPAG"
                         params = UtilityModelNcepInterface.paramsGefsSpag
@@ -315,6 +331,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 6
                         numberRuns = 4
                     }
+
                     2 -> {
                         model = "GEFS-MEAN-SPRD"
                         params = UtilityModelNcepInterface.paramsGefsMnsprd
@@ -325,6 +342,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 6
                         numberRuns = 4
                     }
+
                     16 -> {
                         model = "SREF"
                         params = UtilityModelNcepInterface.paramsSref
@@ -335,6 +353,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 3
                         numberRuns = 5
                     }
+
                     10 -> {
                         model = "NAEFS"
                         params = UtilityModelNcepInterface.paramsNaefs
@@ -345,6 +364,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 6
                         numberRuns = 4
                     }
+
                     14 -> {
                         model = "POLAR"
                         params = UtilityModelNcepInterface.paramsPolar
@@ -355,7 +375,19 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 24
                         numberRuns = 1
                     }
+
                     17 -> {
+                        model = "GEFS-WAVE"
+                        params = UtilityModelNcepInterface.paramsGefsWave
+                        labels = UtilityModelNcepInterface.labelsGefsWave
+                        sectors = UtilityModelNcepInterface.sectorsGefsWave
+                        startStep = 0
+                        endStep = 168
+                        stepAmount = 3
+                        numberRuns = 4
+                    }
+
+                    18 -> {
                         model = "GFS-WAVE"
                         params = UtilityModelNcepInterface.paramsGfsWave
                         labels = UtilityModelNcepInterface.labelsGfsWave
@@ -365,6 +397,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 6
                         numberRuns = 4
                     }
+
                     0 -> {
                         model = "STOFS"
                         params = UtilityModelNcepInterface.paramsStofs
@@ -375,6 +408,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 4
                     }
+
                     1 -> {
                         model = "FIREWX"
                         params = UtilityModelNcepInterface.paramsFirefx
@@ -385,6 +419,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 4
                     }
+
                     8 -> {
                         model = "HRW-ARW2"
                         params = UtilityModelNcepInterface.paramsHrwArw2
@@ -395,6 +430,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 2
                     }
+
                     5 -> {
                         model = "HREF"
                         params = UtilityModelNcepInterface.paramsHref
@@ -405,6 +441,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         stepAmount = 1
                         numberRuns = 4
                     }
+
                     13 -> {
                         model = "NBM"
                         params = UtilityModelNcepInterface.paramsNbm
@@ -418,6 +455,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
 
                 }
             }
+
             ModelType.WPCGEFS -> {
                 when (selectedItemPosition) {
                     0 -> {
@@ -434,6 +472,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                     }
                 }
             }
+
             ModelType.NSSL -> {
                 truncateTime = false
                 when (selectedItemPosition) {
@@ -446,16 +485,8 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         endStep = 36
                         timeTruncate = 3
                     }
+
                     1 -> {
-                        model = "FV3"
-                        params = UtilityModelNsslWrfInterface.paramsNsslFv3
-                        labels = UtilityModelNsslWrfInterface.labelsNsslFv3
-                        sectors = UtilityModelNsslWrfInterface.sectorsLong
-                        startStep = 1
-                        endStep = 60
-                        timeTruncate = 3
-                    }
-                    2 -> {
                         model = "HRRRV3"
                         params = UtilityModelNsslWrfInterface.paramsNsslHrrrv3
                         labels = UtilityModelNsslWrfInterface.labelsNsslHrrrv3
@@ -464,6 +495,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         endStep = 36
                         timeTruncate = 3
                     }
+
                     3 -> {
                         model = "WRF_3KM"
                         params = UtilityModelNsslWrfInterface.paramsNsslWrf
@@ -475,6 +507,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                     }
                 }
             }
+
             ModelType.ESRL -> {
                 when (selectedItemPosition) {
                     1 -> {
@@ -488,6 +521,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         format = "%03d"
                         timeTruncate = 3
                     }
+
                     0 -> {
                         model = "HRRR_NCEP"
                         params = UtilityModelEsrlInterface.paramsHrrr
@@ -501,6 +535,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                     }
                 }
             }
+
             else -> {}
         }
     }

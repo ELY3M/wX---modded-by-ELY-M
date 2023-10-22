@@ -21,7 +21,7 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.Extensions.parseColumn
+import joshuatee.wx.parseColumn
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.UIPreferences
@@ -45,7 +45,7 @@ object UtilityUSHourly {
         var conditionData = "Condition" + GlobalVariables.newline
         startTimes.indices.forEach {
             val time = ObjectDateTime.translateTimeForHourly(startTimes[it])
-            val temperature = Utility.safeGet(temperatures, it).replace("\"","")
+            val temperature = Utility.safeGet(temperatures, it).replace("\"", "")
             val windSpeed = Utility.safeGet(windSpeeds, it).replace(" to ", "-")
             val windDirection = Utility.safeGet(windDirections, it)
             val shortForecast = Utility.safeGet(shortForecasts, it)
@@ -79,16 +79,16 @@ object UtilityUSHourly {
 
     private fun shortenConditions(s: String) =
             s.replace("Showers And Thunderstorms", "Sh/Tst")
-            .replace("Chance", "Chc")
-            .replace("Slight", "Slt")
-            .replace("Light", "Lgt")
-            .replace("Scattered", "Sct")
-            .replace("Rain", "Rn")
-            .replace("Showers", "Shwr")
-            .replace("Snow", "Sn")
-            .replace("Rn And Sn", "Rn/Sn")
-            .replace("Freezing", "Frz")
-            .replace("T-storms", "Tst")
+                    .replace("Chance", "Chc")
+                    .replace("Slight", "Slt")
+                    .replace("Light", "Lgt")
+                    .replace("Scattered", "Sct")
+                    .replace("Rain", "Rn")
+                    .replace("Showers", "Shwr")
+                    .replace("Snow", "Sn")
+                    .replace("Rn And Sn", "Rn/Sn")
+                    .replace("Freezing", "Frz")
+                    .replace("T-storms", "Tst")
 
     fun get(locationNumber: Int): List<String> = if (UIPreferences.useNwsApiForHourly) {
         getString(locationNumber)
@@ -120,8 +120,8 @@ object UtilityUSHourly {
         startTime.indices.forEach {
             val time = ObjectDateTime.translateTimeForHourly(startTime[it]) //.replace(Regex("-0[0-9]:00"), ""))
             content += To.stringPadLeft(time, 8)
-            if (temperature.size > it)   content += To.stringPadLeft(temperature[it].replace("\"",""), 5)
-            if (windSpeed.size > it)     content += To.stringPadLeft(windSpeed[it], 9)
+            if (temperature.size > it) content += To.stringPadLeft(temperature[it].replace("\"", ""), 5)
+            if (windSpeed.size > it) content += To.stringPadLeft(windSpeed[it], 9)
             if (windDirection.size > it) content += To.stringPadLeft(windDirection[it], 7)
             if (shortForecast.size > it) content += To.stringPadLeft(shortenConditions(shortForecast[it]), 12)
             content += GlobalVariables.newline

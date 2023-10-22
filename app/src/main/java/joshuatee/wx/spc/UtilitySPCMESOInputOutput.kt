@@ -28,8 +28,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
+import joshuatee.wx.parseColumn
 import joshuatee.wx.ui.ObjectToolbar
 
 object UtilitySpcMesoInputOutput {
@@ -56,11 +58,11 @@ object UtilitySpcMesoInputOutput {
             layers[SpcMesoLayerType.Radar]!!.isEnabled = true
         }
         listOf(
-            SpcMesoLayerType.Population,
-            SpcMesoLayerType.Topography,
-            SpcMesoLayerType.County,
-            SpcMesoLayerType.Radar,
-            SpcMesoLayerType.Observations,
+                SpcMesoLayerType.Population,
+                SpcMesoLayerType.Topography,
+                SpcMesoLayerType.County,
+                SpcMesoLayerType.Radar,
+                SpcMesoLayerType.Observations,
         ).forEach {
             if (layers[it]!!.isEnabled) {
                 drawables.add(getDrawable(context, layers[it]!!.getUrl(sector)))
@@ -76,7 +78,7 @@ object UtilitySpcMesoInputOutput {
     }
 
     private fun getDrawable(context: Context, url: String): BitmapDrawable =
-        BitmapDrawable(context.resources, UtilityImg.eraseBackground(url.getImage(), -1))
+            BitmapDrawable(context.resources, UtilityImg.eraseBackground(url.getImage(), -1))
 
     fun getAnimation(product: String, sector: String, frameCount: Int): List<String> {
         val timeList = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")

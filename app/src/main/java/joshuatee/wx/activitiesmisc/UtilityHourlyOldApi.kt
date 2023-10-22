@@ -21,7 +21,7 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.Extensions.getHtml
+import joshuatee.wx.getHtml
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
@@ -39,7 +39,7 @@ object UtilityHourlyOldApi {
                 To.stringPadLeft("Temp", 8) +
                 To.stringPadLeft("Dew", 8) +
                 To.stringPadLeft("Precip%", 8) +
-                To.stringPadLeft( "Cloud%", 8) + GlobalVariables.newline
+                To.stringPadLeft("Cloud%", 8) + GlobalVariables.newline
         return GlobalVariables.newline + header + parseHourly(html)
     }
 
@@ -81,10 +81,10 @@ object UtilityHourlyOldApi {
     }
 
     private val regexpList = listOf(
-        "<temperature type=.hourly.*?>(.*?)</temperature>",
-        "<temperature type=.dew point.*?>(.*?)</temperature>",
-        "<time-layout.*?>(.*?)</time-layout>",
-        "<probability-of-precipitation.*?>(.*?)</probability-of-precipitation>",
-        "<cloud-amount type=.total.*?>(.*?)</cloud-amount>"
+            "<temperature type=.hourly.*?>(.*?)</temperature>",
+            "<temperature type=.dew point.*?>(.*?)</temperature>",
+            "<time-layout.*?>(.*?)</time-layout>",
+            "<probability-of-precipitation.*?>(.*?)</probability-of-precipitation>",
+            "<cloud-amount type=.total.*?>(.*?)</cloud-amount>"
     )
 }

@@ -25,15 +25,19 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import joshuatee.wx.getImage
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.common.GlobalArrays
-import joshuatee.wx.objects.FutureBytes
+import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.ui.ImageSummary
 import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.TouchImage
+import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.UtilityImg
 
 class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
@@ -44,12 +48,16 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     // 1: day
     //
 
-    companion object { const val NO = "" }
+    companion object {
+        const val NO = ""
+    }
 
     private var day = ""
-    private lateinit var touchImage: TouchImage
     private var state = ""
-    private val imgPrefToken = "SWO_STATE"
+    private var bitmaps = mutableListOf<Bitmap>()
+    private var urls = listOf<String>()
+    private lateinit var box: VBox
+    private lateinit var imageSummary: ImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spcswostate_top, menu)
@@ -65,7 +73,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, iconsEvenlySpaced = true, bottomToolbar = false)
         day = intent.getStringArrayExtra(NO)!![0]
         state = UtilityLocation.getWfoSiteName(Location.wfo).split(",")[0]
-        touchImage = TouchImage(this, toolbar, R.id.iv)
+        box = VBox.fromResource(this)
         getContent()
     }
 
@@ -76,13 +84,19 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
     private fun getContent() {
         title = "SWO D$day"
+        urls = UtilitySpcSwo.getSwoStateUrl(state, day)
         invalidateOptionsMenu()
-        FutureBytes(this, UtilitySpcSwo.getSwoStateUrl(state, day), ::showImage)
+        bitmaps = MutableList(urls.size) { UtilityImg.getBlankBitmap() }
+        box.removeChildrenAndLayout()
+        imageSummary = ImageSummary(this, box, bitmaps)
+        urls.forEachIndexed { index, url ->
+            FutureVoid({ bitmaps[index] = url.getImage() }, { update(index) })
+        }
     }
 
-    private fun showImage(bitmap: Bitmap) {
-        touchImage.set(bitmap)
-        touchImage.firstRun(imgPrefToken)
+    private fun update(index: Int) {
+        imageSummary.set(index, bitmaps[index])
+        imageSummary.connect(index) { Route.image(this, urls[index], "") }
     }
 
     private val statesLower48
@@ -91,17 +105,12 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_sector -> ObjectDialogue.generic(this, statesLower48, ::getContent) {
-                touchImage.setZoom(1.0f)
                 state = statesLower48[it].split(":")[0]
             }
-            R.id.action_share -> UtilityShare.bitmap(this, "$state SWO D$day", touchImage)
+
+            R.id.action_share -> UtilityShare.text(this, "$state SWO D$day", "", bitmaps) // UtilityShare.bitmap(this, "$state SWO D$day", touchImage)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    override fun onStop() {
-        touchImage.imgSavePosnZoom(imgPrefToken)
-        super.onStop()
     }
 }

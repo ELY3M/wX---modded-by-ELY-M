@@ -49,8 +49,8 @@ class WidgetSPCSWO : AppWidgetProvider() {
     }
 
     private fun getContent(context: Context) {
-        FutureVoid(context,
+        FutureVoid(
                 { UtilityWidgetDownload.download(context, type) })
-                { UtilityWidget.update(context, type) }
+        { UtilityWidget.update(context, type) }
     }
 }

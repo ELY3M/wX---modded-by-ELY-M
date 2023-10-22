@@ -24,7 +24,7 @@
         android:id="@+id/action_animate"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/animate_icon"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
@@ -32,8 +32,8 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_rtma"
-        android:title="RTMA"
-        app:showAsAction="never" />
+        android:title="@string/rtma"
+        app:showAsAction="ifRoom" />
 </menu>
 
 

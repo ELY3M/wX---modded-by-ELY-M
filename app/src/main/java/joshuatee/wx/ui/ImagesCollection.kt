@@ -32,32 +32,32 @@ class ImagesCollection(val title: String, val urls: List<String>, val labels: Li
     companion object {
 
         val map = mapOf(
-            "OPC" to ImagesCollection(
-                    "OPC",
-                    UtilityOpcImages.urls,
-                    UtilityOpcImages.labels,
-                    "OPC_IMG_FAV_IDX",
-                    "OPCIMG"),
-            "OBSERVATIONS" to ImagesCollection(
-                    "Observations",
-                    UtilityObservations.urls,
-                    UtilityObservations.labels,
-                    "SFC_OBS_IMG_IDX",
-                    "OBS"),
-            "GOESFD" to ImagesCollection(
-                    "GOESFD",
-                    UtilityGoesFullDisk.urls,
-                    UtilityGoesFullDisk.labels,
-                    "GOESFULLDISK_IMG_FAV_IDX",
-                    "GOESFULLDISKIMG"),
+                "OPC" to ImagesCollection(
+                        "OPC",
+                        UtilityOpcImages.urls,
+                        UtilityOpcImages.labels,
+                        "OPC_IMG_FAV_IDX",
+                        "OPCIMG"),
+                "OBSERVATIONS" to ImagesCollection(
+                        "Observations",
+                        UtilityObservations.urls,
+                        UtilityObservations.labels,
+                        "SFC_OBS_IMG_IDX",
+                        "OBS"),
+                "GOESFD" to ImagesCollection(
+                        "GOESFD",
+                        UtilityGoesFullDisk.urls,
+                        UtilityGoesFullDisk.labels,
+                        "GOESFULLDISK_IMG_FAV_IDX",
+                        "GOESFULLDISKIMG"),
 					
-            //elys mod
-            "AURORA" to ImagesCollection(
-                    "AURORA",
-                    UtilityAurora.urls,
-                    UtilityAurora.labels,
-                    "AURORA_IMG_FAV_IDX",
-                    "AURORA"),
+            	//elys mod
+            	"AURORA" to ImagesCollection(
+                    	"AURORA",
+                    	UtilityAurora.urls,
+                    	UtilityAurora.labels,
+                    	"AURORA_IMG_FAV_IDX",
+                    	"AURORA"),
 									
         )
     }

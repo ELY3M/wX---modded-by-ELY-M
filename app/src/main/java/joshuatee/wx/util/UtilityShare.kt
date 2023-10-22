@@ -29,6 +29,7 @@ import androidx.core.app.ShareCompat.IntentBuilder
 import java.io.File
 import java.io.FileOutputStream
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.BitmapAttr
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.TouchImage
@@ -36,7 +37,7 @@ import joshuatee.wx.ui.TouchImage
 object UtilityShare {
 
     fun prepTextForShare(text: String): String =
-        text.replace(GlobalVariables.newline, GlobalVariables.newline + GlobalVariables.newline)
+            text.replace(GlobalVariables.newline, GlobalVariables.newline + GlobalVariables.newline)
 
     fun textAsAttachment(context: Context, subject: String, text: String, filename: String) {
         val dir = File(context.filesDir.toString() + "/shared")
@@ -64,7 +65,7 @@ object UtilityShare {
         }
         val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val intentBuilder = IntentBuilder(context)
-        with (intentBuilder) {
+        with(intentBuilder) {
             setSubject("$subject $formattedDate")
             addEmailTo("")
             setText(text)
@@ -79,7 +80,7 @@ object UtilityShare {
     fun text(context: Context, subject: String, text: String) {
         val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val sharingIntent = Intent(Intent.ACTION_SEND)
-        with (sharingIntent) {
+        with(sharingIntent) {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
             putExtra(Intent.EXTRA_TEXT, text)
@@ -89,6 +90,10 @@ object UtilityShare {
 
     fun text(activity: Activity, subject: String, text: String, bitmaps: List<Bitmap>) {
         bitmap(activity, subject, UtilityImg.mergeImagesVertically(bitmaps), text)
+    }
+
+    fun textWithBitmapAttr(activity: Activity, subject: String, text: String, bitmapsAttr: List<BitmapAttr>) {
+        bitmap(activity, subject, UtilityImg.mergeImagesVerticallyBitmapAttr(bitmapsAttr), text)
     }
 
     fun bitmap(activity: Activity, subject: String, image: Image, text: String = "") {
@@ -115,7 +120,7 @@ object UtilityShare {
         }
         val formattedDate = ObjectDateTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val intentBuilder = IntentBuilder(context)
-        with (intentBuilder) {
+        with(intentBuilder) {
             setSubject("$subject $formattedDate")
             addEmailTo("")
             setText(text)

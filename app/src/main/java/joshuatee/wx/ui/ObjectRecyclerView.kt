@@ -37,7 +37,9 @@ class ObjectRecyclerView(activity: Activity, resourceId: Int, list: MutableList<
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
         adapter.setOnItemClickListener(object : SingleTextAdapterList.MyClickListener {
-            override fun onItemClick(position: Int) { fn(position) }
+            override fun onItemClick(position: Int) {
+                fn(position)
+            }
         })
     }
 
@@ -50,9 +52,9 @@ class ObjectRecyclerView(activity: Activity, resourceId: Int, list: MutableList<
         adapter.notifyDataSetChanged()
     }
 
-    fun setItem(index: Int, str: String) {
-        adapter.setItem(index, str)
-    }
+//    fun setItem(index: Int, str: String) {
+//        adapter.setItem(index, str)
+//    }
 
     fun getItem(index: Int): String = adapter.getItem(index)
 

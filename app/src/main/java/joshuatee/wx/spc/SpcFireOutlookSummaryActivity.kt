@@ -24,7 +24,7 @@ package joshuatee.wx.spc
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureVoid
@@ -65,9 +65,9 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        if (downloadTimer.isRefreshNeeded(this)) {
+        if (downloadTimer.isRefreshNeeded()) {
             UtilitySpcFireOutlook.urls.forEachIndexed { index, url ->
-                FutureVoid(this, { bitmaps[index] = url.getImage() }) { updateImage(index) }
+                FutureVoid({ bitmaps[index] = url.getImage() }) { updateImage(index) }
             }
         }
     }

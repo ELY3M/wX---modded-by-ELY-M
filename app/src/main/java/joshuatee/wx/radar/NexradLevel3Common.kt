@@ -37,9 +37,9 @@ internal object NexradLevel3Common {
     ): List<Double> {
         val start = ExternalGlobalCoordinates(ecArr)
         val externalGlobalCoordinates = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-            start,
-            startBearing,
-            distance)
+                start,
+                startBearing,
+                distance)
         return startPoint.asList() + Projection.computeMercatorNumbers(externalGlobalCoordinates, projectionNumbers).toList()
     }
 
@@ -52,14 +52,14 @@ internal object NexradLevel3Common {
             distance: Double
     ): List<Double> {
         val externalGlobalCoordinates = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-            start,
-            startBearing,
-            distance)
+                start,
+                startBearing,
+                distance)
         return startPoint.toList() + Projection.computeMercatorNumbers(externalGlobalCoordinates, projectionNumbers).toList()
     }
 
     // wind barbs
-    fun drawLine(startEc: ExternalGlobalCoordinates, pn: ProjectionNumbers, startBearing: Double, distance: Double): List<Double>  {
+    fun drawLine(startEc: ExternalGlobalCoordinates, pn: ProjectionNumbers, startBearing: Double, distance: Double): List<Double> {
         val startPoint = ExternalGlobalCoordinates(startEc)
         val ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(startPoint, startBearing, distance)
         return Projection.computeMercatorNumbers(startEc, pn).toList() + Projection.computeMercatorNumbers(ec, pn).toList()

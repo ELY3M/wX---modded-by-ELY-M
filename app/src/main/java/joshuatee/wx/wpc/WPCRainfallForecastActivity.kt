@@ -47,7 +47,9 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     // 1: day
     //
 
-    companion object { const val NUMBER = "" }
+    companion object {
+        const val NUMBER = ""
+    }
 
     private var product = ""
     private var imageUrl = ""
@@ -56,7 +58,7 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     private lateinit var box: VBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.wpc_rainfall_forecast)
         val arguments = intent.getStringArrayExtra(NUMBER)!!
         val dayIndex = To.int(arguments[0])
         product = UtilityWpcRainfallForecast.productCode[dayIndex]
@@ -68,7 +70,6 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
 
     private fun setupUI() {
         box = VBox.fromResource(this)
-        objectToolbarBottom.hideRadar()
         objectToolbarBottom.connect(this)
         image = if (tabletInLandscape) {
             box.makeHorizontal()
@@ -83,7 +84,7 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
 
     private fun getContent() {
         FutureText(this, product, cardText::setText1)
-        FutureBytes(this, imageUrl, ::showImage)
+        FutureBytes(imageUrl, ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {

@@ -46,6 +46,7 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
     private val messageOffset: Long = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + messageOffset31 // offset of start of message
     var hasHighResREFData = false
     var hasHighResVELData = false
+
     // message header
     var messageSize: Short = 0
     var messageType: Byte = 0
@@ -209,34 +210,39 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
     companion object {
         /* added for high resolution message type 31 */
         private const val REFLECTIVITY_HIGH = 5
+
         /**
          * High Resolution Radial Velocity moment identifier
          */
         private const val VELOCITY_HIGH = 6
+
         /**
          * Size of the CTM record header
          */
         private const val CTM_HEADER_SIZE = 12
+
         /**
          * Size of the the message header, to start of the data message
          */
         private const val MESSAGE_HEADER_SIZE = 28
+
         /**
          * Size of the entire message, if its a radar data message
          */
         private const val RADAR_DATA_SIZE = 2432
+
         /**
          * Size of the file header, aka title
          */
         private const val FILE_HEADER_SIZE = 24
 
         @Throws(IOException::class)
-        fun factory(din: UCARRandomAccessFile, record: Int, message_offset31: Long): Level2Record? {
-            val offset = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + message_offset31
+        fun factory(din: UCARRandomAccessFile, record: Int, messageOffset31: Long): Level2Record? {
+            val offset = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + messageOffset31
             return if (offset >= din.length()) {
                 null
             } else {
-                Level2Record(din, record, message_offset31)
+                Level2Record(din, record, messageOffset31)
             }
         }
     }

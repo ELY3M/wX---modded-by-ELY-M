@@ -20,6 +20,7 @@
 */
 //modded by ELY M.
 //aurora add-in
+
 package joshuatee.wx.fragments
 
 import android.os.Bundle
@@ -36,7 +37,6 @@ import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.activitiesmisc.WebViewTwitter
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
-import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.radar.RadarMosaicNwsActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.vis.GoesActivity
@@ -95,23 +95,13 @@ class MiscFragment : Fragment() {
                     arrayOf(),
                     "nhc", "NHC"
             )
-            if (UIPreferences.useAwcMosaic) {
-                hm["nwsmosaic"] = TileObject(
-                        R.drawable.nws_sector,
-                        AwcRadarMosaicActivity::class.java,
-                        AwcRadarMosaicActivity.URL,
-                        arrayOf(""),
-                        "nwsmosaic", "NWS Radar Mosaics"
-                )
-            } else {
-                hm["nwsmosaic"] = TileObject(
-                        R.drawable.nws_sector,
-                        RadarMosaicNwsActivity::class.java,
-                        RadarMosaicNwsActivity.URL,
-                        arrayOf("sector"),
-                        "nwsmosaic", "NWS Radar Mosaics"
-                )
-            }
+            hm["nwsmosaic"] = TileObject(
+                    R.drawable.nws_sector,
+                    RadarMosaicNwsActivity::class.java,
+                    RadarMosaicNwsActivity.URL,
+                    arrayOf("sector"),
+                    "nwsmosaic", "NWS Radar Mosaics"
+            )
             hm["goes"] = TileObject(
                     R.drawable.goes,
                     GoesActivity::class.java,
@@ -120,11 +110,11 @@ class MiscFragment : Fragment() {
                     "goes", "GOES"
             )
             hm["lightning"] = TileObject(
-                R.drawable.lightning,
-                GoesActivity::class.java,
-                GoesActivity.RID,
-                arrayOf("CONUS", "23"),
-                "lightning", "lightning"
+                    R.drawable.lightning,
+                    GoesActivity::class.java,
+                    GoesActivity.RID,
+                    arrayOf("CONUS", "23"),
+                    "lightning", "lightning"
             )
             hm["wpcimages"] = TileObject(
                     R.drawable.fmap,
@@ -133,6 +123,7 @@ class MiscFragment : Fragment() {
                     arrayOf(),
                     "wpcimages", "National Images"
             )
+	    //elys mod - keeping twitter
             hm["twitter_state"] = TileObject(
                     R.drawable.twstate,
                     WebViewTwitter::class.java,

@@ -227,9 +227,9 @@ class ColorPicker : View {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
+            context,
+            attrs,
+            defStyle
     ) {
         init(attrs, defStyle)
     }
@@ -301,37 +301,37 @@ class ColorPicker : View {
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         val a = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.ColorPicker, defStyle, 0
+                attrs,
+                R.styleable.ColorPicker, defStyle, 0
         )
         val b = context.resources
 
         mColorWheelThickness = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_wheel_thickness,
-            b.getDimensionPixelSize(R.dimen.color_wheel_thickness)
+                R.styleable.ColorPicker_color_wheel_thickness,
+                b.getDimensionPixelSize(R.dimen.color_wheel_thickness)
         )
         mColorWheelRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_wheel_radius,
-            b.getDimensionPixelSize(R.dimen.color_wheel_radius)
+                R.styleable.ColorPicker_color_wheel_radius,
+                b.getDimensionPixelSize(R.dimen.color_wheel_radius)
         )
         mPreferredColorWheelRadius = mColorWheelRadius
         mColorCenterRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_center_radius,
-            b.getDimensionPixelSize(R.dimen.color_center_radius)
+                R.styleable.ColorPicker_color_center_radius,
+                b.getDimensionPixelSize(R.dimen.color_center_radius)
         )
         mPreferredColorCenterRadius = mColorCenterRadius
         mColorCenterHaloRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_center_halo_radius,
-            b.getDimensionPixelSize(R.dimen.color_center_halo_radius)
+                R.styleable.ColorPicker_color_center_halo_radius,
+                b.getDimensionPixelSize(R.dimen.color_center_halo_radius)
         )
         mPreferredColorCenterHaloRadius = mColorCenterHaloRadius
         mColorPointerRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_pointer_radius,
-            b.getDimensionPixelSize(R.dimen.color_pointer_radius)
+                R.styleable.ColorPicker_color_pointer_radius,
+                b.getDimensionPixelSize(R.dimen.color_pointer_radius)
         )
         mColorPointerHaloRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_pointer_halo_radius,
-            b.getDimensionPixelSize(R.dimen.color_pointer_halo_radius)
+                R.styleable.ColorPicker_color_pointer_halo_radius,
+                b.getDimensionPixelSize(R.dimen.color_pointer_halo_radius)
         )
 
         a.recycle()
@@ -373,15 +373,15 @@ class ColorPicker : View {
 
         // Draw the pointer's "halo"
         canvas.drawCircle(
-            pointerPosition[0], pointerPosition[1],
-            mColorPointerHaloRadius.toFloat(), mPointerHaloPaint!!
+                pointerPosition[0], pointerPosition[1],
+                mColorPointerHaloRadius.toFloat(), mPointerHaloPaint!!
         )
 
         // Draw the pointer (the currently selected color) slightly smaller on
         // top.
         canvas.drawCircle(
-            pointerPosition[0], pointerPosition[1],
-            mColorPointerRadius.toFloat(), mPointerColor!!
+                pointerPosition[0], pointerPosition[1],
+                mColorPointerRadius.toFloat(), mPointerColor!!
         )
 
         // Draw the halo of the center colors.
@@ -422,16 +422,16 @@ class ColorPicker : View {
         // fill the rectangle instances.
         mColorWheelRadius = min / 2 - mColorWheelThickness - mColorPointerHaloRadius
         mColorWheelRectangle.set(
-            (-mColorWheelRadius).toFloat(), (-mColorWheelRadius).toFloat(),
-            mColorWheelRadius.toFloat(), mColorWheelRadius.toFloat()
+                (-mColorWheelRadius).toFloat(), (-mColorWheelRadius).toFloat(),
+                mColorWheelRadius.toFloat(), mColorWheelRadius.toFloat()
         )
         mColorCenterRadius =
-            (mPreferredColorCenterRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
+                (mPreferredColorCenterRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
         mColorCenterHaloRadius =
-            (mPreferredColorCenterHaloRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
+                (mPreferredColorCenterHaloRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
         mCenterRectangle.set(
-            (-mColorCenterRadius).toFloat(), (-mColorCenterRadius).toFloat(),
-            mColorCenterRadius.toFloat(), mColorCenterRadius.toFloat()
+                (-mColorCenterRadius).toFloat(), (-mColorCenterRadius).toFloat(),
+                mColorCenterRadius.toFloat(), mColorCenterRadius.toFloat()
         )
     }
 
@@ -563,17 +563,17 @@ class ColorPicker : View {
                 // Check whether the user pressed on the pointer.
                 val pointerPosition = calculatePointerPosition(mAngle)
                 if (x >= pointerPosition[0] - mColorPointerHaloRadius
-                    && x <= pointerPosition[0] + mColorPointerHaloRadius
-                    && y >= pointerPosition[1] - mColorPointerHaloRadius
-                    && y <= pointerPosition[1] + mColorPointerHaloRadius
+                        && x <= pointerPosition[0] + mColorPointerHaloRadius
+                        && y >= pointerPosition[1] - mColorPointerHaloRadius
+                        && y <= pointerPosition[1] + mColorPointerHaloRadius
                 ) {
                     mSlopX = x - pointerPosition[0]
                     mSlopY = y - pointerPosition[1]
                     mUserIsMovingPointer = true
                     invalidate()
                 } else if (x >= -mColorCenterRadius && x <= mColorCenterRadius
-                    && y >= -mColorCenterRadius && y <= mColorCenterRadius
-                    && mShowCenterOldColor
+                        && y >= -mColorCenterRadius && y <= mColorCenterRadius
+                        && mShowCenterOldColor
                 ) {
                     mCenterHaloPaint!!.alpha = 0x50
                     color = oldCenterColor
@@ -584,6 +584,7 @@ class ColorPicker : View {
                 }// If user did not press pointer or center, report event not handled
                 // Check whether the user pressed on the center.
             }
+
             MotionEvent.ACTION_MOVE -> if (mUserIsMovingPointer) {
                 mAngle = atan2((y - mSlopY).toDouble(), (x - mSlopX).toDouble()).toFloat()
                 mPointerColor!!.color = calculateColor(mAngle)
@@ -614,6 +615,7 @@ class ColorPicker : View {
                 }
                 invalidate()
             }
+
             MotionEvent.ACTION_CANCEL -> if (onColorSelectedListener != null && mCenterNewColor != oldSelectedListenerColor) {
                 onColorSelectedListener.onColorSelected(mCenterNewColor)
                 oldSelectedListenerColor = mCenterNewColor
@@ -837,13 +839,13 @@ class ColorPicker : View {
          *
          */
         private val COLORS = intArrayOf(
-            0xFFFF0000.toInt(),
-            0xFFFF00FF.toInt(),
-            0xFF0000FF.toInt(),
-            0xFF00FFFF.toInt(),
-            0xFF00FF00.toInt(),
-            0xFFFFFF00.toInt(),
-            0xFFFF0000.toInt()
+                0xFFFF0000.toInt(),
+                0xFFFF00FF.toInt(),
+                0xFF0000FF.toInt(),
+                0xFF00FFFF.toInt(),
+                0xFF00FF00.toInt(),
+                0xFFFFFF00.toInt(),
+                0xFFFF0000.toInt()
         )
     }
 }

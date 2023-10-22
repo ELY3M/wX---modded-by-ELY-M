@@ -48,11 +48,14 @@ class ImageCollectionActivity : VideoRecordActivity() {
     // used for OPC, GOES Full Disk, Observations
     //
 
-    companion object { const val TYPE = "" }
+    companion object {
+        const val TYPE = ""
+    }
 
     private lateinit var touchImage: TouchImage
     private lateinit var navDrawer: NavDrawer
     private lateinit var imageCollection: ImagesCollection
+
     // TODO FIXME use ObjectAnimate if possible
     private var animDrawable = AnimationDrawable()
 
@@ -97,11 +100,11 @@ class ImageCollectionActivity : VideoRecordActivity() {
 
     private fun getContent() {
         setTitle(imageCollection.title, navDrawer.getLabel())
-        FutureBytes(this, navDrawer.url, ::showImage)
+        FutureBytes(navDrawer.url, ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {
-        with (touchImage) {
+        with(touchImage) {
             if (navDrawer.url.contains("large_latestsfc.gif")) {
                 setMaxZoom(16.0f)
             } else {
@@ -131,10 +134,11 @@ class ImageCollectionActivity : VideoRecordActivity() {
             R.id.action_animate -> getAnimate()
             R.id.action_rtma -> Route.rtma(this)
             R.id.action_share -> if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
-                    checkOverlayPerms()
-                } else {
-                    UtilityShare.bitmap(this, imageCollection.title, touchImage)
-                }
+                checkOverlayPerms()
+            } else {
+                UtilityShare.bitmap(this, imageCollection.title, touchImage)
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -146,8 +150,8 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     private fun getAnimate() {
-        FutureVoid(this,
-            { animDrawable = UtilityGoesFullDisk.getAnimation(this, navDrawer.url) })
-            { UtilityImgAnim.startAnimation(animDrawable, touchImage) }
+        FutureVoid(
+                { animDrawable = UtilityGoesFullDisk.getAnimation(this, navDrawer.url) })
+        { UtilityImgAnim.startAnimation(animDrawable, touchImage) }
     }
 }

@@ -27,7 +27,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.safeGet
 import java.util.Locale
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
@@ -56,7 +56,9 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 1: text product (lower case)
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private lateinit var arguments: Array<String>
     private var product = ""
@@ -149,6 +151,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 NotificationTextProduct.toggle(this, box.get(), product.uppercase(Locale.US))
                 updateSubmenuNotificationText()
             }
+
             R.id.action_share -> UtilityShare.text(this, product, textToShare)
             else -> return super.onOptionsItemSelected(item)
         }
@@ -173,6 +176,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     }
                 }
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

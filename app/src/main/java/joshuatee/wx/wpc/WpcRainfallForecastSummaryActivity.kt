@@ -24,7 +24,7 @@ package joshuatee.wx.wpc
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureVoid
@@ -65,9 +65,9 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        if (downloadTimer.isRefreshNeeded(this)) {
+        if (downloadTimer.isRefreshNeeded()) {
             UtilityWpcRainfallForecast.urls.forEachIndexed { index, url ->
-                FutureVoid(this, { bitmaps[index] = url.getImage() }) { update(index) }
+                FutureVoid({ bitmaps[index] = url.getImage() }) { update(index) }
             }
         }
     }

@@ -29,11 +29,12 @@ import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.getImage
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
+import joshuatee.wx.parse
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.HBox
 import joshuatee.wx.ui.Image
@@ -51,7 +52,9 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 2: "sound" (optional)
     //
 
-    companion object { const val NUMBER = "" }
+    companion object {
+        const val NUMBER = ""
+    }
 
     private val bitmaps = MutableList(5) { UtilityImg.getBlankBitmap() }
     private var urls = listOf<String>()
@@ -116,7 +119,6 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             playlistProd = "swod48"
             miProbabilistic.isVisible = false
             miCategorical.isVisible = false
-            objectToolbarBottom.hide(R.id.action_state_graphics)
         } else {
             listOf(miDay4Img, miDay5Img, miDay6Img, miDay7Img, miDay8Img).forEach {
                 it.isVisible = false
@@ -131,13 +133,13 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        if (downloadTimer.isRefreshNeeded(this)) {
+        if (downloadTimer.isRefreshNeeded()) {
             val textUrl = if (day == "4-8") {
                 "SWOD48"
             } else {
                 "SWODY$day"
             }
-            FutureVoid(this, ::downloadImages) {}
+            FutureVoid(::downloadImages) {}
             FutureText(this, textUrl, ::showText)
         }
     }
@@ -151,7 +153,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun downloadImages() {
         urls = UtilitySpcSwo.getUrls(day)
         urls.indices.forEach {
-            FutureVoid(this, { bitmaps[it] = urls[it].getImage() }, { showImage(it) })
+            FutureVoid({ bitmaps[it] = urls[it].getImage() }, { showImage(it) })
         }
     }
 

@@ -18,9 +18,12 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.   
+//keeping twitter 
 
 package joshuatee.wx.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -41,17 +44,17 @@ class Drawer(
         val activity: Activity,
 ) {
 
-    val headerItems = mutableListOf<DrawerHeaderItem>()
+    private val headerItems = mutableListOf<DrawerHeaderItem>()
     private val gravityForDrawer = if (UIPreferences.navDrawerMainScreenOnRight) {
         GravityCompat.END
     } else {
         GravityCompat.START
     }
     private var tint: ColorStateList
-    val statusText: TextView
-    val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
+    private val statusText: TextView
+    private val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
     private val navigationView: NavigationView = activity.findViewById(R.id.nav_view)
-    val headerLayout: View
+    private val headerLayout: View
 
     init {
         navigationView.itemIconTintList = null
@@ -78,7 +81,7 @@ class Drawer(
         addSecondaryItems()
     }
 
-    fun addItem(buttonId: Int, textId: Int, fn: () -> Unit) {
+    private fun addItem(buttonId: Int, textId: Int, fn: () -> Unit) {
         headerItems.add(DrawerHeaderItem(drawerLayout, headerLayout, buttonId, textId, tint, gravityForDrawer, fn))
     }
 
@@ -96,7 +99,7 @@ class Drawer(
         }
     }
 
-    fun closeDrawer() {
+    private fun closeDrawer() {
         if (UIPreferences.navDrawerMainScreenOnRight) {
             drawerLayout.closeDrawer(GravityCompat.END)
         } else {
@@ -105,6 +108,7 @@ class Drawer(
     }
 
     // TODO FIXME this does not work well if user modified tab headers
+    @SuppressLint("SetTextI18n")
     fun setStatusText(spcText: String, miscText: String): Float {
         val headerSize: Float
         if (UIPreferences.checkspc || UIPreferences.checktor || UIPreferences.checkwpc && (spcText != "SPC" || miscText != "MISC")) {
@@ -119,7 +123,7 @@ class Drawer(
     }
 
     private fun addHeaderItems() {
-        addItem(R.id.severeDashboardButton, R.id.severeDashboardText) { Route.severeDash(activity) }
+        addItem(R.id.severeDashboardButton, R.id.severeDashboardText) { Route.severeDashboard(activity) }
         addItem(R.id.visibleSatelliteButton, R.id.visibleSatelliteText) { Route.vis(activity) }
         addItem(R.id.wfoButton, R.id.wfoText) { Route.wfoText(activity) }
         addItem(R.id.hourlyButton, R.id.hourlyText) { Route.hourly(activity) }

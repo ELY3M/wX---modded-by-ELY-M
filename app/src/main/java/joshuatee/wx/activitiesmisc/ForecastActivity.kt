@@ -49,7 +49,9 @@ class ForecastActivity : BaseActivity() {
     // arg1  lon
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private var latLon = LatLon()
     private var currentConditions = CurrentConditions()
@@ -67,7 +69,7 @@ class ForecastActivity : BaseActivity() {
         return true
     }
 
-//    @SuppressLint("MissingSuperCall")
+    //    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         val arguments = intent.getStringArrayExtra(URL)!!
@@ -84,7 +86,7 @@ class ForecastActivity : BaseActivity() {
         boxHazards = VBox(this)
         boxForecast = VBox(this)
         sevenDayCollection = SevenDayCollection(this, boxForecast, scrollView)
-        with (box) {
+        with(box) {
             addWidget(cardCurrentConditions)
             addLayout(boxHazards)
             addLayout(boxForecast)
@@ -97,9 +99,9 @@ class ForecastActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, ::downloadCc, ::updateCc)
-        FutureVoid(this, ::downloadHazards, ::updateHazards)
-        FutureVoid(this, ::download7Day, ::update7Day)
+        FutureVoid(::downloadCc, ::updateCc)
+        FutureVoid(::downloadHazards, ::updateHazards)
+        FutureVoid(::download7Day, ::update7Day)
     }
 
     private fun downloadCc() {

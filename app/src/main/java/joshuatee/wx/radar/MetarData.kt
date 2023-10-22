@@ -25,14 +25,18 @@ class MetarData {
 
     // temp / dew per site
     var obsArr = listOf<String>()
+
     // extended obs per site
     var obsArrExt = listOf<String>()
+
     // lat lon winDir kt
     var obsArrWb = listOf<String>()
     var x = DoubleArray(1)
     var y = DoubleArray(1)
+
     // lat lon winDir gustKt
     var obsArrWbGust = listOf<String>()
+
     // aviation color per site
     var obsArrAviationColor = listOf<Int>()
     var obsStateOld = ""

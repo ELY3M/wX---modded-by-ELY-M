@@ -24,10 +24,11 @@ package joshuatee.wx.util
 import android.content.Context
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.radar.Metar
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.parse
 import joshuatee.wx.radar.RID
 import kotlin.math.roundToInt
 
@@ -54,6 +55,7 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
     private var rawMetar = ""
     private var metarSkyCondition = ""
     private var metarWeatherCondition = ""
+
     // TODO FIXME change to String
     val obsClosest: RID
 

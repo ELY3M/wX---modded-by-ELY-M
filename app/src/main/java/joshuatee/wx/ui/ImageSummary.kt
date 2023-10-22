@@ -39,6 +39,9 @@ class ImageSummary(context: Context, box: VBox, bitmaps: List<Bitmap>) {
         if (UtilityUI.isLandScape(context)) {
             imagesPerRow = 3
         }
+        if (bitmaps.size == 1) {
+            imagesPerRow = 1
+        }
         box.removeChildrenAndLayout()
         val boxRows = mutableListOf<HBox>()
         bitmaps.forEachIndexed { index, bitmap ->

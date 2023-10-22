@@ -40,7 +40,7 @@ class CardBlackHeaderText(context: Context, val title: String) : Widget {
     }
 
     private fun setTextHeader() {
-        with (text) {
+        with(text) {
             text = title
             setSize(TextSize.LARGE)
             setPadding(20)

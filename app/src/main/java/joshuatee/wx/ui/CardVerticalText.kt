@@ -41,7 +41,7 @@ class CardVerticalText(context: Context, numberOfColumns: Int) : Widget {
             hbox.wrap()
             box.addLayout(hbox)
             val textView = Text(context)
-            with (textView) {
+            with(textView) {
                 textViews.add(this)
                 gravity = Gravity.START
                 wrap()

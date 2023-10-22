@@ -21,10 +21,9 @@
 
 package joshuatee.wx.objects
 
-import android.content.Context
 import kotlinx.coroutines.*
 
-class FutureVoid(val context: Context, val downloadFunc: () -> Unit, val updateFunc: () -> Unit) {
+class FutureVoid(val downloadFunc: () -> Unit, val updateFunc: () -> Unit) {
 
     init {
         getContent()

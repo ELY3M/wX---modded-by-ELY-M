@@ -25,7 +25,7 @@ package joshuatee.wx.radar
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
-import joshuatee.wx.Extensions.isEven
+import joshuatee.wx.isEven
 import joshuatee.wx.Jni
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarningType
@@ -58,7 +58,7 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             buffers.setToPositionZero()
             buffers.breakSize = 30000
             if (RadarPreferences.useJni) {
-                NexradRenderUtilities.colorGen(buffers.colorBuffer,  buffers.breakSize * 2, buffers.colorArray)
+                NexradRenderUtilities.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             } else {
                 NexradRenderUtilities.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             }
@@ -80,7 +80,8 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         buffers.setToPositionZero()
     }
 
-    @Synchronized fun warningLines(polygonWarningType: PolygonWarningType) {
+    @Synchronized
+    fun warningLines(polygonWarningType: PolygonWarningType) {
         if (data.warningBuffers[polygonWarningType]!!.warningType!!.isEnabled) {
             lines(data.warningBuffers[polygonWarningType]!!)
         }
@@ -146,7 +147,9 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             } else {
                 NexradRenderUtilities.colorGen(buffers.colorBuffer, 4 * list.size, buffers.colorArray)
             }
-        } catch (e: java.lang.Exception) { UtilityLog.handleException(e) }
+        } catch (e: java.lang.Exception) {
+            UtilityLog.handleException(e)
+        }
         buffers.breakSize = 15000
         buffers.chunkCount = 1
         val totalBinsSti = list.size / 4
@@ -206,8 +209,8 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             buffers.isInitialized = true
         }
     }
-	
-    @Synchronized fun swoLines() {
+    @Synchronized
+    fun swoLines() {
         data.swoBuffers.isInitialized = false
         val hashSwo = SwoDayOne.polygonBy.toMap()
         var coordinates: DoubleArray
@@ -243,7 +246,8 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         data.swoBuffers.isInitialized = true
     }
 
-    @Synchronized fun wpcFronts() {
+    @Synchronized
+    fun wpcFronts() {
         data.wpcFrontBuffersList.clear()
         data.wpcFrontPaints.clear()
         var coordinates: DoubleArray
@@ -268,7 +272,7 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
                 FrontTypeEnum.TROF -> data.wpcFrontPaints.add(Color.rgb(254, 216, 177))
             }
             for (j in 0 until front.coordinates.size step 2) {
-                if ( j < front.coordinates.size - 1) {
+                if (j < front.coordinates.size - 1) {
                     coordinates = Projection.computeMercatorNumbers(front.coordinates[j].lat, front.coordinates[j].lon, state.projectionNumbers)
                     data.wpcFrontBuffersList[z].putFloat(coordinates[0].toFloat())
                     data.wpcFrontBuffersList[z].putFloat((coordinates[1] * -1.0f).toFloat())
@@ -414,7 +418,8 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
 
     //elys mod - hailmod
     //hiBuffersList
-    @Synchronized fun hailIndex() {
+    @Synchronized 
+    fun hailIndex() {
         val hailList = NexradLevel3HailIndex.decode(state.rid)
         data.hiBuffersList = mutableListOf()
         hailList.indices.forEach {
@@ -470,7 +475,7 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         spotterBuffers.isInitialized = false
         spotterBuffers.lenInit = PolygonType.SPOTTER.size
         spotterBuffers.triangleCount = 6
-        UtilitySpotter.get(context)
+        UtilitySpotter.get()
         spotterBuffers.xList = UtilitySpotter.x
         spotterBuffers.yList = UtilitySpotter.y
         triangles(spotterBuffers)

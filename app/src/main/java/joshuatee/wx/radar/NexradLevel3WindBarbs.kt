@@ -61,9 +61,9 @@ internal object NexradLevel3WindBarbs {
                 stormList += Projection.computeMercatorNumbers(ec, projectionNumbers).toList()
                 start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
                 ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-                    start,
-                    degree2 + degreeShift,
-                    barbLength * nmScaleFactor * barbLengthScaleFactor)
+                        start,
+                        degree2 + degreeShift,
+                        barbLength * nmScaleFactor * barbLengthScaleFactor)
                 val end = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
                 stormList += Projection.computeMercatorNumbers(ec, projectionNumbers).toList()
                 var barbCount = length / 10
@@ -86,59 +86,59 @@ internal object NexradLevel3WindBarbs {
                 if (above50) {
                     // initial angled line
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-                        end,
-                        degree2,
-                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
+                            end,
+                            degree2,
+                            barbOffset + startLength)
                     stormList += NexradLevel3Common.drawLine(
-                        ec,
-                        projectionNumbers,
-                        degree2 - arrowBend * 2.0,
-                        startLength + arrowLength * nmScaleFactor)
+                            ec,
+                            projectionNumbers,
+                            degree2 - arrowBend * 2.0,
+                            startLength + arrowLength * nmScaleFactor)
                     // perpendicular line from main barb
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-                        end,
-                        degree2,
-                        barbOffset + startLength + -1.0 * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
+                            end,
+                            degree2,
+                            barbOffset + startLength + -1.0 * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
                     stormList += NexradLevel3Common.drawLine(
-                        ec,
-                        projectionNumbers,
-                        degree2 - 90.0,
-                        startLength + 0.80 * arrowLength * nmScaleFactor)
+                            ec,
+                            projectionNumbers,
+                            degree2 - 90.0,
+                            startLength + 0.80 * arrowLength * nmScaleFactor)
                     // connecting line parallel to main barb
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-                        end,
-                        degree2,
-                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
+                            end,
+                            degree2,
+                            barbOffset + startLength)
                     stormList += NexradLevel3Common.drawLine(
-                        ec,
-                        projectionNumbers,
-                        degree2 - 180.0,
-                        startLength + 0.5 * arrowLength * nmScaleFactor)
+                            ec,
+                            projectionNumbers,
+                            degree2 - 180.0,
+                            startLength + 0.5 * arrowLength * nmScaleFactor)
                     index += 1
                 }
                 (index until barbCount).forEach { _ ->
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-                        end,
-                        degree2,
-                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
+                            end,
+                            degree2,
+                            barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
                     stormList += NexradLevel3Common.drawLine(
-                        ec,
-                        projectionNumbers,
-                        degree2 - arrowBend * 2.0,
-                        startLength + arrowLength * nmScaleFactor)
+                            ec,
+                            projectionNumbers,
+                            degree2 - arrowBend * 2.0,
+                            startLength + arrowLength * nmScaleFactor)
                     index += 1
                 }
                 val halfBarbOffsetFudge = if (oneHalfBarb) nmScaleFactor * 1.0 else 0.0
                 if (halfBarb) {
                     ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-                        end,
-                        degree2,
-                        barbOffset + halfBarbOffsetFudge + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
+                            end,
+                            degree2,
+                            barbOffset + halfBarbOffsetFudge + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
                     stormList += NexradLevel3Common.drawLine(
-                        ec,
-                        projectionNumbers,
-                        degree2 - arrowBend * 2.0,
-                        startLength + arrowLength / 2.0 * nmScaleFactor)
+                            ec,
+                            projectionNumbers,
+                            degree2 - arrowBend * 2.0,
+                            startLength + arrowLength / 2.0 * nmScaleFactor)
                 }
             } // if length greater then 4
         } // loop over wind barbs

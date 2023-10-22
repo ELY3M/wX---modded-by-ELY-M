@@ -58,20 +58,20 @@ object UtilityForecastIcon {
         } else {
             // legacy add
             val urlTmp = url.replace("i=", "")
-                            .replace("j=", "")
-                            .replace("ip=", "")
-                            .replace("jp=", "")
+                    .replace("j=", "")
+                    .replace("ip=", "")
+                    .replace("jp=", "")
             val items = urlTmp.split(";")
             if (items.size > 3) {
                 getDualBitmapWithNumbers(context, items[0] + items[2], items[1] + items[3])
             } else if (items.size > 2) {
                 if (url.contains(";jp=")) {
-                     getDualBitmapWithNumbers(context, items[0], items[1] + items[2])
+                    getDualBitmapWithNumbers(context, items[0], items[1] + items[2])
                 } else {
-                     getDualBitmapWithNumbers(context, items[0] + items[2], items[1])
+                    getDualBitmapWithNumbers(context, items[0] + items[2], items[1])
                 }
             } else {
-                 getDualBitmapWithNumbers(context, items[0], items[1])
+                getDualBitmapWithNumbers(context, items[0], items[1])
             }
             // legacy add end
         }
@@ -150,18 +150,18 @@ object UtilityForecastIcon {
 
     private fun getFilename(url: String): String {
         var fileName = url.replace("?size=medium", "")
-                            .replace("?size=small", "")
-                            .replace("https://api.weather.gov/icons/land/", "")
-                            .replace("http://api.weather.gov/icons/land/", "")
-                            .replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
-                            .replace("day/", "")
-                            // legacy add
-                            .replace("http://forecast.weather.gov/newimages/medium/", "")
-                            .replace("https://forecast.weather.gov/newimages/medium/", "")
-                            .replace(".png", "")
-                            .replace("http://forecast.weather.gov/DualImage.php?", "")
-                            .replace("https://forecast.weather.gov/DualImage.php?", "")
-                            .replace("&amp", "")
+                .replace("?size=small", "")
+                .replace("https://api.weather.gov/icons/land/", "")
+                .replace("http://api.weather.gov/icons/land/", "")
+                .replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
+                .replace("day/", "")
+                // legacy add
+                .replace("http://forecast.weather.gov/newimages/medium/", "")
+                .replace("https://forecast.weather.gov/newimages/medium/", "")
+                .replace(".png", "")
+                .replace("http://forecast.weather.gov/DualImage.php?", "")
+                .replace("https://forecast.weather.gov/DualImage.php?", "")
+                .replace("&amp", "")
         // legacy add end
         if (fileName.contains("night")) {
             fileName = fileName.replace("night/", "n").replace("/", "/n")

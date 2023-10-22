@@ -147,10 +147,12 @@ object UtilityLocation {
                 x = getRadarSiteX(site.uppercase(Locale.US))
                 y = addChar + getRadarSiteY(site.uppercase(Locale.US))
             }
+
             OfficeTypeEnum.WFO -> {
                 x = getWfoSiteX(site.uppercase(Locale.US))
                 y = addChar + getWfoSiteY(site.uppercase(Locale.US))
             }
+
             OfficeTypeEnum.SOUNDING -> {
                 x = getSoundingSiteX(site.uppercase(Locale.US))
                 y = addChar + getSoundingSiteY(site.uppercase(Locale.US))
@@ -193,10 +195,10 @@ object UtilityLocation {
     }
 
     fun hasAlerts(locNum: Int): Boolean = joshuatee.wx.settings.Location.locations[locNum].notification
-        || joshuatee.wx.settings.Location.locations[locNum].notificationMcd
-        || joshuatee.wx.settings.Location.locations[locNum].ccNotification
-        || joshuatee.wx.settings.Location.locations[locNum].sevenDayNotification
-        || joshuatee.wx.settings.Location.locations[locNum].notificationSpcFw
-        || joshuatee.wx.settings.Location.locations[locNum].notificationSwo
-        || joshuatee.wx.settings.Location.locations[locNum].notificationWpcMpd
+            || joshuatee.wx.settings.Location.locations[locNum].notificationMcd
+            || joshuatee.wx.settings.Location.locations[locNum].ccNotification
+            || joshuatee.wx.settings.Location.locations[locNum].sevenDayNotification
+            || joshuatee.wx.settings.Location.locations[locNum].notificationSpcFw
+            || joshuatee.wx.settings.Location.locations[locNum].notificationSwo
+            || joshuatee.wx.settings.Location.locations[locNum].notificationWpcMpd
 }

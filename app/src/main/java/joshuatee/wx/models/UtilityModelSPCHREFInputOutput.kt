@@ -27,10 +27,13 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import java.util.Locale
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.parse
+import joshuatee.wx.safeGet
 
 internal object UtilityModelSpcHrefInputOutput {
 
@@ -42,7 +45,7 @@ internal object UtilityModelSpcHrefInputOutput {
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
-            runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRun, 12,"yyyyMMddHH","yyyyMMddHH", 4))
+            runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRun, 12, "yyyyMMddHH", "yyyyMMddHH", 4))
             runData.mostRecentRun = mostRecentRun
             return runData
         }

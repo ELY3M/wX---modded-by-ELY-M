@@ -31,9 +31,8 @@ import androidx.appcompat.widget.Toolbar
 import java.sql.Date
 import java.util.Calendar
 import java.util.TimeZone
-import joshuatee.wx.Extensions.startAnimation
+import joshuatee.wx.startAnimation
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.ui.TouchImage
@@ -52,34 +51,33 @@ object UtilityModels {
         }
         writePrefs(context, om)
         FutureVoid(
-            context,
-            {
-                (0 until om.numPanes).forEach {
-                    om.displayData.bitmaps[it] = om.getImage(it, overlayImg)
-                }
-            },
-            {
-                (0 until om.numPanes).forEach {
-                    if (om.numPanes > 1) {
-                        UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmaps[it], om.displayData.image[it].get())
-                    } else {
-                        om.displayData.image[it].set(om.displayData.bitmaps[it])
-                    }
-                }
-                om.animRan = false
-                if (!om.firstRun) {
+                {
                     (0 until om.numPanes).forEach {
-                        om.displayData.image[it].imgRestorePosnZoom(om.modelProvider + om.numPanes.toString() + it.toString())
+                        om.displayData.bitmaps[it] = om.getImage(it, overlayImg)
                     }
-                    if (UIPreferences.fabInModels && om.numPanes < 2) {
-                        om.fab1?.visibility = View.VISIBLE
-                        om.fab2?.visibility = View.VISIBLE
+                },
+                {
+                    (0 until om.numPanes).forEach {
+                        if (om.numPanes > 1) {
+                            UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmaps[it], om.displayData.image[it].get())
+                        } else {
+                            om.displayData.image[it].set(om.displayData.bitmaps[it])
+                        }
                     }
-                    om.firstRun = true
+                    om.animRan = false
+                    if (!om.firstRun) {
+                        (0 until om.numPanes).forEach {
+                            om.displayData.image[it].imgRestorePosnZoom(om.modelProvider + om.numPanes.toString() + it.toString())
+                        }
+                        if (om.numPanes < 2) {
+                            om.fab1?.visibility = View.VISIBLE
+                            om.fab2?.visibility = View.VISIBLE
+                        }
+                        om.firstRun = true
+                    }
+                    updateToolbarLabels(om)
+                    om.imageLoaded = true
                 }
-                updateToolbarLabels(om)
-                om.imageLoaded = true
-            }
         )
     }
 
@@ -98,19 +96,19 @@ object UtilityModels {
         }
     }
 
-    fun getAnimate(context: Context, om: ObjectModel, overlayImg: List<String>) {
+    fun getAnimate(om: ObjectModel, overlayImg: List<String>) {
         FutureVoid(
-            context,
-            { (0 until om.numPanes).forEach {
-                    om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg)
+                {
+                    (0 until om.numPanes).forEach {
+                        om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg)
+                    }
+                },
+                {
+                    (0 until om.numPanes).forEach {
+                        om.displayData.animDrawable[it].startAnimation(om.displayData.image[it])
+                    }
+                    om.animRan = true
                 }
-            },
-            {
-                (0 until om.numPanes).forEach {
-                    om.displayData.animDrawable[it].startAnimation(om.displayData.image[it])
-                }
-                om.animRan = true
-            }
         )
     }
 

@@ -21,13 +21,12 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.radarcolorpalettes.ColorPalette
 
-class OglRadarBuffers(val context: Context, var bgColor: Int) : OglBuffers() {
+class OglRadarBuffers(var bgColor: Int) : OglBuffers() {
 
     var fileName = "nids"
     var numberOfRadials = 360

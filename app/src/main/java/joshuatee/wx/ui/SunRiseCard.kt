@@ -29,10 +29,10 @@ import joshuatee.wx.util.UtilityTimeSunMoon
 
 class SunRiseCard(context: Context, latLon: LatLon, scrollView: ScrollView) : Widget {
 
-    val sunriseCard = CardText(context)
+    private val sunriseCard = CardText(context)
 
     init {
-        with (sunriseCard) {
+        with(sunriseCard) {
             ///center()
             connect { scrollView.smoothScrollTo(0, 0) }
             text = UtilityTimeSunMoon.getForHomeScreen(context, latLon)

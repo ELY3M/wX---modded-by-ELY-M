@@ -42,7 +42,7 @@ class BackgroundFetch(val context: Context) {
     // This is the main code that handles notifications (formerly in AlertReceiver)
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    val timer = DownloadTimer("NOTIFICATIONS_MAIN")
+    private val timer = DownloadTimer("NOTIFICATIONS_MAIN")
 
     private fun getNotifications() {
         var notificationUrls = ""
@@ -126,9 +126,10 @@ class BackgroundFetch(val context: Context) {
         Utility.writePref(context, "NOTIF_STR", notificationString)
     }
 
-    @Synchronized fun getContent() = GlobalScope.launch(uiDispatcher) {
+    @Synchronized
+    fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            if (timer.isRefreshNeeded(context)) {
+            if (timer.isRefreshNeeded()) {
                 // https://developer.android.com/develop/ui/views/notifications/notification-permission
                 val notificationManagerCompat = NotificationManagerCompat.from(context)
                 val areNotificationsEnabled = notificationManagerCompat.areNotificationsEnabled()

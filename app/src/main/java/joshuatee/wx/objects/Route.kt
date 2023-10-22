@@ -28,15 +28,11 @@ import android.net.Uri
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.audio.SettingsPlaylistActivity
-import joshuatee.wx.canada.CanadaAlertsActivity
-import joshuatee.wx.canada.CanadaHourlyActivity
-import joshuatee.wx.canada.CanadaTextActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.models.ModelsSpcHrefActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.nhc.NhcStormActivity
 import joshuatee.wx.nhc.NhcStormDetails
-import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.radar.RadarMosaicNwsActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
@@ -98,11 +94,12 @@ class Route() {
         // TODO FIXME alphabetize
 
         fun alerts(context: Context) {
-            if (Location.isUS) {
-                usAlerts(context)
-            } else {
-                Route(context, CanadaAlertsActivity::class.java)
-            }
+            Route(
+                    context,
+                    USWarningsWithRadarActivity::class.java,
+                    USWarningsWithRadarActivity.URL,
+                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
+            )
         }
 
         fun colorPicker(context: Context, pref: String, label: String) {
@@ -132,8 +129,6 @@ class Route() {
         fun hourly(context: Context) {
             if (Location.isUS) {
                 Route(context, HourlyActivity::class.java, HourlyActivity.LOC_NUM, Location.currentLocationStr)
-            } else {
-                Route(context, CanadaHourlyActivity::class.java, CanadaHourlyActivity.LOC_NUM, Location.currentLocationStr)
             }
         }
 
@@ -184,11 +179,11 @@ class Route() {
         }
 
         fun observations(context: Context) {
-            if (Location.isUS) {
-                Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OBSERVATIONS"))
-            } else {
-                image(context, "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg", "Observations")
-            }
+//            if (Location.isUS) {
+            Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OBSERVATIONS"))
+//            } else {
+//                image(context, "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg", "Observations")
+//            }
         }
 
         fun obsSites(context: Context) {
@@ -238,11 +233,7 @@ class Route() {
         }
 
         fun radarMosaic(context: Context) {
-            if (UIPreferences.useAwcMosaic) {
-                Route(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf(""))
-            } else {
-                Route(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf(""))
-            }
+            Route(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf(""))
         }
 
         fun rtma(context: Context) {
@@ -257,16 +248,8 @@ class Route() {
             Route(context, SettingsRadarActivity::class.java)
         }
 
-        fun severeDash(context: Context) {
+        fun severeDashboard(context: Context) {
             Route(context, SevereDashboardActivity::class.java)
-        }
-
-        fun severeDashMainScreen(context: Context) {
-            if (Location.isUS) {
-                severeDash(context)
-            } else {
-                Route(context, CanadaAlertsActivity::class.java)
-            }
         }
 
         fun sounding(context: Context) {
@@ -357,8 +340,6 @@ class Route() {
         fun wfoText(context: Context) {
             if (Location.isUS) {
                 Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, arrayOf(Location.wfo, ""))
-            } else {
-                Route(context, CanadaTextActivity::class.java)
             }
         }
 
@@ -379,15 +360,6 @@ class Route() {
             Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
         }
 
-        fun usAlerts(context: Context) {
-            Route(
-                    context,
-                    USWarningsWithRadarActivity::class.java,
-                    USWarningsWithRadarActivity.URL,
-                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
-            )
-        }
-
         fun web(context: Context, url: String) {
             Route(context, Intent.ACTION_VIEW, Uri.parse(url))
         }
@@ -400,16 +372,8 @@ class Route() {
             Route(context, WebView::class.java, WebView.URL, arrayOf(url, title, extended))
         }
 
-        fun webViewTwitterStates(context: Context) {
-            Route(context, WebViewTwitter::class.java)
-        }
-
-        fun webViewTwitterTornado(context: Context) {
-            webView(context, "https://mobile.twitter.com/hashtag/tornado", "#tornado")
-        }
-
         fun wpcGefs(context: Context) {
-            model(context,"1", "WPCGEFS", "WPC")
+            model(context, "1", "WPCGEFS", "WPC")
         }
 
         fun wpcImages(context: Context) {
@@ -431,18 +395,21 @@ class Route() {
         fun wpcText(context: Context, product: String) {
             Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(product))
         }
-        //elys mod  
+        //elys mod - keeping twitter
+        fun webViewTwitterStates(context: Context) {
+            Route(context, WebViewTwitter::class.java)
+        }
+
+        fun webViewTwitterTornado(context: Context) {
+            webView(context, "https://mobile.twitter.com/hashtag/tornado", "#tornado")
+        }	
         //elys mod - for radar longpress menu
         fun vis00(context: Context) {
             Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "00"))
         }
         //elys mod - for longpress in radar
         fun radarMosaicConus(context: Context) {
-            if (UIPreferences.useAwcMosaic) {
-                Route(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf("us"))
-            } else {
                 Route(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf("CONUS"))
-            }
         }		
     }
 }

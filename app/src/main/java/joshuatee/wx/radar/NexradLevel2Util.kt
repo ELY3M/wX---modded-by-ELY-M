@@ -175,9 +175,9 @@ internal object NexradLevel2Util {
                         total += nread
                         nread = cbzip2.read(ubuff)
                     }
-                    if (obuff.size >= 0) {
-                        outputRaf.write(obuff, 0, total)
-                    }
+//                    if (obuff.size >= 0) {
+                    outputRaf.write(obuff, 0, total)
+//                    }
                 } catch (e: Exception) {
                     UtilityLog.handleException(e)
                 }

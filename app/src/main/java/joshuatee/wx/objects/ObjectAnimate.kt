@@ -26,7 +26,7 @@ import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.ui.TouchImage
@@ -35,11 +35,11 @@ import joshuatee.wx.util.UtilityImgAnim
 
 class ObjectAnimate(val context: Context, val image: TouchImage) {
 
-    var animationDrawable = AnimationDrawable()
+    private var animationDrawable = AnimationDrawable()
     private var animateButton: MenuItem? = null
     private var pauseButton: MenuItem? = null
     var urls = listOf<String>()
-    var isPaused = false
+    private var isPaused = false
 
     fun start() {
         UtilityImgAnim.startAnimation(animationDrawable, image)
@@ -69,7 +69,7 @@ class ObjectAnimate(val context: Context, val image: TouchImage) {
         }
     }
 
-    fun setIconToRun() {
+    private fun setIconToRun() {
         animateButton?.setIcon(GlobalVariables.ICON_STOP)
         pauseButton?.isVisible = true
         pauseButton?.setIcon(GlobalVariables.ICON_PAUSE)
@@ -88,7 +88,7 @@ class ObjectAnimate(val context: Context, val image: TouchImage) {
             getContent()
         } else {
             setIconToRun()
-            FutureVoid(context,
+            FutureVoid(
                     {
                         urls = getFn()
                         download()

@@ -22,9 +22,11 @@
 package joshuatee.wx.util
 
 import java.util.regex.Pattern
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.parse
+import joshuatee.wx.parseLastMatch
 import java.util.Locale
 
 object UtilityString {
@@ -216,7 +218,7 @@ object UtilityString {
     }
 
     fun addPeriodBeforeLastTwoChars(string: String): String =
-        StringBuilder(string).insert(string.length - 2, ".").toString()
+            StringBuilder(string).insert(string.length - 2, ".").toString()
 
     fun replaceAllRegexp(s: String, a: String, b: String): String = s.replace(Regex(a), b)
 
@@ -227,21 +229,21 @@ object UtilityString {
         var payload = payloadF ?: ""
         val delim = delimF ?: ""
         if (delim == "start-valid-time") {
-            payload = payload.replace( "<end-valid-time>.*?</end-valid-time>".toRegex() , "")
-                             .replace( "<layout-key>.*?</layout-key>".toRegex() , "")
+            payload = payload.replace("<end-valid-time>.*?</end-valid-time>".toRegex(), "")
+                    .replace("<layout-key>.*?</layout-key>".toRegex(), "")
         }
-        payload = payload.replace( "<name>.*?</name>".toRegex() , "")
-                         .replace( "</" + delim + ">".toRegex() , "")
+        payload = payload.replace("<name>.*?</name>".toRegex(), "")
+                .replace("</" + delim + ">".toRegex(), "")
         return payload.split("<$delim>")
     }
 
     fun parseXmlValue(payloadF: String?): List<String> {
         var payload = payloadF ?: ""
-        payload = payload.replace("<name>.*?</name>".toRegex() , "")
-                         .replace( "</value>" , "")
+        payload = payload.replace("<name>.*?</name>".toRegex(), "")
+                .replace("</value>", "")
         return GlobalVariables.xmlValuePattern.split(payload).toList()
     }
 
-    fun parseXmlExt (regexpList: List<String>, html: String): List<String> =
+    fun parseXmlExt(regexpList: List<String>, html: String): List<String> =
             regexpList.map { parseAcrossLines(html, it) }
 }

@@ -129,7 +129,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     }
 
     fun openDashboard() {
-        Route.severeDashMainScreen(this)
+        Route.severeDashboard(this)
     }
 
     fun openHourly() {
@@ -138,8 +138,8 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     fun openActivity(context: Context, activityName: String) {
         Route(context,
-            UtilityHomeScreen.classes[activityName]!!,
-            UtilityHomeScreen.classId[activityName]!!,
-            UtilityHomeScreen.classArgs[activityName]!!)
+                UtilityHomeScreen.classes[activityName]!!,
+                UtilityHomeScreen.classId[activityName]!!,
+                UtilityHomeScreen.classArgs[activityName]!!)
     }
 }

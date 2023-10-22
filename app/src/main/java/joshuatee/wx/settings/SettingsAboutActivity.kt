@@ -34,6 +34,7 @@ import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFileManagement
+import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.util.UtilityShare
 
 class SettingsAboutActivity : BaseActivity() {
@@ -57,22 +58,21 @@ class SettingsAboutActivity : BaseActivity() {
     }
 
     private fun addCards() {
-        val faqButton = CardText(this, "View FAQ (current app issues listed at top)")
-        faqButton.setTextColor(UIPreferences.textHighlightColor)
-        faqButton.connect { Route.web(this, faqUrl) }
-
-        val releaseNotesButton = CardText(this, "View release notes")
-        releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
-        releaseNotesButton.connect { Route.web(this, releaseNotesUrl) }
-
+        val textSize = UIPreferences.textSizeLarge
+        val padding = UIPreferences.paddingSettings
+        val faqButton = CardText(this, "View FAQ", textSize, { Route.web(this, faqUrl) }, padding)
+        val releaseNotesButton = CardText(this, "View Release Notes", textSize, { Route.web(this, releaseNotesUrl) }, padding)
+        val developerSettingsCard = CardText(this, "Developer Settings", textSize, SettingsDeveloperActivity::class.java, padding)
         cardText = CardText(this, Utility.showVersion(this))
         val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
         cardDeleteFiles.connect {
             PopupMessage(box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         }
-
         box.addWidget(faqButton)
         box.addWidget(releaseNotesButton)
+        box.addWidget(CardText(this, "Celsius to fahrenheit table", textSize,
+                { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") }, padding))
+        box.addWidget(developerSettingsCard)
         box.addWidget(cardText)
         box.addWidget(cardDeleteFiles)
     }

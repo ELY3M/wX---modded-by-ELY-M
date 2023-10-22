@@ -24,16 +24,16 @@ package joshuatee.wx.spc
 import joshuatee.wx.common.GlobalVariables
 
 class StormReport(
-    val title: String = "",
-    val lat: String = "",
-    val lon: String = "",
-    val time: String = "",
-    val magnitude: String = "",
-    val address: String = "",
-    val city: String = "",
-    val state: String = "",
-    val description: String = ""
+        val title: String = "",
+        val lat: String = "",
+        val lon: String = "",
+        val time: String = "",
+        val magnitude: String = "",
+        val address: String = "",
+        val city: String = "",
+        val state: String = "",
+        val description: String = ""
 ) {
     override fun toString(): String =
-        listOf(title, lat, lon, time, magnitude, address, city, state, description).joinToString(",") + GlobalVariables.newline
+            listOf(title, lat, lon, time, magnitude, address, city, state, description).joinToString(",") + GlobalVariables.newline
 }

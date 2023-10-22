@@ -37,8 +37,9 @@ import android.graphics.drawable.LayerDrawable
 import androidx.core.graphics.drawable.DrawableCompat
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.MyApplication
+import joshuatee.wx.objects.BitmapAttr
 import joshuatee.wx.radar.CanvasCreate
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.NexradUtil
@@ -130,7 +131,7 @@ object UtilityImg {
     fun resizeViewSetImgInCard(bitmap: Bitmap, imageView: ImageView, numberAcross: Int = 1) {
         val layoutParams = imageView.layoutParams
         layoutParams.width = (MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) / numberAcross
-        layoutParams.height = ((MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) * bitmap.height / bitmap.width ) / numberAcross
+        layoutParams.height = ((MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) * bitmap.height / bitmap.width) / numberAcross
         imageView.layoutParams = layoutParams
         imageView.setImageBitmap(bitmap)
     }
@@ -230,10 +231,33 @@ object UtilityImg {
             return getBlankBitmap()
         }
         combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
-        val comboImage = Canvas(combinedImage!!)
+        val comboImage = Canvas(combinedImage)
         var workingHeight = 0.0f
         images.forEach {
             comboImage.drawBitmap(it, 0.0f, workingHeight, null)
+            workingHeight += it.height
+        }
+        return combinedImage
+    }
+
+    fun mergeImagesVerticallyBitmapAttr(images: List<BitmapAttr>): Bitmap {
+        val combinedImage: Bitmap?
+        var width = 0
+        var height = 0
+        images.forEach {
+            height += it.height
+            if (it.width > width) {
+                width = it.width
+            }
+        }
+        if (width == 0 || height == 0) {
+            return getBlankBitmap()
+        }
+        combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
+        val comboImage = Canvas(combinedImage)
+        var workingHeight = 0.0f
+        images.forEach {
+            comboImage.drawBitmap(it.bitmap, 0.0f, workingHeight, null)
             workingHeight += it.height
         }
         return combinedImage

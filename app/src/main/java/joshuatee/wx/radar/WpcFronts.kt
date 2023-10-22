@@ -21,14 +21,14 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
 import joshuatee.wx.util.Utility
 import kotlin.math.*
 import joshuatee.wx.util.UtilityMath
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.parseFirst
 import joshuatee.wx.util.To
 
 // Data file - https://www.wpc.ncep.noaa.gov/basicwx/coded_srp.txt
@@ -197,8 +197,8 @@ object WpcFronts {
         }
     }
 
-    fun get(context: Context) {
-        if (timer.isRefreshNeeded(context)) {
+    fun get() {
+        if (timer.isRefreshNeeded()) {
             pressureCenters.clear()
             fronts.clear()
             val urlBlob = GlobalVariables.nwsWPCwebsitePrefix + "/basicwx/coded_srp.txt"
@@ -207,12 +207,12 @@ object WpcFronts {
 //                              .replace(GlobalVariables.newline, GlobalVariables.sep)
 
             var html = urlBlob.getHtmlWithNewLine()
-                              .replace(GlobalVariables.newline, GlobalVariables.sep)
+                    .replace(GlobalVariables.newline, GlobalVariables.sep)
 
             val timestamp = html.parseFirst("SURFACE PROG VALID ([0-9]{12}Z)")
             Utility.writePref("WPC_FRONTS_TIMESTAMP", timestamp)
             html = html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" + GlobalVariables.sep + " " + GlobalVariables.sep)
-                       .replace(GlobalVariables.sep, GlobalVariables.newline)
+                    .replace(GlobalVariables.sep, GlobalVariables.newline)
             val lines = html.split(GlobalVariables.newline).toMutableList()
             lines.indices.forEach { index ->
                 if (index < lines.size - 1) {
@@ -225,16 +225,16 @@ object WpcFronts {
                             && lines[index + 1][0] != 'O'
                             && lines[index + 1][0] != 'T'
                             && lines[index + 1][0] != 'W') {
-                        lines[index] =  lines[index]  + lines[index + 1]
+                        lines[index] = lines[index] + lines[index + 1]
                         if (index < lines.size - 2
-                                &&lines[index + 2][0] != 'H'
+                                && lines[index + 2][0] != 'H'
                                 && lines[index + 2][0] != 'L'
                                 && lines[index + 2][0] != 'C'
                                 && lines[index + 2][0] != 'S'
                                 && lines[index + 2][0] != 'O'
                                 && lines[index + 2][0] != 'T'
                                 && lines[index + 2][0] != 'W') {
-                            lines[index] =  lines[index]  + lines[index + 2]
+                            lines[index] = lines[index] + lines[index + 2]
                         }
                     }
                 }
@@ -252,6 +252,7 @@ object WpcFronts {
                                 }
                             }
                         }
+
                         "LOWS" -> {
                             for (typeIndex in 0 until tokens.size step 2) {
                                 if (typeIndex + 1 < tokens.size) {
@@ -261,12 +262,14 @@ object WpcFronts {
                                 }
                             }
                         }
+
                         "COLD" -> {
                             val front = Fronts(FrontTypeEnum.COLD)
                             addFrontData(front, tokens)
                             addColdFrontTriangles(front, tokens)
                             fronts.add(front)
                         }
+
                         "STNRY" -> {
                             val front = Fronts(FrontTypeEnum.STNRY)
                             addFrontData(front, tokens)
@@ -275,17 +278,20 @@ object WpcFronts {
                             addFrontDataStnryWarm(frontStWarm, tokens)
                             fronts.add(frontStWarm)
                         }
+
                         "WARM" -> {
                             val front = Fronts(FrontTypeEnum.WARM)
                             addFrontData(front, tokens)
                             addWarmFrontSemicircles(front, tokens)
                             fronts.add(front)
                         }
+
                         "TROF" -> {
                             val front = Fronts(FrontTypeEnum.TROF)
                             addFrontDataTrof(front, tokens)
                             fronts.add(front)
                         }
+
                         "OCFNT" -> {
                             val front = Fronts(FrontTypeEnum.OCFNT)
                             addFrontData(front, tokens)
@@ -293,6 +299,7 @@ object WpcFronts {
                             addWarmFrontSemicircles(front, tokens)
                             fronts.add(front)
                         }
+
                         else -> {}
                     }
                 }

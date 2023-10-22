@@ -33,14 +33,31 @@ unsigned short toShort(char* value){
 	return cs.value;
 }
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials
-(JNIEnv * env, jclass clazz, jstring src, jlong seek_start, jint length, jobject i_buff, jobject o_buff, jobject rad_buff, jobject color_buff, jfloat bin_size, jbyte bg_color_red, jbyte bg_color_green, jbyte bg_color_blue, jobject colormap_r, jobject colormap_g, jobject colormap_b, jint productCode) {
-	jbyte* color_r = (*env)-> GetDirectBufferAddress(env, colormap_r);
-	jbyte* color_g = (*env)-> GetDirectBufferAddress(env, colormap_g);
-	jbyte* color_b = (*env)-> GetDirectBufferAddress(env, colormap_b);
-	color_r[0] = bg_color_red;
-	color_g[0] = bg_color_green;
-	color_b[0] = bg_color_blue;
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials (
+	JNIEnv * env,
+	jobject clazz, // was jclass
+	jstring src,
+	jlong seekStart,
+	jint length,
+	jobject inputBuffer,
+	jobject outputBuffer,
+	jobject radarBuffer,
+	jobject colorBuffer,
+	jfloat binSize,
+	jbyte bgColorRed,
+	jbyte bgColorGreen,
+	jbyte bgColorBlue,
+	jobject colorRedBuffer,
+	jobject colorGreenBuffer,
+	jobject colorBlueBuffer,
+	jint productCode
+ ) {
+	jbyte* color_r = (*env)->GetDirectBufferAddress(env, colorRedBuffer);
+	jbyte* color_g = (*env)->GetDirectBufferAddress(env, colorGreenBuffer);
+	jbyte* color_b = (*env)->GetDirectBufferAddress(env, colorBlueBuffer);
+	color_r[0] = bgColorRed;
+	color_g[0] = bgColorGreen;
+	color_b[0] = bgColorBlue;
 	int total_bins = 0;
 	float angle;
 	float angle_v;
@@ -51,23 +68,22 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials
 	int color_for = 0;
 	float bin_size_times_level_count;
 	double W_180_DIV_PI = 180.0 / M_PI;
-	jfloat* rBuff = (*env)-> GetDirectBufferAddress(env, rad_buff);
-	jbyte* cBuff = (*env)-> GetDirectBufferAddress(env, color_buff);
+	jfloat* rBuff = (*env)->GetDirectBufferAddress(env, radarBuffer);
+	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, colorBuffer);
 	int r_i = 0;
 	int c_i = 0;
 	int cur_level;
 	const char *src_path = (*env)->GetStringUTFChars(env, src, NULL);
-	jbyte* oBuff = (*env)-> GetDirectBufferAddress(env, o_buff);
-	jbyte* iBuff = (*env)-> GetDirectBufferAddress(env, i_buff);
-	FILE *fp_src;
-	fp_src = fopen(src_path, "r");
+	jbyte* oBuff = (*env)->GetDirectBufferAddress(env, outputBuffer);
+	jbyte* iBuff = (*env)->GetDirectBufferAddress(env, inputBuffer);
+	FILE* fp_src = fopen(src_path, "r");
 	if (fp_src == NULL) {
 		return -1;
 	}
 	// int ret_size = 1000000;
 	// Feb 22, increase for L3 super-res
 	int ret_size = 2000000;
-	int seek_return = fseek(fp_src, seek_start, SEEK_SET);
+	int seek_return = fseek(fp_src, seekStart, SEEK_SET);
 	if (seek_return != 0) {
     	return -1;
     }
@@ -115,30 +131,34 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials
 
 		level = 0;
 		level_count = 0;
-		bin_start = bin_size;
+		bin_start = binSize;
 		if (r < 359) {
 			angle_v = angle_next;
 		} else {
 			angle_v = angle_0;
 		}
+        double angleVCos = cos(angle_v / W_180_DIV_PI);
+        double angleVSin = sin(angle_v / W_180_DIV_PI);
+        double angleCos = cos(angle / W_180_DIV_PI);
+        double angleSin = sin(angle / W_180_DIV_PI);
 		for (bin = 0; bin < number_of_rle_halfwords; bin++) {
 			cur_level = (unsigned char)oBuff[o_idx++];
 			if (cur_level == level){
 				level_count++;
 			} else {
-				bin_size_times_level_count = bin_size * level_count;
+				bin_size_times_level_count = binSize * level_count;
 
-				rBuff[r_i++] = bin_start * cos(angle_v / W_180_DIV_PI);
-				rBuff[r_i++] = bin_start * sin(angle_v / W_180_DIV_PI);
+				rBuff[r_i++] = bin_start * angleVCos;
+				rBuff[r_i++] = bin_start * angleVSin;
 
-				rBuff[r_i++] = (bin_start + (bin_size_times_level_count)) * cos((angle_v) / (W_180_DIV_PI));
-				rBuff[r_i++] = (bin_start + (bin_size_times_level_count)) * sin((angle_v) / (W_180_DIV_PI));
+				rBuff[r_i++] = (bin_start + bin_size_times_level_count) * angleVCos;
+				rBuff[r_i++] = (bin_start + bin_size_times_level_count) * angleVSin;
 
-				rBuff[r_i++] = (bin_start + (bin_size_times_level_count)) * cos(angle / (W_180_DIV_PI));
-				rBuff[r_i++] = (bin_start + (bin_size_times_level_count)) * sin(angle / (W_180_DIV_PI));
+				rBuff[r_i++] = (bin_start + bin_size_times_level_count) * angleCos;
+				rBuff[r_i++] = (bin_start + bin_size_times_level_count) * angleSin;
 
-				rBuff[r_i++] = bin_start * cos(angle / (W_180_DIV_PI));
-				rBuff[r_i++] = bin_start * sin(angle / (W_180_DIV_PI));
+				rBuff[r_i++] = bin_start * angleCos;
+				rBuff[r_i++] = bin_start * angleSin;
 
 				for (color_for = 0; color_for < 4; color_for++) {
 					cBuff[c_i++] = (jbyte)color_r[level];
@@ -147,7 +167,7 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials
 				}
 				total_bins++;
 				level = cur_level;
-				bin_start = bin * bin_size;
+				bin_start = bin * binSize;
 				level_count = 1;
 			}
 		} // end looping over bins in one radial

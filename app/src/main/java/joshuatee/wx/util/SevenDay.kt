@@ -21,12 +21,11 @@
 
 package joshuatee.wx.util
 
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.Location
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.parseColumn
 
 class SevenDay {
 
@@ -34,10 +33,12 @@ class SevenDay {
     // separated by "!"
     var iconsAsString = ""
         private set
+
     // used in NotificationLocal.kt, UtilityWidget.kt, and LocationFragment.kt (which writes pref "FCST" used in UtilityVoiceCommand.kt)
     // used in ObjectWidgetCC.kt, ObjectWidgetCCLegacy.kt, and WeatherDataProvider.kt via pref "7DAY_EXT_WIDGET"
     var sevenDayLong = ""
         private set
+
     // used in ObjectWidgetCCLegacy.kt via pref "7DAY_WIDGET"
     // used in NotificationLocal.kt
     var sevenDayShort = ""
@@ -58,12 +59,6 @@ class SevenDay {
             iconsAsString = getIcons7Day(html)
             sevenDayLong = get7DayExtended(html)
             sevenDayShort = get7DayShort(html)
-        } else {
-            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locationNumber))
-            sevenDayLong = UtilityCanada.get7Day(html)
-            iconsAsString = UtilityCanada.getIcons7Day(sevenDayLong)
-            icons = UtilityCanada.getIcons7DayAsList(sevenDayLong).toMutableList()
-            convertExt7DayToList()
         }
     }
 
@@ -72,10 +67,6 @@ class SevenDay {
         iconsAsString = getIcons7Day(html)
         sevenDayLong = get7DayExtended(html)
         sevenDayShort = get7DayShort(html)
-    }
-
-    private fun convertExt7DayToList() {
-        detailedForecasts = sevenDayLong.split(GlobalVariables.newline + GlobalVariables.newline).dropLastWhile { it.isEmpty() }.toMutableList()
     }
 
     private fun getIcons7Day(html: String): String = if (UIPreferences.useNwsApi) {

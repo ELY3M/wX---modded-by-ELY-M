@@ -26,11 +26,11 @@ import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.PolygonWarning
 import joshuatee.wx.objects.PolygonWarningType
+import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences
 
@@ -53,7 +53,7 @@ internal object NotificationTornado {
         return notificationUrls
     }
 
-    fun checkAndSend(context: Context, html: String): String {
+    private fun checkAndSend(context: Context, html: String): String {
         var notificationUrls = ""
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         try {

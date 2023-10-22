@@ -30,7 +30,7 @@ import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.getHtml
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.VBox
 
@@ -42,7 +42,9 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // arg2 if "sound" will play TTS on first load
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private lateinit var arguments: Array<String>
     private var url = ""
@@ -73,6 +75,9 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objectToolbarBottom.hide(R.id.action_playlist)
         objectToolbarBottom.connect(this)
         cardText = CardText(this, toolbar, toolbarBottom)
+        if (title.contains("VAD Wind Profile")) {
+            cardText.typefaceMono()
+        }
         box.addWidget(cardText)
     }
 
@@ -84,7 +89,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this, ::download, ::update)
+        FutureVoid(::download, ::update)
     }
 
     fun download() {

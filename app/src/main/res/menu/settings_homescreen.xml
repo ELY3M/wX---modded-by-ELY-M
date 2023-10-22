@@ -24,17 +24,12 @@
         android:id="@+id/action_radar"
         android:icon="@drawable/ic_flash_on_24dp"
         android:title="@string/action_radar"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_afd"
         android:icon="@drawable/ic_info_outline_24dp"
         android:title="@string/add_afd"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_img"
-        android:icon="@drawable/ic_public_24dp"
-        android:title="@string/add_img"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_help"
         android:title="@string/help_menu_item"

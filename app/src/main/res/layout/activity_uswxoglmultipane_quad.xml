@@ -23,71 +23,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/rl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/toolbar_bottom"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/toolbar_bottom"
-            android:orientation="vertical">
+        <include layout="@layout/widget_toolbar_top" />
 
-            <include layout="@layout/widget_toolbar_top" />
+        <TableLayout
+            android:id="@+id/tl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/dividerColor"
+            android:dividerPadding="0px"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="0dip"
+            android:stretchColumns="*">
 
-            <TableLayout
-                android:id="@+id/tl"
+            <TableRow
+                android:id="@+id/tr1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/rl1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <RelativeLayout
+                    android:id="@+id/rl2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tr2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/rl3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <RelativeLayout
+                    android:id="@+id/rl4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableRow>
+
+            <joshuatee.wx.util.ImageMap
+                android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@color/dividerColor"
-                android:dividerPadding="0px"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="0dip"
-                android:stretchColumns="*">
+                android:src="@drawable/ncar_nexrad_sites"
+                ctc:map="ncar_nexrad_sites" />
+        </TableLayout>
+    </LinearLayout>
 
-                <TableRow
-                    android:id="@+id/tr1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <RelativeLayout
-                        android:id="@+id/rl1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/tr2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <RelativeLayout
-                        android:id="@+id/rl3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </TableRow>
-
-                <joshuatee.wx.util.ImageMap
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ncar_nexrad_sites"
-                    ctc:map="ncar_nexrad_sites" />
-            </TableLayout>
-        </LinearLayout>
-
-        <include layout="@layout/widget_toolbar_bottom" />
-    </RelativeLayout>
+    <include layout="@layout/widget_toolbar_bottom" />
 </RelativeLayout>

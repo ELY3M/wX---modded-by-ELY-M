@@ -45,7 +45,9 @@ class ImageShowActivity : BaseActivity() {
     // 3: (optional) string "true" means a white background is needed
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private var url = ""
     private var urls = listOf<String>()
@@ -74,10 +76,12 @@ class ImageShowActivity : BaseActivity() {
                 urls = url.split(":")
                 getContentFromStorage()
             }
+
             url.contains("raw:") -> {
                 urls = url.split(":")
                 loadRawBitmap()
             }
+
             else -> getContent()
         }
     }
@@ -93,7 +97,7 @@ class ImageShowActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureBytes(this, url, ::showImage)
+        FutureBytes(url, ::showImage)
     }
 
     private fun showImage(bitmap2: Bitmap) {

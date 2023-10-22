@@ -59,7 +59,9 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
             redValues.put(Color.red(colorAsInt).toByte())
             greenValues.put(Color.green(colorAsInt).toByte())
             blueValues.put(Color.blue(colorAsInt).toByte())
-        } catch (e: Exception) { UtilityLog.handleException(e) }
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
+        }
     }
 
     private fun putBytes(redByte: Int, greenByte: Int, blueByte: Int) {
@@ -90,6 +92,7 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
                 setupBuffers(16)
                 generate4bitGeneric(context, colormapCode)
             }
+
             165 -> {
                 setupBuffers(256)
                 try {
@@ -98,6 +101,7 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
                     UtilityLog.handleException(e)
                 }
             }
+
             else -> {
                 setupBuffers(256)
                 try {
@@ -171,42 +175,50 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
                     scale = 2
                     lowerEnd = -32
                 }
+
                 99 -> {
                     scale = 1
                     lowerEnd = -127
                 }
+
                 134 -> {
                     scale = 1
                     lowerEnd = 0
                     prodOffset = 0.0
                     prodScale = 3.64
                 }
+
                 135 -> {
                     scale = 1
                     lowerEnd = 0
                 }
+
                 159 -> {
                     scale = 1
                     lowerEnd = 0
                     prodOffset = 128.0
                     prodScale = 16.0
                 }
+
                 161 -> {
                     scale = 1
                     lowerEnd = 0
                     prodOffset = -60.5
                     prodScale = 300.0
                 }
+
                 163 -> {
                     scale = 1
                     lowerEnd = 0
                     prodOffset = 43.0
                     prodScale = 20.0
                 }
+
                 172 -> {
                     scale = 1
                     lowerEnd = 0
                 }
+
                 else -> {
                     scale = 2
                     lowerEnd = -32
@@ -277,6 +289,7 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
                         objectColorPalette.putLine(colorPaletteLines[index])
                     }
                     (1 until diff).forEach { j ->
+                        @Suppress("KotlinConstantConditions")
                         if (scale == 1) {
                             val colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, j.toFloat() / (diff * scale).toFloat())
                             objectColorPalette.putInt(colorInt)
@@ -301,7 +314,7 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
             // http://www.usawx.com/grradarexamples.htm
             var code = radarColorPalette[product] ?: ""
             if (code == "COD") {
-                code =  "CODENH"
+                code = "CODENH"
             }
             generate(context, product, code)
         }

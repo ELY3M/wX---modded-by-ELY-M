@@ -22,7 +22,7 @@
 package joshuatee.wx.objects
 
 import android.content.Context
-import joshuatee.wx.Extensions.getHtml
+import joshuatee.wx.getHtml
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.notifications.UtilityNotification
@@ -57,7 +57,7 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
     }
 
     fun download(context: Context) {
-        if (timer.isRefreshNeeded(context)) {
+        if (timer.isRefreshNeeded()) {
             getImmediate(context)
         }
     }
@@ -141,7 +141,7 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
         return listOf(html, UtilityNotification.storeWatchMcdLatLon(html))
     }
 
-    private fun locationNotification(): Boolean = when(type) {
+    private fun locationNotification(): Boolean = when (type) {
         PolygonType.MCD -> NotificationMcd.locationNeedsMcd()
         PolygonType.MPD -> NotificationMpd.locationNeedsMpd()
         else -> false
@@ -173,10 +173,10 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
     companion object {
 
         private val polygonList = listOf(
-            PolygonType.WATCH,
-            PolygonType.WATCH_TORNADO,
-            PolygonType.MCD,
-            PolygonType.MPD
+                PolygonType.WATCH,
+                PolygonType.WATCH_TORNADO,
+                PolygonType.MCD,
+                PolygonType.MPD
         )
         val byType = mutableMapOf<PolygonType, PolygonWatch>()
 
@@ -196,16 +196,16 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
 //        )
 
         val textPrefix = mapOf(
-            PolygonType.MCD to "SPCMCD",
-            PolygonType.MPD to "WPCMPD",
+                PolygonType.MCD to "SPCMCD",
+                PolygonType.MPD to "WPCMPD",
 //            PolygonType.WATCH to "RADAR_COLOR_TSTORM_WATCH",
 //            PolygonType.WatchTornado to "RADAR_COLOR_TOR_WATCH",
         )
 
         val regex = mapOf(
-            PolygonType.MCD to RegExp.mcdPatternAlerts,
-            PolygonType.MPD to RegExp.mpdPattern,
-            PolygonType.WATCH to RegExp.watchPattern,
+                PolygonType.MCD to RegExp.mcdPatternAlerts,
+                PolygonType.MPD to RegExp.mpdPattern,
+                PolygonType.WATCH to RegExp.watchPattern,
 //            PolygonType.WatchTornado to "RADAR_COLOR_TOR_WATCH",
         )
 
@@ -221,7 +221,7 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
         }
 
         fun getLatLonWatch(number: String): String =
-            UtilityString.getHtmlAndParseLastMatch("${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
+                UtilityString.getHtmlAndParseLastMatch("${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
 
     }
 }

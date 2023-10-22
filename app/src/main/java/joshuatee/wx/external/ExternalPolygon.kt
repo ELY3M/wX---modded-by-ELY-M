@@ -42,6 +42,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
         private var boundingBox: BoundingBox? = null
         private var firstPoint = true
         private var isClosed = false
+
         /**
          * Add vertex points of the polygon.<br></br>
          * It is very important to add the vertexes by order, like you were drawing them one by one.
@@ -65,6 +66,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
             }
             return this
         }
+
         /**
          * Close the polygon shape. This will create a new side (edge) from the **last** vertex point to the **first** vertex point.
          *
@@ -77,6 +79,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
             isClosed = true
             return this
         }
+
         /**
          * Build the instance of the polygon shape.
          *
@@ -91,6 +94,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
             }
             return ExternalPolygon(sides, boundingBox!!)
         }
+
         /**
          * Update bounding box with a new point.<br></br>
          *
@@ -124,6 +128,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
             if (vertexes.size < 3) throw RuntimeException("Polygon must have at least 3 points")
         }
     }
+
     /**
      * Check if the the given point is inside of the polygon.<br></br>
      *
@@ -147,6 +152,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
         }
         return false
     }
+
     /**
      * By given ray and one side of the polygon, check if both lines intersect.
      *
@@ -178,6 +184,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
         }
         return side.isInside(intersectPoint) && ray.isInside(intersectPoint)
     }
+
     /**
      * Create a ray. The ray will be created by given point and on point outside of the polygon.<br></br>
      * The outside point is calculated automatically.
@@ -191,6 +198,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
         val outsidePoint = ExternalPoint(boundingBox.xMin - epsilon, boundingBox.yMin)
         return ExternalLine(outsidePoint, point)
     }
+
     /**
      * Check if the given point is in bounding box
      *

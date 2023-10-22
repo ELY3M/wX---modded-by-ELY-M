@@ -36,8 +36,8 @@ import joshuatee.wx.util.UtilityImg
 class DisplayData(activity: Activity, numPanes: Int, om: ObjectModel) {
 
     var animDrawable = MutableList(numPanes) { AnimationDrawable() }
-    var param = MutableList(numPanes) {""}
-    var paramLabel = MutableList(numPanes) {""}
+    var param = MutableList(numPanes) { "" }
+    var paramLabel = MutableList(numPanes) { "" }
     val image = mutableListOf<TouchImage>()
     val objectAnimates = mutableListOf<ObjectAnimate>()
     var bitmaps = MutableList(numPanes) { UtilityImg.getBlankBitmap() }

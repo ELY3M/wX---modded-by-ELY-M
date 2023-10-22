@@ -30,7 +30,7 @@ class ObjectPaint {
     private val paint = Paint()
 
     init {
-        with (paint) {
+        with(paint) {
             color = UIPreferences.nwsIconTextColor
             textSize = 14.0f
             typeface = Typeface.DEFAULT_BOLD

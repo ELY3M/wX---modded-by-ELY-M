@@ -78,7 +78,9 @@ class TouchImage {
 
     var visibility
         get() = img.visibility
-        set(value) { img.visibility = value }
+        set(value) {
+            img.visibility = value
+        }
 
     val currentZoom
         get() = img.currentZoom

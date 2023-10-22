@@ -31,8 +31,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ContextMenu.ContextMenuInfo
 import android.widget.ScrollView
-import joshuatee.wx.Extensions.getHtmlWithNewLine
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getHtmlWithNewLine
+import joshuatee.wx.getImage
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.common.GlobalVariables
@@ -51,7 +51,6 @@ import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.NavDrawer
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.To
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityMap
@@ -66,7 +65,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 1: string "yesterday" or "today"
     //
 
-    companion object { const val DAY = "" }
+    companion object {
+        const val DAY = ""
+    }
 
     private var dayArgument = ""
     private var imgUrl = ""
@@ -159,8 +160,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() {
         scrollView.smoothScrollTo(0, 0)
-        FutureVoid(this, ::download, ::displayData)
-        FutureBytes2(this, ::downloadImage, ::updateImage)
+        FutureVoid(::download, ::displayData)
+        FutureBytes2(::downloadImage, ::updateImage)
     }
 
     private fun downloadImage(): Bitmap {
@@ -198,7 +199,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var stormCnt = -3
         stormReports.forEachIndexed { k, stormReport ->
             val isHeader = stormReport.title == "Tornado Reports" || stormReport.title == "Wind Reports" || stormReport.title == "Hail Reports"
-            if (filter == "All" || stormReport.state == filter || isHeader ) {
+            if (filter == "All" || stormReport.state == filter || isHeader) {
                 stormCnt += 1
                 if (stormReport.state != "") {
                     val freq3 = mapState[stormReport.state]
@@ -228,7 +229,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cardText.text = mapOut
 //        textForShare.insert(0, Utility.fromHtml("<br><b>" + mapOut + GlobalVariables.newline + "</b><br>"))
         textForShare.insert(0, GlobalVariables.newline + mapOut + GlobalVariables.newline)
-        UtilityLog.d("wx", ":::" + textForShare)
+//        UtilityLog.d("wx", ":::" + textForShare)
         if (firstRun) {
             stateArray = mapState.keys.sorted().toList()
             val stateArrayLabel = mutableListOf<String>()

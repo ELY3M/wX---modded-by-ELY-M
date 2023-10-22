@@ -49,12 +49,12 @@ object UtilityToolbar {
         }
     }
 
-    fun fullScreenMode(toolbar: Toolbar) {
-        toolbar.elevation = UIPreferences.elevationPref
-        if (UIPreferences.fullscreenMode) {
-            toolbar.visibility = View.GONE
-        }
-    }
+//    fun fullScreenMode(toolbar: Toolbar) {
+//        toolbar.elevation = UIPreferences.elevationPref
+//        if (UIPreferences.fullscreenMode) {
+//            toolbar.visibility = View.GONE
+//        }
+//    }
 
     fun setElevation(toolbar: Toolbar) {
         toolbar.elevation = UIPreferences.elevationPref

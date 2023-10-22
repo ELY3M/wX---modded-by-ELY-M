@@ -53,7 +53,7 @@ class WeatherDataProviderObserver(
         // In response, the factory's onDataSetChanged() will be called which will requery the
         // cursor for the new data.
         mAppWidgetManager.notifyAppWidgetViewDataChanged(
-            mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.weather_list
+                mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.weather_list
         )
     }
 }

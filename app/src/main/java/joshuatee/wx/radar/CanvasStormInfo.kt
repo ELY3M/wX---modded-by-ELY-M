@@ -19,6 +19,8 @@
 
 */
 
+@file:Suppress("SameParameterValue")
+
 package joshuatee.wx.radar
 
 import android.graphics.Bitmap
@@ -32,9 +34,10 @@ import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.OfficeTypeEnum
+import joshuatee.wx.parseColumn
+import joshuatee.wx.parseColumnAll
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
 import java.util.Locale
@@ -67,13 +70,13 @@ object CanvasStormInfo {
         var motionStr = ""
         // TODO FIXME
         posn.map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
-            .forEach {
-                posnStr += it.replace("/", " ")
-            }
+                .forEach {
+                    posnStr += it.replace("/", " ")
+                }
         motion.map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
-            .forEach {
-                motionStr += it.replace("/", " ")
-            }
+                .forEach {
+                    motionStr += it.replace("/", " ")
+                }
         val posnNumbers = posnStr.parseColumnAll(pattern3)
         val motNumbers = motionStr.parseColumnAll(pattern3)
         val degreeShift = 180.00
@@ -136,7 +139,7 @@ object CanvasStormInfo {
                 list = Projection.computeMercatorNumbers(stormLists[i], stormLists[i + 1], projectionNumbers)
                 list2 = Projection.computeMercatorNumbers(stormLists[i + 2], stormLists[i + 3], projectionNumbers)
             }
-            with (wallPath) {
+            with(wallPath) {
                 reset()
                 moveTo(list[0], list[1])
                 lineTo(list2[0], list2[1])
@@ -147,12 +150,12 @@ object CanvasStormInfo {
 
     // FIXME are these the same as in Level3Common ?
     private fun drawTickMarks(
-        list: MutableList<Double>,
-        startPoint: LatLon,
-        pn: ProjectionNumbers,
-        ecArr: ExternalGlobalCoordinates,
-        startBearing: Double,
-        distance: Double
+            list: MutableList<Double>,
+            startPoint: LatLon,
+            pn: ProjectionNumbers,
+            ecArr: ExternalGlobalCoordinates,
+            startBearing: Double,
+            distance: Double
     ) {
         list.add(startPoint.lat)
         list.add(startPoint.lon)
@@ -162,12 +165,12 @@ object CanvasStormInfo {
     }
 
     private fun drawLine(
-        list: MutableList<Double>,
-        startPoint: DoubleArray,
-        pn: ProjectionNumbers,
-        start: ExternalGlobalCoordinates,
-        startBearing: Double,
-        distance: Double
+            list: MutableList<Double>,
+            startPoint: DoubleArray,
+            pn: ProjectionNumbers,
+            start: ExternalGlobalCoordinates,
+            startBearing: Double,
+            distance: Double
     ) {
         list.add(startPoint[0])
         list.add(startPoint[1])

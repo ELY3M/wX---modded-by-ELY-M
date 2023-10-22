@@ -28,7 +28,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import joshuatee.wx.Extensions.setPadding
+import joshuatee.wx.setPadding
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 
@@ -38,18 +38,24 @@ class Text(val context: Context) : Widget {
 
     var text
         get() = tv.text.toString()
-        set(value) { tv.text = value }
+        set(value) {
+            tv.text = value
+        }
 
     var gravity
         get() = tv.gravity
-        set(value) { tv.gravity = value }
+        set(value) {
+            tv.gravity = value
+        }
 
     var visibility
         get() = tv.visibility
-        set(value) { tv.visibility = value }
+        set(value) {
+            tv.visibility = value
+        }
 
     init {
-        with (tv) {
+        with(tv) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
             setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
             gravity = Gravity.START
@@ -120,11 +126,15 @@ class Text(val context: Context) : Widget {
 
     var color
         get() = tv.currentTextColor
-        set(newValue) { tv.setTextColor(newValue) }
+        set(newValue) {
+            tv.setTextColor(newValue)
+        }
 
     var typeface: Typeface
         get() = tv.typeface
-        set(newValue) { tv.typeface = newValue }
+        set(newValue) {
+            tv.typeface = newValue
+        }
 
     private fun setAsBackgroundText() {
         setSmall()
@@ -136,9 +146,9 @@ class Text(val context: Context) : Widget {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
     }
 
-    fun matchParent() {
-        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-    }
+//    fun matchParent() {
+//        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+//    }
 
     fun wrap() {
         tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)

@@ -22,7 +22,7 @@
 package joshuatee.wx.settings
 
 import android.os.Bundle
-import joshuatee.wx.Extensions.swap
+import joshuatee.wx.swap
 import joshuatee.wx.R
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.ui.BaseActivity
@@ -41,7 +41,9 @@ class FavRemoveActivity : BaseActivity() {
     // arg1: type such as "SND", "WFO", "SREF", "SPCMESO", "NWSTEXT", and "RID"
     //
 
-    companion object { const val TYPE = "" }
+    companion object {
+        const val TYPE = ""
+    }
 
     private var favorites = mutableListOf<String>()
     private var favoriteString = ""
@@ -50,7 +52,7 @@ class FavRemoveActivity : BaseActivity() {
     private lateinit var objectRecyclerView: ObjectRecyclerView
     private lateinit var type: FavoriteType
     private val initialValue = " : : "
-    var verboseTitle = ""
+    private var verboseTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
@@ -67,14 +69,17 @@ class FavRemoveActivity : BaseActivity() {
                 prefTokenLocation = "NWS_LOCATION_"
                 verboseTitle = "sounding sites"
             }
+
             FavoriteType.WFO -> {
                 prefTokenLocation = "NWS_LOCATION_"
                 verboseTitle = "NWS offices"
             }
+
             FavoriteType.RID -> {
                 prefTokenLocation = "RID_LOC_"
                 verboseTitle = "radar sites"
             }
+
             FavoriteType.NWS_TEXT -> verboseTitle = "text products"
             FavoriteType.SREF -> verboseTitle = "parameters"
             FavoriteType.SPCMESO -> verboseTitle = "parameters"
@@ -141,13 +146,13 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun getFullString(shortCode: String) = when (type) {
-            FavoriteType.SND -> UtilityLocation.getSoundingSiteName(shortCode)
-            FavoriteType.WFO -> shortCode + ": " + UtilityLocation.getWfoSiteName(shortCode)
-            FavoriteType.RID -> shortCode + ": " + UtilityLocation.getRadarSiteName(shortCode)
-            FavoriteType.NWS_TEXT -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
-            FavoriteType.SREF -> shortCode
-            FavoriteType.SPCMESO -> findSpcMesoLabel(shortCode)
-        }
+        FavoriteType.SND -> UtilityLocation.getSoundingSiteName(shortCode)
+        FavoriteType.WFO -> shortCode + ": " + UtilityLocation.getWfoSiteName(shortCode)
+        FavoriteType.RID -> shortCode + ": " + UtilityLocation.getRadarSiteName(shortCode)
+        FavoriteType.NWS_TEXT -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
+        FavoriteType.SREF -> shortCode
+        FavoriteType.SPCMESO -> findSpcMesoLabel(shortCode)
+    }
 
     private fun saveMyApp(s: String) {
         UIPreferences.favorites[type] = s

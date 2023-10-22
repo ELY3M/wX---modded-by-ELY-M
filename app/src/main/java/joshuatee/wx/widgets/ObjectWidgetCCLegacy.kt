@@ -34,9 +34,6 @@ import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
 import joshuatee.wx.activitiesmisc.WfoTextActivity
-import joshuatee.wx.canada.CanadaAlertsActivity
-import joshuatee.wx.canada.CanadaHourlyActivity
-import joshuatee.wx.canada.CanadaTextActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.radar.WXGLRadarActivity
@@ -105,7 +102,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         hazardsExt = hazardsExt.replace("<hr /><br />", "")
         UtilityWidget.setupIntent(context, remoteViews, TextScreenActivity::class.java, R.id.hazard, TextScreenActivity.URL, arrayOf(hazardsExt, "Local Hazards"), actionHazard)
         UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.b_radar, WXGLRadarActivity.RID, arrayOf(radarSite), actionRadar)
-        // local alerts ( or nat for CA )
+        // local alerts
         if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
                     context,
@@ -116,20 +113,14 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                     arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us"),
                     actionAlert
             )
-        } else {
-            UtilityWidget.setupIntent(context, remoteViews, CanadaAlertsActivity::class.java, R.id.b_alert, actionAlert)
         }
         // Hourly
         if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(context, remoteViews, HourlyActivity::class.java, R.id.b_hourly, HourlyActivity.LOC_NUM, widgetLocationNumber, actionHourly)
-        } else {
-            UtilityWidget.setupIntent(context, remoteViews, CanadaHourlyActivity::class.java, R.id.b_hourly, CanadaHourlyActivity.LOC_NUM, widgetLocationNumber, actionHourly)
         }
         // AFD
         if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(context, remoteViews, WfoTextActivity::class.java, R.id.b_afd, WfoTextActivity.URL, arrayOf(wfo, ""), actionAfd)
-        } else {
-            UtilityWidget.setupIntent(context, remoteViews, CanadaTextActivity::class.java, R.id.b_afd, actionAfd)
         }
         UtilityWidget.setupIntent(context, remoteViews, SevereDashboardActivity::class.java, R.id.b_dash, actionDashboard)
         // cloud icon - vis

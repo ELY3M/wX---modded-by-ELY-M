@@ -54,7 +54,6 @@ object GlobalVariables {
     //const val nwsConusRadarNew = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_raw/ows?service=wms&version=1.3.0&request=GetCapabilities"
 	//end of elys mod 
 
-
     const val nwsRadarPub = "https://tgftp.nws.noaa.gov/"
     const val nwsSPCwebsitePrefix = "https://www.spc.noaa.gov"
     const val nwsWPCwebsitePrefix = "https://www.wpc.ncep.noaa.gov"
@@ -69,42 +68,44 @@ object GlobalVariables {
     const val goes16AnimUrl = "https://www.star.nesdis.noaa.gov"
     const val nwsApiUrl = "https://api.weather.gov"
     const val nwsSwpcWebSitePrefix = "https://services.swpc.noaa.gov"
-    const val canadaEcSitePrefix = "https://weather.gc.ca"
     const val tgftpSitePrefix = "https://tgftp.nws.noaa.gov"
     const val sep = "ABC123"
     const val pre2Pattern = "<pre>(.*?)</pre>"
 
-    const val ICON_ALERT_2 = R.drawable.ic_report_24dp
-    const val ICON_MAP = R.drawable.ic_public_24dp_white
-    const val ICON_MPD = R.drawable.ic_brightness_7_24dp
-    const val ICON_TORNADO = R.drawable.ic_flash_off_24dp
-    const val ICON_MCD = R.drawable.ic_directions_24dp
-    const val ICON_ACTION = R.drawable.ic_play_arrow_24dp
-    const val ICON_ALERT = R.drawable.ic_warning_24dp
-    const val ICON_RADAR = R.drawable.ic_flash_on_24dp
-    const val ICON_RADAR_WHITE = R.drawable.ic_flash_on_24dp_white
-    const val ICON_FORECAST = R.drawable.ic_place_24dp
-    const val ICON_CURRENT = R.drawable.ic_info_outline_24dp
-    const val ICON_CURRENT_WHITE = R.drawable.ic_info_outline_24dp_white
-    const val ICON_NHC_1 = R.drawable.ic_brightness_auto_24dp
-    const val ICON_DELETE_WHITE = R.drawable.ic_delete_24dp_white
-    const val STAR_ICON = R.drawable.ic_star_24dp
-    const val STAR_OUTLINE_ICON = R.drawable.ic_star_outline_24dp
-    const val STAR_ICON_WHITE = R.drawable.ic_star_24dp_white
-    const val STAR_OUTLINE_ICON_WHITE = R.drawable.ic_star_outline_24dp_white
-    const val ICON_PLAY = R.drawable.ic_play_arrow_24dp
-    const val ICON_PLAY_WHITE = R.drawable.ic_play_arrow_24dp_white
-    const val ICON_STOP = R.drawable.ic_stop_24dp
-    const val ICON_STOP_WHITE = R.drawable.ic_stop_24dp_white
-    const val ICON_MIC = R.drawable.ic_mic_24dp
-    const val ICON_PAUSE = R.drawable.ic_pause_24dp
-    const val ICON_PAUSE_WHITE = R.drawable.ic_pause_24dp_white
-    const val ICON_PAUSE_PRESSED = R.drawable.ic_pause_white_24dp
-    const val ICON_PAUSE_PRESSED_BLUE = R.drawable.ic_pause_blue_24dp
-    const val ICON_ADD = R.drawable.ic_add_box_24dp
-    const val ICON_ADD2 = R.drawable.ic_add2_box_24dp_white
-    const val ICON_SKIP_BACK = R.drawable.ic_skip_previous_24dp
-    const val ICON_SKIP_FORWARD = R.drawable.ic_skip_next_24dp
+    val ICON_ALERT_2 = R.drawable.ic_report_24dp
+    val ICON_MAP = R.drawable.ic_public_24dp_white
+    val ICON_MPD = R.drawable.ic_brightness_7_24dp
+    val ICON_TORNADO = R.drawable.ic_flash_off_24dp
+    val ICON_MCD = R.drawable.ic_directions_24dp
+    val ICON_ACTION = R.drawable.ic_play_arrow_24dp
+    val ICON_ALERT = R.drawable.ic_warning_24dp
+    val ICON_RADAR = R.drawable.ic_flash_on_24dp
+    val ICON_RADAR_WHITE = R.drawable.ic_flash_on_24dp_white
+    val ICON_FORECAST = R.drawable.ic_place_24dp
+    val ICON_CURRENT = R.drawable.ic_info_outline_24dp
+    val ICON_CURRENT_WHITE = R.drawable.ic_info_outline_24dp_white
+    val ICON_NHC_1 = R.drawable.ic_brightness_auto_24dp
+    val ICON_DELETE_WHITE = R.drawable.ic_delete_24dp_white
+    val STAR_ICON = R.drawable.ic_star_24dp
+    val STAR_OUTLINE_ICON = R.drawable.ic_star_outline_24dp
+    val STAR_ICON_WHITE = R.drawable.ic_star_24dp_white
+    val STAR_OUTLINE_ICON_WHITE = R.drawable.ic_star_outline_24dp_white
+    val ICON_PLAY = R.drawable.ic_play_arrow_24dp
+    val ICON_PLAY_WHITE = R.drawable.ic_play_arrow_24dp_white
+    val ICON_STOP = R.drawable.ic_stop_24dp
+    val ICON_STOP_WHITE = R.drawable.ic_stop_24dp_white
+    val ICON_MIC = R.drawable.ic_mic_24dp
+    val ICON_PAUSE = R.drawable.ic_pause_24dp
+    val ICON_PAUSE_WHITE = R.drawable.ic_pause_24dp_white
+    val ICON_PAUSE_PRESSED = R.drawable.ic_pause_white_24dp
+    val ICON_PAUSE_PRESSED_BLUE = R.drawable.ic_pause_blue_24dp
+    val ICON_ADD = R.drawable.ic_add_box_24dp
+    val ICON_ADD2 = R.drawable.ic_add2_box_24dp_white
+    val ICON_SKIP_BACK = R.drawable.ic_skip_previous_24dp
+    val ICON_SKIP_FORWARD = R.drawable.ic_skip_next_24dp
+    val ICON_DONE = R.drawable.ic_done_24dp
+    val ICON_PLAYLIST = R.drawable.ic_playlist_play_24dp
+    val ICON_REORDER = R.drawable.ic_reorder_24dp
 
     const val degreeSymbol = "\u00B0"
     const val prefSeparator = " : : :"

@@ -52,7 +52,9 @@ class HourlyActivity : BaseActivity() {
     // arg0 location number ( "1" being first saved location )
     //
 
-    companion object { const val LOC_NUM = "" }
+    companion object {
+        const val LOC_NUM = ""
+    }
 
     private var htmlShare = listOf<String>()
     private lateinit var card: Card
@@ -96,7 +98,7 @@ class HourlyActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, { htmlShare = UtilityUSHourly.get(locationNumber) }, ::update)
+        FutureVoid({ htmlShare = UtilityUSHourly.get(locationNumber) }, ::update)
     }
 
     private fun update() {
@@ -106,11 +108,11 @@ class HourlyActivity : BaseActivity() {
             UtilityUSHourly.getStringForActivityFromOldApi(htmlShare[1])
         }
         cardVerticalText.set(listOf(
-            hourly.time,
-            hourly.temp,
-            hourly.windSpeed,
-            hourly.windDir,
-            hourly.conditions))
+                hourly.time,
+                hourly.temp,
+                hourly.windSpeed,
+                hourly.windDir,
+                hourly.conditions))
         plotData()
         graphCard.visibility = View.VISIBLE
     }
@@ -133,7 +135,7 @@ class HourlyActivity : BaseActivity() {
         }
         val series = LineGraphSeries(dataPoints.toTypedArray())
         series.color = Color.BLACK
-        with (graph) {
+        with(graph) {
             removeAllSeries()
             viewport.isXAxisBoundsManual = true
             viewport.backgroundColor = Color.LTGRAY
@@ -145,13 +147,13 @@ class HourlyActivity : BaseActivity() {
                     return if (isValueX) {
                         // show normal x values
                         if ((value.toInt() % 10) == 0) {
-                            super.formatLabel(value, isValueX)
+                            super.formatLabel(value, true)
                         } else {
                             ""
                         }
                     } else {
                         // show currency for y values
-                        super.formatLabel(value, isValueX)
+                        super.formatLabel(value, false)
                     }
                 }
             }

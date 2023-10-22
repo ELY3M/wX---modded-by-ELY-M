@@ -26,17 +26,19 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.View
 import com.google.android.material.button.MaterialButton
-import joshuatee.wx.Extensions.setPadding
+import joshuatee.wx.setPadding
 import joshuatee.wx.util.Utility
 
 class Button(context: Context, title: String, icon: Int) : Widget {
 
-    companion object { private const val padding = 15 }
+    companion object {
+        private const val padding = 15
+    }
 
     private val button = MaterialButton(context)
 
     init {
-        with (button) {
+        with(button) {
             text = title
             setIconResource(icon)
             setBackgroundColor(Color.TRANSPARENT)
@@ -56,7 +58,9 @@ class Button(context: Context, title: String, icon: Int) : Widget {
 
     var visibility
         get() = button.visibility
-        set(value) { button.visibility = value }
+        set(value) {
+            button.visibility = value
+        }
 
     override fun getView() = button
 }

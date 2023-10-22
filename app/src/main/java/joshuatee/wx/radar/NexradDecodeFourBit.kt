@@ -58,7 +58,9 @@ internal object NexradDecodeFourBit {
                 }
             }
             dataInputStream.close()
-        } catch (e: IOException) { UtilityLog.handleException(e) }
+        } catch (e: IOException) {
+            UtilityLog.handleException(e)
+        }
         return numberOfRangeBins
     }
 
@@ -96,7 +98,9 @@ internal object NexradDecodeFourBit {
                 }
             }
             dataInputStream.close()
-        } catch (e: IOException) { UtilityLog.handleException(e) }
+        } catch (e: IOException) {
+            UtilityLog.handleException(e)
+        }
         return numberOfRangeBins
     }
 }

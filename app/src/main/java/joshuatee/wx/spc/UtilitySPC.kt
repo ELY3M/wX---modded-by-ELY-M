@@ -24,12 +24,14 @@ package joshuatee.wx.spc
 import android.content.Context
 import android.graphics.Bitmap
 import joshuatee.wx.util.DownloadText
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWatch
+import joshuatee.wx.parseColumn
 import joshuatee.wx.radar.Warnings
 
 object UtilitySpc {

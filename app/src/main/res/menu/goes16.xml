@@ -24,7 +24,7 @@
         android:id="@+id/action_animate"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/animate_icon"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_pause"
         android:icon="@drawable/ic_pause_24dp"
@@ -120,7 +120,6 @@
                     app:showAsAction="never" />
 
 
-
             </menu>
         </item>
         <item
@@ -203,42 +202,42 @@
         </item>
     </group>
     <item
-            android:id="@+id/action_animate_submenu"
-            android:title="@string/animate_icon"
-            app:showAsAction="never">
-            <menu>
-                <item
-                    android:id="@+id/action_a12"
-                    android:title="@string/label_a12"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_a24"
-                    android:title="@string/label_a24"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_a36"
-                    android:title="@string/label_a36"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_a48"
-                    android:title="@string/label_a48"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_a60"
-                    android:title="@string/label_a60"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_a72"
-                    android:title="@string/label_a72"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_a84"
-                    android:title="@string/label_a84"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_a96"
-                    android:title="@string/label_a96"
-                    app:showAsAction="never" />
-            </menu>
-        </item>
+        android:id="@+id/action_animate_submenu"
+        android:title="@string/animate_icon"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/action_a12"
+                android:title="@string/label_a12"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_a24"
+                android:title="@string/label_a24"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_a36"
+                android:title="@string/label_a36"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_a48"
+                android:title="@string/label_a48"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_a60"
+                android:title="@string/label_a60"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_a72"
+                android:title="@string/label_a72"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_a84"
+                android:title="@string/label_a84"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_a96"
+                android:title="@string/label_a96"
+                app:showAsAction="never" />
+        </menu>
+    </item>
 </menu>

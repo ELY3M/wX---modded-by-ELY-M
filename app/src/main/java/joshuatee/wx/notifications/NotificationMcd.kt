@@ -22,7 +22,7 @@
 package joshuatee.wx.notifications
 
 import android.content.Context
-import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
@@ -41,7 +41,9 @@ import joshuatee.wx.util.UtilityLog
 
 internal object NotificationMcd {
 
-    fun locationNeedsMcd() = (0 until Location.numLocations).any { Location.locations.getOrNull(it)?.notificationMcd ?: false }
+    fun locationNeedsMcd() = (0 until Location.numLocations).any {
+        Location.locations.getOrNull(it)?.notificationMcd ?: false
+    }
 
     fun send(context: Context): String {
         var notificationUrls = ""

@@ -28,10 +28,11 @@ import android.util.TypedValue
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import joshuatee.wx.Extensions.swap
+import joshuatee.wx.swap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -41,7 +42,7 @@ object UtilityUI {
     fun immersiveMode(activity: Activity) {
         if (UIPreferences.radarImmersiveMode) {
             WindowCompat.setDecorFitsSystemWindows(activity.window, false)
-            WindowInsetsControllerCompat(activity.window,  activity.window.decorView).let { controller ->
+            WindowInsetsControllerCompat(activity.window, activity.window.decorView).let { controller ->
                 controller.hide(WindowInsetsCompat.Type.systemBars())
                 controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
@@ -79,8 +80,10 @@ object UtilityUI {
     fun statusBarHeight(context: Context): Int {
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
         return if (resourceId > 0) {
+            UtilityLog.d("wxsize", context.resources.getDimensionPixelSize(resourceId).toString())
             context.resources.getDimensionPixelSize(resourceId)
         } else {
+            UtilityLog.d("wxsize", "error in getting status bar height")
             0
         }
     }
@@ -101,7 +104,7 @@ object UtilityUI {
     }
 
     fun spToPx(sp: Int, context: Context): Float =
-        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
 
     fun isTablet(): Boolean {
         val displayMetrics = MyApplication.dm
@@ -112,5 +115,5 @@ object UtilityUI {
     }
 
     fun isLandScape(context: Context): Boolean =
-        context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }

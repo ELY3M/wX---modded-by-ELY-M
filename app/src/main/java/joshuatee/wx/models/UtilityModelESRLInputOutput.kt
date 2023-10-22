@@ -25,8 +25,10 @@ import android.graphics.Bitmap
 import android.content.Context
 import java.util.Locale
 import joshuatee.wx.util.UtilityString
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.parse
 import java.util.regex.Pattern
 
 internal object UtilityModelEsrlInputOutput {
@@ -55,17 +57,17 @@ internal object UtilityModelEsrlInputOutput {
         return runData
     }
 
-    fun getImage(@Suppress("UNUSED_PARAMETER") context: Context, om: ObjectModel, time: String): Bitmap {
+    fun getImage(@Suppress("UNUSED_PARAMETER") ignoredContext: Context, om: ObjectModel, time: String): Bitmap {
         val parentModel = when (om.model) {
             "RAP_NCEP" -> "RAP"
-            "HRRR_NCEP" ->  "HRRR"
+            "HRRR_NCEP" -> "HRRR"
             else -> ""
         }
         val onDemandUrl: String
         val imgUrl: String
         val sectorLocal = om.sector.replace(" ", "")
-                                    .replace("Full", "full")
-                                    .replace("CONUS", "conus")
+                .replace("Full", "full")
+                .replace("CONUS", "conus")
         val param = om.currentParam.replace("_full_", "_" + sectorLocal + "_")
         if (parentModel.contains("RAP")) {
             imgUrl = "$urlBase/" + parentModel + "/for_web/" + om.model.lowercase(Locale.US) +

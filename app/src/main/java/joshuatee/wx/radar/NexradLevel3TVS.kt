@@ -23,14 +23,12 @@ package joshuatee.wx.radar
 
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
-import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.OfficeTypeEnum
+import joshuatee.wx.parse
+import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.To
-import java.io.File
 import java.util.regex.Pattern
 
 internal object NexradLevel3TVS {
@@ -40,7 +38,6 @@ internal object NexradLevel3TVS {
 
     fun decode(radarSite: String): List<Double> {
         val location = UtilityLocation.getSiteLocation(radarSite, OfficeTypeEnum.RADAR)
-
         val data = NexradLevel3TextProduct.download("TVS", radarSite)
 
         //for testing TVS

@@ -23,7 +23,6 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.view.Gravity
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.Location
@@ -55,7 +54,7 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
             text1.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
             text3.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 2)
             text2.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
-            with (hbox) {
+            with(hbox) {
                 makeVertical()
                 addWidget(text1)
                 addWidget(text3)
@@ -86,7 +85,7 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
 
     fun connect(objectDialogue: ObjectDialogue?, dialogueItems: MutableList<String>, radarTimestamps: () -> List<String>) {
         photo.connect {
-            with (dialogueItems) {
+            with(dialogueItems) {
                 clear()
                 add("Edit Location...")
                 add("Force Data Refresh...")
@@ -105,7 +104,7 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
         if (isUS) {
             photo.set(UtilityForecastIcon.getIcon(context, objCc.iconUrl))
         } else {
-            photo.set(UtilityForecastIcon.getIcon(context, UtilityCanada.translateIconNameCurrentConditions(objCc.data, objCc.status)))
+            photo.set(UtilityForecastIcon.getIcon(context, "ra"))
         }
         val sep = " - "
         val conditionTokens = objCc.data.split(sep).dropLastWhile { it.isEmpty() }
@@ -115,10 +114,12 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
             setMiddleLine(items[1].replace("^ ".toRegex(), "") + sep + conditionTokens[1] + sep + conditionTokens[3])
             setStatus(objCc.status + radarTime)
         } else {
-            val items = conditionTokens[0].split("/").dropLastWhile { it.isEmpty() }
-            setTopLine(conditionTokens[4] + "" + items[0] + conditionTokens[2])
-            setMiddleLine(items[1].replace("^ ".toRegex(), "") + sep + conditionTokens[1] + sep + conditionTokens[3])
-            setStatus(objCc.status.replace("^ ".toRegex(), "") + radarTime)
+            if (conditionTokens.isNotEmpty()) {
+                val items = conditionTokens[0].split("/").dropLastWhile { it.isEmpty() }
+                setTopLine(conditionTokens[4] + "" + items[0] + conditionTokens[2])
+                setMiddleLine(items[1].replace("^ ".toRegex(), "") + sep + conditionTokens[1] + sep + conditionTokens[3])
+                setStatus(objCc.status.replace("^ ".toRegex(), "") + radarTime)
+            }
         }
     }
 }

@@ -26,14 +26,18 @@ import joshuatee.wx.common.GlobalVariables
 internal object UtilityWpcRainfallForecast {
 
     val productCode = listOf(
-        "QPF94E",
-        "QPF98E",
-        "QPF99E"
+            "QPF94E",
+            "QPF98E",
+            "QPF99E",
+            "PMDEPD",
+            "PMDEPD",
     )
 
     val urls = listOf(
-        "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
-        "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
-        "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"
+            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
+            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
+            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/99ewbg.gif",
+            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/ero_d45/images/d4wbg.gif",
+            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/ero_d45/images/d5wbg.gif"
     )
 }

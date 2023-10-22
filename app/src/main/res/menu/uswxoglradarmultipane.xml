@@ -18,52 +18,62 @@
 
  -->
 <!-- Modded by ELY M. -->
-
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--
     <item
         android:id="@+id/action_ridmap"
         android:icon="@drawable/ic_public_24dp_white"
         android:title="@string/label_rid_map"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+    --> 	
     <item
         android:id="@+id/action_n0q"
         android:icon="@drawable/br"
         android:title="@string/label_br"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_n0u"
         android:icon="@drawable/bv"
         android:title="@string/label_bv"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 
     <item android:id="@+id/action_n0s"
         android:title="@string/label_srm"
         android:icon="@drawable/srm"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/action_n0b"
         android:icon="@drawable/br_super"
         android:title="@string/label_n0b"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/action_n0g"
         android:icon="@drawable/bv_super"
         android:title="@string/label_n0g"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 		
     <item
         android:id="@+id/action_a"
         android:icon="@drawable/ic_play_arrow_24dp_white"
         android:title="@string/label_a"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_pause_24dp_white"
         android:title="@string/label_toggle_favorite"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_radar1"
         android:title="@string/label_sel_radar1"

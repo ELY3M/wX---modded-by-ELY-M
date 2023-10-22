@@ -57,7 +57,7 @@ internal class NumberPicker(
     private val seekBar = AppCompatSeekBar(context)
 
     init {
-        with (text) {
+        with(text) {
             setPadding(UIPreferences.padding)
             wrap()
             gravity = Gravity.TOP

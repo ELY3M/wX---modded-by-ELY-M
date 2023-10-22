@@ -49,11 +49,11 @@ internal class FlashView private constructor(context: Context, private val liste
                 WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
             }
             return WindowManager.LayoutParams(
-                MATCH_PARENT, MATCH_PARENT, layoutFlag, FLAG_NOT_FOCUSABLE
-                        or FLAG_NOT_TOUCH_MODAL
-                        or FLAG_LAYOUT_NO_LIMITS
-                        or FLAG_LAYOUT_INSET_DECOR
-                        or FLAG_LAYOUT_IN_SCREEN, TRANSLUCENT
+                    MATCH_PARENT, MATCH_PARENT, layoutFlag, FLAG_NOT_FOCUSABLE
+                    or FLAG_NOT_TOUCH_MODAL
+                    or FLAG_LAYOUT_NO_LIMITS
+                    or FLAG_LAYOUT_INSET_DECOR
+                    or FLAG_LAYOUT_IN_SCREEN, TRANSLUCENT
             )
         }
     }

@@ -29,7 +29,7 @@ import kotlin.math.*
 object UtilityMath {
 
     fun distanceOfLine(x1: Double, y1: Double, x2: Double, y2: Double): Double =
-        sqrt((x2 - x1).pow(2.0) + (y2 - y1).pow(2.0))
+            sqrt((x2 - x1).pow(2.0) + (y2 - y1).pow(2.0))
 
     fun computeTipPoint(x0: Double, y0: Double, x1: Double, y1: Double, right: Boolean): List<Double> {
         val dx = x1 - x0
@@ -54,7 +54,7 @@ object UtilityMath {
     }
 
     fun computeMidPoint(x0: Double, y0: Double, x1: Double, y1: Double, fraction: Double): List<Double> =
-        listOf(x0 + fraction * (x1 - x0), y0 + fraction * (y1 - y0))
+            listOf(x0 + fraction * (x1 - x0), y0 + fraction * (y1 - y0))
 
     // 42.98888 to 42.99
     fun latLonFix(x: String): String {
@@ -70,14 +70,14 @@ object UtilityMath {
 
     // convert polar cords to rect
     fun toRect(r: Float, t: Float): FloatArray =
-        floatArrayOf((r * cos(t / (180.0f / PI))).toFloat(), (r * sin(t / (180.0f / PI))).toFloat())
+            floatArrayOf((r * cos(t / (180.0f / PI))).toFloat(), (r * sin(t / (180.0f / PI))).toFloat())
 
     fun unitsPressure(value: String): String {
         val num = To.double(value)
         return if (UIPreferences.unitsM) {
             To.stringFromFloatFixed(num * 33.8637526, 2)
         } else {
-            To.stringFromFloatFixed(num, 2)  + " in"
+            To.stringFromFloatFixed(num, 2) + " in"
         }
     }
 
@@ -88,19 +88,19 @@ object UtilityMath {
     }
 
     internal fun fahrenheitToCelsius(value: Double): String =
-        ((value - 32.0) * 5.0 / 9.0).roundToInt().toString()
+            ((value - 32.0) * 5.0 / 9.0).roundToInt().toString()
 
     // used by celsiusToFahrenheitTable only
     private fun celsiusToFahrenheitAsInt(value: Int): String =
-        (value * 9.0 / 5.0 + 32.0).roundToInt().toString()
+            (value * 9.0 / 5.0 + 32.0).roundToInt().toString()
 
     fun celsiusToFahrenheitTable(): String =
-        (40 downTo -40).joinToString("") {
-            it.toString() + "  " + celsiusToFahrenheitAsInt(it) + GlobalVariables.newline
-        }
+            (40 downTo -40).joinToString("") {
+                it.toString() + "  " + celsiusToFahrenheitAsInt(it) + GlobalVariables.newline
+            }
 
     internal fun pressureMBtoIn(value: String): String =
-        To.stringFromFloatFixed((To.double(value) / 33.8637526), 2) + " in"
+            To.stringFromFloatFixed((To.double(value) / 33.8637526), 2) + " in"
 
     fun pixPerDegreeLon(centerX: Double, factor: Double): Double {
         val radius = 180.0 / PI * (1.0 / cos(Math.toRadians(30.51))) * factor
@@ -121,7 +121,7 @@ object UtilityMath {
 
     // https://training.weather.gov/wdtd/tools/misc/beamwidth/index.htm
     fun getRadarBeamHeight(degree: Double, distance: Double): Double =
-        3.281 * (sin(Math.toRadians(degree)) * distance + distance * distance / 15417.82) * 1000.0
+            3.281 * (sin(Math.toRadians(degree)) * distance + distance * distance / 15417.82) * 1000.0
 
     fun heatIndex(temp: String, rh: String): String {
         val t = To.double(temp)

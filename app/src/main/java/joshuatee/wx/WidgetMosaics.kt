@@ -50,8 +50,7 @@ class WidgetMosaics : AppWidgetProvider() {
 
     private fun getContent(context: Context) {
         FutureVoid(
-                context,
                 { UtilityWidgetDownload.download(context, type) })
-                { UtilityWidget.update(context, type) }
+        { UtilityWidget.update(context, type) }
     }
 }

@@ -22,7 +22,6 @@
 package joshuatee.wx.util
 
 import android.content.Context
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
@@ -30,7 +29,7 @@ import joshuatee.wx.objects.LatLon
 
 class CurrentConditions {
 
-    var isUS = true
+    private var isUS = true
     var topLine = ""
     var data = ""
         private set
@@ -49,9 +48,6 @@ class CurrentConditions {
             process(context, Location.getLatLon(locationNumber))
         } else {
             isUS = false
-            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locationNumber))
-            data = UtilityCanada.getConditions(html)
-            status = UtilityCanada.getStatus(html)
         }
     }
 

@@ -47,7 +47,9 @@ class RtmaActivity : VideoRecordActivity() {
     //  arg1: product (ex. "10m_wnd")
     //
 
-    companion object { const val RID = "" }
+    companion object {
+        const val RID = ""
+    }
 
     private lateinit var objectAnimate: ObjectAnimate
     private lateinit var touchImage: TouchImage
@@ -78,7 +80,7 @@ class RtmaActivity : VideoRecordActivity() {
         readPrefs()
         sector = UtilityRtma.getNearest(Location.latLon)
         oldSector = sector
-        FutureVoid(this, ::getRunTime, ::getContent)
+        FutureVoid(::getRunTime, ::getContent)
     }
 
     private fun setupUI() {
@@ -97,23 +99,23 @@ class RtmaActivity : VideoRecordActivity() {
 
     private fun getContent() {
         setTitle(sector, navDrawer.getLabel())
-        FutureBytes(this, UtilityRtma.getUrl(navDrawer.url, sector, runTimes.getOrNull(runTimeIndex) ?: ""), ::display)
+        FutureBytes(UtilityRtma.getUrl(navDrawer.url, sector, runTimes.getOrNull(runTimeIndex)
+                ?: ""), ::display)
     }
 
     private fun getContentBySector(sector: String) {
         this.sector = sector
         setTitle(sector, navDrawer.getLabel())
-        FutureBytes(this, UtilityRtma.getUrl(navDrawer.url, sector, runTimes.getOrNull(0) ?: ""), ::display)
+        FutureBytes(UtilityRtma.getUrl(navDrawer.url, sector, runTimes.getOrNull(0)
+                ?: ""), ::display)
     }
 
     private fun display(bitmap: Bitmap) {
-        with (touchImage) {
-            set(bitmap)
-            firstRun(prefImagePosition)
-            if (oldSector != sector) {
-                setZoom(1.0f)
-                oldSector = sector
-            }
+        touchImage.set(bitmap)
+        touchImage.firstRun(prefImagePosition)
+        if (oldSector != sector) {
+            touchImage.setZoom(1.0f)
+            oldSector = sector
         }
     }
 
@@ -164,13 +166,14 @@ class RtmaActivity : VideoRecordActivity() {
                     UtilityShare.bitmap(this, navDrawer.getLabel(), touchImage)
                 }
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
     override fun onRestart() {
-        FutureVoid(this, ::getRunTime, ::getContent)
+        FutureVoid(::getRunTime, ::getContent)
         super.onRestart()
     }
 

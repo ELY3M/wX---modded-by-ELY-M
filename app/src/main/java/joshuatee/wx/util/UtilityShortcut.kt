@@ -35,7 +35,7 @@ import joshuatee.wx.activitiesmisc.WfoTextActivity
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.objects.ObjectIntentShortcut
 import joshuatee.wx.objects.ShortcutType
-import joshuatee.wx.radar.AwcRadarMosaicActivity
+import joshuatee.wx.radar.RadarMosaicNwsActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcSwoSummaryActivity
 import joshuatee.wx.vis.GoesActivity
@@ -72,18 +72,22 @@ object UtilityShortcut {
                     intent = ObjectIntentShortcut(context, SevereDashboardActivity::class.java).intent
                     imageId = R.drawable.ntor
                 }
+
                 ShortcutType.AFD -> {
                     intent = ObjectIntentShortcut(context, WfoTextActivity::class.java, WfoTextActivity.URL, arrayOf(Location.wfo, "")).intent
                     imageId = R.drawable.widget_afd
                 }
+
                 ShortcutType.GOES16 -> {
                     intent = ObjectIntentShortcut(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("")).intent
                     imageId = R.drawable.goes
                 }
-                 ShortcutType.RADAR_MOSAIC -> {
-                     intent = ObjectIntentShortcut(context, AwcRadarMosaicActivity::class.java).intent
-                     imageId = R.drawable.widget_radar_mosaic
-                 }
+
+                ShortcutType.RADAR_MOSAIC -> {
+                    intent = ObjectIntentShortcut(context, RadarMosaicNwsActivity::class.java).intent
+                    imageId = R.drawable.widget_radar_mosaic
+                }
+
                 ShortcutType.SPC_SWO_SUMMARY -> {
                     intent = ObjectIntentShortcut(context, SpcSwoSummaryActivity::class.java).intent
                     imageId = R.drawable.spc_sum
@@ -107,7 +111,7 @@ object UtilityShortcut {
         if (android.os.Build.VERSION.SDK_INT < 26) {
             try {
                 toolbar.menu.findItem(R.id.action_pin).isVisible = false
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
         }
@@ -117,7 +121,7 @@ object UtilityShortcut {
         if (android.os.Build.VERSION.SDK_INT < 26) {
             try {
                 menu.findItem(R.id.action_pin).isVisible = false
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
         }

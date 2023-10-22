@@ -22,9 +22,9 @@
 package joshuatee.wx.activitiesmisc
 
 internal class Hourly(
-    val time: String = "",
-    val temp: String = "",
-    val windSpeed: String = "",
-    val windDir: String = "",
-    val conditions: String = ""
+        val time: String = "",
+        val temp: String = "",
+        val windSpeed: String = "",
+        val windDir: String = "",
+        val conditions: String = ""
 )

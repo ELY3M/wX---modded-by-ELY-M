@@ -25,7 +25,7 @@ import android.widget.RelativeLayout
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.Utility
 
-class NexradColorLegend(val activity: VideoRecordActivity, val nexradState: NexradStatePane) {
+class NexradColorLegend(val activity: VideoRecordActivity, private val nexradState: NexradStatePane) {
 
     private var legendShown = false
     private var legend: ViewColorLegend? = null
@@ -49,12 +49,12 @@ class NexradColorLegend(val activity: VideoRecordActivity, val nexradState: Nexr
             legend = ViewColorLegend(activity, nexradState.product)
             nexradState.relativeLayouts[0].addView(legend, layoutParams)
             RadarPreferences.showLegend = true
-            Utility.writePref(activity,"RADAR_SHOW_LEGEND", "true")
+            Utility.writePref(activity, "RADAR_SHOW_LEGEND", "true")
         } else {
             nexradState.relativeLayouts[0].removeView(legend)
             legendShown = false
             RadarPreferences.showLegend = false
-            Utility.writePref(activity,"RADAR_SHOW_LEGEND", "false")
+            Utility.writePref(activity, "RADAR_SHOW_LEGEND", "false")
         }
     }
 

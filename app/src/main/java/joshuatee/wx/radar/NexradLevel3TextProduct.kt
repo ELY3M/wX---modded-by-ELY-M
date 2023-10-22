@@ -21,63 +21,59 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
-import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.Extensions.getInputStream
+import joshuatee.wx.getHtml
+import joshuatee.wx.getInputStream
 import java.io.EOFException
 import java.io.IOException
-import joshuatee.wx.util.UCARRandomAccessFile
-import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
 import java.io.DataInputStream
 
 object NexradLevel3TextProduct {
 
     fun download(product: String, radarSite: String): String =
-        NexradDownload.getRadarFileUrl(radarSite, product).getHtml()
+            NexradDownload.getRadarFileUrl(radarSite, product).getHtml()
 
-    fun readFile(context: Context, fileName: String): String {
-        val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
-        ucarRandomAccessFile.bigEndian = true
-        return read(ucarRandomAccessFile)
-    }
-
-    private fun read(ucarRandomAccessFile: UCARRandomAccessFile?): String {
-        val stringBuilder = StringBuilder(1500)
-        try {
-            ucarRandomAccessFile?.let {
-                while (true) {
-                    if (it.readShort().toInt() == -1) {
-                        break
-                    }
-                }
-                it.skipBytes(26)
-                while (true) {
-                    if (it.readShort().toInt() == -1) {
-                        break
-                    }
-                }
-                try {
-                    while (!it.isAtEndOfFile) {
-                        stringBuilder.append(String(byteArrayOf(it.readByte()), charset("ISO-8859-1")))
-                    }
-                } catch (e: EOFException) {
-                    UtilityLog.handleException(e)
-                } catch (e: OutOfMemoryError) {
-                    UtilityLog.handleException(e)
-                } finally {
-                    try {
-                        it.close()
-                    } catch (e: IOException) {
-                        UtilityLog.handleException(e)
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return stringBuilder.toString()
-    }
+//    fun readFile(context: Context, fileName: String): String {
+//        val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
+//        ucarRandomAccessFile.bigEndian = true
+//        return read(ucarRandomAccessFile)
+//    }
+//    private fun read(ucarRandomAccessFile: UCARRandomAccessFile?): String {
+//        val stringBuilder = StringBuilder(1500)
+//        try {
+//            ucarRandomAccessFile?.let {
+//                while (true) {
+//                    if (it.readShort().toInt() == -1) {
+//                        break
+//                    }
+//                }
+//                it.skipBytes(26)
+//                while (true) {
+//                    if (it.readShort().toInt() == -1) {
+//                        break
+//                    }
+//                }
+//                try {
+//                    while (!it.isAtEndOfFile) {
+//                        stringBuilder.append(String(byteArrayOf(it.readByte()), charset("ISO-8859-1")))
+//                    }
+//                } catch (e: EOFException) {
+//                    UtilityLog.handleException(e)
+//                } catch (e: OutOfMemoryError) {
+//                    UtilityLog.handleException(e)
+//                } finally {
+//                    try {
+//                        it.close()
+//                    } catch (e: IOException) {
+//                        UtilityLog.handleException(e)
+//                    }
+//                }
+//            }
+//        } catch (e: Exception) {
+//            UtilityLog.handleException(e)
+//        }
+//        return stringBuilder.toString()
+//    }
 
     fun getVwp(radarSite: String): String {
         // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.48vwp/SI.kccx/

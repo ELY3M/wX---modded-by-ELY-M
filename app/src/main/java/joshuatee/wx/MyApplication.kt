@@ -145,10 +145,10 @@ class MyApplication : Application() {
             response
         }
         val httpClient = OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
-            .addInterceptor(okHttp3Interceptor)
-            .build()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .addInterceptor(okHttp3Interceptor)
+                .build()
 
         lateinit var preferences: SharedPreferences
         private lateinit var preferencesTelecine: SharedPreferences

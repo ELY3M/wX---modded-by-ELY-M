@@ -78,7 +78,7 @@ class NexradStateMainScreen(context: Context, numberOfPanes: Int, homeScreenToke
     }
 
     fun adjustForTdwr(idx: Int) {
-        with (wxglRenders[idx]) {
+        with(wxglRenders[idx]) {
             if (state.product == "N0Q" && isRidTdwr(state.rid)) {
                 state.product = "TZL"
             }

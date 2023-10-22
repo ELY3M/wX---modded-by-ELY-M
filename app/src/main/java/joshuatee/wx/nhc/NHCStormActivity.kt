@@ -21,16 +21,17 @@
 
 package joshuatee.wx.nhc
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.R
 import joshuatee.wx.notifications.NotificationNhc
+import joshuatee.wx.objects.BitmapAttr
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureText
 import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.CardText
@@ -51,11 +52,13 @@ class NhcStormActivity : BaseActivity() {
     //  1: object ObjectNhcStormDetails
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private lateinit var stormData: NhcStormDetails
     private var product = ""
-    private val bitmaps = mutableListOf<Bitmap>()
+    private var bitmapsAttr = mutableListOf<BitmapAttr>()
     private lateinit var cardText: CardText
     private lateinit var box: VBox
     private lateinit var boxText: VBox
@@ -63,15 +66,26 @@ class NhcStormActivity : BaseActivity() {
     private var imagesPerRow = 2
     private val boxRows = mutableListOf<HBox>()
     private val imageUrls = listOf(
-        "_5day_cone_with_line_and_wind_sm2.png",
-        "_key_messages.png",
-        "WPCQPF_sm2.gif",
-        "WPCERO_sm2.gif",
-        "_earliest_reasonable_toa_34_sm2.png",
-        "_most_likely_toa_34_sm2.png",
-        "_wind_probs_34_F120_sm2.png",
-        "_wind_probs_50_F120_sm2.png",
-        "_wind_probs_64_F120_sm2.png"
+            "_5day_cone_with_line_and_wind_sm2.png",
+            "_key_messages.png",
+            "WPCQPF_sm2.gif",
+            "WPCERO_sm2.gif",
+            "_earliest_reasonable_toa_34_sm2.png",
+            "_most_likely_toa_34_sm2.png",
+            "_wind_probs_34_F120_sm2.png",
+            "_wind_probs_50_F120_sm2.png",
+            "_wind_probs_64_F120_sm2.png"
+    )
+    private val imageTitles = listOf(
+            "Coastal Watches/Warnings and Forecast Cone for Storm Center",
+            "Key Messages",
+            "WPCQPF_sm2.gif",
+            "WPCERO_sm2.gif",
+            "Earliest Reasonable Arrival Time of Tropical-Storm-Force Winds",
+            "Most Likely Arrival Time of Tropical-Storm-Force Winds",
+            "Tropical-Storm-Force Wind Speed Probabilities",
+            "50-knot (58 mph) Wind Speed Probabilities",
+            "Hurricane-Force Wind Speed Probabilities"
     )
     private var textProductUrl = ""
     private var office = "MIA"
@@ -85,6 +99,7 @@ class NhcStormActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc_storm, false)
         stormData = intent.getSerializableExtra(URL) as NhcStormDetails
+//        stormData = IntentCompat.getParcelableExtra(intent, URL, NhcStormDetails::class.java) as NhcStormDetails
         setTitle(stormData.name + " " + stormData.classification, stormData.forTopHeader())
         box = VBox.fromResource(this)
         boxImage = VBox(this)
@@ -108,45 +123,48 @@ class NhcStormActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        if (downloadTimer.isRefreshNeeded(this)) {
-            FutureVoid(this, ::downloadImages, ::showImages)
+        if (downloadTimer.isRefreshNeeded()) {
+            FutureVoid(::downloadImages, ::showImages)
             FutureText(this, textProductUrl, ::showText)
         }
     }
 
     private fun downloadImages() {
-        bitmaps.clear()
+        bitmapsAttr.clear()
         imageUrls.forEach {
             var url = stormData.baseUrl
             if (it == "WPCQPF_sm2.gif" || it == "WPCERO_sm2.gif") {
-                url = url.dropLast(2)
+                // url = url.dropLast(2)
+                url = url.replace(ObjectDateTime.getYearString(), ObjectDateTime.getYearShortString())
             }
-            bitmaps.add((url + it).getImage())
+            bitmapsAttr.add(BitmapAttr((url + it).getImage()))
         }
     }
 
-    fun showImages() {
+    private fun showImages() {
         boxImage.removeChildrenAndLayout()
-        bitmaps.forEachIndexed { index, bitmap ->
-            if (bitmap.width > 100) {
-                if (index % imagesPerRow == 0) {
-                    boxRows.add(HBox(this, boxImage.get()))
-                }
-                val image = Image(this, bitmap, imagesPerRow)
-                boxRows.last().addWidget(image)
-                image.connect {
-                    var url = stormData.baseUrl
-                    if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") {
-                        url = url.dropLast(2)
-                    }
-                    val fullUrl = url + imageUrls[index]
-                    Route.image(this, fullUrl, "")
-                }
+        bitmapsAttr.forEachIndexed { index, b ->
+            var url = stormData.baseUrl
+            if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") {
+                url = url.replace(ObjectDateTime.getYearString(), ObjectDateTime.getYearShortString())
+            }
+            b.url = url + imageUrls[index]
+            b.title = imageTitles[index]
+        }
+        bitmapsAttr = bitmapsAttr.filter { it.width > 100 }.toMutableList()
+        bitmapsAttr.forEachIndexed { index, bitmapAttr ->
+            if (index % imagesPerRow == 0) {
+                boxRows.add(HBox(this, boxImage.get()))
+            }
+            val image = Image(this, bitmapAttr, imagesPerRow)
+            boxRows.last().addWidget(image)
+            image.connect {
+                Route.image(this, bitmapAttr.url, bitmapAttr.title)
             }
         }
     }
 
-    fun showText(s: String) {
+    private fun showText(s: String) {
         boxText.removeChildrenAndLayout()
         cardText = CardText(this, toolbar, toolbarBottom)
         boxText.addWidget(cardText)
@@ -160,12 +178,12 @@ class NhcStormActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_cloud -> Route.visNhc(this, stormData.goesUrl)
-            R.id.action_share -> UtilityShare.text(this, stormData.name, "", bitmaps)
+            R.id.action_share -> UtilityShare.textWithBitmapAttr(this, stormData.name + " " + stormData.forTopHeader(), cardText.text, bitmapsAttr)
             R.id.action_MIATCPEP2 -> Route.wpcText(this, "${office}TCP${stormData.binNumber}")
             R.id.action_MIATCMEP2 -> Route.wpcText(this, "${office}TCM${stormData.binNumber}")
             R.id.action_MIATCDEP2 -> Route.wpcText(this, "${office}TCD${stormData.binNumber}")
             R.id.action_MIAPWSEP2 -> Route.wpcText(this, "${office}PWS${stormData.binNumber}")
-            R.id.action_mute_notification -> NotificationNhc.muteNotification(this, stormData.id)
+            R.id.action_mute_notification -> NotificationNhc.muteNotification(this, stormData.stormId)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -23,16 +23,18 @@ package joshuatee.wx.activitiesmisc
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.AlertDetail
 import joshuatee.wx.ui.Card
+import joshuatee.wx.ui.Fab
 import joshuatee.wx.ui.VBox
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 
 class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
@@ -45,13 +47,16 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 2: "sound" (optional)
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private var alertUrl = ""
     private var capAlert = CapAlert()
     private lateinit var alertDetail: AlertDetail
     private lateinit var box: VBox
     private lateinit var arguments: Array<String>
+    private lateinit var fab: Fab
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.usalerts_detail)
@@ -64,6 +69,7 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun setupUI() {
         box = VBox.fromResource(this)
         Card(this, R.id.cardView)
+        fab = Fab(this, R.id.fab, GlobalVariables.ICON_RADAR) { Route.radarBySite(this, capAlert.getClosestRadar()) }
         objectToolbarBottom.hide(R.id.action_playlist)
         objectToolbarBottom.connect(this)
         alertDetail = AlertDetail(this, box)
@@ -75,12 +81,12 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this, { capAlert = CapAlert.createFromUrl(alertUrl) }, ::update)
+        FutureVoid({ capAlert = CapAlert.createFromUrl(alertUrl) }, ::update)
     }
 
     private fun update() {
         if (capAlert.getClosestRadar() == "") {
-            objectToolbarBottom.hideRadar()
+            fab.visibility = View.GONE
         }
         alertDetail.updateContent(capAlert, alertUrl)
         setTitle(alertDetail.title, alertDetail.wfoTitle)
@@ -93,7 +99,6 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         when (item.itemId) {
             R.id.action_share -> UtilityShare.text(this, capAlert.title + " " + capAlert.area, capAlert.text)
-            R.id.action_radar -> Route.radarBySite(this, capAlert.getClosestRadar())
             else -> return super.onOptionsItemSelected(item)
         }
         return true

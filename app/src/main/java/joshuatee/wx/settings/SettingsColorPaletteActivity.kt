@@ -35,7 +35,7 @@ import joshuatee.wx.radar.NexradUtil
 import joshuatee.wx.radarcolorpalettes.ColorPalette
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFileManagement
 
@@ -52,8 +52,8 @@ class SettingsColorPaletteActivity : BaseActivity() {
     private var type = ""
     private var typeAsInt = 0
     private var globalPosition = 0
-    private lateinit var fab1: Fab
-    private lateinit var fab2: Fab
+    private lateinit var fabAdd: FabExtended
+    private lateinit var fabDelete: FabExtended
     private var builtinStr = ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -62,7 +62,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_twofab, null, false)
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_twofab_colorpal, null, false)
         type = intent.getStringArrayExtra(TYPE)!![0]
         typeAsInt = type.toIntOrNull() ?: 94
         setTitle(ColorPalette.radarColorPalette[typeAsInt]!!, NexradUtil.productCodeStringToName[typeAsInt]!!)
@@ -83,8 +83,8 @@ class SettingsColorPaletteActivity : BaseActivity() {
     }
 
     private fun setupFab() {
-        fab1 = Fab(this, R.id.fab1, R.drawable.ic_reorder_24dp) { addPalFab() }
-        fab2 = Fab(this, R.id.fab2, GlobalVariables.ICON_DELETE_WHITE) { editPalFab() }
+        fabAdd = FabExtended(this, R.id.fab1, GlobalVariables.ICON_REORDER, "Edit") { addPalette() }
+        fabDelete = FabExtended(this, R.id.fab2, GlobalVariables.ICON_DELETE_WHITE, "Delete") { editPalette() }
     }
 
     private val allItemList: List<TileObjectColorPalette>
@@ -131,8 +131,9 @@ class SettingsColorPaletteActivity : BaseActivity() {
             allItems.forEach {
                 if (ColorPalette.radarColorPalette[typeAsInt] == it.colorMapLabel && it.builtin) {
                     builtinStr = "true"
-                    fab2.visibility = View.GONE
-                    fab1.set(GlobalVariables.ICON_ADD2)
+                    fabDelete.visibility = View.GONE
+                    fabAdd.set(GlobalVariables.ICON_ADD2)
+                    fabAdd.text = "Add"
                 }
             }
             return allItems
@@ -142,6 +143,9 @@ class SettingsColorPaletteActivity : BaseActivity() {
         rowListItem = allItemList
         tileAdapterColorPalette = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
         cardList.adapter = tileAdapterColorPalette
+        tileAdapterColorPalette.selectedListItem = globalPosition
+        tileAdapterColorPalette.setListener(::itemClicked)
+        tileAdapterColorPalette.notifyDataSetChanged()
         title = ColorPalette.radarColorPalette[typeAsInt]
         ColorPalette.loadColorMap(this, typeAsInt)
         super.onRestart()
@@ -155,11 +159,11 @@ class SettingsColorPaletteActivity : BaseActivity() {
         return true
     }
 
-    private fun addPalFab() {
+    private fun addPalette() {
         Route(this, SettingsColorPaletteEditor::class.java, SettingsColorPaletteEditor.URL, arrayOf(type, ColorPalette.radarColorPalette[typeAsInt]!!, builtinStr))
     }
 
-    private fun editPalFab() {
+    private fun editPalette() {
         val builtInHelpMsg = "Built-in color palettes can not be deleted."
         if (rowListItem[globalPosition].prefToken == "RADAR_COLOR_PALETTE_$type") {
             if (!rowListItem[globalPosition].builtin) {
@@ -175,6 +179,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 ColorPalette.loadColorMap(this, typeAsInt)
                 rowListItem = allItemList
                 tileAdapterColorPalette = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
+                tileAdapterColorPalette.setListener(::itemClicked)
                 cardList.adapter = tileAdapterColorPalette
             } else {
                 ObjectDialogue(this, builtInHelpMsg)
@@ -186,12 +191,14 @@ class SettingsColorPaletteActivity : BaseActivity() {
         globalPosition = position
         if (rowListItem[position].builtin) {
             builtinStr = "true"
-            fab2.visibility = View.GONE
-            fab1.set(GlobalVariables.ICON_ADD2)
+            fabDelete.visibility = View.GONE
+            fabAdd.set(GlobalVariables.ICON_ADD2)
+            fabAdd.text = "Add"
         } else {
             builtinStr = "false"
-            fab2.visibility = View.VISIBLE
-            fab1.set(R.drawable.ic_reorder_24dp)
+            fabDelete.visibility = View.VISIBLE
+            fabAdd.set(GlobalVariables.ICON_REORDER)
+            fabAdd.text = "Edit"
         }
         if (rowListItem[position].prefToken == "RADAR_COLOR_PALETTE_$type") {
             ColorPalette.radarColorPalette[typeAsInt] = rowListItem[position].colorMapLabel

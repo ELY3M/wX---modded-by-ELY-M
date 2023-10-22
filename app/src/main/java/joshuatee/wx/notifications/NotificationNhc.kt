@@ -47,22 +47,22 @@ object NotificationNhc {
         val storms = Nhc.getTextData(context)
         if (NotificationPreferences.alertNhcEpacNotification) {
             storms.forEach {
-                if (it.id.startsWith("ep")) {
-                    if (!muteStr.contains(it.id)) {
+                if (it.stormId.startsWith("ep")) {
+                    if (!muteStr.contains(it.stormId)) {
                         notificationUrls += sendNotification(context, NotificationPreferences.alertNotificationSoundNhcAtl, it)
                     } else {
-                        UtilityLog.d("wx", "blocking " + it.id)
+                        UtilityLog.d("wx", "blocking " + it.stormId)
                     }
                 }
             }
         }
         if (NotificationPreferences.alertNhcAtlNotification) {
             storms.forEach {
-                if (it.id.startsWith("al")) {
-                    if (!muteStr.contains(it.id)) {
+                if (it.stormId.startsWith("al")) {
+                    if (!muteStr.contains(it.stormId)) {
                         notificationUrls += sendNotification(context, NotificationPreferences.alertNotificationSoundNhcAtl, it)
                     } else {
-                        UtilityLog.d("wx", "blocking " + it.id)
+                        UtilityLog.d("wx", "blocking " + it.stormId)
                     }
                 }
             }
@@ -73,13 +73,14 @@ object NotificationNhc {
     private fun sendNotification(context: Context, soundPref: Boolean, stormData: NhcStormDetails): String {
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val objectPendingIntents = ObjectPendingIntents(context, NhcStormActivity::class.java, NhcStormActivity.URL, stormData)
-        val cancelString = stormData.id + stormData.dateTime
+        //val cancelString = stormData.id + stormData.dateTime
+        val cancelString = stormData.stormId + stormData.advisoryIssuanceNumber
         if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
             val sound = soundPref && !inBlackout
             val objectNotification = ObjectNotification(
                     context,
                     sound,
-                    stormData.id,
+                    stormData.stormId,
                     stormData.summaryForNotification(),
                     objectPendingIntents,
                     GlobalVariables.ICON_NHC_1,

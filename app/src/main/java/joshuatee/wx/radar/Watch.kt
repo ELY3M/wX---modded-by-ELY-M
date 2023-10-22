@@ -46,17 +46,17 @@ internal object Watch {
         val numberList: List<String>
         val watchLatLon: String
         if (type == PolygonType.WATCH) {
-            watchLatLon= PolygonWatch.watchLatlonCombined.value
+            watchLatLon = PolygonWatch.watchLatlonCombined.value
             numberList = PolygonWatch.byType[PolygonType.WATCH]!!.numberList.value.split(":")
         } else {
             numberList = PolygonWatch.byType[type]!!.numberList.value.split(":")
-            watchLatLon= PolygonWatch.byType[type]!!.latLonList.value
+            watchLatLon = PolygonWatch.byType[type]!!.latLonList.value
         }
         val polygons = watchLatLon.split(":").dropLastWhile { it.isEmpty() }
         var notFound = true
         var numberString = ""
         polygons.indices.forEach { z ->
-            val latLons = LatLon.parseStringToLatLons(polygons[z],-1.0, false)
+            val latLons = LatLon.parseStringToLatLons(polygons[z], -1.0, false)
             if (latLons.isNotEmpty()) {
                 val contains = ExternalPolygon.polygonContainsPoint(latLon, latLons)
                 if (contains && notFound) {

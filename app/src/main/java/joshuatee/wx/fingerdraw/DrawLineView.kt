@@ -63,13 +63,13 @@ class DrawLineView : View {
     private var oneDegreeScaleFactor = 0.0f
 
     constructor(
-        context: Context,
-        radarSite: String,
-        mScaleFactor: Float,
-        mPositionX: Float,
-        mPositionY: Float,
-        ortInt: Float,
-        oneDegreeScaleFactor: Float
+            context: Context,
+            radarSite: String,
+            mScaleFactor: Float,
+            mPositionX: Float,
+            mPositionY: Float,
+            ortInt: Float,
+            oneDegreeScaleFactor: Float
     ) : super(context) {
         this.mScaleFactor = mScaleFactor
         this.mPositionX = mPositionX
@@ -89,13 +89,13 @@ class DrawLineView : View {
         isFocusable = true
         isFocusableInTouchMode = true
         this.setOnTouchListener(drawListener)
-        with (paint) {
+        with(paint) {
             color = RadarPreferences.drawToolColor
             isAntiAlias = true
             strokeWidth = RadarPreferences.drawToolSize.toFloat()
             this.textSize = UIPreferences.textSizeLarge
         }
-        with (paintText) {
+        with(paintText) {
             color = if (!RadarPreferences.blackBg) {
                 Color.BLACK
             } else {
@@ -110,7 +110,7 @@ class DrawLineView : View {
     public override fun onDraw(canvas: Canvas) {
         val distance = distanceBetweenTwoPoints(startX, startY, endX, endY)
         paint.alpha = 255
-        with (canvas) {
+        with(canvas) {
             drawLine(startX, startY, endX, endY, paint)
             drawText("mi: " + round(calcMiles()).toString(), startX, startY - 25, paintText)
             val circleEndRadius = 10.0f
@@ -141,7 +141,7 @@ class DrawLineView : View {
     }
 
     private fun distanceBetweenTwoPoints(x1: Float, y1: Float, x2: Float, y2: Float): Float =
-        sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+            sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 
     private inner class DrawListener : OnTouchListener {
         override fun onTouch(view: View, event: MotionEvent): Boolean {

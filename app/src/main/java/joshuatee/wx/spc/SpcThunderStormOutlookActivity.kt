@@ -25,7 +25,7 @@ import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
@@ -64,7 +64,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(this, { urls = UtilitySpc.thunderStormOutlookUrls() }, ::getImages)
+        FutureVoid({ urls = UtilitySpc.thunderStormOutlookUrls() }, ::getImages)
     }
 
     private fun getImages() {
@@ -72,7 +72,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
         box.removeChildrenAndLayout()
         imageSummary = ImageSummary(this, box, bitmaps)
         urls.forEachIndexed { index, url ->
-            FutureVoid(this, { bitmaps[index] = url.getImage() }, { update(index) })
+            FutureVoid({ bitmaps[index] = url.getImage() }, { update(index) })
         }
     }
 

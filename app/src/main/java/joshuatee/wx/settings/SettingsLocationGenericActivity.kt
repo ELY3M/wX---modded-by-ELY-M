@@ -44,14 +44,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import joshuatee.wx.R
-import joshuatee.wx.canada.UtilityCitiesCanada
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.CitiesExtended
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.Card
-import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.ui.VBox
@@ -67,7 +67,9 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     // arg1 location number
     //
 
-    companion object { const val LOC_NUM = "" }
+    companion object {
+        const val LOC_NUM = ""
+    }
 
     // This controls whether or not the title should update based on
     // If this is a location edit (show)
@@ -105,7 +107,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         notifText = findViewById(R.id.notif_text_perm)
         requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
         objectToolbarBottom.connect(this)
-        Fab(this, R.id.fab) { saveLocation() }
+        FabExtended(this, R.id.fab, GlobalVariables.ICON_DONE, "Save Location") { saveLocation() }
         Card(this, R.id.cv1)
     }
 
@@ -125,7 +127,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private fun initializeDataStructures() {
         objectToolbarBottom.find(R.id.action_delete).isVisible = Location.numLocations > 1
         CitiesExtended.create(this)
-        UtilityCitiesCanada.initialize()
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
         Utility.writePref(this, "LOCATION_CANADA_CITY", "")
         Utility.writePref(this, "LOCATION_CANADA_ID", "")
@@ -150,37 +151,36 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     // This is needed because CA locations requires navigating to a new activity FIXME TODO remove after 2023
-    override fun onRestart() {
-        val caProv = Utility.readPref(this, "LOCATION_CANADA_PROV", "")
-        val caCity = Utility.readPref(this, "LOCATION_CANADA_CITY", "")
-        val caId = Utility.readPref(this, "LOCATION_CANADA_ID", "")
-        if (caProv != "" || caCity != "" || caId != "") {
-            editTextLat.setText(resources.getString(R.string.settings_loc_generic_ca_x, caProv))
-            editTextLon.setText(caId)
-            val caLabel = "$caCity, $caProv"
-            editTextLabel.setText(caLabel)
-            settingsLocationGenericSwitches.notificationsCanada(true)
-            saveLocation()
-        }
-        super.onRestart()
-    }
+//    override fun onRestart() {
+//        val caProv = Utility.readPref(this, "LOCATION_CANADA_PROV", "")
+//        val caCity = Utility.readPref(this, "LOCATION_CANADA_CITY", "")
+//        val caId = Utility.readPref(this, "LOCATION_CANADA_ID", "")
+//        if (caProv != "" || caCity != "" || caId != "") {
+//            editTextLat.setText(resources.getString(R.string.settings_loc_generic_ca_x, caProv))
+//            editTextLon.setText(caId)
+//            val caLabel = "$caCity, $caProv"
+//            editTextLabel.setText(caLabel)
+//            settingsLocationGenericSwitches.notificationsCanada(true)
+//            saveLocation()
+//        }
+//        super.onRestart()
+//    }
 
     private fun saveLocation() {
         val lat = editTextLat.text.toString()
         val lon = editTextLon.text.toString()
         val label = editTextLabel.text.toString()
         FutureText2(
-                this,
                 { Location.save(this, locationNumber, lat, lon, label) })
-                { saveStatus ->
-                    PopupMessage(relativeLayout, saveStatus, PopupMessage.short)
-                    updateSubTitle()
-                    if (lat.startsWith("CANADA:")) {
-                        settingsLocationGenericSwitches.notificationsCanada(true)
-                    } else {
-                        settingsLocationGenericSwitches.notificationsCanada(false)
-                    }
-                }
+        { saveStatus ->
+            PopupMessage(relativeLayout, saveStatus, PopupMessage.short)
+            updateSubTitle()
+            if (lat.startsWith("CANADA:")) {
+                settingsLocationGenericSwitches.notificationsCanada(true)
+            } else {
+                settingsLocationGenericSwitches.notificationsCanada(false)
+            }
+        }
     }
 
     override fun onStop() {
@@ -238,14 +238,16 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             changeSearchViewTextColor(searchView)
         }
         // the SearchView's AutoCompleteTextView drop down. For some reason this wasn't working in styles.xml
-        val autoCompleteTextView: SearchView.SearchAutoComplete = searchView.findViewById(R.id.search_src_text)
+        val autoCompleteTextView: SearchView.SearchAutoComplete = searchView.findViewById(androidx.constraintlayout.widget.R.id.search_src_text)
         when {
             UIPreferences.themeIsWhite -> {
                 autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_white)
             }
+
             Utility.isThemeAllBlack() -> {
                 autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_black)
             }
+
             else -> {
                 autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_dark_blue)
             }
@@ -265,9 +267,10 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         if (lat.isNotEmpty() && lon.isNotEmpty()) {
             if (Location.us(lat)) {
                 Route.webView(this, UtilityMap.getUrl(lat, lon, "9"), Location.name)
-            } else {
-                Route.webView(this, UtilityMap.getUrlFromAddress(editTextLabel.text.toString()), Location.name)
             }
+            // else {
+            // Route.webView(this, UtilityMap.getUrlFromAddress(editTextLabel.text.toString()), Location.name)
+            // }
         }
     }
 
@@ -275,20 +278,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         when (item.itemId) {
             R.id.action_delete -> delete()
             R.id.action_map -> showMap()
-            R.id.action_ca -> Route(this, SettingsLocationCanadaActivity::class.java)
-            R.id.action_ab -> openCanadaMap("ab")
-            R.id.action_bc -> openCanadaMap("bc")
-            R.id.action_mb -> openCanadaMap("mb")
-            R.id.action_nb -> openCanadaMap("nb")
-            R.id.action_nl -> openCanadaMap("nl")
-            R.id.action_ns -> openCanadaMap("ns")
-            R.id.action_nt -> openCanadaMap("nt")
-            R.id.action_nu -> openCanadaMap("nu")
-            R.id.action_on -> openCanadaMap("on")
-            R.id.action_pe -> openCanadaMap("pe")
-            R.id.action_qc -> openCanadaMap("qc")
-            R.id.action_sk -> openCanadaMap("sk")
-            R.id.action_yt -> openCanadaMap("yt")
             R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.activity_settings_generic_help))
             else -> return super.onOptionsItemSelected(item)
         }
@@ -301,6 +290,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 actionGps()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -359,10 +349,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 }
             }
         }
-    }
-
-    private fun openCanadaMap(s: String) {
-        Route(this, SettingsLocationCanadaMapActivity::class.java, SettingsLocationCanadaMapActivity.URL, arrayOf(s))
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {

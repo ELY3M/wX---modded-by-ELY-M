@@ -44,12 +44,12 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
         notifyDataSetChanged()
     }
 
-    fun setItem(index: Int, str: String) {
-        if (index < dataSet.size) {
-            dataSet[index] = str
-        }
-        notifyDataSetChanged()
-    }
+//    fun setItem(index: Int, str: String) {
+//        if (index < dataSet.size) {
+//            dataSet[index] = str
+//        }
+//        notifyDataSetChanged()
+//    }
 
     // used in FavRemoveActivity for SPCMeso
     override fun toString(): String {

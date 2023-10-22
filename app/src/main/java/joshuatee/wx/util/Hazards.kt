@@ -21,9 +21,8 @@
 
 package joshuatee.wx.util
 
-import joshuatee.wx.Extensions.parseColumn
+import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.Location
@@ -45,13 +44,6 @@ class Hazards {
             urls = hazards.parseColumn("\"id\": \"(" + GlobalVariables.nwsApiUrl + ".*?)\"")
             titles = hazards.parseColumn("\"event\": \"(.*?)\"")
         }
-    }
-
-    // Canada
-    constructor(html: String) {
-        val hazArr = UtilityCanada.getHazards(html)
-        hazardsShort = hazArr[0]
-        hazards = hazArr[1]
     }
 
     // adhoc forecast

@@ -28,7 +28,7 @@ import joshuatee.wx.settings.UtilityLocation
 class ProjectionNumbers {
 
     var scale = 0.0
-    var scaleFloat = 0.0f
+    private var scaleFloat = 0.0f
     var oneDegreeScaleFactor = 0.0
     var x = "0.0"
     var y = "0.0"
@@ -58,12 +58,14 @@ class ProjectionNumbers {
                 yCenter = 500.0
                 polygonWidth = 2.0
             }
+
             ProjectionType.WX_RENDER_48 -> {
                 scale = 450.00
                 xCenter = 500.0
                 yCenter = 500.0
                 polygonWidth = 1.0
             }
+
             ProjectionType.WX_OGL -> {
                 scale = 190.00
                 xCenter = 0.0

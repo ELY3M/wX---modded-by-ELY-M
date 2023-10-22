@@ -28,7 +28,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.audio.AudioPlayActivity
@@ -43,7 +43,6 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.DownloadText
 import joshuatee.wx.util.To
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityImageMap
 import joshuatee.wx.util.UtilityShare
@@ -58,7 +57,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 2: product ( always LSR )
     //
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private var firstTime = true
     private var wfo = ""
@@ -109,7 +110,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, lsrList.toString(), "LSR",  wfo)) {
+        if (audioPlayMenu(item.itemId, lsrList.toString(), "LSR", wfo)) {
             return true
         }
         when (item.itemId) {
@@ -148,6 +149,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     }
                 }
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -164,7 +166,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = UIPreferences.favorites[FavoriteType.WFO]!!
         box.removeChildren()
-        FutureVoid(this, ::downloadFirst, ::getLsrFromWfo)
+        FutureVoid(::downloadFirst, ::getLsrFromWfo)
     }
 
     private fun downloadFirst() {
@@ -174,7 +176,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         )
     }
 
-    private fun download(i: Int , version: Int) {
+    private fun download(i: Int, version: Int) {
         lsrList[i] = DownloadText.byProduct("LSR$wfo", version)
     }
 
@@ -201,7 +203,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 textList.add(CardText(this))
                 box.addWidget(textList.last())
                 val iFinal = i
-                FutureVoid(this, { download(iFinal, version) }, { update(iFinal) })
+                FutureVoid({ download(iFinal, version) }, { update(iFinal) })
                 i += 1
             }
         }

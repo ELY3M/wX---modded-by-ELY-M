@@ -24,7 +24,7 @@ package joshuatee.wx.radar
 
 import android.app.Activity
 import android.content.Context
-import joshuatee.wx.Extensions.insert
+import joshuatee.wx.insert
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
@@ -37,7 +37,6 @@ import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMath
 import kotlin.math.roundToInt
@@ -68,7 +67,7 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
     val changeListener = object : NexradRenderSurfaceView.OnProgressChangeListener {
         override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
             if (progress != 50000) {
-                with (nexradState) {
+                with(nexradState) {
                     if (numberOfPanes > 1) {
                         curRadar = idxInt
                     }
@@ -76,15 +75,15 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
                         curRadar = idx
                     }
                     setupContextMenu(
-                        activity,
-                        radarLongPressItems,
-                        nexradArguments.locXCurrent,
-                        nexradArguments.locYCurrent,
-                        surface.latLon,
-                        render.wxglNexradLevel3,
-                        render.state.rid,
-                        render.state.closestRadarSites,
-                        longPressDialogue
+                            activity,
+                            radarLongPressItems,
+                            nexradArguments.locXCurrent,
+                            nexradArguments.locYCurrent,
+                            surface.latLon,
+                            render.wxglNexradLevel3,
+                            render.state.rid,
+                            render.state.closestRadarSites,
+                            longPressDialogue
                     )
                 }
             } else {
@@ -149,17 +148,18 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
             }
             // end Thanks to Ely
             val obsSite = Metar.findClosestObsSite(context, latLon)
+            with(longPressList) {
             //elys mod
-            longPressList.add("Radar Mosaic")
-            longPressList.add("GOES Satellite")
-            ///
-            longPressList.add("Observation: " + obsSite.name + " (" + obsSite.distance + " mi)")
-            longPressList.add("Forecast: $latLonTitle")
-            longPressList.add("Meteogram: " + obsSite.name)
-            longPressList.add("Radar status message: " + closestRadarSites.first().name)
+                add("Radar Mosaic")
+                add("GOES Satellite")
+                add("Observation: ${obsSite.name} ${obsSite.distance} mi")
+                add("Forecast: $latLonTitle")
+                add("Meteogram: ${obsSite.name}")
+                add("Radar status message: ${closestRadarSites.first().name}")
+            }
             //elys mod
             if (RadarPreferences.spotters || RadarPreferences.spottersLabel) longPressList.add("Spotter Info")
-	        longPressList.add("Userpoint info: " + latLonTitle)
+	    longPressList.add("Userpoint info: " + latLonTitle)
             longPressList.add("Add userpoint for: " + latLonTitle)
             longPressList.add("Delete userpoint for: " + latLonTitle)
             longPressList.add("Delete all userpoints")
@@ -167,8 +167,8 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
         }
 
         private fun getWpcFrontTimeStamp(context: Context): String {
-            var timeStamp = Utility.readPref(context,"WPC_FRONTS_TIMESTAMP", "")
-                                    .replace(ObjectDateTime.getYear().toString(), "")
+            var timeStamp = Utility.readPref(context, "WPC_FRONTS_TIMESTAMP", "")
+                    .replace(ObjectDateTime.getYear().toString(), "")
             if (timeStamp.length > 6) {
                 timeStamp = timeStamp.insert(4, " ")
             }
@@ -192,7 +192,7 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
                 s.startsWith("Radar status message") -> NexradRenderUI.showRadarStatus(activity, radarSite)
                 s.startsWith("Beam") -> {}
             	//elys mod //need context....
-            	s.contains("Spotter Info") -> NexradRenderUI.showSpotterInfo(activity, latLon, MyApplication.appContext)
+            	s.contains("Spotter Info") -> NexradRenderUI.showSpotterInfo(activity, latLon)
             	s.contains("Userpoint info") -> NexradRenderUI.showUserPointInfo(activity, MyApplication.appContext, latLon)
             	s.contains("Add userpoint for") -> NexradRenderUI.addUserPoint(activity, MyApplication.appContext, latLon)
             	s.contains("Delete userpoint for") ->  NexradRenderUI.deleteUserPoint(activity, MyApplication.appContext, latLon)

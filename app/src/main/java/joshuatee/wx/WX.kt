@@ -45,14 +45,13 @@ import joshuatee.wx.ui.Drawer
 import joshuatee.wx.ui.Fab
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectToolbar
-import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 
 class WX : CommonActionBarFragment() {
 
-    private var backButtonCounter = 0
+    //    private var backButtonCounter = 0
     private lateinit var vpa: ViewPagerAdapter
     private lateinit var voiceRecognitionIcon: MenuItem
     private var tabIndex = 0
@@ -135,7 +134,7 @@ class WX : CommonActionBarFragment() {
         viewPager.offscreenPageLimit = 4
         vpa = ViewPagerAdapter(this)
         viewPager.adapter = vpa
-        with (slidingTabLayout) {
+        with(slidingTabLayout) {
             tabGravity = TabLayout.GRAVITY_FILL
             TabLayoutMediator(this, viewPager) { tab, position ->
                 tab.text = "OBJECT ${(position + 1)}"
@@ -170,26 +169,26 @@ class WX : CommonActionBarFragment() {
     //
     // On the main screen prevent back button from closing app unless user changes pref
     //
-    // TODO FIXME deprecate in 2023
-    override fun onBackPressed() {
-        if (UIPreferences.prefPreventAccidentalExit) {
-            if (backButtonCounter < 1) {
-                PopupMessage(slidingTabLayout, "Please tap the back button one more time to close wX.")
-                backButtonCounter += 1
-            } else {
-                finish()
-            }
-        } else {
-            super.onBackPressed()
-        }
-    }
+    // deprecated in Sep 2023
+//    override fun onBackPressed() {
+//        if (UIPreferences.prefPreventAccidentalExit) {
+//            if (backButtonCounter < 1) {
+//                PopupMessage(slidingTabLayout, "Please tap the back button one more time to close wX.")
+//                backButtonCounter += 1
+//            } else {
+//                finish()
+//            }
+//        } else {
+//            super.onBackPressed()
+//        }
+//    }
 
     private fun refreshDynamicContent() {
         if (!UIPreferences.simpleMode) {
             val tabStr = UtilitySpc.checkSpc()
             vpa.setTabTitles(1, tabStr[0])
             vpa.setTabTitles(2, tabStr[1])
-            with (slidingTabLayout) {
+            with(slidingTabLayout) {
                 if (tabCount > 2) {
                     getTabAt(0)!!.text = UIPreferences.tabHeaders[0]
                     getTabAt(1)!!.text = vpa.tabTitles[1]
@@ -210,13 +209,15 @@ class WX : CommonActionBarFragment() {
     }
 
     private val onBroadcast = object : BroadcastReceiver() {
-        override fun onReceive(ctxt: Context, i: Intent) { refreshDynamicContent() }
+        override fun onReceive(ctxt: Context, i: Intent) {
+            refreshDynamicContent()
+        }
     }
 
     override fun onRestart() {
         super.onRestart()
         voiceRecognitionIcon.isVisible = UIPreferences.vrButton
-        backButtonCounter = 0
+//        backButtonCounter = 0
         refreshDynamicContent()
     }
     
@@ -242,30 +243,34 @@ class WX : CommonActionBarFragment() {
             KeyEvent.KEYCODE_H -> if (event.isCtrlPressed) openHourly()
             KeyEvent.KEYCODE_O -> if (event.isCtrlPressed) openActivity(this, "NHC")
             KeyEvent.KEYCODE_L -> if (event.isCtrlPressed) {
-                    val currentFragment = supportFragmentManager.fragments.first() as LocationFragment
-                    currentFragment.showLocations()
-                }
+                val currentFragment = supportFragmentManager.fragments.first() as LocationFragment
+                currentFragment.showLocations()
+            }
+
             KeyEvent.KEYCODE_I -> if (event.isCtrlPressed) openActivity(this, "WPCIMG")
             KeyEvent.KEYCODE_Z -> if (event.isCtrlPressed) openActivity(this, "WPCTEXT")
             KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showMainScreenShortCuts())
             KeyEvent.KEYCODE_J -> if (event.isCtrlPressed) {
-                    tabIndex += -1
-                    if (tabIndex < 0) {
-                        tabIndex = 2
-                    }
-                    viewPager.currentItem = tabIndex
+                tabIndex += -1
+                if (tabIndex < 0) {
+                    tabIndex = 2
                 }
+                viewPager.currentItem = tabIndex
+            }
+
             KeyEvent.KEYCODE_K -> if (event.isCtrlPressed) {
-                    tabIndex += 1
-                    if (tabIndex > 2) {
-                        tabIndex = 0
-                    }
-                    viewPager.currentItem = tabIndex
+                tabIndex += 1
+                if (tabIndex > 2) {
+                    tabIndex = 0
                 }
+                viewPager.currentItem = tabIndex
+            }
+
             KeyEvent.KEYCODE_REFRESH -> {
                 val currentFragment = supportFragmentManager.fragments.first() as LocationFragment
                 currentFragment.getContent()
             }
+
             else -> return super.onKeyUp(keyCode, event)
         }
         return true

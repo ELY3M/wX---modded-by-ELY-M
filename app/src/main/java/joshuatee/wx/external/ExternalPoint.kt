@@ -29,6 +29,6 @@ import joshuatee.wx.objects.LatLon
  */
 class ExternalPoint(val x: Float, val y: Float) {
 
-    constructor(latLon: LatLon): this(latLon.lat.toFloat(), latLon.lon.toFloat())
+    constructor(latLon: LatLon) : this(latLon.lat.toFloat(), latLon.lon.toFloat())
 
 }

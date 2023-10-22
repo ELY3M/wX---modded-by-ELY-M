@@ -27,15 +27,15 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 class ObjectNotification(
-    val context: Context,
-    val sound: Boolean,
-    val title: String,
-    val text: String,
-    val objectPendingIntents: ObjectPendingIntents,
-    val iconAlert: Int,
-    val iconAction: Int,
-    val buttonStr: String,
-    val priority: Int = NotificationCompat.PRIORITY_HIGH
+        val context: Context,
+        val sound: Boolean,
+        val title: String,
+        val text: String,
+        val objectPendingIntents: ObjectPendingIntents,
+        val iconAlert: Int,
+        val iconAction: Int,
+        val buttonStr: String,
+        val priority: Int = NotificationCompat.PRIORITY_HIGH
 ) {
 
     fun send(cancelString: String) {

@@ -25,7 +25,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.CardBlackHeaderText
@@ -66,14 +66,14 @@ class SevereDashboardActivity : BaseActivity() {
     private lateinit var boxWarnings: VBox
     private var downloadTimer = DownloadTimer("SEVERE_DASHBOARD_ACTIVITY")
     private val watchesByType = mapOf(
-        PolygonType.WATCH to SevereNotice(PolygonType.WATCH),
-        PolygonType.MCD to SevereNotice(PolygonType.MCD),
-        PolygonType.MPD to SevereNotice(PolygonType.MPD),
+            PolygonType.WATCH to SevereNotice(PolygonType.WATCH),
+            PolygonType.MCD to SevereNotice(PolygonType.MCD),
+            PolygonType.MPD to SevereNotice(PolygonType.MPD),
     )
     private val warningsByType = mapOf(
-        PolygonWarningType.TornadoWarning to SevereWarning(PolygonWarningType.TornadoWarning),
-        PolygonWarningType.ThunderstormWarning to SevereWarning(PolygonWarningType.ThunderstormWarning),
-        PolygonWarningType.FlashFloodWarning to SevereWarning(PolygonWarningType.FlashFloodWarning),
+            PolygonWarningType.TornadoWarning to SevereWarning(PolygonWarningType.TornadoWarning),
+            PolygonWarningType.ThunderstormWarning to SevereWarning(PolygonWarningType.ThunderstormWarning),
+            PolygonWarningType.FlashFloodWarning to SevereWarning(PolygonWarningType.FlashFloodWarning),
     )
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -105,16 +105,16 @@ class SevereDashboardActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        if (downloadTimer.isRefreshNeeded(this)) {
+        if (downloadTimer.isRefreshNeeded()) {
             bitmaps = MutableList(2) { UtilityImg.getBlankBitmap() }
             listOf(PolygonType.WATCH, PolygonType.MCD, PolygonType.MPD).forEach {
-                FutureVoid(this, { downloadWatch(it) }, ::showItems)
+                FutureVoid({ downloadWatch(it) }, ::showItems)
             }
-            FutureVoid(this, { bitmaps[0] = DownloadImage.byProduct(this, "USWARN") }, ::showItems)
-            FutureVoid(this, { bitmaps[1] = UtilitySpc.getStormReportsTodayUrl().getImage() }, ::showItems)
+            FutureVoid({ bitmaps[0] = DownloadImage.byProduct(this, "USWARN") }, ::showItems)
+            FutureVoid({ bitmaps[1] = UtilitySpc.getStormReportsTodayUrl().getImage() }, ::showItems)
             // TODO FIXME .values()
             warningsByType.forEach { (_, severeWarning) ->
-                FutureVoid(this, { severeWarning.download() }, ::updateWarnings)
+                FutureVoid({ severeWarning.download() }, ::updateWarnings)
             }
         }
     }
@@ -124,7 +124,8 @@ class SevereDashboardActivity : BaseActivity() {
         watchesByType[type]!!.getBitmaps(PolygonWatch.byType[type]!!.storage.value)
     }
 
-    @Synchronized private fun updateWarnings() {
+    @Synchronized
+    private fun updateWarnings() {
         boxWarnings.removeChildrenAndLayout()
         listOf(PolygonWarningType.TornadoWarning, PolygonWarningType.ThunderstormWarning, PolygonWarningType.FlashFloodWarning).forEach {
             val severeWarning = warningsByType[it]!!
@@ -134,7 +135,7 @@ class SevereDashboardActivity : BaseActivity() {
                     if (w.isCurrent) {
                         val cardDashAlertItem = CardDashAlertItem(this, w)
                         boxWarnings.addWidget(cardDashAlertItem)
-                        cardDashAlertItem.connect { Route.hazard(this, w.url)  }
+                        cardDashAlertItem.connect { Route.hazard(this, w.url) }
                     }
                 }
             }
@@ -162,7 +163,8 @@ class SevereDashboardActivity : BaseActivity() {
         return subTitle
     }
 
-    @Synchronized private fun showItems() {
+    @Synchronized
+    private fun showItems() {
         boxImages.removeChildrenAndLayout()
         boxRows.clear()
         numbers = mutableListOf("USWARN", "STORM_REPORTS")
@@ -183,7 +185,7 @@ class SevereDashboardActivity : BaseActivity() {
             boxRows.last().addWidget(card)
             if (it < 2) {
                 if (it == 0) {
-                    card.connect { Route.usAlerts(this) }
+                    card.connect { Route.alerts(this) }
                 } else {
                     card.connect { Route.spcStormReports(this) }
                 }

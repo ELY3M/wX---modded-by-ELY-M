@@ -25,8 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -37,8 +36,7 @@
             android:layout_alignParentBottom="true"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/MyDarkToolbarStyle">
-        </androidx.appcompat.widget.Toolbar>
+            app:popupTheme="@style/MyDarkToolbarStyle" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -52,34 +50,68 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/MyDarkToolbarStyle">
-            </androidx.appcompat.widget.Toolbar>
+                app:popupTheme="@style/MyDarkToolbarStyle" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                >
+            <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/main_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <joshuatee.wx.ui.TouchImageView2
-                    android:id="@+id/iv1"
-                    android:layout_width="0px"
-                    android:layout_height="0px"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:gravity="center_horizontal" />
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <joshuatee.wx.ui.TouchImageView2
-                    android:id="@+id/iv2"
-                    android:layout_width="0px"
-                    android:layout_height="0px"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:gravity="center_horizontal" />
+                    <joshuatee.wx.ui.TouchImageView2
+                        android:id="@+id/iv1"
+                        android:layout_width="0px"
+                        android:layout_height="0px"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:gravity="center_horizontal" />
 
-            </LinearLayout>
+                    <joshuatee.wx.ui.TouchImageView2
+                        android:id="@+id/iv2"
+                        android:layout_width="0px"
+                        android:layout_height="0px"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:gravity="center_horizontal" />
+
+                </LinearLayout>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginStart="@dimen/fab_margin3"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:layout_marginEnd="@dimen/fab_margin"
+                    android:layout_marginBottom="@dimen/fab_margin"
+                    app:elevation="@dimen/fab_elevation"
+                    app:layout_anchor="@id/iv2"
+                    app:layout_anchorGravity="bottom|right"
+                    app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+                    app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp_white"
+                    android:contentDescription="@string/forward_arrow" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginEnd="@dimen/fab_margin2"
+                    android:layout_marginBottom="@dimen/fab_margin"
+                    app:elevation="@dimen/fab_elevation"
+                    app:layout_anchor="@id/iv2"
+                    app:layout_anchorGravity="bottom|right"
+                    app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+                    app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp_white"
+                    android:contentDescription="@string/back_arrow" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </LinearLayout>
     </RelativeLayout>
 

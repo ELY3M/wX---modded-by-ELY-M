@@ -26,25 +26,43 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import java.util.Locale
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.parse
 
 internal object UtilityModelNsslWrfInputOutput {
 
     private const val baseUrl = "https://cams.nssl.noaa.gov"
+    fun runTime(om: ObjectModel): RunTimeData {
+        val runData = RunTimeData()
+        var modelCode = ""
+        when (om.model) {
+            "WRF" -> {
+                modelCode = "wrf_nssl"
+            }
 
-    val runTime: RunTimeData
-        get() {
-            val runData = RunTimeData()
-            val htmlRunStatus = baseUrl.getHtml()
-            val html = htmlRunStatus.parse("\\{model: \"fv3_nssl\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
-            val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
-            val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
-            val mostRecentRun = day + time
-            runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRun, 24, "yyyyMMddHH","yyyyMMddHH", 4))
-            runData.mostRecentRun = mostRecentRun
-            return runData
+            "WRF_3KM" -> {
+                modelCode = "wrf_nssl_3km"
+            }
+
+            "HRRRV3" -> {
+                modelCode = "hrrrv3"
+            }
+
+            "FV3" -> {
+                modelCode = "fv3_nssl"
+            }
         }
+        val htmlRunStatus = ("$baseUrl/?model=$modelCode").getHtml()
+        val html = htmlRunStatus.parse("\\{model: \"$modelCode\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
+        val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
+        val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
+        val mostRecentRun = day + time
+        runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRun, 24, "yyyyMMddHH", "yyyyMMddHH", 4))
+        runData.mostRecentRun = mostRecentRun
+        return runData
+    }
 
     fun getImage(context: Context, om: ObjectModel, timeOriginal: String): Bitmap {
         val time = timeOriginal.split(" ")[0]

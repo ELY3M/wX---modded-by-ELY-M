@@ -28,7 +28,7 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import joshuatee.wx.Extensions.getInputStream
+import joshuatee.wx.getInputStream
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
@@ -60,7 +60,9 @@ object CanvasCreate {
             inputStream?.let { UtilityIO.saveInputStream(context, it, "l2") }
             try {
                 inputStream?.close()
-            } catch (e: Exception) { UtilityLog.handleException(e) }
+            } catch (e: Exception) {
+                UtilityLog.handleException(e)
+            }
         }
         val layers = mutableListOf<Drawable>()
         val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
@@ -117,7 +119,8 @@ object CanvasCreate {
 
     fun bitmapForColorPalette(context: Context, product: Int): Bitmap {
         val fileName = "nids_dvn_" + product + "_archive"
-        UtilityIO.saveRawToInternalStorage(context, NexradUtil.productCodeStringToResourceFile[product] ?: R.raw.dvn94, fileName)
+        UtilityIO.saveRawToInternalStorage(context, NexradUtil.productCodeStringToResourceFile[product]
+                ?: R.raw.dvn94, fileName)
         val layers = mutableListOf<Drawable>()
         val colorDrawable = if (RadarPreferences.blackBg) {
             ColorDrawable(Color.BLACK)
@@ -126,7 +129,8 @@ object CanvasCreate {
         }
         try {
             val bitmapCanvas = Bitmap.createBitmap(imageWidth, imageHeight, Config.ARGB_8888)
-            CanvasRadial8Bit.decodeAndPlot(context, bitmapCanvas, fileName, NexradUtil.productCodeStringToCode[product] ?: "N0Q")
+            CanvasRadial8Bit.decodeAndPlot(context, bitmapCanvas, fileName, NexradUtil.productCodeStringToCode[product]
+                    ?: "N0Q")
             layers.add(colorDrawable)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         } catch (e: Exception) {

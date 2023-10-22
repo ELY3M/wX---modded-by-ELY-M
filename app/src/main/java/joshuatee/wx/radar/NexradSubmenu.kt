@@ -46,7 +46,7 @@ class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState:
 
     init {
         starButton = objectToolbarBottom.getFavIcon()
-        with (objectToolbarBottom) {
+        with(objectToolbarBottom) {
             animateButton = find(R.id.action_a)
             tiltMenu = find(R.id.action_tilt)
             tiltMenuOption4 = find(R.id.action_tilt4)
@@ -64,7 +64,7 @@ class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState:
             quadPaneJump.isVisible = false
         }
         if (!UIPreferences.radarImmersiveMode) {
-            with (objectToolbarBottom) {
+            with(objectToolbarBottom) {
                 hide(R.id.action_blank)
                 hide(R.id.action_level3_blank)
                 hide(R.id.action_level2_blank)

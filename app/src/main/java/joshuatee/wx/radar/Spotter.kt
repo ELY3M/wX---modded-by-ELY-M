@@ -61,13 +61,7 @@ class Spotter internal constructor(
     var freq = ""
     var note = ""
     var firstName = ""
-    var lastName = ""
-/*
-    var latD = 0.0
-        private set
-    var lonD = 0.0
-        private set
-*/	
+    var lastName = ""	
     val latLon = LatLon(lat, lon)
 
     init {
@@ -92,7 +86,6 @@ class Spotter internal constructor(
     }
 
     override fun toString() = "$firstName $lastName"
-
 }
 
 

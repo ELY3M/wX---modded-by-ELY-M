@@ -23,32 +23,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
 
-            <include layout="@layout/widget_toolbar_top" />
+        <include layout="@layout/widget_toolbar_top" />
 
-            <TableLayout
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/dividerColor"
+            android:dividerPadding="0px"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="0dip"
+            android:stretchColumns="*">
+
+            <joshuatee.wx.ui.TouchImageView2
+                android:id="@+id/iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@color/dividerColor"
-                android:dividerPadding="0px"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="0dip"
-                android:stretchColumns="*">
+                android:layout_gravity="center"
+                android:scaleType="fitCenter" />
 
-                <joshuatee.wx.ui.TouchImageView2
-                    android:id="@+id/iv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:scaleType="fitCenter" />
-
-            </TableLayout>
-        </LinearLayout>
+        </TableLayout>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/left_drawer"

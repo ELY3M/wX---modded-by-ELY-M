@@ -25,7 +25,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
-import joshuatee.wx.Extensions.setPadding
+import joshuatee.wx.setPadding
 import joshuatee.wx.fragments.UtilityLocationFragment
 import joshuatee.wx.settings.UIPreferences
 
@@ -34,7 +34,7 @@ class Photo(context: Context) : Widget {
     private val imageView = ImageView(context)
 
     fun set(bitmap: Bitmap) {
-        with (imageView) {
+        with(imageView) {
             setImageBitmap(bitmap)
             setPadding(UIPreferences.paddingSmall)
             val layoutParams = this.layoutParams

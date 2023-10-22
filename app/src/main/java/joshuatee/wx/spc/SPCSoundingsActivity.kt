@@ -27,9 +27,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.Extensions.parse
-import joshuatee.wx.Extensions.safeGet
+import joshuatee.wx.getHtml
+import joshuatee.wx.parse
+import joshuatee.wx.safeGet
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
@@ -51,7 +51,9 @@ import joshuatee.wx.util.UtilityShare
 
 class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
-    companion object { const val URL = "" }
+    companion object {
+        const val URL = ""
+    }
 
     private var imgUrl = ""
     private lateinit var touchImage: TouchImage
@@ -100,7 +102,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         } else {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
-        FutureBytes2(this, { UtilitySpcSoundings.getImage(this, office) }, ::showImage)
+        FutureBytes2({ UtilitySpcSoundings.getImage(this, office) }, ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {
@@ -144,7 +146,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun setPlotAndGet(upperAir: String) {
         this.upperAir = upperAir
-        FutureBytes2(this, ::downloadSpcPlot, ::showSpcPlot)
+        FutureBytes2(::downloadSpcPlot, ::showSpcPlot)
     }
 
     private fun mapSwitch(location: String) {
@@ -173,6 +175,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
                     }
                 }
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

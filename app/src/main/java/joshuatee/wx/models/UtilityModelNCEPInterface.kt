@@ -41,7 +41,8 @@ internal object UtilityModelNcepInterface {
             "POLAR",
             "RAP",
             "SREF",
-            "GFS-WAVE"
+            "GEFS-WAVE",
+            "GFS-WAVE",
     )
 
     val sectorsGfs = listOf(
@@ -74,6 +75,7 @@ internal object UtilityModelNcepInterface {
     val sectorsNamHires = listOf(
             "CONUS",
             "ALASKA",
+            "Hawaii",
             "US-NW",
             "US-SW",
             "US-NC",
@@ -148,7 +150,7 @@ internal object UtilityModelNcepInterface {
             "US-SE"
     )
 
-    val sectorsHref= listOf(
+    val sectorsHref = listOf(
             "CONUS",
             "US-NW",
             "US-SW",
@@ -188,22 +190,60 @@ internal object UtilityModelNcepInterface {
             "ARCTIC"
     )
 
-    val sectorsGfsWave = listOf(
+    val sectorsGefsWave = listOf(
+            "AFRICA",
             "ALASKA",
             "ARCTIC",
             "ATL-PAC",
             "ATLANTIC",
+            "EAST-GOA",
             "EAST-PAC",
+            "EUROPE",
             "GOM",
+            "GUAM",
             "HAWAII",
+            "INDIA",
+            "MID-ATL",
             "NE-COAST",
             "NORTH-CAL",
             "NORTH-PAC",
             "PAC-REGION",
+            "POLAR",
+            "PR",
             "SE-COAST",
             "SOUTH-CAL",
+            "US-SAMOA",
             "WA-OR",
-            "WEST-ATL"
+            "WEST-ATL",
+            "WEST-GOA"
+    )
+
+    val sectorsGfsWave = listOf(
+            "AFRICA",
+            "ALASKA",
+            "ARCTIC",
+            "ATL-PAC",
+            "ATLANTIC",
+            "EAST-GOA",
+            "EAST-PAC",
+            "EUROPE",
+            "GOM",
+            "GUAM",
+            "HAWAII",
+            "INDIA",
+            "MID-ATL",
+            "NE-COAST",
+            "NORTH-CAL",
+            "NORTH-PAC",
+            "PAC-REGION",
+            "POLAR",
+            "PR",
+            "SE-COAST",
+            "SOUTH-CAL",
+            "US-SAMOA",
+            "WA-OR",
+            "WEST-ATL",
+            "WEST-GOA"
     )
 
     val sectorsStofs = listOf(
@@ -225,8 +265,11 @@ internal object UtilityModelNcepInterface {
     )
 
     val sectorsNbm = listOf(
+            "ALASKA",
             "CONUS",
-            "NAMER"
+            "HAWAII",
+            "NAMER",
+            "PR",
     )
 
     val paramsGfs = listOf(
@@ -239,6 +282,7 @@ internal object UtilityModelNcepInterface {
             "precip_p48",
             "precip_p60",
             "precip_ptot",
+            "precip_rate_type",
             "sim_radar_comp",
             "snodpth_chng",
             "1000_500_thick",
@@ -272,6 +316,7 @@ internal object UtilityModelNcepInterface {
             "Total Precipitation every 48 hours",
             "Total Precipitation every 60 hours",
             "Total Accumulated Precipitation of Period",
+            "Precip Rate(IN/HR), 1000-500MB Thickness",
             "Composite Radar Reflectivity",
             "Snow Depth Change from F00",
             "MSLP, 1000-500mb thickness and 3-, or 12-hourly total precipitation",
@@ -305,6 +350,7 @@ internal object UtilityModelNcepInterface {
             "precip_p48",
             "precip_p60",
             "precip_ptot",
+            "precip_rate_type",
             "sim_radar_1km",
             "snodpth_chng",
             "1000_500_thick",
@@ -338,6 +384,7 @@ internal object UtilityModelNcepInterface {
             "Total Precipitation every 48 hours",
             "Total Precipitation every 60 hours",
             "Total Accumulated Precipitation of Period",
+            "Precip Rate(IN/HR), 1000-500MB Thickness",
             "Simulated Radar Reflectivity 1km",
             "Snow Depth Change from F00",
             "MSLP, 1000-500mb thickness, 3-hourly total precipitation",
@@ -419,6 +466,7 @@ internal object UtilityModelNcepInterface {
             "precip_p01",
             "precip_ptot",
             "precip_rate",
+            "precip_rate_type",
             "snow_total",
             "sim_radar_1km",
             "sim_radar_comp",
@@ -455,6 +503,7 @@ internal object UtilityModelNcepInterface {
             "Hourly Total Precipitation",
             "Total Accumulated Precipitation",
             "Precipitation Rate",
+            "Precip Rate(IN/HR), 1000-500MB Thickness",
             "Total Accumulated Snowfall",
             "Simulated Radar Reflectivity 1km",
             "Composite Radar Reflectivity",
@@ -497,6 +546,7 @@ internal object UtilityModelNcepInterface {
             "precip_p48",
             "precip_p60",
             "precip_ptot",
+            "precip_rate_type",
             "sim_radar_1km",
             "sim_radar_comp",
             "snodpth_chng",
@@ -541,6 +591,7 @@ internal object UtilityModelNcepInterface {
             "Total Precipitation every 48 hours",
             "Total Precipitation every 60 hours",
             "Total Accumulated Precipitation of Period",
+            "Precip Rate(IN/HR), 1000-500MB Thickness",
             "Simulated Radar Reflectivity 1km",
             "Composite Radar Reflectivity",
             "Snow Depth Change from F00",
@@ -853,6 +904,32 @@ internal object UtilityModelNcepInterface {
             "925mb Winds"
     )
 
+    val paramsGefsWave = listOf(
+            "peak_dir_per",
+            "sig_wv_ht",
+            "wsea_dir_per",
+            "wsea_wv_ht",
+            "swell1_wv_ht",
+            "swell1_dir_per",
+            "swell2_wv_ht",
+            "swell2_dir_per",
+            "swell3_wv_ht",
+            "swell3_dir_per"
+    )
+
+    val labelsGefsWave = listOf(
+            "Peak Wave Direction and Period (SEC)",
+            "Significant Wave Heights (M) and Wind (KTS)",
+            "Wind Sea Direction and Period (SEC)",
+            "Wind Sea Wave Height (M) and Wind (KTS)",
+            "Primary Swell Wave Height (M) and Wind (KTS)",
+            "Primary Swell Direction and Period (SEC)",
+            "Secondary Swell Wave Height (M) and Wind (KTS)",
+            "Secondary Swell Direction and Period (SEC)",
+            "Tertiary Swell Wave Height (M) and Wind (KTS)",
+            "Tertiary Swell Direction and Period (SEC)",
+    )
+
     val paramsGfsWave = listOf(
             "peak_dir_per",
             "sig_wv_ht",
@@ -861,18 +938,22 @@ internal object UtilityModelNcepInterface {
             "swell1_wv_ht",
             "swell1_dir_per",
             "swell2_wv_ht",
-            "swell2_dir_per"
+            "swell2_dir_per",
+            "swell3_wv_ht",
+            "swell3_dir_per"
     )
 
     val labelsGfsWave = listOf(
-            "Peak Wave Direction and Period (sec)",
-            "Significant Wave Height and Wind",
-            "Wind Sea Direction and Period (sec)",
-            "Wind Sea Wave Height and Wind (sec)",
-            "Primary Swell Wave Height and Wind Image (sec)",
-            "Primary Swell Direction and Period (sec)",
-            "Secondary Swell Wave Height and Wind (sec)",
-            "Secondary Swell Direction and Period (sec)"
+            "Peak Wave Direction and Period (SEC)",
+            "Significant Wave Heights (M) and Wind (KTS)",
+            "Wind Sea Direction and Period (SEC)",
+            "Wind Sea Wave Height (M) and Wind (KTS)",
+            "Primary Swell Wave Height (M) and Wind (KTS)",
+            "Primary Swell Direction and Period (SEC)",
+            "Secondary Swell Wave Height (M) and Wind (KTS)",
+            "Secondary Swell Direction and Period (SEC)",
+            "Tertiary Swell Wave Height (M) and Wind (KTS)",
+            "Tertiary Swell Direction and Period (SEC)",
     )
 
     val paramsStofs = listOf(
@@ -1003,7 +1084,7 @@ internal object UtilityModelNcepInterface {
             "850mb Temperature, Wind, and Height"
     )
 
-    val paramsHref= listOf(
+    val paramsHref = listOf(
             "mean_precip_p01",
             "mean_precip_p03",
             "mean_precip_ptot",
@@ -1142,71 +1223,71 @@ internal object UtilityModelNcepInterface {
     )
 
     val modelHrwFv3Params = listOf(
-        "precip_p01",
-        "precip_p03",
-        "precip_p06",
-        "precip_p12",
-        "precip_p24",
-        "precip_p36",
-        "precip_p48",
-        "precip_ptot",
-        "sim_radar_1km",
-        "sim_radar_comp",
-        "1000_500_thick",
-        "1000_850_thick",
-        "850_700_thick",
-        "10m_wnd",
-        "10m_wnd_precip",
-        "10m_wnd_sfc_gust",
-        "2m_dewp_10m_wnd",
-        "2m_temp_10m_wnd",
-        "best_cape_cin",
-        "sfc_cape_cin",
-        "helicity_1km",
-        "helicity_3km",
-        "max_updraft_hlcy",
-        "echo_top",
-        "ceiling",
-        "vis",
-        "250_wnd_ht",
-        "300_wnd_ht",
-        "500_vort_ht",
-        "700_rh_ht",
-        "850_temp_ht"
+            "precip_p01",
+            "precip_p03",
+            "precip_p06",
+            "precip_p12",
+            "precip_p24",
+            "precip_p36",
+            "precip_p48",
+            "precip_ptot",
+            "sim_radar_1km",
+            "sim_radar_comp",
+            "1000_500_thick",
+            "1000_850_thick",
+            "850_700_thick",
+            "10m_wnd",
+            "10m_wnd_precip",
+            "10m_wnd_sfc_gust",
+            "2m_dewp_10m_wnd",
+            "2m_temp_10m_wnd",
+            "best_cape_cin",
+            "sfc_cape_cin",
+            "helicity_1km",
+            "helicity_3km",
+            "max_updraft_hlcy",
+            "echo_top",
+            "ceiling",
+            "vis",
+            "250_wnd_ht",
+            "300_wnd_ht",
+            "500_vort_ht",
+            "700_rh_ht",
+            "850_temp_ht"
     )
 
     val modelHrwFv3Labels = listOf(
-        "Total Precipitation every 1 hour",
-        "Total Precipitation every 3 hours",
-        "Total Precipitation every 6 hours",
-        "Total Precipitation every 12 hours",
-        "Total Precipitation every 24 hours",
-        "Total Precipitation every 36 hours",
-        "Total Precipitation every 48 hours",
-        "Total Accumulated Precipitation",
-        "Simulated Radar Reflectivity 1km",
-        "Simulated Composite Radar Reflectivity",
-        "MSLP, 1000-500mb thickness, 3-hourly total precipitation",
-        "MSLP, 1000-850mb thickness, 3-hourly total precipitation",
-        "MSLP, 850-700mb thickness, 3-hourly total precipitation",
-        "10 meter Wind",
-        "MSLP, 10m wind, 3-hourly total precip, 2m temperature",
-        "10 meter wind gust",
-        "2 meter Dew Point and 10 meter wind",
-        "2 meter Temperature and 10 meter Wind",
-        "Most Unstable Convective Available Potential Energy and Convective Inhibition",
-        "Surface-Based Convective Available Potential Energy and Convective Inhibition",
-        "0-1km Helicity and Storm Motion",
-        "0-3km Helicity and Storm Motion",
-        "Max 2-5km Updraft Helicity ",
-        "Echo Tops",
-        "Cloud Ceiling ",
-        "Visibility",
-        "250mb Wind and Height",
-        "300mb Wind and Height",
-        "500mb Vorticity, Wind, and Height",
-        "700mb Relative Humidity, Wind, and Height",
-        "850mb Temperature, Wind, and Height"
+            "Total Precipitation every 1 hour",
+            "Total Precipitation every 3 hours",
+            "Total Precipitation every 6 hours",
+            "Total Precipitation every 12 hours",
+            "Total Precipitation every 24 hours",
+            "Total Precipitation every 36 hours",
+            "Total Precipitation every 48 hours",
+            "Total Accumulated Precipitation",
+            "Simulated Radar Reflectivity 1km",
+            "Simulated Composite Radar Reflectivity",
+            "MSLP, 1000-500mb thickness, 3-hourly total precipitation",
+            "MSLP, 1000-850mb thickness, 3-hourly total precipitation",
+            "MSLP, 850-700mb thickness, 3-hourly total precipitation",
+            "10 meter Wind",
+            "MSLP, 10m wind, 3-hourly total precip, 2m temperature",
+            "10 meter wind gust",
+            "2 meter Dew Point and 10 meter wind",
+            "2 meter Temperature and 10 meter Wind",
+            "Most Unstable Convective Available Potential Energy and Convective Inhibition",
+            "Surface-Based Convective Available Potential Energy and Convective Inhibition",
+            "0-1km Helicity and Storm Motion",
+            "0-3km Helicity and Storm Motion",
+            "Max 2-5km Updraft Helicity ",
+            "Echo Tops",
+            "Cloud Ceiling ",
+            "Visibility",
+            "250mb Wind and Height",
+            "300mb Wind and Height",
+            "500mb Vorticity, Wind, and Height",
+            "700mb Relative Humidity, Wind, and Height",
+            "850mb Temperature, Wind, and Height"
     )
 
     // grep title /tmp/a | egrep -o ">.*</a>" | sed 's/>/\"/' | sed 's/<\/a>/\"\,/'

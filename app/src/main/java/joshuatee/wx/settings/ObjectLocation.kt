@@ -29,8 +29,6 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
     val x: String
     val y: String
     val name: String
-    private val countyCurrent: String
-    private val zoneCurrent: String
     val wfo: String
     val rid: String
     val state: String
@@ -54,8 +52,6 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
         x = Utility.readPref(context, "LOC" + jStr + "_X", "0.0")
         y = Utility.readPref(context, "LOC" + jStr + "_Y", "0.0")
         name = Utility.readPref(context, "LOC" + jStr + "_LABEL", "")
-        countyCurrent = Utility.readPref(context, "COUNTY$jStr", "")
-        zoneCurrent = Utility.readPref(context, "ZONE$jStr", "")
         wfo = Utility.readPref(context, "NWS$jStr", "")
         rid = Utility.readPref(context, "RID$jStr", "")
         nwsStateCurrent = Utility.readPref(context, "NWS" + jStr + "_STATE", "")
@@ -88,8 +84,6 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
         Utility.writePref(context, "LOC" + iStr + "_X", x)
         Utility.writePref(context, "LOC" + iStr + "_Y", y)
         Utility.writePref(context, "LOC" + iStr + "_LABEL", name)
-        Utility.writePref(context, "COUNTY$iStr", countyCurrent)
-        Utility.writePref(context, "ZONE$iStr", zoneCurrent)
         Utility.writePref(context, "NWS$iStr", wfo)
         Utility.writePref(context, "RID$iStr", rid)
         Utility.writePref(context, "NWS" + iStr + "_STATE", nwsStateCurrent)

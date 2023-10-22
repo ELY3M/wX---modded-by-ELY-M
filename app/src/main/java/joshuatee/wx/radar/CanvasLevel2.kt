@@ -56,6 +56,7 @@ import joshuatee.wx.util.UtilityMath
 internal object CanvasLevel2 {
 
     private const val DECOMP_FN = "l2.decomp"
+
     // FIXME needs refactor - all utilNexrad*
     fun decodeAndPlot(context: Context, bitmap: Bitmap, prod: String) {
         val canvas = Canvas(bitmap)
@@ -148,11 +149,11 @@ internal object CanvasLevel2 {
                         paint.color = zeroColor
                     else
                         paint.color = Color.rgb(
-                            cR.get(level).toInt() and 0xFF,
-                            cG.get(level).toInt() and 0xFF,
-                            cB.get(level).toInt() and 0xFF
+                                cR.get(level).toInt() and 0xFF,
+                                cG.get(level).toInt() and 0xFF,
+                                cB.get(level).toInt() and 0xFF
                         )
-                    with (path) {
+                    with(path) {
                         rewind() // only needed when reusing this path for a new build
                         moveTo(xy1[0], xy1[1])
                         lineTo(xy2[0], xy2[1])

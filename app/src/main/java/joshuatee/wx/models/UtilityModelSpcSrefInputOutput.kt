@@ -24,8 +24,10 @@ package joshuatee.wx.models
 import android.content.Context
 import android.graphics.Bitmap
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.parse
+import joshuatee.wx.parseColumn
 
 internal object UtilityModelSpcSrefInputOutput {
 
@@ -44,7 +46,9 @@ internal object UtilityModelSpcSrefInputOutput {
             }
             runData.listRunAddAll(runTimes)
             runData.imageCompleteStr = tmpTxt
-            runData.mostRecentRun = runData.listRun.first()
+            if (runData.listRun.isNotEmpty()) {
+                runData.mostRecentRun = runData.listRun.first()
+            }
             return runData
         }
 

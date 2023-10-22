@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 
-internal class TabScreen (fragmentActivity: FragmentActivity, view: View, prefToken: String, tileObjects: MutableList<TileObject>) {
+internal class TabScreen(fragmentActivity: FragmentActivity, view: View, prefToken: String, tileObjects: MutableList<TileObject>) {
 
     init {
         val gridLayoutManager = GridLayoutManager(fragmentActivity, UIPreferences.tilesPerRow)

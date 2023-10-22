@@ -21,27 +21,33 @@
 
 package joshuatee.wx.ui
 
+import android.Manifest
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.view.Gravity
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.radar.RadarGeometry
+import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
-class Switch(context: Context, label: String, pref: String, strId: Int) : Widget {
+class Switch(context: Activity, label: String, pref: String, strId: Int) : Widget {
 
     private val card = Card(context)
     private val checkBox = CheckBox(context)
 
     init {
         val text = Text(context)
-        with (text) {
+        with(text) {
             wrap()
             setPadding(UIPreferences.paddingSettings)
             text.text = label
@@ -67,11 +73,10 @@ class Switch(context: Context, label: String, pref: String, strId: Int) : Widget
                 "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
                 "USE_NWS_API_HOURLY",
                 "LIGHTNING_USE_GOES",
-                "USE_AWC_MOSAIC",
                 "SHOW_RADAR_WHEN_PAN",
         )
         checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
-             || ( pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")
+                || (pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")
         checkBox.setOnCheckedChangeListener { compoundButton, _ ->
             if (compoundButton.isChecked) {
                 //
@@ -114,6 +119,13 @@ class Switch(context: Context, label: String, pref: String, strId: Int) : Widget
                     Utility.restart()
                 }
             }
+            if (pref == "NOTIF_TTS") {
+                if (NotificationPreferences.notifTts != Utility.readPref(context, "NOTIF_TTS", "false").startsWith("t")) {
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 5002)
+                    }
+                }
+            }
             when (pref) {
                 "COD_WARNINGS_DEFAULT", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
@@ -137,7 +149,9 @@ class Switch(context: Context, label: String, pref: String, strId: Int) : Widget
 
     var visibility
         get() = card.visibility
-        set(value) { card.visibility = value }
+        set(value) {
+            card.visibility = value
+        }
 
     override fun getView() = card.getView()
 

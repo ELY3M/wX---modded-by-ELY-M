@@ -87,8 +87,8 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
             }
             t2 += GlobalVariables.newline + preferences.getString("UPDTIME_WIDGET", "No data")
         }
-        remoteViews.setTextViewText(R.id.widget_tv1, String.format(formatString, temp, t1))
-        remoteViews.setTextViewText(R.id.widget_tv2, String.format(formatString, temp, t2))
+        remoteViews.setTextViewText(R.id.widget_tv1, String.format(formatString, t1))
+        remoteViews.setTextViewText(R.id.widget_tv2, String.format(formatString, t2))
         var iconString = preferences.getString("7DAY_ICONS_WIDGET", "NoData")
         iconString = preferences.getString("CC_WIDGET_ICON_URL", "NULL")!! + "!" + iconString
         val icons = iconString.split("!")

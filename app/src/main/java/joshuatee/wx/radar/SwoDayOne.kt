@@ -21,13 +21,14 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
 import android.graphics.Color
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.parseAcrossLines
+import joshuatee.wx.parseColumnAcrossLines
 import joshuatee.wx.util.To
 
 internal object SwoDayOne {
@@ -41,8 +42,8 @@ internal object SwoDayOne {
             Color.YELLOW,
             Color.rgb(0, 100, 0))
 
-    fun get(context: Context) {
-        if (timer.isRefreshNeeded(context)) {
+    fun get() {
+        if (timer.isRefreshNeeded()) {
             /*	... CATEGORICAL ...
 
 		SLGT   26488256 27058145 27138124 27337986

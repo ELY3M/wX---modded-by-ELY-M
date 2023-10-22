@@ -26,7 +26,6 @@ import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.app.ActivityCompat
 import java.util.Locale
@@ -41,7 +40,7 @@ import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.ui.RecyclerViewGeneric
@@ -57,7 +56,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private var playListString = ""
     private val prefToken = "PLAYLIST"
     private lateinit var adapter: PlayListAdapter
-    private lateinit var fabPause: Fab
+    private lateinit var fabPause: FabExtended
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
     private lateinit var recyclerView: RecyclerViewGeneric
@@ -80,8 +79,8 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun setupFab() {
-        Fab(this, R.id.fab) { playAll() }
-        fabPause = Fab(this, R.id.fab3) { playItemFab() }
+        FabExtended(this, R.id.fab, GlobalVariables.ICON_PLAYLIST, "Play All") { playAll() }
+        fabPause = FabExtended(this, R.id.fab3, GlobalVariables.ICON_PAUSE_PRESSED, "Play/Pause") { playItemFab() }
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             GlobalVariables.ICON_PAUSE_PRESSED
         } else {
@@ -130,9 +129,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        FutureVoid(this,
+        FutureVoid(
                 { UtilityPlayList.downloadAll(this) })
-                { updateListNoInit(); adapter.notifyDataSetChanged() }
+        { updateListNoInit(); adapter.notifyDataSetChanged() }
     }
 
     private fun updateList() {
@@ -165,9 +164,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun getLongString(code: String): String =
             "$code;" + Utility.readPref(
-            this,
-            "PLAYLIST_" + code + "_TIME",
-            "unknown"
+                    this,
+                    "PLAYLIST_" + code + "_TIME",
+                    "unknown"
             ) + "  (size: " + Utility.readPref(this, "PLAYLIST_$code", "").length + ")"
 
     private val isStoragePermissionGranted: Boolean

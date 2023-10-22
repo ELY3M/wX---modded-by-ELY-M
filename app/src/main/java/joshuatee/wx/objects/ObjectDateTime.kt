@@ -21,7 +21,7 @@
 
 package joshuatee.wx.objects
 
-import joshuatee.wx.Extensions.parse
+import joshuatee.wx.parse
 import joshuatee.wx.radar.RID
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
@@ -84,9 +84,9 @@ class ObjectDateTime() {
             // time comes in as follows 2018.02.11 2353 UTC
             // https://en.wikipedia.org/wiki/ISO_8601
             val returnTime = time.trim()
-                                    .replace(" UTC", "")
-                                    .replace(".", "")
-                                    .replace(" ", " ") + "00"
+                    .replace(" UTC", "")
+                    .replace(".", "")
+                    .replace(" ", " ") + "00"
             // time should now be as "20220225T095300.000Z"
             // text has a timezone "Z" so 2nd arg is null
             // time converted to the following to parse 20220226 115300
@@ -129,6 +129,10 @@ class ObjectDateTime() {
 
         // hourly old / UtilityRadarUI
         fun getYear(): Int = ObjectDateTime().dateTime.year
+
+        fun getYearString(): String = ObjectDateTime().dateTime.year.toString()
+
+        fun getYearShortString(): String = ObjectDateTime().dateTime.year.toString().substring(2)
 
         private fun getHour(): Int = ObjectDateTime().dateTime.hour
 
@@ -248,7 +252,7 @@ class ObjectDateTime() {
             val sunTimes = UtilityTimeSunMoon.getSunriseSunsetFromObs(location)
             val sunRiseDate = sunTimes[0]
             val sunSetDate = sunTimes[1]
-            val currentTime  = ObjectDateTime()
+            val currentTime = ObjectDateTime()
             val fallsBetween = currentTime.isAfter(sunRiseDate) && currentTime.isBefore(sunSetDate)
             val currentTimeTomorrow = ObjectDateTime()
             currentTimeTomorrow.addHours(24)

@@ -25,12 +25,12 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
-import joshuatee.wx.Extensions.swap
+import joshuatee.wx.swap
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.ui.PopupMessage
@@ -53,7 +53,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_homescreen, R.menu.settings_homescreen, true)
         setTitle("Manage Home Screen", "Tap item to delete or move.")
-        Fab(this, R.id.fab, GlobalVariables.ICON_ADD) { dialogueMain.show() }
+        FabExtended(this, R.id.fab_image, GlobalVariables.ICON_MAP, "Add Image") { dialogueImages.show() }
+        FabExtended(this, R.id.fab_text, GlobalVariables.ICON_ADD, "Add Text Products") { dialogueMain.show() }
         objectToolbarBottom.connect(this)
         homeScreenFavOrig = UIPreferences.homescreenFav
         recyclerView = ObjectRecyclerView(this, R.id.card_list, labels, ::prodClicked)
@@ -122,7 +123,6 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_img -> dialogueImages.show()
             R.id.action_afd -> dialogueAfd.show()
             R.id.action_radar -> dialogueRadar.show()
             R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.homescreen_help_label))
@@ -130,6 +130,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 UIPreferences.homescreenFav = UIPreferences.homeScreenFavDefault
                 updateList()
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -211,12 +212,12 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionRadarNexrad(key: String) = GlobalArrays.radars
-                .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
-                ?.let { "$it (NEXRAD)" } ?: ""
+            .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
+            ?.let { "$it (NEXRAD)" } ?: ""
 
     private fun findPositionRadarTdwr(key: String) = GlobalArrays.tdwrRadars
-                .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
-                ?.let { "$it (TDWR)" } ?: ""
+            .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
+            ?.let { "$it (TDWR)" } ?: ""
 
     override fun onStop() {
         if (UIPreferences.homescreenFav != homeScreenFavOrig) {
@@ -235,6 +236,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                     super.onStop()
                 }
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -242,7 +244,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun prodClicked(position: Int) {
         val bottomSheetFragment = BottomSheetFragment(this, position, recyclerView.getItem(position), false)
-        with (bottomSheetFragment) {
+        with(bottomSheetFragment) {
             functions = listOf(::deleteItem, ::moveUp, ::moveDown)
             labelList = listOf("Delete Item", "Move Up", "Move Down")
             show(supportFragmentManager, bottomSheetFragment.tag)

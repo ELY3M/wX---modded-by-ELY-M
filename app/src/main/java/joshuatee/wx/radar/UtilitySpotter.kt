@@ -23,7 +23,7 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import joshuatee.wx.Extensions.getHtmlWithNewLine
+import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.DownloadTimer
@@ -62,8 +62,8 @@ object UtilitySpotter {
     // thanks Landei
     // http://stackoverflow.com/questions/6720236/sorting-an-arraylist-of-objects-by-last-name-and-firstname-in-java
 
-    fun get(context: Context): List<Spotter> {
-        if (timer.isRefreshNeeded(context)) {
+    fun get(): List<Spotter> {
+        if (timer.isRefreshNeeded()) {
             spotterList.clear()
             reportsList.clear()
             val lats = mutableListOf<String>()
@@ -75,7 +75,6 @@ object UtilitySpotter {
             val lines = html.split(GlobalVariables.newline).dropLastWhile { it.isEmpty() }
             lines.forEach { line ->
                 val items = line.split(";;").dropLastWhile { it.isEmpty() }
-
                 if (items.size > 15) {
                     spotterList.add(
                             Spotter(

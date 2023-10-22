@@ -13,10 +13,10 @@ import joshuatee.wx.util.UtilityImg
 // thanks http://inducesmile.com/android/android-gridlayoutmanager-with-recyclerview-in-material-design/
 
 internal class TileAdapter(
-    val context: Context,
-    private val itemList: MutableList<TileObject>,
-    private val tilesPerRow: Int,
-    private val prefVar: String
+        val context: Context,
+        private val itemList: MutableList<TileObject>,
+        private val tilesPerRow: Int,
+        private val prefVar: String
 ) : RecyclerView.Adapter<RecyclerViewHolders>(), ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolders {
@@ -29,7 +29,7 @@ internal class TileAdapter(
         val layoutParams = holder.imageView.layoutParams
         layoutParams.width = MyApplication.dm.widthPixels / tilesPerRow
         layoutParams.height = layoutParams.width * bitmap.height / bitmap.width
-        with (holder) {
+        with(holder) {
             imageView.layoutParams = layoutParams
             imageView.setImageBitmap(bitmap)
             imageView.contentDescription = itemList[position].description
@@ -37,7 +37,7 @@ internal class TileAdapter(
     }
 
     override fun getItemCount(): Int = this.itemList.size
-    
+
     override fun onItemDismiss(position: Int) {
         itemList.removeAt(position)
         notifyItemRemoved(position)

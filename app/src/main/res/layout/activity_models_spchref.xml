@@ -25,8 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -62,8 +61,7 @@
                 android:padding="0dip"
                 android:stretchColumns="*">
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/main_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">

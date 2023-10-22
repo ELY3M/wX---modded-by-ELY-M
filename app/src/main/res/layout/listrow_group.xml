@@ -1,4 +1,5 @@
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/textView1"
     android:layout_width="wrap_content"
     android:layout_height="?android:attr/listPreferredItemHeight"
@@ -10,9 +11,10 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:textColor="#fff"
-    android:textSize="@dimen/normal_text" />
+    android:textSize="@dimen/normal_text"
+    tools:ignore="Overdraw" />
 
 
-<!--
-android:background="@color/primary_dark_blue"
--->
+    <!--
+    android:background="@color/primary_dark_blue"
+    -->

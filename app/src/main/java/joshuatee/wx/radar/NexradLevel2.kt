@@ -24,7 +24,6 @@ package joshuatee.wx.radar
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import android.content.Context
-import joshuatee.wx.Jni
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.RadarPreferences
@@ -57,32 +56,16 @@ class NexradLevel2 {
     fun decodeAndPlot(context: Context, fileName: String, prod: String, radarStatusStr: String, idxStr: String, performDecompression: Boolean) {
         val decompFileName = "$fileName.decomp$idxStr"
         val productCode: Short = if (prod == "L2VEL") 154 else 153
-        if (RadarPreferences.useJni) {
-            ibuff.position(0)
-            obuff.position(0)
+        if (performDecompression) {
             try {
-                Jni.level2Decompress(
-                    UtilityIO.getFilePath(context, fileName),
-                    UtilityIO.getFilePath(context, decompFileName),
-                    ibuff,
-                    obuff,
-                    productCode.toInt()
-                )
+                val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName), "r", 1024 * 256 * 10)
+                dis.bigEndian = true
+                dis.close()
+                NexradLevel2Util.decompress(context, fileName, decompFileName, productCode.toInt())
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
-            }
-        } else {
-            if (performDecompression) {
-                try {
-                    val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName), "r", 1024 * 256 * 10)
-                    dis.bigEndian = true
-                    dis.close()
-                    NexradLevel2Util.decompress(context, fileName, decompFileName, productCode.toInt())
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                } catch (e: OutOfMemoryError) {
-                    UtilityLog.handleException(e)
-                }
+            } catch (e: OutOfMemoryError) {
+                UtilityLog.handleException(e)
             }
         }
         radialStartAngle.order(ByteOrder.nativeOrder())
@@ -94,18 +77,8 @@ class NexradLevel2 {
         msecs.order(ByteOrder.nativeOrder())
         msecs.position(0)
         try {
-            if (RadarPreferences.useJni) {
-                Jni.level2Decode(
-                    UtilityIO.getFilePath(context, decompFileName),
-                    binWord,
-                    radialStartAngle,
-                    productCode.toInt(),
-                    days,
-                    msecs
-                )
-            } else {
-                if (performDecompression) {
-                    Level2.decode(
+            if (performDecompression) {
+                Level2.decode(
                         context,
                         decompFileName,
                         binWord,
@@ -113,27 +86,26 @@ class NexradLevel2 {
                         productCode.toInt(),
                         days,
                         msecs
-                    )
-                    if (!decompFileName.contains("l2")) {
-                        NexradLevel2Util.writeDecodedFile(
+                )
+                if (!decompFileName.contains("l2")) {
+                    NexradLevel2Util.writeDecodedFile(
                             context,
                             decompFileName + "bb",
                             binWord,
                             radialStartAngle,
                             days,
                             msecs
-                        )
-                    }
-                } else {
-                    NexradLevel2Util.readDecodedFile(
+                    )
+                }
+            } else {
+                NexradLevel2Util.readDecodedFile(
                         context,
                         decompFileName + "bb",
                         binWord,
                         radialStartAngle,
                         days,
                         msecs
-                    )
-                }
+                )
             }
             msecs.position(0)
             days.position(0)

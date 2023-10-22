@@ -21,12 +21,11 @@
 
 package joshuatee.wx.objects
 
-import android.content.Context
 import android.graphics.Bitmap
-import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.getImage
 import kotlinx.coroutines.*
 
-class FutureBytes(val context: Context, val url: String, val updateFunc: (Bitmap) -> Unit) {
+class FutureBytes(val url: String, val updateFunc: (Bitmap) -> Unit) {
 
     init {
         getContent()

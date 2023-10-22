@@ -18,34 +18,39 @@
 
  -->
 <!-- modded by ELY M. --> 
-
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_radar"
         android:icon="@drawable/ic_flash_on_24dp"
         android:title="@string/action_radar"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_cloud"
         android:icon="@drawable/ic_cloud_24dp"
         android:title="@string/action_cloud"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_afd"
         android:icon="@drawable/ic_info_outline_24dp"
         android:title="@string/action_afd"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_dashboard"
         android:icon="@drawable/ic_report_24dp"
         android:title="@string/label_severe_dashboard"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_vr"
         android:icon="@drawable/ic_mic_24dp"
         android:title="@string/label_voice_command"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_forecast"
         android:title="@string/action_forecast"

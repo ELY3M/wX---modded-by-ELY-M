@@ -43,7 +43,7 @@ class PolygonWarning(val context: Context, val type: PolygonWarningType) {
     }
 
     fun download() {
-        if (timer.isRefreshNeeded(context)) {
+        if (timer.isRefreshNeeded()) {
             val html = UtilityDownloadNws.getStringFromUrlBaseNoHeader1(getUrl())
             if (html != "") {
                 storage.valueSet(context, html)
@@ -53,7 +53,7 @@ class PolygonWarning(val context: Context, val type: PolygonWarningType) {
 
     fun getData(): String = storage.value
 
-    fun getUrlToken(): String = longName[type] ?: ""
+    private fun getUrlToken(): String = longName[type] ?: ""
 
     private fun getUrl(): String = baseUrl + getUrlToken()
 
@@ -81,43 +81,43 @@ class PolygonWarning(val context: Context, val type: PolygonWarningType) {
 
         // NWS default colors: https://www.weather.gov/help-map
         private val defaultColors = mapOf(
-            PolygonWarningType.TornadoWarning to Color.RED,
-            PolygonWarningType.ThunderstormWarning to Color.YELLOW,
-            PolygonWarningType.FlashFloodWarning to Color.GREEN,
-    	    PolygonWarningType.SpecialMarineWarning to Color.CYAN,
-            PolygonWarningType.SnowSquallWarning to Color.rgb(199, 21, 133),
-            PolygonWarningType.DustStormWarning to Color.rgb(255, 228, 196),
-            PolygonWarningType.SpecialWeatherStatement to Color.rgb(255, 228, 181)
+            	PolygonWarningType.TornadoWarning to Color.RED,
+            	PolygonWarningType.ThunderstormWarning to Color.YELLOW,
+            	PolygonWarningType.FlashFloodWarning to Color.GREEN,
+    	    	PolygonWarningType.SpecialMarineWarning to Color.CYAN,
+                PolygonWarningType.SnowSquallWarning to Color.rgb(199, 21, 133),
+                PolygonWarningType.DustStormWarning to Color.rgb(255, 228, 196),
+                PolygonWarningType.SpecialWeatherStatement to Color.rgb(255, 228, 181)
         )
 
         val namesByEnumId = mapOf(
-            PolygonWarningType.ThunderstormWarning to "TSTORM",
-            PolygonWarningType.TornadoWarning to "TOR",
-            PolygonWarningType.FlashFloodWarning to "FFW",
-            PolygonWarningType.SnowSquallWarning to "SQW",
-            PolygonWarningType.DustStormWarning to "DSW",
-            PolygonWarningType.SpecialWeatherStatement to "SPS",
-            PolygonWarningType.SpecialMarineWarning to "SMW"
+                PolygonWarningType.ThunderstormWarning to "TSTORM",
+                PolygonWarningType.TornadoWarning to "TOR",
+                PolygonWarningType.FlashFloodWarning to "FFW",
+                PolygonWarningType.SnowSquallWarning to "SQW",
+                PolygonWarningType.DustStormWarning to "DSW",
+                PolygonWarningType.SpecialWeatherStatement to "SPS",
+                PolygonWarningType.SpecialMarineWarning to "SMW"
         )
 
         val polygonList = listOf(
-            PolygonWarningType.SpecialMarineWarning,
-            PolygonWarningType.SnowSquallWarning,
-            PolygonWarningType.DustStormWarning,
-            PolygonWarningType.SpecialWeatherStatement,
-            PolygonWarningType.TornadoWarning,
-            PolygonWarningType.ThunderstormWarning,
-            PolygonWarningType.FlashFloodWarning,
+                PolygonWarningType.SpecialMarineWarning,
+                PolygonWarningType.SnowSquallWarning,
+                PolygonWarningType.DustStormWarning,
+                PolygonWarningType.SpecialWeatherStatement,
+                PolygonWarningType.TornadoWarning,
+                PolygonWarningType.ThunderstormWarning,
+                PolygonWarningType.FlashFloodWarning,
         )
 
         val longName = mapOf(
-            PolygonWarningType.SpecialMarineWarning to "Special%20Marine%20Warning",
-            PolygonWarningType.SnowSquallWarning to "Snow%20Squall%20Warning",
-            PolygonWarningType.DustStormWarning to "Dust%20Storm%20Warning",
-            PolygonWarningType.SpecialWeatherStatement to "Special%20Weather%20Statement",
-            PolygonWarningType.TornadoWarning to "Tornado%20Warning",
-            PolygonWarningType.ThunderstormWarning to "Severe%20Thunderstorm%20Warning",
-            PolygonWarningType.FlashFloodWarning to "Flash%20Flood%20Warning",
+                PolygonWarningType.SpecialMarineWarning to "Special%20Marine%20Warning",
+                PolygonWarningType.SnowSquallWarning to "Snow%20Squall%20Warning",
+                PolygonWarningType.DustStormWarning to "Dust%20Storm%20Warning",
+                PolygonWarningType.SpecialWeatherStatement to "Special%20Weather%20Statement",
+                PolygonWarningType.TornadoWarning to "Tornado%20Warning",
+                PolygonWarningType.ThunderstormWarning to "Severe%20Thunderstorm%20Warning",
+                PolygonWarningType.FlashFloodWarning to "Flash%20Flood%20Warning",
         )
 
         const val baseUrl = "https://api.weather.gov/alerts/active?event="

@@ -23,11 +23,12 @@ package joshuatee.wx.settings
 
 import android.os.Bundle
 import joshuatee.wx.R
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.ui.RecyclerViewGeneric
 import joshuatee.wx.util.CurrentConditions
@@ -46,7 +47,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
-        Fab(this, R.id.fab_add) { addLocation() }
+        FabExtended(this, R.id.fab_add, GlobalVariables.ICON_ADD, "Add Location") { addLocation() }
         updateList()
         setupUI()
         updateTitle()
@@ -62,7 +63,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     private fun getContent() {
         currentConditionsList.clear()
-        FutureVoid(this, ::download, ::update)
+        FutureVoid(::download, ::update)
     }
 
     private fun download() {

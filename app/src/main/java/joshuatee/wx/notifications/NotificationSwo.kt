@@ -28,17 +28,23 @@ import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
 import joshuatee.wx.spc.SpcSwoActivity
 import android.content.Context
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.getHtml
+import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.parse
+import joshuatee.wx.parseAcrossLines
+import joshuatee.wx.parseColumnAcrossLines
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 
 internal object NotificationSwo {
 
-    fun locationNeedsSwo() = (0 until Location.numLocations).any { Location.locations.getOrNull(it)?.notificationSwo ?: false }
+    fun locationNeedsSwo() = (0 until Location.numLocations).any {
+        Location.locations.getOrNull(it)?.notificationSwo ?: false
+    }
 
     fun send(context: Context, inBlackout: Boolean): String {
         var notificationUrls = ""
@@ -129,7 +135,7 @@ internal object NotificationSwo {
                     //
                     if (latLons.isNotEmpty()) {
                         val polygonFrame = ExternalPolygon.Builder()
-                        latLons.forEach {latLon -> polygonFrame.addVertex(ExternalPoint(latLon)) }
+                        latLons.forEach { latLon -> polygonFrame.addVertex(ExternalPoint(latLon)) }
                         val polygonShape = polygonFrame.build()
                         (1..Location.numLocations).forEach { n ->
                             val locNum = n.toString()

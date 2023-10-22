@@ -103,7 +103,7 @@ class NexradRenderTextObject(
                                 CitiesExtended.lat[index],
                                 CitiesExtended.lon[index],
                                 CitiesExtended.labels[index],
-                                RadarPreferences.colorCity
+                                RadarPreferences.colorCity,
                         )
                     } else {
                         break
@@ -158,7 +158,7 @@ class NexradRenderTextObject(
                             CountyLabels.lat[it],
                             CountyLabels.lon[it],
                             CountyLabels.labels[it],
-                            RadarPreferences.colorCountyLabels
+                            RadarPreferences.colorCountyLabels,
                     )
                 }
             } else {
@@ -253,7 +253,7 @@ class NexradRenderTextObject(
             relativeLayout.removeView(it)
         }
     }
-
+    
     private fun checkAndDrawText(textViews: MutableList<TextView>, lat: Double, lon: Double, text: String, color: Int) {
         val coordinates = Projection.computeMercatorNumbers(lat, lon, projectionNumbers)
         val renderX: Float
@@ -272,6 +272,7 @@ class NexradRenderTextObject(
             textViews.add(textView)
             textView.setTextColor(color)
             textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
+            textView.setSingleLine()
             relativeLayout.addView(textView)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
             if ((coordinates[1] * scale).toInt() < 0) {
@@ -293,7 +294,7 @@ class NexradRenderTextObject(
         }
     }
 
-    private fun checkButDoNotDrawText(textViews: MutableList<TextView>, lat: Double, lon: Double, color: Int, textSizeTv: Float): Boolean {
+    private fun checkButDoNotDrawText(textViews: MutableList<TextView>, lat: Double, lon: Double, color: Int, textSizeTv: Float, singleLine: Boolean): Boolean {
         val coordinates = Projection.computeMercatorNumbers(lat, lon, projectionNumbers)
         if (RadarPreferences.wxoglCenterOnLocation) {
             coordinates[0] = coordinates[0] + state.gpsLatLonTransformed[0]
@@ -309,6 +310,8 @@ class NexradRenderTextObject(
             textViews.add(textView)
             textView.setTextColor(color)
             textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
+            if (singleLine)
+                textView.setSingleLine()
             relativeLayout.addView(textView)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizeTv)
             if ((coordinates[1] * scale).toInt() < 0) {
@@ -370,12 +373,13 @@ class NexradRenderTextObject(
             }
             if (state.zoom > 0.5) {
                 val drawText = checkButDoNotDrawText(
-                    wxglSurfaceView.spotterTextView,
-                    latLon.lat,
-                    latLon.lon * -1.0,
-                    RadarPreferences.colorSpotter,
-                    UIPreferences.textSizeSmall * oglrZoom * 1.5f * RadarPreferences.textSize
-                    )
+                        wxglSurfaceView.spotterTextView,
+                        latLon.lat,
+                        latLon.lon * -1.0,
+                        RadarPreferences.colorSpotter,
+                        UIPreferences.textSizeSmall * oglrZoom * 1.5f * RadarPreferences.textSize,
+                        true
+                )
                 if (drawText) {
                     if (!report) {
                         //elys mod
@@ -453,7 +457,7 @@ class NexradRenderTextObject(
             textSize = UIPreferences.textSizeNormal * RadarPreferences.textSize
             if (state.zoom < (0.5 / state.zoomScreenScaleFactor)) {
                 WpcFronts.pressureCenters.forEach {
-                    var color = Color.rgb(0,127,225)
+                    var color = Color.rgb(0, 127, 225)
                     if (it.type == PressureCenterTypeEnum.LOW) {
                         color = Color.RED
                     }
@@ -513,7 +517,8 @@ class NexradRenderTextObject(
                                 lat,
                                 lon * -1.0,
                                 RadarPreferences.colorObs,
-                                textSize
+                                textSize,
+                                false
                         )
                         if (drawText) {
                             if (state.zoom > obsExtZoom) {

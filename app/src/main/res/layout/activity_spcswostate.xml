@@ -18,29 +18,24 @@
 
  -->
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/widget_toolbar_top" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical">
+        android:scrollbars="none">
 
-        <include layout="@layout/widget_toolbar_top" />
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/dividerColor"
-            android:dividerPadding="0px"
-            android:gravity="center"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="0dip"
-            android:stretchColumns="*">
-
-            <joshuatee.wx.ui.TouchImageView2
-                android:id="@+id/iv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="fitCenter" />
-
-        </TableLayout>
-    </LinearLayout>
+            android:padding="@dimen/padding_ll" />
+    </ScrollView>
+</LinearLayout>

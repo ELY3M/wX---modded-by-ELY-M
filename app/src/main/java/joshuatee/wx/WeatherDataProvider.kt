@@ -49,7 +49,7 @@ class WeatherDataProvider : ContentProvider() {
         val days = sevenDay.split("\n\n").dropLastWhile { it.isEmpty() }.toMutableList()
         if (days.size > 1) {
             days[0] = preferences.getString("CC_WIDGET", "No data")!!
-            weatherDataPoints = (0 until days.lastIndex).map{ WeatherDataPoint(days[it] + "\n", 0) }
+            weatherDataPoints = (0 until days.lastIndex).map { WeatherDataPoint(days[it] + "\n", 0) }
         }
         return true
     }
@@ -93,6 +93,7 @@ class WeatherDataProvider : ContentProvider() {
 
     companion object {
         val CONTENT_URI: Uri = Uri.parse("content://${GlobalVariables.packageNameAsString}.weatherlistwidget.provider")
+
         /**
          * Generally, this data will be stored in an external and persistent location (ie. File,
          * Database, SharedPreferences) so that the data can persist if the process is ever killed.

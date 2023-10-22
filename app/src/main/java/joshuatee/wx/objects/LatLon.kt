@@ -27,7 +27,7 @@ import joshuatee.wx.util.UtilityString
 import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
-import joshuatee.wx.Extensions.*
+import joshuatee.wx.isEven
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
 import joshuatee.wx.radar.Projection
@@ -86,28 +86,36 @@ class LatLon() {
     }
 
     var lat: Double
-        get() { return latNum }
+        get() {
+            return latNum
+        }
         set(newValue) {
             latNum = newValue
             xStr = latNum.toString()
         }
 
     var lon: Double
-        get() { return lonNum }
+        get() {
+            return lonNum
+        }
         set(newValue) {
             lonNum = newValue
             yStr = lonNum.toString()
         }
 
     var latString: String
-        get() { return xStr }
+        get() {
+            return xStr
+        }
         set(newValue) {
             xStr = newValue
             latNum = To.double(newValue)
         }
 
     var lonString: String
-        get() { return yStr }
+        get() {
+            return yStr
+        }
         set(newValue) {
             yStr = newValue
             lonNum = To.double(newValue)

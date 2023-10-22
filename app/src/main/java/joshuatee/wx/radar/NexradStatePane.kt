@@ -30,6 +30,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 class NexradStatePane(
         val activity: VideoRecordActivity,
@@ -72,10 +73,11 @@ class NexradStatePane(
                             2 - UIPreferences.actionBarHeight /
                             2 - UtilityUI.statusBarHeight(activity) / 2 -
                             (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
-                if (UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode && numberOfPanes == 4) {
+                if (UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode) {
+                    UtilityLog.d("wxsize", MyApplication.dm.heightPixels.toString())
                     params.height = MyApplication.dm.heightPixels / 2 // - UtilityUI.statusBarHeight(activity) / 2
-                            // (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
-                            // (UIPreferences.actionBarHeight / 2) -
+                    // (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
+                    // (UIPreferences.actionBarHeight / 2) -
                 }
                 params.width = MyApplication.dm.widthPixels / 2
             } else if (numberOfPanes == 2) {
@@ -418,7 +420,7 @@ class NexradStatePane(
     }
 
     fun adjustForTdwrMultiPane(z: Int) {
-        with (wxglRenders[z]) {
+        with(wxglRenders[z]) {
             if ((state.product.matches(Regex("N[0-3]Q")) || state.product == "L2REF") && isRidTdwr(state.rid)) {
                 state.product = "TZL"
             }

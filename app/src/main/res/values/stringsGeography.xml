@@ -28,28 +28,28 @@
     <string name="label_NE">Northeast</string>
     <string name="label_SW">Southwest</string>
     <string name="label_NW">Northwest</string>
-    <string name="label_CA">Canada</string>
-    <string name="label_CA_BC">British Columbia</string>
-    <string name="label_CA_AB">Alberta</string>
-    <string name="label_CA_SK">Saskatchewan</string>
-    <string name="label_CA_MB">Manitoba</string>
-    <string name="label_CA_YT">Yukon</string>
-    <string name="label_CA_PE">Prince Edward Island</string>
-    <string name="label_CA_NU">Nunavut</string>
-    <string name="label_CA_NT">Northwest Territories</string>
-    <string name="label_CA_NS">Nova Scotia</string>
-    <string name="label_CA_NL">Newfoundland and Labrador</string>
-    <string name="label_CA_NB">New Brunswick</string>
-    <string name="label_CA_QC_S">Quebec - South</string>
-    <string name="label_CA_QC_N">Quebec - North</string>
-    <string name="label_CA_QC">Quebec</string>
-    <string name="label_CA_ON_S">Ontario - South</string>
-    <string name="label_CA_ON_N">Ontario - North</string>
-    <string name="label_CA_ON">Ontario</string>
-    <string name="label_CA_MB_S">S MB</string>
-    <string name="label_CA_MB_N">N MB</string>
-    <string name="label_CA_SK_S">S SK</string>
-    <string name="label_CA_SK_N">N SK</string>
-    <string name="label_CA_AB_S">S AB</string>
-    <string name="label_CA_AB_N">N AB</string>
+    <string name="label_GL">Great Lakes</string>
+    <string name="label_GB">Intermountain West</string>
+
+    <string name="california">California</string>
+    <string name="colorado">Colorado</string>
+    <string name="florida">Florida</string>
+    <string name="guam">Guam</string>
+    <string name="michigan">Michigan</string>
+    <string name="montana">Montana</string>
+    <string name="texas">Texas</string>
+    <string name="wisconsin">wisconsin</string>
+
+    <string name="northSouthCarolina">North/South Carolina</string>
+    <string name="northSouthDakota">North/South Dakota</string>
+
+    <string name="ohioValley">Ohio Valley</string>
+    <string name="nwPacific">NW Pacific</string>
+    <string name="swUs">SW US</string>
+    <string name="gulfCoast">Gulf Coast</string>
+    <string name="midAtlantic">Mid Atlantic</string>
+    <string name="midWest">Mid West</string>
+
+    <string name="newEngland">New England</string>
+
 </resources>

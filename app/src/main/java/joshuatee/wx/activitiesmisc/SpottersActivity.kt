@@ -38,7 +38,7 @@ import joshuatee.wx.radar.UtilitySpotter
 import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.Fab
+import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.RecyclerViewGeneric
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
@@ -84,19 +84,19 @@ class SpottersActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab, null, false)
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab_spotters, null, false)
         setTitle(titleString, "Tap on name for actions.")
-        Fab(this, R.id.fab, R.drawable.ic_info_outline_24dp_white) { reportFAB() }
+        FabExtended(this, R.id.fab, R.drawable.ic_info_outline_24dp_white, "Spotter Reports") { goToSpotterReports() }
         recyclerView = RecyclerViewGeneric(this, R.id.card_list)
         getContent()
     }
 
-    private fun reportFAB() {
+    private fun goToSpotterReports() {
         Route(this, SpotterReportsActivity::class.java)
     }
 
     private fun getContent() {
-        FutureVoid(this, { spotterList = UtilitySpotter.get(this).toMutableList() }, ::showText)
+        FutureVoid({ spotterList = UtilitySpotter.get().toMutableList() }, ::showText)
     }
 
     private fun showText() {
@@ -148,8 +148,8 @@ class SpottersActivity : BaseActivity() {
 
     private fun markFavorites() {
         spotterList.filter { UIPreferences.spotterFav.contains(it.unique + ":") && !it.lastName.contains("0FAV ") }.forEach {
-                    it.lastName = "0FAV " + it.lastName
-                }
+            it.lastName = "0FAV " + it.lastName
+        }
         sortSpotters()
     }
 
@@ -164,7 +164,7 @@ class SpottersActivity : BaseActivity() {
 
     private fun itemClicked(position: Int) {
         val bottomSheetFragment = BottomSheetFragment(this, position, adapter.getItem(position).toString(), false)
-        with (bottomSheetFragment) {
+        with(bottomSheetFragment) {
             functions = listOf(::showItemOnRadar, ::showItemOnMap, ::toggleFavorite)
             labelList = listOf("Show on radar", "Show on map", "Toggle favorite")
             show(supportFragmentManager, bottomSheetFragment.tag)
@@ -182,5 +182,7 @@ class SpottersActivity : BaseActivity() {
         Route.radarWithOneSpotter(this, radarSite, spotterList[position].unique)
     }
 
-    private fun toggleFavorite(position: Int) { checkFavorite(position) }
+    private fun toggleFavorite(position: Int) {
+        checkFavorite(position)
+    }
 }

@@ -193,7 +193,7 @@ internal object CanvasRadial4Bit {
                                     paint.color = graphColor[level]
                                 }
                             }
-                            with (path) {
+                            with(path) {
                                 rewind()
                                 moveTo(xy1[0], xy1[1])
                                 lineTo(xy2[0], xy2[1])

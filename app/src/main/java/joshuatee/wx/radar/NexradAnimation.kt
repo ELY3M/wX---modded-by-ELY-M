@@ -31,9 +31,9 @@ import java.io.File
 
 class NexradAnimation(
         val activity: VideoRecordActivity,
-        val nexradState: NexradStatePane,
-        private val nexradUI: NexradUI,
-        val nexradArguments: NexradArguments
+        private val nexradState: NexradStatePane,
+        private val nexradUI: NexradUI
+        //val nexradArguments: NexradArguments
 ) {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main

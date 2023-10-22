@@ -33,7 +33,7 @@ import kotlin.math.abs
  */
 
 internal class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter) :
-    ItemTouchHelper.Callback() {
+        ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled() = true
 

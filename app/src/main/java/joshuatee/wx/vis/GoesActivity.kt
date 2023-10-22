@@ -55,7 +55,9 @@ class GoesActivity : VideoRecordActivity() {
     //  arg2 (optional): product (ie "09", "23" is lightning) or for NHC ""
     //
 
-    companion object { const val RID = "" }
+    companion object {
+        const val RID = ""
+    }
 
     private lateinit var objectAnimate: ObjectAnimate
     private lateinit var touchImage: TouchImage
@@ -65,8 +67,9 @@ class GoesActivity : VideoRecordActivity() {
     private var savePrefs = true
     private lateinit var arguments: Array<String>
     private val prefImagePosition = "GOES16_IMG"
+
     // NHC
-    var goesFloater = false
+    private var goesFloater = false
     private var goesFloaterUrl = ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -105,9 +108,9 @@ class GoesActivity : VideoRecordActivity() {
         writePrefs()
         setTitle(UtilityGoes.sectorToName[sector] ?: "", navDrawer.getLabel())
         if (!goesFloater) {
-            FutureBytes(this, UtilityGoes.getImage(navDrawer.url, sector), ::display)
+            FutureBytes(UtilityGoes.getImage(navDrawer.url, sector), ::display)
         } else {
-            FutureBytes(this, UtilityGoes.getImageGoesFloater(goesFloaterUrl, navDrawer.url), ::display)
+            FutureBytes(UtilityGoes.getImageGoesFloater(goesFloaterUrl, navDrawer.url), ::display)
         }
     }
 
@@ -171,6 +174,7 @@ class GoesActivity : VideoRecordActivity() {
                     getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
                 }
             }
+
             R.id.action_a12 -> getAnimate(12)
             R.id.action_a24 -> getAnimate(24)
             R.id.action_a36 -> getAnimate(36)
@@ -221,6 +225,7 @@ class GoesActivity : VideoRecordActivity() {
                     UtilityShare.bitmap(this, navDrawer.getLabel(), touchImage)
                 }
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

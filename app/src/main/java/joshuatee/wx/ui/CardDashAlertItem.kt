@@ -37,8 +37,8 @@ class CardDashAlertItem(val context: Context, private val warning: ObjectWarning
     private val textStart = Text(context)
     private val textEnd = Text(context)
     private val textBottom = Text(context, backgroundText = true)
-    private val radarButton = Button(context,"Radar", GlobalVariables.ICON_RADAR)
-    private val detailsButton = Button(context,"Details", GlobalVariables.ICON_CURRENT)
+    private val radarButton = Button(context, "Radar", GlobalVariables.ICON_RADAR)
+    private val detailsButton = Button(context, "Details", GlobalVariables.ICON_CURRENT)
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
@@ -46,7 +46,7 @@ class CardDashAlertItem(val context: Context, private val warning: ObjectWarning
             vbox.addWidget(it)
         }
         val hbox = HBox(context)
-        with (hbox) {
+        with(hbox) {
             wrap()
             addWidget(radarButton)
             addWidget(detailsButton)
@@ -66,11 +66,11 @@ class CardDashAlertItem(val context: Context, private val warning: ObjectWarning
         textTop.text = warning.sender
         textTitle.text = warning.event
         textStart.text = warning.effective.replace("T", " ")
-                                            .replace(Regex(":00-0[0-9]:00"), "")
-                                            .replace(Regex(":00-10:00"), "")
+                .replace(Regex(":00-0[0-9]:00"), "")
+                .replace(Regex(":00-10:00"), "")
         textEnd.text = warning.expires.replace("T", " ")
-                                        .replace(Regex(":00-0[0-9]:00"), "")
-                                        .replace(Regex(":00-10:00"), "")
+                .replace(Regex(":00-0[0-9]:00"), "")
+                .replace(Regex(":00-10:00"), "")
         textBottom.text = warning.area
     }
 

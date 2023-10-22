@@ -30,33 +30,33 @@ import joshuatee.wx.util.UtilityImgAnim
 internal object UtilityGoesFullDisk {
 
     val labels = listOf(
-        "Meteosat Infrared",
-        "Meteosat Visible",
-        "Meteosat India Ocean Infrared",
-        "Meteosat India Ocean Visible",
-        "Himawari-8 Infrared",
-        "Himawari-8 IR, Ch. 4",
-        "Himawari-8 Water Vapor",
-        "Himawari-8 Water Vapor (Blue)",
-        "Himawari-8 Visible",
-        "Himawari-8 AVN Infrared",
-        "Himawari-8 Funktop Infrared",
-        "Himawari-8 RBTop Infrared, Ch. 4"
+            "Meteosat Infrared",
+            "Meteosat Visible",
+            "Meteosat India Ocean Infrared",
+            "Meteosat India Ocean Visible",
+            "Himawari-8 Infrared",
+            "Himawari-8 IR, Ch. 4",
+            "Himawari-8 Water Vapor",
+            "Himawari-8 Water Vapor (Blue)",
+            "Himawari-8 Visible",
+            "Himawari-8 AVN Infrared",
+            "Himawari-8 Funktop Infrared",
+            "Himawari-8 RBTop Infrared, Ch. 4"
     )
 
     val urls = listOf(
-        "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GMIR.JPG",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GMVS.JPG",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GIIR.JPG",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GIVS.JPG",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/rb/10.gif",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/ir4/10.gif",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/wv/10.gif",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/wvblue/10.gif",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/vis/10.gif",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/avn/10.gif",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/ft/10.gif",
-        "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/rbtop/10.gif"
+            "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GMIR.JPG",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GMVS.JPG",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GIIR.JPG",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GIVS.JPG",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/rb/10.gif",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/ir4/10.gif",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/wv/10.gif",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/wvblue/10.gif",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/vis/10.gif",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/avn/10.gif",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/ft/10.gif",
+            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/rbtop/10.gif"
     )
 
     fun getAnimation(context: Context, urlOriginal: String): AnimationDrawable {

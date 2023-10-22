@@ -25,8 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -37,8 +36,7 @@
             android:layout_alignParentBottom="true"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/MyDarkToolbarStyle">
-        </androidx.appcompat.widget.Toolbar>
+            app:popupTheme="@style/MyDarkToolbarStyle" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -52,8 +50,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/MyDarkToolbarStyle">
-            </androidx.appcompat.widget.Toolbar>
+                app:popupTheme="@style/MyDarkToolbarStyle" />
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -65,8 +62,7 @@
                 android:padding="0dip"
                 android:stretchColumns="*">
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/main_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -92,7 +88,7 @@
                         app:layout_anchorGravity="bottom|right"
                         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
                         app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp_white"
-                        />
+                        android:contentDescription="@string/moveBackInTime" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/fab1"
@@ -106,7 +102,7 @@
                         app:layout_anchorGravity="bottom|right"
                         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
                         app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp_white"
-                        />
+                        android:contentDescription="@string/moveForwardInTime" />
 
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

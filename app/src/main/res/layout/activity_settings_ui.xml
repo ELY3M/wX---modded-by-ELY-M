@@ -19,6 +19,7 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
@@ -35,8 +36,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/padding_ll"
-            >
+            android:padding="@dimen/padding_ll">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_tab_labels"
@@ -73,7 +73,8 @@
                             android:layout_weight="0.5"
                             android:hint="@string/local"
                             android:inputType="text"
-                            android:importantForAutofill="no" />
+                            android:importantForAutofill="no"
+                            tools:ignore="LabelFor" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -100,7 +101,8 @@
                             android:layout_weight="0.5"
                             android:hint="@string/spc"
                             android:inputType="text"
-                            android:importantForAutofill="no" />
+                            android:importantForAutofill="no"
+                            tools:ignore="LabelFor" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -127,7 +129,8 @@
                             android:layout_weight="0.5"
                             android:hint="@string/misc"
                             android:inputType="text"
-                            android:importantForAutofill="no" />
+                            android:importantForAutofill="no"
+                            tools:ignore="LabelFor" />
                     </LinearLayout>
 
                 </LinearLayout>

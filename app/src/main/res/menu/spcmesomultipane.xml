@@ -18,12 +18,14 @@
 
  -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_sfc"
         android:title="@string/label_short_sfc"
-        app:showAsAction="always">
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
         <menu>
             <item
                 android:id="@+id/action_bigsfc"
@@ -54,7 +56,8 @@
     <item
         android:id="@+id/action_ua"
         android:title="@string/label_short_ua"
-        app:showAsAction="always">
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
         <menu>
             <item
                 android:id="@+id/action_925mb"
@@ -93,7 +96,8 @@
     <item
         android:id="@+id/action_cape"
         android:title="@string/label_short_cpe"
-        app:showAsAction="always">
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
         <menu>
             <item
                 android:id="@+id/action_laps"
@@ -124,7 +128,8 @@
     <item
         android:id="@+id/action_comp"
         android:title="@string/label_short_cmp"
-        app:showAsAction="always">
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
         <menu>
             <item
                 android:id="@+id/action_sigh"
@@ -143,7 +148,8 @@
     <item
         android:id="@+id/action_shr"
         android:title="@string/label_short_shr"
-        app:showAsAction="always">
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
         <menu>
             <item
                 android:id="@+id/action_srh1"
@@ -167,7 +173,8 @@
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_star_outline_24dp"
         android:title="@string/label_toggle_favorite"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_img1"
         android:title="@string/label_sel_img1"
@@ -255,6 +262,14 @@
             <item
                 android:id="@+id/action_NW"
                 android:title="@string/label_NW"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_GL"
+                android:title="@string/label_GL"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_GB"
+                android:title="@string/label_GB"
                 app:showAsAction="never" />
         </menu>
     </item>

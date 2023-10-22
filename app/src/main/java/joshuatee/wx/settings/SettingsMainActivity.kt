@@ -56,6 +56,7 @@ class SettingsMainActivity : BaseActivity() {
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
         box.addWidget(CardText(this, "About wX", textSize, SettingsAboutActivity::class.java, padding))
+	//elys mod
         box.addWidget(CardText(this, "Celsius to fahrenheit table", textSize,
                 { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") }, padding))
         box.addWidget(CardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding))

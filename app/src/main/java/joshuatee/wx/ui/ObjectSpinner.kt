@@ -39,7 +39,7 @@ class ObjectSpinner(context: Context, label: String, pref: String, prefInit: Str
 
     init {
         val text = Text(context)
-        with (text) {
+        with(text) {
             setPadding(UIPreferences.paddingSettings)
             wrap()
             text.text = label

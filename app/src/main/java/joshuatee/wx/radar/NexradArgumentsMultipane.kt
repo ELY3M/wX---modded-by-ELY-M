@@ -33,7 +33,7 @@ class NexradArgumentsMultipane : NexradArguments() {
 
     fun process(arguments: Array<String>?) {
         this.arguments = arguments
-        if (arguments != null && arguments.size > 3 ) {
+        if (arguments != null && arguments.size > 3) {
             if (arguments[3] == "true") { // invoked from single pane radar
                 doNotSavePref = true
                 useSinglePanePref = true

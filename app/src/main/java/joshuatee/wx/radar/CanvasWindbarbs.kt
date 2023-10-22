@@ -44,7 +44,7 @@ object CanvasWindbarbs {
         val wbCircleYArr = Metar.data[index].y
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        with (paint) {
+        with(paint) {
             style = Style.FILL
             strokeWidth = 2.0f
             color = if (isGust) Color.RED else RadarPreferences.colorObsWindbarbs

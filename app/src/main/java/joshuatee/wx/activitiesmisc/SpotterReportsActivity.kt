@@ -46,7 +46,9 @@ class SpotterReportsActivity : BaseActivity() {
         recyclerViewGeneric.adapter = adapterSpotterReports
         updateTitles()
         adapterSpotterReports.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {
-            override fun onItemClick(position: Int) { itemSelected(position) }
+            override fun onItemClick(position: Int) {
+                itemSelected(position)
+            }
         })
     }
 

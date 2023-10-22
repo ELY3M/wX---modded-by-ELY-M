@@ -51,22 +51,22 @@ private constructor(private val name: String) {
          * @throws IllegalArgumentException  if <tt>magic.length&lt;MAGIC_SIZE</tt>
          */
         fun getCompression(magic: ByteArray): Compression = if (magic.size < MAGIC_SIZE) {
-                throw IllegalArgumentException(
+            throw IllegalArgumentException(
                     "Magic buffer must be at least MAGIC_SIZE=" + MAGIC_SIZE +
                             " bytes"
-                )
-            } else if (magic[0] == 0x1f.toByte() && magic[1] == 0x8b.toByte()) {
-                GZIP
-            } else if (magic[0] == 'B'.code.toByte() &&
+            )
+        } else if (magic[0] == 0x1f.toByte() && magic[1] == 0x8b.toByte()) {
+            GZIP
+        } else if (magic[0] == 'B'.code.toByte() &&
                 magic[1] == 'Z'.code.toByte() &&
                 magic[2] == 'h'.code.toByte()
-            ) {
-                BZIP2
-            } else if (magic[0] == 0x1f.toByte() && magic[1] == 0x9d.toByte()) {
-                COMPRESS
-            } else {
-                NONE
-            }
+        ) {
+            BZIP2
+        } else if (magic[0] == 0x1f.toByte() && magic[1] == 0x9d.toByte()) {
+            COMPRESS
+        } else {
+            NONE
+        }
 
         /**
          * Returns a decompressed version of the given input stream.
@@ -133,7 +133,7 @@ private constructor(private val name: String) {
                 /* Eat the first two bytes. */
                 if (raw.read().toChar() != 'B' || raw.read().toChar() != 'Z') {
                     throw IllegalArgumentException(
-                        "Wrong magic number for bzip2 encoding"
+                            "Wrong magic number for bzip2 encoding"
                     )
                 }
                 return CBZip2InputStream(raw)

@@ -19,13 +19,12 @@
 
 */
 
-package joshuatee.wx.Extensions
+package joshuatee.wx
 
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import java.util.regex.Pattern
 import joshuatee.wx.ui.TouchImage
-import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImgAnim
@@ -36,9 +35,9 @@ fun Array<String>.safeGet(index: Int) = Utility.safeGet(this, index)
 
 fun List<String>.safeGet(index: Int) = Utility.safeGet(this, index)
 
-fun String.condenseSpace()= this.replace("\\s+".toRegex(), " ")
+fun String.condenseSpace() = this.replace("\\s+".toRegex(), " ")
 
-fun String.removeHtml() = this.replace(Regex("\\<[^>]*>"),"")
+fun String.removeHtml() = this.replace(Regex("\\<[^>]*>"), "")
 
 fun String.removeLineBreaks() = this.replace("\n", "ABC123")
         .replace("ABC123ABC123", "\n")
@@ -95,11 +94,9 @@ fun View.setPadding(padding: Int) {
 
 fun Int.isEven() = this and 1 == 0
 
-fun AnimationDrawable.startAnimation(img: TouchImageView2) = UtilityImgAnim.startAnimation(this, img)
-
 fun AnimationDrawable.startAnimation(img: TouchImage) = UtilityImgAnim.startAnimation(this, img)
 
-fun <T> MutableList<T>.swap(index1: Int, index2: Int){
+fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
     val tmp = this[index1]
     this[index1] = this[index2]
     this[index2] = tmp

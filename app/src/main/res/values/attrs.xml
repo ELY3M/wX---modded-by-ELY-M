@@ -21,4 +21,12 @@
         <attr name="bar_pointer_halo_radius" format="dimension" />
         <attr name="bar_orientation_horizontal" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="OpacityBar">
+        <attr name="obar_thickness" format="dimension" />
+        <attr name="obar_length" format="dimension" />
+        <attr name="obar_pointer_radius" format="dimension" />
+        <attr name="obar_pointer_halo_radius" format="dimension" />
+        <attr name="obar_orientation_horizontal" format="boolean" />
+    </declare-styleable>
 </resources>

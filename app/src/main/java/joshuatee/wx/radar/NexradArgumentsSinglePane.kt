@@ -28,6 +28,7 @@ class NexradArgumentsSinglePane : NexradArguments() {
 
     var urlStr = ""
     var fixedSite = false
+
     // set when fixedSite is true
     var originalRadarSite = ""
     var arguments: Array<String>? = null

@@ -62,7 +62,7 @@ class SettingsRadarActivity : BaseActivity() {
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
         box.addWidget(CardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding))
-        box.addWidget(CardText(this, "Color Palettes", textSize, SettingsColorPaletteListingActivity::class.java, padding))
+        box.addWidget(CardText(this, "Color Palettes (Beta)", textSize, SettingsColorPaletteListingActivity::class.java, padding))
         box.addWidget(CardText(this, "Line / Marker sizes", textSize, SettingsRadarSizesActivity::class.java, padding))
         box.addWidget(CardText(this, "Screen Recorder", textSize, SettingsTelecineActivity::class.java, padding))
     }
@@ -72,7 +72,7 @@ class SettingsRadarActivity : BaseActivity() {
                 Switch(this, "Warnings (TST/TOR/FFW)", "COD_WARNINGS_DEFAULT", R.string.cod_warnings_default_label)
         )
         PolygonWarning.byType.values.forEach {
-            if (it.type != PolygonWarningType.FlashFloodWarning &&  it.type != PolygonWarningType.ThunderstormWarning && it.type != PolygonWarningType.TornadoWarning) {
+            if (it.type != PolygonWarningType.FlashFloodWarning && it.type != PolygonWarningType.ThunderstormWarning && it.type != PolygonWarningType.TornadoWarning) {
                 box.addWidget(
                         Switch(this, it.name, it.prefTokenEnabled, R.string.cod_warnings_default_label)
                 )
@@ -81,7 +81,7 @@ class SettingsRadarActivity : BaseActivity() {
         val configs1 = listOf(
                 Switch(this, "SPC MCD/Watches", "RADAR_SHOW_WATCH", R.string.radar_show_watch_default_label),
                 Switch(this, "WPC MPDs", "RADAR_SHOW_MPD", R.string.radar_show_mpd_default_label),
-                Switch(this, "Location marker", "COD_LOCDOT_DEFAULT", R.string.cod_locdot_default_label),
+                Switch(this, "Location markers", "COD_LOCDOT_DEFAULT", R.string.cod_locdot_default_label),
         )
         configs1.forEach {
             box.addWidget(it)
@@ -122,7 +122,6 @@ class SettingsRadarActivity : BaseActivity() {
 	    	    Switch(this, "Conus Radar", "CONUS_RADAR", R.string.conus_radar_label),
 	    	    //elys mod end
                 Switch(this, "Counties", "RADAR_SHOW_COUNTY", R.string.show_county_label),
-                Switch(this, "Counties use high resolution data", "RADAR_COUNTY_HIRES", R.string.county_hires_label),
                 Switch(this, "County labels", "RADAR_COUNTY_LABELS", R.string.show_county_labels_label),
                 Switch(this, "Hail index", "RADAR_SHOW_HI", R.string.show_hi_label),
 		        //elys mod
@@ -131,10 +130,9 @@ class SettingsRadarActivity : BaseActivity() {
                 Switch(this, "Highways", "COD_HW_DEFAULT", R.string.cod_hw_default_label),
                 Switch(this, "Launch app directly to radar", "LAUNCH_TO_RADAR", R.string.launch_to_radar_label),
                 Switch(this, "Lakes and rivers", "COD_LAKES_DEFAULT", R.string.cod_lakes_default_label),
-                Switch(this, "Multi-pane: share lat/lon/zoom", "DUALPANE_SHARE_POSN", R.string.dualpaneshareposn_label),
-                Switch(this, "Multipurpose radar icons", "WXOGL_ICONS_LEVEL2", R.string.radar_icons_level2_label),
+                Switch(this, "Multi-pane will share lat/lon/zoom", "DUALPANE_SHARE_POSN", R.string.dualpaneshareposn_label),
                 Switch(this, "Observations", "WXOGL_OBS", R.string.obs_label),
-                Switch(this, "Remember location / product", "WXOGL_REMEMBER_LOCATION", R.string.rememberloc_label),
+                Switch(this, "Remember location/product", "WXOGL_REMEMBER_LOCATION", R.string.rememberloc_label),
                 Switch(this, "Screen stays on and auto refresh radar", "RADAR_AUTOREFRESH", R.string.autorefresh_label),
                 Switch(this, "Secondary roads", "RADAR_HW_ENH_EXT", R.string.hw_enh_ext_label),
                 Switch(this, "Show radar during a pan/drag motion", "SHOW_RADAR_WHEN_PAN", R.string.show_radar_when_pan_label),
@@ -143,12 +141,10 @@ class SettingsRadarActivity : BaseActivity() {
                 Switch(this, "Spotter labels", "WXOGL_SPOTTERS_LABEL", R.string.spotters_label_label),
                 //elys mod
 		        Switch(this, "Spotter labels Show Last names only", "WXOGL_SPOTTERS_LABEL_LASTNAME", R.string.spotters_label_lastname),
-                Switch(this, "States use high resolution data", "RADAR_STATE_HIRES", R.string.state_hires_label),
                 Switch(this, "Storm tracks", "RADAR_SHOW_STI", R.string.show_sti_label),
-                Switch(this, "Tornado Vortex Signature", "RADAR_SHOW_TVS", R.string.show_tvs_label),
-                Switch(this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label),
+                Switch(this, "Tornado Vortex Signature (TVS)", "RADAR_SHOW_TVS", R.string.show_tvs_label),
                 Switch(this, "Wind barbs", "WXOGL_OBS_WINDBARBS", R.string.obs_windbarbs_label),
-                Switch(this, "WPC Fronts and pressure highs and lows", "RADAR_SHOW_WPC_FRONTS", R.string.radar_show_wpc_fronts_label),
+                Switch(this, "WPC Surface Fronts and Pressures", "RADAR_SHOW_WPC_FRONTS", R.string.radar_show_wpc_fronts_label),
 		        //elys mod
 		        Switch(this, "Enable userpoints icons on radar", "RADAR_USERPOINTS", R.string.radar_userpoints),
             	Switch(this, "Hide radar", "RADAR_HIDE_RADAR", R.string.hide_radar),
@@ -188,12 +184,15 @@ class SettingsRadarActivity : BaseActivity() {
     }
 
     private fun showGPSPermsDialogue() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-        } else {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionsAccessFineLocation)
-            }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionsAccessFineLocation)
         }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//        } else {
+//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionsAccessFineLocation)
+//            }
+//        }
     }
 
     private val myPermissionsAccessFineLocation = 5001

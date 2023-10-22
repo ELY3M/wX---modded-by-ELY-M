@@ -28,8 +28,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.radar.WXGLRadarActivity
-import joshuatee.wx.canada.CanadaHourlyActivity
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.CurrentConditions
 import joshuatee.wx.util.Hazards
@@ -40,16 +38,15 @@ import joshuatee.wx.util.UtilityForecastIcon
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.R
 import joshuatee.wx.WX
-import joshuatee.wx.Extensions.*
 import androidx.core.app.NotificationManagerCompat
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.HourlyActivity
 import joshuatee.wx.activitiesmisc.ForecastActivity
-import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UtilityLocation
 
@@ -68,7 +65,6 @@ object NotificationLocal {
         // if locations are enabled for a valid location
         //
         if (Location.locations.size > locationIndex && Location.locations[locationIndex].notification) {
-            val locationLabel = "(" + Location.getName(locationIndex) + ") "
             var alertPresent = false
             if (Location.isUS(locationIndex)) {
                 //
@@ -79,43 +75,10 @@ object NotificationLocal {
                 if (oldnotifUrls != notificationUrls) {
                     alertPresent = true
                 }
-            } else {
-                //
-                // Canada notification
-                //
-                val html = UtilityCanada.getLocationHtml(Location.getLatLon(locationIndex))
-                val hazArr = UtilityCanada.getHazards(html)
-                val hazSum = Utility.fromHtml(hazArr[0])
-                val hazUrls = hazArr[1]
-                val title = locationLabel + hazSum
-                if (hazSum != "" && !hazSum.contains("No watches or warnings in effect")) {
-                    alertPresent = true
-                    val objectPendingIntents = ObjectPendingIntents(
-                            context, TextScreenActivity::class.java, TextScreenActivity.URL,
-                            arrayOf(hazUrls, hazSum),
-                            arrayOf(hazUrls, hazSum, "sound")
-                    )
-                    val cancelString = Location.getY(locationIndex) + hazUrls.parse("(</h2> <p>.*?</strong> </p>)").replace(",".toRegex(), "").replace(" ".toRegex(), "")
-                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
-                        val sound = Location.locations[locationIndex].sound && !inBlackout || Location.locations[locationIndex].sound && NotificationPreferences.alertBlackoutTornado
-                        val objectNotification = ObjectNotification(
-                                context,
-                                sound,
-                                title,
-                                Utility.fromHtml(hazUrls),
-                                objectPendingIntents,
-                                GlobalVariables.ICON_ALERT,
-                                GlobalVariables.ICON_ACTION,
-                                context.resources.getString(R.string.read_aloud)
-                        )
-                        objectNotification.send(cancelString)
-                    }
-                    notificationUrls += cancelString + NotificationPreferences.notificationStrSep
-                }
             }
             //
             // if an alert is present and user wants a notification with a mini radar image
-            // Canada is no longer support
+            // Canada is no longer supported
             //
             if (alertPresent && Location.locations[locationIndex].notificationRadar && Location.isUS(locationIndex)) {
                 val nwsLocation = UtilityLocation.getWfoSiteName(Location.locations[locationIndex].wfo)
@@ -186,14 +149,13 @@ object NotificationLocal {
                 resultIntent = Intent(context, HourlyActivity::class.java)
                 resultIntent.putExtra(HourlyActivity.LOC_NUM, locNum)
             } else {
-                resultIntent = Intent(context, CanadaHourlyActivity::class.java)
-                resultIntent.putExtra(CanadaHourlyActivity.LOC_NUM, locNum)
+                resultIntent = Intent(context, HourlyActivity::class.java)
             }
             val stackBuilder = TaskStackBuilder.create(context)
             if (Location.isUS(locationIndex))
                 stackBuilder.addParentStack(HourlyActivity::class.java)
             else
-                stackBuilder.addParentStack(CanadaHourlyActivity::class.java)
+                stackBuilder.addParentStack(HourlyActivity::class.java)
             stackBuilder.addNextIntent(resultIntent)
             val resultPendingIntent = stackBuilder.getPendingIntent(x, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             //
@@ -215,7 +177,7 @@ object NotificationLocal {
             val bitmap = if (Location.isUS(locationIndex)) {
                 UtilityForecastIcon.getIcon(context, currentConditions.iconUrl)
             } else {
-                UtilityForecastIcon.getIcon(context, UtilityCanada.translateIconNameCurrentConditions(currentConditions.data, currentConditions.status))
+                UtilityForecastIcon.getIcon(context, "ra")
             }
             val notification = UtilityNotification.createNotificationBigTextBigIcon(
                     context,

@@ -52,7 +52,7 @@ import joshuatee.wx.util.UtilityFileManagement
 
 class NexradUI(
         val activity: VideoRecordActivity,
-        val nexradState: NexradStatePane,
+        private val nexradState: NexradStatePane,
         private val nexradSubmenu: NexradSubmenu,
         val nexradArguments: NexradArguments,
         val getContent: () -> Unit
@@ -66,17 +66,21 @@ class NexradUI(
 
     // auto update interval, 180 seconds by default
     var interval = 180000
+
     // delay between animation frames
     var delay = 0
     val objectImageMap = ObjectImageMap(activity, R.id.map, activity.objectToolbar, activity.objectToolbarBottom, nexradState.wxglSurfaceViews)
+
     // auto refresh and GPS location
     val handler = Handler(Looper.getMainLooper())
     private var locationManager: LocationManager? = null
     var loopCount = 0
+
     // animation processing
     var inOglAnim = false
     var inOglAnimPaused = false
     var animTriggerDownloads = false
+
     //
     var settingsVisited = false
 
@@ -84,7 +88,7 @@ class NexradUI(
         objectImageMap.connect(::mapSwitch, UtilityImageMap::mapToRid)
         UtilityToolbar.transparentToolbars(activity.objectToolbar, activity.objectToolbarBottom)
         activity.objectToolbar.setTextColor(Color.WHITE)
-        activity.objectToolbar.connectClick { Route.severeDash(activity) }
+        activity.objectToolbar.connectClick { Route.severeDashboard(activity) }
         UtilityFileManagement.deleteCacheFiles(activity)
         delay = UtilityImg.animInterval(activity)
 
@@ -153,7 +157,7 @@ class NexradUI(
     }
 
     fun setSubTitle() {
-        val items = NexradUtil.getRadarInfo(activity,"").split(" ")
+        val items = NexradUtil.getRadarInfo(activity, "").split(" ")
         if (items.size > 3) {
             activity.toolbar.subtitle = items[3]
             if (ObjectDateTime.isRadarTimeOld(items[3]))
@@ -186,7 +190,7 @@ class NexradUI(
         // set the subtitle to a string which is the new list joined by "/"
         val radarInfoList = nexradState.wxglRenders.indices.map { NexradUtil.getRadarInfo(activity, (it + 1).toString()) }
         val tmpArray = radarInfoList.map { it.split(" ") }
-        if (tmpArray.all { it.size > 3}) {
+        if (tmpArray.all { it.size > 3 }) {
             val tmpArray2 = tmpArray.map { it[3] }
             var s = tmpArray2.joinToString("/")
             if (a != "" && b != "") {
@@ -214,7 +218,7 @@ class NexradUI(
     Radar Lon: -97.303]
      */
 
-    fun hideMap() {
+    private fun hideMap() {
         objectImageMap.hideMap()
     }
 
@@ -247,7 +251,7 @@ class NexradUI(
         }
     }
 
-    val runnable: Runnable = object : Runnable {
+    private val runnable: Runnable = object : Runnable {
         override fun run() {
             if (loopCount > 0) {
                 if (inOglAnim) {

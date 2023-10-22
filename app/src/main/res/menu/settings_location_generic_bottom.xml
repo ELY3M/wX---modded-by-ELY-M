@@ -26,69 +26,6 @@
         android:title="@string/label_delete_location"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_ca"
-        android:title="@string/label_CA"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_ca_map"
-        android:title="@string/label_ca_via_map"
-        app:showAsAction="never">
-        <menu>
-            <item
-                android:id="@+id/action_ab"
-                android:title="@string/label_CA_AB"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_bc"
-                android:title="@string/label_CA_BC"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_mb"
-                android:title="@string/label_CA_MB"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_nb"
-                android:title="@string/label_CA_NB"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_nl"
-                android:title="@string/label_CA_NL"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_ns"
-                android:title="@string/label_CA_NS"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_nt"
-                android:title="@string/label_CA_NT"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_nu"
-                android:title="@string/label_CA_NU"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_on"
-                android:title="@string/label_CA_ON"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_pe"
-                android:title="@string/label_CA_PE"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_qc"
-                android:title="@string/label_CA_QC"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_sk"
-                android:title="@string/label_CA_SK"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_yt"
-                android:title="@string/label_CA_YT"
-                app:showAsAction="never" />
-        </menu>
-    </item>
-    <item
         android:id="@+id/action_map"
         android:icon="@drawable/ic_public_24dp"
         android:title="@string/label_show_location_on_map"

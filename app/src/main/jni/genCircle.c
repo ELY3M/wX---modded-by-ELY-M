@@ -21,9 +21,26 @@
 
 #include "genCircle.h"
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircle(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels, jfloat one_degree_scale_factor, jdoubleArray x, jdoubleArray y, jint count, jfloat len, int triangleAmount, jobject color_buff, jbooleanArray col) {
-	jfloat* lBuff = (*env)->GetDirectBufferAddress(env, loc_buff);
-	jshort* iBuff = (*env)->GetDirectBufferAddress(env, index_buff);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircle(
+	JNIEnv * env,
+	jclass clazz,
+	jobject locationBuffer,
+	jobject indexBuffer,
+	jfloat centerX,
+	jfloat centerY,
+	jfloat xImageCenterPixels,
+	jfloat yImageCenterPixels,
+	jfloat oneDegreeScaleFactor,
+	jdoubleArray x,
+	jdoubleArray y,
+	jint count,
+	jfloat len,
+	int triangleAmount,
+	jobject color_buff,
+	jbooleanArray col
+) {
+	jfloat* lBuff = (*env)->GetDirectBufferAddress(env, locationBuffer);
+	jshort* iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
 	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, color_buff);
 	jdouble* x_arr = (*env)->GetDoubleArrayElements(env, x, 0);
 	jdouble* y_arr = (*env)->GetDoubleArrayElements(env, y, 0);
@@ -42,20 +59,20 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircle(JNIEnv * env, jclass claz
 	double W_PI_DIV_360 = M_PI / 360.0 ;
 	double W_PI_DIV_4 = M_PI / 4.0;
 	len = len * 0.50;
-	for (int i_count = 0; i_count < count; i_count++){
+	for (int i_count = 0; i_count < count; i_count++) {
 		point_x = x_arr[i_count];
 		point_y = y_arr[i_count];
-		test1 = W_180_DIV_PI * log(tan(W_PI_DIV_4+point_x*W_PI_DIV_360));
-		test2 = W_180_DIV_PI * log(tan(W_PI_DIV_4+center_x*W_PI_DIV_360));
-		pix_y_d = -((test1 - test2) * one_degree_scale_factor ) + y_image_center_pixels;
-		pix_x_d = -((point_y - center_y ) * one_degree_scale_factor ) + x_image_center_pixels;
+		test1 = W_180_DIV_PI * log(tan(W_PI_DIV_4 + point_x * W_PI_DIV_360));
+		test2 = W_180_DIV_PI * log(tan(W_PI_DIV_4 + centerX * W_PI_DIV_360));
+		pix_y_d = -1.0 * ((test1 - test2) * oneDegreeScaleFactor) + yImageCenterPixels;
+		pix_x_d = -1.0 * ((point_y - centerY) * oneDegreeScaleFactor) + xImageCenterPixels;
 		for(int i = 0; i < triangleAmount; i++) {
 			lBuff[l_count++] = pix_x_d;
-			lBuff[l_count++] = -pix_y_d;
+			lBuff[l_count++] = -1.0 * pix_y_d;
 			lBuff[l_count++] = pix_x_d + (len * cos(i *  twicePi / triangleAmount));
-			lBuff[l_count++] = -pix_y_d + (len * sin(i * twicePi / triangleAmount));
-			lBuff[l_count++] = pix_x_d + (len * cos((i+1) *  twicePi / triangleAmount));
-			lBuff[l_count++] = -pix_y_d + (len * sin((i+1) * twicePi / triangleAmount));
+			lBuff[l_count++] = -1.0 * pix_y_d + (len * sin(i * twicePi / triangleAmount));
+			lBuff[l_count++] = pix_x_d + (len * cos((i + 1) *  twicePi / triangleAmount));
+			lBuff[l_count++] = -1.0 * pix_y_d + (len * sin((i + 1) * twicePi / triangleAmount));
 			iBuff[ix_count] = ix_count;
 			iBuff[ix_count + 1] = ix_count + 1;
 			iBuff[ix_count + 2] = ix_count + 2;

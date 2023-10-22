@@ -22,9 +22,9 @@
 package joshuatee.wx.spc
 
 import android.content.Context
-import joshuatee.wx.Extensions.condenseSpace
-import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.Extensions.parse
+import joshuatee.wx.condenseSpace
+import joshuatee.wx.getImage
+import joshuatee.wx.parse
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.PolygonType
@@ -62,17 +62,20 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
                 title = "Watch $productNumber"
                 prod = "SPCWAT$productNumber"
             }
+
             PolygonType.MCD -> {
                 imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$productNumber.png"
                 textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md$productNumber.html"
                 title = "MCD $productNumber"
                 prod = "SPCMCD$productNumber"
             }
+
             PolygonType.MPD -> {
                 imgUrl = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/images/mcd$productNumber.gif"
                 title = "MPD $productNumber"
                 prod = "WPCMPD$productNumber"
             }
+
             else -> {}
         }
     }
@@ -122,8 +125,8 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
 
     val textForSubtitle: String
         get() {
-            var subTitle = text.parse("Areas affected...(.*?)<BR>")
-            if (subTitle == "" ) {
+            var subTitle = text.parse("Areas affected...(.*?)\n")
+            if (subTitle == "") {
                 subTitle = text.parse("Watch for (.*?)<BR>").condenseSpace()
             }
             return subTitle

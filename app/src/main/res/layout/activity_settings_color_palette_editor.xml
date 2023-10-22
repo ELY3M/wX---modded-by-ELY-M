@@ -49,8 +49,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_ll"
-                    >
+                    android:padding="@dimen/padding_ll">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv1"
@@ -89,7 +88,7 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

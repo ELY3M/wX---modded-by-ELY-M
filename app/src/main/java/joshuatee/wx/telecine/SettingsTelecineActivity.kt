@@ -35,8 +35,8 @@ class SettingsTelecineActivity : BaseActivity() {
 
     private fun addSwitch() {
         val configs = listOf(
-            Switch(this, "Three Second Countdown", "show-countdown", R.string.loc1_radar_label),
-            Switch(this, "Recording Notification","recording-notification", R.string.loc1_radar_label),
+                Switch(this, "Three Second Countdown", "show-countdown", R.string.loc1_radar_label),
+                Switch(this, "Recording Notification", "recording-notification", R.string.loc1_radar_label),
         )
         configs.forEach {
             box.addWidget(it)

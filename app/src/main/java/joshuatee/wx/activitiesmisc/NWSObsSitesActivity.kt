@@ -78,6 +78,7 @@ class NwsObsSitesActivity : BaseActivity() {
                     siteDisplay = false
                     title = titleString
                 }
+
                 else -> showObsSite(listIds[position])
             }
         }
@@ -117,9 +118,11 @@ class NwsObsSitesActivity : BaseActivity() {
         when (item.itemId) {
             R.id.action_lastused -> showObsSite(
                     Utility.readPref(this, prefToken, Metar.findClosestObsSite(this, Location.latLon).name))
+
             R.id.action_map -> Route.webView(this,
-                        "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
-                                "Observations near " + Location.wfo)
+                    "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
+                    "Observations near " + Location.wfo)
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

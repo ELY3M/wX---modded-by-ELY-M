@@ -29,13 +29,15 @@ import joshuatee.wx.R
 import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.TextSize
+import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.VBox
@@ -50,7 +52,9 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
     // - "wat" or "mcd"
     //
 
-    companion object { const val NO = "" }
+    companion object {
+        const val NO = ""
+    }
 
     private var number = ""
     private var url = ""
@@ -101,8 +105,8 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        if (downloadTimer.isRefreshNeeded(this)) {
-            FutureVoid(this, ::download, ::update)
+        if (downloadTimer.isRefreshNeeded()) {
+            FutureVoid(::download, ::update)
         }
     }
 

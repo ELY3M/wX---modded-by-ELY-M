@@ -22,15 +22,14 @@
 package joshuatee.wx.settings
 
 import android.content.Context
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.Utility
 import java.util.Locale
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalDictionaries
+import joshuatee.wx.getNwsHtml
 import joshuatee.wx.objects.OfficeTypeEnum
+import joshuatee.wx.parse
 import joshuatee.wx.util.To
-//import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
 object Location {
@@ -75,7 +74,9 @@ object Location {
 
     var currentLocationStr: String
         get() = (currentLocation + 1).toString()
-        set(currentLocationStr) { currentLocation = To.int(currentLocationStr) - 1 }
+        set(currentLocationStr) {
+            currentLocation = To.int(currentLocationStr) - 1
+        }
 
     val state get() = locations.getOrNull(currentLocation)?.state ?: "MI"
 
@@ -110,8 +111,6 @@ object Location {
         val lon = locations.getOrNull(locNum)?.y ?: ""
         return "LAT" + lat + "LON" + lon
     }
-
-    val locationIndex get() = currentLocation
 
     fun isUS(locationNumber: Int): Boolean = locations.getOrNull(locationNumber)?.isUS ?: true
 
@@ -175,38 +174,6 @@ object Location {
             }
             Utility.writePref(context, "RID$locNum", radarSite.uppercase(Locale.US))
             Utility.writePref(context, "NWS$locNum", wfo.uppercase(Locale.US))
-        } else if (xStr.contains("CANADA")) {
-            var tmpLatLon = LatLon()
-            if (xStr.length < 12) {
-                // if we are here then the user used the submenu
-                // need to calculate lat/lon first as get rid is now coded to parse on ":" for both x/y
-                // first check if the label is present in the database
-                if (UtilityCanada.isLabelPresent(labelStr)) {
-                    tmpLatLon = UtilityCanada.getLatLonFromLabel(labelStr)
-                }
-            }
-            var prov = ""
-            val parseProv = xStr.split(":").dropLastWhile { it.isEmpty() }
-            if (parseProv.isNotEmpty()) {
-                prov = parseProv[1]
-            }
-            var id = ""
-            val parseId = yStr.split(":").dropLastWhile { it.isEmpty() }
-            if (parseId.isNotEmpty()) {
-                id = parseId[0]
-            }
-            if (xStr.length > 12) {
-                tmpLatLon = LatLon(parseProv[2], parseId[1])
-            }
-            Utility.writePref(context, "LOC" + locNum + "_X", "CANADA" + ":" + prov + ":" + tmpLatLon.latString)
-            Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatLon.lonString)
-            setNumLocations(context, locNumToSave)
-            radarSite = UtilityCanada.getRadarSite(xStr, yStr)
-            Utility.writePref(context, "RID$locNum", radarSite.uppercase(Locale.US))
-            Utility.writePref(context, "NWS" + locNum + "_STATE", prov)
-            Utility.writePref(context, "ZONE$locNum", "")
-            Utility.writePref(context, "COUNTY$locNum", "")
-            Utility.writePref(context, "NWS$locNum", "")
         }
         refreshLocationData(context)
         setCurrentLocationStr(context, locNum)

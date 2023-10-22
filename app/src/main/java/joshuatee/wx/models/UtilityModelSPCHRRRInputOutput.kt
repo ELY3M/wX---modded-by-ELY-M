@@ -31,9 +31,12 @@ import android.graphics.drawable.Drawable
 import java.util.Locale
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
 import joshuatee.wx.objects.ObjectDateTime
+import joshuatee.wx.parse
+import joshuatee.wx.parseColumn
 import joshuatee.wx.util.To
 
 internal object UtilityModelSpcHrrrInputOutput {
@@ -80,10 +83,10 @@ internal object UtilityModelSpcHrrrInputOutput {
     }
 
     private fun getSectorCode(sectorName: String): String =
-        UtilityModelSpcHrrrInterface.sectors.indices
-            .firstOrNull { sectorName == UtilityModelSpcHrrrInterface.sectors[it] }
-            ?.let { UtilityModelSpcHrrrInterface.sectorCodes[it] }
-            ?: "S19"
+            UtilityModelSpcHrrrInterface.sectors.indices
+                    .firstOrNull { sectorName == UtilityModelSpcHrrrInterface.sectors[it] }
+                    ?.let { UtilityModelSpcHrrrInterface.sectorCodes[it] }
+                    ?: "S19"
 
     private fun getValidTime(run: String, validTimeForecast: String): String {
         val timeFormatString = "yyyyMMddHH"

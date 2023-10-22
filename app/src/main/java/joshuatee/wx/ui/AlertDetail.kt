@@ -22,7 +22,7 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import joshuatee.wx.Extensions.parseMultiple
+import joshuatee.wx.parseMultiple
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
@@ -78,6 +78,7 @@ class AlertDetail(val context: Context, box: VBox) {
                         endTime = items[2]
                         wfo = items[3]
                     }
+
                     capAlert.title.contains("until") -> {
                         val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
                         title = items[0]
@@ -85,6 +86,7 @@ class AlertDetail(val context: Context, box: VBox) {
                         endTime = items[2]
                         wfo = items[3]
                     }
+
                     else -> {
                         val items = capAlert.title.parseMultiple("(.*?) issued (.*?) by (.*?)$", 3)
                         title = items[0]

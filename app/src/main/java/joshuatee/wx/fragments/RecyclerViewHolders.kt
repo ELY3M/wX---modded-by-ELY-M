@@ -12,7 +12,7 @@ import joshuatee.wx.ui.Card
 // thanks http://inducesmile.com/android/android-gridlayoutmanager-with-recyclerview-in-material-design/
 
 internal class RecyclerViewHolders(itemView: View, private val itemList: List<TileObject>) :
-    RecyclerView.ViewHolder(itemView), View.OnClickListener, ItemTouchHelperViewHolder {
+        RecyclerView.ViewHolder(itemView), View.OnClickListener, ItemTouchHelperViewHolder {
 
     val imageView: ImageView
 

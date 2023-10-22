@@ -21,13 +21,30 @@
 
 #include "level2GenRadials.h"
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jclass clazz, jobject rad_buff, jobject color_buff, jobject bin_buff, jobject radial_start, jint number_of_radials, jint num_range_bins, jfloat bin_size, jboolean bg_color, jobject colormap_r, jobject colormap_g, jobject colormap_b, int product_code) {
-	unsigned char* c_r = (*env)->GetDirectBufferAddress(env, colormap_r);
-	unsigned char* c_g = (*env)->GetDirectBufferAddress(env, colormap_g);
-	unsigned char* c_b = (*env)->GetDirectBufferAddress(env, colormap_b);
-	c_r[0] = bg_color;
-	c_g[0] = bg_color;
-	c_b[0] = bg_color;
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(
+		JNIEnv * env,
+		jobject clazz, // was jclass
+		jobject radarFloatBuffer,
+		jobject radarColorBuffer,
+		jobject binWord,
+		jobject radialStartAngle,
+		jint number_of_radials,
+		jint numberOfRangeBins,
+		jfloat bin_size,
+		jbyte bgColorRed,
+		jbyte bgColorGreen,
+		jbyte bgColorBlue,
+		jobject colormapRed,
+		jobject colormapGreen,
+		jobject colormapBlue,
+		int productCode
+) {
+	unsigned char* c_r = (*env)->GetDirectBufferAddress(env, colormapRed);
+	unsigned char* c_g = (*env)->GetDirectBufferAddress(env, colormapGreen);
+	unsigned char* c_b = (*env)->GetDirectBufferAddress(env, colormapBlue);
+	c_r[0] = bgColorRed;
+	c_g[0] = bgColorGreen;
+	c_b[0] = bgColorBlue;
 	int total_bins = 0;
 	int g = 0;
 	float angle;
@@ -38,10 +55,10 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jcla
 	int bin = 0;
 	int color_for = 0;
 	double W_180_DIV_PI = 180.0 / M_PI;
-	jfloat* rBuff = (*env)->GetDirectBufferAddress(env, rad_buff);
-	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, color_buff);
-	jbyte* bBuff = (*env)->GetDirectBufferAddress(env, bin_buff);
-	jfloat* radial_start_angle = (*env)->GetDirectBufferAddress(env, radial_start);
+	jfloat* rBuff = (*env)->GetDirectBufferAddress(env, radarFloatBuffer);
+	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, radarColorBuffer);
+	jbyte* bBuff = (*env)->GetDirectBufferAddress(env, binWord);
+	jfloat* radial_start_angle = (*env)->GetDirectBufferAddress(env, radialStartAngle);
 	int r_i = 0;
 	int c_i = 0;
 	int b_i = 0;
@@ -57,7 +74,7 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jcla
 		} else {
 	        angle_v = radial_start_angle[0];
 		}
-		for (bin = 0; bin < num_range_bins; bin++) {
+		for (bin = 0; bin < numberOfRangeBins; bin++) {
 			cur_level = (unsigned char)bBuff[b_i];
 			b_i++;
 			if (cur_level == level) {

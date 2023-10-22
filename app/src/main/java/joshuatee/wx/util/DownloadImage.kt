@@ -27,11 +27,10 @@ import android.graphics.Bitmap
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.activitiesmisc.UtilityRtma
+import joshuatee.wx.getImage
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.radar.UtilityAwcRadarMosaic
 import joshuatee.wx.radar.UtilityNwsRadarMosaic
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.spc.UtilitySpcMeso
@@ -43,17 +42,9 @@ import joshuatee.wx.vis.UtilityGoes
 object DownloadImage {
 
     fun radarMosaic(context: Context): Bitmap = try {
-        if (UIPreferences.useAwcMosaic) {
-            val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
-            val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
-            val sector = Utility.readPref(context, prefTokenSector, "us")
-            val product = Utility.readPref(context, prefTokenProduct, "rad_rala")
-            UtilityAwcRadarMosaic.get(sector, product).getImage()
-        } else {
-            val prefTokenSector = "REMEMBER_NWSMOSAIC_SECTOR"
-            val sector = Utility.readPref(context, prefTokenSector, UtilityNwsRadarMosaic.getNearest(Location.latLon))
-            UtilityNwsRadarMosaic.get(sector).getImage()
-        }
+        val prefTokenSector = "REMEMBER_NWSMOSAIC_SECTOR"
+        val sector = Utility.readPref(context, prefTokenSector, UtilityNwsRadarMosaic.getNearest(Location.latLon))
+        UtilityNwsRadarMosaic.get(sector).getImage()
     } catch (e: Exception) {
         UtilityLog.handleException(e)
         UtilityImg.getBlankBitmap()
@@ -69,11 +60,13 @@ object DownloadImage {
                 val index = Utility.readPrefInt(context, "GOES16_IMG_FAV_IDX", 0)
                 bitmap = UtilityGoes.getImage(UtilityGoes.codes[index], Utility.readPref(context, "GOES16_SECTOR", "cgl")).getImage()
             }
+
             "VIS_1KM", "VIS_MAIN" -> needsBitmap = false
             "RAD_2KM" -> {
                 needsBitmap = false
                 bitmap = radarMosaic(context)
             }
+
             "IR_2KM", "WV_2KM", "VIS_2KM" -> needsBitmap = false
             "RTMA_DEW" -> url = UtilityRtma.getUrlForHomeScreen("2m_dwpt")
             "RTMA_TEMP" -> url = UtilityRtma.getUrlForHomeScreen("2m_temp")
@@ -82,6 +75,7 @@ object DownloadImage {
                 needsBitmap = false
                 bitmap = UtilityGoes.getImage("02", "CONUS").getImage()
             }
+
             "USWARN" -> url = "https://forecast.weather.gov/wwamap/png/US.png"
             "AKWARN" -> url = "https://forecast.weather.gov/wwamap/png/ak.png"
             "HIWARN" -> url = "https://forecast.weather.gov/wwamap/png/hi.png"
@@ -112,9 +106,9 @@ object DownloadImage {
             "QPF1-7" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/p168i.gif"
             "WPC_ANALYSIS" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/images/wwd/radnat/NATRAD_24.gif"
             "NHC2ATL" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png"
-            "NHC5ATL" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png"
+            "NHC5ATL" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_7d0.png"
             "NHC2EPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png"
-            "NHC5EPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
+            "NHC5EPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_7d0.png"
             "NHC2CPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png"
             "NHC5CPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
             "SPC_TST" -> {
@@ -122,30 +116,37 @@ object DownloadImage {
                 val images = UtilitySpc.thunderStormOutlookImages
                 bitmap = UtilityImg.mergeImagesVertically(images)
             }
+
             "SWOD1" -> {
                 needsBitmap = false
                 bitmap = UtilitySpcSwo.getImages("1", false)[0]
             }
+
             "WEATHERSTORY" -> {
                 needsBitmap = false
                 bitmap = ("https://www.weather.gov/images/" + Location.wfo.lowercase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
             }
+
             "WFOWARNINGS" -> {
                 needsBitmap = false
                 bitmap = ("https://www.weather.gov/wwamap/png/" + Location.wfo.lowercase(Locale.US) + ".png").getImage()
             }
+
             "SWOD2" -> {
                 needsBitmap = false
                 bitmap = UtilitySpcSwo.getImages("2", false)[0]
             }
+
             "SWOD3" -> {
                 needsBitmap = false
                 bitmap = UtilitySpcSwo.getImages("3", false)[0]
             }
+
             "SWOD4" -> {
                 needsBitmap = false
                 bitmap = UtilitySpcSwo.getImages("4", false)[0]
             }
+
             "SPCMESO1" -> {
                 var param = "500mb"
                 val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":").dropLastWhile { it.isEmpty() }
@@ -160,6 +161,7 @@ object DownloadImage {
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
+
             "SPCMESO2" -> {
                 var param = "pmsl"
                 val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
@@ -174,6 +176,7 @@ object DownloadImage {
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
+
             "SPCMESO3" -> {
                 var param = "ttd"
                 val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
@@ -188,6 +191,7 @@ object DownloadImage {
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
+
             "SPCMESO4" -> {
                 var param = "rgnlrad"
                 val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
@@ -202,6 +206,7 @@ object DownloadImage {
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
+
             "SPCMESO5" -> {
                 var param = "lllr"
                 val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
@@ -216,6 +221,7 @@ object DownloadImage {
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
+
             "SPCMESO6" -> {
                 var param = "laps"
                 val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
@@ -230,18 +236,22 @@ object DownloadImage {
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
+
             "CONUSWV" -> {
                 needsBitmap = false
                 bitmap = UtilityGoes.getImage("09", "CONUS").getImage()
             }
+
             "LTG" -> {
                 needsBitmap = false
                 bitmap = UtilityGoes.getImage("GLM", "CONUS").getImage()
             }
+
             "SND" -> {
                 needsBitmap = false
                 bitmap = UtilitySpcSoundings.getImage(context, UtilityLocation.getNearestSoundingSite(Location.latLon))
             }
+
             "STRPT" -> url = UtilitySpc.getStormReportsTodayUrl()
             else -> needsBitmap = false
         }

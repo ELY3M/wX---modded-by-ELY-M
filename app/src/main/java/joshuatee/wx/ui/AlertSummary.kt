@@ -43,7 +43,7 @@ class AlertSummary(private val context: Context, mainBox: VBox, private val scro
     private var image = Image(context, bitmap)
     private val cardText = CardText(context)
     private val textBox = VBox(context)
-    var capAlerts = listOf<CapAlert>()
+    private var capAlerts = listOf<CapAlert>()
 
     init {
         if (UtilityUI.isLandScape(context)) {

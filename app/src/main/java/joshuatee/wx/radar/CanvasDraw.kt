@@ -71,7 +71,7 @@ internal object CanvasDraw {
     fun cities(projectionType: ProjectionType, bitmap: Bitmap, projectionNumbers: ProjectionNumbers, textSize: Int) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        with (paint) {
+        with(paint) {
             style = Style.FILL
             strokeWidth = 1.0f
             color = RadarPreferences.colorCity
@@ -102,7 +102,7 @@ internal object CanvasDraw {
     fun locationDotForCurrentLocation(projectionType: ProjectionType, bitmap: Bitmap, projectionNumbers: ProjectionNumbers) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        with (paint) {
+        with(paint) {
             style = Style.FILL
             strokeWidth = 1.0f
             color = RadarPreferences.colorLocdot
@@ -179,7 +179,7 @@ internal object CanvasDraw {
     ) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        with (paint) {
+        with(paint) {
             style = Style.STROKE
             strokeWidth = (RadarGeometry.dataByType[geographyType]!!.lineSize / 2.0).toFloat()
             color = RadarGeometry.dataByType[geographyType]!!.colorInt

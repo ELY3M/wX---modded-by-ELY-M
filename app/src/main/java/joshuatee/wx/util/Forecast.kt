@@ -22,8 +22,8 @@
 package joshuatee.wx.util
 
 internal class Forecast(
-    val name: String,
-    val temperature: String,
-    val shortForecast: String,
-    val detailedForecast: String
+        val name: String,
+        val temperature: String,
+        val shortForecast: String,
+        val detailedForecast: String
 )

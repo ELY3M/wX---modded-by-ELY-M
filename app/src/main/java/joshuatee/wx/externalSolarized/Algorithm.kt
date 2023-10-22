@@ -48,14 +48,14 @@ import kotlin.math.*
  * @param twilight what angle sun should reach
  */
 internal fun algorithm(
-    time: DateTime,
-    date: LocalDateTime,
+        time: DateTime,
+        date: LocalDateTime,
 //    @FloatRange(from = -90.0, to = 90.0) latitude: Double,
 //    @FloatRange(from = -180.0, to = 180.0) longitude: Double,
-    latitude: Double,
-    longitude: Double,
-    twilight: Twilight,
-    timeZone: TimeZone
+        latitude: Double,
+        longitude: Double,
+        twilight: Twilight,
+        timeZone: TimeZone
 ): LocalDateTime? {
 
     // first calculate the day of the year
@@ -95,7 +95,7 @@ internal fun algorithm(
 
     // local hour angle
     val cosH =
-        (cos(zenith.radians) - (sinDec * sin(latitude.radians))) / (cosDec * cos(latitude.radians))
+            (cos(zenith.radians) - (sinDec * sin(latitude.radians))) / (cosDec * cos(latitude.radians))
 
     // no transition
     if (cosH > 1 || cosH < -1) return null
@@ -120,8 +120,8 @@ internal fun algorithm(
     }
 
     val timezoneOffset = TimeUnit.HOURS.convert(
-        timeZone.getOffset(date.atZone(ZoneId.of(timeZone.id)).toInstant().toEpochMilli()).toLong(),
-        TimeUnit.MILLISECONDS
+            timeZone.getOffset(date.atZone(ZoneId.of(timeZone.id)).toInstant().toEpochMilli()).toLong(),
+            TimeUnit.MILLISECONDS
     )
 
     return setDate.withHour(hour).withMinute(minute).withSecond(second).plusHours(timezoneOffset)

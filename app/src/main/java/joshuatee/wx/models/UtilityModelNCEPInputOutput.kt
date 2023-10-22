@@ -24,8 +24,11 @@ package joshuatee.wx.models
 import android.graphics.Bitmap
 import android.content.Context
 import java.util.Locale
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.getImage
+import joshuatee.wx.parse
+import joshuatee.wx.parseLastMatch
 import java.util.regex.Pattern
 
 internal object UtilityModelNcepInputOutput {
@@ -52,7 +55,7 @@ internal object UtilityModelNcepInputOutput {
         return runData
     }
 
-    fun getImage(@Suppress("UNUSED_PARAMETER") context: Context, om: ObjectModel, time: String): Bitmap {
+    fun getImage(@Suppress("UNUSED_PARAMETER") ignoredContext: Context, om: ObjectModel, time: String): Bitmap {
         val modifiedTime = if (om.model == "HRRR" && time.length == 3) {
             time + "00"
         } else {
@@ -62,8 +65,10 @@ internal object UtilityModelNcepInputOutput {
             "GFS" -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.sector.lowercase(Locale.US) + "/" + om.currentParam + "/" + om.model.lowercase(Locale.US) + "_" +
                     om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
+
             "HRRR" -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + modifiedTime + "_" + om.currentParam + ".gif"
+
             else -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }

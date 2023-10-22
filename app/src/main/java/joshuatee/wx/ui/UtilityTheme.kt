@@ -33,7 +33,7 @@ object UtilityTheme {
         get() = UIPreferences.primaryColor
 
     fun getPrimaryColorFromSelectedTheme(context: Context, color: Int): Int {
-        val attrs = intArrayOf(R.attr.colorPrimary, R.attr.colorPrimaryDark, R.attr.colorAccent)
+        val attrs = intArrayOf(androidx.appcompat.R.attr.colorPrimary, androidx.appcompat.R.attr.colorPrimaryDark, androidx.appcompat.R.attr.colorAccent)
         val ta = context.theme.obtainStyledAttributes(attrs)
         val primaryColor = ta.getColor(color, Color.BLACK) // 1 index for primaryColorDark
         ta.recycle()
@@ -41,7 +41,7 @@ object UtilityTheme {
     }
 
     fun setPrimaryColor(context: Context) {
-        val attrs = intArrayOf(R.attr.colorPrimary, R.attr.colorPrimaryDark, R.attr.colorAccent)
+        val attrs = intArrayOf(androidx.appcompat.R.attr.colorPrimary, androidx.appcompat.R.attr.colorPrimaryDark, androidx.appcompat.R.attr.colorAccent)
         val ta = context.theme.obtainStyledAttributes(attrs)
         if (UIPreferences.themeInt != R.style.MyCustomTheme_mixedBlue_NOAB && !UIPreferences.themeIsWhite) {
             UIPreferences.primaryColor = ta.getColor(0, Color.BLACK) // 1 index for primaryColorDark

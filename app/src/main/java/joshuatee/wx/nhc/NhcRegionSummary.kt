@@ -22,7 +22,6 @@
 package joshuatee.wx.nhc
 
 import android.graphics.Bitmap
-import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.common.GlobalVariables
 
 class NhcRegionSummary(region: NhcOceanEnum) {
@@ -39,40 +38,42 @@ class NhcRegionSummary(region: NhcOceanEnum) {
                 titles = listOf(
                         "Atlantic Tropical Cyclones and Disturbances ",
                         "ATL: Two-Day Graphical Tropical Weather Outlook",
-                        "ATL: Five-Day Graphical Tropical Weather Outlook"
+                        "ATL: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
                         "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
                         "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png"
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_7d0.png"
                 )
                 replaceString = "NHC Atlantic Wallet"
                 baseUrl = "${GlobalVariables.nwsNhcWebsitePrefix}/nhc_at"
             }
+
             NhcOceanEnum.EPAC -> {
                 titles = listOf(
                         "EPAC Tropical Cyclones and Disturbances ",
                         "EPAC: Two-Day Graphical Tropical Weather Outlook",
-                        "EPAC: Five-Day Graphical Tropical Weather Outlook"
+                        "EPAC: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
                         "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
                         "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_7d0.png"
                 )
                 replaceString = "NHC Eastern Pacific Wallet"
                 baseUrl = "${GlobalVariables.nwsNhcWebsitePrefix}/nhc_ep"
             }
+
             NhcOceanEnum.CPAC -> {
                 titles = listOf(
                         "CPAC Tropical Cyclones and Disturbances ",
                         "CPAC: Two-Day Graphical Tropical Weather Outlook",
-                        "CPAC: Five-Day Graphical Tropical Weather Outlook"
+                        "CPAC: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
                         "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_0d0.png",
                         "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
+                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_7d0.png"
                 )
                 replaceString = ""
                 baseUrl = ""
@@ -80,9 +81,9 @@ class NhcRegionSummary(region: NhcOceanEnum) {
         }
     }
 
-    fun getImages() {
-        bitmaps = urls.map { it.getImage() }
-    }
-
-    fun getTitle(index: Int) = arrayOf(urls[index], titles[index])
+//    fun getImages() {
+//        bitmaps = urls.map { it.getImage() }
+//    }
+//
+//    fun getTitle(index: Int) = arrayOf(urls[index], titles[index])
 }

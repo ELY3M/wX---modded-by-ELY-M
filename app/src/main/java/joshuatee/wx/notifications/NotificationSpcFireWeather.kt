@@ -27,10 +27,10 @@ import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
 import joshuatee.wx.spc.SpcFireOutlookSummaryActivity
 import android.content.Context
-import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.Extensions.getHtmlSep
-import joshuatee.wx.Extensions.parse
-import joshuatee.wx.Extensions.parseColumn
+import joshuatee.wx.getHtml
+import joshuatee.wx.getHtmlSep
+import joshuatee.wx.parse
+import joshuatee.wx.parseColumn
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.LatLon

@@ -21,6 +21,7 @@
 package joshuatee.wx.fragments
 
 import androidx.recyclerview.widget.RecyclerView
+
 //import androidx.recyclerview.widget.ItemTouchHelper
 
 internal interface ItemTouchHelperAdapter {
@@ -41,6 +42,7 @@ internal interface ItemTouchHelperAdapter {
      * *
      * @see RecyclerView.ViewHolder.getAdapterPosition
      */
+    @Suppress("SameReturnValue")
     fun onItemMove(fromPosition: Int, toPosition: Int): Boolean
 
     /**

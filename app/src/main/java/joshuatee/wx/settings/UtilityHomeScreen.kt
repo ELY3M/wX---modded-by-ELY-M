@@ -30,7 +30,6 @@ import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Route
-import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.radar.RadarMosaicNwsActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.spc.SpcSwoActivity
@@ -49,26 +48,26 @@ internal object UtilityHomeScreen {
     val classes = mutableMapOf<String, Class<*>>()
     val classArgs = mutableMapOf<String, Array<String>>()
     val classId = mutableMapOf<String, String>()
-    
+
     val localChoicesText = listOf(
-        "CC: Current Conditions",
-        "CC2: Current Conditions with image",
-        "HAZ: Hazards",
-        "7DAY2: 7 Day Forecast with images",
-        "AFDLOC: Area Forecast Discussion",
-        "HWOLOC: Hazardous Weather Outlook",
-        "VFDLOC: Aviation only Area Forecast Discussion",
-        "HOURLY: Hourly Forecast",
-        "CTOF: Celsius to Fahrenheit table"
+            "CC: Current Conditions",
+            "CC2: Current Conditions with image",
+            "HAZ: Hazards",
+            "7DAY2: 7 Day Forecast with images",
+            "AFDLOC: Area Forecast Discussion",
+            "HWOLOC: Hazardous Weather Outlook",
+            "VFDLOC: Aviation only Area Forecast Discussion",
+            "HOURLY: Hourly Forecast",
+            "CTOF: Celsius to Fahrenheit table"
     )
 
     val localChoicesImg = listOf(
-        "RADAR: Local NEXRAD Radar",
-        "WEATHERSTORY: Local NWS Weather Story",
-        "WFOWARNINGS: Local NWS Office Warnings",
-        "RTMA_DEW: Real-Time Mesoscale Analysis Dew Point",
-        "RTMA_TEMP: Real-Time Mesoscale Analysis Temperature",
-        "RTMA_WIND: Real-Time Mesoscale Analysis Wind"
+            "RADAR: Local NEXRAD Radar",
+            "WEATHERSTORY: Local NWS Weather Story",
+            "WFOWARNINGS: Local NWS Office Warnings",
+            "RTMA_DEW: Real-Time Mesoscale Analysis Dew Point",
+            "RTMA_TEMP: Real-Time Mesoscale Analysis Temperature",
+            "RTMA_WIND: Real-Time Mesoscale Analysis Wind"
     )
 
     fun launch(context: Context, homeScreenImageCards: List<CardHSImage>) {
@@ -187,64 +186,58 @@ internal object UtilityHomeScreen {
         classArgs["RTMA_WIND"] = arrayOf("10m_wnd")
         classId["RTMA_WIND"] = RtmaActivity.RID
 
-        if (UIPreferences.useAwcMosaic) {
-            classes["RAD_2KM"] = AwcRadarMosaicActivity::class.java
-            classArgs["RAD_2KM"] = arrayOf("")
-            classId["RAD_2KM"] = AwcRadarMosaicActivity.URL
-        } else {
-            classes["RAD_2KM"] = RadarMosaicNwsActivity::class.java
-            classArgs["RAD_2KM"] = arrayOf("")
-            classId["RAD_2KM"] = RadarMosaicNwsActivity.URL
-        }
+        classes["RAD_2KM"] = RadarMosaicNwsActivity::class.java
+        classArgs["RAD_2KM"] = arrayOf("")
+        classId["RAD_2KM"] = RadarMosaicNwsActivity.URL
 
         listOf(
-            "FMAP",
-            "FMAPD2",
-            "FMAPD3",
-            "FMAP12",
-            "FMAP24",
-            "FMAP36",
-            "FMAP48",
-            "FMAP72",
-            "FMAP96",
-            "FMAP120",
-            "FMAP144",
-            "FMAP168",
-            "FMAP3D",
-            "FMAP4D",
-            "FMAP5D",
-            "FMAP6D",
-            "WPC_ANALYSIS",
-            "QPF1",
-            "QPF2",
-            "QPF3",
-            "QPF1-2",
-            "QPF1-3",
-            "QPF4-5",
-            "QPF6-7",
-            "QPF1-5",
-            "QPF1-7"
+                "FMAP",
+                "FMAPD2",
+                "FMAPD3",
+                "FMAP12",
+                "FMAP24",
+                "FMAP36",
+                "FMAP48",
+                "FMAP72",
+                "FMAP96",
+                "FMAP120",
+                "FMAP144",
+                "FMAP168",
+                "FMAP3D",
+                "FMAP4D",
+                "FMAP5D",
+                "FMAP6D",
+                "WPC_ANALYSIS",
+                "QPF1",
+                "QPF2",
+                "QPF3",
+                "QPF1-2",
+                "QPF1-3",
+                "QPF4-5",
+                "QPF6-7",
+                "QPF1-5",
+                "QPF1-7"
         ).forEach {
             classes[it] = WpcImagesActivity::class.java
             classArgs[it] = arrayOf("HS", it)
             classId[it] = WpcImagesActivity.URL
         }
         listOf(
-            "USWARN",
-            "AKWARN",
-            "HIWARN"
+                "USWARN",
+                "AKWARN",
+                "HIWARN"
         ).forEach {
             classes[it] = USWarningsWithRadarActivity::class.java
             classArgs[it] = arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
             classId[it] = USWarningsWithRadarActivity.URL
         }
         listOf(
-            "NHC2ATL",
-            "NHC5ATL",
-            "NHC2EPAC",
-            "NHC5EPAC",
-            "NHC2CPAC",
-            "NHC5CPAC"
+                "NHC2ATL",
+                "NHC5ATL",
+                "NHC2EPAC",
+                "NHC5EPAC",
+                "NHC2CPAC",
+                "NHC5CPAC"
         ).forEach {
             classes[it] = NhcActivity::class.java
             classId[it] = ""

@@ -58,11 +58,11 @@ object NexradRenderRadar {
     }
 
     fun decodeRadarHeader(context: Context,
-            data: NexradRenderData,
-            state: NexradRenderState,
-            wxglNexradLevel2: NexradLevel2,
-            wxglNexradLevel3: NexradLevel3,
-            performDecomp: Boolean
+                          data: NexradRenderData,
+                          state: NexradRenderState,
+                          wxglNexradLevel2: NexradLevel2,
+                          wxglNexradLevel3: NexradLevel3,
+                          performDecomp: Boolean
     ) {
         //
         // extract information from the header
@@ -97,7 +97,8 @@ object NexradRenderRadar {
         data.radarBuffers.setToPositionZero()
     }
 
-    fun createRadials(context: Context,
+    fun createRadials(
+            context: Context,
             data: NexradRenderData,
             state: NexradRenderState,
             wxglNexradLevel2: NexradLevel2,
@@ -145,23 +146,26 @@ object NexradRenderRadar {
                 }
             } else {
                 wxglNexradLevel2.binWord.position(0)
-                totalBins = if (RadarPreferences.useJni)
-                    Jni.level2GenRadials(
-                            data.radarBuffers.floatBuffer,
-                            data.radarBuffers.colorBuffer,
-                            wxglNexradLevel2.binWord,
-                            wxglNexradLevel2.radialStartAngle,
-                            data.radarBuffers.numberOfRadials,
-                            data.radarBuffers.numRangeBins,
-                            data.radarBuffers.binSize,
-                            data.radarBuffers.bgColor,
-                            colorPalette.redValues,
-                            colorPalette.greenValues,
-                            colorPalette.blueValues,
-                            data.radarBuffers.productCode.toInt()
-                    )
-                else
-                    NexradDecodeEightBit.createRadials(data.radarBuffers, wxglNexradLevel2.binWord, wxglNexradLevel2.radialStartAngle)
+                totalBins = NexradDecodeEightBit.createRadials(data.radarBuffers, wxglNexradLevel2.binWord, wxglNexradLevel2.radialStartAngle)
+//                totalBins = if (RadarPreferences.useJni)
+//                    Jni.level2GenRadials(
+//                            data.radarBuffers.floatBuffer,
+//                            data.radarBuffers.colorBuffer,
+//                            wxglNexradLevel2.binWord,
+//                            wxglNexradLevel2.radialStartAngle,
+//                            data.radarBuffers.numberOfRadials,
+//                            data.radarBuffers.numRangeBins,
+//                            data.radarBuffers.binSize,
+//                            Color.red(data.radarBuffers.bgColor).toByte(),
+//                            Color.green(data.radarBuffers.bgColor).toByte(),
+//                            Color.blue(data.radarBuffers.bgColor).toByte(),
+//                            colorPalette.redValues,
+//                            colorPalette.greenValues,
+//                            colorPalette.blueValues,
+//                            data.radarBuffers.productCode.toInt()
+//                    )
+//                else
+//                    NexradDecodeEightBit.createRadials(data.radarBuffers, wxglNexradLevel2.binWord, wxglNexradLevel2.radialStartAngle)
             } // level 2 , level 3 check
         } catch (e: Exception) {
             UtilityLog.handleException(e)

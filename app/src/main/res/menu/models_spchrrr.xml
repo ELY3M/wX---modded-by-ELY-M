@@ -24,22 +24,11 @@
     <item
         android:id="@+id/action_run"
         android:title="@string/run"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_time"
         android:title="@string/time"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_back"
-        android:icon="@drawable/ic_keyboard_arrow_left_24dp"
-        android:title="@string/back_arrow"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_forward"
-        android:icon="@drawable/ic_keyboard_arrow_right_24dp"
-        android:title="@string/forward_arrow"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_img1"
         android:title="@string/label_sel_img1"

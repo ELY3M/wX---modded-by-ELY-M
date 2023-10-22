@@ -72,9 +72,9 @@ object GlobalArrays {
             "SPCMESO6: Favorite #6 (laps)",
             "WPC_ANALYSIS: WPC Analysis, Radar, Warnings",
             "NHC2ATL: ATL Two-Day Graphical Tropical Weather Outlook",
-            "NHC5ATL: ATL Five-Day Graphical Tropical Weather Outlook",
+            "NHC5ATL: ATL Seven-Day Graphical Tropical Weather Outlook",
             "NHC2EPAC: EPAC Two-Day Graphical Tropical Weather Outlook",
-            "NHC5EPAC: EPAC Five-Day Graphical Tropical Weather Outlook",
+            "NHC5EPAC: EPAC Seven-Day Graphical Tropical Weather Outlook",
             "NHC2CPAC: CPAC Two-Day Graphical Tropical Weather Outlook",
             "NHC5CPAC: CPAC Five-Day Graphical Tropical Weather Outlook",
             "AURORA: Aurora Forecast"

@@ -41,17 +41,17 @@ class ObjectWarning() {
     var isCurrent = true
 
     constructor(
-        url: String,
-        title: String,
-        area: String,
-        effective: String,
-        expires: String,
-        event: String,
-        sender: String,
-        polygon: String,
-        vtec: String,
-        geometry: String
-    ): this() {
+            url: String,
+            title: String,
+            area: String,
+            effective: String,
+            expires: String,
+            event: String,
+            sender: String,
+            polygon: String,
+            vtec: String,
+            geometry: String
+    ) : this() {
         this.url = url
         // detailed desc
         this.title = title
@@ -78,19 +78,19 @@ class ObjectWarning() {
 
     fun getClosestRadar(): String {
         val data = polygon
-                    .replace("[", "")
-                    .replace("]", "")
-                    .replace(",", " ")
-                    .replace("-", "")
+                .replace("[", "")
+                .replace("]", "")
+                .replace(",", " ")
+                .replace("-", "")
         val points = data.split(" ")
         return getClosestRadarCompute(points)
     }
 
     fun getPolygonAsLatLons(multiplier: Int): List<LatLon> {
         val polygonTmp = polygon
-                            .replace("[", "")
-                            .replace("]", "")
-                            .replace(",", " ")
+                .replace("[", "")
+                .replace("]", "")
+                .replace(",", " ")
         return LatLon.parseStringToLatLons(polygonTmp, multiplier.toDouble(), true)
     }
 
@@ -121,8 +121,8 @@ class ObjectWarning() {
             val eventList = UtilityString.parseColumn(html, "\"event\": \"(.*?)\"")
             val senderNameList = UtilityString.parseColumn(html, "\"senderName\": \"(.*?)\"")
             val data = html
-                        .replace("\n", "")
-                        .replace(" ", "")
+                    .replace("\n", "")
+                    .replace(" ", "")
             val listOfPolygonRaw = UtilityString.parseColumn(data, RegExp.warningLatLonPattern)
             val vtecs = UtilityString.parseColumn(html, RegExp.warningVtecPattern)
             val geometryList = UtilityString.parseColumn(html, "\"geometry\": (.*?),")

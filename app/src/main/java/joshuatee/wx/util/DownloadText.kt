@@ -28,10 +28,15 @@ import joshuatee.wx.activitiesmisc.UtilityUSHourly
 import joshuatee.wx.audio.UtilityPlayList
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.getHtml
+import joshuatee.wx.getHtmlWithNewLine
+import joshuatee.wx.getNwsHtml
+import joshuatee.wx.parse
+import joshuatee.wx.parseAcrossLines
+import joshuatee.wx.removeHtml
+import joshuatee.wx.removeLineBreaks
 import joshuatee.wx.settings.Location.latLon
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityLocation
 
 object DownloadText {
@@ -47,23 +52,26 @@ object DownloadText {
             prod == "HWOLOC" -> text = byProduct(context, "hwo" + Location.wfo.lowercase(Locale.US))
             prod == "VFDLOC" -> text = byProduct(context, "vfd" + Location.wfo.lowercase(Locale.US))
             //elys mod
-	    prod == "SUNMOON" -> text = UtilityTimeSunMoon.getData(latLon)
-	    prod == "HOURLY" -> text = UtilityUSHourly.get(Location.currentLocation)[0]
+	        prod == "SUNMOON" -> text = UtilityTimeSunMoon.getData(latLon)
+            prod == "HOURLY" -> text = UtilityUSHourly.get(Location.currentLocation)[0]
             prod == "QPF94E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "1"
                 val html = textUrl.getHtmlWithNewLine()
                 text = UtilityString.extractPre(html).removeLineBreaks().removeHtml()
             }
+
             prod == "QPF98E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "2"
                 val html = textUrl.getHtmlWithNewLine()
                 text = UtilityString.extractPre(html).removeLineBreaks().removeHtml()
             }
+
             prod == "QPF99E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "3"
                 val html = textUrl.getHtmlWithNewLine()
                 text = UtilityString.extractPre(html).removeLineBreaks().removeHtml()
             }
+
             prod == "SWPC3DAY" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/3-day-forecast.txt").getHtmlWithNewLine()
             prod == "SWPC27DAY" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/27-day-outlook.txt").getHtmlWithNewLine()
             prod == "SWPCWWA" -> text = (GlobalVariables.nwsSwpcWebSitePrefix + "/text/advisory-outlook.txt").getHtmlWithNewLine()
@@ -80,12 +88,14 @@ object DownloadText {
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeHtml()
             }
+
             prod.contains("MIAT") || prod == "HFOTWOCP" -> text = "${GlobalVariables.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod".getHtmlWithNewLine().removeLineBreaks()
             prod.startsWith("SCCNS") -> {
                 val url = "${GlobalVariables.nwsWPCwebsitePrefix}/discussions/nfd" + prod.lowercase(Locale.US).replace("ns", "") + ".html"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeHtml()
             }
+
             prod.contains("SPCMCD") -> {
                 val no = prod.substring(6)
                 val textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md$no.html"
@@ -98,6 +108,7 @@ object DownloadText {
 //                }
 //                text = text.replace("<br>".toRegex(), "<BR>")
             }
+
             prod.contains("SPCWAT") -> {
                 val no = prod.substring(6)
                 val textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww$no.html"
@@ -110,6 +121,7 @@ object DownloadText {
 //                    text = text.replace("<br>", " ")
 //                }
             }
+
             prod.contains("WPCMPD") -> {
                 val no = prod.substring(6)
                 val textUrl = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
@@ -123,6 +135,7 @@ object DownloadText {
 //                    text = text.replace("<br>", " ")
 //                }
             }
+
             prod.startsWith("GLF") && !prod.contains("%") -> text = byProduct(context, "$prod%")
             prod.contains("FOCN45") -> text = "${GlobalVariables.nwsRadarPub}/data/raw/fo/focn45.cwwg..txt".getHtmlWithNewLine().removeLineBreaks()
             prod.startsWith("AWCN") -> text = ("${GlobalVariables.nwsRadarPub}/data/raw/aw/" + prod.lowercase(Locale.US) + ".cwwg..txt").getHtmlWithNewLine().removeLineBreaks()
@@ -141,6 +154,7 @@ object DownloadText {
                 val html = url.getHtmlWithNewLine()
                 text = UtilityString.extractPreLsr(html)
             }
+
             prod.startsWith("GLF") -> {
                 val product = prod.substring(0, 3)
                 val site = prod.substring(3).replace("%", "")
@@ -148,37 +162,32 @@ object DownloadText {
                 val html = url.getHtmlWithNewLine()
                 text = UtilityString.extractPreLsr(html)
             }
+
             prod.contains("FWDDY1") -> {
                 val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/fwdy1.html"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
+
             prod.contains("FWDDY2") -> {
                 val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/fwdy2.html"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
+
             prod.contains("FWDDY38") -> {
                 val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/fire_wx/"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
-            prod.startsWith("FXCN01") -> {
-                text = ("https://collaboration.cmc.ec.gc.ca/cmc/cmop/FXCN/").getHtmlWithNewLine()
-                val dateList = UtilityString.parseColumnAcrossLines(text, "href=\"([0-9]{8})/\"")
-                val dateString = dateList.last()
-                val daysAndRegion = prod.replace("FXCN01_", "").lowercase(Locale.US)
-                text = ("https://collaboration.cmc.ec.gc.ca/cmc/cmop/FXCN/" + dateString + "/fx_" + daysAndRegion + "_" + dateString + "00.html")
-                        .getHtml()
-                        .replace(GlobalVariables.newline + GlobalVariables.newline, GlobalVariables.newline)
-                text = Utility.fromHtml(text)
-            }
+
             prod.startsWith("VFD") -> {
                 val t2 = prod.substring(3)
                 text = (GlobalVariables.nwsAWCwebsitePrefix + "/fcstdisc/data?cwa=K$t2").getHtmlWithNewLine()
                 text = text.parseAcrossLines("<!-- raw data starts -->(.*?)<!-- raw data ends -->")
                 text = text.removeLineBreaks().removeHtml()
             }
+
             prod.contains("FPCN48") -> text = "${GlobalVariables.nwsRadarPub}/data/raw/fp/fpcn48.cwao..txt".getHtmlWithNewLine()
             prod.contains("PMDTHR") -> {
                 val url = GlobalVariables.nwsCPCNcepWebsitePrefix + "/products/predictions/threats/threats.php"
@@ -186,36 +195,43 @@ object DownloadText {
                 text = text.parseAcrossLines("<div id=\"discDiv\">(.*?)</div>")
                 text = text.removeLineBreaks().removeHtml()
             }
+
             prod.contains("USHZD37") -> {
                 val url = "https://www.wpc.ncep.noaa.gov/threats/threats.php"
                 text = url.getHtmlWithNewLine()
                 text = text.parseAcrossLines("<div class=.haztext.>(.*?)</div>")
                 text = text.removeHtml()
             }
+
             prod.contains("PMD30D") -> {
                 val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxus07.kwbc.pmd.30d.txt"
                 text = textUrl.getHtmlWithNewLine()
                 text = text.removeLineBreaks()
             }
+
             prod.contains("PMD90D") -> {
                 val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxus05.kwbc.pmd.90d.txt"
                 text = textUrl.getHtmlWithNewLine()
                 text = text.removeLineBreaks()
             }
+
             prod.contains("PMDHCO") -> {
                 val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxhw40.kwbc.pmd.hco.txt"
                 text = textUrl.getHtmlWithNewLine()
             }
+
             prod.contains("PMDMRD") -> {
                 val textUrl = GlobalVariables.tgftpSitePrefix + "/data/raw/fx/fxus06.kwbc.pmd.mrd.txt"
                 text = textUrl.getHtmlWithNewLine().removeLineBreaks()
             }
+
             prod.startsWith("FTM") -> {
                 val radarSite = prod.substring(3, 6)
                 val url = "https://forecast.weather.gov/product.php?site=NWS&product=FTM&issuedby=$radarSite"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPreLsr(text)
             }
+
             prod.startsWith("RWR") -> {
                 val product = prod.substring(0, 3)
                 val location = prod.substring(3).replace("%", "")
@@ -226,6 +242,7 @@ object DownloadText {
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPreLsr(text)
             }
+
             prod.startsWith("NSH") || (prod.startsWith("RTP") && prod.length == 6) -> {
                 val product = prod.substring(0, 3)
                 val location = prod.substring(3).replace("%", "")
@@ -233,6 +250,7 @@ object DownloadText {
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPreLsr(text)
             }
+
             prod.startsWith("RTP") && prod.length == 5 -> {
                 val product = prod.substring(0, 3)
                 val location = prod.substring(3, 5).replace("%", "")
@@ -244,6 +262,7 @@ object DownloadText {
                 text = text.replace("\\n\\n", "\n")
                 text = text.replace("\\n", "\n")
             }
+
             prod.startsWith("CLI") -> {
                 val location = prod.substring(3, 6).replace("%", "")
                 val wfo = prod.substring(6).replace("%", "")
@@ -251,6 +270,7 @@ object DownloadText {
                 text = "https://forecast.weather.gov/product.php?site=$wfo&product=CLI&issuedby=$location".getHtmlWithNewLine()
                 text = UtilityString.extractPreLsr(text)
             }
+
             prod.contains("CTOF") -> text = "Celsius to Fahrenheit table" + GlobalVariables.newline + UtilityMath.celsiusToFahrenheitTable()
             else -> {
                 // Feb 8 2020 Sat
@@ -277,36 +297,43 @@ object DownloadText {
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
+
                         "SWODY2" -> {
                             val url = "https://www.spc.noaa.gov/products/outlook/day2otlk.html"
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
+
                         "SWODY3" -> {
                             val url = "https://www.spc.noaa.gov/products/outlook/day3otlk.html"
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
+
                         "SWOD48" -> {
                             val url = "https://www.spc.noaa.gov/products/exper/day4-8/"
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
+
                         "PMDSPD", "PMDEPD", "PMDHI", "PMDAK", "QPFERD", "QPFHSD" -> {
                             val url = "https://www.wpc.ncep.noaa.gov/discussions/hpcdiscussions.php?disc=" + prod.lowercase(Locale.US)
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
-                        "PMDSA"-> {
+
+                        "PMDSA" -> {
                             val url = "https://www.wpc.ncep.noaa.gov/discussions/hpcdiscussions.php?disc=fxsa20"
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
-                        "PMDCA"-> {
+
+                        "PMDCA" -> {
                             val url = "https://www.wpc.ncep.noaa.gov/discussions/hpcdiscussions.php?disc=fxca20"
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
+
                         else -> {
                             // https://forecast.weather.gov/product.php?site=DTX&issuedby=DTX&product=AFD&format=txt&version=1&glossary=0
                             val url = "https://forecast.weather.gov/product.php?site=" +

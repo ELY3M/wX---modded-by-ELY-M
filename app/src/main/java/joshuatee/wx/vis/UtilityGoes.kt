@@ -21,8 +21,10 @@
 
 package joshuatee.wx.vis
 
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.getHtml
+import joshuatee.wx.parse
+import joshuatee.wx.parseColumn
 import joshuatee.wx.util.UtilityString
 
 object UtilityGoes {
@@ -58,7 +60,7 @@ object UtilityGoes {
         var url = GlobalVariables.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
         if (product == "GLM") {
             url = url.replace("ABI", "GLM")
-                     .replace("$sectorLocal/GLM", "$sectorLocal/EXTENT3")
+                    .replace("$sectorLocal/GLM", "$sectorLocal/EXTENT3")
         }
         return url
     }
@@ -80,8 +82,8 @@ object UtilityGoes {
             else -> GlobalVariables.goes16AnimUrl + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$productLocal&length=$frameCountString"
         }
         val html = url.getHtml()
-                        .replace("\n", "")
-                        .replace("\r", "")
+                .replace("\n", "")
+                .replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")
         return imageHtml.parseColumn("'(https.*?jpg)'")
     }

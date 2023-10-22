@@ -27,13 +27,14 @@ import joshuatee.wx.R
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.OfficeTypeEnum
+import joshuatee.wx.parse
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
 import java.util.regex.Pattern
@@ -44,6 +45,7 @@ internal object Metar {
     // 4 is for the main screen
     // 5 is for canvas
     val data = List(6) { MetarData() }
+
     // A data structure (map) consisting of a Lat/Lon string array for each Obs site
     private val obsLatLon = mutableMapOf<String, Array<String>>()
     val timer = DownloadTimer("METAR")
@@ -55,7 +57,7 @@ internal object Metar {
     private val pattern5: Pattern = Pattern.compile("SM (.*?) M?[0-9]{2}/")
 
     fun get(context: Context, rid: String, paneNumber: Int) {
-        if (timer.isRefreshNeeded(context) || rid != data[paneNumber].obsStateOld) {
+        if (timer.isRefreshNeeded() || rid != data[paneNumber].obsStateOld) {
             val obsAl = mutableListOf<String>()
             val obsAlExt = mutableListOf<String>()
             val obsAlWb = mutableListOf<String>()
@@ -65,17 +67,14 @@ internal object Metar {
             val obsAlAviationColor = mutableListOf<Int>()
             data[paneNumber].obsStateOld = rid
             val obsList = getNearbyObsSites(context, rid)
-            // https://www.aviationweather.gov/metar/data?ids=KDTW%2CKARB&format=raw&date=&hours=0
-            // FIXME TODO new format? https://beta.aviationweather.gov/cgi-bin/data/metar.php?ids=KORD,KSEA,KATL
-            // FIXME TODO new format has each obs on single line, no HTML tags
 
-            // OLD - current
-            val html = "${GlobalVariables.nwsAWCwebsitePrefix}/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
-            val metarsTmp = html.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
+            // OLD
+//            val html = "${GlobalVariables.nwsAWCwebsitePrefix}/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
+//            val metarsTmp = html.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
 
-            // NEW
-//            val html = "https://beta.aviationweather.gov/cgi-bin/data/metar.php?ids=$obsList".getHtmlWithNewLine()
-//            val metarsTmp = html.split(GlobalVariables.newline)
+            // NEW - current
+            val html = "https://www.aviationweather.gov/cgi-bin/data/metar.php?ids=$obsList".getHtmlWithNewLine()
+            val metarsTmp = html.split(GlobalVariables.newline)
 
             val metars = condense(metarsTmp)
             initObsMap(context)
@@ -124,6 +123,8 @@ internal object Metar {
                     } else {
                         ovcInt
                     }
+
+                    @Suppress("KotlinConstantConditions")
                     val aviationColor = if (visInt > 5 && lowestCig > 3000) {
                         Color.GREEN
                     } else if (visInt in 3..5 || lowestCig in 1000..3000) {
@@ -174,11 +175,11 @@ internal object Metar {
                         if (latLon[0] != "0.0") {
                             obsAl.add(latLon[0] + ":" + latLon[1] + ":" + temperature + "/" + dewPoint)
                             obsAlExt.add(
-                                latLon[0] + ":" + latLon[1] + ":" + temperature + "/" + dewPoint + " (" + obsSite + ")"
-                                        + GlobalVariables.newline + pressureBlob + " - " + visBlobDisplay
-                                        + GlobalVariables.newline + windBlob
-                                        + GlobalVariables.newline + conditionsBlob
-                                        + GlobalVariables.newline + timeBlob
+                                    latLon[0] + ":" + latLon[1] + ":" + temperature + "/" + dewPoint + " (" + obsSite + ")"
+                                            + GlobalVariables.newline + pressureBlob + " - " + visBlobDisplay
+                                            + GlobalVariables.newline + windBlob
+                                            + GlobalVariables.newline + conditionsBlob
+                                            + GlobalVariables.newline + timeBlob
                             )
                             if (validWind) {
                                 obsAlWb.add(latLon[0] + ":" + latLon[1] + ":" + windDir + ":" + windInKt)
@@ -212,7 +213,8 @@ internal object Metar {
         }
     }
 
-    @Synchronized private fun initObsMap(context: Context) {
+    @Synchronized
+    private fun initObsMap(context: Context) {
         if (obsLatLon.isEmpty()) {
             val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.us_metar3)
             val lines = text.split("\n").dropLastWhile { it.isEmpty() }
@@ -242,13 +244,14 @@ internal object Metar {
     // K1BM 47.2833333333 -110.366666667
     // K1BW 41.5166666667 -104.0
     //
-    @Synchronized private fun readData(context: Context) {
+    @Synchronized
+    private fun readData(context: Context) {
         if (metarSites.isEmpty()) {
             val metarDataRaw = UtilityIO.readTextFileFromRaw(context.resources, R.raw.us_metar3)
             val metarDataAsList = metarDataRaw.split("\n").dropLastWhile { it.isEmpty() }
             metarDataAsList.forEach {
                 val tokens = it.split(" ")
-                metarSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2]),0))
+                metarSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2]), 0))
             }
         }
     }

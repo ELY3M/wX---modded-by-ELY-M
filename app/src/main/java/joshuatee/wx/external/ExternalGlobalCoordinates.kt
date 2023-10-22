@@ -37,7 +37,7 @@ import joshuatee.wx.objects.LatLon
  */
 /** Latitude in degrees. Negative latitude is southern hemisphere.  */
 /** Longitude in degrees. Negative longitude is western hemisphere.  */
-open class ExternalGlobalCoordinates (private var mLatitude: Double, private var mLongitude: Double)  { // : Comparable<ExternalGlobalCoordinates>, Serializable
+open class ExternalGlobalCoordinates(private var mLatitude: Double, private var mLongitude: Double) { // : Comparable<ExternalGlobalCoordinates>, Serializable
     /**
      * Get latitude.
      *
@@ -75,6 +75,7 @@ open class ExternalGlobalCoordinates (private var mLatitude: Double, private var
             mLongitude = longitude
             canonicalize()
         }
+
     /**
      * Canonicalize the current latitude and longitude values such that:
      *

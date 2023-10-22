@@ -28,11 +28,17 @@ internal class PlayListAdapter(val context: Context, private val dataSet: Mutabl
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
+        override fun onClick(v: View) {
+            myClickListener!!.onItemClick(layoutPosition)
+        }
     }
 
     fun setListener(fn: (Int) -> Unit) {
-        myClickListener = object : MyClickListener { override fun onItemClick(position: Int) { fn(position) } }
+        myClickListener = object : MyClickListener {
+            override fun onItemClick(position: Int) {
+                fn(position)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
@@ -42,14 +48,14 @@ internal class PlayListAdapter(val context: Context, private val dataSet: Mutabl
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
         val items = dataSet[position].split(";")
-        with (holder) {
+        with(holder) {
             label.text = items[0]
             timeAndSize.text = items[1]
 //            val string = Utility.fromHtml(Utility.readPref(context, "PLAYLIST_" + items[0], ""))
 //            val s = Utility.readPref(context, "PLAYLIST_" + items[0], "")
             contentPreview.text = Utility.readPref(context, "PLAYLIST_" + items[0], "")
-                                            .replace(GlobalVariables.newline, " ")
-                                            .take(maxLength)
+                    .replace(GlobalVariables.newline, " ")
+                    .take(maxLength)
         }
     }
 
@@ -61,7 +67,9 @@ internal class PlayListAdapter(val context: Context, private val dataSet: Mutabl
 
     override fun getItemCount() = dataSet.size
 
-    interface MyClickListener { fun onItemClick(position: Int) }
+    interface MyClickListener {
+        fun onItemClick(position: Int)
+    }
 
     companion object {
         private var myClickListener: MyClickListener? = null

@@ -21,10 +21,9 @@
 
 package joshuatee.wx.objects
 
-import android.content.Context
 import kotlinx.coroutines.*
 
-class FutureText2(val context: Context, val downloadFunc: () -> String, val updateFunc: (String) -> Unit) {
+class FutureText2(val downloadFunc: () -> String, val updateFunc: (String) -> Unit) {
 
     init {
         getContent()

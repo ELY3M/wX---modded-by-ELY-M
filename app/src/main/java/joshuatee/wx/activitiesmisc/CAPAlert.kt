@@ -22,11 +22,13 @@
 package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.util.UtilityDownloadNws
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.parse
+import joshuatee.wx.parseFirst
+import joshuatee.wx.removeLineBreaksCap
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityString
 
@@ -58,6 +60,7 @@ class CapAlert {
     private var tornadoThreat = ""
     var motion = ""
     var extended = ""
+
     // used for XML
     private var polygon = ""
 
@@ -194,10 +197,10 @@ class CapAlert {
         private fun getWarningsFromJson(html: String): List<String> {
             val data = html.replace("\n", "").replace(" ", "")
             val points = data.parseFirst(RegExp.warningLatLonPattern)
-                             .replace("[", "")
-                             .replace("]", "")
-                             .replace(",", " ")
-                             .replace("-", "")
+                    .replace("[", "")
+                    .replace("]", "")
+                    .replace(",", " ")
+                    .replace("-", "")
             return points.split(" ")
         }
     }
