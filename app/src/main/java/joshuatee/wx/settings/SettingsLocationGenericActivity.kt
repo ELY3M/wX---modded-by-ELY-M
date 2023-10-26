@@ -150,22 +150,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         adjustNotificationLabel()
     }
 
-    // This is needed because CA locations requires navigating to a new activity FIXME TODO remove after 2023
-//    override fun onRestart() {
-//        val caProv = Utility.readPref(this, "LOCATION_CANADA_PROV", "")
-//        val caCity = Utility.readPref(this, "LOCATION_CANADA_CITY", "")
-//        val caId = Utility.readPref(this, "LOCATION_CANADA_ID", "")
-//        if (caProv != "" || caCity != "" || caId != "") {
-//            editTextLat.setText(resources.getString(R.string.settings_loc_generic_ca_x, caProv))
-//            editTextLon.setText(caId)
-//            val caLabel = "$caCity, $caProv"
-//            editTextLabel.setText(caLabel)
-//            settingsLocationGenericSwitches.notificationsCanada(true)
-//            saveLocation()
-//        }
-//        super.onRestart()
-//    }
-
     private fun saveLocation() {
         val lat = editTextLat.text.toString()
         val lon = editTextLon.text.toString()
@@ -268,9 +252,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             if (Location.us(lat)) {
                 Route.webView(this, UtilityMap.getUrl(lat, lon, "9"), Location.name)
             }
-            // else {
-            // Route.webView(this, UtilityMap.getUrlFromAddress(editTextLabel.text.toString()), Location.name)
-            // }
         }
     }
 

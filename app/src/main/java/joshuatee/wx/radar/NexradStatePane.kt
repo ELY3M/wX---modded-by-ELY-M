@@ -44,7 +44,7 @@ class NexradStatePane(
     var tilt = "0"
     var latD = 0.0
     var lonD = 0.0
-    private val landScape = UtilityUI.isLandScape(activity)
+//    private val landScape = UtilityUI.isLandScape(activity)
 
     // single pane only
     var radarSitesForFavorites = listOf<String>()
@@ -81,16 +81,18 @@ class NexradStatePane(
                 }
                 params.width = MyApplication.dm.widthPixels / 2
             } else if (numberOfPanes == 2) {
-                val params = relativeLayouts[it].layoutParams
-                if (!landScape) {
-                    params.height = MyApplication.dm.heightPixels / 2 -
-                            (UIPreferences.actionBarHeight / 2) - UtilityUI.statusBarHeight(activity) / 2 -
-                            (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
-                    params.width = MyApplication.dm.widthPixels
-                } else {
-                    params.width = MyApplication.dm.widthPixels
-                    params.height = MyApplication.dm.heightPixels
-                }
+//                val params = relativeLayouts[it].layoutParams
+//                if (!landScape) {
+//                    params.height = MyApplication.dm.heightPixels / 2 -
+//                            (UIPreferences.actionBarHeight / 2) - UtilityUI.statusBarHeight(activity) / 2 -
+//                            (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
+//                    params.width = MyApplication.dm.widthPixels
+                UtilityLog.d("wx using this", "comment out")
+//
+//                } else {
+//                    params.width = MyApplication.dm.widthPixels
+//                    params.height = MyApplication.dm.heightPixels
+//                }
             }
         }
         wxglSurfaceViews.indices.forEach {

@@ -42,6 +42,10 @@ class TelecineService : Service() {
             if (!UIPreferences.telecineSwitchRecordingNotification) {
                 return
             }
+            if (Build.VERSION.SDK_INT > 31) {
+                // screen recording no longer supported on 12L or higher
+                return
+            }
             val context = applicationContext
             val title = context.getString(R.string.notification_recording_title)
             val subtitle = context.getString(R.string.notification_recording_subtitle)

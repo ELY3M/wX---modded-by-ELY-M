@@ -26,8 +26,6 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
@@ -37,7 +35,6 @@ import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 
 class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListener {
@@ -95,11 +92,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         nexradState.initGlView(nexradLongPressMenu.changeListener)
         nexradState.readPreferencesMultipane(this, nexradArguments)
 
-        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            UtilityLog.d("wxsize", "new method: " + insets.top.toString())
-            WindowInsetsCompat.CONSUMED
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, windowInsets ->
+//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            UtilityLog.d("wxsize", "new method: " + insets.top.toString())
+//            WindowInsetsCompat.CONSUMED
+//        }
         getContentParallel()
     }
 
@@ -107,46 +104,49 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         var heightDivider = heightDividerF
         val layoutType: Int
         if (numberOfPanes == 2) {
-            if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent) {
-                if (landScape) {
-                    layoutType = if (Utility.isThemeAllWhite())
-                        R.layout.activity_uswxoglmultipane_immersive_landscape_white
-                    else
-                        R.layout.activity_uswxoglmultipane_immersive_landscape
-                    heightDivider = 1
-                } else {
-                    layoutType = if (Utility.isThemeAllWhite())
-                        R.layout.activity_uswxoglmultipane_immersive_white
-                    else
-                        R.layout.activity_uswxoglmultipane_immersive
-                }
+//            if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent) {
+//                if (landScape) {
+//                    layoutType = if (Utility.isThemeAllWhite())
+//                        R.layout.activity_uswxoglmultipane_immersive_landscape_white
+//                    else
+//                        R.layout.activity_uswxoglmultipane_immersive_landscape
+//                    heightDivider = 1
+//                } else {
+//                    layoutType = if (Utility.isThemeAllWhite())
+//                        R.layout.activity_uswxoglmultipane_immersive_white
+//                    else
+//                        R.layout.activity_uswxoglmultipane_immersive
+//                }
+//            } else {
+            if (landScape) {
+                layoutType = if (Utility.isThemeAllWhite())
+                    R.layout.activity_uswxoglmultipane_immersive_landscape_white
+                else
+                    R.layout.activity_uswxoglmultipane_immersive_landscape
+                heightDivider = 1
             } else {
-                if (landScape) {
-                    layoutType = if (Utility.isThemeAllWhite())
-                        R.layout.activity_uswxoglmultipane_immersive_landscape_white
-                    else
-                        R.layout.activity_uswxoglmultipane_immersive_landscape
-                    heightDivider = 1
-                } else {
-                    layoutType = if (Utility.isThemeAllWhite())
-                        R.layout.activity_uswxoglmultipane_white
-                    else
-                        R.layout.activity_uswxoglmultipane
+                layoutType = if (Utility.isThemeAllWhite())
+                    R.layout.activity_uswxoglmultipane_white
+                else {
+                    R.layout.activity_uswxoglmultipane
                 }
             }
+//            }
             super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, iconsEvenlySpaced = true, bottomToolbar = true)
         } else {
-            layoutType = if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent) {
-                if (Utility.isThemeAllWhite())
-                    R.layout.activity_uswxoglmultipane_quad_immersive_white
-                else
-                    R.layout.activity_uswxoglmultipane_quad_immersive
-            } else {
-                if (Utility.isThemeAllWhite())
-                    R.layout.activity_uswxoglmultipane_quad_white
-                else
-                    R.layout.activity_uswxoglmultipane_quad
-            }
+//            layoutType = if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent) {
+//                if (Utility.isThemeAllWhite())
+//                    R.layout.activity_uswxoglmultipane_quad_immersive_white
+//                else
+//                    R.layout.activity_uswxoglmultipane_quad_immersive
+//            } else {
+            layoutType = if (Utility.isThemeAllWhite())
+                R.layout.activity_uswxoglmultipane_quad_immersive_white
+            // R.layout.activity_uswxoglmultipane_quad_white
+            else
+                R.layout.activity_uswxoglmultipane_quad_immersive
+            //R.layout.activity_uswxoglmultipane_quad
+//            }
             super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, iconsEvenlySpaced = true, bottomToolbar = true)
         }
         objectToolbarBottom.connect(this)

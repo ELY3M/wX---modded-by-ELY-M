@@ -224,9 +224,9 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         //
 	    //elys mod
         //show/hide radar
-        UtilityLog.d("radarshow", "displayHold: " + state.displayHold)
-        UtilityLog.d("radarshow", "showRadarWhenPan: " + RadarPreferences.showRadarWhenPan)
-        UtilityLog.d("radarshow", "hideradar: " + RadarPreferences.hideRadar)
+        //UtilityLog.d("radarshow", "displayHold: " + state.displayHold)
+        //UtilityLog.d("radarshow", "showRadarWhenPan: " + RadarPreferences.showRadarWhenPan)
+        //UtilityLog.d("radarshow", "hideradar: " + RadarPreferences.hideRadar)
         if ((!RadarPreferences.hideRadar) && (!(state.displayHold && !RadarPreferences.showRadarWhenPan))) {
         //org
         //if (!(state.displayHold && !RadarPreferences.showRadarWhenPan)) {
@@ -400,7 +400,11 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         */
 
         if (displayConus) {
-            drawConusRadarTest(data.conusRadarBuffers)
+            try {
+                drawConusRadarTest(data.conusRadarBuffers)
+            } catch (e: Exception) {
+                UtilityLog.d("wx-elys", "conus crashed: " + e.message)
+            }
         } 
         //TODO try to use real plotting without adding usa map....
         //hack job!!!

@@ -38,11 +38,11 @@ class SettingsDeveloperActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Developer/Advanced Settings", "Settings might/will be deprecated in the future.")
         box = VBox.fromResource(this)
-        addSwitch2()
+        addSwitch()
     }
 
-    private fun addSwitch2() {
-        val configs2 = listOf(
+    private fun addSwitch() {
+        val configs = listOf(
                 Switch(this, "Alert only once", "ALERT_ONLYONCE", R.string.alert_onlyonce_label),
                 Switch(this, "Auto cancel notifs", "ALERT_AUTOCANCEL", R.string.alert_autocancel_label),
                 Switch(this, "Icons evenly spaced", "UI_ICONS_EVENLY_SPACED", R.string.icons_spacing_label),
@@ -60,7 +60,7 @@ class SettingsDeveloperActivity : BaseActivity() {
                 Switch(this, "Radar with transparent toolbars", "RADAR_TOOLBAR_TRANSPARENT", R.string.radar_toolbar_transparent_label),
                 Switch(this, "Radar with transparent status bar", "RADAR_STATUSBAR_TRANSPARENT", R.string.radar_statusbar_transparent_label),
         )
-        configs2.forEach {
+        configs.forEach {
             box.addWidget(it)
         }
     }

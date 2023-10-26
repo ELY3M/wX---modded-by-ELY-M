@@ -115,7 +115,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
             }
         }
         if (requestCode == CREATE_SCREEN_CAPTURE && resultCode == Activity.RESULT_OK) {
-            if (Build.VERSION.SDK_INT > 32) {
+            if (Build.VERSION.SDK_INT > 31) { // was 32, Android 12L is showing in crash reports
                 val intent = TelecineService.newIntent(this, 1, Intent())
                 intent.putExtra("show_distance_tool", showDistanceTool)
                 intent.putExtra("show_recording_tools", "false")

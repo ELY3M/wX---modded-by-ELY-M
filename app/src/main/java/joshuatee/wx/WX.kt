@@ -51,7 +51,6 @@ import joshuatee.wx.util.Utility
 
 class WX : CommonActionBarFragment() {
 
-    //    private var backButtonCounter = 0
     private lateinit var vpa: ViewPagerAdapter
     private lateinit var voiceRecognitionIcon: MenuItem
     private var tabIndex = 0
@@ -166,23 +165,6 @@ class WX : CommonActionBarFragment() {
         }
     }
 
-    //
-    // On the main screen prevent back button from closing app unless user changes pref
-    //
-    // deprecated in Sep 2023
-//    override fun onBackPressed() {
-//        if (UIPreferences.prefPreventAccidentalExit) {
-//            if (backButtonCounter < 1) {
-//                PopupMessage(slidingTabLayout, "Please tap the back button one more time to close wX.")
-//                backButtonCounter += 1
-//            } else {
-//                finish()
-//            }
-//        } else {
-//            super.onBackPressed()
-//        }
-//    }
-
     private fun refreshDynamicContent() {
         if (!UIPreferences.simpleMode) {
             val tabStr = UtilitySpc.checkSpc()
@@ -217,7 +199,6 @@ class WX : CommonActionBarFragment() {
     override fun onRestart() {
         super.onRestart()
         voiceRecognitionIcon.isVisible = UIPreferences.vrButton
-//        backButtonCounter = 0
         refreshDynamicContent()
     }
     

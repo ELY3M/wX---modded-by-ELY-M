@@ -58,15 +58,16 @@ class SevenDayCard(context: Context, iconUrl: String, isUS: Boolean, forecast: S
                                 + UtilityLocationFragment.extractWindDirection(items[1].substring(1))
                                 + UtilityLocationFragment.extract7DayMetrics(items[1].substring(1)) + ")"
                 )
-            } else {
-                setTopLine(
-                        items[0] + " ("
-                                + UtilityLocationFragment.extractCanadaTemperature(items[1])
-                                + GlobalVariables.degreeSymbol
-                                + UtilityLocationFragment.extractCanadaWindDirection(items[1])
-                                + UtilityLocationFragment.extractCanadaWindSpeed(items[1]) + ")"
-                )
             }
+//            else {
+//                setTopLine(
+//                        items[0] + " ("
+//                                + UtilityLocationFragment.extractCanadaTemperature(items[1])
+//                                + GlobalVariables.degreeSymbol
+//                                + UtilityLocationFragment.extractCanadaWindDirection(items[1])
+//                                + UtilityLocationFragment.extractCanadaWindSpeed(items[1]) + ")"
+//                )
+//            }
             setBottomLine(items[1])
         }
         if (!UIPreferences.locfragDontShowIcons) {

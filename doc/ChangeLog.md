@@ -2,11 +2,25 @@
 
 # Developer ChangeLog
 
-## 55839 2022_10_21
+## 55842 2022_10_22
+
+## 55841 2022_10_22
+
+* [FIX] crash in model animation seen occasionally in crash reports
+
+## 55840 2022_10_22
+
+* [FIX] disallow screen recorder on 12L as it's no longer working and will not be supported (see
+  FAQ)
+* [FIX] Simplify and hopefully fix some issues (with all white theme) with nexrad multipane as seen
+  across various devices
+
+## 55839 2022_10_22
 
 * [FIX] misc lint
 * [ADD] remove option "Use AWC Radar Mosaic" and all supporting files since NWS has changed AWC
   website and removed radar mosaics
+* [FIX] Simplify and hopefully fix some issues with nexrad multipane as seen across various devices
 
 ## 55838 2022_10_21
 

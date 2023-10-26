@@ -67,34 +67,6 @@ object UtilityLocationFragment {
     private val sevenDayWinddir6: Pattern = Pattern.compile("Blustery, with a[n]? (.*?) wind")
     private val sevenDayWinddir7: Pattern = Pattern.compile("Light (.*?) wind")
 
-    private val ca7DayTemp1: Pattern = Pattern.compile("Temperature falling to (minus [0-9]{1,2}) this")
-    private val ca7DayTemp2: Pattern = Pattern.compile("Low (minus [0-9]{1,2})\\.")
-    private val ca7DayTemp3: Pattern = Pattern.compile("High (minus [0-9]{1,2})\\.")
-    private val ca7DayTemp4: Pattern = Pattern.compile("Low plus ([0-9]{1,2})\\.")
-    private val ca7DayTemp5: Pattern = Pattern.compile("High plus ([0-9]{1,2})\\.")
-    private val ca7DayTemp6: Pattern = Pattern.compile("steady near (minus [0-9]{1,2})\\.")
-    private val ca7DayTemp7: Pattern = Pattern.compile("steady near plus ([0-9]{1,2})\\.")
-    private val ca7DayTemp8: Pattern = Pattern.compile("rising to (minus [0-9]{1,2}) ")
-    private val ca7DayTemp9: Pattern = Pattern.compile("falling to (minus [0-9]{1,2}) ")
-    private val ca7DayTemp10: Pattern = Pattern.compile("Low (minus [0-9]{1,2}) ")
-    private val ca7DayTemp11: Pattern = Pattern.compile("Low (zero)\\.")
-    private val ca7DayTemp12: Pattern = Pattern.compile("rising to ([0-9]{1,2}) ")
-    private val ca7DayTemp13: Pattern = Pattern.compile("High ([0-9]{1,2})[\\. ]")
-    private val ca7DayTemp14: Pattern = Pattern.compile("rising to plus ([0-9]{1,2}) ")
-    private val ca7DayTemp15: Pattern = Pattern.compile("falling to plus ([0-9]{1,2}) ")
-    private val ca7DayTemp16: Pattern = Pattern.compile("High (zero)\\.")
-    private val ca7DayTemp17: Pattern = Pattern.compile("rising to (zero) by")
-    private val ca7DayTemp18: Pattern = Pattern.compile("Low ([0-9]{1,2})\\.")
-    private val ca7DayTemp19: Pattern = Pattern.compile("High ([0-9]{1,2}) with temperature")
-    private val ca7DayTemp20: Pattern = Pattern.compile("Temperature falling to (zero) in")
-    private val ca7DayTemp21: Pattern = Pattern.compile("steady near ([0-9]{1,2})\\.")
-    private val ca7DayTemp22: Pattern = Pattern.compile("steady near (zero)\\.")
-    private val ca7DayWinddir1: Pattern = Pattern.compile("Wind ([a-z]*?) [0-9]{2,3} ")
-    private val ca7DayWinddir2: Pattern = Pattern.compile("Wind becoming ([a-z]*?) [0-9]{2,3} ")
-    private val ca7DayWindspd1: Pattern = Pattern.compile("([0-9]{2,3}) to ([0-9]{2,3}) km/h")
-    private val ca7DayWindspd2: Pattern = Pattern.compile("( [0-9]{2,3}) km/h")
-    private val ca7DayWindspd3: Pattern = Pattern.compile("gusting to ([0-9]{2,3})")
-
     private val windDirectionMap = mapOf(
             "north" to "N",
             "north northeast" to "NNE",
@@ -220,82 +192,6 @@ object UtilityLocationFragment {
             }
         }
         return ""
-    }
-
-    fun extractCanadaTemperature(blob: String): String {
-        var temp = blob.parse(ca7DayTemp1)
-        if (temp != "") return temp.replace("minus ", "-")
-        temp = blob.parse(ca7DayTemp2)
-        if (temp != "") return temp.replace("minus ", "-")
-        temp = blob.parse(ca7DayTemp3)
-        if (temp != "") return temp.replace("minus ", "-")
-        temp = blob.parse(ca7DayTemp4)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp5)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp6)
-        if (temp != "") return temp.replace("minus ", "-")
-        temp = blob.parse(ca7DayTemp7)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp8)
-        if (temp != "") return temp.replace("minus ", "-")
-        temp = blob.parse(ca7DayTemp9)
-        if (temp != "") return temp.replace("minus ", "-")
-        temp = blob.parse(ca7DayTemp10)
-        if (temp != "") return temp.replace("minus ", "-")
-        temp = blob.parse(ca7DayTemp11)
-        if (temp != "") return "0"
-        temp = blob.parse(ca7DayTemp12)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp13)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp14)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp15)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp16)
-        if (temp != "") return "0"
-        temp = blob.parse(ca7DayTemp17)
-        if (temp != "") return "0"
-        temp = blob.parse(ca7DayTemp18)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp19)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp20)
-        if (temp != "") return "0"
-        temp = blob.parse(ca7DayTemp21)
-        if (temp != "") return temp
-        temp = blob.parse(ca7DayTemp22)
-        if (temp != "") return "0"
-        return temp
-    }
-
-    fun extractCanadaWindDirection(chunk: String): String {
-        var windDirection = chunk.parse(ca7DayWinddir1)
-        if (windDirection == "") {
-            windDirection = chunk.parse(ca7DayWinddir2)
-        }
-        if (windDirection != "") {
-            windDirection = " " + (windDirectionMap[windDirection] ?: "")
-        }
-        return windDirection
-    }
-
-    fun extractCanadaWindSpeed(forecast: String): String {
-        val windSpeedRange = forecast.parseMultiple(ca7DayWindspd1, 2)
-        val windSpeed = forecast.parse(ca7DayWindspd2)
-        var gust = ""
-        if (forecast.contains("gusting")) {
-            gust = " G " + forecast.parse(ca7DayWindspd3)
-        }
-        if (windSpeedRange.size > 1 && windSpeedRange[0] != "" && windSpeedRange[1] != "") {
-            return " " + windSpeedRange[0] + "-" + windSpeedRange[1] + gust + " km/h"
-        }
-        return if (windSpeed == "") {
-            ""
-        } else {
-            "$windSpeed$gust km/h"
-        }
     }
 
     fun handleIconTap(s: String, wxglRender: NexradRender?, activityReference: Context, fnRefresh: () -> Unit, fnResetRadarView: () -> Unit, fnGetRadars: () -> Unit) {

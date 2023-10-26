@@ -187,35 +187,6 @@ object UtilityModels {
         }
     }
 
-//    fun convertTimeRunToTimeString(runStr: String, timeStrFunc: String, showDate: Boolean): String {
-//        val timeStr = timeStrFunc.split(" ")[0]
-//        val runInt = To.int(runStr)
-//        val timeInt = To.int(timeStr)
-//        val realTimeGmt = runInt + timeInt
-//        val offsetFromUtc = ObjectDateTime.offsetFromUtcInSeconds()
-//        val realTime = realTimeGmt + offsetFromUtc / 60 / 60
-//        var hourOfDay = realTime % 24
-//        var amPm: String
-//        if (hourOfDay > 11) {
-//            amPm = "pm"
-//            if (hourOfDay > 12) {
-//                hourOfDay -= 12
-//            }
-//        } else {
-//            amPm = "am"
-//        }
-//        var day = realTime / 24
-//        if (hourOfDay < 0) {
-//            hourOfDay += 12
-//            amPm = "pm"
-//            day -= 1
-//        }
-//        val objectDateTime = ObjectDateTime(runInt, 0)
-//        objectDateTime.addHours(timeInt.toLong() + offsetFromUtc / 60 / 60)
-//        println(objectDateTime.format("E") + " " + objectDateTime.toString() + " " + runStr + " " + timeStrFunc + " " +  realTime + " " + hourOfDay + " " + day + " "  +  ":::" + objectDateTime.format("E") + "  " + hourOfDay.toString() + amPm)
-//        return "${objectDateTime.format("E")}  $hourOfDay$amPm"
-//    }
-
     fun updateTime(runOriginal: String, modelCurrentTimeF: String, listTime: MutableList<String>, prefix: String, showDate: Boolean) {
         var run = runOriginal.replace("Z", "").replace("z", "")
         val modelCurrentTime = modelCurrentTimeF.replace("Z", "").replace("z", "")
@@ -264,8 +235,12 @@ object UtilityModels {
         AnimationDrawable()
     } else {
         val bitmaps = (om.timeIndex until om.times.size).map {
-            getImage(context, om, om.times[it].split(" ").getOrNull(0)
-                    ?: "")
+            if (it < om.times.size) {
+                getImage(context, om, om.times[it].split(" ").getOrNull(0)
+                        ?: "")
+            } else {
+                UtilityImg.getBlankBitmap()
+            }
         }
         UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
