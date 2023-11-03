@@ -68,11 +68,11 @@
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_epac_7daily"
-                android:title="@string/epac_7_day_analysis"
+                android:title="@string/epac_daily_sst_analysis"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_atl_7daily"
-                android:title="@string/atl_7_day_analysis"
+                android:title="@string/atl_daily_sst_analysis"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_epac_sst_anomaly"

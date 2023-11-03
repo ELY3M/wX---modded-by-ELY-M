@@ -50,7 +50,7 @@ class SettingsDeveloperActivity : BaseActivity() {
                 Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.mainscreen_radar_button),
                 Switch(this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label),
                 Switch(this, "Radar: immersive mode", "RADAR_IMMERSIVE_MODE", R.string.radar_immersive_mode_label),
-                Switch(this, "Media control notification", "MEDIA_CONTROL_NOTIF", R.string.media_control_notif_tv),
+//                Switch(this, "Media control notification", "MEDIA_CONTROL_NOTIF", R.string.media_control_notif_tv),
                 Switch(this, "Lock toolbars", "LOCK_TOOLBARS", R.string.lock_toolbars_label),
                 Switch(this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label),
                 Switch(this, "Multipurpose radar icons", "WXOGL_ICONS_LEVEL2", R.string.radar_icons_level2_label),

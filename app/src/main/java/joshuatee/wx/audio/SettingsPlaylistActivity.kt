@@ -31,7 +31,6 @@ import androidx.core.app.ActivityCompat
 import java.util.Locale
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.util.Utility
@@ -199,18 +198,12 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             GlobalVariables.ICON_PAUSE
         }
         fabPause.set(icon)
-        if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
-            UtilityNotification.createMediaControlNotification(applicationContext, "")
-        }
     }
 
     private fun playAll() {
         fabPause.set(GlobalVariables.ICON_PAUSE)
         if (isStoragePermissionGranted) {
             UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
-        }
-        if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
-            UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
     }
 

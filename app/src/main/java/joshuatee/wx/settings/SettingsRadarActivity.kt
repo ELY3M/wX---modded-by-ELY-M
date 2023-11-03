@@ -128,7 +128,6 @@ class SettingsRadarActivity : BaseActivity() {
 		        Switch(this, "Hail labels", "WXOGL_HAIL_LABEL", R.string.show_hi_label_label),
 		        //elys mod end
                 Switch(this, "Highways", "COD_HW_DEFAULT", R.string.cod_hw_default_label),
-                Switch(this, "Launch app directly to radar", "LAUNCH_TO_RADAR", R.string.launch_to_radar_label),
                 Switch(this, "Lakes and rivers", "COD_LAKES_DEFAULT", R.string.cod_lakes_default_label),
                 Switch(this, "Multi-pane will share lat/lon/zoom", "DUALPANE_SHARE_POSN", R.string.dualpaneshareposn_label),
                 Switch(this, "Observations", "WXOGL_OBS", R.string.obs_label),

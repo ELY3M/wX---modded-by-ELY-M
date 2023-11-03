@@ -94,15 +94,12 @@ object GlobalVariables {
     val ICON_PLAY_WHITE = R.drawable.ic_play_arrow_24dp_white
     val ICON_STOP = R.drawable.ic_stop_24dp
     val ICON_STOP_WHITE = R.drawable.ic_stop_24dp_white
-    val ICON_MIC = R.drawable.ic_mic_24dp
     val ICON_PAUSE = R.drawable.ic_pause_24dp
     val ICON_PAUSE_WHITE = R.drawable.ic_pause_24dp_white
     val ICON_PAUSE_PRESSED = R.drawable.ic_pause_white_24dp
     val ICON_PAUSE_PRESSED_BLUE = R.drawable.ic_pause_blue_24dp
     val ICON_ADD = R.drawable.ic_add_box_24dp
     val ICON_ADD2 = R.drawable.ic_add2_box_24dp_white
-    val ICON_SKIP_BACK = R.drawable.ic_skip_previous_24dp
-    val ICON_SKIP_FORWARD = R.drawable.ic_skip_next_24dp
     val ICON_DONE = R.drawable.ic_done_24dp
     val ICON_PLAYLIST = R.drawable.ic_playlist_play_24dp
     val ICON_REORDER = R.drawable.ic_reorder_24dp

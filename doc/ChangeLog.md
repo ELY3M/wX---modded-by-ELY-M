@@ -2,7 +2,34 @@
 
 # Developer ChangeLog
 
-## 55842 2022_10_22
+## 55851 2022_11_02
+
+## 55850 2022_11_02
+
+* [ADD] version bump for internal testing
+* [FIX] NWS changed some of the URLs for the SST images accessed in the NHC activity
+
+## 55845 2022_10_27
+
+* [REF] lint
+
+## 55844 2022_10_26
+
+* [ADD] target API33 until after May 1, 2024 - at that time screen recorder will be removed along
+  with drawing tools
+* [ADD] as communicated in "Upcoming changes": after support for Android 7.1 is removed
+  the option **Settings->Radar->Launch app directly to radar** will be removed since Android 8.0 and
+  higher supports *static pinned launchers* i.e. if you long press on the app icon in the android
+  home screen you can launch the radar directly and also setup another icon to do so.
+
+## 55843 2022_10_26
+
+* [REF] remove the deprecated media controller
+
+## 55842 2022_10_26
+
+* [ADD] per URL add to Manifest
+  android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION https://developer.android.com/about/versions/14/changes/fgs-types-required#use-cases
 
 ## 55841 2022_10_22
 
@@ -2761,3 +2788,10 @@ KLOT 41.6 -88.1
                     [FIX] at joshuatee.wx.models.UtilityModels.setSubtitleRestoreIMGXYZOOM(UtilityModels.kt:294)
                             java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
                             ```
+
+
+
+* [ADD] [Target Android 14 API34](https://developer.android.com/google/play/requirements/target-sdk)
+  As the URL explains Google requires application developers to target newer versions each year so
+  that they can enforce newer security policies (and other things - see URL). You should see no
+  differences within the app, please let me know if otherwise.

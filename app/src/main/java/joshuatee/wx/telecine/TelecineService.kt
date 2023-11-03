@@ -19,10 +19,8 @@ import joshuatee.wx.R
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.notifications.UtilityNotification
 import android.app.NotificationManager
-import android.content.pm.ServiceInfo
 import android.media.projection.MediaProjectionManager
 import android.os.Build
-import androidx.core.app.ServiceCompat
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.UIPreferences
@@ -56,14 +54,15 @@ class TelecineService : Service() {
                     .setColor(ContextCompat.getColor(context, R.color.primary_normal))
                     .setAutoCancel(true)
                     .build()
-//            startForeground(NOTIFICATION_ID, notification)
+            startForeground(NOTIFICATION_ID, notification)
+            // API34 below, this will all be removed anyway so it won't be needed
             // https://developer.android.com/reference/androidx/core/app/ServiceCompat#startForeground(android.app.Service,int,android.app.Notification,int)
             // https://developer.android.com/guide/components/foreground-services
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) { // API29
-                ServiceCompat.startForeground(this@TelecineService, NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
-            } else {
-                startForeground(NOTIFICATION_ID, notification)
-            }
+//            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) { // API29
+//                ServiceCompat.startForeground(this@TelecineService, NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
+//            } else {
+//                startForeground(NOTIFICATION_ID, notification)
+//            }
         }
 
         override fun onStop() {
@@ -79,7 +78,7 @@ class TelecineService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        if (Build.VERSION.SDK_INT > 28) {
+        if (Build.VERSION.SDK_INT in 29..33) {
             mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
             notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             send()
@@ -123,12 +122,13 @@ class TelecineService : Service() {
                 .setContentTitle("wX")
                 .setContentText(label)
                 .build()
-//        startForeground(requestID, notification)
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) { // API29
-            ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
-        } else {
-            startForeground(NOTIFICATION_ID, notification)
-        }
+        startForeground(requestID, notification)
+        // API34 below, this will all be removed anyway so it won't be needed
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) { // API29
+//            ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
+//        } else {
+//            startForeground(NOTIFICATION_ID, notification)
+//        }
         notificationManager!!.notify(requestID, notification)
     }
 

@@ -87,10 +87,10 @@ class NhcActivity : BaseActivity() {
             R.id.action_share -> UtilityShare.text(this, "NHC", "", nhc.bitmaps)
             R.id.action_epac_daily -> Route.image(this, "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg", "EPAC Daily Analysis")
             R.id.action_atl_daily -> Route.image(this, "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg", "ATL Daily Analysis")
-            R.id.action_epac_7daily -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anal.gif", "EPAC 7-Day Analysis")
-            R.id.action_atl_7daily -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis")
-            R.id.action_epac_sst_anomaly -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly")
-            R.id.action_atl_sst_anomaly -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly")
+            R.id.action_epac_7daily -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/sst_loop/14_pac.png", "EPAC 7-Day Analysis")
+            R.id.action_atl_7daily -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/sst_loop/14_atl.png", "ATL 7-Day Analysis")
+            R.id.action_epac_sst_anomaly -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/sst_loop/14_pac_anom.png", "EPAC SST Anomaly")
+            R.id.action_atl_sst_anomaly -> Route.image(this, "${GlobalVariables.nwsNhcWebsitePrefix}/tafb/sst_loop/14_atl_anom.png", "ATL SST Anomaly")
             else -> return super.onOptionsItemSelected(item)
         }
         return true

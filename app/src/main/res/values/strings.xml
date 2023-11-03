@@ -337,8 +337,8 @@
     <string name="sst_images">SST images…</string>
     <string name="epac_daily_analysis">EPAC Daily Analysis</string>
     <string name="atl_daily_analysis">ATL Daily Analysis</string>
-    <string name="epac_7_day_analysis">EPAC 7-Day Analysis</string>
-    <string name="atl_7_day_analysis">ATL 7-Day Analysis</string>
+    <string name="epac_daily_sst_analysis">EPAC Daily SST Analysis</string>
+    <string name="atl_daily_sst_analysis">ATL Daily SST Analysis</string>
     <string name="epac_sst_anomaly">EPAC SST Anomaly</string>
     <string name="atl_sst_anomaly">ATL SST Anomaly</string>
     <string name="severe">Severe</string>

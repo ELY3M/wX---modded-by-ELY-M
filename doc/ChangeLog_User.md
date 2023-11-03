@@ -8,10 +8,29 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55850 2022_11_03 (BETA)
+
+* [FIX] NWS changed some of the URLs for the SST images accessed in the NHC activity
+
+## 55844 2022_10_27 (BETA)
+
+* [FIX] Window sizing for dual/quad pane has been problematic across various devices, Android OS
+  versions, and setting combinations. This release attempts to simplify and fix this issue. If you
+  still experience dual/quad pane window sizing issues please email me with screenshot, device type,
+  Android OS version, etc. thanks
+* [REF] Deprecated Media notification controller has been removed. It is unlikely most users were
+  even aware of this feature related to text to speech.
+* [REF] Also communicated in "Upcoming changes", after support for Android 7.1 was removed, the
+  option
+  Settings->Radar->Launch app directly to radar has been removed since Android 8.0 and higher
+  supports static pinned launchers
+  i.e. if you long press on the app icon in the android home screen you can launch the radar
+  directly and also setup another icon to do so.
+
 ## 55836 2022_10_17
 
 * [FIX] Nexrad windbarbs and observations in response to NWS planned AWC website
-    upgrade: https://aviationweather.gov/
+  upgrade: https://aviationweather.gov/
 * Add the following in the national image viewer (MISC Tab, 3nd Row, Right)
 
 ```
@@ -33,6 +52,7 @@ impacting all or some users.
     "fxcn01_d1-3_east: Days 1 to 3 Significant Weather Discussion - East",
     "fxcn01_d4-7_east: Days 4 to 7 Significant Weather Discussion - East",
 ```
+
 * [ADD] All model activities (ie SPC SREF/HREF/HRRR, ESRL, NCEP, etc) - use floating buttons (
   similar to single pane) for back/forward
 * [ADD] move setting from UI into settings Developer as they are discouraged to change and will

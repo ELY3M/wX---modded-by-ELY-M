@@ -33,7 +33,6 @@ import androidx.core.app.ActivityCompat
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.UtilityUI
@@ -115,9 +114,6 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                 if (isStoragePermissionGranted) {
                     UtilityTts.synthesizeTextAndPlay(this, txt, prod)
                     pause.setIcon(GlobalVariables.ICON_PAUSE)
-                    if (UIPreferences.mediaControlNotif) {
-                        UtilityNotification.createMediaControlNotification(applicationContext, "")
-                    }
                 } else {
                     UtilityLog.d("wx", "perm to write to storage was not granted")
                 }
@@ -131,9 +127,6 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                     pause.setIcon(pausePressedIcon)
                 } else {
                     pause.setIcon(GlobalVariables.ICON_PAUSE)
-                }
-                if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
-                    UtilityNotification.createMediaControlNotification(applicationContext, "")
                 }
             }
 
@@ -177,9 +170,6 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     UtilityTts.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
                     pause.setIcon(GlobalVariables.ICON_PAUSE)
-                    if (UIPreferences.mediaControlNotif) {
-                        UtilityNotification.createMediaControlNotification(applicationContext, "")
-                    }
                 }
             }
         }

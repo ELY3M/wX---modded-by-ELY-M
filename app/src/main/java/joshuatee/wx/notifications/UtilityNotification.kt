@@ -24,28 +24,17 @@ package joshuatee.wx.notifications
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.app.NotificationCompat
-import androidx.media.app.NotificationCompat.MediaStyle
-import joshuatee.wx.audio.AudioServiceBack
-import joshuatee.wx.audio.AudioServiceForward
-import joshuatee.wx.audio.AudioServiceToggleState
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.spc.UtilitySpc
-import joshuatee.wx.audio.VoiceCommandActivity
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityString
 import android.app.NotificationChannel
 import android.graphics.Color
 import android.os.Build
-import joshuatee.wx.WX
 import android.media.AudioAttributes
-import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences
@@ -150,60 +139,6 @@ object UtilityNotification {
             ).bigText(objectNotification.text).build()!!
         }
         return notification
-    }
-
-    fun createMediaControlNotification(context: Context, titleF: String) {
-        initChannels(context)
-        var title = titleF
-        if (title == "")
-            title = NotificationPreferences.mediaNotifTtsTitle
-        else
-            NotificationPreferences.mediaNotifTtsTitle = title
-        val pauseIcon =
-                if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
-                    GlobalVariables.ICON_PAUSE_PRESSED
-                else
-                    GlobalVariables.ICON_PAUSE
-        val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notification: Notification
-        val resultIntent = Intent(context, VoiceCommandActivity::class.java)
-        val resultIntent2 = Intent(context, AudioServiceToggleState::class.java)
-        val resultIntentBack = Intent(context, AudioServiceBack::class.java)
-        val resultIntentForward = Intent(context, AudioServiceForward::class.java)
-        val stackBuilder = TaskStackBuilder.create(context)
-        stackBuilder.addParentStack(WX::class.java)
-        stackBuilder.addNextIntent(resultIntent)
-        val requestID = ObjectDateTime.currentTimeMillis().toInt()
-        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val resultPendingIntent2 = PendingIntent.getService(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val resultPendingIntentBack = PendingIntent.getService(context, requestID + 4, resultIntentBack, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val resultPendingIntentForward = PendingIntent.getService(context, requestID + 5, resultIntentForward, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val notifCurrent = "true"
-        val txt = if (notifCurrent.startsWith("t")) {
-            val tabStr = UtilitySpc.checkSpc()
-            "" + tabStr[0] + " " + tabStr[1].replace("MISC", "")
-        } else {
-            ""
-        }
-        val actionBack = NotificationCompat.Action.Builder(GlobalVariables.ICON_SKIP_BACK, "", resultPendingIntentBack).build()
-        val actionPlay = NotificationCompat.Action.Builder(pauseIcon, "", resultPendingIntent2).build()
-        val actionForward = NotificationCompat.Action.Builder(GlobalVariables.ICON_SKIP_FORWARD, "", resultPendingIntentForward).build()
-        val style = MediaStyle().setShowActionsInCompactView(0, 1, 2)
-        notification = NotificationCompat.Builder(context, notiChannelStrNoSound)
-                .setContentTitle("wX $title")
-                .setStyle(style)
-                .setShowWhen(false)
-                .setColor(UIPreferences.colorNotif)
-                .setContentText(txt)
-                .setContentIntent(resultPendingIntent)
-                .setOnlyAlertOnce(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .addAction(actionBack)
-                .addAction(actionPlay)
-                .addAction(actionForward)
-                .setSmallIcon(GlobalVariables.ICON_MIC)
-                .build()
-        notifier.notify("wx_media", 1, notification)
     }
 
     // this is used primary by the current conditions notification

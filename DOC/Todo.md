@@ -28,6 +28,7 @@ HREF - reset zoom when change sector
 
 ## Bugs
 
+* [FIX] ChromeOS: with obs enabled, zoom out via kbd - obs don't update location and never hides
 * [FIX] nexrad crash with ConcurrentModificationException in NexradRender:
   data.wpcFrontBuffersList.forEach {
 * [FIX] nexrad with cities, zoom in on location and then long press to current radar - text objects

@@ -53,7 +53,6 @@ class StartupActivity : Activity() {
         startInitialActivity()
         finish()
     }
-    
 
     private fun initPreferences() {
         if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) {
@@ -65,20 +64,10 @@ class StartupActivity : Activity() {
 
     private fun initBackgroundJobs() {
         UtilityWXJobService.startService(this)
-        if (UIPreferences.mediaControlNotif) {
-            UtilityNotification.createMediaControlNotification(applicationContext, "")
-        }
     }
-    
+
     private fun startInitialActivity() {
-        if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
-            Route(this, WX::class.java)
-        } else {
-            val wfo = Location.wfo
-            val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
-            val radarSite = Location.getRid(this, Location.currentLocationStr)
-            Route.radar(this, arrayOf(radarSite, state))
-        }
+        Route(this, WX::class.java)
     }
 
     private fun askPerms() {

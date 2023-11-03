@@ -60,7 +60,6 @@ object UIPreferences {
     var colorOffwhiteToolbar = 0
     var dualpaneRadarIcon = false
     var homescreenTextLength = 0
-    var mediaControlNotif = false
     var radarToolbarTransparent = true
     var radarStatusBarTransparent = false
     var radarImmersiveMode = false
@@ -148,7 +147,6 @@ object UIPreferences {
         colorNotif = ContextCompat.getColor(context, R.color.primary_dark_blue)
         colorBlack = ContextCompat.getColor(context, R.color.black)
         colorOffwhiteToolbar = ContextCompat.getColor(context, R.color.offwhite_toolbar)
-        mediaControlNotif = Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "false").startsWith("t")
         radarToolbarTransparent = Utility.readPref(context, "RADAR_TOOLBAR_TRANSPARENT", "true").startsWith("t")
         radarStatusBarTransparent = Utility.readPref(context, "RADAR_STATUSBAR_TRANSPARENT", "false").startsWith("t")
         radarImmersiveMode = Utility.readPref(context, "RADAR_IMMERSIVE_MODE", "false").startsWith("t")

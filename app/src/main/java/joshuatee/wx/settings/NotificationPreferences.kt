@@ -52,7 +52,6 @@ object NotificationPreferences {
     var alertOnlyOnce = false
     var notifSoundUri = ""
 
-    var mediaNotifTtsTitle = ""
     const val notificationStrSep = ","
     var notifTextProdStr = ""
 

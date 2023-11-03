@@ -32,7 +32,6 @@ import android.widget.CompoundButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import joshuatee.wx.MyApplication
-import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.radar.RadarGeometry
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences
@@ -84,12 +83,6 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
                 //
                 if (pref.contains("NOTIFICATION")) {
                     UtilityLog.d("WXRADAR", "notif turned on")
-                }
-
-                if (pref == "MEDIA_CONTROL_NOTIF") {
-                    if (Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "").startsWith("f")) {
-                        UtilityNotification.createMediaControlNotification(context.applicationContext, "")
-                    }
                 }
                 Utility.writePref(context, pref, "true")
             } else {
