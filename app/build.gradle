@@ -7,14 +7,14 @@ android {
 //    buildToolsVersion '33.0.1'
 
     defaultConfig {
-        compileSdk 34
+        compileSdk 33
     }
 
     defaultConfig {
         applicationId "joshuatee.wx"
         // 2023-09-09 changed from 23 to 25
         minSdkVersion 25
-        targetSdkVersion 34
+        targetSdkVersion 33
         // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
