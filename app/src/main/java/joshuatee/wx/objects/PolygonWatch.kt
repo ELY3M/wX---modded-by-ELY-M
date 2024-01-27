@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,7 +25,6 @@ import android.content.Context
 import joshuatee.wx.getHtml
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.NotificationMcd
 import joshuatee.wx.notifications.NotificationMpd
 import joshuatee.wx.radar.WatchData
@@ -81,11 +80,11 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
                 val watchHtml = DownloadText.byProduct(context, "SPCWAT$it")
                 htmlList.add(watchHtml)
                 val latLonHtml = getLatLonWatch(it)
-                watchLatLonList += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
+                watchLatLonList += LatLon.storeWatchMcdLatLon(latLonHtml)
                 if (!watchHtml.contains("Tornado Watch")) {
-                    watchLatLon += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
+                    watchLatLon += LatLon.storeWatchMcdLatLon(latLonHtml)
                 } else {
-                    watchLatLonTor += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
+                    watchLatLonTor += LatLon.storeWatchMcdLatLon(latLonHtml)
                 }
             }
             if (PolygonType.MCD.pref) {
@@ -138,7 +137,7 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
     // return the raw MPD text and the lat/lon as a list
     private fun getLatLon(context: Context, number: String): List<String> {
         val html = DownloadText.byProduct(context, textPrefix[type] + number)
-        return listOf(html, UtilityNotification.storeWatchMcdLatLon(html))
+        return listOf(html, LatLon.storeWatchMcdLatLon(html))
     }
 
     private fun locationNotification(): Boolean = when (type) {

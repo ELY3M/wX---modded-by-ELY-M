@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -44,7 +44,6 @@ class NexradStatePane(
     var tilt = "0"
     var latD = 0.0
     var lonD = 0.0
-//    private val landScape = UtilityUI.isLandScape(activity)
 
     // single pane only
     var radarSitesForFavorites = listOf<String>()
@@ -75,24 +74,9 @@ class NexradStatePane(
                             (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
                 if (UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode) {
                     UtilityLog.d("wxsize", MyApplication.dm.heightPixels.toString())
-                    params.height = MyApplication.dm.heightPixels / 2 // - UtilityUI.statusBarHeight(activity) / 2
-                    // (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
-                    // (UIPreferences.actionBarHeight / 2) -
+                    params.height = MyApplication.dm.heightPixels / 2
                 }
                 params.width = MyApplication.dm.widthPixels / 2
-            } else if (numberOfPanes == 2) {
-//                val params = relativeLayouts[it].layoutParams
-//                if (!landScape) {
-//                    params.height = MyApplication.dm.heightPixels / 2 -
-//                            (UIPreferences.actionBarHeight / 2) - UtilityUI.statusBarHeight(activity) / 2 -
-//                            (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
-//                    params.width = MyApplication.dm.widthPixels
-                UtilityLog.d("wx using this", "comment out")
-//
-//                } else {
-//                    params.width = MyApplication.dm.widthPixels
-//                    params.height = MyApplication.dm.heightPixels
-//                }
             }
         }
         wxglSurfaceViews.indices.forEach {

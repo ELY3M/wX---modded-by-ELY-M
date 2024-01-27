@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,7 +37,7 @@ class CanadaLegal(context: Context, box: VBox, url: String) {
             refreshTextSize(TextSize.SMALL)
             center()
             connect { Route(context, Intent.ACTION_VIEW, Uri.parse(url)) }
-            text = context.resources.getText(R.string.main_screen_ca_disclaimor).toString()
+            text = context.resources.getText(R.string.main_screen_ca_disclaimer).toString()
             box.addWidget(this)
         }
     }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -59,6 +59,7 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
         checkBox.gravity = Gravity.CENTER_VERTICAL
         val truePrefs = listOf(
                 "COD_HW_DEFAULT",
+                "RADAR_SHOW_COUNTY",
                 "DUALPANE_SHARE_POSN",
                 "UNITS_F",
                 "UNITS_M",
@@ -73,6 +74,10 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
                 "USE_NWS_API_HOURLY",
                 "LIGHTNING_USE_GOES",
                 "SHOW_RADAR_WHEN_PAN",
+                "ALERT_BLACKOUT_TORNADO",
+                "LOCK_TOOLBARS",
+                "ALERT_ONLYONCE",
+                "ALERT_AUTOCANCEL"
         )
         checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
                 || (pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")

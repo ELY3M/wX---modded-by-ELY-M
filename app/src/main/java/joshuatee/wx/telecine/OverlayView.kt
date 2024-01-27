@@ -80,7 +80,7 @@ internal class OverlayView private constructor(
             View.inflate(context, R.layout.telecine_overlay_view, this)
         else
             View.inflate(context, R.layout.telecine_overlay_jellybean_view, this)
-        distanceToolView = findViewById(R.id.record_overlay_distancetool)
+        distanceToolView = findViewById(R.id.record_overlay_distance_tool)
         drawToolView = findViewById(R.id.record_overlay_drawtool)
         buttonsView = findViewById(R.id.record_overlay_buttons)
         val cancelView: View = findViewById(R.id.record_overlay_cancel)
@@ -155,7 +155,7 @@ internal class OverlayView private constructor(
                 listener.onDrawTool()
             }
 
-            R.id.record_overlay_distancetool -> {
+            R.id.record_overlay_distance_tool -> {
                 distanceToolView.isActivated = !distanceToolView.isActivated
                 listener.onDistanceTool()
             }

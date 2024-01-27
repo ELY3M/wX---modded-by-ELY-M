@@ -19,9 +19,9 @@ internal class PlayListAdapter(val context: Context, private val dataSet: Mutabl
 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val label = Text(itemView, R.id.singletext, UIPreferences.textHighlightColor, TextSize.MEDIUM)
+        val label = Text(itemView, R.id.single_text, UIPreferences.textHighlightColor, TextSize.MEDIUM)
         val contentPreview = Text(itemView, R.id.text2, backgroundText = true)
-        val timeAndSize = Text(itemView, R.id.timeandsize, TextSize.SMALL)
+        val timeAndSize = Text(itemView, R.id.time_and_size, TextSize.SMALL)
 
         init {
             Card(itemView, R.id.cv1)

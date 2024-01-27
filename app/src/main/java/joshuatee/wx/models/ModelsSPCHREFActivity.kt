@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -100,9 +100,9 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         title = arguments[2]
         objectModelLayout = ObjectModelLayout(arguments[1], arguments[0])
         if (To.int(arguments[0]) == 1) {
-            super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, iconsEvenlySpaced = false, bottomToolbar = true)
+            super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, bottomToolbar = true)
         } else {
-            super.onCreate(savedInstanceState, objectModelLayout.layoutMultiPane, objectModelLayout.menuResId, iconsEvenlySpaced = false, bottomToolbar = true)
+            super.onCreate(savedInstanceState, objectModelLayout.layoutMultiPane, objectModelLayout.menuResId, bottomToolbar = true)
             val box = VBox.fromResource(this)
             if (UtilityUI.isLandScape(this)) {
                 box.makeHorizontal()
@@ -163,6 +163,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private fun setupModel() {
         var defaultParam = "500w_mean,500h_mean"
         var defaultLabel = "500 mb Height/Wind"
+        om.times.clear()
         if (om.modelType == ModelType.SPCSREF) {
             (om.startStep..om.endStep step om.stepAmount).forEach {
                 om.times.add("f" + To.stringPadLeftZeros(it, 3))
@@ -180,7 +181,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun runStatusDownload() {
-        om.rtd = om.getRunTime()
+        om.rtd = ObjectModelGet.runTime(om)
     }
 
     private fun runStatusUpdate() {
@@ -271,6 +272,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_region -> ObjectDialogue.generic(this, om.sectorsLong, ::getContent) {
                 om.sector = om.sectorsLong[it]
+                om.displayData.image.forEach { touchImage -> touchImage.resetZoom() }
             }
             // SREF only
             R.id.action_param -> ObjectDialogue.generic(this, favList, ::getContent) {

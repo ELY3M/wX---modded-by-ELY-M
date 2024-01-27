@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -40,6 +40,7 @@ import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
+import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityShare
 
 object UtilityModels {
@@ -53,7 +54,7 @@ object UtilityModels {
         FutureVoid(
                 {
                     (0 until om.numPanes).forEach {
-                        om.displayData.bitmaps[it] = om.getImage(it, overlayImg)
+                        om.displayData.bitmaps[it] = ObjectModelGet.image(om, it, overlayImg)
                     }
                 },
                 {
@@ -100,7 +101,7 @@ object UtilityModels {
         FutureVoid(
                 {
                     (0 until om.numPanes).forEach {
-                        om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg)
+                        om.displayData.animDrawable[it] = ObjectModelGet.animate(om, it, overlayImg)
                     }
                 },
                 {
@@ -184,6 +185,45 @@ object UtilityModels {
             "$futureDay  $hourOfDay$amPm ($month/$dayOfMonth)"
         } else {
             "$futureDay  $hourOfDay$amPm"
+        }
+    }
+
+    fun convertTimeRunToTimeStringNew(runStrOrig: String, timeStrFunc: String, showDate: Boolean): String {
+        val runStr = runStrOrig.takeLast(2)
+        UtilityLog.d("wxRUN", runStr)
+        val timeStr = timeStrFunc.split(" ")[0].take(3)
+//        val a = LocalDateTime.now(ZoneOffset.UTC)
+//        val time = a.withHour(To.int(runStr.takeLast(2)))
+        val runInt = To.int(runStr)
+        val timeInt = To.int(timeStr)
+        val realTimeGmt = runInt + timeInt
+        val offsetFromUtc = ObjectDateTime.offsetFromUtcInSeconds()
+        val realTime = realTimeGmt + offsetFromUtc / 60 / 60
+        var hourOfDay = realTime % 24
+        var amPm: String
+        if (hourOfDay > 11) {
+            amPm = "pm"
+            if (hourOfDay > 12) {
+                hourOfDay -= 12
+            }
+        } else {
+            amPm = "am"
+        }
+        var day = realTime / 24
+        if (hourOfDay < 0) {
+            hourOfDay += 12
+            amPm = "pm"
+            day -= 1
+        }
+        val objectDateTime = ObjectDateTime(runInt, 0)
+        objectDateTime.addHours(timeInt.toLong() + offsetFromUtc / 60 / 60)
+        val month = objectDateTime.getMonth()
+        val dayOfMonth = objectDateTime.getDayOfMonth()
+        return if (showDate) {
+            "${objectDateTime.format("E")}  $hourOfDay$amPm ($month/$dayOfMonth)"
+            //"$futureDay  $hourOfDay$amPm ($month/$dayOfMonth)"
+        } else {
+            "${objectDateTime.format("E")}  $hourOfDay$amPm"
         }
     }
 

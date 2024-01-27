@@ -1,48 +1,27 @@
 # TODOs
 
-* Animate buttons in goes not working as intended. stop once animating should show latest image,
-  play after pause should start from where it was
-* Color Pal - vel not well developed
-* Color Pal - have to select before delete even though subtitle shows
-* rainfall - title is truncated, check other devices
-* after 2023-10-01 change min api to 25 (7.1)
-* after 2023-12-31 have the option Icons evenly spaced removed in Settings->UI.
-* wx href 0 hour
-* Beam height is truncated
-* NCEP STOFS
-* have all HTML get functions use user-agent header
-* rename radarForLocation in locfrag -> radarForLocationIndex
-* UtilityNotification.storeWatchMcdLatLon - move
-* remove usage of String.getHtmlSep()
-* NotificationSpcFireWeather
-* [ADD] migrate from "android.enableJetifier=true" to "android.enableJetifier=false" in
-  gradle.properties (com.jjoe64:graphview:4.2.2 requires jetifier and legacy support libraries)
-
 ## Refactor
 
-./app/src/main/java/joshuatee/wx/spc/SpcStormReportsActivity.kt:import java.util.Calendar
+* [REF] remove usage of String.getHtmlSep() (used only in NotificationSpcFireWeather)
+* [ADD] https://developer.android.com/studio/write/lint#config
+* [REF] remove usage of legacy java.util.Calendar
+
+```
 ./app/src/main/java/joshuatee/wx/models/UtilityModels.kt:import java.util.Calendar
 ./app/src/main/java/joshuatee/wx/notifications/AlertService.kt:import java.util.Calendar
-CurrentConditions - metarSiteCache
-HREF - reset zoom when change sector
+```
 
 ## Bugs
 
-* [FIX] ChromeOS: with obs enabled, zoom out via kbd - obs don't update location and never hides
+* [ADD] Color Pal - vel not well developed
+* [FIX] Color Pal - have to select before delete even though subtitle shows
+* [FIX] Beam height is truncated
 * [FIX] nexrad crash with ConcurrentModificationException in NexradRender:
   data.wpcFrontBuffersList.forEach {
 * [FIX] nexrad with cities, zoom in on location and then long press to current radar - text objects
   don't refresh
 * [FIX] USAlerts state count is not accurate
-* [FIX] chromeOS: text size for observations in nexrad
 * [FIX] storm reports - having location follow gps breaks the location marker
-* [FIX] if nexrad transparent toolbars are turned off (feature deprecated, will not fix), multipane
-  does not use the entire area
-* [FIX] if nexrad transparent toolbars are turned off (feature deprecated, will not fix), map of
-  radar sites does not display properly
-* [FIX] if nexrad transparent toolbars are turned off (feature deprecated, will not fix) and theme
-  is all white, toolbar text and some icons do not show
-* [ADD] move settings
 
 ## Features
 
@@ -52,7 +31,6 @@ HREF - reset zoom when change sector
   fileprovider
 * [ADD] debug option with circular log for downloads
 * [REF] migrate all to Future* (BackgroundFetch)
-* [ADD] nexrad pan 1:1 and configurable
 
 ## Deprecations
 

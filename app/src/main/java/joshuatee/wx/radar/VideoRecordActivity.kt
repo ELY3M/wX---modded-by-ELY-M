@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -56,7 +56,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     lateinit var objectToolbar: ObjectToolbar
     lateinit var objectToolbarBottom: ObjectToolbar
 
-    protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, iconsEvenlySpaced: Boolean, bottomToolbar: Boolean) {
+    protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, bottomToolbar: Boolean) {
         setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
         setContentView(layoutResId)
@@ -72,11 +72,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         objectToolbarBottom = ObjectToolbar(toolbarBottom)
         // for model activities need to force false regardless of user setting
         if (menuResId != null && bottomToolbar) {
-            if (UIPreferences.iconsEvenSpaced && iconsEvenlySpaced) {
-                UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, menuResId)
-            } else {
-                toolbarBottom.inflateMenu(menuResId)
-            }
+            toolbarBottom.inflateMenu(menuResId)
             toolbar.setOnClickListener { toolbarBottom.showOverflowMenu() }
             toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         }

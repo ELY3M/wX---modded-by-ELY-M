@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,16 +24,18 @@ package joshuatee.wx.spc
 import joshuatee.wx.common.GlobalVariables
 
 class StormReport(
-        val title: String = "",
-        val lat: String = "",
-        val lon: String = "",
-        val time: String = "",
-        val magnitude: String = "",
-        val address: String = "",
-        val city: String = "",
-        val state: String = "",
-        val description: String = ""
+        val lat: String,
+        val lon: String,
+        val time: String,
+        val magnitude: String,
+        val address: String,
+        val city: String,
+        val state: String,
+        val damageReport: String,
+        val damageHeader: String,
 ) {
+
+    // var latLon: LatLon = LatLon(lat, lon)
     override fun toString(): String =
-            listOf(title, lat, lon, time, magnitude, address, city, state, description).joinToString(",") + GlobalVariables.newline
+            listOf(damageHeader, lat, lon, time, magnitude, address, city, state, damageReport).joinToString(",") + GlobalVariables.newline
 }

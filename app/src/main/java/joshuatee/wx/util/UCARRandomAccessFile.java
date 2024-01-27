@@ -240,7 +240,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
         long minLength = 0;
         if (!readonly && (minLength != 0) && (minLength != fileSize)) {
             file.setLength(minLength);
-            // System.out.println("TRUNCATE!!! minlength="+minLength);
+            // System.out.println("TRUNCATE!!! minLength="+minLength);
         }
 
         // Close the underlying file object.
@@ -252,7 +252,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
      * Set the position in the file for the next read or write.
      *
      * @param pos the offset (in bytes) from the start of the file.
-     *            if an I/O error occurrs.
+     *            if an I/O error occurs.
      */
     public void seek(long pos) throws IOException {
 
@@ -293,7 +293,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
      * write will occur.
      *
      * @return the offset from the start of the file in bytes.
-     * if an I/O error occurrs.
+     * if an I/O error occurs.
      */
     // public long getFilePointer() throws IOException {
     public long getFilePointer() {
@@ -344,7 +344,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
      *
      * @return the next byte of data, or -1 if the end of the file is
      * reached.
-     * if an I/O error occurrs.
+     * if an I/O error occurs.
      */
     private int read() throws IOException {
 
@@ -374,7 +374,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
      * @param len the number of bytes to copy.
      * @return the actual number of bytes read, or -1 if there is not
      * more data due to the end of the file being reached.
-     * if an I/O error occurrs.
+     * if an I/O error occurs.
      */
     private int readBytes(byte[] b, int off, int len) throws IOException {
 
@@ -473,7 +473,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
      * @param len the number of bytes to copy.
      * @return the actual number of bytes read, or -1 if there is not
      * more data due to the end of the file being reached.
-     * if an I/O error occurrs.
+     * if an I/O error occurs.
      */
     private int read(byte[] b, int off, int len) throws IOException {
         return readBytes(b, off, len);
@@ -486,7 +486,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
      * @param b the byte array to receive the bytes.
      * @return the actual number of bytes read, or -1 if there is not
      * more data due to the end of the file being reached.
-     * if an I/O error occurrs.
+     * if an I/O error occurs.
      */
     public int read(byte[] b) throws IOException {
         return readBytes(b, 0, b.length);
@@ -560,7 +560,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
      * undefined.
      *
      * @param b write this byte
-     *          if an I/O error occurrs.
+     *          if an I/O error occurs.
      */
     public void write(int b) throws IOException {
 
@@ -599,7 +599,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
      * @param b   the array containing the data.
      * @param off the offset in the array to the data.
      * @param len the length of the data.
-     *            if an I/O error occurrs.
+     *            if an I/O error occurs.
      */
     private void writeBytes(byte[] b, int off, int len) throws IOException {
         // If the amount of data is small (less than a full buffer)...

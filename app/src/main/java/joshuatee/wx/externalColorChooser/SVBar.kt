@@ -33,6 +33,7 @@ import joshuatee.wx.R
 import kotlin.math.min
 import kotlin.math.roundToInt
 
+@Suppress("SpellCheckingInspection")
 class SVBar : View {
 
     // FIXME reformat whole file
@@ -113,7 +114,7 @@ class SVBar : View {
     private var mPosToSVFactor = 0.toFloat()
 
     /**
-     * Factor used to calculate the Saturation/Value to the postion on the bar.
+     * Factor used to calculate the Saturation/Value to the position on the bar.
      */
     private var mSVToPosFactor = 0.toFloat()
 

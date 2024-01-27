@@ -57,7 +57,7 @@
         <menu>
             <item
                 android:id="@+id/action_layer_clear"
-                android:title="@string/menu_clearall"
+                android:title="@string/menu_clear_all"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_layer_rgnlrad"

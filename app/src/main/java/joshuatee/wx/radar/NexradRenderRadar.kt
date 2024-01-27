@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -147,25 +147,6 @@ object NexradRenderRadar {
             } else {
                 wxglNexradLevel2.binWord.position(0)
                 totalBins = NexradDecodeEightBit.createRadials(data.radarBuffers, wxglNexradLevel2.binWord, wxglNexradLevel2.radialStartAngle)
-//                totalBins = if (RadarPreferences.useJni)
-//                    Jni.level2GenRadials(
-//                            data.radarBuffers.floatBuffer,
-//                            data.radarBuffers.colorBuffer,
-//                            wxglNexradLevel2.binWord,
-//                            wxglNexradLevel2.radialStartAngle,
-//                            data.radarBuffers.numberOfRadials,
-//                            data.radarBuffers.numRangeBins,
-//                            data.radarBuffers.binSize,
-//                            Color.red(data.radarBuffers.bgColor).toByte(),
-//                            Color.green(data.radarBuffers.bgColor).toByte(),
-//                            Color.blue(data.radarBuffers.bgColor).toByte(),
-//                            colorPalette.redValues,
-//                            colorPalette.greenValues,
-//                            colorPalette.blueValues,
-//                            data.radarBuffers.productCode.toInt()
-//                    )
-//                else
-//                    NexradDecodeEightBit.createRadials(data.radarBuffers, wxglNexradLevel2.binWord, wxglNexradLevel2.radialStartAngle)
             } // level 2 , level 3 check
         } catch (e: Exception) {
             UtilityLog.handleException(e)

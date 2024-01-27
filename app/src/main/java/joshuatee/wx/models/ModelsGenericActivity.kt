@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -105,9 +105,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         title = titleString
         objectModelLayout = ObjectModelLayout(prefModelToken, numberOfPanes)
         if (To.int(numberOfPanes) == 1) {
-            super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, iconsEvenlySpaced = false, bottomToolbar = true)
+            super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, bottomToolbar = true)
         } else {
-            super.onCreate(savedInstanceState, objectModelLayout.layoutMultiPane, objectModelLayout.menuResId, iconsEvenlySpaced = false, bottomToolbar = true)
+            super.onCreate(savedInstanceState, objectModelLayout.layoutMultiPane, objectModelLayout.menuResId, bottomToolbar = true)
             val box = VBox.fromResource(this)
             if (UtilityUI.isLandScape(this)) {
                 box.makeHorizontal()
@@ -264,7 +264,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (om.modelType == ModelType.NCEP) {
             om.rtd = UtilityModelNcepInputOutput.getRunTime(om.model, om.displayData.param[0], om.sectors[0])
         } else {
-            om.rtd = om.getRunTime()
+            om.rtd = ObjectModelGet.runTime(om)
         }
     }
 
@@ -363,6 +363,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_region -> ObjectDialogue.generic(this, om.sectors, ::getContent) {
                 om.sector = om.sectors[it]
                 om.sectorInt = it
+                om.displayData.image.forEach { touchImage -> touchImage.resetZoom() }
             }
 
             R.id.action_model -> ObjectDialogue.generic(this, om.models, {}) {

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,7 +27,7 @@ import android.graphics.Bitmap
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.activitiesmisc.UtilityRtma
+import joshuatee.wx.misc.UtilityRtma
 import joshuatee.wx.getImage
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.settings.UIPreferences
@@ -39,6 +39,7 @@ import joshuatee.wx.spc.UtilitySpcSoundings
 import joshuatee.wx.spc.UtilitySpcSwo
 import joshuatee.wx.vis.UtilityGoes
 
+@Suppress("SpellCheckingInspection")
 object DownloadImage {
 
     fun radarMosaic(context: Context): Bitmap = try {

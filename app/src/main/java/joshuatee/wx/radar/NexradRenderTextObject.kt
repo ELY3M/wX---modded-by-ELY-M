@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,17 +24,16 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import android.graphics.Color
-import android.util.TypedValue
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import joshuatee.wx.MyApplication
-import joshuatee.wx.R
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.ui.TextViewMetal
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
 import kotlin.math.*
@@ -47,7 +46,6 @@ class NexradRenderTextObject(
         private val numberOfPanes: Int,
         private val paneNumber: Int
 ) {
-    private var layoutParams: RelativeLayout.LayoutParams
     private var citiesInitialized = false
     private var countyLabelsInitialized = false
     private var observationsInitialized = false
@@ -77,9 +75,6 @@ class NexradRenderTextObject(
             MyApplication.dm.heightPixels
         }
         projectionNumbers = ProjectionNumbers(state.rid, ProjectionType.WX_OGL)
-        layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
-        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
     }
 
     private fun addCities() {
@@ -88,11 +83,12 @@ class NexradRenderTextObject(
             hideCities()
             wxglSurfaceView.cities.clear()
             scale = getScale()
-            oglrZoom = 1.0f
-            if (state.zoom < 1.00f) {
-                oglrZoom = state.zoom * 0.8f
-            }
-            textSize = UIPreferences.textSizeSmall * oglrZoom * 0.75f * RadarPreferences.textSize
+//            oglrZoom = 1.0f
+//            if (state.zoom < 1.00f) {
+//                oglrZoom = state.zoom * 0.8f
+//            }
+//            textSize = UIPreferences.textSizeSmall * oglrZoom * 0.75f * RadarPreferences.textSize
+            textSize = UIPreferences.textSizeSmall * RadarPreferences.textSize * 0.80f
             val cityMinZoom = 0.50
             if (state.zoom > cityMinZoom) {
                 val cityExtLength = CitiesExtended.labels.size
@@ -255,7 +251,6 @@ class NexradRenderTextObject(
     }
     
     private fun checkAndDrawText(textViews: MutableList<TextView>, lat: Double, lon: Double, text: String, color: Int) {
-        val coordinates = Projection.computeMercatorNumbers(lat, lon, projectionNumbers)
         val renderX: Float
         val renderY: Float
         if (RadarPreferences.wxoglCenterOnLocation) {
@@ -265,16 +260,13 @@ class NexradRenderTextObject(
             renderX = state.x / state.zoom
             renderY = state.y / state.zoom
         }
+        val coordinates = Projection.computeMercatorNumbers(lat, lon, projectionNumbers)
         coordinates[0] = coordinates[0] + renderX
         coordinates[1] = coordinates[1] - renderY
         if (abs(coordinates[0] * scale) < glviewWidth && abs(coordinates[1] * scale) < glviewHeight) {
-            val textView = TextView(context)
-            textViews.add(textView)
-            textView.setTextColor(color)
-            textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
-            textView.setSingleLine()
-            relativeLayout.addView(textView)
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+            val textView = TextViewMetal(context, text, color, textSize)
+            textViews.add(textView.getView())
+            relativeLayout.addView(textView.getView())
             if ((coordinates[1] * scale).toInt() < 0) {
                 if ((coordinates[0] * scale).toInt() < 0)
                     textView.setPadding(0, 0, (-(coordinates[0] * scale)).toInt(), (-(coordinates[1] * scale)).toInt())
@@ -286,11 +278,6 @@ class NexradRenderTextObject(
                 else
                     textView.setPadding((coordinates[0] * scale).toInt(), (coordinates[1] * scale).toInt(), 0, 0)
             }
-            layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
-            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
-            textView.layoutParams = layoutParams
-            textView.text = text
         }
     }
 
@@ -306,14 +293,14 @@ class NexradRenderTextObject(
         var drawText = false
         if (abs(coordinates[0] * scale) < glviewWidth && abs(coordinates[1] * scale) < glviewHeight) {
             drawText = true
-            val textView = TextView(context)
-            textViews.add(textView)
-            textView.setTextColor(color)
-            textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
-            if (singleLine)
-                textView.setSingleLine()
-            relativeLayout.addView(textView)
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizeTv)
+            val textView = TextViewMetal(context, "", color, textSizeTv, singleLine, drawText = false)
+            textViews.add(textView.getView())
+//            textView.setTextColor(color)
+//            textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
+//            if (singleLine)
+//                textView.setSingleLine()
+            relativeLayout.addView(textView.getView())
+//            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizeTv)
             if ((coordinates[1] * scale).toInt() < 0) {
                 if ((coordinates[0] * scale).toInt() < 0)
                     textView.setPadding(0, 0, (-(coordinates[0] * scale)).toInt(), (-(coordinates[1] * scale)).toInt())
@@ -325,10 +312,10 @@ class NexradRenderTextObject(
                 else
                     textView.setPadding((coordinates[0] * scale).toInt(), (coordinates[1] * scale).toInt(), 0, 0)
             }
-            layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
-            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
-            textView.layoutParams = layoutParams
+//            val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+//            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+//            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
+//            textView.layoutParams = layoutParams
         }
         return drawText
     }
@@ -466,7 +453,7 @@ class NexradRenderTextObject(
                             it.lat,
                             it.lon,
                             it.pressureInMb,
-                            color
+                            color,
                     )
                 }
 		//elys mod
@@ -492,15 +479,16 @@ class NexradRenderTextObject(
             projectionNumbers = ProjectionNumbers(state.rid, ProjectionType.WX_OGL)
             var lat = 0.0
             var lon = 0.0
-            val fontScaleFactorObs = 0.65f
+//            val fontScaleFactorObs = 0.65f
             hideObservations()
             wxglSurfaceView.observations.clear()
             scale = getScale()
             oglrZoom = 1.0f
-            if (state.zoom < 1.0f) {
-                oglrZoom = state.zoom * 0.8f
-            }
-            textSize = UIPreferences.textSizeSmall * oglrZoom * fontScaleFactorObs * RadarPreferences.textSize
+//            if (state.zoom < 1.0f) {
+//                oglrZoom = state.zoom * 0.8f
+//            }
+//            textSize = UIPreferences.textSizeSmall * oglrZoom * fontScaleFactorObs * RadarPreferences.textSize
+            textSize = UIPreferences.textSizeSmall * oglrZoom * RadarPreferences.textSize * 0.75f
             val obsArr = Metar.data[paneNumber].obsArr.toList()
             val obsArrExt = Metar.data[paneNumber].obsArrExt.toList()
             if (state.zoom > 0.5) {

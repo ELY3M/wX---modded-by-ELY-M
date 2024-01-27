@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -89,7 +89,6 @@ class SpcMesoLayer(val context: Context, val type: SpcMesoLayerType, objectToolb
                 SpcMesoLayerType.Population to "Population"
         )
 
-        // val radImgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
         val urlToken = mapOf(
                 SpcMesoLayerType.County to "cnty",
                 SpcMesoLayerType.Outlook to "otlk",

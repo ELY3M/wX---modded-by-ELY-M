@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -165,7 +165,7 @@ object Location {
             if (wfo == "") {
                 wfo = UtilityLocation.getNearestOffice(OfficeTypeEnum.WFO, LatLon(xStr, yStr)).lowercase(Locale.US)
             }
-            if (radarSite == "") {
+            if (radarSite == "" || radarSite == "LIX") {
                 radarSite = UtilityLocation.getNearestOffice(OfficeTypeEnum.RADAR, LatLon(xStr, yStr))
             }
             // CT shows mosaic not nexrad so the old way is needed
@@ -203,7 +203,6 @@ object Location {
                 val locLabelCurrent = Utility.readPref(context, "LOC" + jStr + "_LABEL", "")
                 val nwsCurrent = Utility.readPref(context, "NWS$jStr", "")
                 val ridCurrent = Utility.readPref(context, "RID$jStr", "")
-                val nwsStateCurrent = Utility.readPref(context, "NWS" + jStr + "_STATE", "")
                 val alertNotificationCurrent = Utility.readPref(context, "ALERT" + jStr + "_NOTIFICATION", "false")
                 val alertNotificationRadarCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$jStr", "false")
                 val alertCcNotificationCurrent = Utility.readPref(context, "ALERT_CC" + jStr + "_NOTIFICATION", "false")
@@ -228,7 +227,6 @@ object Location {
                 Utility.writePref(context, "LOC" + iStr + "_LABEL", locLabelCurrent)
                 Utility.writePref(context, "NWS$iStr", nwsCurrent)
                 Utility.writePref(context, "RID$iStr", ridCurrent)
-                Utility.writePref(context, "NWS" + iStr + "_STATE", nwsStateCurrent)
                 setNumLocations(context, locNumIntCurrent - 1)
                 i += 1
             }

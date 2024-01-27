@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -72,15 +72,15 @@ class ObjectWidgetCC(context: Context) {
             }
             remoteViews.setTextViewText(R.id.pressure, currentConditionsList[1])
             remoteViews.setTextViewText(R.id.visibility, currentConditionsList[3])
-            remoteViews.setTextColor(R.id.bigdewpt, UIPreferences.widgetTextColor)
+            remoteViews.setTextColor(R.id.big_dew_point, UIPreferences.widgetTextColor)
             remoteViews.setTextColor(R.id.wind, UIPreferences.widgetTextColor)
             remoteViews.setTextColor(R.id.pressure, UIPreferences.widgetTextColor)
             remoteViews.setTextColor(R.id.visibility, UIPreferences.widgetTextColor)
             remoteViews.setTextViewText(R.id.updatetime, currentConditionsTime)
             remoteViews.setTextColor(R.id.updatetime, UIPreferences.widgetTextColor)
-            remoteViews.setTextViewText(R.id.bigtemp, temperatureList[0])
-            remoteViews.setTextViewText(R.id.bigdewpt, temperatureList[1].replace("^ ".toRegex(), ""))
-            remoteViews.setTextColor(R.id.bigtemp, UIPreferences.widgetHighlightTextColor)
+            remoteViews.setTextViewText(R.id.big_temp, temperatureList[0])
+            remoteViews.setTextViewText(R.id.big_dew_point, temperatureList[1].replace("^ ".toRegex(), ""))
+            remoteViews.setTextColor(R.id.big_temp, UIPreferences.widgetHighlightTextColor)
         }
         if (!UIPreferences.widgetCCShow7Day) {
             remoteViews.setTextViewText(R.id.text4, sevenDay)

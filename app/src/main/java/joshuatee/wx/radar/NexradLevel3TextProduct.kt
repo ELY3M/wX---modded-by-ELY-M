@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,48 +32,6 @@ object NexradLevel3TextProduct {
 
     fun download(product: String, radarSite: String): String =
             NexradDownload.getRadarFileUrl(radarSite, product).getHtml()
-
-//    fun readFile(context: Context, fileName: String): String {
-//        val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
-//        ucarRandomAccessFile.bigEndian = true
-//        return read(ucarRandomAccessFile)
-//    }
-//    private fun read(ucarRandomAccessFile: UCARRandomAccessFile?): String {
-//        val stringBuilder = StringBuilder(1500)
-//        try {
-//            ucarRandomAccessFile?.let {
-//                while (true) {
-//                    if (it.readShort().toInt() == -1) {
-//                        break
-//                    }
-//                }
-//                it.skipBytes(26)
-//                while (true) {
-//                    if (it.readShort().toInt() == -1) {
-//                        break
-//                    }
-//                }
-//                try {
-//                    while (!it.isAtEndOfFile) {
-//                        stringBuilder.append(String(byteArrayOf(it.readByte()), charset("ISO-8859-1")))
-//                    }
-//                } catch (e: EOFException) {
-//                    UtilityLog.handleException(e)
-//                } catch (e: OutOfMemoryError) {
-//                    UtilityLog.handleException(e)
-//                } finally {
-//                    try {
-//                        it.close()
-//                    } catch (e: IOException) {
-//                        UtilityLog.handleException(e)
-//                    }
-//                }
-//            }
-//        } catch (e: Exception) {
-//            UtilityLog.handleException(e)
-//        }
-//        return stringBuilder.toString()
-//    }
 
     fun getVwp(radarSite: String): String {
         // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.48vwp/SI.kccx/

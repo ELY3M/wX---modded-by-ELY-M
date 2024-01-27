@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,7 +24,7 @@ package joshuatee.wx.util
 
 import java.util.Locale
 import android.content.Context
-import joshuatee.wx.activitiesmisc.UtilityUSHourly
+import joshuatee.wx.misc.UtilityUSHourly
 import joshuatee.wx.audio.UtilityPlayList
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
@@ -39,6 +39,7 @@ import joshuatee.wx.removeLineBreaks
 import joshuatee.wx.settings.Location.latLon
 import joshuatee.wx.settings.UtilityLocation
 
+@Suppress("SpellCheckingInspection")
 object DownloadText {
 
     private const val useNwsApi = false
@@ -99,41 +100,19 @@ object DownloadText {
             prod.contains("SPCMCD") -> {
                 val no = prod.substring(6)
                 val textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md$no.html"
-//                text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
                 text = textUrl.getHtmlWithNewLine().parseAcrossLines(RegExp.pre2)
-//                text = text.replace("^<br><br>".toRegex(), "")
-//                if (UIPreferences.nwsTextRemovelinebreaks) {
-//                    text = text.replace("<br><br>", "<BR><BR>")
-//                    text = text.replace("<br>", " ")
-//                }
-//                text = text.replace("<br>".toRegex(), "<BR>")
             }
 
             prod.contains("SPCWAT") -> {
                 val no = prod.substring(6)
                 val textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww$no.html"
                 text = textUrl.getHtmlWithNewLine().parseAcrossLines(RegExp.pre2)
-//                text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
-//                text = textUrl.getHtmlSep().parse(RegExp.pre2Pattern)
-//                text = text.replace("^<br>".toRegex(), "")
-//                if (UIPreferences.nwsTextRemovelinebreaks) {
-//                    text = text.replace("<br><br>", "<BR><BR>")
-//                    text = text.replace("<br>", " ")
-//                }
             }
 
             prod.contains("WPCMPD") -> {
                 val no = prod.substring(6)
                 val textUrl = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
                 text = textUrl.getHtmlWithNewLine().parseAcrossLines(RegExp.pre2)
-//                text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
-//                text = textUrl.getHtmlSep().parse(RegExp.pre2Pattern)
-//                text = text.replace("^<br>".toRegex(), "")
-//                text = text.replace("^ <br>".toRegex(), "")
-//                if (UIPreferences.nwsTextRemovelinebreaks) {
-//                    text = text.replace("<br><br>", "<BR><BR>")
-//                    text = text.replace("<br>", " ")
-//                }
             }
 
             prod.startsWith("GLF") && !prod.contains("%") -> text = byProduct(context, "$prod%")
@@ -197,10 +176,8 @@ object DownloadText {
             }
 
             prod.contains("USHZD37") -> {
-                val url = "https://www.wpc.ncep.noaa.gov/threats/threats.php"
-                text = url.getHtmlWithNewLine()
-                text = text.parseAcrossLines("<div class=.haztext.>(.*?)</div>")
-                text = text.removeHtml()
+                text =
+                        "product discontinued via SCN23-101: Termination of the Weather Prediction Center Day 3-7 Hazards Outlook Discussion Effective November 15, 2023"
             }
 
             prod.contains("PMD30D") -> {

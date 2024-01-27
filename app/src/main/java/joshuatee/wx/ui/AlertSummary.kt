@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,15 +25,18 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.widget.ScrollView
 import java.util.Locale
-import joshuatee.wx.activitiesmisc.CapAlert
+import joshuatee.wx.misc.CapAlert
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.Route
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
 class AlertSummary(private val context: Context, mainBox: VBox, private val scrollView: ScrollView) {
+
+    //
+    // Container used by USAlertsActivity that contains both
+    // views and the data that will go into them
+    //
 
     var navList = listOf<String>()
         private set
@@ -50,6 +53,7 @@ class AlertSummary(private val context: Context, mainBox: VBox, private val scro
             mainBox.makeHorizontal()
         }
         textBox.addWidget(cardText)
+        textBox.matchParentWidth()  // ChromeOS optimization
         mainBox.addWidget(image)
         mainBox.addLayout(textBox)
     }
@@ -75,48 +79,29 @@ class AlertSummary(private val context: Context, mainBox: VBox, private val scro
         image.connect { Route.image(context, "https://forecast.weather.gov/wwamap/png/US.png", "US Alerts") }
         val mapEvent = mutableMapOf<String, Int>()
         val mapState = mutableMapOf<String, Int>()
-        val map = mutableMapOf<String, Int>()
+        val mapStateForFilter = mutableMapOf<String, Int>()
         var i = 0
-        try {
-            val alerts = UtilityString.parseColumn(data, "<entry>(.*?)</entry>")
-            capAlerts = alerts.map { CapAlert.initializeFromCap(it) }
-            capAlerts.forEach { capAlert ->
-                val zones = capAlert.zones.split(" ")
-                val tmpStateList = zones.filter { it.length > 1 }.map { it.substring(0, 2) }
-                val uniqueStates = tmpStateList.toSet()
-                uniqueStates.forEach {
-                    val prev = mapState.getOrDefault(it, 0)
-                    mapState[it] = prev + 1
-                }
-                val prev = mapEvent.getOrDefault(capAlert.event, 0)
-                mapEvent[capAlert.event] = prev + 1
-                if (capAlert.event.matches(filterOriginal.toRegex())) {
-                    val nwsOffice: String
-                    val nwsLoc: String
-                    if (capAlert.vtec.length > 15 && capAlert.event != "Special Weather Statement") {
-                        nwsOffice = capAlert.vtec.substring(8, 11)
-                        nwsLoc = UtilityLocation.getWfoSiteName(nwsOffice)
-                    } else {
-                        nwsOffice = ""
-                        nwsLoc = ""
-                    }
-                    val tmp2StateList = zones.asSequence().filter { it.length > 1 }.map { it.substring(0, 2) }
-                    val unique2States = tmp2StateList.toSet()
-                    unique2States.forEach { state ->
-                        val prev1 = map.getOrDefault(state, 0)
-                        map[state] = prev1 + 1
-                    }
-                    val cardAlertDetail = CardAlertDetail(context)
-                    cardAlertDetail.setTextFields(nwsOffice, nwsLoc, capAlert)
-                    cardAlertDetail.connect { Route.hazard(context, capAlert.url) }
-                    textBox.addWidget(cardAlertDetail)
-                    i += 1
-                }
+        val alerts = UtilityString.parseColumn(data, "<entry>(.*?)</entry>")
+        capAlerts = alerts.map { CapAlert.initializeFromCap(it) }
+        capAlerts.forEach { capAlert ->
+            val zones = capAlert.zones.split(" ")
+            updateStateMap(zones, mapState)
+            //
+            // build a map to track which events have been seen and how many times
+            //
+            updateEventMap(capAlert.event, mapEvent)
+            if (capAlert.event.matches(filterOriginal.toRegex())) {
+                updateStateMap(zones, mapStateForFilter)
+                val cardAlertDetail = CardAlertDetail(context, capAlert)
+                cardAlertDetail.connect { Route.hazard(context, capAlert.url) }
+                textBox.addWidget(cardAlertDetail)
+                i += 1
             }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
         }
-        val mapOut = map.toString().replace("[{}]".toRegex(), "")
+        //
+        // Update the navigation drawer entries and the textual filter label
+        //
+        val mapOut = mapStateForFilter.toString().replace("[{}]".toRegex(), "")
         val filter = filterOriginal.replace("[|*?.]".toRegex(), " ")
         if (mapOut.isNotEmpty()) {
             cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")" + GlobalVariables.newline + mapOut)
@@ -133,6 +118,22 @@ class AlertSummary(private val context: Context, mainBox: VBox, private val scro
         }
     }
 
-    fun getTitle(title: String): String =
-            "(" + capAlerts.size + ") " + title.uppercase(Locale.US) + " Alerts"
+    //
+    // Update a map to track which states have been seen and how many times
+    //
+    private fun updateStateMap(zoneList: List<String>, stateMap: MutableMap<String, Int>) {
+        val stateList = zoneList.asSequence().filter { it.length > 1 }.map { it.substring(0, 2) }
+        val uniqueStateList = stateList.toSet()
+        uniqueStateList.forEach { state ->
+            val previousCount = stateMap.getOrDefault(state, 0)
+            stateMap[state] = previousCount + 1
+        }
+    }
+
+    private fun updateEventMap(event: String, map: MutableMap<String, Int>) {
+        val prev = map.getOrDefault(event, 0)
+        map[event] = prev + 1
+    }
+
+    fun getTitle(title: String) = "(" + capAlerts.size + ") " + title.uppercase(Locale.US) + " Alerts"
 }

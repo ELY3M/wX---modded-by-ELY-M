@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -38,11 +38,11 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-
+@Suppress("SpellCheckingInspection")
 object UtilitySpotter {
 
     internal val spotterList = mutableListOf<Spotter>()
-    private val reportsList = mutableListOf<SpotterReports>()
+    private val reportsList = mutableListOf<SpotterReport>()
     val timer = DownloadTimer("SPOTTER")
     internal var x = DoubleArray(1)
         private set
@@ -124,7 +124,7 @@ object UtilitySpotter {
             val items = line.split(";;").dropLastWhile { it.isEmpty() }
             if (items.size > 10 && !items[0].startsWith("#")) {
                 reportsList.add(
-		SpotterReports(
+		SpotterReport(
 		items[9], 
 		items[10], 
 		items[5], 
@@ -234,7 +234,7 @@ fun countTime(reportAt: String): String {
     return idleDateTime
 }
 
-    val reports: List<SpotterReports>
+    val reports: List<SpotterReport>
         get() = reportsList
 
 }

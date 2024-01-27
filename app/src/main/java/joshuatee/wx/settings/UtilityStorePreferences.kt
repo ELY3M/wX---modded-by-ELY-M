@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-//modded by ELY M.
 
 package joshuatee.wx.settings
 
@@ -33,32 +32,18 @@ object UtilityStorePreferences {
         val value = preferences.getString("ALERT1_NOTIFICATION", null)
         if (value == null) {
             // Define the default location
-            editor.putString("ALERT_ONLYONCE", "true")
-            editor.putString("ALERT_AUTOCANCEL", "true")
-            editor.putString("LOCK_TOOLBARS", "true")
-            editor.putString("RADAR_SHOW_COUNTY", "true")
             editor.putString("ALERT1_NOTIFICATION", "false")
             editor.putString("ALERT_CC1_NOTIFICATION", "false")
             editor.putString("ALERT_7DAY_1_NOTIFICATION", "false")
             editor.putString("ALERT_NOTIFICATION_RADAR1", "false")
             editor.putString("ALERT_NOTIFICATION_SOUND1", "false")
             editor.putInt("ALERT_NOTIFICATION_INTERVAL", 12)
-            editor.putString("ALERT_BLACKOUT", "false")
-            editor.putInt("ALERT_BLACKOUT_AM", 7)
-            editor.putInt("ALERT_BLACKOUT_PM", 22)
-            editor.putString("ALERT_BLACKOUT_TORNADO", "true")
             editor.putInt("LOC_NUM_INT", 1)
             editor.putString("LOC1_X", "35.231")
             editor.putString("LOC1_Y", "-97.451")
-            editor.putString("LOC1_NWS", "OUN")
             editor.putString("LOC1_LABEL", "home")
-            editor.putString("STATE", "Oklahoma")
-            editor.putString("STATE_CODE", "OK")
             editor.putString("NWS1", "OUN")
             editor.putString("RID1", "TLX")
-            editor.putString("NWS1_STATE", "OK")
-            editor.putString("THEME_BLUE", "BlackAqua")
-            editor.putString("NWS_RADAR_BG_BLACK", "true")
             // NCEP default to GFS
             editor.putInt("MODEL_NCEP1_INDEX", 4)
             editor.putInt("MODEL_NCEP2_INDEX", 4)

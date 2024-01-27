@@ -21,15 +21,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_warnmap"
+        android:id="@+id/action_warn_map"
         android:title="@string/conus_warning_map"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_warnmapAK"
+        android:id="@+id/action_warn_map_AK"
         android:title="@string/ak_warning_map"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_warnmapHI"
+        android:id="@+id/action_warn_map_HI"
         android:title="@string/hi_warning_map"
         app:showAsAction="never" />
 </menu>

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,7 +23,7 @@ package joshuatee.wx.widgets
 
 import joshuatee.wx.*
 
-enum class WidgetFile constructor(val fileName: String, val prefString: String, val action: String, val clazz: Class<*>) {
+enum class WidgetFile(val fileName: String, val prefString: String, val action: String, val clazz: Class<*>) {
 
     NEXRAD_RADAR("nexrad.png", "DOWNLOAD_LOC1_RADAR", "ACTION_WX_NEXRAD", WidgetNexrad::class.java),
     MOSAIC_RADAR("rad_1km.png", "DOWNLOAD_LOC1_MOSAICS_RAD", "ACTION_WX", WidgetMosaicsRad::class.java),

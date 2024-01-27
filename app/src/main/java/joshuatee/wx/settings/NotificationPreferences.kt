@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -65,20 +65,20 @@ object NotificationPreferences {
         alertNotificationSoundTextProd = getInitialPreference("ALERT_NOTIFICATION_SOUND_TEXT_PROD", "false")
         notifSoundRepeat = getInitialPreference("NOTIF_SOUND_REPEAT", "false")
         notifTts = getInitialPreference("NOTIF_TTS", "false")
-        alertBlackoutAmCurrent = getInitialPreference("ALERT_BLACKOUT_AM", -1)
-        alertBlackoutPmCurrent = getInitialPreference("ALERT_BLACKOUT_PM", -1)
+        alertBlackoutAmCurrent = getInitialPreference("ALERT_BLACKOUT_AM", 7)
+        alertBlackoutPmCurrent = getInitialPreference("ALERT_BLACKOUT_PM", 22)
         alertTornadoNotification = getInitialPreference("ALERT_TORNADO_NOTIFICATION", "false")
         alertSpcMcdNotification = getInitialPreference("ALERT_SPCMCD_NOTIFICATION", "false")
         alertSpcWatchNotification = getInitialPreference("ALERT_SPCWAT_NOTIFICATION", "false")
         alertSpcSwoNotification = getInitialPreference("ALERT_SPCSWO_NOTIFICATION", "false")
         alertSpcSwoSlightNotification = getInitialPreference("ALERT_SPCSWO_SLIGHT_NOTIFICATION", "false")
         alertWpcMpdNotification = getInitialPreference("ALERT_WPCMPD_NOTIFICATION", "false")
-        alertBlackoutTornado = getInitialPreference("ALERT_BLACKOUT_TORNADO", "false")
+        alertBlackoutTornado = getInitialPreference("ALERT_BLACKOUT_TORNADO", "true")
         alertNhcEpacNotification = getInitialPreference("ALERT_NHC_EPAC_NOTIFICATION", "false")
         alertNhcAtlNotification = getInitialPreference("ALERT_NHC_ATL_NOTIFICATION", "false")
-        alertAutocancel = getInitialPreference("ALERT_AUTOCANCEL", "false")
+        alertAutocancel = getInitialPreference("ALERT_AUTOCANCEL", "true")
         alertBlackout = getInitialPreference("ALERT_BLACKOUT", "false")
-        alertOnlyOnce = getInitialPreference("ALERT_ONLYONCE", "false")
+        alertOnlyOnce = getInitialPreference("ALERT_ONLYONCE", "true")
         notifSoundUri = getInitialPreferenceString("NOTIF_SOUND_URI", "")
         if (notifSoundUri == "") {
             notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()

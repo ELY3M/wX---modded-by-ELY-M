@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -31,7 +31,7 @@ import joshuatee.wx.objects.TextSize
 import joshuatee.wx.spc.StormReport
 import java.util.Locale
 
-class CardStormReportItem(context: Context) : Widget {
+class CardStormReportItem(context: Context, stormReport: StormReport, k: Int) : Widget {
 
     private val card = Card(context)
     private val textTop = Text(context, UIPreferences.textHighlightColor)
@@ -42,6 +42,9 @@ class CardStormReportItem(context: Context) : Widget {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
         vbox.addWidgets(listOf(textTop, textTitle, textBottom))
         card.addLayout(vbox)
+
+        setId(k)
+        setTextFields(stormReport)
     }
 
     fun registerForContextMenu(activity: Activity) {
@@ -51,7 +54,7 @@ class CardStormReportItem(context: Context) : Widget {
     override fun getView() = card.getView()
 
     // This is needed for long press on the card for archived L2 radar (unreliable feature which should be removed)
-    fun setId(id: Int) {
+    private fun setId(id: Int) {
         card.setId(id)
     }
 
@@ -59,14 +62,14 @@ class CardStormReportItem(context: Context) : Widget {
         card.connect(fn)
     }
 
-    fun setTextFields(stormReport: StormReport) {
+    private fun setTextFields(stormReport: StormReport) {
         textTop.text = stormReport.state + ", " + stormReport.city + " " + stormReport.time
         textTitle.text = stormReport.address
-        textBottom.text = stormReport.magnitude + " - " + stormReport.description
+        textBottom.text = stormReport.magnitude + " - " + stormReport.damageReport
     }
 
     fun setTextHeader(stormReport: StormReport) {
-        textTop.text = stormReport.title.uppercase(Locale.US)
+        textTop.text = stormReport.damageHeader.uppercase(Locale.US)
         textTop.setSize(TextSize.LARGE)
         textTop.setPadding(20)
         textTitle.visibility = View.GONE

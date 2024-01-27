@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -38,6 +38,7 @@ import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
+import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.UtilityCities
 import joshuatee.wx.util.UtilityLog
 import java.nio.ByteBuffer
@@ -179,20 +180,20 @@ internal object CanvasDraw {
     ) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        with(paint) {
-            style = Style.STROKE
-            strokeWidth = (RadarGeometry.dataByType[geographyType]!!.lineSize / 2.0).toFloat()
-            color = RadarGeometry.dataByType[geographyType]!!.colorInt
-        }
-        if (projectionType.needsCanvasShift) {
-            canvas.translate(CanvasMain.xOffset, CanvasMain.yOffset)
-        }
+        paint.style = Style.STROKE
+        paint.strokeWidth = (RadarGeometry.dataByType[geographyType]!!.lineSize / 2.0).toFloat()
+        paint.color = RadarGeometry.dataByType[geographyType]!!.colorInt
+        if (projectionType.needsCanvasShift) canvas.translate(CanvasMain.xOffset, CanvasMain.yOffset)
         val path = Path()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         genericByteBuffer.position(0)
         try {
             val tmpBuffer = ByteBuffer.allocateDirect(genericByteBuffer.capacity())
-            Projection.computeMercatorFloatToBuffer(genericByteBuffer, tmpBuffer, projectionNumbers)
+            if (projectionType.isMercator) {
+                UtilityCanvasProjection.computeMercatorFloatToBuffer(genericByteBuffer, tmpBuffer, projectionNumbers)
+            } else {
+                UtilityCanvasProjection.compute4326NumbersFloatToBuffer(genericByteBuffer, tmpBuffer, projectionNumbers)
+            }
             tmpBuffer.position(0)
             while (tmpBuffer.position() < tmpBuffer.capacity()) {
                 path.moveTo(tmpBuffer.float, tmpBuffer.float)

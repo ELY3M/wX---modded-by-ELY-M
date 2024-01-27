@@ -8,12 +8,50 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
-## 55850 2022_11_03 (BETA)
+## 55855 2024_01_15 (BETA)
 
+* [FIX] WPC Rainfall Outlook Day 1 - 5, Title was truncated, move parts of Title to Sub-title
+* [ADD] Previously, the graph in the hourly activity was set to a fixed size height.
+  On laptops (ie ChromeOS) this led to the graph being very narrow. The graph is now set to
+  slightly less then the width and the height is a fixed fraction of that width.
+* [ADD] ChromeOS keyboard shortcut for main screen "Ctrl - s" (SPC SWO Summary)
+* [ADD] ChromeOS keyboard shortcut for main screen "Ctrl - g" (Rainfall Outlook Summary)
+* [FIX] In GOES, move share icon to submenu as when animating pause icon was not showing on some
+  devices
+* [FIX] In GOES, Animate button was not working as intended. if tap Stop once animating, it should
+  show latest image
+* [FIX] SPC SREF - time menu was not showing up in bottom toolbar
+* [FIX] SPC HREF - when change sector, reset zoom level on image(s)
+* [FIX] SPC HREF - remove first time "00" in series which is not valid for this model
+* [FIX] NCEP MAG Models - when change sector, reset zoom level on image(s)
+* [ADD] change keyboard shortcuts (ie for ChromeOS) to more closely match desktop ports, SPC Meso (
+  cltr-Z), Nat Text (cltr-T), Settings (cltr-P)
+* [FIX] Orange theme still had blue FAB
+* [ADD] Main screen: make location label and hazards bold
+* [FIX] Nexrad radar city textual labels and observation labels were not working well on ChromeOS,
+  change the way size is computed.
+* [FIX] Rainfall Outlook Summary - swap title and subtitle as title was too long
+* [ADD] as mentioned in "Upcoming Changes" since Aug 2022:
+  The option **Icons evenly spaced** will be removed in **Settings->UI**.
+  This was meant to be a bridge from Android 4.4 to Android 5.0 back in Fall 2014.
+  It goes against modern Android design and has caused issues in the past for users who have
+  unknowingly enabled it.
+* [ADD] SPC SWO Summary - similar to Severe Dashboard, move "pin to homescreen" icon to submenu so
+  it's clear what this is doing
+
+## 55855 2023_12_08
+
+* [FIX] KLIX (LA, New Orleans) nexrad radar is being physically moved.
+  This update prevents it from being used as an active radar in long press radar
+  selection or if adding a new location.
+* [FIX] WPC US Hazards Outlook Days 3-7: product discontinued via SCN23-101: Termination of the
+  Weather Prediction Center Day 3-7
+  Hazards Outlook Discussion Effective November 15, 2023
+* [ADD] NHC storm detail - force to mph for wind intensity and add "mph" label
+* [ADD] Nexrad radar widget - load geometry data locally in an attempt to make widget more reliable
+* [FIX] remove 3 obsolete Canadian text products in the National Text Viewer (MISC Tab, 2nd row,
+  left)
 * [FIX] NWS changed some of the URLs for the SST images accessed in the NHC activity
-
-## 55844 2022_10_27 (BETA)
-
 * [FIX] Window sizing for dual/quad pane has been problematic across various devices, Android OS
   versions, and setting combinations. This release attempts to simplify and fix this issue. If you
   still experience dual/quad pane window sizing issues please email me with screenshot, device type,
@@ -27,7 +65,7 @@ impacting all or some users.
   i.e. if you long press on the app icon in the android home screen you can launch the radar
   directly and also setup another icon to do so.
 
-## 55836 2022_10_17
+## 55836 2023_10_17
 
 * [FIX] Nexrad windbarbs and observations in response to NWS planned AWC website
   upgrade: https://aviationweather.gov/
@@ -65,7 +103,7 @@ impacting all or some users.
 * [ADD] In NHC Storm, add titles so that the image viewer (screen shown when tapping on an image)
   has something in subtitle and when sharing
 
-## 55826 2022_09_09
+## 55826 2023_09_09
 
 * [NOTE] versions of Android prior to Android 7.1 (API Level 24 and below) will no longer supported
   after 2023-10-01.
@@ -129,7 +167,7 @@ impacting all or some users.
   have these graphics and may show as blank images)
 * [ADD] NHC Storm sharing now includes more content in the subject and text product included
 
-## 55813 2022_08_27
+## 55813 2023_08_27
 
 * [FIX] CPAC long range graphic is now 7 days instead of 5 (as accessed via main NHC activity)
 * [ADD] NWS has issued change notification: SCN23-79: Upgrade of Aviation Weather Center Website on
@@ -138,7 +176,7 @@ impacting all or some users.
   Observations in Nexrad and static aviation graphics.
   App updates will be issued as soon as possible after NWS moves over to the new website.
 
-## 55807 2022_07_12
+## 55807 2023_07_12
 
 * [ADD] Ability to view state level SPC Convective Outlooks for Days 4 - 8 (select "State graphics"
   from submenu in any Convective Outlook activity)
@@ -148,20 +186,20 @@ impacting all or some users.
   Notification filter. This Settings allows you to not
   receive notifications if configured and to not show up on the main screen.
 
-## 55807 2022_07_02 (BETA)
+## 55807 2023_07_02 (BETA)
 
 * [ADD] "Test Message" was added to the list of choices in Settings -> Notifications -> WFO
   Notification filter. This Settings allows you to not
   receive notifications if configured and to not show up on the main screen.
 
-## 55805 2022_06_27 (BETA)
+## 55805 2023_06_27 (BETA)
 
 * [ADD] Ability to view state level SPC Convective Outlooks for Days 4 - 8 (select "State graphics"
   from submenu in any Convective Outlook activity)
 * [ADD] For all state level SPC Convective Outlooks show all products available. Reminder that you
   can tap on an image to view by itself or double tap to zoom in.
 
-## 55804 2022_06_22
+## 55804 2023_06_22
 
 * [ADD] SPC Mesoanalysis, add sectors Intermountain West and Great Lakes
 * [FIX] Textual labels in Nexrad that were recently forced to one line to avoid edge wrap should not
@@ -188,7 +226,7 @@ impacting all or some users.
 
 * [FIX] for Android 13 (API 33), no need to request storage permission
 
-## 55795 2022_05_28
+## 55795 2023_05_28
 
 * [FIX] Attempt to avoid text label (ie cities, counties) wrapping at edges in Nexrad radar
 * [FIX] NHC - replace retired 5 day outlooks with new 7 day outlooks
@@ -559,7 +597,7 @@ KLOT 41.6 -88.1
   arrow does when pressed
 * [ADD] In Settings -> about, add navdrawer token string to assist in troubleshooting
 * [FIX] remove observation point KSTF (Starkville, MS) as it's impacting users.
-* [FIX] remove decomissioned text products
+* [FIX] remove decommissioned text products
     - "mimpac: Marine Weather disc for N PAC Ocean"
     - "mimatn: Marine disc for N Atlantic Ocean"
 * [ADD] SPC Meso in "Multi-Parameter Fields" add "Bulk Shear - Sfc-3km / Sfc-3km MLCAPE"
@@ -589,6 +627,7 @@ KLOT 41.6 -88.1
 * [REF] LsrByWfoActivity refactor to use Future* and parallel download threads
 * [FIX] add to UtilityMetarConditions "Patches Of Fog"
 * [REF] Numerous changes to make the source code base easier to support in the long run and changes
-  required by google to keep the app active on the playstore (ie target a new version of Android,
+  required by google to keep the app active on the Google Play Store (ie target a new version of
+  Android,
   etc)
 

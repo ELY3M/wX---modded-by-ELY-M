@@ -37,7 +37,7 @@
             id="@+id/lub"
             shape="rect" />
         <area
-            alt="NWS Pleasent Hill, MO"
+            alt="NWS Pleasant Hill, MO"
             coords="290,180,290,198,302,197,312,190,313,168,293,168,282,169,290,180"
             id="@+id/eax"
             shape="poly" />
@@ -402,8 +402,7 @@
             id="@+id/gid"
             shape="poly" />
         <area
-            alt="NWS G
-oodland, KS"
+            alt="NWS Goodland, KS"
             coords="244,185,240,185,239,191,230,190,228,194,219,194,219,189,210,189,211,178,215,178,215,168,222,168,222,171,238,170,238,173,244,173,244,185,244,185"
             id="@+id/gld"
             shape="poly" />

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,7 +32,6 @@ internal object UtilitySpcSwo {
     // https://www.spc.noaa.gov/partners/outlooks/state/images/MS_swody1_TORN.png
     fun getSwoStateUrl(state: String, day: String): List<String> = when (day) {
         "1", "2" -> listOf(
-                // "${GlobalVariables.nwsSPCwebsitePrefix}/public/state/images/" + state + "_swody" + day + ".png",
                 "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + ".png",
                 "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + "_TORN.png",
                 "${GlobalVariables.nwsSPCwebsitePrefix}/partners/outlooks/state/images/" + state + "_swody" + day + "_HAIL.png",

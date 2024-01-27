@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,14 +24,15 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import joshuatee.wx.parseMultiple
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.activitiesmisc.CapAlert
+import joshuatee.wx.misc.CapAlert
+import joshuatee.wx.misc.UtilityCapAlert
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.TextSize
+import joshuatee.wx.settings.UtilityLocation
 
-class CardAlertDetail(val context: Context) : Widget {
+class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
 
     private val card = Card(context)
     private val textViewTop = Text(context, UIPreferences.textHighlightColor)
@@ -47,12 +48,24 @@ class CardAlertDetail(val context: Context) : Widget {
         vbox.addWidgets(listOf(textViewTop, textViewTitle, textViewStart, textViewEnd, textViewBottom))
         val hbox = HBox(context)
         with(hbox) {
-            wrap()
+            //wrap() remove for ChromeOS optimization
             addWidget(radarButton)
             addWidget(detailsButton)
             vbox.addLayout(this)
         }
         card.addLayout(vbox)
+
+        val office: String
+        val location: String
+        if (capAlert.vtec.length > 15 && capAlert.event != "Special Weather Statement") {
+            office = capAlert.vtec.substring(8, 11)
+            location = UtilityLocation.getWfoSiteName(office)
+        } else {
+            office = ""
+            location = ""
+        }
+
+        setTextFields(office, location, capAlert)
     }
 
     override fun getView() = card.getView()
@@ -61,21 +74,11 @@ class CardAlertDetail(val context: Context) : Widget {
         card.connect(fn)
     }
 
-    fun setTextFields(office: String, location: String, capAlert: CapAlert) {
-        val title: String
-        val startTime: String
-        val endTime: String
-        if (capAlert.title.contains("until")) {
-            val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
-            title = items[0]
-            startTime = items[1]
-            endTime = items[2]
-        } else {
-            val items = capAlert.title.parseMultiple("(.*?) issued (.*?) by (.*?)$", 3)
-            title = items[0]
-            startTime = items[1]
-            endTime = ""
-        }
+    private fun setTextFields(office: String, location: String, capAlert: CapAlert) {
+        val items = UtilityCapAlert.timesForCard(capAlert)
+        val startTime = items[0]
+        val endTime = items[1]
+        val title = items[2]
         textViewTop.text = "$office ($location)"
         if (office == "") {
             textViewTop.visibility = View.GONE

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -38,7 +38,7 @@ object UtilityNetworkIO {
         Utility.logDownload("getStringFromUrlNew $withNewLine: $url")
         val out = StringBuilder(5000)
         try {
-            val request = Request.Builder().url(url).build()
+            val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.httpUserAgent).build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -74,7 +74,7 @@ object UtilityNetworkIO {
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
-            val request = Request.Builder().url(url).build()
+            val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.httpUserAgent).build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -94,7 +94,7 @@ object UtilityNetworkIO {
     // String.getImage()
     fun getBitmapFromUrl(url: String): Bitmap = try {
         Utility.logDownload("getBitmapFromUrl: $url")
-        val request = Request.Builder().url(url).build()
+        val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.httpUserAgent).build()
         val response = MyApplication.httpClient.newCall(request).execute()
         if (url.contains("hazards_d8_14_contours.png")) {
             val options = BitmapFactory.Options()
@@ -113,7 +113,7 @@ object UtilityNetworkIO {
     // raw downloads - nexrad radar files, etc
     fun getInputStreamFromUrl(url: String): InputStream? = try {
         Utility.logDownload("getInputStreamFromUrl: $url")
-        val request = Request.Builder().url(url).build()
+        val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.httpUserAgent).build()
         val response = MyApplication.httpClient.newCall(request).execute()
         response.body!!.byteStream()
     } catch (e: IOException) {

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -57,12 +57,13 @@ import joshuatee.wx.ui.CardHazards
 import joshuatee.wx.ui.CardHazardsCA
 import joshuatee.wx.ui.CardHSImage
 import joshuatee.wx.ui.CardHSText
+import joshuatee.wx.ui.CardSevenDay
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.SevenDayCard
 import joshuatee.wx.ui.SevenDayCollection
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
+import joshuatee.wx.util.UtilityLocationFragment
 
 class LocationFragment : Fragment() {
 
@@ -80,13 +81,13 @@ class LocationFragment : Fragment() {
     private var glviewInitialized = false
     private var cardCurrentConditions: CardCurrentConditions? = null
     private lateinit var box: VBox
-    private val sevenDayCards = mutableListOf<SevenDayCard>()
+    private val sevenDayCards = mutableListOf<CardSevenDay>()
     private val textCards = mutableListOf<CardHSText>()
     private val imageCards = mutableListOf<CardHSImage>()
     private val radarLocationChangedList = mutableListOf<Boolean>()
 
     // used to track the wxogl # for the wxogl that is tied to current location
-    private var radarForLocation = -1
+    private var radarForLocationIndex = -1
     private var needForecastData = false
     private var boxForecast: VBox? = null
     private var sevenDayCollection: SevenDayCollection? = null
@@ -132,7 +133,7 @@ class LocationFragment : Fragment() {
 
                 token == "OGL-RADAR" || token.contains("NXRD-") -> {
                     if (token == "OGL-RADAR") {
-                        radarForLocation = radarLocationChangedList.size
+                        radarForLocationIndex = radarLocationChangedList.size
                     }
                     cards.add(Card(activityReference))
                     cards.last().addWidget(nexradState.relativeLayouts[radarLocationChangedList.size])
@@ -210,6 +211,7 @@ class LocationFragment : Fragment() {
         with(locationLabel) {
             setPaddingAmount(locationLabelPadding)
             setTextColor(UIPreferences.textHighlightColor)
+            typefaceBold()
             connect { locationDialogue.show() }
         }
     }
@@ -232,10 +234,10 @@ class LocationFragment : Fragment() {
         // If user did not choose the last option "Add Location..."
         if (position != Location.numLocations) {
             Location.setCurrentLocationStr(activityReference, (position + 1).toString())
-            if (UIPreferences.isNexradOnMainScreen && radarForLocation != -1) {
-                radarLocationChangedList[radarForLocation] = false
-                nexradState.wxglSurfaceViews[radarForLocation].scaleFactor = RadarPreferences.wxoglSize / 10.0f
-                nexradState.wxglRenders[radarForLocation].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
+            if (UIPreferences.isNexradOnMainScreen && radarForLocationIndex != -1) {
+                radarLocationChangedList[radarForLocationIndex] = false
+                nexradState.wxglSurfaceViews[radarForLocationIndex].scaleFactor = RadarPreferences.wxoglSize / 10.0f
+                nexradState.wxglRenders[radarForLocationIndex].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
             }
             imageCards.forEach {
                 it.resetZoom()
@@ -307,8 +309,8 @@ class LocationFragment : Fragment() {
     private fun getRadar(idx: Int) {
         // if radarForLocation is not equal to -1 it means the user has a radar for the current location (default)
         //if (radarForLocation != -1)
-        if (radarForLocation != -1 && !radarLocationChangedList[radarForLocation]) {
-            nexradState.wxglRenders[radarForLocation].state.rid = Location.rid
+        if (radarForLocationIndex != -1 && !radarLocationChangedList[radarForLocationIndex]) {
+            nexradState.wxglRenders[radarForLocationIndex].state.rid = Location.rid
         }
         nexradState.adjustForTdwr(idx)
         NexradDraw.initGeom(
@@ -356,8 +358,8 @@ class LocationFragment : Fragment() {
             ////////
 
             nexradState.wxglSurfaceViews[idx].requestRender()
-            if (idx == radarForLocation) {
-                radarTime = getRadarTimeStampForHomescreen(nexradState.wxglRenders[radarForLocation].state.rid)
+            if (idx == radarForLocationIndex) {
+                radarTime = getRadarTimeStampForHomescreen(nexradState.wxglRenders[radarForLocationIndex].state.rid)
                 cardCurrentConditions?.setStatus(currentConditionsTime + radarTime)
             }
             if (RadarPreferences.wxoglCenterOnLocation) {
@@ -380,8 +382,8 @@ class LocationFragment : Fragment() {
         } else {
             ""
         }
-        return if (radarForLocation != -1) {
-            " " + nexradState.wxglRenders[radarForLocation].state.rid + ": " + timestamp
+        return if (radarForLocationIndex != -1) {
+            " " + nexradState.wxglRenders[radarForLocationIndex].state.rid + ": " + timestamp
         } else {
             ""
         }
@@ -450,7 +452,7 @@ class LocationFragment : Fragment() {
         val oldRadarSite = nexradState.radarSite
         nexradState.adjustPaneTo(nexradState.curRadar, newRadarSite)
         // if user changes any non-location based nexrad this change will be permanent via homescreen string change
-        if (nexradState.curRadar != radarForLocation) {
+        if (nexradState.curRadar != radarForLocationIndex) {
             UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace("NXRD-$oldRadarSite", "NXRD-" + nexradState.radarSite)
             Utility.writePref(activityReference, "HOMESCREEN_FAV", UIPreferences.homescreenFav)
         }

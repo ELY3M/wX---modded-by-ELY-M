@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -52,8 +52,6 @@ object UIPreferences {
     var translateText = false
     private var nwsTextRemovelinebreaks = false
     var recordScreenShare = false
-
-    //    var prefPreventAccidentalExit = false
     var backgroundColor = Color.WHITE
     var colorNotif = 0
     var colorBlack = 0
@@ -67,6 +65,21 @@ object UIPreferences {
     var tilesPerRowDefault = 3
     var themeStr = ""
     var themeInt = 0
+    val themes = listOf(
+            "blue",
+            "mixedBlue",
+            "darkBlue",
+            "black",
+            "allBlack",
+            "green",
+            "gray",
+            "white",
+            "whiteNew",
+            "allWhite",
+            "orange",
+	    "BlackAqua",
+	    "BlackNeonGreen"	    
+    )
     var textHighlightColor = 0
     var textSmallThemeColor = 0
     var themeIsWhite = false //elys mod
@@ -99,7 +112,6 @@ object UIPreferences {
     var elevationPrefDefault = 5
 	//elys mod 
 	var checkinternet = false
-    var iconsEvenSpaced = false
     var simpleMode = false
     var checkspc = false
     var checkwpc = false
@@ -141,7 +153,6 @@ object UIPreferences {
         translateText = Utility.readPref(context, "TRANSLATE_TEXT", "false").startsWith("t")
         nwsTextRemovelinebreaks = Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
         recordScreenShare = Utility.readPref(context, "RECORD_SCREEN_SHARE", "true").startsWith("t")
-//        prefPreventAccidentalExit = Utility.readPref(context, "PREF_PREVENT_ACCIDENTAL_EXIT", "true").startsWith("t")
         dualpaneRadarIcon = Utility.readPref(context, "DUALPANE_RADAR_ICON", "false").startsWith("t")
         hideTopToolbar = Utility.readPref(context, "HIDE_TOP_TOOLBAR", "false").startsWith("t")
         colorNotif = ContextCompat.getColor(context, R.color.primary_dark_blue)
@@ -172,7 +183,7 @@ object UIPreferences {
         tabHeaders[2] = Utility.readPref(context, "TAB3_HEADER", "MISC")
         widgetPreventTap = getInitialPreference("UI_WIDGET_PREVENT_TAP", "")
         fullscreenMode = getInitialPreference("FULLSCREEN_MODE", "false")
-        lockToolbars = getInitialPreference("LOCK_TOOLBARS", "false")
+        lockToolbars = getInitialPreference("LOCK_TOOLBARS", "true")
         unitsM = getInitialPreference("UNITS_M", "true")
         unitsF = getInitialPreference("UNITS_F", "true")
         widgetTextColor = getInitialPreference("WIDGET_TEXT_COLOR", Color.WHITE)
@@ -187,7 +198,6 @@ object UIPreferences {
         fabElevationDepressed = elevationPref * 2
 		//elys mod 
 		checkinternet = getInitialPreference("CHECKINTERNET", "false")
-        iconsEvenSpaced = getInitialPreference("UI_ICONS_EVENLY_SPACED", "false")
         simpleMode = getInitialPreference("SIMPLE_MODE", "false")
         checkspc = getInitialPreference("CHECKSPC", "false")
         checkwpc = getInitialPreference("CHECKWPC", "false")
@@ -199,7 +209,7 @@ object UIPreferences {
         nwsIconSize = MyApplication.preferences.getInt("NWS_ICON_SIZE_PREF", nwsIconSizeDefault)
         homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", homeScreenFavDefault)
         isNexradOnMainScreen = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
-        FavoriteType.values().forEach {
+        FavoriteType.entries.forEach {
             favorites[it] = getInitialPreferenceString(UtilityFavorites.getPrefToken(it), GlobalVariables.prefSeparator)
         }
         spotterFav = getInitialPreferenceString("SPOTTER_FAV", "")

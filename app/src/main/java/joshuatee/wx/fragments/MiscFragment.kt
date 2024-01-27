@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,11 +30,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.activitiesmisc.ImageCollectionActivity
-import joshuatee.wx.activitiesmisc.NwsObsSitesActivity
-import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
-import joshuatee.wx.activitiesmisc.WebView
-import joshuatee.wx.activitiesmisc.WebViewTwitter
+import joshuatee.wx.misc.ImageCollectionActivity
+import joshuatee.wx.misc.NwsObsSitesActivity
+import joshuatee.wx.misc.USAlertsActivity
+import joshuatee.wx.misc.WebView
+import joshuatee.wx.misc.WebViewTwitter
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.radar.RadarMosaicNwsActivity
@@ -43,9 +43,9 @@ import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.util.Utility
-import joshuatee.wx.wpc.WpcImagesActivity
-import joshuatee.wx.wpc.WpcRainfallForecastSummaryActivity
-import joshuatee.wx.wpc.WpcTextProductsActivity
+import joshuatee.wx.wpc.NationalImagesActivity
+import joshuatee.wx.wpc.RainfallOutlookSummaryActivity
+import joshuatee.wx.wpc.NationalTextActivity
 
 class MiscFragment : Fragment() {
 
@@ -76,15 +76,15 @@ class MiscFragment : Fragment() {
 
             hm["uswarn"] = TileObject(
                     R.drawable.uswarn,
-                    USWarningsWithRadarActivity::class.java,
-                    USWarningsWithRadarActivity.URL,
+                    USAlertsActivity::class.java,
+                    USAlertsActivity.URL,
                     arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us"),
                     "uswarn", "US Warnings"
             )
             hm["wpctext"] = TileObject(
                     R.drawable.srfd,
-                    WpcTextProductsActivity::class.java,
-                    WpcTextProductsActivity.URL,
+                    NationalTextActivity::class.java,
+                    NationalTextActivity.URL,
                     arrayOf("pmdspd", "Short Range Forecast Discussion"),
                     "wpctext", "National text products"
             )
@@ -118,7 +118,7 @@ class MiscFragment : Fragment() {
             )
             hm["wpcimages"] = TileObject(
                     R.drawable.fmap,
-                    WpcImagesActivity::class.java,
+                    NationalImagesActivity::class.java,
                     "",
                     arrayOf(),
                     "wpcimages", "National Images"
@@ -205,7 +205,7 @@ class MiscFragment : Fragment() {
             )
             hm["wpc_rainfall"] = TileObject(
                     R.drawable.wpc_rainfall,
-                    WpcRainfallForecastSummaryActivity::class.java,
+                    RainfallOutlookSummaryActivity::class.java,
                     "",
                     arrayOf(),
                     "wpc_rainfall", "WPC RAINFALL"

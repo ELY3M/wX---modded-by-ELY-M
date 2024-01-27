@@ -46,7 +46,7 @@
 
     <dimen name="normal_text">16sp</dimen>
     <dimen name="large_text">21sp</dimen>
-    <dimen name="listitem_text">14sp</dimen>
+    <dimen name="list_item_text">14sp</dimen>
 
     <dimen name="fab_elevation_pressed">0dp</dimen>
     <dimen name="fab_elevation">0dp</dimen>
@@ -61,10 +61,10 @@
     <!-- TODO move to values-23/ as overlay_height overload when M is released. -->
     <dimen name="overlay_height_m">24dp</dimen>
 
-    <!-- For google weatherlist widget demo -->
+    <!-- For google weather list widget demo -->
     <dimen name="widget_margin_top">8dp</dimen>
     <dimen name="widget_margin_bottom">8dp</dimen>
     <dimen name="widget_margin_left">8dp</dimen>
     <dimen name="widget_margin_right">8dp</dimen>
-    <!-- end google weatherlist widget demo -->
+    <!-- end google weather list widget demo -->
 </resources>

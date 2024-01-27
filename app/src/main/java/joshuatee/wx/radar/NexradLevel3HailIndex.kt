@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -50,25 +50,6 @@ internal object NexradLevel3HailIndex {
         hailList.clear()
         //File("/sdcard/wX/hailtest").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true)
         val data = NexradLevel3TextProduct.download("HI", radarSite)
-//        val posn = data.parseColumn(pattern1)
-//        val hailPercent = data.parseColumn(pattern2)
-//        val hailSize = data.parseColumn(pattern3)
-//        var posnStr = ""
-//        posn.forEach {
-//            posnStr += it.replace("/", " ")
-//        }
-//        var hailPercentStr = ""
-//        hailPercent.forEach {
-//            hailPercentStr += it.replace("/", " ")
-//        }
-//        hailPercentStr = hailPercentStr.replace("UNKNOWN", " 0 0 ")
-//        var hailSizeStr = ""
-//        hailSize.forEach {
-//            hailSizeStr += it.replace("/", " ")
-//        }
-//        hailSizeStr = hailSizeStr.replace("UNKNOWN", " 0.00 ")
-//        hailSizeStr = hailSizeStr.replace("<0.50", " 0.49 ")
-
         val posn = data.parseColumn(pattern1)
         val posnStr = posn.joinToString("")
                 .replace("/", " ")
@@ -77,7 +58,6 @@ internal object NexradLevel3HailIndex {
         val hailPercentStr = hailPercent.joinToString("")
                 .replace("/", " ")
                 .replace("UNKNOWN", " 0 0 ")
-//                .replace("\\s+", " ")
 
         val hailSize = data.parseColumn(pattern3)
         val hailSizeStr = hailSize.joinToString("")

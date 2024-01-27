@@ -13,6 +13,8 @@
  * TECHNICAL SUPPORT TO USERS.
  */
 
+@file:Suppress("SpellCheckingInspection")
+
 package joshuatee.wx.radar
 
 import android.content.Context

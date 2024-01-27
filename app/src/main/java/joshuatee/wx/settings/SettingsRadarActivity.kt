@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -59,12 +59,10 @@ class SettingsRadarActivity : BaseActivity() {
     }
 
     private fun addCards() {
-        val textSize = UIPreferences.textSizeLarge
-        val padding = UIPreferences.paddingSettings
-        box.addWidget(CardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding))
-        box.addWidget(CardText(this, "Color Palettes (Beta)", textSize, SettingsColorPaletteListingActivity::class.java, padding))
-        box.addWidget(CardText(this, "Line / Marker sizes", textSize, SettingsRadarSizesActivity::class.java, padding))
-        box.addWidget(CardText(this, "Screen Recorder", textSize, SettingsTelecineActivity::class.java, padding))
+        box.addWidget(CardText(this, "Colors", SettingsColorsActivity::class.java))
+        box.addWidget(CardText(this, "Color Palettes (Beta)", SettingsColorPaletteListingActivity::class.java))
+        box.addWidget(CardText(this, "Line / Marker sizes", SettingsRadarSizesActivity::class.java))
+        box.addWidget(CardText(this, "Screen Recorder", SettingsTelecineActivity::class.java))
     }
 
     private fun addSwitch1() {
@@ -129,9 +127,9 @@ class SettingsRadarActivity : BaseActivity() {
 		        //elys mod end
                 Switch(this, "Highways", "COD_HW_DEFAULT", R.string.cod_hw_default_label),
                 Switch(this, "Lakes and rivers", "COD_LAKES_DEFAULT", R.string.cod_lakes_default_label),
-                Switch(this, "Multi-pane will share lat/lon/zoom", "DUALPANE_SHARE_POSN", R.string.dualpaneshareposn_label),
+                Switch(this, "Multi-pane will share lat/lon/zoom", "DUALPANE_SHARE_POSN", R.string.dual_pane_share_position_label),
                 Switch(this, "Observations", "WXOGL_OBS", R.string.obs_label),
-                Switch(this, "Remember location/product", "WXOGL_REMEMBER_LOCATION", R.string.rememberloc_label),
+                Switch(this, "Remember location/product", "WXOGL_REMEMBER_LOCATION", R.string.remember_loc_label),
                 Switch(this, "Screen stays on and auto refresh radar", "RADAR_AUTOREFRESH", R.string.autorefresh_label),
                 Switch(this, "Secondary roads", "RADAR_HW_ENH_EXT", R.string.hw_enh_ext_label),
                 Switch(this, "Show radar during a pan/drag motion", "SHOW_RADAR_WHEN_PAN", R.string.show_radar_when_pan_label),

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -158,12 +158,20 @@ object UtilityDownloadNws {
         return hourlyUrl.getNwsHtml()
     }
 
+    fun getHourlyOldData(latLon: LatLon): String {
+        return UtilityIO.getHtml(
+                "https://forecast.weather.gov/MapClick.php?lat=" +
+                        latLon.latForNws + "&lon=" +
+                        latLon.lonForNws + "&FcstType=digitalDWML"
+        )
+    }
+
     fun get7DayData(latLon: LatLon): String = if (UIPreferences.useNwsApi) {
         val pointsData = getLocationPointData(latLon)
         val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
         forecastUrl.getNwsHtml()
     } else {
-        UtilityUS.getLocationHtml(latLon.latString, latLon.lonString)
+        UtilityUS.getLocationHtml(latLon)
     }
 
     private fun getLocationPointData(latLon: LatLon): String =

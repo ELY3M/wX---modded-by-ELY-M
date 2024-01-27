@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,6 +21,7 @@
 
 package joshuatee.wx.radar
 
+@Suppress("SpellCheckingInspection")
 object RadarSites {
 
     // grep NWS_LOC UtilityPref.dart |sed "s/Utility.writePref(.NWS_LOCATION_/\"/" | sed 's/",/" to/' | sed "s/);/,/"
@@ -99,7 +100,7 @@ object RadarSites {
             "LZK" to "AR, Little Rock",
             "POE" to "LA, Fort Polk",
             "LCH" to "LA, Lake Charles",
-            "LIX" to "LA, New Orleans",
+            "LIX" to "LA, New Orleans (deprecated)",
             "SHV" to "LA, Shreveport",
             "AMA" to "TX, Amarillo",
             "EWX" to "TX, Austin/San Antonio",
@@ -337,7 +338,8 @@ object RadarSites {
             "VAX" to "30.89",
             "MHX" to "34.776",
             "OHX" to "36.247",
-            "LIX" to "30.337",
+//            "LIX" to "30.337",
+            "LIX" to "0.0",
             "OKX" to "40.865",
             "AEC" to "64.512",
             "AKQ" to "36.984",
@@ -555,7 +557,8 @@ object RadarSites {
             "VAX" to "83.002",
             "MHX" to "76.876",
             "OHX" to "86.563",
-            "LIX" to "89.825",
+//            "LIX" to "89.825",
+            "LIX" to "0.0",
             "OKX" to "72.864",
             "AEC" to "165.293",
             "AKQ" to "77.008",

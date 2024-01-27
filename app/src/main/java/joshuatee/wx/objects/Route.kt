@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.activitiesmisc.*
+import joshuatee.wx.misc.*
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.models.ModelsSpcHrefActivity
@@ -56,10 +56,10 @@ import joshuatee.wx.spc.SpcThunderStormOutlookActivity
 import joshuatee.wx.spc.SpcSwoActivity
 import joshuatee.wx.spc.SpcSwoSummaryActivity
 import joshuatee.wx.vis.GoesActivity
-import joshuatee.wx.wpc.WpcImagesActivity
-import joshuatee.wx.wpc.WpcRainfallForecastActivity
-import joshuatee.wx.wpc.WpcRainfallForecastSummaryActivity
-import joshuatee.wx.wpc.WpcTextProductsActivity
+import joshuatee.wx.wpc.NationalImagesActivity
+import joshuatee.wx.wpc.RainfallOutlookActivity
+import joshuatee.wx.wpc.RainfallOutlookSummaryActivity
+import joshuatee.wx.wpc.NationalTextActivity
 
 //
 // Used to start another activity
@@ -96,8 +96,8 @@ class Route() {
         fun alerts(context: Context) {
             Route(
                     context,
-                    USWarningsWithRadarActivity::class.java,
-                    USWarningsWithRadarActivity.URL,
+                    USAlertsActivity::class.java,
+                    USAlertsActivity.URL,
                     arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
             )
         }
@@ -123,7 +123,7 @@ class Route() {
         }
 
         fun hazard(context: Context, url: String) {
-            Route(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url))
+            Route(context, AlertsDetailActivity::class.java, AlertsDetailActivity.URL, arrayOf(url))
         }
 
         fun hourly(context: Context) {
@@ -179,11 +179,7 @@ class Route() {
         }
 
         fun observations(context: Context) {
-//            if (Location.isUS) {
             Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OBSERVATIONS"))
-//            } else {
-//                image(context, "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg", "Observations")
-//            }
         }
 
         fun obsSites(context: Context) {
@@ -377,23 +373,23 @@ class Route() {
         }
 
         fun wpcImages(context: Context) {
-            Route(context, WpcImagesActivity::class.java, "", arrayOf())
+            Route(context, NationalImagesActivity::class.java, "", arrayOf())
         }
 
         fun wpcRainfallSummary(context: Context) {
-            Route(context, WpcRainfallForecastSummaryActivity::class.java)
+            Route(context, RainfallOutlookSummaryActivity::class.java)
         }
 
         fun wpcRainfallByDay(context: Context, dayIndex: String) {
-            Route(context, WpcRainfallForecastActivity::class.java, WpcRainfallForecastActivity.NUMBER, arrayOf(dayIndex))
+            Route(context, RainfallOutlookActivity::class.java, RainfallOutlookActivity.NUMBER, arrayOf(dayIndex))
         }
 
         fun wpcText(context: Context) {
-            Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"))
+            Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"))
         }
 
         fun wpcText(context: Context, product: String) {
-            Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(product))
+            Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf(product))
         }
         //elys mod - keeping twitter
         fun webViewTwitterStates(context: Context) {

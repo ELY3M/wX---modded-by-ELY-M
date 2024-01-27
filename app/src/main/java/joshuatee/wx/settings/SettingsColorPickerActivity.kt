@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -69,7 +69,6 @@ class SettingsColorPickerActivity : BaseActivity(), OnColorChangedListener {
         buttonDefault = findViewById(R.id.buttonDefault)
         color = UtilityColor.setColor(prefVal)
         val currentColor = Utility.readPrefInt(this, prefVal, color)
-//        buttonDefault.setTextColor(color)
         with(colorPicker) {
             oldCenterColor = currentColor
             this.color = currentColor

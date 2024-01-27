@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -43,12 +43,11 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
 
     private fun setupUI() {
         NexradUtil.colorPaletteProducts.filter { it != 165 }.forEach { product ->
-            val card = CardText(this,
+            val card = CardText(
+                    this,
                     NexradUtil.productCodeStringToName[product] + ": " + ColorPalette.radarColorPalette[product],
                     UIPreferences.textSizeNormal,
-                    { Route(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString())) },
-                    UIPreferences.paddingSettings
-            )
+            ) { Route(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString())) }
             box.addWidget(card)
             cardColorPalettes.add(card)
         }

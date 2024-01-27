@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,7 @@ import android.content.Context
 import android.text.TextUtils
 import android.view.View
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.TextScreenActivity
+import joshuatee.wx.misc.TextScreenActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.ui.PopupMessage

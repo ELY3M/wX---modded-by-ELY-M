@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,12 +29,11 @@ import joshuatee.wx.util.SevenDay
 class SevenDayCollection(val context: Context, private val boxForecast: VBox, val scrollView: ScrollView) {
 
     fun update(sevenDay: SevenDay, latLon: LatLon, showSunriseCard: Boolean) {
-//        boxForecast.removeChildrenAndLayout()
         boxForecast.removeChildren()
         sevenDay.icons.forEachIndexed { index, iconUrl ->
-            val sevenDayCard = SevenDayCard(context, iconUrl, true, sevenDay.forecastList[index])
-            sevenDayCard.connect { scrollView.smoothScrollTo(0, 0) }
-            boxForecast.addWidget(sevenDayCard)
+            val cardSevenDay = CardSevenDay(context, iconUrl, true, sevenDay.forecastList[index])
+            cardSevenDay.connect { scrollView.smoothScrollTo(0, 0) }
+            boxForecast.addWidget(cardSevenDay)
         }
         if (showSunriseCard) {
             boxForecast.addWidget(SunRiseCard(context, latLon, scrollView))

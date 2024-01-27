@@ -20,10 +20,10 @@
     <shortcut
         android:enabled="true"
         android:icon="@drawable/meso"
-        android:shortcutDisabledMessage="@string/spcmesoanalysis_shortcut"
+        android:shortcutDisabledMessage="@string/spc_mesoanalysis_shortcut"
         android:shortcutId="SPC Mesoanalysis"
-        android:shortcutLongLabel="@string/spcmesoanalysis_shortcut"
-        android:shortcutShortLabel="@string/spcmesoanalysis_shortcut">
+        android:shortcutLongLabel="@string/spc_mesoanalysis_shortcut"
+        android:shortcutShortLabel="@string/spc_mesoanalysis_shortcut">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="joshuatee.wx.WX"

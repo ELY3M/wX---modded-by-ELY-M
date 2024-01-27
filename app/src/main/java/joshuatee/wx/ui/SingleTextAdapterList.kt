@@ -1,5 +1,6 @@
 package joshuatee.wx.ui
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,7 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
 
     class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val label = Text(itemView, R.id.singletext, TextSize.MEDIUM)
+        val label = Text(itemView, R.id.single_text, TextSize.MEDIUM)
 
         init {
             Card(itemView, R.id.cv1)
@@ -39,17 +40,11 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
         holder.label.text = dataSet[position]
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun deleteItem(index: Int) {
         dataSet.removeAt(index)
         notifyDataSetChanged()
     }
-
-//    fun setItem(index: Int, str: String) {
-//        if (index < dataSet.size) {
-//            dataSet[index] = str
-//        }
-//        notifyDataSetChanged()
-//    }
 
     // used in FavRemoveActivity for SPCMeso
     override fun toString(): String {

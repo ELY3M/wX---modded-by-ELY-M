@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,8 +35,7 @@ internal object CountyLabels {
     fun create(context: Context) {
         if (labels.isEmpty()) {
             var tokens: Array<String>
-            val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.gaz_counties_national)
-            val lines = text.split("\n").dropLastWhile { it.isEmpty() }
+            val lines = UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.gaz_counties_national)
             labels = Array(lines.size) { "" }
             lat = DoubleArray(lines.size)
             lon = DoubleArray(lines.size)

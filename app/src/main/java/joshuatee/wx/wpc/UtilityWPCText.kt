@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,6 +26,7 @@ import joshuatee.wx.safeGet
 import joshuatee.wx.util.Group
 import joshuatee.wx.ui.MenuTitle
 
+@Suppress("SpellCheckingInspection")
 internal object UtilityWpcText {
 
     fun needsFixedWidthFont(product: String): Boolean {
@@ -38,7 +39,7 @@ internal object UtilityWpcText {
     }
 
     fun getLabel(token: String): String {
-        val list = labels.filter { it.startsWith(token) }
+        val list = labelsWithCodes.filter { it.startsWith(token) }
         return if (list.isNotEmpty()) {
             list[0].split(":").safeGet(1)
         } else {
@@ -57,16 +58,15 @@ internal object UtilityWpcText {
             MenuTitle("NHC", 7),
             MenuTitle("Great Lakes", 7),
             MenuTitle("Space Weather", 6),
-            MenuTitle("Canada", 7)
+            MenuTitle("Canada", 4)
     )
 
-    val labels = listOf(
+    val labelsWithCodes = listOf(
             "pmdspd: Short Range Forecast Discussion",
             "pmdepd: Extended Forecast Discussion",
 
             "pmdhi: Hawaii Extended Forecast Discussion",
             "pmdak: Alaska Extended Forecast Discussion",
-//        "pmdsa: South American Synoptic Discussion",
             "pmdca: Tropical Discussion",
             "pmdmrd: Prognostic disc for 6-10 and 8-14 Day Outlooks",
             "pmd30d: Prognostic disc for Monthly Outlook",
@@ -76,13 +76,13 @@ internal object UtilityWpcText {
             "qpferd: Excessive Rainfall Discussion",
             "qpfhsd: Heavy Snow and Icing Discussion",
 
-            "ushzd37: CPC US Hazards Outlook Days 3-7",
-            "pmdthr: CPC US Hazards Outlook Days 8-14",
             "sccns1: Storm Summary 1",
             "sccns2: Storm Summary 2",
             "sccns3: Storm Summary 3",
             "sccns4: Storm Summary 4",
             "sccns5: Storm Summary 5",
+            "pmdthr: CPC US Hazards Outlook Days 8-14",
+            "ushzd37: CPC US Hazards Outlook Days 3-7",
 
             "miahsfat2: High Seas Forecasts - Atlantic",
             "miahsfep2: High Seas Forecasts - NE Pacific",
@@ -163,12 +163,9 @@ internal object UtilityWpcText {
             "swpcwwa: Advisory Outlook",
 
             "focn45: Significant Weather Discussion, PASPC",
-            "awcn11: Weather Summary S. Manitoba",
-            "awcn12: Weather Summary N. Manitoba",
-            "awcn13: Weather Summary S. Saskatchewan",
-            "awcn14: Weather Summary N. Saskatchewan",
-            "awcn15: Weather Summary S. Alberta",
-            "awcn16: Weather Summary N. Alberta"
+            "awcn11: Weather Summary Manitoba",
+            "awcn13: Weather Summary Saskatchewan",
+            "awcn15: Weather Summary Alberta"
     )
 
     val groups = SparseArray<Group>()
@@ -184,9 +181,9 @@ internal object UtilityWpcText {
                     titles,
                     index
             ) until titles[index].count + MenuTitle.getStart(titles, index))) {
-                group.children.add(labels[j])
-                shortCodes[index][m] = labels[k].split(":")[0]
-                longCodes[index][m] = labels[k]
+                group.children.add(labelsWithCodes[j])
+                shortCodes[index][m] = labelsWithCodes[k].split(":")[0]
+                longCodes[index][m] = labelsWithCodes[k]
                 k += 1
                 m += 1
             }

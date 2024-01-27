@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,7 +28,7 @@ import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.Utility
-import joshuatee.wx.wpc.WpcTextProductsActivity
+import joshuatee.wx.wpc.NationalTextActivity
 
 object UtilityVoiceCommand {
 
@@ -56,7 +56,7 @@ object UtilityVoiceCommand {
                     wfo = tokens[1].uppercase(Locale.US)
                 }
                 if (wfo == "WPC") {
-                    Route(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
+                    Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
                 } else {
                     Route.wfoText(context, arrayOf(wfo, "AFD", "sound"))
                 }

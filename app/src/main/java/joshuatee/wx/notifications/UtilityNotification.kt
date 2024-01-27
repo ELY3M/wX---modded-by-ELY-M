@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,13 +29,10 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.util.To
-import joshuatee.wx.util.UtilityString
 import android.app.NotificationChannel
 import android.graphics.Color
 import android.os.Build
 import android.media.AudioAttributes
-import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences
 
@@ -56,7 +53,6 @@ object UtilityNotification {
         channel.setSound(
                 Uri.parse(NotificationPreferences.notifSoundUri), AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-//                .setUsage(AudioAttributes.USAGE_NOTIFICATION_COMMUNICATION_INSTANT)
                 .build()
         )
         notificationManager.createNotificationChannel(channel)
@@ -194,29 +190,5 @@ object UtilityNotification {
             ).bigText(noSummary).build()!!
         }
         return notification
-    }
-
-    internal fun storeWatchMcdLatLon(html: String): String {
-        val coordinates = html.parseColumn("([0-9]{8}).*?")
-        var string = ""
-        coordinates.forEach { temp ->
-            var xStrTmp = temp.substring(0, 4)
-            var yStrTmp = temp.substring(4, 8)
-            if (yStrTmp.matches("^0".toRegex())) {
-                yStrTmp = yStrTmp.replace("^0".toRegex(), "")
-                yStrTmp += "0"
-            }
-            xStrTmp = UtilityString.addPeriodBeforeLastTwoChars(xStrTmp)
-            yStrTmp = UtilityString.addPeriodBeforeLastTwoChars(yStrTmp)
-            var tmpDbl = To.double(yStrTmp)
-            if (tmpDbl < 40.00) {
-                tmpDbl += 100.0
-                yStrTmp = tmpDbl.toString()
-            }
-            string = "$string$xStrTmp $yStrTmp "
-        }
-        string += ":"
-        string = string.replace(" :", ":")
-        return string
     }
 }

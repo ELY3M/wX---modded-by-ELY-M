@@ -15,8 +15,6 @@ National Weather Service
 
 Environment Canada
  - everything for Canada
- 
-LightningMaps.org CC BY-SA 4.0 / Lightning data by Blitzortung.org and its participants
 
 Included Binary Credits
 --------------------
@@ -69,6 +67,10 @@ FingerDraw
 Chris Lizon
 https://github.com/ChrisLizon/FingerDraw
 
+GraphView
+jjoe64 Jonas Gehring (and 31 other contributors as of 2023-12-30)
+https://github.com/jjoe64/GraphView
+
 eraseBG used in and NWS images: Paul - http://stackoverflow.com/questions/20056050/transparent-gif-in-android-imageview
 
 Lars Vogel for ExpandableListView code used in SPC Meso:
@@ -85,8 +87,8 @@ Compression.java Mark Taylor (Starlink)
 http://stackoverflow.com/questions/4414673/android-color-between-two-colors-based-on-percentage Stuck Mark Renouf
 
 Ely M:
- - finding bugs and prodiving code for fixes (as specified in ChangeLog)
- - adding radarlong press options to show Watch/MPD/MCD test
+ - finding bugs and providing code for fixes (as specified in ChangeLog)
+ - adding radar "long press" options to show Watch/MPD/MCD test
 
  - Point Sprite shader and codes used for loading icons and images on radar  
 http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html

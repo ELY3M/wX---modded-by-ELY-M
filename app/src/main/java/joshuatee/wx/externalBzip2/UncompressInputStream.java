@@ -59,6 +59,7 @@ import java.io.InputStream;
  * @version 0.3-3 06/05/2001
  * @noinspection SameReturnValue, ManualMinMaxCalculation
  */
+
 public class UncompressInputStream extends FilterInputStream {
     /**
      * @param is the input stream to decompress

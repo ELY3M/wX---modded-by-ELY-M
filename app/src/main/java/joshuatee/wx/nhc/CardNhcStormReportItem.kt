@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,6 +29,7 @@ import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.ui.Text
 import joshuatee.wx.ui.Widget
+import joshuatee.wx.util.UtilityMath
 import java.util.Locale
 
 class CardNhcStormReportItem(context: Context, stormData: NhcStormDetails) : Widget {
@@ -50,7 +51,7 @@ class CardNhcStormReportItem(context: Context, stormData: NhcStormDetails) : Wid
         textViewTime.text = stormData.dateTime.replace("T", " ").replace(":00.000Z", "Z")
         textViewMovement.text = "Moving: " + stormData.movement
         textViewPressure.text = "Min pressure: " + stormData.pressure
-        textViewWindSpeed.text = "Max sustained: " + stormData.intensity
+        textViewWindSpeed.text = "Max sustained: " + UtilityMath.knotsToMph(stormData.intensity) + " mph"
         textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.stormId.uppercase(Locale.US)
     }
 

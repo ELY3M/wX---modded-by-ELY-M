@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,6 +21,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
@@ -73,6 +74,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun update() {
         locations.clear()
         Location.locations.forEachIndexed { index, location ->
@@ -126,6 +128,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun moveUp(position: Int) {
         if (position > 0) {
             val locA = ObjectLocation(this, position - 1)
@@ -141,6 +144,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         settingsLocationAdapterList.notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun moveDown(position: Int) {
         if (position < Location.numLocations - 1) {
             val locA = ObjectLocation(this, position)

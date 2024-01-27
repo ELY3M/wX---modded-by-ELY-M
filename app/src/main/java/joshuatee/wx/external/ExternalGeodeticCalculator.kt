@@ -24,6 +24,8 @@ import kotlin.math.*
  *
  * @author Mike Gavaghan
  */
+
+@Suppress("SpellCheckingInspection")
 object ExternalGeodeticCalculator {
 
     /**

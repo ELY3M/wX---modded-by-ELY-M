@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -45,12 +45,10 @@ class SettingsDeveloperActivity : BaseActivity() {
         val configs = listOf(
                 Switch(this, "Alert only once", "ALERT_ONLYONCE", R.string.alert_onlyonce_label),
                 Switch(this, "Auto cancel notifs", "ALERT_AUTOCANCEL", R.string.alert_autocancel_label),
-                Switch(this, "Icons evenly spaced", "UI_ICONS_EVENLY_SPACED", R.string.icons_spacing_label),
-                Switch(this, "NWS Text: remove line breaks", "NWS_TEXT_REMOVELINEBREAKS", R.string.nws_text_removelinebreak_label),
-                Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.mainscreen_radar_button),
+                Switch(this, "NWS Text: remove line breaks", "NWS_TEXT_REMOVELINEBREAKS", R.string.nws_text_remove_linebreak_label),
+                Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.main_screen_radar_button),
                 Switch(this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label),
                 Switch(this, "Radar: immersive mode", "RADAR_IMMERSIVE_MODE", R.string.radar_immersive_mode_label),
-//                Switch(this, "Media control notification", "MEDIA_CONTROL_NOTIF", R.string.media_control_notif_tv),
                 Switch(this, "Lock toolbars", "LOCK_TOOLBARS", R.string.lock_toolbars_label),
                 Switch(this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label),
                 Switch(this, "Multipurpose radar icons", "WXOGL_ICONS_LEVEL2", R.string.radar_icons_level2_label),

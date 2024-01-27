@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -53,27 +53,24 @@ class SettingsMainActivity : BaseActivity() {
     }
 
     private fun addCards() {
-        val textSize = UIPreferences.textSizeLarge
-        val padding = UIPreferences.paddingSettings
-        box.addWidget(CardText(this, "About wX", textSize, SettingsAboutActivity::class.java, padding))
+        box.addWidget(CardText(this, "About wX", SettingsAboutActivity::class.java))
 	//elys mod
-        box.addWidget(CardText(this, "Celsius to fahrenheit table", textSize,
-                { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") }, padding))
-        box.addWidget(CardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding))
-        box.addWidget(CardText(this, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding))
-        box.addWidget(CardText(this, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding))
+        box.addWidget(CardText(this, "Celsius to fahrenheit table", { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") }))
+        box.addWidget(CardText(this, "Colors", SettingsColorsActivity::class.java))
+        box.addWidget(CardText(this, "Home Screen", SettingsHomeScreenActivity::class.java))
+        box.addWidget(CardText(this, "Locations", SettingsLocationRecyclerViewActivity::class.java))
         //elys mod
-	box.addWidget(CardText(this, "Spotter Network Settings", textSize, SettingsSpotterNetwork::class.java, padding))
-        notifCard = CardText(this, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
+	box.addWidget(CardText(this, "Spotter Network Settings", SettingsSpotterNetwork::class.java))
+        notifCard = CardText(this, "Notifications", SettingsNotificationsActivity::class.java)
         box.addWidget(notifCard)
-        box.addWidget(CardText(this, "PlayList", textSize, { Route.playlist(this) }, padding))
-        box.addWidget(CardText(this, "Radar", textSize, SettingsRadarActivity::class.java, padding))
-        box.addWidget(CardText(this, "User Interface", textSize, SettingsUIActivity::class.java, padding))
-        box.addWidget(CardText(this, "Widgets", textSize, SettingsWidgetsActivity::class.java, padding))
+        box.addWidget(CardText(this, "PlayList") { Route.playlist(this) })
+        box.addWidget(CardText(this, "Radar", SettingsRadarActivity::class.java))
+        box.addWidget(CardText(this, "User Interface", SettingsUIActivity::class.java))
+        box.addWidget(CardText(this, "Widgets", SettingsWidgetsActivity::class.java))
         //elys mod
-        box.addWidget(CardText(this, "Delete old radar files", textSize, UtilityFileManagement.deleteCacheFiles(this)::class.java, padding))
-        box.addWidget(CardText(this, "Backup Settings", textSize, { UtilityBackupRestore.backupPrefs(this) }, padding))
-        box.addWidget(CardText(this, "Restore Settings", textSize, { UtilityBackupRestore.restorePrefs(this) }, padding))
+        box.addWidget(CardText(this, "Delete old radar files", UtilityFileManagement.deleteCacheFiles(this)::class.java))
+        box.addWidget(CardText(this, "Backup Settings", { UtilityBackupRestore.backupPrefs(this) }))
+        box.addWidget(CardText(this, "Restore Settings", { UtilityBackupRestore.restorePrefs(this) }))
         box.addWidget(
             Switch(this,"Check for Internet on startup","CHECKINTERNET", R.string.checkinternet_switch_label)
         )

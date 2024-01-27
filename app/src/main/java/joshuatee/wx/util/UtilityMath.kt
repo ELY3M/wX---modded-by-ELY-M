@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -86,6 +86,9 @@ object UtilityMath {
     } else {
         value
     }
+
+    fun knotsToMph(value: String): String =
+            (To.double(value) * 1.151).roundToInt().toString()
 
     internal fun fahrenheitToCelsius(value: Double): String =
             ((value - 32.0) * 5.0 / 9.0).roundToInt().toString()

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -109,10 +109,6 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
         ) {
             longPressList.clear()
             val dist = LatLon.distance(LatLon(locX, locY), latLon, DistanceUnit.MILE)
-//            val ridX = To.double(UtilityLocation.getRadarSiteX(radarSite))
-//            val ridY = -1.0 * To.double(UtilityLocation.getRadarSiteY(radarSite))
-//            val distRid = LatLon.distance(LatLon(ridX, ridY), latLon, DistanceUnit.MILE)
-//            val distRidKm = LatLon.distance(LatLon(ridX, ridY), latLon, DistanceUnit.KM)
             val radarSiteLatLon = UtilityLocation.getSiteLocation(radarSite, OfficeTypeEnum.RADAR)
             val distRid = LatLon.distance(radarSiteLatLon, latLon, DistanceUnit.MILE)
             val distRidKm = LatLon.distance(radarSiteLatLon, latLon, DistanceUnit.KM)
@@ -130,7 +126,7 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
                 longPressList.add("WPC Fronts: ${getWpcFrontTimeStamp(context)}")
             }
             longPressList += closestRadarSites.map {
-                "${it.name} ${UtilityLocation.getRadarSiteName(it.name)} ${it.distance} mi"
+                "${it.name} ${UtilityLocation.getRadarSiteName(it.name)} ${it.distance.roundToInt()} mi"
             }
             //elys mod
 	    if ((RadarPreferences.warnings || PolygonWarning.areAnyEnabled()) /*&& PolygonWarning.isCountNonZero()*/) {
@@ -147,12 +143,12 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
                 longPressList.add("Show MPD")
             }
             // end Thanks to Ely
-            val obsSite = Metar.findClosestObsSite(context, latLon)
+            val obsSite = Metar.findClosestObservation(context, latLon)
             with(longPressList) {
             //elys mod
                 add("Radar Mosaic")
                 add("GOES Satellite")
-                add("Observation: ${obsSite.name} ${obsSite.distance} mi")
+                add("Observation: ${obsSite.name} ${obsSite.distance.roundToInt()} mi")
                 add("Forecast: $latLonTitle")
                 add("Meteogram: ${obsSite.name}")
                 add("Radar status message: ${closestRadarSites.first().name}")

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -216,16 +216,17 @@ object Utility {
                     "Ctrl-d: Severe Dashboard" + GlobalVariables.newline +
                     "Ctrl-c: Goes Viewer" + GlobalVariables.newline +
                     "Ctrl-a: Local text product viewer" + GlobalVariables.newline +
-                    "Ctrl-s: Settings" + GlobalVariables.newline +
+                    "Ctrl-p: Settings" + GlobalVariables.newline +
                     "Ctrl-2: Dual Pane Radar" + GlobalVariables.newline +
                     "Ctrl-4: Quad Pane Radar" + GlobalVariables.newline +
-                    "Ctrl-e: SPC Mesoanalysis" + GlobalVariables.newline +
+                    "Ctrl-s: SPC Convective Outlook Summary" + GlobalVariables.newline +
+                    "Ctrl-z: SPC Mesoanalysis" + GlobalVariables.newline +
                     "Ctrl-n: NCEP Models" + GlobalVariables.newline +
                     "Ctrl-h: Hourly" + GlobalVariables.newline +
                     "Ctrl-o: NHC" + GlobalVariables.newline +
                     "Ctrl-l: Show locations" + GlobalVariables.newline +
                     "Ctrl-i: National images" + GlobalVariables.newline +
-                    "Ctrl-z: National text discussions" + GlobalVariables.newline +
+                    "Ctrl-t: National text discussions" + GlobalVariables.newline +
                     "Ctrl-j: Previous tab" + GlobalVariables.newline +
                     "Ctrl-k: Next tab" + GlobalVariables.newline
 

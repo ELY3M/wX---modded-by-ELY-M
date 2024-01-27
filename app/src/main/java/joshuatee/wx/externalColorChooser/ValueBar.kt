@@ -113,7 +113,7 @@ class ValueBar : View {
     private var mPosToSatFactor = 0.toFloat()
 
     /**
-     * Factor used to calculate the Opacity to the postion on the bar.
+     * Factor used to calculate the Opacity to the position on the bar.
      */
     private var mSatToPosFactor = 0.toFloat()
 

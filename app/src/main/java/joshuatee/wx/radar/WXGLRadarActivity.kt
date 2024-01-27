@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -43,7 +43,7 @@ import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFavorites
 //elys mod
-import joshuatee.wx.activitiesmisc.WebView
+import joshuatee.wx.misc.WebView
 import joshuatee.wx.util.UtilityLog
 
 
@@ -107,9 +107,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun setupLayout(savedInstanceState: Bundle?) {
         if (Utility.isThemeAllWhite()) {
-            super.onCreate(savedInstanceState, R.layout.activity_uswxogl_white, R.menu.uswxoglradar, iconsEvenlySpaced = true, bottomToolbar = true)
+            super.onCreate(savedInstanceState, R.layout.activity_uswxogl_white, R.menu.uswxoglradar, bottomToolbar = true)
         } else {
-            super.onCreate(savedInstanceState, R.layout.activity_uswxogl, R.menu.uswxoglradar, iconsEvenlySpaced = true, bottomToolbar = true)
+            super.onCreate(savedInstanceState, R.layout.activity_uswxogl, R.menu.uswxoglradar, bottomToolbar = true)
         }
         objectToolbarBottom.connect(this)
     }
@@ -144,8 +144,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             nexradColorLegend.updateAfterDownload()
             nexradState.oldProd = nexradState.product
         })
-//        nexradColorLegend.updateAfterDownload()
-//        nexradState.oldProd = nexradState.product
         NexradLayerDownload.download(
                 this,
                 nexradState.render,
@@ -285,7 +283,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         super.onPause()
     }
 
-    // https://developer.android.com/reference/android/app/Activity
     override fun onResume() {
         nexradUI.checkForAutoRefresh()
         nexradState.onResume()

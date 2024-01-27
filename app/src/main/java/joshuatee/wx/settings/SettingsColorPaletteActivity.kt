@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,6 +22,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import android.view.Menu
@@ -107,6 +108,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                         TileObjectColorPalette(it, toolbar, prefToken, this, type, false)
                     }
                 }
+
                 99 -> {
 		    //elys mod
                     listOf("CODENH", "AF", "EAK", "ELY", "ELYENH").forEach {
@@ -117,6 +119,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                         TileObjectColorPalette(it, toolbar, prefToken, this, type, false)
                     }
                 }
+
                 else -> {
                     listOf("CODENH").forEach {
                         allItems.add(TileObjectColorPalette(it, toolbar, prefToken, this, type, true))
@@ -139,6 +142,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
             return allItems
         }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onRestart() {
         rowListItem = allItemList
         tileAdapterColorPalette = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)

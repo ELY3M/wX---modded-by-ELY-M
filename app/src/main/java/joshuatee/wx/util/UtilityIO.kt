@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,6 +30,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.externalBzip2.Compression
+import joshuatee.wx.objects.URL
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.BufferedReader
@@ -74,6 +75,9 @@ object UtilityIO {
     }
 
     fun getFilePath(context: Context, fileName: String): String = context.getFileStreamPath(fileName).absolutePath
+
+    fun rawFileToStringArrayFromResource(resources: Resources, fileRaw: Int): List<String> =
+            readTextFileFromRaw(resources, fileRaw).split("\n").dropLastWhile { it.isEmpty() }
 
     fun readTextFileFromRaw(resources: Resources, fileRaw: Int): String = readTextFile(resources.openRawResource(fileRaw))
     //elys mod - cant be private. it is used in other file.  
@@ -136,6 +140,11 @@ object UtilityIO {
         }
     }
 
+    @Suppress("unused")
+    fun downloadAsByteArray(url: String): ByteArray = URL(url).getBytes()
+
+    fun getHtml(url: String): String = UtilityNetworkIO.getStringFromUrlWithNewLine(url)
+        
     //elys mod - keeping this
     fun readTextFromUri(context: Context, uri: Uri): String {
         var content = ""
@@ -152,5 +161,5 @@ object UtilityIO {
         }
         return content
     }
-    fun getHtml(url: String) = UtilityNetworkIO.getStringFromUrl(url)
+
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,6 +37,7 @@ import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.util.To
 
+@Suppress("SpellCheckingInspection")
 internal object NotificationSpcFireWeather {
 
     fun locationNeedsSpcFireWeather() = (0 until Location.numLocations).any {
@@ -85,8 +86,8 @@ internal object NotificationSpcFireWeather {
                 var string = ""
                 val htmlList = htmlBlob.parseColumn(threat.substring(1) + "(.*?)[A-Z&]")
                 htmlList.forEach {
-                    string += UtilityNotification.storeWatchMcdLatLon(it)
-                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO seperates on 8 's
+                    string += LatLon.storeWatchMcdLatLon(it)
+                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO separates on 8 's
                 } // end looping over polygons of one threat level
                 val items = RegExp.colon.split(string)
                 items.forEach {

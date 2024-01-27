@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,37 +21,26 @@
 
 package joshuatee.wx
 
+//
 // interface to JNI functions to be used by all Java files
 // This file must stay in this location otherwise the underlying C source code files need
 // to be updated
+//
 
 import java.nio.ByteBuffer
 
 object Jni {
 
+    //
     // Native code accessed via JNI was originally developed in 2014. At the time it was necessary for best performance.
     // years later gains in hardware and software make the gains negligible in most cases.
+    // It is supported best effort and must be enabled in developer settings
+    // This is used for Level3 only.
+    //
 
     init {
         System.loadLibrary("radial")
     }
-
-//    external fun level2GenRadials(
-//        radarFloatBuffer: ByteBuffer,
-//        radarColorBuffer: ByteBuffer,
-//        binWord: ByteBuffer,
-//        radialStartAngle: ByteBuffer,
-//        radials: Int,
-//        numberOfRangeBins: Int,
-//        bsize: Float,
-//        bgColorRed: Byte,
-//        bgColorGreen: Byte,
-//        bgColorBlue: Byte,
-//        colormapRed: ByteBuffer,
-//        colormapGreen: ByteBuffer,
-//        colormapBlue: ByteBuffer,
-//        productCode: Int
-//    ): Int
 
     external fun decode8BitAndGenRadials(
             src: String,
@@ -71,28 +60,9 @@ object Jni {
             productCode: Int
     ): Int
 
-    // given a portion of a Level 2 radar file , decompress only what is needed for the lowest tilt of 153 ref or 154 vel
-//    external fun level2Decompress(
-//        src: String,
-//        dst: String,
-//        inputByteBuffer: ByteBuffer,
-//        outputByteBuffer: ByteBuffer,
-//        productCode: Int
-//    )
-
-    // given a decompressed Level 2 radar file decode the file and return radial / level data
-//    external fun level2Decode(
-//        src: String,
-//        binWordByteBuffer: ByteBuffer,
-//        radialStartAngleByteBuffer: ByteBuffer,
-//        productCode: Int,
-//        byteBufferDays: ByteBuffer,
-//        byteBufferMSec: ByteBuffer
-//    )
-
     external fun genIndex(indexBuffer: ByteBuffer, len: Int, breakSize: Int)
     external fun genIndexLine(indexBuffer: ByteBuffer, len: Int, breakSize: Int)
-    external fun genMercato(
+    external fun genMercator(
             inputBuffer: ByteBuffer,
             outputBuffer: ByteBuffer,
             centerX: Float,

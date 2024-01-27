@@ -72,8 +72,8 @@ To associate the map with the img, list the map in in ImageMap attributes
         android:id="@+id/map"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/usamap"
-        ctc:map="usamap"/>
+        android:src="@drawable/usa_map"
+        ctc:map="usa_map"/>
 </LinearLayout>
 
 
@@ -82,7 +82,7 @@ One difference over HTML maps is that each area must have an id. I went back and
 
 <!--?xml version="1.0" encoding="utf-8"?-->
 <maps xmlns:android="http://schemas.android.com/apk/res/android">
-    <map name="gridmap">
+    <map name="grid_map">
         <area id="@+id/area1001" shape="rect" coords="118,124,219,226" />
         <area id="@+id/area1002" shape="rect" coords="474,374,574,476" />
         <area id="@+id/area1004" shape="rect" coords="710,878,808,980" />
@@ -90,7 +90,7 @@ One difference over HTML maps is that each area must have an id. I went back and
         <area id="@+id/area1006" shape="poly" coords="250,780,250,951,405,951" />
         <area id="@+id/area1007" shape="poly" coords="592,502,592,730,808,730,808,502,709,502,709,603,690,603,690,502" />
     </map>
-    <map name="usamap">
+    <map name="usa_map">
         <area id="@+id/area1" shape="poly" coords="230,35,294,38,299,57,299,79,228,79" />
 ...
      </map>

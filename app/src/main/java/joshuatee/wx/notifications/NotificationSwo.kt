@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -121,8 +121,8 @@ internal object NotificationSwo {
                 var string = ""
                 val htmlList = htmlBlob.parseColumnAcrossLines(threat.substring(1) + "(.*?)[A-Z&]")
                 htmlList.forEach {
-                    string += UtilityNotification.storeWatchMcdLatLon(it)
-                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO seperates on 8 's
+                    string += LatLon.storeWatchMcdLatLon(it)
+                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO separates on 8 's
                 } // end looping over polygons of one threat level
                 val items = RegExp.colon.split(string)
                 items.forEach {
@@ -213,8 +213,8 @@ internal object NotificationSwo {
                 var string = ""
                 val htmlList = htmlBlob.parseColumnAcrossLines(threat.substring(1) + "(.*?)[A-Z&]")
                 htmlList.forEach {
-                    string += UtilityNotification.storeWatchMcdLatLon(it)
-                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO seperates on 8 's
+                    string += LatLon.storeWatchMcdLatLon(it)
+                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO separates on 8 's
                 } // end looping over polygons of one threat level
                 val items = string.split(":")
                 items.indices.forEach { z ->

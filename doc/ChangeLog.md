@@ -2,7 +2,315 @@
 
 # Developer ChangeLog
 
-## 55851 2022_11_02
+## 55870 2024_01_24
+
+* [ADD] tool upgrade
+
+```
+-        classpath 'com.android.tools.build:gradle:8.2.1'
++        classpath 'com.android.tools.build:gradle:8.2.2'
+```
+
+## 55869 2024_01_09
+
+* [FIX] WPC Rainfall Outlook Day 1 - 5, Title was truncated, move parts of Title to Sub-title
+* [FIX] usalerts on chromeOS, cards should take remaining horizontal space on screen
+* [ADD] Previously, the graph in the hourly activity was set to a fixed size height.
+  On laptops (ie ChromeOS) this led to the graph being very narrow. The graph is now set to
+  slightly less then the width and the height is a fixed fraction of that width.
+* [REF] lint
+* [ADD] ChromeOS keyboard shortcut for main screen "Ctrl - s" (SPC SWO Summary)
+* [ADD] ChromeOS keyboard shortcut for main screen "Ctrl - g" (Rainfall Outlook Summary)
+* [REF] WPC renames
+
+```
+	renamed:    WpcImagesActivity.kt -> NationalImagesActivity.kt
+	renamed:    WpcTextProductsActivity.kt -> NationalTextActivity.kt
+	renamed:    WpcRainfallForecastActivity.kt -> RainfallOutlookActivity.kt
+	renamed:    WpcRainfallForecastSummaryActivity.kt -> RainfallOutlookSummaryActivity.kt
+```
+
+## 55868 2024_01_05
+
+* [REF] lint
+* [REF] rename
+
+```
+renamed:    app/src/main/java/joshuatee/wx/misc/USAlertsDetailActivity.kt -> app/src/main/java/joshuatee/wx/misc/AlertsDetailActivity.kt
+```
+
+* [REF] rename dir activitiesmisc to misc
+* [REF] remove the following which were not being used
+
+```
+	deleted:    app/src/main/java/joshuatee/wx/fingerdraw/FingerDrawActivity.kt
+	deleted:    app/src/main/res/layout/fingerdraw_layout.xml
+```
+
+## 55867 2024_01_04
+
+* [REF] Android Studio migration plus optional build.gradle migrations as follows
+  https://kotlinlang.org/docs/whatsnew1920.html#ide-support
+
+```
+-        classpath 'com.android.tools.build:gradle:8.2.0'
++        classpath 'com.android.tools.build:gradle:8.2.1'
+
+-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0"
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
+
+-    aaptOptions {
+-        additionalParameters "--no-version-vectors"
+-    }
+
+-    lintOptions {
+-        disable 'Typos'
+-        checkReleaseBuilds false
+-        abortOnError false
+-    }
+
++    androidResources {
++        additionalParameters '--no-version-vectors'
++    }
++    lint {
++        abortOnError false
++        checkReleaseBuilds false
++        disable 'Typos'
++    }
+
+```
+
+* [REF] remove older options in build.gradle
+* [FIX] for theme "white", change the following in `src/main/res/values/styles.xml`
+
+```
+-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
++        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
+```
+
+```
+-        vectorDrawables.useSupportLibrary = true
++        // vectorDrawables.useSupportLibrary = true
+
+-    androidResources {
+-        additionalParameters '--no-version-vectors'
+-    }
++//    androidResources {
++//        additionalParameters '--no-version-vectors'
++//    }
+```
+
+## 55866 2024_01_03
+
+* [FIX] In GOES, move share icon to submenu as when animating pause icon was not showing on some
+  devices
+* [FIX] In GOES, Animate button was not working as intended. if tap Stop once animating, it should
+  show latest image
+* [REF] continue lint and spellcheck activities
+
+## 55865 2024_01_02
+
+* [REF] remove the following from UtilityStorePreferences.kt
+
+```
+-            editor.putString("LOC1_NWS", "OUN")
+-            editor.putString("NWS1_STATE", "OK")
+-            editor.putString("STATE", "Oklahoma")
+-            editor.putString("STATE_CODE", "OK")
+-            editor.putString("THEME_BLUE", "whiteNew")
+-            editor.putString("NWS_RADAR_BG_BLACK", "true")
+-            editor.putInt("ALERT_BLACKOUT_AM", 7)
+-            editor.putInt("ALERT_BLACKOUT_PM", 22)
+-            editor.putString("ALERT_BLACKOUT_TORNADO", "true")
+-            editor.putString("ALERT_BLACKOUT", "false")
+-            editor.putString("LOCK_TOOLBARS", "true")
+-            editor.putString("RADAR_SHOW_COUNTY", "true")
+-            editor.putString("ALERT_ONLYONCE", "true")
+-            editor.putString("ALERT_AUTOCANCEL", "true")
+
+
+```
+
+## 55864 2023_12_31
+
+* [REF] cleanup
+
+## 55863 2023_12_31
+
+* [REF] move UtilityNotification.storeWatchMcdLatLon to LatLon.storeWatchMcdLatLon (to match other
+  versions)
+* [REF] lint esp for new graphview code
+* [REF] sync up UtilitySpcStormReports.kt and StormReport.kt with other versions
+* [REF] remove remnants of deprecated option: UIPreferences.iconsEvenSpaced
+
+## 55862 2023_12_30
+
+* [REF] in gradle.properties, comment out `android.enableJetifier=true`, the default is `false`
+* [ADD] Hourly graph: remove the following external dependency and integrate the APL2.0 licensed
+  code directly into the project
+  for ongoing stability. The repo maintainer states they are looking for someone else to take it
+  over and not many changes
+  done in past few years to keep current, this should enable TODO to be completed:
+  `migrate from "android.enableJetifier=true" to "android.enableJetifier=false" in`
+
+```
+build.gradle:
++    // graphview source code was merged locally into project on 2023-12-30
++//    implementation 'com.jjoe64:graphview:4.2.2'
+
+// add the following files/dir
+	app/src/main/java/joshuatee/wx/externalGraphView/
+	app/src/main/res/values/attr_graphview.xml
+	doc/COPYING.GraphView
+```
+
+* [ADD] ObjectModelGet
+* [FIX] SPC SREF - time menu was not showing up in bottom toolbar
+* [FIX] SPC HREF - when change sector, reset zoom level on image(s)
+* [FIX] SPC HREF - remove first time "00" in series which is not valid for this model
+* [FIX] NCEP MAG Models - when change sector, reset zoom level on image(s)
+* [REF] remove unused resources
+* [ADD] change keyboard shortcuts (ie for ChromeOS) to more closely match desktop ports, SPC Meso (
+  cltr-Z), Nat Text (cltr-T), Settings (cltr-P)
+
+```
+	deleted:    app/src/main/res/drawable/ic_skip_next_24dp.xml
+	deleted:    app/src/main/res/drawable/ic_skip_previous_24dp.xml
+	deleted:    app/src/main/res/layout/activity_uswxoglmultipane_immersive.xml
+	deleted:    app/src/main/res/layout/activity_uswxoglmultipane_immersive_white.xml
+	deleted:    app/src/main/res/layout/activity_uswxoglmultipane_quad.xml
+	deleted:    app/src/main/res/layout/activity_uswxoglmultipane_quad_white.xml
+```
+
+## 55860 2022_12_29
+
+* [ADD] have all HTML get functions use user-agent header
+* [REF] Metar - should be `private var obsLatlon = mutableMapOf<String, LatLon>()`
+* [REF] RID.distance change from Int to Double
+
+## 55861 2022_12_28
+
+## 55860 2022_12_28
+
+* [REF] UtilityUS - use LatLon as arg, add latForNws/lonForNws (.4 precision) to LatLon
+* [REF] add UtilityDownloadNws.getHourlyOldData and use in UtilityHourlyOldApi.kt
+* [REF] add UtilityIO.getHtml for compat
+* [REF] rename Metar.readData to Metar.loadMetarData for compat
+
+## 55859 2022_12_24
+
+* [FIX] Orange theme still had blue FAB
+* [ADD] Main screen: make location label and hazards bold
+* [FIX] Nexrad radar city textual labels and observation labels were not working well on ChromeOS,
+  change the way size is
+  computed.
+* [ADD] AppCompatAlertDialogStyle2 in app/src/main/res/values-v28/styles.xml to have less rounder
+  corners in dialogue
+* [FIX] Rainfall Outlook Summary - swap title and subtitle as title was too long
+* [FIX] (needs test on real device) on ChromeOS using keyboard shortcuts in Nexrad, textual labels
+  were not updating
+
+## 55858 2022_12_24
+
+* [ADD] as mentioned in "Upcoming Changes" since Aug 2022:
+  The option **Icons evenly spaced** will be removed in **Settings->UI**.
+  This was meant to be a bridge from Android 4.4 to Android 5.0 back in Fall 2014.
+  It goes against modern Android design and has caused issues in the past for users who have
+  unknowingly enabled it.
+* [REF] lint
+* [ADD] SPC SWO Summary - similar to Severe Dashboard, move "pin to homescreen" icon to submenu so
+  it's clear what this is doing
+* [FIX] Nexrad radar city textual labels were not working well on ChromeOS, change the way size is
+  computed.
+
+## 55857 2022_12_20
+
+* [REF] C source code cleanup
+* [ADD] hardcode value in styles.xml as possibly required by future Material update, example
+* [ADD] UtilityCapAlert
+* [REF] rename activitiesmisc/USWarningsWithRadarActivity.kt -> activitiesmisc/USAlertsActivity.kt
+
+```
+<item name="popupMenuBackground">@color/off_white</item>
+```
+
+## 55856 2022_12_14
+
+* [ADD] NDK update android-ndk-r25c -> android-ndk-r26b
+    - add variable in `build.gradle` for NDK path
+    - `app/src/main/jni/genCircleWithColor.c` required type definition in func for C99 compliance (
+      should have been there from start)
+
+* [ADD]  okhttp minor update
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:4.11.0"
++    implementation "com.squareup.okhttp3:okhttp:4.12.0"
+```
+
+* [REF] gradle 9.0 will require this being removed
+
+```
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -20,7 +20,6 @@ org.gradle.jvmargs=-Xms2048m -Xmx4096m -XX:ReservedCodeCacheSize=2048m
+ android.useAndroidX=true
+ # com.jjoe64:graphview:4.2.2 requires jetifier and legacy support libraries
+ android.enableJetifier=true
+-android.defaults.buildfeatures.buildconfig=true
+ android.nonTransitiveRClass=true
+ android.nonFinalResIds=true
+ #In Android Studio, just go to Fi
+```
+
+## 55855 2022_12_04
+
+* [FIX] KLIX (LA, New Orleans) nexrad radar is being physically moved.
+  This update prevents it from being used as an active radar in long press radar
+  selection or if adding a new location.
+* [REF] tooling update:
+
+```
+-        classpath 'com.android.tools.build:gradle:8.1.4'
++        classpath 'com.android.tools.build:gradle:8.2.0'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-all.zip
+```
+
+## 55854 2022_11_28
+
+* [FIX] WPC US Hazards Outlook Days 3-7: product discontinued via SCN23-101: Termination of the
+  Weather Prediction Center Day 3-7
+  Hazards Outlook Discussion Effective November 15, 2023
+* [REF] cleanup in DownloadText.kt
+
+## 55853 2022_11_25
+
+* [FIX] NHC storm detail - force to mph for wind intensity
+* [ADD] Android Studio update twice and tool update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.1.2'
++        classpath 'com.android.tools.build:gradle:8.1.3'
+```
+
+```
+-        classpath 'com.android.tools.build:gradle:8.1.3'
++        classpath 'com.android.tools.build:gradle:8.1.4'
+
+-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
++    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+```
+
+## 55852 2022_11_05
+
+* [ADD] Nexrad radar widget - load geometry data locally in an attempt to make widget more reliable
+
+## 55851 2022_11_03
+
+* [FIX] remove 3 obsolete Canadian text products in the National Text Viewer (MISC Tab, 2nd row,
+  left)
 
 ## 55850 2022_11_02
 
@@ -411,7 +719,7 @@ build.gradle:
   joshuatee.wx.models.UtilityModelSpcSrefInputOutput.getRunTime line 47
   UtilityModelSpcSrefInputOutput.kt
 * [FIX] NSSL WRF model activity was not working at all
-* [FIX] SPC Meso, selected image was not being saved when using backarrow or keyboard in chromeOS
+* [FIX] SPC Meso, selected image was not being saved when using back arrow or keyboard in chromeOS
 
 ## 55801 2022_06_05
 
@@ -444,7 +752,7 @@ build.gradle:
 
 ## 55796 2022_05_28
 
-* [REF] remove remaining remnants of twitter, webclass and icons
+* [REF] remove remaining remnants of twitter, web class and icons
 * [FIX] for Android 13 (API 33), no need to request storage permission in AudioPlayActivity.kt
 * [REF] various lint mostly make private
 * [REF] remove remaining remnants of canada support
@@ -754,7 +1062,7 @@ build.gradle:
 
 ## 55744 2022_11_13
 
-* [REF] move colorpicker stuff to externalColorChooser/
+* [REF] move color picker stuff to externalColorChooser/
 * [FIX] run time translation fix for SREF/ESRL/NSSL
 
 ## 55743 2022_11_13
@@ -1649,7 +1957,7 @@ https://issuetracker.google.com/issues/238425626?pli=1
 
 ## 55618 2022_07_17
 
-* [ADD] Nexrad radar long press - shorten verbiage (con't)
+* [ADD] Nexrad radar long press - shorten verbiage (continued)
 * [REF] UtilityRadarUI/WXGLSurfaceView change from MutableList to List in some areas
 * [FIX] new NWS Radar Mosaic - remove menu with products that aren't available
 * [FIX] NHC now shows complete summary information and text products for Central Pacific "CP"
@@ -1875,7 +2183,7 @@ https://issuetracker.google.com/issues/238425626?pli=1
 
 ## 55588 2022_02_21
 
-* [ADD] disable new super-res products as NWS has not fully reployed
+* [ADD] disable new super-res products as NWS has not fully deployed
 * [FIX] remove the following weather obs point in `stations_us4.txt` and `us_metar3.txt` as user
   reported it has not updated since Jan 26
 
@@ -1921,7 +2229,7 @@ KLOT 41.6 -88.1
 * [ADD] In Settings -> about, add navdrawer token string to assist in troubleshooting
 * [ADD] com.android.tools.build:gradle:7.0.4 -> com.android.tools.build:gradle:7.1.0
 * [FIX] remove observation point KSTF (Starkville, MS) as it's impacting users.
-* [FIX] remove decomissioned text products
+* [FIX] remove decommissioned text products
     - "mimpac: Marine Weather disc for N PAC Ocean"
     - "mimatn: Marine disc for N Atlantic Ocean"
 
@@ -1998,7 +2306,7 @@ KLOT 41.6 -88.1
 
 ## 55569 2021_10_21
 
-* release to fdroid (tag)
+* release to F-Droid (tag)
 
 ## 55568 2021_10_21
 

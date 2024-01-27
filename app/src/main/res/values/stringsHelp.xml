@@ -57,7 +57,7 @@
           Minimum time in seconds between GPS updates if GPS and auto-refresh enabled.
 </string>
 
-    <string name="textview_fontsize_np_label">
+    <string name="textview_font_size_np_label">
          Size of the normal size text. Default is 16. Large and small font are relative to this as well. A full manual app restart might be required for this (for now). Work in progress.
 </string>
 
@@ -65,7 +65,7 @@
 Prevent tapping on a widget from opening the app. Please note that after changing this setting you must then delete and re-add any widget that you want this to take effect for.
 </string>
 
-    <string name="mainscreen_radar_button">
+    <string name="main_screen_radar_button">
 Show a floating action button on the main screen for access to radar.
 </string>
 
@@ -77,12 +77,8 @@ Hide the top toolbar on the main screen.
         circle around it in the toolbar or navigation drawer.
 </string>
 
-    <string name="cc_widget_show_sevenday">
+    <string name="cc_widget_show_seven_day">
 Show 7 day forecast in 4x1 CC widget if widget is expanded.
-</string>
-
-    <string name="media_control_notif_tv">
-Show the media control notification in status bar.
 </string>
 
     <string name="vr_button_label">
@@ -119,7 +115,7 @@ Use a dataset 9 times larger then the default state dataset: cb_2015_us_state_50
     <string name="settings_color_palette_help">
 On first start, the built-in color palettes are shown with a yellow label. The currently active color palette is shown in the title area and can be changed by
         tapping any icon. To create a new color palette, select the palette you want to use as a base and then touch the action button in the lower left. From there
-        you are in the editor and a name has been chosen for you at top that you can modify. After you have made chanegs tap the check mark icon to save. Once you leave
+        you are in the editor and a name has been chosen for you at top that you can modify. After you have made changes tap the check mark icon to save. Once you leave
         the editor a new icon will be generated based on your color palette. The label is in white to show this is a custom palette. If you chose the custom palette
         by tapping on it a trash icon will appear in the lower right allowing you to delete it and the plus icon will change to a different icon indicating you can edit
         instead of clone with the current selected palette.
@@ -166,7 +162,7 @@ Nexrad radar single pane activity will have the status bar and navigation bar hi
 
     <string name="record_screen_share_label">
 Use screen recording technology for sharing in activities involving just images and offering animations. After touching the record button in
-          the upper right of the screen touch the same area to stop the recording. Media can be accessed via the notifications or via a filemanager
+          the upper right of the screen touch the same area to stop the recording. Media can be accessed via the notifications or via a file-manager
           in the DCIM or Movies folder.
       </string>
 
@@ -232,11 +228,11 @@ Location dot will use the GPS of your device and will also keep the screen on an
 add heading bug to your GPS location if you are following your GPS.
 </string>
 
-    <string name="dualpaneshareposn_label">
+    <string name="dual_pane_share_position_label">
 If in a multi-pane radar mode each pane will share the same zoom lat/lon provided they are using the same radar site.
 </string>
 
-    <string name="nws_text_removelinebreak_label">
+    <string name="nws_text_remove_linebreak_label">
 Remove line breaks used to keep NWS text products at fixed width.
         This will make headers harder to read but the body of the text will more easily adapt to the size of your screen.
     </string>
@@ -248,7 +244,7 @@ Remove line breaks used to keep NWS text products at fixed width.
         such as warnings and watches.
 </string>
 
-    <string name="help_radar_drawingtools">
+    <string name="help_radar_drawing_tools">
 
         When "Share / Drawing Tools" is selected from the sub-menu, a recording toolbar appears in the top right of the screen.
         You will need to approve and enable various Android permissions to allow this to happen.
@@ -323,7 +319,7 @@ Animation speed. Lower is faster. Default is 8.
 
     <string name="default_linesize_np_label">
 Thickness of lines for State, Rivers, highways Lines. Smaller is thinner.
-    </string>
+      </string>
 
     <string name="warn_linesize_np_label">
 Thickness of lines for warnings. Smaller number is thinner.
@@ -333,22 +329,22 @@ Thickness of lines for warnings. Smaller number is thinner.
 Thickness of lines for SPC Watch/MCD. Smaller number is thinner.
 </string>
 
- <string name="state_linesize_np">
+    <string name="state_linesize_np">
 Thickness of lines for state lines. Smaller number is thinner.
 </string>
- <string name="county_linesize_np">
+    <string name="county_linesize_np">
 Thickness of lines for county outlines. Smaller number is thinner.
 </string>
- <string name="hw_linesize_np">
+    <string name="hw_linesize_np">
 Thickness of lines for main highways. Smaller number is thinner.
 </string>
- <string name="hwext_linesize_np">
+    <string name="hwext_linesize_np">
 Thickness of lines for secondary highways/roads. Smaller number is thinner.
 </string>
- <string name="lakes_linesize_np">
+    <string name="lakes_linesize_np">
 Thickness of lines for rivers and lakes. Smaller number is thinner.
 </string>
- <string name="gpscircle_linesize_np">
+    <string name="gpscircle_linesize_np">
 Thickness of lines for the GPS location circle. Smaller number is thinner.
 </string>
     <string name="sti_linesize_np">
@@ -425,7 +421,7 @@ Ignore blackout (of sound) if it is a local Tornado warning.</string>
  End of blackout (if configured sound will now resume if there is an alert). </string>
 
     <string name="tv_notif_sound_repeat_label">
- If enabled any notification that has sound configured will play the sound continusouly until the notification is acknowledged.
+ If enabled any notification that has sound configured will play the sound continuously until the notification is acknowledged.
      </string>
 
     <string name="tv_notif_tts_label">
@@ -455,9 +451,6 @@ to download warning data.
     </string>
     <string name="spinner_theme_label">
  The default theme is BlackAqua. For those who do not like this you can select an alternate.
-    </string>
-    <string name="icons_spacing_label">
- Determines if icons are evenly spaced in the bottom toolbar.
     </string>
     <string name="fullscreen_mode_label">
  Use fullscreen when viewing content as much as possible.
@@ -537,10 +530,10 @@ Enable counties to be displayed.</string>
 If enabled the WXOGL activity will attempt to prevent the screen from turning off and will auto refresh roughly every 3 minutes ( by default ).
         Interval is configurable. Additionally, the GPS will be queried to show your current location on the radar.</string>
 
-     <string name="show_sti_label">
+    <string name="show_sti_label">
 If enabled the WXOGL radar will show storm tracks ( predicted future path / speed ).</string>
 
-     <string name="show_hi_label">
+    <string name="show_hi_label">
 If enabled the WXOGL radar will hail signatures with hail size at or greater then 0.50 inch at 50% or higher probability.</string>
 
     <string name="show_hi_label_label">
@@ -562,14 +555,11 @@ Allows one to change the size of the TVS markers.</string>
     <string name="userpoints_size_np">
 Allows one to change the size of the Userpoints markers.</string>
 
-    <string name="rememberloc_label">
+    <string name="remember_loc_label">
 Nexrad Radar will use the last location / product / zoom level / position viewed instead of the radar site for the current location in the main tab.</string>
 
     <string name="wxogl_refresh_interval_label">
 Controls the number of minutes before an auto  refresh is triggered if that option is enabled.</string>
-
-    <string name="launch_to_radar_label">
-Launch the application directly into the radar interface.</string>
 
     <string name="elevation_np_label">
 Control how much elevation is present in the UI. Default is 3.</string>

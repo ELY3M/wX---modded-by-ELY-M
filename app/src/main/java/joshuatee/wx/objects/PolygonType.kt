@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,7 +25,7 @@ package joshuatee.wx.objects
 import android.graphics.Color
 import joshuatee.wx.settings.RadarPreferences
 
-enum class PolygonType constructor(var color: Int, private val typeAsString: String, var pref: Boolean, var size: Float) {
+enum class PolygonType(var color: Int, private val typeAsString: String, var pref: Boolean, var size: Float) {
 
     MCD(RadarPreferences.colorMcd, "MCD", RadarPreferences.watMcd, RadarPreferences.watchMcdLineSize),
     MPD(RadarPreferences.colorMpd, "MPD", RadarPreferences.mpd, RadarPreferences.watchMcdLineSize),
@@ -55,7 +55,6 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
 
     companion object {
         fun refresh() {
-
             MCD.pref = RadarPreferences.watMcd
             MPD.pref = RadarPreferences.mpd
             WATCH.pref = RadarPreferences.watMcd

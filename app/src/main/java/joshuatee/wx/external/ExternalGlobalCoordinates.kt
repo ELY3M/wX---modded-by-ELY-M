@@ -19,7 +19,7 @@ import joshuatee.wx.objects.LatLon
  *
  *
  *
- * Any angle may be specified for longtiude and latitude, but all angles will be
+ * Any angle may be specified for longitude and latitude, but all angles will be
  * canonicalized such that:
  *
  *

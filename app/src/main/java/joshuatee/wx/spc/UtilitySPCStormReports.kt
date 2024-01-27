@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,7 +27,7 @@ internal object UtilitySpcStormReports {
         val stormReports = mutableListOf<StormReport>()
         linesOfData.forEach { line ->
             val items: List<String>
-            var title = ""
+            var damageHeader = ""
             var lat = ""
             var lon = ""
             var state = ""
@@ -37,11 +37,11 @@ internal object UtilitySpcStormReports {
             var magnitude = ""
             var city = ""
             if (line.contains(",F_Scale,")) {
-                title = "Tornado Reports"
+                damageHeader = "Tornado Reports"
             } else if (line.contains(",Speed,")) {
-                title = "Wind Reports"
+                damageHeader = "Wind Reports"
             } else if (line.contains(",Size,")) {
-                title = "Hail Reports"
+                damageHeader = "Hail Reports"
             } else {
                 items = line.split(",")
                 if (items.size > 7) {
@@ -55,7 +55,7 @@ internal object UtilitySpcStormReports {
                     description = items[7]
                 }
             }
-            stormReports.add(StormReport(title, lat, lon, time, magnitude, address, city, state, description))
+            stormReports.add(StormReport(lat, lon, time, magnitude, address, city, state, description, damageHeader))
         }
         return stormReports
     }

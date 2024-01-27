@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -86,7 +86,7 @@ class GoesActivity : VideoRecordActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.goes16, iconsEvenlySpaced = true, bottomToolbar = false)
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.goes16, bottomToolbar = false)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         arguments = intent.getStringArrayExtra(RID)!!
         setupUI()
@@ -167,13 +167,25 @@ class GoesActivity : VideoRecordActivity() {
         }
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.GOES16)
-            R.id.action_animate -> {
-                if (objectAnimate.isRunning()) {
-                    objectAnimate.stop()
-                } else {
-                    getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
-                }
-            }
+            R.id.action_animate -> getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
+//                if (!goesFloater) {
+//                    objectAnimate.animateClicked({ getContent(sector) }) {
+//                        UtilityGoes.getAnimation(navDrawer.url, sector, To.int(RadarPreferences.uiAnimIconFrames))
+//                    }
+//                } else {
+//                    objectAnimate.animateClicked({ getContent(sector) }) {
+//                        UtilityGoes.getAnimationGoesFloater(navDrawer.url, sector, To.int(RadarPreferences.uiAnimIconFrames))
+//                    }
+//                }
+//            }
+
+            //                {
+//                if (objectAnimate.isRunning()) {
+//                    objectAnimate.stop()
+//                } else {
+//                    getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
+//                }
+//            }
 
             R.id.action_a12 -> getAnimate(12)
             R.id.action_a24 -> getAnimate(24)
@@ -243,9 +255,9 @@ class GoesActivity : VideoRecordActivity() {
 
     private fun getAnimate(frameCount: Int) {
         if (!goesFloater) {
-            objectAnimate.animateClicked({}) { UtilityGoes.getAnimation(navDrawer.url, sector, frameCount) }
+            objectAnimate.animateClicked({ getContent(sector) }) { UtilityGoes.getAnimation(navDrawer.url, sector, frameCount) }
         } else {
-            objectAnimate.animateClicked({}) { UtilityGoes.getAnimationGoesFloater(navDrawer.url, sector, frameCount) }
+            objectAnimate.animateClicked({ getContent(sector) }) { UtilityGoes.getAnimationGoesFloater(navDrawer.url, sector, frameCount) }
         }
     }
 }

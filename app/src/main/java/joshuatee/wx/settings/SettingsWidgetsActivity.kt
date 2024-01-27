@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -59,7 +59,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
 
     private fun addSwitch() {
         val configs = listOf(
-                Switch(this, "Do not show 7day in CC widget", "WIDGET_CC_DONOTSHOW_7_DAY", R.string.cc_widget_show_sevenday),
+                Switch(this, "Do not show 7day in CC widget", "WIDGET_CC_DONOTSHOW_7_DAY", R.string.cc_widget_show_seven_day),
                 Switch(this, "Download AFD", WidgetFile.AFD.prefString, R.string.loc1_txt_label),
                 Switch(this, "Download HWO", WidgetFile.HWO.prefString, R.string.loc1_txt_hwo_label),
                 Switch(this, "Download mosaics", WidgetFile.VIS.prefString, R.string.loc1_mosaics_label),

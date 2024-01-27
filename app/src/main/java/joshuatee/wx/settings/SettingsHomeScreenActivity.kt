@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -63,7 +63,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun setupUI() {
-        dialogueMain = ObjectDialogue(this, "Select text products:", UtilityHomeScreen.localChoicesText + UtilityWpcText.labels)
+        dialogueMain = ObjectDialogue(this, "Select text products:", UtilityHomeScreen.localChoicesText + UtilityWpcText.labelsWithCodes)
         dialogueMain.connect { dialog, index -> dialogClicked(dialogueMain, "TXT-", index, dialog) }
 
         dialogueImages = ObjectDialogue(this, "Select image products:", UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts)
@@ -178,7 +178,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         Utility.writePref(this, prefToken, UIPreferences.homescreenFav)
     }
 
-    private fun findPositionText(key: String) = UtilityWpcText.labels
+    private fun findPositionText(key: String) = UtilityWpcText.labelsWithCodes
             .firstOrNull { it.startsWith(key.lowercase(Locale.US).replace("txt-", "")) } ?: ""
 
     private fun findPositionImage(key: String) = GlobalArrays.nwsImageProducts

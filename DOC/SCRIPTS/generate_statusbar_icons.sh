@@ -3,8 +3,8 @@
 # https://en.wikipedia.org/wiki/Latin-1_Supplement_%28Unicode_block%29
 # for degree symbol copy/paste U+00B0
 #
-# downsize font from 16 to 14 to accomdate symbol
-# pointsize from 14 to 13
+# downsize font from 16 to 14 to accommodate symbol
+# point size from 14 to 13
 
 for i in `seq 0 99`
 do

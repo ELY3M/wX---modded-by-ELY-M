@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,11 +29,11 @@ import android.view.View
 import android.widget.RemoteViews
 import joshuatee.wx.R
 import joshuatee.wx.Widget
-import joshuatee.wx.activitiesmisc.HourlyActivity
-import joshuatee.wx.activitiesmisc.SevereDashboardActivity
-import joshuatee.wx.activitiesmisc.TextScreenActivity
-import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
-import joshuatee.wx.activitiesmisc.WfoTextActivity
+import joshuatee.wx.misc.HourlyActivity
+import joshuatee.wx.misc.SevereDashboardActivity
+import joshuatee.wx.misc.TextScreenActivity
+import joshuatee.wx.misc.USAlertsActivity
+import joshuatee.wx.misc.WfoTextActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.radar.WXGLRadarActivity
@@ -107,9 +107,9 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             UtilityWidget.setupIntent(
                     context,
                     remoteViews,
-                    USWarningsWithRadarActivity::class.java,
+                    USAlertsActivity::class.java,
                     R.id.b_alert,
-                    USWarningsWithRadarActivity.URL,
+                    USAlertsActivity.URL,
                     arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us"),
                     actionAlert
             )

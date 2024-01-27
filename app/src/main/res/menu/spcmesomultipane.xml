@@ -41,7 +41,7 @@
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_thea"
-                android:title="@string/label_thetae"
+                android:title="@string/label_theta_e"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_ttd"

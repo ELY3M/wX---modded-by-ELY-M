@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -100,9 +100,9 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         numPanes = To.int(arguments[1])
         if (numPanes == 1) {
-            super.onCreate(savedInstanceState, R.layout.activity_spcmeso, R.menu.spcmesomultipane, iconsEvenlySpaced = false, bottomToolbar = true)
+            super.onCreate(savedInstanceState, R.layout.activity_spcmeso, R.menu.spcmesomultipane, bottomToolbar = true)
         } else {
-            super.onCreate(savedInstanceState, R.layout.activity_spcmeso_multipane, R.menu.spcmesomultipane, iconsEvenlySpaced = false, bottomToolbar = true)
+            super.onCreate(savedInstanceState, R.layout.activity_spcmeso_multipane, R.menu.spcmesomultipane, bottomToolbar = true)
             val box = VBox.fromResource(this)
             if (UtilityUI.isLandScape(this)) {
                 box.makeHorizontal()

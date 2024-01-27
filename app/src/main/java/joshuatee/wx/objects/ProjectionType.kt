@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,7 +27,7 @@ package joshuatee.wx.objects
 // WX_RENDER_48 is used by the Nexrad Canvas based radar for TDWR radar
 //
 
-enum class ProjectionType constructor(
+enum class ProjectionType(
         val isMercator: Boolean,
         internal val needsBlackPaint: Boolean,
         internal val needsCanvasShift: Boolean,

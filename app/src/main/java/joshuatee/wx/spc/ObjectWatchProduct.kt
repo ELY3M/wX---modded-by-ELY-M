@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,6 @@ import joshuatee.wx.condenseSpace
 import joshuatee.wx.getImage
 import joshuatee.wx.parse
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.PolygonWatch
@@ -86,7 +85,7 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         if (type == PolygonType.WATCH || type == PolygonType.WATCH_TORNADO) {
             textWithLatLon = PolygonWatch.getLatLonWatch(productNumber)
         }
-        stringOfLatLon = UtilityNotification.storeWatchMcdLatLon(textWithLatLon).replace(":", "")
+        stringOfLatLon = LatLon.storeWatchMcdLatLon(textWithLatLon).replace(":", "")
         latLons = stringOfLatLon.split(" ")
         val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
         wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }

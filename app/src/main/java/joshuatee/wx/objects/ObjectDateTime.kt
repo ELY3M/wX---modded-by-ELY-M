@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,6 +29,7 @@ import joshuatee.wx.util.UtilityTimeSunMoon
 import java.time.*
 import java.time.format.DateTimeFormatter
 
+@Suppress("SpellCheckingInspection")
 class ObjectDateTime() {
 
     var dateTime: LocalDateTime = LocalDateTime.now()
@@ -39,6 +40,7 @@ class ObjectDateTime() {
 
     constructor(hours: Int, minutes: Int) : this() {
         this.dateTime = LocalDate.now().atTime(hours, minutes)
+//        this.dateTime = LocalDate.now(ZoneId.of("UTC")).atTime(hours, minutes)
     }
 
     override fun toString(): String = dateTime.toString()
@@ -61,6 +63,12 @@ class ObjectDateTime() {
     // same as ZoneOffset.UTC
     // milliseconds since epoch
     fun toEpochMilli(): Long = dateTime.toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli()
+
+    fun getYear() = dateTime.year
+
+    fun getMonth(): Int = dateTime.monthValue
+
+    fun getDayOfMonth(): Int = dateTime.dayOfMonth
 
     val now: LocalDateTime get() = LocalDateTime.now()
 
@@ -104,6 +112,8 @@ class ObjectDateTime() {
 
         // is t1 greater then t2 by m minutes
         fun timeDifference(t1: LocalDateTime, t2: LocalDateTime, m: Int): Boolean = Duration.between(t1, t2).toMinutes() > m * -1
+
+        fun offsetFromUtcInSeconds() = ZonedDateTime.now().offset.totalSeconds
 
         //
         // Misc

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -31,7 +31,7 @@ import java.util.concurrent.RejectedExecutionException
 class WXJobService : JobService() {
 
     override fun onStartJob(params: JobParameters): Boolean {
-        // Note: this is preformed on the main thread.
+        // Note: this is performed on the main thread.
         try {
             BackgroundFetch(this).getContent()
             UtilityLog.d("wx", "job service ran BackgroundFetch")

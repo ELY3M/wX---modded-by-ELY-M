@@ -15,8 +15,8 @@ args = parser.parse_args()
 
 files: List[str] = glob("app/src/main/java/joshuatee/wx/*.kt") + glob("app/src/main/java/joshuatee/wx/*/*.kt")
 
-oldCopyright: str = "Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com"
-newCopyright: str = "Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com"
+oldCopyright: str = "Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com"
+newCopyright: str = "Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com"
 
 for f in files:
     data: str = open(f).read()

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -39,10 +39,10 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.R
 import joshuatee.wx.WX
 import androidx.core.app.NotificationManagerCompat
-import joshuatee.wx.activitiesmisc.CapAlert
-import joshuatee.wx.activitiesmisc.HourlyActivity
-import joshuatee.wx.activitiesmisc.ForecastActivity
-import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
+import joshuatee.wx.misc.CapAlert
+import joshuatee.wx.misc.HourlyActivity
+import joshuatee.wx.misc.ForecastActivity
+import joshuatee.wx.misc.AlertsDetailActivity
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectDateTime
@@ -60,7 +60,6 @@ object NotificationLocal {
         var notificationUrls = ""
         val oldNotifStr = Utility.readPref(context, "NOTIF_STR", "")
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
-        //val tornadoWarningString = "Tornado Warning"
         //
         // if locations are enabled for a valid location
         //
@@ -198,13 +197,6 @@ object NotificationLocal {
         if (Location.locations[locationIndex].sevenDayNotification) {
             val label = "(" + Location.getName(locationIndex) + ")" + " 7 day"
             val objSevenDay = SevenDay(locationIndex)
-//            val text = objSevenDay.sevenDayShort
-//            val resultIntent2 = Intent(context, ForecastActivity::class.java)
-//            resultIntent2.putExtra(ForecastActivity.URL, arrayOf(Location.locations[locationIndex].x, Location.locations[locationIndex].y))
-//            val stackBuilder2 = TaskStackBuilder.create(context)
-//            stackBuilder2.addParentStack(ForecastActivity::class.java)
-//            stackBuilder2.addNextIntent(resultIntent2)
-//            val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             val objectPendingIntents = ObjectPendingIntents(
                     context,
                     ForecastActivity::class.java,
@@ -212,7 +204,6 @@ object NotificationLocal {
                     arrayOf(Location.locations[locationIndex].x, Location.locations[locationIndex].y),
                     arrayOf(Location.locations[locationIndex].x, Location.locations[locationIndex].y)
             )
-//            objectPendingIntents.resultPendingIntent = resultPendingIntent2
             val objectNotification = ObjectNotification(
                     context,
                     false,
@@ -247,8 +238,8 @@ object NotificationLocal {
                     val text = hazardTitle + " " + capAlert.area + " " + capAlert.summary
                     val objectPendingIntents = ObjectPendingIntents(
                             context,
-                            USAlertsDetailActivity::class.java,
-                            USAlertsDetailActivity.URL,
+                            AlertsDetailActivity::class.java,
+                            AlertsDetailActivity.URL,
                             arrayOf(url, ""),
                             arrayOf(url, "sound"))
                     val tornadoWarningPresent = hazardTitle.contains(tornadoWarningString)

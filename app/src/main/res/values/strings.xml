@@ -26,13 +26,13 @@
     <string name="moveBackInTime">Move back in time</string>
     <string name="moveForwardInTime">Move forward in time</string>
     <string name="rtma">RTMA</string>
-    <string name="spcmesoanalysis_shortcut">SPC Mesoanalysis</string>
+    <string name="spc_mesoanalysis_shortcut">SPC Mesoanalysis</string>
     <string name="ncepModels_shortcut">NCEP Models</string>
     <string name="spchref_shortcut">SPC HREF</string>
     <string name="read_aloud">Read Aloud</string>
     <string name="stop_audio">Stop Audio</string>
     <string name="menu_tools">Tools</string>
-    <string name="menu_clearall">Clear all</string>
+    <string name="menu_clear_all">Clear all</string>
     <string name="app_name">wX</string>
     <string name="action_settings">Settings</string>
     <string name="action_radar">Radar</string>
@@ -49,7 +49,7 @@
         Additional software and tools are used from Telecine, GraphView,
         bzip2, TouchImageView, OkHttp, ImageMap, HoloColorPicker, and OpenStreetMaps.
         Software is provided \"as is\". Use at your own risk. Use for educational purposes and non-commercial purposes only.
-        Do not use for operational purposes.  &#169; 2013&#8211;2022 joshua.tee@gmail.com .
+        Do not use for operational purposes.  &#169; 2013&#8211;2024 joshua.tee@gmail.com .
         Privacy Policy: this app does not collect any data from the user or the user’s device.
         Please report bugs or suggestions via email to me as opposed to app store reviews.
         wX is licensed under the GNU GPLv3 license. For more information on the license please go here:
@@ -58,7 +58,7 @@
     <string name="title_activity_hourly">Hourly Forecast</string>
     <string name="title_activity_settings_notifications">Notifications</string>
     <string name="title_activity_spctstorm_outlook">Thunderstorm Outlook</string>
-    <string name="title_activity_spcswosummary">Convective Outlook Summary</string>
+    <string name="title_activity_spc_swo_summary">Convective Outlook Summary</string>
     <string name="label_br">N0Q: Base Reflectivity</string>
     <string name="label_bv">N0U: Base Velocity</string>
     <string name="label_n0b">N0Q: Base Reflectivity super-res</string>
@@ -120,8 +120,8 @@
     <string name="label_nsw">NSW: Base Spectrum Width</string>
     <string name="label_nvw">NVW: VAD wind profile</string>
     <string name="title_activity_spcfire_outlook">SPC Fire Weather Outlook</string>
-    <string name="title_activity_hpcrainfall_forecast">WPC Excessive Rainfall Forecast</string>
-    <string name="title_activity_spcsoundings">Sounding</string>
+    <string name="title_activity_wpc_rainfall_forecast">WPC Excessive Rainfall Forecast</string>
+    <string name="title_activity_spc_soundings">Sounding</string>
     <string name="title_activity_severe_dashboard">Severe Dashboard</string>
     <string name="title_activity_settings_location_list_view">Locations</string>
     <string name="title_activity_settings_spotternetwork_view">Spotter Network</string>
@@ -130,7 +130,7 @@
     <string name="title_activity_settings_widgets">Widgets</string>
     <string name="title_activity_nhc">NHC</string>
     <string name="title_activity_settings_colors">Colors</string>
-    <string name="title_activity_sndadd_fav">Add SND</string>
+    <string name="title_activity_snd_add_fav">Add SND</string>
     <string name="title_activity_spc_meso">SPC Meso</string>
     <string name="label_playlist">Add to PlayList</string>
     <string name="label_share">Share</string>
@@ -143,7 +143,7 @@
     <string name="uswarn_start_time">Start:&#160;%1$s</string>
     <string name="uswarn_end_time">End:&#160;&#160;&#160;%1$s</string>
     <string name="help_menu_item">Help</string>
-    <string name="main_screen_ca_disclaimor">Support for Canada forecast data is now deprecated.</string>
+    <string name="main_screen_ca_disclaimer">Support for Canada forecast data is now deprecated.</string>
     <string name="menu_regions">Regions</string>
     <string name="action_radar_site_status_l3">Level 3 Radar Status</string>
     <string name="action_radar_site_status_l2">Level 2 Radar Status</string>

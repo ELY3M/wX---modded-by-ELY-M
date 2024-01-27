@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,41 +21,12 @@
 
 package joshuatee.wx.radar
 
-import java.nio.ByteBuffer
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.ProjectionNumbers
 import kotlin.math.*
 
 object Projection {
-
-    fun computeMercatorFloatToBuffer(numBuffer: ByteBuffer, tmpBuffer: ByteBuffer, projectionNumbers: ProjectionNumbers) {
-        numBuffer.position(0)
-        tmpBuffer.position(0)
-        var x: Float
-        var y: Float
-        var xTmp: Float
-        var yTmp: Float
-        val pnXFloat = projectionNumbers.xFloat
-        val pnYFloat = projectionNumbers.yFloat
-        val pnXCenter = projectionNumbers.xCenter
-        val pnYCenter = projectionNumbers.yCenter
-        val oneDegreeScaleFactor = projectionNumbers.oneDegreeScaleFactorFloat
-        while (numBuffer.position() < numBuffer.capacity()) {
-            xTmp = numBuffer.float
-            yTmp = numBuffer.float
-            x = (-1.0f * ((yTmp - pnYFloat) * oneDegreeScaleFactor)) + pnXCenter.toFloat()
-            y = (-1.0 * ((180.0 / PI * log(
-                    tan(PI / 4.0 + xTmp * (PI / 180.0) / 2.0),
-                    E
-            ) - 180.0 / PI * log(
-                    tan(PI / 4.0 + pnXFloat * (PI / 180.0) / 2.0),
-                    E
-            )) * oneDegreeScaleFactor)).toFloat() + pnYCenter.toFloat()
-            tmpBuffer.putFloat(x)
-            tmpBuffer.putFloat(y)
-        }
-    }
 
     fun computeMercatorNumbers(latLon: LatLon, projectionNumbers: ProjectionNumbers): DoubleArray =
             computeMercatorNumbers(latLon.lat, latLon.lon, projectionNumbers)

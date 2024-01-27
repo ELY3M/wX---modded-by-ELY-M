@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -69,7 +69,7 @@ internal object NexradRenderUI {
     fun showNearestMeteogram(context: Context, latLon: LatLon) {
         // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
         // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
-        val obsSite = Metar.findClosestObsSite(context, latLon).name
+        val obsSite = Metar.findClosestObservation(context, latLon).name
         Route.image(context, getMeteogramUrl(obsSite), "$obsSite Meteogram")
     }
 
@@ -107,7 +107,7 @@ internal object NexradRenderUI {
         ObjectDialogue(activity,
                 activity.resources.getString(R.string.help_radar)
                         + GlobalVariables.newline + GlobalVariables.newline
-                        + activity.resources.getString(R.string.help_radar_drawingtools)
+                        + activity.resources.getString(R.string.help_radar_drawing_tools)
                         + GlobalVariables.newline + GlobalVariables.newline
                         + activity.resources.getString(R.string.help_radar_recording)
                         + GlobalVariables.newline + GlobalVariables.newline

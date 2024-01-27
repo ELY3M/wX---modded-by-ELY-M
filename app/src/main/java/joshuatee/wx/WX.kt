@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -46,7 +46,6 @@ import joshuatee.wx.ui.Fab
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityTheme
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 
 class WX : CommonActionBarFragment() {
@@ -64,7 +63,7 @@ class WX : CommonActionBarFragment() {
         super.onCreate(savedInstanceState)
         setupUI()
         setupToolbars()
-        setupVr()
+        setupVoiceRecognition()
         setupFab()
         setupTabs()
         setupNavDrawer()
@@ -97,16 +96,12 @@ class WX : CommonActionBarFragment() {
         // used in CommonActionBarFragment
         view = findViewById(android.R.id.content)
         toolbarBottom.elevation = UIPreferences.elevationPref
-        if (UIPreferences.iconsEvenSpaced) {
-            UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, R.menu.cab)
-        } else {
-            toolbarBottom.inflateMenu(R.menu.cab)
-        }
+        toolbarBottom.inflateMenu(R.menu.cab)
         objectToolbarBottom.connect(this)
         objectToolbarBottom.connectClick { toolbarBottom.showOverflowMenu() }
     }
 
-    private fun setupVr() {
+    private fun setupVoiceRecognition() {
         //
         // optional voice recognition icon
         //
@@ -213,12 +208,13 @@ class WX : CommonActionBarFragment() {
         when (keyCode) {
             KeyEvent.KEYCODE_R -> if (event.isCtrlPressed) openNexradRadar(this)
             KeyEvent.KEYCODE_A -> if (event.isCtrlPressed) openAfd()
-            KeyEvent.KEYCODE_S -> if (event.isCtrlPressed) openSettings()
+            KeyEvent.KEYCODE_P -> if (event.isCtrlPressed) openSettings()
             KeyEvent.KEYCODE_C -> if (event.isCtrlPressed) openVis()
             KeyEvent.KEYCODE_D -> if (event.isCtrlPressed) openDashboard()
+            KeyEvent.KEYCODE_G -> if (event.isCtrlPressed) openRainfallOutlookSummary()
             KeyEvent.KEYCODE_2 -> if (event.isCtrlPressed) openActivity(this, "RADAR_DUAL_PANE")
             KeyEvent.KEYCODE_4 -> if (event.isCtrlPressed) openActivity(this, "RADAR_QUAD_PANE")
-            KeyEvent.KEYCODE_E -> if (event.isCtrlPressed) openActivity(this, "SPCMESO1")
+            KeyEvent.KEYCODE_E, KeyEvent.KEYCODE_Z -> if (event.isCtrlPressed) openActivity(this, "SPCMESO1")
             KeyEvent.KEYCODE_N -> if (event.isCtrlPressed) openActivity(this, "MODEL_NCEP")
             KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) findViewById<Toolbar>(R.id.toolbar_bottom).showOverflowMenu()
             KeyEvent.KEYCODE_H -> if (event.isCtrlPressed) openHourly()
@@ -228,8 +224,9 @@ class WX : CommonActionBarFragment() {
                 currentFragment.showLocations()
             }
 
-            KeyEvent.KEYCODE_I -> if (event.isCtrlPressed) openActivity(this, "WPCIMG")
-            KeyEvent.KEYCODE_Z -> if (event.isCtrlPressed) openActivity(this, "WPCTEXT")
+            KeyEvent.KEYCODE_I -> if (event.isCtrlPressed) openNationalImages()
+            KeyEvent.KEYCODE_S -> if (event.isCtrlPressed) openSpcSwoSummary()
+            KeyEvent.KEYCODE_T -> if (event.isCtrlPressed) openNationalText()
             KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showMainScreenShortCuts())
             KeyEvent.KEYCODE_J -> if (event.isCtrlPressed) {
                 tabIndex += -1

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -57,7 +57,7 @@ object GlobalDictionaries {
             "HI" to "DS.p59hi",
             "DVL" to "DS.134il",
             "EET" to "DS.135et",
-            "DSPFIXME" to "DS.138dp",
+            "DSP FIXME" to "DS.138dp",
 	    "MDA" to "DS.141md",
             "TZ0" to "DS.180z0",
             "TZ1" to "DS.180z1",

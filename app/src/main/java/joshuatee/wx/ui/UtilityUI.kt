@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -112,6 +112,16 @@ object UtilityUI {
         val height = displayMetrics.heightPixels / displayMetrics.densityDpi
         val screenDiagonal = sqrt(width.toDouble().pow(2.0) + height.toDouble().pow(2.0))
         return screenDiagonal >= 7.0
+    }
+
+//    fun screenHeightAbs(): Int {
+//        val displayMetrics = MyApplication.dm
+//        return displayMetrics.heightPixels
+//    }
+
+    fun screenWidthAbs(): Int {
+        val displayMetrics = MyApplication.dm
+        return displayMetrics.widthPixels
     }
 
     fun isLandScape(context: Context): Boolean =

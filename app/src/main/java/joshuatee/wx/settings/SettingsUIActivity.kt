@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -45,21 +45,6 @@ import joshuatee.wx.util.UtilityLog
 
 class SettingsUIActivity : BaseActivity() {
 
-    private val colorArr = listOf(
-            "blue",
-            "mixedBlue",
-            "darkBlue",
-            "black",
-            "allBlack",
-            "green",
-            "gray",
-            "white",
-            "whiteNew",
-            "allWhite",
-            "orange",
-	        "BlackAqua",
-	        "BlackNeonGreen",
-    )
     private var tilesPerRowStart = 0
     private var navDrawerMainScreen = false
     private var navDrawerMainScreenOnRight = true
@@ -90,19 +75,17 @@ class SettingsUIActivity : BaseActivity() {
                         "THEME_BLUE",
                         "BlackAqua",
                         R.string.spinner_theme_label,
-                        colorArr
+                        UIPreferences.themes
                 )
         )
     }
 
     private fun addCards() {
-        val textSize = UIPreferences.textSizeLarge
-        val padding = UIPreferences.paddingSettings
         var navDrawerStatus = " (disabled)"
         if (UIPreferences.navDrawerMainScreen) {
             navDrawerStatus = ""
         }
-        box.addWidget(CardText(this, "Navigation Drawer Configuration$navDrawerStatus", textSize, SettingsNavDrawerActivity::class.java, padding))
+        box.addWidget(CardText(this, "Navigation Drawer Configuration$navDrawerStatus", SettingsNavDrawerActivity::class.java))
         Card(this, R.id.cv_tab_labels)
     }
 
@@ -139,7 +122,7 @@ class SettingsUIActivity : BaseActivity() {
                 NumberPicker(this, "Image tiles per row", "UI_TILES_PER_ROW", R.string.tiles_per_row_label, UIPreferences.tilesPerRowDefault, 3, 10),
                 NumberPicker(this, "NWS icon size", "NWS_ICON_SIZE_PREF", R.string.nws_icon_size_np_label, UIPreferences.nwsIconSizeDefault, 1, 50),
                 NumberPicker(this, "Refresh interval for location in minutes", "REFRESH_LOC_MIN", R.string.refresh_loc_min_np_label, 10, 0, 120),
-                NumberPicker(this, "Text size", "TEXTVIEW_FONT_SIZE", R.string.textview_fontsize_np_label, UIPreferences.normalTextSizeDefault, 12, 25),
+                NumberPicker(this, "Text size", "TEXTVIEW_FONT_SIZE", R.string.textview_font_size_np_label, UIPreferences.normalTextSizeDefault, 12, 25),
                 NumberPicker(this, "Text to speech speed, requires app restart", "TTS_SPEED_PREF", R.string.tts_speed_np_label, 10, 1, 20),
                 NumberPicker(this, "UI elevation height", "ELEVATION_PREF", R.string.elevation_np_label, UIPreferences.elevationPrefDefault, 0, 30),
         )

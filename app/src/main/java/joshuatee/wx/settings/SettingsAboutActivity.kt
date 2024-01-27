@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -41,7 +41,7 @@ class SettingsAboutActivity : BaseActivity() {
 
     private lateinit var cardText: CardText
     private val faqUrl = "https://gitlab.com/joshua.tee/wxl23/-/tree/master/doc/FAQ.md"
-    //private val releaseNotesUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vT-YfH9yH_qmxLHe25UGlJvHHj_25qmTHJoeWPBbNWlvS4nm0YBmFeAnEpeel3GTL3OYKnvXkMNbnOX/pub"
+    //private val releaseNotesUrl = "https://gitlab.com/joshua.tee/wx/-/tree/master/doc/ChangeLog_User.md"
     private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
     private lateinit var box: VBox
 
@@ -58,11 +58,9 @@ class SettingsAboutActivity : BaseActivity() {
     }
 
     private fun addCards() {
-        val textSize = UIPreferences.textSizeLarge
-        val padding = UIPreferences.paddingSettings
-        val faqButton = CardText(this, "View FAQ", textSize, { Route.web(this, faqUrl) }, padding)
-        val releaseNotesButton = CardText(this, "View Release Notes", textSize, { Route.web(this, releaseNotesUrl) }, padding)
-        val developerSettingsCard = CardText(this, "Developer Settings", textSize, SettingsDeveloperActivity::class.java, padding)
+        val faqButton = CardText(this, "View FAQ") { Route.web(this, faqUrl) }
+        val releaseNotesButton = CardText(this, "View Release Notes") { Route.web(this, releaseNotesUrl) }
+        val developerSettingsCard = CardText(this, "Developer Settings", SettingsDeveloperActivity::class.java)
         cardText = CardText(this, Utility.showVersion(this))
         val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
         cardDeleteFiles.connect {
@@ -70,8 +68,8 @@ class SettingsAboutActivity : BaseActivity() {
         }
         box.addWidget(faqButton)
         box.addWidget(releaseNotesButton)
-        box.addWidget(CardText(this, "Celsius to fahrenheit table", textSize,
-                { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") }, padding))
+        box.addWidget(CardText(this, "Celsius to fahrenheit table"
+        ) { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") })
         box.addWidget(developerSettingsCard)
         box.addWidget(cardText)
         box.addWidget(cardDeleteFiles)

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -68,11 +68,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         toolbarBottom = findViewById(R.id.toolbar_bottom)
         objectToolbar = ObjectToolbar(toolbar)
         objectToolbarBottom = ObjectToolbar(toolbarBottom)
-        if (UIPreferences.iconsEvenSpaced) {
-            UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, menuResId)
-        } else {
-            toolbarBottom.inflateMenu(menuResId)
-        }
+        toolbarBottom.inflateMenu(menuResId)
         toolbar.setOnClickListener { toolbarBottom.showOverflowMenu() }
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         UtilityToolbar.setElevation(toolbar)

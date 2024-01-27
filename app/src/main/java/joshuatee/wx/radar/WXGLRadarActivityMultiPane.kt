@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,7 +35,6 @@ import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
-
 
 class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListener {
 
@@ -88,15 +87,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         nexradSubmenu = NexradSubmenu(objectToolbarBottom, nexradState)
         nexradUI = NexradUI(this, nexradState, nexradSubmenu, nexradArguments, ::getContentParallel)
         nexradLongPressMenu = NexradLongPressMenu(this, nexradState, nexradArguments, nexradUI::longPressRadarSiteSwitch)
-        nexradAnimation = NexradAnimation(this, nexradState, nexradUI) // removed nexradArguments as last arg
+        nexradAnimation = NexradAnimation(this, nexradState, nexradUI)
         nexradState.initGlView(nexradLongPressMenu.changeListener)
         nexradState.readPreferencesMultipane(this, nexradArguments)
-
-//        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, windowInsets ->
-//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            UtilityLog.d("wxsize", "new method: " + insets.top.toString())
-//            WindowInsetsCompat.CONSUMED
-//        }
         getContentParallel()
     }
 
@@ -104,20 +97,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         var heightDivider = heightDividerF
         val layoutType: Int
         if (numberOfPanes == 2) {
-//            if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent) {
-//                if (landScape) {
-//                    layoutType = if (Utility.isThemeAllWhite())
-//                        R.layout.activity_uswxoglmultipane_immersive_landscape_white
-//                    else
-//                        R.layout.activity_uswxoglmultipane_immersive_landscape
-//                    heightDivider = 1
-//                } else {
-//                    layoutType = if (Utility.isThemeAllWhite())
-//                        R.layout.activity_uswxoglmultipane_immersive_white
-//                    else
-//                        R.layout.activity_uswxoglmultipane_immersive
-//                }
-//            } else {
             if (landScape) {
                 layoutType = if (Utility.isThemeAllWhite())
                     R.layout.activity_uswxoglmultipane_immersive_landscape_white
@@ -131,23 +110,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     R.layout.activity_uswxoglmultipane
                 }
             }
-//            }
-            super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, iconsEvenlySpaced = true, bottomToolbar = true)
+            super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, bottomToolbar = true)
         } else {
-//            layoutType = if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent) {
-//                if (Utility.isThemeAllWhite())
-//                    R.layout.activity_uswxoglmultipane_quad_immersive_white
-//                else
-//                    R.layout.activity_uswxoglmultipane_quad_immersive
-//            } else {
             layoutType = if (Utility.isThemeAllWhite())
                 R.layout.activity_uswxoglmultipane_quad_immersive_white
-            // R.layout.activity_uswxoglmultipane_quad_white
             else
                 R.layout.activity_uswxoglmultipane_quad_immersive
-            //R.layout.activity_uswxoglmultipane_quad
-//            }
-            super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, iconsEvenlySpaced = true, bottomToolbar = true)
+            super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, bottomToolbar = true)
         }
         objectToolbarBottom.connect(this)
         return heightDivider

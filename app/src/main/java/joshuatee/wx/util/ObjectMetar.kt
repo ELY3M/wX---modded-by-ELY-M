@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -55,14 +55,11 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
     private var rawMetar = ""
     private var metarSkyCondition = ""
     private var metarWeatherCondition = ""
-
-    // TODO FIXME change to String
     val obsClosest: RID
 
     init {
-        obsClosest = Metar.findClosestObsSite(context, location, index)
+        obsClosest = Metar.findClosestObservation(context, location, index)
         val urlMetar = "${GlobalVariables.nwsRadarPub}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
-//        val metarData = urlMetar.getHtmlSep().replace("<br>", GlobalVariables.newline)
         val metarData = urlMetar.getHtmlWithNewLine()
         temperature = metarData.parse("Temperature: (.*?) F")
         dewPoint = metarData.parse("Dew Point: (.*?) F")

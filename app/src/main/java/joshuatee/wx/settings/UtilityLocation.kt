@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -100,7 +100,7 @@ object UtilityLocation {
         val sites = mutableListOf<RID>()
         officeArray.forEach {
             val labelArr = it.split(":")
-            sites.add(RID(labelArr[0], getSiteLocation(labelArr[0], prefToken), LatLon.distance(location, getSiteLocation(labelArr[0], prefToken), DistanceUnit.KM).toInt()))
+            sites.add(RID(labelArr[0], getSiteLocation(labelArr[0], prefToken), LatLon.distance(location, getSiteLocation(labelArr[0], prefToken), DistanceUnit.KM)))
         }
         sites.sortBy { it.distance }
         return sites[0].name
@@ -110,12 +110,12 @@ object UtilityLocation {
         val radarSites = mutableListOf<RID>()
         GlobalArrays.radars.forEach {
             val labels = it.split(":")
-            radarSites.add(RID(labels[0], getSiteLocation(labels[0], OfficeTypeEnum.RADAR), LatLon.distance(location, getSiteLocation(labels[0], OfficeTypeEnum.RADAR), DistanceUnit.MILE).toInt()))
+            radarSites.add(RID(labels[0], getSiteLocation(labels[0], OfficeTypeEnum.RADAR), LatLon.distance(location, getSiteLocation(labels[0], OfficeTypeEnum.RADAR), DistanceUnit.MILE)))
         }
         if (includeTdwr) {
             GlobalArrays.tdwrRadars.forEach {
                 val labels = it.split(":")
-                radarSites.add(RID(labels[0], getSiteLocation(labels[0], OfficeTypeEnum.RADAR), LatLon.distance(location, getSiteLocation(labels[0], OfficeTypeEnum.RADAR), DistanceUnit.MILE).toInt()))
+                radarSites.add(RID(labels[0], getSiteLocation(labels[0], OfficeTypeEnum.RADAR), LatLon.distance(location, getSiteLocation(labels[0], OfficeTypeEnum.RADAR), DistanceUnit.MILE)))
             }
         }
         radarSites.sortBy { it.distance }
@@ -124,10 +124,10 @@ object UtilityLocation {
 
     fun getNearestSoundingSite(location: LatLon): String {
         val sites = GlobalArrays.soundingSites.map {
-            RID(it, getSiteLocation(it, OfficeTypeEnum.SOUNDING), LatLon.distance(location, getSiteLocation(it, OfficeTypeEnum.SOUNDING), DistanceUnit.KM).toInt())
+            RID(it, getSiteLocation(it, OfficeTypeEnum.SOUNDING), LatLon.distance(location, getSiteLocation(it, OfficeTypeEnum.SOUNDING), DistanceUnit.KM))
         }.toMutableList()
         sites.forEach {
-            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM).toInt()
+            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM)
         }
         sites.sortBy { it.distance }
         return sites[0].name
@@ -188,7 +188,7 @@ object UtilityLocation {
     fun getNearest(latLon: LatLon, sectorToLatLon: Map<String, LatLon>): String {
         val sites = mutableListOf<RID>()
         sectorToLatLon.forEach { (k, v) ->
-            sites.add(RID(k, v, LatLon.distance(latLon, v, DistanceUnit.MILE).toInt()))
+            sites.add(RID(k, v, LatLon.distance(latLon, v, DistanceUnit.MILE)))
         }
         sites.sortBy { it.distance }
         return sites[0].name

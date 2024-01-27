@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,7 +29,7 @@ import joshuatee.wx.widgets.WidgetFile.*
 import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.spc.SpcStormReportsActivity
 import joshuatee.wx.vis.GoesActivity
-import joshuatee.wx.wpc.WpcImagesActivity
+import joshuatee.wx.wpc.NationalImagesActivity
 
 class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
 
@@ -39,7 +39,7 @@ class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
         UtilityWidget.setImage(context, remoteViews, type.fileName)
         if (!UIPreferences.widgetPreventTap) {
             when (type) {
-                WPCIMG -> UtilityWidget.setupIntent(context, remoteViews, WpcImagesActivity::class.java, R.id.iv, WpcImagesActivity.URL, arrayOf(""), type.action)
+                WPCIMG -> UtilityWidget.setupIntent(context, remoteViews, NationalImagesActivity::class.java, R.id.iv, NationalImagesActivity.URL, arrayOf(""), type.action)
                 SPCMESO -> UtilityWidget.setupIntent(context, remoteViews, SpcMesoActivity::class.java, R.id.iv, SpcMesoActivity.INFO, arrayOf("SPCMESO1", "1", "SPCMESO"), type.action)
                 CONUSWV -> UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.iv, GoesActivity.RID, arrayOf("CONUS", "09"), type.action)
                 STRPT -> UtilityWidget.setupIntent(context, remoteViews, SpcStormReportsActivity::class.java, R.id.iv, SpcStormReportsActivity.DAY, arrayOf("today"), type.action)

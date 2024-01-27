@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -70,7 +70,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, iconsEvenlySpaced = true, bottomToolbar = false)
+        super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, bottomToolbar = false)
         day = intent.getStringArrayExtra(NO)!![0]
         state = UtilityLocation.getWfoSiteName(Location.wfo).split(",")[0]
         box = VBox.fromResource(this)

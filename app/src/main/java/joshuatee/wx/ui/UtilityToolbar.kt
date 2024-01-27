@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,14 +21,8 @@
 
 package joshuatee.wx.ui
 
-import android.app.ActionBar.LayoutParams
-import android.app.Activity
-import androidx.appcompat.view.menu.ActionMenuItemView
-import androidx.appcompat.widget.ActionMenuView
 import androidx.appcompat.widget.Toolbar
-import android.util.DisplayMetrics
 import android.view.View
-import android.view.ViewGroup
 import joshuatee.wx.settings.UIPreferences
 
 object UtilityToolbar {
@@ -48,13 +42,6 @@ object UtilityToolbar {
             toolbarBottom.visibility = View.GONE
         }
     }
-
-//    fun fullScreenMode(toolbar: Toolbar) {
-//        toolbar.elevation = UIPreferences.elevationPref
-//        if (UIPreferences.fullscreenMode) {
-//            toolbar.visibility = View.GONE
-//        }
-//    }
 
     fun setElevation(toolbar: Toolbar) {
         toolbar.elevation = UIPreferences.elevationPref
@@ -78,46 +65,6 @@ object UtilityToolbar {
                 toolbar.visibility = View.GONE
             } else {
                 toolbar.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    // thanks inner_class7 http://stackoverflow.com/questions/26489079/evenly-spaced-menu-items-on-toolbar
-    // modified slightly
-    // FIXME TODO remove after 2023-12-31
-    fun setupEvenlyDistributedToolbar(activity: Activity, toolbarBottom: Toolbar, menuRes: Int) {
-        // Use Display metrics to get Screen Dimensions
-        val display = activity.windowManager.defaultDisplay
-        val metrics = DisplayMetrics()
-        display.getMetrics(metrics)
-        // Toolbar
-        // Inflate your menu
-        toolbarBottom.inflateMenu(menuRes)
-        // Add 10 spacing on either side of the toolbar
-        toolbarBottom.setContentInsetsAbsolute(10, 10)
-        // Get the ChildCount of your Toolbar, this should only be 1
-        val childCount = toolbarBottom.childCount
-        // Get the Screen Width in pixels
-        val screenWidth = metrics.widthPixels
-        // Create the Toolbar Params based on the screenWidth
-        val toolbarParams = Toolbar.LayoutParams(screenWidth, LayoutParams.WRAP_CONTENT)
-        // Loop through the child Items
-        for (i in 0 until childCount) {
-            // Get the item at the current index
-            val childView = toolbarBottom.getChildAt(i)
-            // If its a ViewGroup
-            if (childView is ViewGroup) {
-                // Set its layout params
-                childView.setLayoutParams(toolbarParams)
-                // Get the child count of this view group, and compute the item widths based on this count & screen size
-                val innerChildCount = childView.childCount
-                val itemWidth = screenWidth / innerChildCount
-                // Create layout params for the ActionMenuView
-                val params = ActionMenuView.LayoutParams(itemWidth, LayoutParams.WRAP_CONTENT)
-                // Loop through the children
-                (0 until innerChildCount).map { childView.getChildAt(it) }.filterIsInstance<ActionMenuItemView>().forEach {
-                    it.layoutParams = params
-                }
             }
         }
     }

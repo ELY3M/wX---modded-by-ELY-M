@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,75 +22,75 @@
 #include "genIndex.h"
 
 JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(
-	JNIEnv * env,
-	jclass clazz,
-	jobject indexBuffer,
-	jint len,
-	jint breakSize
+    JNIEnv * env,
+    jclass clazz,
+    jobject indexBuffer,
+    jint len,
+    jint breakSize
 ) {
-	jshort* iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
-	int i = 0;
-	int incr = 0;
-	int remainder = 0;
-	int chunk_count = 1;
-	int total_bins = len;
-	if (total_bins < breakSize){
-		breakSize = total_bins;
-		remainder = breakSize;
-	} else {
-		chunk_count = total_bins / breakSize;
-		remainder = total_bins - breakSize * chunk_count;
-		chunk_count++;
-	}
-	int chunk_index = 0;
-	for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
-		incr = 0;
-		if (chunk_index == (chunk_count - 1)) {
-			breakSize = remainder;
-		}
-		for (int j = 0; j < breakSize; j++) {
-			iBuff[i++] = (short)(0 + incr);
-			iBuff[i++] = (short)(1 + incr);
-			iBuff[i++] = (short)(2 + incr);
-			iBuff[i++] = (short)(0 + incr);
-			iBuff[i++] = (short)(2 + incr);
-			iBuff[i++] = (short)(3 + incr);
-			incr += 4;
-		}
-	}
+    jshort * iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
+    int i = 0;
+    int incr = 0;
+    int remainder = 0;
+    int chunk_count = 1;
+    int total_bins = len;
+    if (total_bins < breakSize){
+        breakSize = total_bins;
+        remainder = breakSize;
+    } else {
+        chunk_count = total_bins / breakSize;
+        remainder = total_bins - breakSize * chunk_count;
+        chunk_count++;
+    }
+    int chunk_index = 0;
+    for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
+        incr = 0;
+        if (chunk_index == (chunk_count - 1)) {
+            breakSize = remainder;
+        }
+        for (int j = 0; j < breakSize; j++) {
+            iBuff[i++] = (short)(0 + incr);
+            iBuff[i++] = (short)(1 + incr);
+            iBuff[i++] = (short)(2 + incr);
+            iBuff[i++] = (short)(0 + incr);
+            iBuff[i++] = (short)(2 + incr);
+            iBuff[i++] = (short)(3 + incr);
+            incr += 4;
+        }
+    }
 }
 
 JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(
-		JNIEnv * env,
-		jclass clazz,
-		jobject indexBuffer,
-		jint len,
-		jint breakSize
+    JNIEnv * env,
+    jclass clazz,
+    jobject indexBuffer,
+    jint len,
+    jint breakSize
 ) {
-	jshort* iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
-	int i = 0;
-	int incr = 0;
-	int remainder = 0;
-	int chunk_count = 1;
-	int total_bins = len / 4;
-	if (total_bins < breakSize){
-		breakSize = total_bins;
-		remainder = breakSize;
-	} else {
-		chunk_count = total_bins / breakSize;
-		remainder = total_bins - breakSize * chunk_count;
-		chunk_count++;
-	}
-	int chunk_index = 0;
-	for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
-		incr = 0;
-		if (chunk_index == (chunk_count - 1)) {
-			breakSize = remainder;
-		}
-		for (int j = 0; j < breakSize; j++) {
-			iBuff[i++] = (short)(0 + incr);
-			iBuff[i++] = (short)(1 + incr);
-			incr += 2;
-		}
-	}
+    jshort * iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
+    int i = 0;
+    int incr = 0;
+    int remainder = 0;
+    int chunk_count = 1;
+    int total_bins = len / 4;
+    if (total_bins < breakSize){
+        breakSize = total_bins;
+        remainder = breakSize;
+    } else {
+        chunk_count = total_bins / breakSize;
+        remainder = total_bins - breakSize * chunk_count;
+        chunk_count++;
+    }
+    int chunk_index = 0;
+    for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
+        incr = 0;
+        if (chunk_index == (chunk_count - 1)) {
+            breakSize = remainder;
+        }
+        for (int j = 0; j < breakSize; j++) {
+            iBuff[i++] = (short)(0 + incr);
+            iBuff[i++] = (short)(1 + incr);
+            incr += 2;
+        }
+    }
 }

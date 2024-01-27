@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,8 +24,8 @@ package joshuatee.wx.settings
 import android.content.Context
 import android.content.Intent
 import joshuatee.wx.MyApplication
-import joshuatee.wx.activitiesmisc.RtmaActivity
-import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
+import joshuatee.wx.misc.RtmaActivity
+import joshuatee.wx.misc.USAlertsActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.objects.LatLon
@@ -39,8 +39,8 @@ import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.spc.SpcThunderStormOutlookActivity
 import joshuatee.wx.ui.CardHSImage
 import joshuatee.wx.vis.GoesActivity
-import joshuatee.wx.wpc.WpcImagesActivity
-import joshuatee.wx.wpc.WpcTextProductsActivity
+import joshuatee.wx.wpc.NationalImagesActivity
+import joshuatee.wx.wpc.NationalTextActivity
 import java.util.Locale
 
 internal object UtilityHomeScreen {
@@ -126,12 +126,12 @@ internal object UtilityHomeScreen {
         classId["RADAR_QUAD_PANE"] = WXGLRadarActivityMultiPane.RID
         classArgs["RADAR_QUAD_PANE"] = arrayOf("", "", "4")
 
-        classes["WPCIMG"] = WpcImagesActivity::class.java
-        classId["WPCIMG"] = WpcImagesActivity.URL
+        classes["WPCIMG"] = NationalImagesActivity::class.java
+        classId["WPCIMG"] = NationalImagesActivity.URL
         classArgs["WPCIMG"] = arrayOf()
 
-        classes["WPCTEXT"] = WpcTextProductsActivity::class.java
-        classId["WPCTEXT"] = WpcTextProductsActivity.URL
+        classes["WPCTEXT"] = NationalTextActivity::class.java
+        classId["WPCTEXT"] = NationalTextActivity.URL
         classArgs["WPCTEXT"] = arrayOf("pmdspd", "Short Range Forecast Discussion")
 
         classes["NHC"] = NhcActivity::class.java
@@ -218,18 +218,18 @@ internal object UtilityHomeScreen {
                 "QPF1-5",
                 "QPF1-7"
         ).forEach {
-            classes[it] = WpcImagesActivity::class.java
+            classes[it] = NationalImagesActivity::class.java
             classArgs[it] = arrayOf("HS", it)
-            classId[it] = WpcImagesActivity.URL
+            classId[it] = NationalImagesActivity.URL
         }
         listOf(
                 "USWARN",
                 "AKWARN",
                 "HIWARN"
         ).forEach {
-            classes[it] = USWarningsWithRadarActivity::class.java
+            classes[it] = USAlertsActivity::class.java
             classArgs[it] = arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
-            classId[it] = USWarningsWithRadarActivity.URL
+            classId[it] = USAlertsActivity.URL
         }
         listOf(
                 "NHC2ATL",

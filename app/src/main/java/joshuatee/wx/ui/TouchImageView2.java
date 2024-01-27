@@ -39,7 +39,9 @@ import androidx.appcompat.widget.AppCompatImageView;
 import joshuatee.wx.MyApplication;
 import joshuatee.wx.objects.ObjectDateTime;
 import joshuatee.wx.util.UtilityLog;
+import kotlin.Suppress;
 
+@Suppress(names = "SpellCheckingInspection")
 public class TouchImageView2 extends AppCompatImageView {
 
     //private static final String DEBUG = "DEBUG";
@@ -246,7 +248,7 @@ public class TouchImageView2 extends AppCompatImageView {
     }
 
     /**
-     * Returns false if image is in initial, unzoomed state. False, otherwise.
+     * Returns false if image is in initial, un-zoomed state. False, otherwise.
      *
      * @return true if image is zoomed
      */
@@ -913,7 +915,7 @@ public class TouchImageView2 extends AppCompatImageView {
             if (fling != null) {
                 //
                 // If a previous fling is still active, it should be cancelled so that two flings
-                // are not run simultaenously.
+                // are not run simultaneously.
                 //
                 fling.cancelFling();
             }

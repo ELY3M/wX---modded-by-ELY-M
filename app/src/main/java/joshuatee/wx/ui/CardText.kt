@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -90,11 +90,12 @@ class CardText(context: Context) : Widget {
         tv.isFocusable = false
     }
 
-    constructor(context: Context, text: String, textSize: Float, fn: () -> Unit, padding: Int) : this(
+    constructor(context: Context, text: String, fn: () -> Unit) : this(
             context,
-            text,
-            textSize
+            text
     ) {
+        val textSize = UIPreferences.textSizeLarge
+        val padding = UIPreferences.paddingSettings
         this.padding = padding
         tv.setPadding(padding)
         tv.text = text
@@ -103,11 +104,26 @@ class CardText(context: Context) : Widget {
         connect { fn() }
     }
 
-    // used in settings main
-    constructor(context: Context, text: String, textSize: Float, clazz: Class<*>, padding: Int) : this(
+    constructor(context: Context, text: String, textSize: Float, fn: () -> Unit) : this(
             context,
             text
     ) {
+        val padding = UIPreferences.paddingSettings
+        this.padding = padding
+        tv.setPadding(padding)
+        tv.text = text
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        tv.isFocusable = false
+        connect { fn() }
+    }
+
+    // used in settings main, radar, ui, about
+    constructor(context: Context, text: String, clazz: Class<*>) : this(
+            context,
+            text
+    ) {
+        val textSize = UIPreferences.textSizeLarge
+        val padding = UIPreferences.paddingSettings
         this.padding = padding
         tv.setPadding(padding)
         tv.text = text
@@ -164,6 +180,10 @@ class CardText(context: Context) : Widget {
 
     fun typefaceDefault() {
         tv.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+    }
+
+    fun typefaceBold() {
+        tv.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     }
 
     override fun getView() = card.getView()

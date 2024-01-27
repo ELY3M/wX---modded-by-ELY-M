@@ -50,7 +50,7 @@ class WeatherDataProviderObserver(
 
     override fun onChange(selfChange: Boolean) {
         // The data has changed, so notify the widget that the collection view needs to be updated.
-        // In response, the factory's onDataSetChanged() will be called which will requery the
+        // In response, the factory's onDataSetChanged() will be called which will re-query the
         // cursor for the new data.
         mAppWidgetManager.notifyAppWidgetViewDataChanged(
                 mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.weather_list

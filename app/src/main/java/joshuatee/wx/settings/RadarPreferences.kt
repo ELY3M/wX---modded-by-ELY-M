@@ -19,7 +19,6 @@
 
  */
 //modded by ELY M.  
-//not removing color options for geo stuff 
 
 package joshuatee.wx.settings
 
@@ -36,11 +35,9 @@ import joshuatee.wx.ui.UtilityUI
 
 object RadarPreferences {
 
-	
     //elys mod
     var sn_key = ""
-    var sn_locationreport = false
-		
+    var sn_locationreport = false		
     //
     // Radar Preferences
     //
@@ -61,8 +58,6 @@ object RadarPreferences {
     var userPoints = false
     var cities = false
     var locDot = false
-    var lakes = false
-    var county = false
     var countyLabels = false
     var countyHires = false
     var stateHires = false
@@ -144,11 +139,10 @@ object RadarPreferences {
     var wxoglY = 0.0f
 
     fun initRadarPreferences() {
-	
 	//elys mod
         sn_key = getInitialPreferenceString("SN_KEY", "")
         sn_locationreport = getInitialPreference("SN_LOCATIONREPORT", "false")
-	    showRadarWhenPan = getInitialPreference("SHOW_RADAR_WHEN_PAN", "true")
+        showRadarWhenPan = getInitialPreference("SHOW_RADAR_WHEN_PAN", "true")
         wpcFronts = getInitialPreference("RADAR_SHOW_WPC_FRONTS", "false")
         locationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
         conusRadar = getInitialPreference("CONUS_RADAR", "false")
@@ -167,8 +161,6 @@ object RadarPreferences {
         userPoints = getInitialPreference("RADAR_USERPOINTS", "false")
         cities = getInitialPreference("COD_CITIES_DEFAULT", "")
         locDot = getInitialPreference("COD_LOCDOT_DEFAULT", "true")
-        lakes = getInitialPreference("COD_LAKES_DEFAULT", "false")
-        county = getInitialPreference("RADAR_SHOW_COUNTY", "true")
         watMcd = getInitialPreference("RADAR_SHOW_WATCH", "false")
         mpd = getInitialPreference("RADAR_SHOW_MPD", "false")
         sti = getInitialPreference("RADAR_SHOW_STI", "false")
@@ -183,14 +175,12 @@ object RadarPreferences {
         showLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
         showLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)
         wxoglCenterOnLocation = getInitialPreference("RADAR_CENTER_ON_LOCATION", "false")
-        drawToolSize = getInitialPreference("DRAWTOOL_SIZE", 4)
-
+        drawToolSize = getInitialPreference("DRAWTOOL_SIZE", 6) //was 4
         if (UtilityUI.isTablet()) {
             spotterSizeDefault = 2
             aviationSizeDefault = 3
             locationDotSizeDefault = 4
         }
-
         obsExtZoom = getInitialPreference("RADAR_OBS_EXT_ZOOM", 7)
         spotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", spotterSizeDefault)
         aviationSize = getInitialPreference("RADAR_AVIATION_SIZE", aviationSizeDefault)
@@ -213,8 +203,8 @@ object RadarPreferences {
 
         uiAnimIconFrames = getInitialPreferenceString("UI_ANIM_ICON_FRAMES", "10")
         useJni = getInitialPreference("RADAR_USE_JNI", "false")
-        drawToolColor = getInitialPreference("DRAW_TOOL_COLOR", Color.rgb(255, 0, 0))
-        blackBg = getInitialPreference("NWS_RADAR_BG_BLACK", "")
+        drawToolColor = getInitialPreference("DRAW_TOOL_COLOR", Color.rgb(143, 213, 253))
+        blackBg = getInitialPreference("NWS_RADAR_BG_BLACK", "true")
 
         if (UtilityUI.isTablet()) {
             wxoglSizeDefault = 8
@@ -250,7 +240,6 @@ object RadarPreferences {
         colorCountyLabels = getInitialPreference("RADAR_COLOR_COUNTY_LABELS", Color.rgb(75, 75, 75))
         showLegendTextColor = getInitialPreference("RADAR_SHOW_LEGEND_TEXTCOLOR", Color.WHITE)
         nexradBackgroundColor = getInitialPreference("NEXRAD_RADAR_BACKGROUND_COLOR", Color.rgb(0, 0, 0))
-
     }
 
     fun initGenericRadarWarnings(context: Context) {

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,7 +35,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.WebView
+import joshuatee.wx.misc.WebView
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.audio.UtilityVoiceCommand
 import joshuatee.wx.objects.Route
@@ -134,6 +134,22 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     fun openHourly() {
         Route.hourly(this)
+    }
+
+    fun openNationalImages() {
+        Route.wpcImages(this)
+    }
+
+    fun openNationalText() {
+        Route.wfoText(this)
+    }
+
+    fun openSpcSwoSummary() {
+        Route.spcSwoSummary(this)
+    }
+
+    fun openRainfallOutlookSummary() {
+        Route.wpcRainfallSummary(this)
     }
 
     fun openActivity(context: Context, activityName: String) {

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -84,10 +84,6 @@ class TouchImage {
 
     val currentZoom
         get() = img.currentZoom
-
-//    var maxZoom
-//        get() = img.maxZoom
-//        set(value) { img.maxZoom = value }
 
     val scrollPosition: PointF?
         get() = img.scrollPosition

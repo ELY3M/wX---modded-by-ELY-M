@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,6 +25,7 @@ import android.content.Context
 import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.objects.LatLon
 import java.util.regex.Matcher
 
 object UtilityUS {
@@ -57,8 +58,8 @@ object UtilityUS {
     //
     // Legacy forecast support
     //
-    fun getLocationHtml(x: String, y: String): String =
-            "https://forecast.weather.gov/MapClick.php?lat=$x&lon=$y&unit=0&lg=english&FcstType=dwml".getHtmlWithNewLine()
+    fun getLocationHtml(latLon: LatLon): String =
+            "https://forecast.weather.gov/MapClick.php?lat=${latLon.latForNws}&lon=${latLon.lonForNws}&unit=0&lg=english&FcstType=dwml".getHtmlWithNewLine()
 
     fun getSevenDayLegacy(html: String): SevenDayDataLegacy {
         val rawData = UtilityString.parseXmlExt(regexpList, html)

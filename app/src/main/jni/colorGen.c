@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,19 +22,19 @@
 #include "colorGen.h"
 
 JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_colorGen(
-	JNIEnv * env,
-	jclass clazz,
-	jobject colorByteBuffer,
-	jint len,
-	jbyteArray colorByteArray
+    JNIEnv * env,
+    jclass clazz,
+    jobject colorByteBuffer,
+    jint len,
+    jbyteArray colorByteArray
 ) {
-	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, colorByteBuffer);
-	jbyte* col_arr = (*env)->GetByteArrayElements(env, colorByteArray, 0);
-	int count = 0;
-	for (int index = 0; index < len; index++) {
-		cBuff[count] = col_arr[0];
-		cBuff[count + 1] = col_arr[1];
-		cBuff[count + 2] = col_arr[2];
-		count += 3;
-	}
+    jbyte * cBuff = (*env)->GetDirectBufferAddress(env, colorByteBuffer);
+    jbyte * col_arr = (*env)->GetByteArrayElements(env, colorByteArray, 0);
+    int count = 0;
+    for (int index = 0; index < len; index++) {
+        cBuff[count] = col_arr[0];
+        cBuff[count + 1] = col_arr[1];
+        cBuff[count + 2] = col_arr[2];
+        count += 3;
+    }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,7 +27,7 @@ import android.widget.RemoteViews
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
-import joshuatee.wx.wpc.WpcTextProductsActivity
+import joshuatee.wx.wpc.NationalTextActivity
 
 class ObjectWidgetTextWpc(context: Context) {
 
@@ -38,7 +38,7 @@ class ObjectWidgetTextWpc(context: Context) {
         remoteViews.setTextViewText(R.id.text1, text)
         remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
         if (!UIPreferences.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, WpcTextProductsActivity::class.java, R.id.text1, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"), WidgetFile.TEXT_WPC.action)
+            UtilityWidget.setupIntent(context, remoteViews, NationalTextActivity::class.java, R.id.text1, NationalTextActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"), WidgetFile.TEXT_WPC.action)
         }
     }
 

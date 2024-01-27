@@ -24,7 +24,7 @@ import android.os.Bundle
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.fragments.UtilityLocationFragment
+import joshuatee.wx.util.UtilityLocationFragment
 import joshuatee.wx.util.UtilityForecastIcon
 
 /**

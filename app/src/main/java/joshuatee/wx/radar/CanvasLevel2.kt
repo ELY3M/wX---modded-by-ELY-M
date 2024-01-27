@@ -33,8 +33,8 @@
 
 package joshuatee.wx.radar
 
-//The following has chunks of code from Level2VolumeScan.java so using the license for that file
-//This file is no longer in use but serves as a reference since the code used by OGL has been stripped of uneeded parts.
+// The following has chunks of code from Level2VolumeScan.java so using the license for that file
+// This file is no longer in use but serves as a reference since the code used by OGL has been stripped of un-needed parts.
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

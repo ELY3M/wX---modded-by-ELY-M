@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -65,8 +65,8 @@ class SettingsNotificationsActivity : BaseActivity() {
     }
 
     private fun addCards() {
-        box.addWidget(CardText(this, "Notification sound chooser", UIPreferences.textSizeNormal, { notifSoundPicker() }, UIPreferences.paddingSettings))
-        box.addWidget(CardText(this, "WFO notification filter", UIPreferences.textSizeNormal, { showWFONotificationFilterDialogue() }, UIPreferences.paddingSettings))
+        box.addWidget(CardText(this, "Notification sound chooser") { notifSoundPicker() })
+        box.addWidget(CardText(this, "WFO notification filter") { showWFONotificationFilterDialogue() })
         box.addWidget(CardText(this,
                 "Text product notifications: " + NotificationTextProduct.showAll(),
                 UIPreferences.textSizeNormal,
@@ -140,7 +140,6 @@ class SettingsNotificationsActivity : BaseActivity() {
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone")
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, uri)
-//        startActivityForResult(intent, 1)
         startForResult.launch(intent)
     }
 

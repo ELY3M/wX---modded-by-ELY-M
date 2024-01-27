@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,8 +24,6 @@ package joshuatee.wx.models
 import android.app.Activity
 import android.content.Context
 import joshuatee.wx.util.Utility
-import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
 import android.util.SparseArray
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
@@ -184,42 +182,6 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
         modelIndex = Utility.readPrefInt(activity, prefModelIndex, 0)
         setParams(modelIndex)
         sector = Utility.readPref(activity, prefSector, sectors[0])
-    }
-
-    fun getImage(index: Int, overlayImg: List<String>): Bitmap {
-        currentParam = displayData.param[index]
-        return when (modelType) {
-            ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.getImage(activity, this, time)
-            ModelType.ESRL -> UtilityModelEsrlInputOutput.getImage(activity, this, time)
-            ModelType.NSSL -> UtilityModelNsslWrfInputOutput.getImage(activity, this, time)
-            ModelType.NCEP -> UtilityModelNcepInputOutput.getImage(activity, this, time)
-            ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.getImage(activity, this, time)
-            ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.getImage(activity, this, time)
-            ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.getImage(activity, this, time, overlayImg)
-        }
-    }
-
-    fun getAnimate(index: Int, overlayImg: List<String>): AnimationDrawable {
-        currentParam = displayData.param[index]
-        return when (modelType) {
-            ModelType.WPCGEFS -> UtilityModels.getAnimation(activity, this, UtilityModelWpcGefsInputOutput::getImage)
-            ModelType.ESRL -> UtilityModels.getAnimation(activity, this, UtilityModelEsrlInputOutput::getImage)
-            ModelType.NSSL -> UtilityModels.getAnimation(activity, this, UtilityModelNsslWrfInputOutput::getImage)
-            ModelType.NCEP -> UtilityModels.getAnimation(activity, this, UtilityModelNcepInputOutput::getImage)
-            ModelType.SPCSREF -> UtilityModels.getAnimation(activity, this, UtilityModelSpcSrefInputOutput::getImage)
-            ModelType.SPCHREF -> UtilityModels.getAnimation(activity, this, UtilityModelSpcHrefInputOutput::getImage)
-            ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.getAnimation(activity, this, overlayImg)
-        }
-    }
-
-    fun getRunTime() = when (modelType) {
-        ModelType.WPCGEFS -> UtilityModelWpcGefsInputOutput.runTime
-        ModelType.ESRL -> UtilityModelEsrlInputOutput.getRunTime(model, displayData.param[0])
-        ModelType.NSSL -> UtilityModelNsslWrfInputOutput.runTime(this)
-        ModelType.NCEP -> UtilityModelNcepInputOutput.getRunTime(model, displayData.param[0], sector)
-        ModelType.SPCSREF -> UtilityModelSpcSrefInputOutput.runTime
-        ModelType.SPCHREF -> UtilityModelSpcHrefInputOutput.runTime
-        ModelType.SPCHRRR -> UtilityModelSpcHrrrInputOutput.runTime
     }
 
     fun setParams(selectedItemPosition: Int) {
@@ -436,7 +398,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         params = UtilityModelNcepInterface.paramsHref
                         labels = UtilityModelNcepInterface.labelsHref
                         sectors = UtilityModelNcepInterface.sectorsHref
-                        startStep = 0
+                        startStep = 1
                         endStep = 48
                         stepAmount = 1
                         numberRuns = 4
@@ -553,12 +515,12 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
         }
     }
 
-    private fun timeIdxIncr() {
+    private fun timeIndexIncrement() {
         timeIndex += 1
         time = times.safeGet(timeIndex)
     }
 
-    private fun timeIdxDecr() {
+    private fun timeIndexDecrement() {
         timeIndex -= 1
         time = times.safeGet(timeIndex)
     }
@@ -567,7 +529,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
         if (timeIndex == 0) {
             setTimeIdx(times.size - 1)
         } else {
-            timeIdxDecr()
+            timeIndexDecrement()
         }
         getContent()
     }
@@ -576,7 +538,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
         if (timeIndex == times.size - 1) {
             setTimeIdx(0)
         } else {
-            timeIdxIncr()
+            timeIndexIncrement()
         }
         getContent()
     }

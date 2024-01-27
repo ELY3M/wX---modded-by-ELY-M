@@ -18,7 +18,7 @@
 // TODO color pal , allow cloning of a user created pal
 // TODO bug , SPC Meso swipe left/right takes on extra to get started
 // TODO https://android-developers.googleblog.com/2019/03/introducing-new-google-play-app-and.html
-// TODO put more diagnostics in settings -> about including more download stats and also rolling buffer for stacktraces
+// TODO put more diagnostics in settings -> about including more download stats and also rolling buffer for stack traces
 // TODO 2 icons per row: SPC Thunder, SPC Fire, NHC
 // TODO add ability to add generic URLs to homescreen
 // TODO severe dashboard better formatting for vtec
@@ -38,9 +38,9 @@
 55250 2019_07_02    [FIX] at joshuatee.wx.audio.UtilityTts.playMediaPlayerFile(UtilityTts.kt:320)  java.lang.IllegalStateException
                     [FIX] NCEP HRW* change from 0..49 to 1..48
 55249 2019_07_02    [FIX] Remove text scaling in CC due to issues of text truncation and not scaling back to size
-                    [FIX] NHC storm - move title to subtitle as text is usuall to long
+                    [FIX] NHC storm - move title to subtitle as text is usually to long
 55248 2019_07_01    [FIX] USAlertsDetail was not using ObjectTextView and thus not respecting text size in UI -> settings (thanks Jim)
-55247 2019_06_30    [FIX] ObjectMetar init had unecessary call to NWS API
+55247 2019_06_30    [FIX] ObjectMetar init had necessary call to NWS API
                     [FIX] lint cleanup
 55246 2019_06_29    [FIX] severe dashboard was not downloading vtec warnings if warnings not configured elsewhere
 55245 2019_06_29    [FIX] severe dashboard linear layout was causing crash
@@ -61,9 +61,9 @@
                     [FIX] at joshuatee.wx.models.UtilityModels.setSubtitleRestoreIMGXYZOOM(UtilityModels.kt:294)
                             java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
 55237 2019_06_19    [ADD] NCEP Models - refresh params/labels from NCEP website, ordering likely changes
-                    [FIX] NCEP Models - order model list from main pulldown
+                    [FIX] NCEP Models - order model list from main pull down
                     [FIX] lint cleanup in recording session
-55236 2019_06_17    [FIX] add more verbiage about blackout options (impacts sound, alert still shows) after unfavorable playstore review
+55236 2019_06_17    [FIX] add more verbiage about blackout options (impacts sound, alert still shows) after unfavorable play store review
                     [FIX] NSSL WRF_3KM was not working
                     [FIX] disable HRRR experimental in ESRL - not providing a good experience
                     [IMP] NCEP GFS, add sector CONUS, add param sim_radar_cref, remove dom_precip_type
@@ -146,7 +146,7 @@
                     [REF] variable renaming cont.
 55214 2019_06_02    [IMP] add content description tags in fragment tiles to assist accessibility
                     [FIX] "pin" a shortcut to desktop for WFO/AFD activity was causing crash and not working
-                    [REF] architectual simplification in WpcMpdShowSummaryActivity/SpcMcdWatchShowSummaryActivity
+                    [REF] architectural simplification in WpcMpdShowSummaryActivity/SpcMcdWatchShowSummaryActivity
 55211 2019_06_01    [FIX] at joshuatee.wx.activitiesmisc.TextScreenActivity.onCreate (TextScreenActivity.kt:74)
                     Caused by: kotlin.UninitializedPropertyAccessException:
 55210 2019_06_01    [FIX] in UtilityNotification change channel notification importance to NotificationManager.IMPORTANCE_HIGH (Android Q)
@@ -154,7 +154,7 @@
 55209 2019_05_30    [IMP] add watch/mpd/mcd check in radar based off same code in severe dashboard
                     [FIX] settings -> radar when invoked from nexrad radar did not reflect changes immediately
 55208 2019_05_30    [REF] var rename
-                    [IMP] add helper methods in UtilutyDownload{Mpd,Watch,Mcd} for future simplification of Background Fetch and more direct use in nexrad and SD
+                    [IMP] add helper methods in UtilityDownload{Mpd,Watch,Mcd} for future simplification of Background Fetch and more direct use in nexrad and SD
 55207 2019_05_29    [IMP] formatting enhance in settings -> about
                     [IMP] Us warn impact graphics - reverse sort and improve formatting
 55206 2019_05_29    [FIX] Issue: java.lang.IllegalStateException: img[it].scrollPosition must not be null
@@ -208,7 +208,7 @@
                     [REF] change how ObjectForecastPackageHazards is used
 55185 2019_05_17    [REF] camelCase and better naming
 55184 2019_05_17    [REF] camelCase and better naming
-55183 2019_05_16    [IMP] address or remove various minor FIXM/TOD
+55183 2019_05_16    [IMP] address or remove various minor FIXME/TOD
                     [REM] legacy GOES transformations code
 55182 2019_05_16    [IMP] in location edit, if user taps GPS button save location automatically
                     [IMP] in severe dashboard show stats in subtitle like flutter port
@@ -306,12 +306,12 @@
                  in location save, determine wfo/rid from NWS API, fall back to closest
 55147 2019_04_20 add better framework for radar polygon warnings and test for SMR (special marine warning), SPS
                  add SPC Thunderstorm outlook as homescreen option and method in utilImg to combine list of images vertically
-                 change longpress mcd/watch/mpd to use dedicted viewer (SPCMCDShowActivity)
+                 change long-press mcd/watch/mpd to use dedicated viewer (SPCMCDShowActivity)
 55146 2019_04_20 more kotlin binding enhancement
                  lint cleanup
                  [BUG] fix dynamic tab headers, broke after removing images tab
                  Hourly - if tap in text, scroll back to top
-55145 2019_04_19 refector long press watch/mpd/mcd code
+55145 2019_04_19 refactor long press watch/mpd/mcd code
 55144 2019_04_19 storm reports - black background/white text for headers
 55143 2019_04_19 more kotlin binding enhancement
 55142 2019_04_19 [BUGFIX] LSRbyWFOActivity is using afd layout so it was crashing after binding conversion
@@ -331,7 +331,7 @@
                  wpc/afd/hwo widgets - respect text size setting
 55136 2019_04_15 [ELY] left out one thing from MCD/MPD/Watch in 135
                  ObjectWidgetCC - if first element is "" don't update
-                 add initial support to set text size (TODO: fix XML references, take effectimmediatley)
+                 add initial support to set text size (TODO: fix XML references, take effect immediately)
                  settings playlist - fix bug when move item and then view and go back ( onrestart )
 55135 2019_04_15 seekbar - add background progress tint for white themes
                  change elevation default to 5 from 3
@@ -352,7 +352,7 @@
 55126 2019_04_11 [BUG] fav management issue
                  [BUG] modify UtilityDownloadRadar to use UtilityDownloadNWS.getNWSStringFromUrlNoAcceptHeader()
                  new icon for uswarn
-55125 2019_04_11 in uswarn remove longpress open radar mosaic which is obsolete
+55125 2019_04_11 in uswarn remove long-press open radar mosaic which is obsolete
                  in national text products remove canada which is no longer working
                  GOES16 - add title
                  and utilityRadar and Utility to move off pref data for name/lat/lon
@@ -379,7 +379,7 @@
                 [BUG] test changing dark blue theme colors to impact checkbox border (buttonTint)
 55115 2019_02_13 GOES17 and disable Image tab
 55114 2019_02_11 code cleanup
-                 tag release to fdroid
+                 tag release to F-Droid
 55113 2019_02_10 update to studio 3.3.1 including gradle update and kotlin plugin update
                 [BUG] settings->colors didn't have black bg
 		sunrise/sunset card - text to black and tap scrolls to top
@@ -396,15 +396,15 @@
                  add product types to AWC Radar
 55108 2019_02_02 add AWC radar option and add RAD_2KM to homescreen options
 55107 2019_01_30 make better use of ObjectTextView
-                 for 7day card, use text autosize so top line shrinks
+                 for 7day card, use text auto-size so top line shrinks
                  [BUG] if search in spotters activity there is no way save app restart or refresh to get back to full spotter list
 55106 2019_01_28 enhance us warning cards in misc uswarn
                  add ObjectTextView
                  add ObjectCardStormReportItem
 55105 2019_01_27 update NDR to r19 and kotlin plugin to 1.3.20
                  add one more condition to UtilityMetarConditions
-                 add option to not show icons on mainscreen 7day
-                 [BUG] switch warning download to JSON after NWS feed stopped working overshutdown
+                 add option to not show icons on main screen 7day
+                 [BUG] switch warning download to JSON after NWS feed stopped working over shutdown
                  NWS Obs site - add last used
 55104 2019_01_19 TEXT: fixed qpfpfd
 55103 2019_01_16 [BUG] add exception handling in TouchImageView to catch large images such as GOES16 wide atlantic
@@ -447,7 +447,7 @@
 55078 2018_12_19 enhance UtilityRadarUI and add more verbiage in longpress
 55077 2018_12_19 enhance UtilityRadarUI
 55076 2018_12_18 add UtilityRadarUI and move status message there
-                 add 3 more entries to long press on location fragment radar to match dedicted radar screens
+                 add 3 more entries to long press on location fragment radar to match dedicated radar screens
 55075 2018_12_17 in GOESFullDisk and OPC use enhanced NavDrawer Class
 55074 2018_12_15 code cleanup
                  [BUG] upstream goes16 html change broke most products
@@ -517,7 +517,7 @@
 55041 2018_11_12 (bugfix) NSL WRF website was changed completely, add other models
 55040 2018_11_12 (bugfix) NSL WRF website was changed completely, fix WRF as a starter
 55039 2018_11_07 (bugfix) UtilityLocation.getXYFromAddressOSM was not optimal
-55038 2018_11_06 remove uneeded RadarType.kt
+55038 2018_11_06 remove unneeded RadarType.kt
                  add new SPC MESO parm: "Bulk Shear - Sfc-3km", "shr3"
                  (bugfix) "Bulk Shear - Sfc-1km" was incorrectly srh1 and not shr1
                  SPC MESO add parm: "925mb Moisture Transport", "925-850mb Moisture Transport", "100mb Mean Mixing Ratio"
@@ -528,9 +528,9 @@
                 java.lang.ArrayIndexOutOfBoundsException:
                 lint cleanup
 55036 2018_11_04 introduce helper methods in myapp to reduce boilerplate and reduce lint warnings related to initial preference processing
-                 remove app/build from git tracking with .gitignore (as rerequested for f-droid submission)
+                 remove app/build from git tracking with .gitignore (as requested for f-droid submission)
                  in res/raw move files that have .bin to have no extension (mainly geographic binary files for radar)
-55035 2018_11_02 revert changes to vel color legenc
+55035 2018_11_02 revert changes to vel color legend
 55034 2018_10_29 (bugfix - thanks Ely ) revert lint suggestion Oct 13 activity_settings_color_palette_editor.xml
                  update kotlin to 1.3.0
                  lint checks for new 1.3.0
@@ -546,7 +546,7 @@
 55031 2018_10_14 lint cleanup
                  (bugfix) at joshuatee.wx.activitiesmisc.TextScreenActivity.onCreate (TextScreenActivity.kt:64) java.lang.IllegalStateException:
 55030 2018_10_13 (bugfix) legend for radar vel was not adaptive of halfwords 47/48
-                 (bugfix) in API26 or higher notifications were ignoring sound settings, add additional communcation channel for no sound
+                 (bugfix) in API26 or higher notifications were ignoring sound settings, add additional communication channel for no sound
 55029 2018_10_13 refactor instances of package name and email address making it easier for others to create their own version
 55028 2018_10_12 tooling update
                  (bugfix) meteogram was not working in long press in radar
@@ -564,10 +564,10 @@
 55023 2018_10_07 (bugfix) nexradTvs - handle OOO show in bugreports
                  (bugfix) wrap this in try : at joshuatee.wx.radar.WXGLRender.drawElement (WXGLRender.kt:397), java.lang.IllegalArgumentException
                  lint cleanup in some larger radar files
-                 (bugfix) remove sort as it does't appear to be necessary and us causing crashes
+                 (bugfix) remove sort as it doesn't appear to be necessary and us causing crashes
                     at joshuatee.wx.radar.UtilitySpotter.getSpotterData (UtilitySpotter.kt:74) by: java.lang.IllegalArgumentException:
 55022 2018_10_04 PS release (bugfix) locfrag/myapp - setup global static appcontext and use in getText and getImage in locfrag
-55021 2018_10_03 (bugfix) locations - settings, if canada is choosen via city search, US specific nots are still shown
+55021 2018_10_03 (bugfix) locations - settings, if canada is chosen via city search, US specific notifications are still shown
                  lint cleanup in Location
 55020 2018_10_02 update from android-ndk-r17b to android-ndk-r18
 55019 2018_10_02 (bugfix) change in metar API caused duplicate wind barbs and scrambled text to show up in radar
@@ -598,7 +598,7 @@
                  new version of androidX
                  test FAB on main screen for radar ( with toggle in settings->UI)
                  (BACKED OUT) manifest - add android:extractNativeLibs="false"
-55006 2018_08_24 dsable option RADAR_HW_ENH
+55006 2018_08_24 disable option RADAR_HW_ENH
                  convert settings telecine to checkbox and remove old switch file
 55005 2018_08_23 gradle plugin update and sdk updates, wxglradar change asynctask to not serialize in a few spots
 55004 2018_07_30 settings location generic - switch to ObjectSettingsCheckbox
@@ -619,12 +619,12 @@
                 kotlin.KotlinNullPointerException:  ( switch context!! to activityReference )
                 remove as much baseContext as possible
                 (bugfix) on API 28 nws radar and spc sounding where not working after sector change, comment out firstrun code
-51162 2018_07_23 more work on pinnalble framework
+51162 2018_07_23 more work on pinnable framework
                  (bugfix) long press in WPC/MCD save location was crashing
                  start to remove need for MyApp.location ( use Location interface)
-51161 2018_07_22 more work on pinnalble framework
+51161 2018_07_22 more work on pinnable framework
 51160 2018_07_22 prelim support for pinnable shortcut in severeDash
-51159 2018_07_21 shortcuts - add backbutton suport to take to main screen
+51159 2018_07_21 shortcuts - add back button suport to take to main screen
 51158 2018_07_21 add NHC shortcut, add support for pinned shortcuts
 51157 2018_07_21 switch WPC to HTTP via var in MyApp
                  (bugfix) at joshuatee.wx.radar.USNWSMosaicActivity.onCreate (USNWSMosaicActivity.kt:86)
@@ -658,10 +658,10 @@
 51148 2018_07_12 add utilityUI navigationBarHeight, tweak quad/dual pane radar height sizing
                  (bugfix) at joshuatee.wx.radar.WXGLNexradLevel3.<init> (WXGLNexradLevel3.kt:63)
                  java.lang.OutOfMemoryError:
-51147 2018_07_12 (bugfix) county labels not showing by default and GPS perms diaglog not showing
+51147 2018_07_12 (bugfix) county labels not showing by default and GPS perms dialog not showing
 51146 2018_07_08 code cleanup modify - c: Context
 51145 2018_07_07 cleanup formatting in touchimageview
-                 (bugfix) redo initital zoom for goes16, wpcImg, OPC, goesFullDisk for API28 touchimageview issues
+                 (bugfix) redo initial zoom for goes16, wpcImg, OPC, goesFullDisk for API28 touchimageview issues
 51144 2018_07_07 change snackbar action text color to yellow
                  (bugfix) at joshuatee.wx.radar.Level2.decode (Level2.kt:66)
                  Caused by: java.lang.OutOfMemoryError:
@@ -762,7 +762,7 @@ Caused by: java.lang.AssertionError:
                   Caused by: java.lang.OutOfMemoryError:
                   (bugfix) at joshuatee.wx.radar.UtilityWXOGLPerf.colorGen (UtilityWXOGLPerf.kt:606)
                   java.nio.BufferOverflowException:
-51109 2018_06_18 (bugfix) SPC HREF - some parms changed from 3hr to 4hr
+51109 2018_06_18 (bugfix) SPC HREF - some parameters changed from 3hr to 4hr
                  put androidplot code back in but don't activate
 51108 2018_06_17 (bugfix) heat index was not working (ObjectMetar)
 51107 2018_06_17 (bugfix) imagemaps were not working
@@ -830,11 +830,11 @@ Caused by: java.lang.AssertionError:
     at joshuatee.wx.canada.UtilityCanada.getLocationURL (UtilityCanada.kt:256)
     at joshuatee.wx.radar.UtilityNexradRadial8Bit.decocodeAndPlotNexradDigital (UtilityNexradRadial8Bit.kt:79)
 51087 2018_05_14 update NCEP HIRES-NAM
-51086 2018_05_13 remove timestamp in GOES16, MISC tab wv add subtitle on initital launch
+51086 2018_05_13 remove timestamp in GOES16, MISC tab wv add subtitle on initial launch
                  UtilityNotification - change ordering of booleans on line 117 to minimize crash report
 51085 2018_05_12 remove experimental lightning maps
                  (bugfix) radar star icon was not working for favorite management
-51083 2018_05_06 (bugfix) WXJobService open seperate editor to prevent unitialized access
+51083 2018_05_06 (bugfix) WXJobService open separate editor to prevent uninitialized access
 51083 2018_05_03 (bugfix) SPCMCDSummary add "?" to make it     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
                   GOES 16 was not saving lat/lon/zoom
 51082 2018_04_19 in UtilityNotification change         val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
@@ -867,18 +867,18 @@ Caused by: java.lang.AssertionError:
 51069 2018_02_18 Current conditions - use closest Obs and decode Metar for Icon
 51068 2018_02_14 (bugfix) fix crash in locfrag when metar is lacking data ( Reno, NV )
                  support degree/pressure unit conversions in current conditions
-51067 2018_02_13 initital framekwork for current conditions via metar
+51067 2018_02_13 initial framework for current conditions via metar
                  change refreshLocMin from 30min to 10min
 51065 2018_02_11 (bugfix) GOES 16 use 600x600 instead of 1200x1200 which appears to have been removed
 51063 2018_02_04 (bugfix) in native C code check for NULL after fopen/fseek/fread, code style enhancements in C
 51062 2018_02_03 (bugfix) GOES-16 sectors/size adjustments for atlantic
-                 spotter activitiy - remove deprecated method to get searchview
+                 spotter activity - remove deprecated method to get searchview
 51061 2018_02_02 (bugfix) joshuatee.wx.notifications.UtilityNotificationSPC.locationNeedsSWO (UtilityNotificationSPC.kt:93)  java.lang.IndexOutOfBoundsException:
                  (bugfix) joshuatee.wx.settings.Location$Companion.getY (Location.kt:188) java.lang.IndexOutOfBoundsException:
 51060 2018_01_30 lint cleanup
                  spc meso add eehi - Enhanced EHI
 51059 2018_01_28 lint cleanup: telecine
-                 update goes.png ( used by wator vapor )
+                 update goes.png ( used by water vapor )
                  in vis widget change to goes16 from widget_mosaics_1km_vis
 51058 2018_01_27 lint cleanup: wpc, vis, objects, nhc, fragment, activitiesMisc, audio, canada, models, notifications, settings, util
 51057 2018_01_27 MyApp change init() to initBuffers() and move loaded Bool to top of method to prevent potential deadlocks
@@ -892,7 +892,7 @@ Caused by: java.lang.AssertionError:
                  update to ext.supportLibraryVersion = "27.0.2" from 27.0.1
                  lint cleanup
                  (bugfix) joshuatee.wx.settings.UtilityLocation.getLatLonAsDouble , use safe calls in Location
-51055 2018_01_17 (bugfix) fix locfrag crash after deleteing locations
+51055 2018_01_17 (bugfix) fix locfrag crash after deleting locations
                  (bugfix, not sure it worked ) add sound to notification channel
                  enhance locfrag by removing confusing code
 51054 2018_01_13 goes-16: double tap zooms in further ( similar to obs )
@@ -998,7 +998,7 @@ Caused by: java.lang.AssertionError:
 50250 2017_11_11 remove the need for turl[1] (state) in WXGLRadar
                  (bugfix) in nexrad widget radar remove need for state which appeared in one error report
 50249 2017_11_11 (bugfix) locfrag change activity to activityReference in one spot
-                 add more abbrevations in Hourly
+                 add more abbreviations in Hourly
 50248 2017_11_07 add code to centralize in UtilityWXJobService and move to BackgroundFetch
                  add last background fetch time to about
                  add option to use JobService if API @ 24
@@ -1010,7 +1010,7 @@ Caused by: java.lang.AssertionError:
 50243 2017_10_28 (bugfix) radar colors were not taking effect till restart
 50242 2017_10_28 cleanup - move location stuff from Utility to Location
 50241 2017_10_26 begin conversion from float to double - phase 4
-                 enhancements in windbarb and storminfo
+                 enhancements in wind-barb and storminfo
 50240 2017_10_26 begin conversion from float to double - phase 3
 50239 2017_10_26 begin conversion from float to double - phase 2
 50238 2017_10_25 begin conversion from float to double for numerous radar related things
@@ -1122,7 +1122,7 @@ Caused by: java.lang.AssertionError:
 50173 2017_07_16 (bugfix) favoriteRemove was crashing ( array index issue )
                  add conditions to hourly
 50172 2017_07_15 (bugfix) UtilityNWS.dualBitmapWithNumbers ( add array size check )
-50171 2017_07_15 add framework for adloc location forecast query in radar via long press
+50171 2017_07_15 add framework for adhoc location forecast query in radar via long press
 50170 2017_07_11 migrate to mac - part 2
 50169 2017_07_11 migrate to mac
 50168 2017_07_09 more FP
@@ -1167,12 +1167,12 @@ Caused by: java.lang.AssertionError:
                  (bugfix) media player theme was not working
 50144 2017_06_29 cleanup
 50143 2017_06_29 cleanup
-50142 2017_06_29 cleanup ( innclude myapp and widgets )
+50142 2017_06_29 cleanup (include myapp and widgets)
 50141 2017_06_28 cleanup
 50140 2017_06_28 cleanup
 50139 2017_06_28 cleanup
 50138 2017_06_28 cleanup
-                 spc sref transparent background ( all spinners in UI object )
+                 spc sref transparent background (all spinners in UI object)
 50137 2017_06_28 cleanup
 50136 2017_06_27 cleanup
 50135 2017_06_27 cleanup
@@ -1191,13 +1191,13 @@ Caused by: java.lang.AssertionError:
                  (bugfix) anim in models not working , did not init in DisplayData
 50126 2017_06_25 move SPCHHHR,SSEO,WPC GEFS to new framework and remove interface files from having arrays with null
 50125 2017_06_24 move NCEP,NCAR ENS to new framework and remove interface files from having arrays with null
-50124 2017_06_24 SPC SREF architectual enhancements
+50124 2017_06_24 SPC SREF architectural enhancements
 50123 2017_06_24 add performClick to TouchImageView2 to get rid of warning
 50122 2017_06_24 cleanup
                  SPC SWO , for bottom cards tap to take to top
 50121 2017_06_24 (bugfix) lakes in radar was crashing - GeographyType did not refresh relative buffer
                  (bugfix) use Utility.x/y in onResume in locfrag in response to crash reports
-                 (bugfix) add additional nullchecks in locfrag
+                 (bugfix) add additional null checks in locfrag
                  (bugfix) UtilityImgAnim.getURLArray if not all frames are there return something ( ie in vis )
                  (bugfix) UtilityWXOGLPerfL2.level2Decompress catch OOO in decode
                  add in build settings -             shrinkResources false
@@ -1238,8 +1238,8 @@ Caused by: java.lang.AssertionError:
 50090 2017_06_03 convert to following in places: toDoubleOrNull() ?: 0.0
 50089 2017_06_01 wxogl - animate, wrap file management in try-catch
 50088 2017_06_01 SWO widget swap days 2/3
-50087 2017_06_01 (bugfix) crash in radar if longpress closest metar when more then 1000mi from obs site
-50086 2017_06_01 (bugfix) crash in radar if longpress closest obs when more then 1000mi from obs site
+50087 2017_06_01 (bugfix) crash in radar if long-press closest metar when more then 1000mi from obs site
+50086 2017_06_01 (bugfix) crash in radar if long-press closest obs when more then 1000mi from obs site
 50085 2017_06_01 cleanup
 50084 2017_06_01 cleanup
 50081 2017_05_31 WXGLRadarActivity - move WXGLRender out of "companion object"
@@ -1268,7 +1268,7 @@ Caused by: java.lang.AssertionError:
 50066 2017_05_28 widget refactor cont
 50065 2017_05_28 (bugfix) new widgets are not updating
                  use widget enum as much as possible
-50064 2017_05_27 add SPCSWO D1 and SPC Meso wdigets
+50064 2017_05_27 add SPCSWO D1 and SPC Meso widgets
 50063 2017_05_27 remove debug status option
                  use enum for widget filenames
 50062 2017_05_27 (bugfix) wxogl single pane long press
@@ -1303,7 +1303,7 @@ Caused by: java.lang.AssertionError:
 50042 2017_05_23 Kotlin migration - (bugfix) uswarn long press was causing crash
                                     lint cleanup
 50041 2017_05_23 Kotlin migration - lint cleanup, add Kotlin cheat sheet in DOC
-50040 2017_05_23 Kotlin migration - (bugfix) was crashing in  SettingsNotificationsActivity/VideoRecordActivity until last arg changed to optoinal onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+50040 2017_05_23 Kotlin migration - (bugfix) was crashing in  SettingsNotificationsActivity/VideoRecordActivity until last arg changed to optional onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
                                     WXGLDownload.getRadarFile change is to optional and check for null
                                     ModelsNSSLWRFActivity - use elvis operator to prevent crash
                                     ModelsSPCSREFActivity,UtilityModelsSPCSREFInputOutput - several enhancements to prevent crashing when net down
@@ -1328,7 +1328,7 @@ Caused by: java.lang.AssertionError:
 50023 2017_05_21 Kotlin migration - ObjectAlertSummary,ObjectCardVerticalText,ObjectCardImage
 50022 2017_05_21 Kotlin migration - jni bridge, 7day scroll widget, utilImg, ObjectForecastPackage
 50021 2017_05_21 Kotlin migration - utilString
-50020 2017_05_21 Kotlin migration - myapp prepwork, add null,"" contentResolverLocal
+50020 2017_05_21 Kotlin migration - myapp prep work, add null,"" contentResolverLocal
 50019 2017_05_21 Kotlin migration - MyIndexFormat,UtilityAlertDialog,UtilityIO,UtilityImgAnim
 50018 2017_05_21 Kotlin migration - UtilityNexradRadial8Bit,UtilityNexradRadial4Bit,UtilityMetar,ViewColorLegend
 50017 2017_05_21 Kotlin migration - UtilityWXOGLPerfL2,UtilityWXOGLPerfL3FourBit,UtilityNexradL2,UtilityWXOGLPerf
@@ -1352,11 +1352,11 @@ Caused by: java.lang.AssertionError:
 //
 //
 //
-40218 2017_05_19 static array to List migration: SNDAddFav , FavRemoveActivity, settingsPlaytlist, settingsHomescreen
+40218 2017_05_19 static array to List migration: SNDAddFav , FavRemoveActivity, settingsPlayList, settingsHomescreen
 40217 2017_05_18 optimize SPCMesoRemoveFavActivity, FavRemoveActivity
                  (bugreport) add try block around integer parse in UtilitySPCConvectiveOutlook
                  (bugreport) add array check in UtilityWidget.updateSevenDay
-                 (bufix) Utility.US add check for empty string
+                 (bugfix) Utility.US add check for empty string
 40216 2017_05_18 more work in settings playlist/homescreen
 40215 2017_05_18 redo SettingsPlayList/SettingsHomeScreen to use ENUM
                  settings homescreen - prevent duplicate entries from being added
@@ -1401,10 +1401,10 @@ Caused by: java.lang.AssertionError:
 40193 2017_05_13 (bugfix) Location object in checkCurrentLocationValidity
 40192 2017_05_13 (VERY HIGH IMPACT) Use location object to store working location data
 40191 2017_05_13 refactor in UtilityDownloadNWS
-                 remove commentes in MyApp
+                 remove comments in MyApp
                  no longer save raw/dst time in locations
 40190 2017_05_13 (bugfix) generic geographic don't set breaksize and count if not in init ( crashing on legacy highway site switch )
-                 comment out at bottoom //buffers.computeBreakSize(); ( now that setcount and setchunkcount do the calc )
+                 comment out at bottom //buffers.computeBreakSize(); (now that setcount and setchunkcount do the calc)
 40189 2017_05_13 code cleanup
 40188 2017_05_13 AS/gradle update
                  ObjectOGLBuffers - make all properties private
@@ -1445,7 +1445,7 @@ Caused by: java.lang.AssertionError:
                  add count, breakSize, chunkCount to ObjectOglBuffers and use for stateLines
 40161 2017_05_07 enhancements to ObjectOglBuffers incl color buffers
                  remove unused code in WXGLRender main thread
-                 improvementes in WXGLRender scale code
+                 improvements in WXGLRender scale code
 40158 2017_05_05 use ObjectOglBuffers in UtilityWXOGLPerf
 40157 2017_05_05 cleanup wxglrender
 40156 2017_05_05 almost complete work on ObjectColorPalette ( need to finish files other then wxogl render )
@@ -1455,7 +1455,7 @@ Caused by: java.lang.AssertionError:
 40153 2017_05_05 convert Hashtable to HashMap
                  implement Class ObjectOglBuffers ( Spotters )
 40152 2017_05_05 deal with 56 and 165
-40151 2017_05_05 continued work with ObjectColorPalette ( convert rest of normal colormaps )
+40151 2017_05_05 continued work with ObjectColorPalette (convert rest of normal colormaps)
 40150 2017_05_05  (bugfix) wxoglrender - cast productCode from short to int in hashmap for colormap
 40149 2017_05_05 continued work with ObjectColorPalette ( store in HashMap in MyApp)
 40148 2017_05_05 code cleanup
@@ -1465,10 +1465,10 @@ Caused by: java.lang.AssertionError:
                  misc code cleanup
                  TileObject make properties private
                  add new object in notifications: ObjectPendingIntents
-40146 2017_05_04 (bugfix) legacy mastger widget CC and status were not showing as white text
+40146 2017_05_04 (bugfix) legacy master widget CC and status were not showing as white text
                  utilWidget,CAB remove commented code and cleanup
 40145 2017_05_04 build.grade update build-tools to 25.0.3
-                 use new hlper method in UtilWidget
+                 use new helper method in UtilWidget
 40144 2017_05_03 make countyLabelsAl,obsAl,spottersLabelAl,spottersTv ( change from one element array to singleton ) private in WXGLSurfaceView
                  settings radar move show county labels up one slot
                  WXGLTextObject - make rid1,OGLR private
@@ -1535,7 +1535,7 @@ Caused by: java.lang.AssertionError:
                  enhance homescreen labels for SPCMESO to mention default, move to bottom
                  have AFD/HWO widgets respect setting to remember last WFO used
 40110 2017_04_25 add setting to remember last WFO used
-40109 2017_04_25 change default parms for homescreen SPCMESO4-6 ( rgnlrad , lllr, laps )
+40109 2017_04_25 change default params for homescreen SPCMESO4-6 ( rgnlrad , lllr, laps )
 40108 2017_04_25 merge methods to find closest RADAR/WFO sites
 40107 2017_04_25 utilityLocation - switch to computed values for RID/WFO
 40106 2017_04_25 (bugfix) settings->home, after delete list was not updated
@@ -1543,20 +1543,20 @@ Caused by: java.lang.AssertionError:
                  add VIS_CONUS and 3 new SPCMESO fav to homescreen
 40104 2017_04_24 implement and start using loc getting in utility - ie getWFO
 40103 2017_04_24 utilCanvas* remove intermediate vars
-40102 2017_04_24 in mumerous classes, make final and convert to getter/setters
-40101 2017_04_24 in mumerous classes, make final and convert to getter/setters
+40102 2017_04_24 in numerous classes, make final and convert to getter/setters
+40101 2017_04_24 in numerous classes, make final and convert to getter/setters
                  remove MercatoNumbers and migrate to ProjectionNumbers
 #
 # Playstore Release April 24th, 2017 - 40100
 #
 40100 2017_04_23 version bump for big release
-40078 2017_04_23 (bugfix) SPC HRRR thermo sholud be cape in parms
+40078 2017_04_23 (bugfix) SPC HRRR thermo sholud be cape in params
                  (bugfix) NCEP Models run complete str was not working
 40077 2017_04_22 (bugfix) NCAR ENS from 36 to 48
 40076 2017_04_22 (bugfix) NWS changed weather story URL
                  (bugfix) SPC HRRR subtitle was only updating on initial load
                  SPC HRRR add Obs,Topo layers
-40075 2017_04_22 SPC HRRR - add 2 parms
+40075 2017_04_22 SPC HRRR - add 2 params
 40074 2017_04_22 NWS Goes - for anim use txt file if possible
 40073 2017_04_21 NWS Goes - no long support animations with mesoanalysis, to buggy
 40072 2017_04_21 NWS Goes - increase performance for overlays
@@ -1570,13 +1570,13 @@ Caused by: java.lang.AssertionError:
                  wxglpolygon don't swap numbers but instead add first to y list
                  severeWarning - use MyApp vtec pattern
 40067 2017_04_16 XML cleanup
-40066 2017_04_15 equalize pane height in dual pane radar with immersize or transparent toolbars
+40066 2017_04_15 equalize pane height in dual pane radar with immersive or transparent toolbars
 40065 2017_04_15 Locations - remove county/zone definitions
                  settings location, change text color to black, if alert of location make it blue
 40064 2017_04_14 (bugfix) move tor in front of tst/ffw for long press in polygon - nexrad
 40063 2017_04_14 move Vtec and LatLon regexp to MyApp and compile at app start
                  utilWidgetDownload if 7day or CC equals "" don't write to pref
-40062 2017_04_13 (bugfix) 7day scoll widget would at times now show all data utilityWidget(count)
+40062 2017_04_13 (bugfix) 7day scroll widget would at times now show all data utilityWidget(count)
                  WXGLPolygon - don't show EXP or CAN VTEC
 40061 2017_04_13 code cleanup
                  change keyboard shortcuts in main wX to not use D and V as they seem not available
@@ -1623,7 +1623,7 @@ Caused by: java.lang.AssertionError:
                  make NWS Forecast Icon text and bottom color configurable
 40034 2017_04_02 add JobScheduler framework
 40033 2017_04_02 radar - make hail indicators be right side up triangles
-40032 2017_04_02 AppCompatTextView ( relace TextView ) test in ObjectCC and 7day, HSText, Text
+40032 2017_04_02 AppCompatTextView (replace TextView) test in ObjectCC and 7day, HSText, Text
                  test widget with collection https://github.com/Miserlou/Android-SDK-Samples/tree/master/WeatherListWidget
 40031 2017_04_02 (bugfix) utilSPCSWO - change regexp to get time
                  spcSWOSummary - redo to use new code
@@ -1641,17 +1641,17 @@ Caused by: java.lang.AssertionError:
 40024 2017_03_31 cleanup ( MyApp )
 40023 2017_03_31 put back aspect ration after reported problem in radar on LG G6
                  code cleanup in WXGLRender
-40022 2017_03_31 backout aspect ratio change
+40022 2017_03_31 back out aspect ratio change
 40021 2017_03_31 another build to test release process
 40020 2017_03_31 another build to test release process
-40019 2017_03_31 more march ncep changes, change to zipfile creation script to remove apk
+40019 2017_03_31 more march ncep changes, change to zip file creation script to remove apk
 40018 2017_03_30 add <meta-data android:name="android.max_aspect" android:value="2.1" /> per https://android-developers.googleblog.com/2017/03/update-your-app-to-take-advantage-of.html
 40017 2017_03_30 additional 7day temp extraction as NWS has changed verbiage used
 40016 2017_03_29 google rep v46
                  code cleanup
                  (bugfix) RecordingSession - fail silently on line 333
 40015 2017_03_28 update support lib 25.3.0 to 25.3.1 ( and update sdk components )
-40014 2017_03_27 (bugfux) user reported crash when zooming on wind barb colors
+40014 2017_03_27 (bugfix) user reported crash when zooming on wind barb colors
                   update ndk to 14b from 14
 40012 2017_03_26 (bugfix) prevent crash in WPC Img QPF swipe left
                  code cleanup in UtilNWS
@@ -1670,7 +1670,7 @@ Caused by: java.lang.AssertionError:
                  settings->Location add true or false if an alert is present
 40002 2017_03_09 add back windChill, heatIndex from new NWS API
 40001 2017_03_08 AS 2.2 -> 2.3, ndk 13b -> 14, gradle to 3.3
-40000 2017_03_08 in new CC wdiget remove padding from 7day that shows at bottom
+40000 2017_03_08 in new CC widget remove padding from 7day that shows at bottom
                  settings->UI change default icon size to 24
 //
 // 39150 was updated to 39950 and pushed to google play as NWS moved back their API change
@@ -1763,7 +1763,7 @@ Caused by: java.lang.AssertionError:
 39109 2017_02_11 Integrate some new code for new NWS API
 39108 2017_02_11 Integrate some new code for new NWS API
 39107 2017_02_10 SPC Meso single pane - add swipe left/right
-                 (bugfix playstore) if media notif enable but no entries in playlist right arrow causes crash
+                 (bugfix play store) if media notif enable but no entries in playlist right arrow causes crash
 39106 2017_02_10 (bugfix) WPC GEFS title label not updating
                  cleanup after object nav drawer implementation
 39105 2017_02_10 obj navdrwcombo - spc meso, spc sref, wpc img
@@ -1787,7 +1787,7 @@ Caused by: java.lang.AssertionError:
                  convert ot getter/setter ( esp new obj in settings )
 39089 2017_02_06 more vars global to local ( radar )
 39088 2017_02_06 locfrag disable the ability to long press on status in CC ( same as tap on CC icon )
-                 more gett/setter in new UI objects
+                 more getter/setter in new UI objects
 39087 2017_02_06 more vars global to local ( locfrag ) ( Lint: Class Structure -> Field can be local )
                  cleanup in new objects
 39086 2017_02_06 cc/7day getter/setter
@@ -1805,10 +1805,10 @@ Caused by: java.lang.AssertionError:
                  AudioPlayAct - rename toolbar_bottom to toolbarBottom
 39076 2017_02_05 extends AudioPlayActivity - move boilerplate top code to parent class
 39075 2017_02_05 extends AudioPlayActivity - move boilerplate top code to parent class
-39074 2017_02_04 more converstion to new UI objects
-39073 2017_02_04 more converstion to new UI objects
-39072 2017_02_04 more converstion to new UI objects
-39071 2017_02_04 more converstion to new UI objects
+39074 2017_02_04 more conversion to new UI objects
+39073 2017_02_04 more conversion to new UI objects
+39072 2017_02_04 more conversion to new UI objects
+39071 2017_02_04 more conversion to new UI objects
 39070 2017_02_04 add ObjectCardVerticalText ( us hourly )
 39069 2017_02_04 rewrite parts of SPC SWO with new objects
                  attempt to prevent keyboard from opening in settings->UI @ launch
@@ -1828,7 +1828,7 @@ Caused by: java.lang.AssertionError:
 39057 2017_02_02 settings - start to migrate to objects
 39056 2017_02_02 implement stride in numerous activities ( myapp ), code cleanup
                  add K28J, KX60 to us_metar3.txt
-                 (bugfix) CA Radar - fix display error when modiyfing favorites
+                 (bugfix) CA Radar - fix display error when modifying favorites
 39055 2017_02_01 implement stride in numerous activities ( myapp ), code cleanup
 39054 2017_02_01 implement stride in numerous activities ( radar ), code cleanup
 39053 2017_02_01 implement stride in numerous activities ( NCEP ), code cleanup
@@ -1846,7 +1846,7 @@ Caused by: java.lang.AssertionError:
 39049 2017_01_30 revert settings playlist to not use lambda, stop using jack
 39048 2017_01_30 Version bump to move past lamba experiment ( strange behavior in settings->radar )
                  android support lib 25.1.1
-39045 2017_01_30 add UtilityModels.moveBack ( Forward ) and implement in all modelss
+39045 2017_01_30 add UtilityModels.moveBack ( Forward ) and implement in all models
                  in PlayListSettings move to Lambda 100%
 39044 2017_01_29 upgrade compiler to jack and add Java 1.8 compat for Lambda ( test in SettingsPlayList )
                  update okhttp from 3.5.0 to 3.6.0 (https://github.com/square/okhttp/blob/master/CHANGELOG.md)
@@ -1857,7 +1857,7 @@ Caused by: java.lang.AssertionError:
                  add UtilityUI.textViewSetup() ( overloaded ) to reduce boilerplate code
                  remove getcontent overrides that have nothing
                  disable the option to use Iowa Level 2 data in non-archive mode
-                 hide VR button by default, add settings->UI to reenable
+                 hide VR button by default, add settings->UI to re-enable
 39041 2017_01_26 Structural code changes - activitiesmisc
                  add new directory "objects", new class "Tuple" and "LatLonStr" ( ca so far )
 39040 2017_01_26 Structural code changes - activitiesmisc
@@ -1865,7 +1865,7 @@ Caused by: java.lang.AssertionError:
                  add joshuatee.wx.ui.OnSwipeTouchListener and move in activity code over to it in numerous activities
 39039 2017_01_24 code reduction in settings
 #
-# Play Store relelease
+# Play Store release
 #
 39038 2017_01_23 implement java coding style ( JCS ) ( shift-F6)
 39037 2017_01_20 WXOGL SPC D1 fine tune marginal/enh colors
@@ -1928,7 +1928,7 @@ Caused by: java.lang.AssertionError:
 //                  utilImgAnim add pause code
 // 39005 2016_12_27 utilGOESFullDisk use UtilityImgAnim.GetAnimationDrawableFromURLList
 //                  (bugfix) Canada Radar activity was not showing mosaic and vis at appropriate times
-//                   utilCAImg use UtilityImgAnim.GetAnimationDrawableFromURLList [Mosiac,Vis]
+//                   utilCAImg use UtilityImgAnim.GetAnimationDrawableFromURLList [Mosaic,Vis]
 // 39004 2016_12_27 use in more model code UtilityImgAnim.GetAnimationDrawableFromURLList
 //                  add utility file for GLCFS
 // 39003 2016_12_27 rewrite GetNWSGOESAnim,GetNWSGOESAnimV2,GetGOESFullDisk, UtilityNHC.GetAnim to use List instead of Array in most places
@@ -1990,7 +1990,7 @@ Caused by: java.lang.AssertionError:
 //                  code and lint cleanup
 // 38962 2016_12_12 add additional nexrad widget offset options N,S,E,W
 // 38961 2016_12_12 storm info - add 15,30,45 min marker
-// 38960 2016_12_12 add warn map ddefault display in uswarn
+// 38960 2016_12_12 add warn map default display in uswarn
 //                  spc tstorm - convert away from older regexp design patter
 // 38959 2016_12_11 modify utilCA code for potential conversion to Swift
 //
@@ -2003,7 +2003,7 @@ Caused by: java.lang.AssertionError:
 //                  code and lint cleanup
 // 38955 2016_12_10 fix wpc mpd subtitle when spaces are trimmed
 //                  code and lint cleanup
-// 38954 2016_12_10 cutover to Utility.fromHTML
+// 38954 2016_12_10 cut-over to Utility.fromHTML
 //                  WPC MPD - implement newline spacing option
 // 38953 2016_12_10 have fire d3-d8 respect spacing setting
 //                  add helper in Utility for fromHTML deprecation, test in WPCText
@@ -2067,9 +2067,9 @@ Caused by: java.lang.AssertionError:
 //                  (bugfix) USAlertsDetail TTS was pointing to uninit var
 // 38908 2016_11_29 move hashtable to static initializer in utilityNWS and utilityUSNWSMosaic, utilus, WXGLNexrad, UtilityGOES
 // 38907 2016_11_29 uswarn - move cap download to utildownloadnws
-//                  settings radar - reinit bytebuffers instead of showing "restart manually diaglogue" for several settings
+//                  settings radar - reinit bytebuffers instead of showing "restart manually dialogue" for several settings
 //                  windbarb change length of barbs
-//                  add Location class in settings to assist with future enhhancement to re-order locations
+//                  add Location class in settings to assist with future enhancement to re-order locations
 //                  add 2 mini fabs to settings listing but hide for now
 // 38906 2016_11_28 wind barb color add
 // 38905 2016_11_28 widget cc (bugfix report)
@@ -2079,7 +2079,7 @@ Caused by: java.lang.AssertionError:
 // 38901 2016_11_25 update sdk tools and sdk v25
 //                  obs/mosaic - reorder and add swipe
 //                  settings->radar - add windbarbs setting
-// 38900 2016_11_20 version bump for playstore release
+// 38900 2016_11_20 version bump for play store release
 // 38819 2016_11_19 NCEP Models - add new model "ESTOFS"
 // 38818 2016_11_18 OPC/GLCFS/WPC/GOESGlobal swipe left/right
 // 38817 2016_11_18 NCEP Models Nov 2016 update #1
@@ -2139,7 +2139,7 @@ Caused by: java.lang.AssertionError:
 // 38725 2016_09_30 (swift) UtilityUSImgNWSGOESMercator
 // 38724 2016_09_30 (bugfix) few typos in bottom switch statement
 // 38723 2016_09_30 add UtilityColorPaletteGeneric and cutover all but prod 56 ( srm ) and 165 ( hydro class )
-// 38722 2016_09_30 (swift) seperate RID class from WXGLNexrad
+// 38722 2016_09_30 (swift) separate RID class from WXGLNexrad
 // 38721 2016_09_30 (swift) UtilityNWS,UtilityTheme,UtilityLocationFragment
 // 38720 2016_09_30 update google repository to v36 in studio/sdk
 //                  (swift) utilCanvas - add helpers and use parseColumn for polygon warnings ( mass code reduction )
@@ -2176,7 +2176,7 @@ Caused by: java.lang.AssertionError:
 //                  break City out of UtilityCities.java ( also use city object from utilitycities
 // 38658 2016_09_23 (bugfix) java genTriangle didn't set position 0 on color buff
 // 38657 2016_09_23 (bugfix) wxglrender mpd has wrong vars ( sti )
-// 38656 2016_09_23 (MAJOR IMPACT) full backout to using color buffers as this does fix chrome arc issue and presumably s6
+// 38656 2016_09_23 (MAJOR IMPACT) full back-out to using color buffers as this does fix chrome arc issue and presumably s6
 // 38655 2016_09_23 (bugfix? - backed out for now) WXGLRender, add GLES20.glUseProgram(0); before any switch in shader
 //                  http://stackoverflow.com/questions/31274019/shaders-and-uniforms-not-behaving-as-expected-on-the-galaxy-s6
 //                  with code from 38300 bring back colorgen and using color buffer for counties to see if problem fixed in chrome arc
@@ -2193,7 +2193,7 @@ Caused by: java.lang.AssertionError:
 // 38649 2016_09_21 convert few dozen jpg to png in prep for possible IOS port
 // 38648 2016_09_21 code and lint cleanup
 // 38647 2016_09_21 remove static context from adapters, use view.getContext() for settextappearance
-//                  remove static Context in UtilityShare used uncessarily by CreateAnimatedGifService
+//                  remove static Context in UtilityShare used unnecessarily by CreateAnimatedGifService
 // 38646 2016_09_21 (HIGH IMPACT) UtilityTheme.getPrimaryColorFromSelectedTheme - remove context arg
 //                  UtilityUI.CardViewSetup - remove context arg
 // 38645 2016_09_21 test using myapp appcontext in utilitytheme(didn't work )
@@ -2263,7 +2263,7 @@ Caused by: java.lang.AssertionError:
 // 38608 2016_09_16 ESL RAP - add full parms
 // 38607 2016_09_16 GOES - change submenu title "mosaics" to "regions" and eliminate uncessary download for regions
 //                  ESRL RAP framework add
-// 38606 2016_09_15 add US sector 3hr surfance analysis prod in Observations and save most recent image viewed
+// 38606 2016_09_15 add US sector 3hr surface analysis prod in Observations and save most recent image viewed
 // 38605 2016_09_15 lint and code cleanup
 //                  move from activitiesmisc to radar: USNWSMosaicActivity.java UtilityUSImgNWSMosaic.java
 // 38604 2016_09_14 NCAR Ens remove model parm as just one model
@@ -2287,7 +2287,7 @@ Caused by: java.lang.AssertionError:
 // 38542 2016_09_12 SPC SREF Multipane work
 //                  (bugfix) HRRR / NCAR Ensemble Multipane onstop didn't have pref apply and run posn pref not implemented correctly
 // 38541 2016_09_12 SPC SREF - make single pane more adaptable for future multi-pan ( move prefs to strings at top, implement IO file )
-//                  SPC SREF - add framekwork for multipane
+//                  SPC SREF - add framework for multipane
 // 38540 2016_09_12 wxogl change scaleout factor for lakes
 // 38539 2016_09_12 NCAR Ensemble multi-pane
 // 38538 2016_09_12 implement Model IO for NcarEnsemble in prep for Multi Panes
@@ -2355,7 +2355,7 @@ Caused by: java.lang.AssertionError:
 // 38445 2016_09_02 enable regional vs local vis cloud icon support for GOES, redo verbiage
 //                  code and lint cleanup
 // 38444 2016_09_02 remove reference to COD in UtilDownload and USwarn , TextViewer
-//                  remove legacy iowa meso from longpress in storm reports
+//                  remove legacy iowa meso from long-press in storm reports
 // 38443 2016_09_02 update credits given removals
 //                  make NWS default provider of level2 data
 //                  NCEP GFS - first 120 is by hour not 3 ( postpone )
@@ -2441,12 +2441,12 @@ Caused by: java.lang.AssertionError:
 // 38393 2016_08_21 WXGLTextObject - cleanup
 // 38392 2016_08_21 NCAR Ensemble
 //                  WRF / NCAR Ens - add swipe left/right
-// 38391 2016_08_21 NCAR Ensemble framekwork
+// 38391 2016_08_21 NCAR Ensemble framework
 // 38390 2016_08_21 lint cleanup and code cleanup ( radar and radar multipane, opengl shader )
 // 38389 2016_08_20 (bugfix) noti ed the latest support library sprung this bug, not able to edit locations!
 //                  https://code.google.com/p/android/issues/detail?id=220250
-//                  attempted soln was to anchor FAB to main relativelayout which is a direct child of the coord layout
-//                  this works but the padding is a bit off, need to tweek
+//                  attempted solution was to anchor FAB to main relativelayout which is a direct child of the coord layout
+//                  this works but the padding is a bit off, need to tweak
 // 38388 2016_08_20 lint cleanup and code cleanup
 //                  (HIGH IMPACT) substantially reduce memory usage for Level 2 native decomp buffers
 // 38387 2016_08_20 lint cleanup and code cleanup
@@ -2455,7 +2455,7 @@ Caused by: java.lang.AssertionError:
 // 38386 2016_08_20 (HIGH IMPACT) move hw/hw_ext/lakes to line_index_buffer which is allocated only once and smaller in size
 // 38385 2016_08_20 (bugfix) wxglrender - add total_bins_ogl since total_bins was getting reset at various places and goofing up in flight rendering
 // 38384 2016_08_20 lint cleanup and code cleanup
-//                  (HIGH IMPACT) move radar to traingle_index_buffer which is allocated only once and smaller in size
+//                  (HIGH IMPACT) move radar to triangle_index_buffer which is allocated only once and smaller in size
 //                  move county/state to line_index_buffer which is allocated only once and smaller in size
 // 38383 2016_08_19 fragment cleanup
 // 38382 2016_08_19 cleanup gradle build files, add additional credits in about dialogue
@@ -2485,7 +2485,7 @@ Caused by: java.lang.AssertionError:
 //                  cleanups
 //                  move all bzip2 code to util.bzip2
 // 38365 2016_08_16 code,lint cleanup
-//                  remove unused JNI files brough back yesterday
+//                  remove unused JNI files brought back yesterday
 // 38364 2016_08_15 native - add L2 back if JNI option enabled ( still broke on decomp )
 // 38363 2016_08_15 native - decode8bit work
 // 38362 2016_08_15 native - decode8bit work
@@ -2501,14 +2501,14 @@ Caused by: java.lang.AssertionError:
 //                  (HIGH IMPACT) - for level3 combine decode8bit and genradials into one method - remove saving decomp files
 // 38357 2016_08_14 switch to L3 method for anim - save radial/binword to file
 //                  L2 - delete decomp files after they are ingested into bytebuffer file
-// 38356 2016_08_14 minor optimizations in GenRadials,GenMercato related to PI constants
+// 38356 2016_08_14 minor optimizations in GenRadials,GenMercator related to PI constants
 //                  minor change WXGLNexrad bin_size_54
-// 38355 2016_08_14 minor optimizations in GenRadials,GenMercato
+// 38355 2016_08_14 minor optimizations in GenRadials,GenMercator
 // 38354 2016_08_13 (bugfix) need to re-init index buffer but also move it to last step in construct poly , critical to zero out the index buffer everytime
 // 38353 2016_08_13 Radar L3 - re-enable write to decomp
 //                  WXGLNexradLevel3 don't init everytime
 //                  WXGLRender - reuse bb's if same size
-// 38352 2016_08_13 Radar L3 - disable writing decomp to seperate file as anim had to many flashes
+// 38352 2016_08_13 Radar L3 - disable writing decomp to separate file as anim had to many flashes
 // 38351 2016_08_13 Radar L3 - don't save decomp if not anim frame
 // 38350 2016_08_13 WXradar* add support for L3 animation in which decomp'ed file is stored and then used after first run (DK)
 // 38349 2016_08_13 wxogl single/multi pane - add L2 and L3 radar status to tools submenu
@@ -2574,10 +2574,10 @@ Caused by: java.lang.AssertionError:
 //                  utilitywxoglperf - remove colorbuffer as arg for spotter and locdot_circle
 // 38320 2016_08_08 (HIGH IMPACT) completely disable native code - JNI and remove setting in settings->radar
 // 38319 2016_08_08 (HIGH IMPACT) modify opengl shader and various wxgl code incl jni to no longer input alpha, add alpa in shader
-//                  wxgl radar (multi) revert change to pause after change while L3 anim is running ( now that tigher L3 java code is in place )
+//                  wxgl radar (multi) revert change to pause after change while L3 anim is running ( now that tighter L3 java code is in place )
 // 38318 2016_08_07 (VERY HIGH IMPACT) wxglrender - switch to 2 shaders one for uniform color, move wat/ffw/sti right below radar to group VBO color together
 // 38317 2016_08_07 restore parallelism in locfrag after changes in last version
-// 38316 2016_08_07 UtilityWXOGLPerf - for most bytebuffer put's use incidices to prevent requestRender resetting posn on the bytebuffer
+// 38316 2016_08_07 UtilityWXOGLPerf - for most bytebuffer put's use indices to prevent requestRender resetting posn on the bytebuffer
 //                  for example dragging while animating would cause numerous artifacts
 // 38315 2016_08_07 default to not use native code ( JNI ) for opengl radar
 // 38314 2016_08_06 (bugfix) android 7.0 emulator was showing distorted radar in locfrag 20% of time, disable parallelism and multiple requestRender
@@ -2611,7 +2611,7 @@ Caused by: java.lang.AssertionError:
 // 38296 2016_08_05 code cleanup wxogl (perf)
 //                  rename Level3FourBit and remove radial manipulation, create dup method in new file but don't use yet - UtilityWXOGLPerfL3FourBit
 //                  utilwxoglperf move float to class scope as final static
-// 38295 2016_08_04 UtilWXOGLPerf - remove uneeded args in radialv2
+// 38295 2016_08_04 UtilWXOGLPerf - remove unneeded args in radialv2
 // 38294 2016_08_03 UtilWXOGLPerf - remove need for ibuff/obuff for decode8bit and decode8bitwx
 //                  UtilWXOGLPerf.decode8bit - skipbytes instead of reading by small chunks and not using
 //                  UtilWXOGLPerf - cleanup
@@ -2629,7 +2629,7 @@ Caused by: java.lang.AssertionError:
 // 38282 2016_07_31 move L2 decode when radar_use_jni
 // 38280 2016_07_31 have Level2 use radialv2 when radar_use_jni
 // 38278 2016_07_31 move rect8bitwx,decode8bitwx to radar_use_jni
-// 38277 2016_07_31 recompile after removal of uneeded bzip2 module included while experimenting
+// 38277 2016_07_31 recompile after removal of unneeded bzip2 module included while experimenting
 // 38276 2016_07_31 import a bunch of bzip2 files from wct into utils
 //                  move decode8bit to radar_use_jni
 // 38275 2016_07_31 (bugfix) spotter - need to set position to 0
@@ -2642,8 +2642,8 @@ Caused by: java.lang.AssertionError:
 //                  add setting radar_use_jni_label and use for geom
 // 38268 2016_07_30 delete radial.c and radial.h in JNI - no longer needed
 //                  add UtilityWXOGLPerf to experiment with re-writing JNI in java to see performance impact
-// 38267 2016_07_29 (backout) revert to gcc from clang, no issues for debug/release on x64 or arm emulators yet crashes on LG G2 with CM13
-//                   backout consists of updating buildit and run ( comment out clang env var ) and then clean and build project
+// 38267 2016_07_29 (back-out) revert to gcc from clang, no issues for debug/release on x64 or arm emulators yet crashes on LG G2 with CM13
+//                   back-out consists of updating buildit and run ( comment out clang env var ) and then clean and build project
 // 38266 2016_07_29 (bugfix) make changes in bzipwrap similar to other two files
 // 38265 2016_07_29 (bugfix) fix Warning:(57, 10) warning: implicit declaration of function 'BZ2_bzBuffToBuffDecompress'
 //                  add in decode8bitwx toShort definition
@@ -2651,7 +2651,7 @@ Caused by: java.lang.AssertionError:
 // 38264 2016_07_29 manifest - remove NZ entries
 //                  use NDK Clang instead of gcc: for studio and CLI build
 //                  export NDK_TOOLCHAIN_VERSION=clang
-// 38263 2016_07_29 wpc images - switch to new screen capture share techology
+// 38263 2016_07_29 wpc images - switch to new screen capture share technology
 //                  hrrr model - add swipe left/right
 // 38262 2016_07_29 code cleanup and help additions
 //                  lint cleanup ( incl radar multipane animate )
@@ -2665,7 +2665,7 @@ Caused by: java.lang.AssertionError:
 // 38254 2016_07_27 SPC HRRR - add more layers cities, cnty, population - add clear all params menu item
 // 38253 2016_07_27 SPC HRRR - support mult parms being displayed same time
 // 38252 2016_07_27 SPC HRRR - add swipe left/right, start to add layers
-// 38251 2016_07_27 SPC HRRR - move img,anim code into seperate file
+// 38251 2016_07_27 SPC HRRR - move img,anim code into separate file
 // 38250 2016_07_26 SPC HRRR
 // 38249 2016_07_26 SPC HRRR
 // 38248 2016_07_26 SPC HRRR
@@ -2678,13 +2678,13 @@ Caused by: java.lang.AssertionError:
 // 38242 2016_07_26 remove most AU,NZ java code, menu/layout xml
 //                  rename homescreen activity and menu to begin with settings
 // 38241 2016_07_26 remove ability to add AU locations
-//                  verbiage enhancemnet in menu in settings location
+//                  verbiage enhancement in menu in settings location
 // 38240 2016_07_25 release version
 // 38239 2016_07_25 (bugfix) NHC Storm EP cloud icon not working
 // 38238 2016_07_24 minsdk from 17 (4.2) down to 16 (4.1) on user request
 // 38237 2016_07_21 update appcompat to 24.1.1
 //                  cleanup and tweaks to layout sizing in widget cc
-//                  update build.gradle to exlcude lint spelling ( not working, but added it anyway )
+//                  update build.gradle to exclude lint spelling ( not working, but added it anyway )
 //                  minor lint cleanup
 // 38236 2016_07_21 lint cleanup
 //                  cleanup in notifications
@@ -2769,7 +2769,7 @@ Caused by: java.lang.AssertionError:
 // 38191 2016_06_30 new release to update build scripts
 // 38190 2016_06_30 convert obs act to video act
 //                  improve cod 1km/reg overlay text and move to strings.xml
-//                  cod1km menu move zoomout above submenus
+//                  cod1km menu move zoom-out above submenus
 //                  usgoes menu - use new strings as well
 //                  app/build.gradle - add support for signing config via cmdline: ./gradlew assembleRelease
 //                  spc meso - move regions to submenu
@@ -2792,7 +2792,7 @@ Caused by: java.lang.AssertionError:
 //                  playlist autodwlnd remove redundant title
 // 38179 2016_06_26 (bugfix) had to modify menu for settings loc generic and modify path to arrayadaptersearchview
 // 38178 2016_06_26 [VERY HIGH IMPACT] subdir migration try 2
-// 38177 2016_06_26 regretably backed out moving src into subdirs as this seemed to break widgets, will try later and exclude widgets
+// 38177 2016_06_26 regrettably backed out moving src into subdirs as this seemed to break widgets, will try later and exclude widgets
 // 38174 2016_06_25 cleanup and add version to subtitle under settings
 // 38173 2016_06_25 add NCAR WRF to misc frag
 // 38172 2016_06_25 add NCAR WRF in test area
@@ -2827,7 +2827,7 @@ Caused by: java.lang.AssertionError:
 // 3.8156 2016_06_14 (bugfix) typo in cod1km menu
 // 3.8155 2016_06_10 (bugfix) comment out TeleListener stuff in UtilityTTS.InitMediaPlayer ( audio would randomly come on )
 //                   add version support to WFO text product activity
-//                   disable media notif being fired in alert reciever
+//                   disable media notif being fired in alert receiver
 // 3.8154 2016_06_10 AudioPlayActivity - don't fire media player on pause
 //                   settings playlist - fire notif on play playlist and on play/pause when playing
 // 3.8153 2016_06_10 UtilityTTS.MediaPlayerPause - only pause if already playing
@@ -2913,7 +2913,7 @@ Caused by: java.lang.AssertionError:
 //                   move spcswo, spcmcd, and wpctext to new TTS framework
 // 3.8112 2016_06_03 modify media notif and part of playlist activity to use new file based TTS framework
 //
-// 3.8111 is targetted for playstore release on Sun 6/5/2016
+// 3.8111 is targeted for playstore release on Sun 6/5/2016
 //
 // 3.8111 2016_06_03 lint and code cleanup ( esp in new integrated code ) ( wX convert VPA and toolbar_bottom to local var )
 //                   Utilspotter, FormatSpotterReports - if no spotter reports say so
@@ -2966,7 +2966,7 @@ Caused by: java.lang.AssertionError:
 //                   wxogl - move DrawView directly into wxogl and add start/stop under tilt sub-menu ( allows drawing on anim )
 // 3.8077 2016_05_29 (bugfix) for Android 5.0 with immersive mode/transparent toolbar on, the addition of drawing tool to the bottom
 //                   of the menu was causing a crash, putting into tilt now till decide how to handle
-//                   (bugfix) for some reason on a fresh install of L2 G2, initital launch of radar was crashing on
+//                   (bugfix) for some reason on a fresh install of L2 G2, initial launch of radar was crashing on
 //                   DeleteCacheFiles, check of context is null and reorder some stuff
 // 3.8076 2016_05_29 FingerDraw - integrate wxogl (single/multi)
 // 3.8075 2016_05_29 telecine - change notif color to match rest of wX
@@ -2978,44 +2978,44 @@ Caused by: java.lang.AssertionError:
 //                   Telecine - change default to not do 3sec countdown
 //                   Telecine - Android 6.0 if external storage write is allow go to overlay perm screen
 // 3.8072 2016_05_28 locfrag - another attempt to fix bug #1 using isAdded() in postexecute
-// 3.8071 2016_05_28 Telecine - RecordingSession - for media recorder add a few checks to see if null and surroun stop() with try/catch
+// 3.8071 2016_05_28 Telecine - RecordingSession - for media recorder add a few checks to see if null and surround stop() with try/catch
 //                   Telecine settings - hide "hide from recents" , NA to embedded version
-// 3.8070 2016_05_28 Telecine - add support for multiple notifications by adjust notificationManager.notify, reciever, and implement unique requestcode
+// 3.8070 2016_05_28 Telecine - add support for multiple notifications by adjust notificationManager.notify, receiver, and implement unique requestcode
 // 3.8069 2016_05_28 Telecine - in RecordingSession->stopRecording change hideOverlay() to showOverlay()
 // 3.8068 2016_05_28 wxogl - removed unused code from initial attempt at video recording
 //                   create VideoRecordActivity as abstract class and extend from it in multipane spcmeso, cod model, and wxogl
-// 3.8067 2016_05_28 Telecin - standardize settings layout and move from Switch to SwitchCompat to mesh with themes
-// 3.8066 2016_05_28 Telecin - add notice to each file at top that changes were made ( required by APL2.0 )
+// 3.8067 2016_05_28 Telecine - standardize settings layout and move from Switch to SwitchCompat to mesh with themes
+// 3.8066 2016_05_28 Telecine - add notice to each file at top that changes were made ( required by APL2.0 )
 // 3.8065 2016_05_28 wxogl - don't stop anim if share chosen from submenu
 // 3.8064 2016_05_27 (bugfix) NHC storm GOES ID detect was not working leading to nothing in vis
-// 3.8063 2016_05_27 Telecin - support sdk 23 ( A6.0 ) and revamp look of UI for settings screen recorder
+// 3.8063 2016_05_27 Telecine - support sdk 23 ( A6.0 ) and revamp look of UI for settings screen recorder
 // 3.8062 2016_05_27 Telecine - move settings to radar-settings and share in radar goes right to capture icons
 // 3.8061 2016_05_27 Telecine - update notif for screenshot to use FLAG_CANCEL_CURRENT instead of 0
 // 3.8060 2016_05_27 Telecine - add changes from tylerjroach on github for adding screenshot as well
 //                   https://github.com/JakeWharton/Telecine/pull/77/files
 // 3.8059 2016_05_27 Telecine - modify theme of TelecineActivity and textcolor in layout
 //                   Telecine - add to multipane wxogl
-// 3.8058 2016_05_27 Telecine - integate code into MyApp for dagger injection
+// 3.8058 2016_05_27 Telecine - integrate code into MyApp for dagger injection
 // 3.8057 2016_05_27 Telecine - add to manifest and styles
 // 3.8056 2016_05_27 wxogl test of telecine when action_share
 // 3.8055 2016_05_27 lint cleanup and add "non-commercial" bit to about
 //                   (HIGH IMPACT) initial attempt at integration of telecine ( screencapture ) into wX, not yet used
 // 3.8054 2016_05_26 (bugfix) NWS has changed GOES ceus and w/e to a different project, remove ability to add overlays ( cities, watch/warn, etc )
 // 3.8053 2016_05_26 (bugfix) dual pane in immersive mode, map needs to be centered as rids at top not accessible
-// 3.8052 2016_05_25 (bugfix) wxogl quad pane not immersize but transparnet toolbar - fix for city text labels being off in 2 bottom panes
+// 3.8052 2016_05_25 (bugfix) wxogl quad pane not immersive but transparent toolbar - fix for city text labels being off in 2 bottom panes
 // 3.8051 2016_05_25 lint cleanup
 //                   JNI cleanup ( nexradl2ogl radialv2 )
 //                   remove UtilityNexradAnim
 //                   cleanup in SPCMeso and COD Model ( incl multipane )
 // 3.8050 2016_05_25 locfrag replace getActivity() with getActivitiyReference() in response to crashes in postexecture of forecast
 //                   the thinking is fragment gets destroyed and created while http is in transit and activity reference is gone
-// 3.8049 2016_05_25 hourly formating enhancement ( update utildownload as well since changes in utilushourly )
+// 3.8049 2016_05_25 hourly formatting enhancement ( update utildownload as well since changes in utilushourly )
 // 3.8048 2016_05_25 move getInputStreamFromURL_L2 from UtilityDownload to WXGLDownload ( and others in UtilityNexradAnim related to L2)
 //                   put framework in place for NWS L2 download site but don't use it ( in testing was slower then IOWA Mesonet )
 //                   move UtilityNexrad to WXGLNexrad
 // 3.8047 2016_05_24 lint cleanup
 //                   move decode8bitwx and rect8bitwx to JNI
-// 3.8046 2016_05_24 wxogl  add mediaprojectionmanager framekwork but don't use it yet
+// 3.8046 2016_05_24 wxogl  add mediaprojectionmanager framework but don't use it yet
 //                   lint cleanup
 // 3.8045 2016_05_24 lint cleanup include remove unused raw.hwv3 and UtilityNexradColorsOGL.java
 // 3.8044 2016_05_24 more changes related to 8043
@@ -3031,10 +3031,10 @@ Caused by: java.lang.AssertionError:
 //                   ModelsCOD (single/multi pane) - move animationdrawable creation to new class UtilityModelCODIO
 //                   various lint cleanups
 // 3.8037 2016_05_23 add trailing 1 to lat/lon of default location as NWS not displaying correctly
-//                   removed doco releated old city dataset
+//                   removed doco related old city dataset
 //                   update title for SPC Meso ( single/dual pane ) in strings/manifest
 //                   spcmeso change multi pane to dual pane in submenu
-// 3.8036 2016_05_22 remove raw resources city by state fiels ( legacy/outdate/not used ) and additional code cleanup
+// 3.8036 2016_05_22 remove raw resources city by state files ( legacy/outdated/not used ) and additional code cleanup
 // 3.8035 2016_05_22 integrate new city dataset from Gaz_places_national.txt
 //                   remove city ext setting - for wxogl there will be just one
 // 3.8034 2016_05_22 correct coords for Valentine, NE
@@ -3042,12 +3042,12 @@ Caused by: java.lang.AssertionError:
 // 3.8032 2016_05_22 debug option points to old NWS radar site
 // 3.8031 2016_05_22 wxogl single/multi - add onWindowFocusChanged to be used with immersive
 // 3.8030 2016_05_22 for toolbar.getbackground.setalpha add mutate() before setalpha so alertdiaglogue does not get impacted
-//                   also, remove uncessary calls as a result of adding mutate() ie onrestart/onstop in WX act
-//                   multi-pane radar - add support for hidding of toolbars when scrolling if configured ( best when used with immersive+transparent tb)
+//                   also, remove unnecessary calls as a result of adding mutate() ie onrestart/onstop in WX act
+//                   multi-pane radar - add support for hiding of toolbars when scrolling if configured ( best when used with immersive+transparent tb)
 // 3.8029 2016_05_22 support immersive mode in quad pane radar
 // 3.8028 2016_05_22 if debug enabled use main URL for radar data
 //                   support immersive mode in dual pane radar
-// 3.8027 2016_05_21 wxglsurfaceview , pass act so can trigger immservice mode in singlepan,fullscreen on action_down
+// 3.8027 2016_05_21 wxglsurfaceview , pass act so can trigger immersive mode in singlepan,fullscreen on action_down
 // 3.8026 2016_05_21 in settings->UI add option to enable immersive mode for single pane wxogl
 // 3.8025 2016_05_21 (bugfix) wxogl need to set transparent toolbars onrestart
 // 3.8024 2016_05_21 (bugfix) transparent toolbars need to revert onstop and also in wx->onrestart
@@ -3060,7 +3060,7 @@ Caused by: java.lang.AssertionError:
 //
 // 3.8021 2016_05_21 revert NWS radar download URL in WXGLdownload, hail, TVS, storm motion ( IPv6 DNS issue mostly seen over some cellular )
 //                   utiluswximg, metaract, utilmetar
-// 3.8020 2016_05_20 WXGLDownload.GetNidsArr - add some try code for inital dir dump
+// 3.8020 2016_05_20 WXGLDownload.GetNidsArr - add some try code for initial dir dump
 // 3.8019 2016_05_20 add CAB to manifest to prevent lint warning
 //                   rename wxogl layout ( forgot v on end )
 //                   declare "private" and "final" for various vars to appease lint
@@ -3082,7 +3082,7 @@ Caused by: java.lang.AssertionError:
 // 3.8016 2016_05_19 removed popup in wxlgrender for radar decode failed due to issues when animating
 //                   also reset oom_reached when contructpolygons is called
 // 3.8015 2016_05_19 add slice() after buffer name for all opengl calls ( Android "N" was not working , ignoring position in bb )
-// 3.8014 2016_05_18 performed invlidate/cache restart to clear things out in AS2.1
+// 3.8014 2016_05_18 performed invalidate/cache restart to clear things out in AS2.1
 //                   cleanup in cod model dual pane
 //                   add Local.US to clear lint warnings in all Model activities
 //                   rename to remove the end "v2" SPC SREF/MESO and SPC SWO ( java, layout, menu )
@@ -3101,7 +3101,7 @@ Caused by: java.lang.AssertionError:
 //                   http://www.nws.noaa.gov/om/notification/scn16-16wng.htm
 // 3.8008 2016_05_16 have notifs use myapp.notif_snd var
 // 3.8007 2016_05_16 foundations for picking notif sound
-// 3.8006 2016_05_16 (bugfix) swipe was occuring even when zoomed in
+// 3.8006 2016_05_16 (bugfix) swipe was occurring even when zoomed in
 // 3.8005 2016_05_16 add swipe left/right to COD/SREF/NCEP/TT
 // 3.8004 2016_05_15 spc meso multipane
 // 3.8003 2016_05_15 spc meso multipane
@@ -3130,8 +3130,8 @@ Caused by: java.lang.AssertionError:
 //                   current source stopped working tonight, change URLs in AlertReciever, seemed to work
 // 3.7987 2016_05_13 (bugfix?) in WX and locfrag move super.onrestart() and super.onresume() to first line in overriden method
 //                   hoping to fix rotation issues and occasional blank cards after restart
-// 3.7986 2016_05_13 (bugfix) fixed crash on entrace for SREF and HRRR when network is down
-//                   (bugfix) GOES - hide zoom for certain sectors, when select WFO from top pulldown change image type to vis
+// 3.7986 2016_05_13 (bugfix) fixed crash on entrance for SREF and HRRR when network is down
+//                   (bugfix) GOES - hide zoom for certain sectors, when select WFO from top pull down change image type to vis
 // 3.7985 2016_05_13 before this release in wxglrender only 2 precip products continued to allocate BB when range_bins==0
 //                   removed restriction and open to any radar product, reduce crashing when network is down
 //                   instead fail silently
@@ -3147,7 +3147,7 @@ Caused by: java.lang.AssertionError:
 // 3.7978 2016_05_12 wxgl - add prod 170 ( beta, no legend ) digital accum array (1hr)
 // 3.7977 2016_05_12 make new nws remove line break option the default
 //                   rename DSP to correct name
-//                   usalertsdetail - remove linebreaks in instrunctions
+//                   usalertsdetail - remove linebreaks in instructions
 // 3.7976 2016_05_11 utilusalertsdetail - add extra space to more closely mimic alerts.weather.gov
 //                   migrate off GetAFDforWidget to standard textprod download code
 //                   Utility.GetHazardsCard - add new code to enhance text formatting for small screens
@@ -3185,7 +3185,7 @@ Caused by: java.lang.AssertionError:
 // 3.7956 2016_05_07 WXGLRender - major cleanup
 // 3.7955 2016_05_07 WXOGL - consolidate methods used to download radar files to WXGLDownload
 // 3.7954 2016_05_07 (bugfix) quad pane pan while anim loading would cause crash at times
-// 3.7953 2016_05_07 backout change from  3.7950
+// 3.7953 2016_05_07 back-out change from  3.7950
 // 3.7952 2016_05_07 disable cards on main screen which as legacy mode is crashing with new wxgltext object
 // 3.7951 2016_05_07
 // 3.7950 2016_05_07 (HIGH IMPACT) wxogl color buffers, allocate on demand
@@ -3225,7 +3225,7 @@ Caused by: java.lang.AssertionError:
 // 3.7924 2016_05_03 migrate to WXGLTextObject
 // 3.7923 2016_05_03 add WXGLTextObject
 // 3.7922 2016_05_03 (bugfix) quad pane ogl was obscuring part of top toolbar
-//                    descrease base city text size in multipane
+//                    decrease base city text size in multipane
 // 3.7921 2016_05_02 (HIGH IMPACT) multi-pane minor rework in layout and java to better support cities
 // 3.7920 2016_05_02 (HIGH IMPACT) major revamp of multipane for init support of textview ( base city )
 //                   WIP - scale factor not quite right
@@ -3301,7 +3301,7 @@ Caused by: java.lang.AssertionError:
 // 3.7870 2016_04_23 Level 2 JNI cleanup
 // 3.7869 2016_04_23 Level 2 JNI cleanup, UtilityCanvasWarnings ( HIGH IMPACT ) check for LAT...LON otherwise ignore
 // 3.7868 2016_04_23 wxogl getcontent preexec - add bool flag for tdwr to replace multiple method calls to check
-// 3.7867 2016_04_23 Level 2 JNI - read bins in chunks vs seperately (nexradl2ogl.c/readData)
+// 3.7867 2016_04_23 Level 2 JNI - read bins in chunks vs separately (nexradl2ogl.c/readData)
 // 3.7866 2016_04_23 Level 2 JNI velocity now working
 // 3.7865 2016_04_23 WIP/HIGHIMPACT WXOGL Level 2 to full JNI
 // 3.7864 2016_04_22 work on nexradl2ogl
@@ -3315,26 +3315,26 @@ Caused by: java.lang.AssertionError:
 //                   add credit subtitle in GOES14
 // 3.7859 2016_04_21 GOES14 add ability to see images from past previous hr in anim
 //                   GOES14 , have anim delay cut in half, add 54 frames
-// 3.7858 2016_04_21 move GOES14 to seperate activity, add WV/IR and basic anim
+// 3.7858 2016_04_21 move GOES14 to separate activity, add WV/IR and basic anim
 // 3.7857 2016_04_20 COD GFS - add avg cloud cover and remove sector NW ( merged with CAN )
 //                   COD 1km/2m - add GOES14 as demo
 //                   (bugfix) GFS 850mb - duplicate parm was causing one to be missing
 //                   COD GFS remove 3km hel, 850mb wet bulb after image change
 // 3.7856 2016_04_20 (bugfix) COD NAM4KM was missing SGP ( southern great plains )
 //                   COD GFS url and bitmap ( add bgwhite layer ) change - part1
-// 3.7855 2016_04_20 spc swo - add ability to share day4-8 img seperate ( Caleb )
+// 3.7855 2016_04_20 spc swo - add ability to share day4-8 img separate ( Caleb )
 // 3.7854 2016_04_19 (bugfix) wxogl - if legend not shown and in DSP, showing legend would not have text
 // 3.7853 2016_04_19 (bugfix) wxogl - if legend not shown and DSP selected , legend would show
 // 3.7852 2016_04_19 172 color pal tweaks
-// 3.7851 2016_04_19 oglr  - init support for 172 PAL colormap and legend (  alpha , has isses )
+// 3.7851 2016_04_19 oglr  - init support for 172 PAL colormap and legend (  alpha , has issues )
 //                   removed 4bit ref/vel from choice in wxogl and dual pane
 // 3.7850 2016_04_19 implement halfword3132 for determine DSP legend scale ( (255/x)*.01 )
 // 3.7849 2016_04_19 add utilString parseInsensitive for upcoming May11 NWS change
 //                   cleanup unused PAL Files in raw
 // 3.7848 2016_04_19 wxogl - move legend and setting old_prod from pre to post
-// 3.7847 2016_04_18 (bufig) colormap163 had issues in the 0.2-1.0 range
+// 3.7847 2016_04_18 (bugfix) colormap163 had issues in the 0.2-1.0 range
 //                   oglr  - init support for 165 PAL colormap
-// 3.7846 2016_04_18 (bugfix) radar lenend would shown unit on every line after onrestart
+// 3.7846 2016_04_18 (bugfix) radar legend would shown unit on every line after onrestart
 // 3.7845 2016_04_18 legends - add unit to top entry
 //                   make legend show/hide persist
 // 3.7844 2016_04_16 (bugfix) vel legend text was to small
@@ -3383,7 +3383,7 @@ Caused by: java.lang.AssertionError:
 //                   color pal act - if builtin use yellow text, white otherwise
 //                   save color pal preview icons as JPEG instead of PNG ( 1/3 or less size )
 //                   change default date for cloned color map ( incl month/day )
-// 3.7808 2016_04_11 usability enhancementes it color map act
+// 3.7808 2016_04_11 usability enhancements it color map act
 // 3.7807 2016_04_11 colormap - icon would not regenerate if custom map was changed
 // 3.7806 2016_04_11 (bugfix) utilloc closest rid legacy code used for spotter activity only considered if rid was within 1k miles
 //                   spotters over seas would cause crash if selected
@@ -3396,7 +3396,7 @@ Caused by: java.lang.AssertionError:
 // 3.7799 2016_04_10 codenh ref tweaks ( yellow-orange-red )
 // 3.7798 2016_04_10 codenh ref tweaks ( pink )
 // 3.7797 2016_04_10 (bugfix) color map custom vel not working
-// 3.7796 2016_04_10 add prod to filename for colormap icons stored in interal storage
+// 3.7796 2016_04_10 add prod to filename for colormap icons stored in internal storage
 // 3.7795 2016_04_10 add helper methods in utilityio and utilityfm
 //                   colormap icon generation, save to internal storage and then attempt to restore if present
 // 3.7794 2016_04_10 color map vel - add prelim icon generation support
@@ -3412,7 +3412,7 @@ Caused by: java.lang.AssertionError:
 // 3.7787 2016_04_09 init support for color palette built-in editing for prod 94
 
 
-goole play release Apr 9 2016
+google play release Apr 9 2016
 
 // 3.7786 2016_04_08 cleanup
 // 3.7785 2016_04_08 wxogl - share screen not bitmap from legacy ( did not work )
@@ -3436,17 +3436,17 @@ goole play release Apr 9 2016
 // 3.7769 2016_04_06 adjust zoom size at which hw hide
 //                   add 2nd roads file
 // 3.7768 2016_04_06 new highway test
-// 3.7767 2016_04_05 (bugfix) locfrag longpress
-// 3.7766 2016_04_05 wxogl longpress - remove degrees ( not working fully and adding to much clutter )
+// 3.7767 2016_04_05 (bugfix) locfrag long-press
+// 3.7766 2016_04_05 wxogl long-press - remove degrees ( not working fully and adding to much clutter )
 // 3.7765 2016_04_04 (bugfix) locfrag tdwr was not working
 // 3.7764 2016_04_04 (bugfix) fix animation/icon stopping issues in wxogl single-pane ( onitemselected ) dual-pane ( ridmapswitch )
-// 3.7763 2016_04_04 (bugfux) dualpane longpress was showing 3 closest radar - not 4
-// 3.7762 2016_04_04 (bugfux) dualpane TDWR not fully working
+// 3.7763 2016_04_04 (bugfix) dualpane long-press was showing 3 closest radar - not 4
+// 3.7762 2016_04_04 (bugfix) dualpane TDWR not fully working
 // 3.7761 2016_04_04 port TDWR support to dual-pane
-// 3.7760 2016_04_04 wxogl dual-pane - update longpress screen to match single pane
-// 3.7759 2016_04_04 wxogl longpress - add degrees ( in relation to long-pressed lat/lon )
-// 3.7758 2016_04_04 wxogl longpress - add option to query radar status
-//                   wxogl longpress - add support for deg in longpress ( not finalized )
+// 3.7760 2016_04_04 wxogl dual-pane - update long-press screen to match single pane
+// 3.7759 2016_04_04 wxogl long-press - add degrees ( in relation to long-pressed lat/lon )
+// 3.7758 2016_04_04 wxogl long-press - add option to query radar status
+//                   wxogl long-press - add support for deg in long-press ( not finalized )
 // 3.7757 2016_04_04 wxogl - if tdwr , hide l2/l3 menu
 //                   fav mgt wxogl - add TDWR to radar list in add fav - detect if colon split on that else use space
 // 3.7756 2016_04_04 (bugfix) TDWR change algorithm to determine if tdwr, update pref location for cleveland
@@ -3459,15 +3459,15 @@ goole play release Apr 9 2016
 // 3.7751 2016_04_04 wxogl - initgeom - no longer check if TDWR product as nexrad/tdwr has been decoupled
 // 3.7750 2016_04_04 wxogl - long press change from "Switch to" to "Go to"
 // 3.7749 2016_04_04 wxogl - overhaul in the way TDWR is handled, no longer coupled with nexrad, no more submenu, alertdialogue
-// 3.7748 2016_04_03 (bugfix) new wxogl longpress show 3 closest radars was showing as KM not MI ( overloaded from original )
-// 3.7747 2016_04_03 wxogl longpress - test adding 3 closest radars ( new object in utilnexrad and overload in utilitylocation )
+// 3.7748 2016_04_03 (bugfix) new wxogl long-press show 3 closest radars was showing as KM not MI ( overloaded from original )
+// 3.7747 2016_04_03 wxogl long-press - test adding 3 closest radars ( new object in utilnexrad and overload in utilitylocation )
 // 3.7746 2016_04_03 testing with padding in simple_spinner_item.xml
 // 3.7745 2016_04_03 dup city removal CA TX AR MO IA SC CT ME MI
 // 3.7744 2016_04_03 (bugfix) wogl dualpane crash when locations locked and switch radar
 // 3.7743 2016_04_03 wxogl - refine text in popup and switch from nm to miles, enhance help text for location settings
-// 3.7742 2016_04_03 wxogl - more enhancements for longpress popup: show lat/lon, show distance from current location and rid
+// 3.7742 2016_04_03 wxogl - more enhancements for long-press popup: show lat/lon, show distance from current location and rid
 //                   (bugfix) - afd submenu, wfo hazard map website no longer avail but img is so switched to that
-//                   (bugfix) - related to how longpress new rid location is stored, was causing issues on successive long press
+//                   (bugfix) - related to how long-press new rid location is stored, was causing issues on successive long press
 // 3.7741 2016_04_03 wxogl dual pane switch long press to popup menu
 // 3.7740 2016_04_03 wxogl switch long press to popup menu
 // 3.7739 2016_04_02 settings->radar remove setting for showing cities ext nearby as we now load conus
@@ -3479,7 +3479,7 @@ goole play release Apr 9 2016
 // 3.7734 2016_04_02 wxogl city ext - minor tweaks
 //                   wxogl city ext - change spacing algorithm to only X more per screen since list now used to track
 // 3.7733 2016_04_02 wxogl city ext - replace array with list , list is populated dynamically with what is on screen
-// 3.7732 2016_04_02 (perf) wxogl city ext: utilcanvasstatelines and utilcityext - maintain hash in class and track with initalized variable
+// 3.7732 2016_04_02 (perf) wxogl city ext: utilcanvasstatelines and utilcityext - maintain hash in class and track with initialized variable
 //                   (perf) wxogl city ext: utilio.readTextFile increase buffer size from 1024 to 32768
 //                   utilmetar - move from local readtextfile to one in utilIO
 // 3.7731 2016_04_02 add setting to show cities in nearby states as performance is noticeably impacted ( startup of radar activity mostly )
@@ -3501,7 +3501,7 @@ goole play release Apr 9 2016
 //                    enhanced data set for hw incl CA/MX http://nationalmap.gov/small_scale/atlasftp.html?openChapters=chptrans#chptrans
 // 3.7718 2016_03_31 wxogl obs - add entry in settings->color
 //                   wxogl text overlays - add entry in settings->radar to use as a scale factor for text
-//                   wxogl single spotter label adust from factor of 2.0f to 1.5f as normal spotter was reduced from 1.0f to 0.75f
+//                   wxogl single spotter label adjust from factor of 2.0f to 1.5f as normal spotter was reduced from 1.0f to 0.75f
 // 3.7716 2016_03_30 (bugfix) spotter activity - if one does a search and then marks a favorite there was no way to get back to the main list
 //                   spotter activity - default mode is now radar mode
 // 3.7715 2016_03_30 wxogl metar - implement regexp in myapp for perf
@@ -3525,7 +3525,7 @@ goole play release Apr 9 2016
 //                   update state city files to include population in last column and sorted numeric reverse so big cities at top
 // 3.7703 2016_03_29 wxogl cities_ext - remove major cities from raw files and addtvcities will not hide when zoom in to far
 //                   display an increasing fraction of city ext as one zooms in
-// 3.7702 2016_03_29 bgufix wxogl tv double click was not working to display tv after
+// 3.7702 2016_03_29 bugfix wxogl tv double click was not working to display tv after
 // 3.7701 2016_03_29 bugfix wxogl double tap fullscreen wxogl not render tv
 // 3.7700 2016_03_29 implement generic anim: cod,codkm,goes
 // 3.7699 2016_03_29 implement generic anim: wxogl,wxogl_dualpane
@@ -3552,7 +3552,7 @@ goole play release Apr 9 2016
 // 3.7684 2016_03_27 init support for modern current conditions widget ( not able to test in emulation )
 //                   added code for wxogl obs to show surround state metar
 // 3.7683 2016_03_27 wxogl - show location dots for all US locations in addition to GPS dot if configured
-// 3.7682 2016_03_27 wxogl - move locdot from static array aseembly to buffers like all other objects
+// 3.7682 2016_03_27 wxogl - move locdot from static array assembly to buffers like all other objects
 //                   wxogl - move locdot from triangle to simu circle
 // 3.7681 2016_03_27 (bugfix) wxogl from spotter activity was crashing
 //                   increase text size for given spotter when radar invokes from spotter activity
@@ -3560,7 +3560,7 @@ goole play release Apr 9 2016
 //                   adjust scaling factor used in textview over opengl and move number to global var
 // 3.7679 2016_03_26 wxogl - add dewpt to obs
 // 3.7678 2016_03_26 wxogl - init support for obs
-// 3.7677 2016_03_26 add testcode in metartext for wxogl state obs
+// 3.7677 2016_03_26 add test code in metartext for wxogl state obs
 //                   (bugfix) try to prevent crash if enable autorefresh while in wxogl and try to exit
 //                   (bugfix) prevent spotter labels if in archive mode
 // 3.7676 2016_03_26 (bugfix )wxogl spotter label hide on map show
@@ -3585,7 +3585,7 @@ goole play release Apr 9 2016
 // 3.7661 2016_03_25 (bugfix) wxogl archive mode not showing locdot on storm report if locdot follows gps enabled
 // 3.7660 2016_03_25 (bugfix) US cc - if condition is blank it won't work correctly on main screen, change to "NA"
 // 3.7659 2016_03_25 (bugfix) spotter wxogl integration
-// 3.7658 2016_03_25 spotters - beginning infrastrucute for radar mode
+// 3.7658 2016_03_25 spotters - beginning infrastructure for radar mode
 // 3.7657 2016_03_25 spotters - initial work on fav mgmt
 // 3.7656 2016_03_24 wxogl - change getcontent in autorefresh to not run in parallel to prevent bug fix in prior release
 //                   spotters - change default color from green to pink
@@ -3593,8 +3593,8 @@ goole play release Apr 9 2016
 // 3.7655 2016_03_24 spotters - comment out sort of collection as possible reason for A5.0 crash
 //                   spotters - disable in locfrag until it reaches a greater level of stability
 // 3.7654 2016_03_24 spotters - strip out storm reports at bottom
-// 3.7653 2016_03_24 (bugfix) longpress wxogl not working with ffw
-// 3.7652 2016_03_24 add seperate jni file for spotter and update OGLR to use
+// 3.7653 2016_03_24 (bugfix) long-press wxogl not working with ffw
+// 3.7652 2016_03_24 add separate jni file for spotter and update OGLR to use
 //                   move to circle like construction ( 6 triangles ) for spotter
 // 3.7651 2016_03_24 (bugfix) spotter activity not working after 50 change
 // 3.7650 2016_03_24 wxogl only download data every 5 min
@@ -3616,14 +3616,14 @@ goole play release Apr 9 2016
 // 3.7637 2016_03_21 wrap sunrise detection in try after but report of a crash preventing app from open
 //                   add long press action to wxogl dualpane
 //                   wxogl dual pane - make long press action choice persist across reboots
-// 3.7636 2016_03_20 wxogl - implment long press inside ffw/tor/tst for popup text
-// 3.7635 2016_03_20 colors - begin the process for seperate tor/tst watch colors (  Dave )
+// 3.7636 2016_03_20 wxogl - implement long press inside ffw/tor/tst for popup text
+// 3.7635 2016_03_20 colors - begin the process for separate tor/tst watch colors (  Dave )
 // 3.7634 2016_03_19 wxogl meta - trim obs site file from 2900 down to 2300 based on website content listing
 // 3.7633 2016_03_19 wxogl add initial infrastructure for controlling what long press does
 //                   remove legacy spotter code in NWS Mosaic and COD as spotternetwork.org terms of use requires contact
 //                   (bugfix) SPC storm reports was offering L2 if a TDWR was nearby
 //                   insert metar site file into raw dir in res, add to DOC/METAR cmds used to generate that file
-//                   add UtilityMetar and activate longpress option in wxogl ( metar file needs some weeding out )
+//                   add UtilityMetar and activate long-press option in wxogl ( metar file needs some weeding out )
 // 3.7632 2016_03_19 CA - more work on cc and 7day notif
 // 3.7631 2016_03_19 CA - unhide 7day and cc notif in settingsgeneric so can test notifs
 // 3.7630 2016_03_19 temp icon change fon 14 to 13 so negative fits
@@ -3641,10 +3641,10 @@ goole play release Apr 9 2016
 //                   torn notification - use some process as tab headers as it was counting test warnings ( Steve reported )
 // 3.7621 2016_03_17 add moon phase data to sunmoonactivity
 // 3.7620 2016_03_17 add more concise and non enoded text in sunmoonactivity
-// 3.7619 2016_03_17 add seperate activity: SunMoonActivity
+// 3.7619 2016_03_17 add separate activity: SunMoonActivity
 // 3.7618 2016_03_15 SPC SREF - change action_share title to param from param_label which wasn't getting updated
 //                   correct spacing issue in COD HRRR labels
-//                   remove "No" option from restart dialogue. recieved a bug report from someone who chose simple mode but didn't restart, force restart from now on
+//                   remove "No" option from restart dialogue. received a bug report from someone who chose simple mode but didn't restart, force restart from now on
 //                   improve help text
 // 3.7617 2016_03_15 dual pane radar , change getcontent to run parallel after setting idx_str
 // 3.7616 2016_03_14 CA7day change tstorm from tsra to scttsra
@@ -3652,7 +3652,7 @@ goole play release Apr 9 2016
 // 3.7614 2016_03_13 CA7 day add regex for "steady near zero."
 // 3.7613 2016_03_13 update few remaining CA cities with no lat/lon
 //                   cod mosaics meso - add Vorticity,Theta,Moisture Divergence,Wind Vectors
-// 3.7612 2016_03_13 CA - add disclaimor for CA data similar to AU in loc frag, CA hrly, CA warn
+// 3.7612 2016_03_13 CA - add disclaimer for CA data similar to AU in loc frag, CA hrly, CA warn
 //                    bugfix - CA hourly not showing data after addition of lat/lon to x/y
 
 
@@ -3678,9 +3678,9 @@ goole play release Apr 9 2016
 //                   update android-ndk-r10e to android-ndk-r11
 // 3.7605 2016_03_10 (bugfix - try2) sharing of level 2 radar would cause crash
 // 3.7604 2016_03_10 (bugfix) sharing of level 2 radar would cause crash
-// 3.7603 2016_03_09 RecylviewViewHolder - change setBackgroundColor to setCardBackgroundColor to resolve bug in pre-lolli
-// 3.7602 2016_03_09 Model TT - add new parms to HRRR
-//                   RecylviewViewHolder - conditional for SDK version related to drag and drop color change ( crashing on prelollipop )
+// 3.7603 2016_03_09 RecylviewViewHolder - change setBackgroundColor to setCardBackgroundColor to resolve bug in pre-lollipop
+// 3.7602 2016_03_09 Model TT - add new params to HRRR
+//                   RecylviewViewHolder - conditional for SDK version related to drag and drop color change ( crashing on pre-lollipop )
 //                   java.lang.ClassCastException: android.graphics.drawable.ColorDrawable cannot be cast to android.support.v7.widget.RoundRectDrawableWithShadow
 // 3.7601 2016_03_09 DnD support - add color during long press ( Yellow )
 // 3.7600 2016_03_09 init support for drag and drop placement of IMGGOES fragment tiles
@@ -3694,7 +3694,7 @@ goole play release Apr 9 2016
 //                   modify TileAdapter and MISC/SPC and both IMG fragmentes to use this new code
 //                   NOTE: tiles can now move but does not persist across restart
 // 3.7595 2016_03_08 (bugfix) share not working wxogl singleframe
-//                   (bugfix) CA7day wasn't picking put verbiage for Freezing rain when it started sentance
+//                   (bugfix) CA7day wasn't picking put verbiage for Freezing rain when it started sentence
 // 3.7594 2016_03_08 wxogl - if dualpane in toolbar have misc icon change and invoke single pane
 // 3.7593 2016_03_07 wxogl ( and dualpane ) - add sleep after l2 anim stops to prevent crash
 //                   cod1km and spc meso anim, add extra sleep at the end
@@ -3706,14 +3706,14 @@ goole play release Apr 9 2016
 // 3.7589 2016_03_06 settings main - for cod vis show alert that manual restart is  needed
 // 3.7588 2016_03_06 util download L2 increase size for ref on download ( was crashing on complex scenes )
 // 3.7587 2016_03_05 add METARText activity accessible from Obs
-// 3.7586 2016_03_05 usgoes - for wfo view hide wv in menu, for zoomout once back to wfo switch image type to vis
-//                   usgoes - if ceus hide zoomout in menu
+// 3.7586 2016_03_05 usgoes - for wfo view hide wv in menu, for zoom-out once back to wfo switch image type to vis
+//                   usgoes - if ceus hide zoom-out in menu
 // 3.7585 2016_03_05 (bugfix) CA if obs is not reporting still show 7day ( try statement in utilca )
 // 3.7584 2016_03_05 CA 7day change Showers to howers and Cloud to loudy
 //                   wxogl dualpane - show radar scan - show data both both radars
 // 3.7583 2016_03_04 (bugfix) ogl - some sites have 4bit vel, srm with 361 radials and not 360, hardcode loop to 360
 // 3.7582 2016_03_04 (bugfix) wxogl - add fav was using wfo array and not rid array
-//                   wogl dualpane - comment out setEGLConfigChooser ( which allows in emulation )
+//                   wxogl dualpane - comment out setEGLConfigChooser ( which allows in emulation )
 // 3.7581 2016_03_04 wxogl dualpane - if share lat/lon zoom have radar 2 assume it prefs for 1
 // 3.7580 2016_03_04 wxogl dualpane - if shared lat/lon switch both RIDs on map change or startup
 //                   wxogl dualpane - cleanup
@@ -3753,9 +3753,9 @@ goole play release Apr 9 2016
 // 3.7557 2016_03_01 add enhanced GPS support in wxogl for auto-ref
 // 3.7556 2016_03_01 update cardview_playlist padding to remove lint warnings
 //                   cleanup in settings playlist and autodownload
-//                   lint supress - add to manifest: android:supportsRtl="false"
+//                   lint suppress - add to manifest: android:supportsRtl="false"
 //                   cleanup locfrag
-//                   uswxogl dualpane init framekwork
+//                   uswxogl dualpane init framework
 // 3.7555 2016_03_01 removed v21 of this and moved to drawable layout/toast_shape.xml
 //                   in utilloc add ContextCompat.checkSelfPermission for GetGPS*
 //                   cleanup in codmosaic* / codmeso
@@ -3774,7 +3774,7 @@ goole play release Apr 9 2016
 //                   NZ 7day - add support for sunrise/sunset - locations need to be re-saved to pickup lat/lon
 // 3.7548 2016_02_28 AU 7day - add support for sunrise/sunset - locations need to be re-saved to pickup lat/lon
 // 3.7547 2016_02_28 CA 7day - add support for sunrise/sunset - locations need to be re-saved to pickup lat/lon
-// 3.7546 2016_02_28 bugfix - models tt - nam12/32 rundetection was not fully working
+// 3.7546 2016_02_28 bugfix - models tt - nam12/32 run detection was not fully working
 // 3.7545 2016_02_28 to comply with copyright requirements of the BOM(AU) add bottom card with credits and open to website if tapped
 //                   also add forecast issuance for 7day
 //                   minor cleanup in locfrag
@@ -3812,7 +3812,7 @@ goole play release Apr 9 2016
 // 3.7526 2016_02_23 COD sounding - correct maps and add text product
 // 3.7525 2016_02_23 CA/COD sounding - add png images for mx/ak/conus and init support via imagemap
 // 3.7524 2016_02_23 CA sounding - add hodo
-// 3.7523 2016_02_22 SPC Meso - added 3 new parms in composite related to hail
+// 3.7523 2016_02_22 SPC Meso - added 3 new params in composite related to hail
 // 3.7522 2016_02_22 bugfix - spccompmap if nothing selected ( on restart ) - reported via crash bug/comment
 //                   new orange theme ( beta )
 //                   new NWS Observation site interface
@@ -3877,14 +3877,14 @@ goole play release Apr 9 2016
 //                   (bugfix) UtilityNWS.GetIconForNonUS, if url is "" return blank img
 // 3.7479 2016_02_04 major cleanup ( loc frag , color picker )
 // 3.7478 2016_02_04 major cleanup ( spc storm reports, nhc )
-//                   SPCMeso - add Classic,Beta submenu and new parms
-//                   SPCMeso - add 1 new comp and 3 new winter parms
+//                   SPCMeso - add Classic,Beta submenu and new params
+//                   SPCMeso - add 1 new comp and 3 new winter params
 // 3.7477 2016_02_03 major cleanup
 //                   in SPC storm reports make share be a submenu so can share text and image separately per user request
 // 3.7476 2016_02_03 major cleanup
 // 3.7475 2016_02_03 major cleanup
 // 3.7474 2016_02_03 major cleanup
-// 3.7473 2016_02_03 major cleanup ( ostly wxogl related )
+// 3.7473 2016_02_03 major cleanup ( mostly wxogl related )
 // 3.7472 2016_02_03 major cleanup
 // 3.7471 2016_02_03 mark methods as private as shown via inspect
 // 3.7470 2016_02_02 add final to many vars as shown via inspect
@@ -3925,7 +3925,7 @@ goole play release Apr 9 2016
 // 3.7442 2016_01_28 further work on tropical tidbits
 // 3.7441 2016_01_28 init framework tropical tidbits model interface
 // 3.7440 2016_01_27 convert remaining nodpi  gif to png to prevent lint warnings
-// 3.7439 2016_01_27 convert some of the nost used image maps ( cwa,rid,snd,obs ) from gif to png to prevent lint warnings
+// 3.7439 2016_01_27 convert some of the most used image maps ( cwa,rid,snd,obs ) from gif to png to prevent lint warnings
 // 3.7438 2016_01_27 minor cleanup
 // 3.7437 2016_01_26 minor cleanup
 // 3.7436 2016_01_26 minor cleanup
@@ -3960,7 +3960,7 @@ goole play release Apr 9 2016
 // 3.7417 2016_01_13 minor cleanup
 // 3.7416 2016_01_13 rename casnd and cleanup in homescreen and aumodel, settings playlist, usalerts
 //                   remove old settings location based on listview
-// 3.7415 2016_01_13 CA,AU - remove back arrors in toolbar for settings location, add subtitle with instructions
+// 3.7415 2016_01_13 CA,AU - remove back arrows in toolbar for settings location, add subtitle with instructions
 //                   CA,AU - remove old listview based settings location
 //                   CA UV text product needed a regexp change because EC changed html
 //                   CA TEXT - last used is now restored next time activity is started
@@ -4047,7 +4047,7 @@ goole play release Apr 9 2016
 // 3.7369 2016_01_05 CA radar - fix map
 //                   CA hourly - move to card
 //                   CA 7day show blank icon if not found
-//                   CA hazards move to new framekwork ( prev wasn't showing anything )
+//                   CA hazards move to new framework ( prev wasn't showing anything )
 // 3.7368 2016_01_05 CA 7day - continued work
 //                   CA radar - init support for map
 // 3.7367 2016_01_04 CA 7day - continued work , icon detection via string parsing
@@ -4126,7 +4126,7 @@ goole play release Apr 9 2016
 // 3.7313 2015_12_17 bugfix: spc meso/sref force bg to dark blue in listrow_group and LL In listrow_details
 // 3.7312 2015_12_17 bugfix: change listrow_details layout to dark blue bg for sref/meso
 // 3.7311 2015_12_17 bugfix: spc meso and sref - drawerbackground change from primarydark to dark blue
-//                   bugfix: depreate radar6 in uswarn as it changes radar provider
+//                   bugfix: deprecate radar6 in uswarn as it changes radar provider
 // 3.7310 2015_12_16 bugfix: loc settings generic - ca/au were not flagged as never in menu
 // 3.7309 2015_12_16 settings -> ui, allow one to change tab headings
 //                   settings loc generic, move save off toolbar to fab in center and move gps icon to top, move map to menu
@@ -4202,7 +4202,7 @@ goole play release Apr 9 2016
 // 3.7263 2015_12_01 convert all remaining addfav activities to recyclerview with cards
 //                   bugfix - nwstextremove didn't have hardcoded theme fix for white theme
 // 3.7262 2015_12_01 recyclerview card - set layout_margin top/bottom
-// 3.7261 2015_12_01 conver SPC SND Add fav from listview to recyclerview
+// 3.7261 2015_12_01 convert SPC SND Add fav from listview to recyclerview
 // 3.7259 2015_12_01 try2 to 23.1.1 ( did a clean )
 // 3.7258 2015_12_01 revert support components from 23.1.1 to 23.1.0 -crashed on start LG G2 5.0
 // 3.7257 2015_12_01 add recylcerview to build.gradle for future use
@@ -4284,8 +4284,8 @@ goole play release Apr 9 2016
 // 3.7216 2015_11_22 change CC2 text formatting ( windchill/heat index to top line )
 //                   change default nws icon size from 28 to 24
 // 3.7215 2015_11_21 take leading space off conditions in CC2
-// 3.7214 2015_11_20 add reciever in settings playlist for download all to update list
-// 3.7213 2015_11_20 settings -> paylist, add plus and i at top to allow one to add playlist entries in bulk and w/o download
+// 3.7214 2015_11_20 add receiver in settings playlist for download all to update list
+// 3.7213 2015_11_20 settings -> playlist, add plus and i at top to allow one to add playlist entries in bulk and w/o download
 //                   myapp list of wfo sites - remove ANC ( anchorage ) which is not a valid WFO but probably an obs site
 // 3.7212 2015_11_20 update various SDK/build components
 //                   revert sunrise/sunset back to one line
@@ -4304,7 +4304,7 @@ goole play release Apr 9 2016
 // 3.7206 2015_11_17 ( HIGH IMPACT ) added ExternalDuplicateRemover and UtilityVTEC and modified severedash and utilspc to handle
 //                   dup entries from new tor/tst/ffw nws source
 // 3.7205 2015_11_17 ustor notif bugfix, trim tor/tst/ffw data before being stored in alert reciever ( required change in severe dash )
-// 3.7204 2015_11_16 alert rcv, correct ustor cnt after changein 203
+// 3.7204 2015_11_16 alert rcv, correct ustor cnt after change in 203
 //                   utilcanvaswarn move few regexp to myapp
 //                   cleanup in many activities modified past few days
 // 3.7203 2015_11_16 (VERY HIGH IMPACT) in alertreciever and myapp ( match_str ) , severe dashboard
@@ -4314,7 +4314,7 @@ goole play release Apr 9 2016
 // 3.7201 2015_11_16 bugfix - current conditions was only showing wind sustain in mph under certain conditions
 // 3.7200 2015_11_16 (HIGH impact )
 //                   add compiled regexp in myapp for conditions/7day
-//                   nunerous changes to MPD/MCD/WAT with regars to formatting and using utildownload
+//                   numerous changes to MPD/MCD/WAT with regars to formatting and using utildownload
 // 3.7199 2015_11_16 (HIGH impact +20 files modified )
 //                   settings loc generic - bugfix - if no lat/lon and tap on map , app crashes
 //                   numerous changes to standardize padding, text size
@@ -4382,12 +4382,12 @@ goole play release Apr 9 2016
 // 3.7161 2015_11_08 7DAY2 CC2 - if NULL return blank bitmap ( Reno, SF )
 // 3.7160 2015_11_08 7DAY2 icons - single img with dual nums
 // 3.7159 2015_11_08 7DAY2 icons - work on dual images with percents
-// 3.7158 2015_11_08 7DAY2 icons - add support for nws dual iamge icons that don't include text
+// 3.7158 2015_11_08 7DAY2 icons - add support for nws dual image icons that don't include text
 //                   7DAY2 icons - added missing additional icons which manifested as 7 day stopping after x days
 // 3.7157 2015_11_08 7DAY2 icons - add nws icons with percents ( rain, snow, etc )
 //                   7DAY2 icons - init work on dualimage decode
 // 3.7156 2015_11_07 7DAY2 - additional work in decoding wind direction
-// 3.7155 2015_11_07 7DAY2-decode wind directioin and show abbrev in title for each time period
+// 3.7155 2015_11_07 7DAY2-decode wind direction and show abbrev in title for each time period
 // 3.7154 2015_11_06 code cleanup
 // 3.7153 2015_11_06 user pointed out undocumented feature if refresh interval is set to 0 will not work
 //                   add in locfrag data_not_initialized and then updated help string
@@ -4411,12 +4411,12 @@ goole play release Apr 9 2016
 // 3.7138 2015_11_04 cc2 - use medium instead of large icon, scale to 250 instead of 200
 // 3.7137 2015_11_04 fix current conditions string issue, no "-" between visibility and summary
 // 3.7136 2015_11_04 fix current conditions weather summary bug, add beta CC2 card with icon
-// 3.7135 2015_11_04 ImageShowAct - fix bug causing crash  ( mostly from WPC Text ) turl[2] assumd arg was there
+// 3.7135 2015_11_04 ImageShowAct - fix bug causing crash  ( mostly from WPC Text ) turl[2] assumed arg was there
 //                   NHC/Hourly/USwarn - formatting changes
 // 3.7134 2015_11_03 WPC - add remaining 4 storm summaries
 //                   AFD - add near shore marine
-// 3.7133 2015_11_03 houly - plot, adjust colors to match theme and change domain labels to time stamp abbrev
-// 3.7132 2015_11_03 houry - disable hw accel at activity level ( OOM for large plots on rotate )
+// 3.7133 2015_11_03 hourly - plot, adjust colors to match theme and change domain labels to time stamp abbrev
+// 3.7132 2015_11_03 hourly - disable hw accel at activity level ( OOM for large plots on rotate )
 // 3.7131 2015_11_02 hourly - adjust height of plots as a % of width
 // 3.7130 2015_11_02 hourly - handle bad data better in plots, don't show plots till done
 //                   utilhourly - remove HI -10:00 in time stamp
@@ -4454,12 +4454,12 @@ goole play release Apr 9 2016
 // 3.7108 2015_10_29 locfrag, settings widget, HM cleanup
 // 3.7107 2015_10_29 locfrag, more work on nexrad timestamp
 // 3.7106 2015_10_29 locfrag getradar update status only when idx == loc specific radar
-// 3.7105 2015_10_29 locfrag - long press status change radar prod and reset zoom/center now imapct all nexrad radars on homescreen
+// 3.7105 2015_10_29 locfrag - long press status change radar prod and reset zoom/center now impact all nexrad radars on homescreen
 //                   OGLR - only save timestamp data if boolean is true ( used to prevent parallarl radar grabs from clobbering the pref )
 //                   by default is true but all non-location specific nexrad set this to false
 // 3.7104 2015_10_29 in wxogl long press if rid is current rid, reload and recenter
 // 3.7103 2015_10_28 disable glconfig for vm
-// 3.7102 2015_10_28 locfrag, if NXRD is changed via longpress update HM fav
+// 3.7102 2015_10_28 locfrag, if NXRD is changed via long-press update HM fav
 // 3.7101 2015_10_28 wxogl, use filenames with index on end to promote paralleslism in locfrag ( high impact )
 // 3.7100 2015_10_27 bugfix for work in 099 ( locfrag crash when switch locations when location specific nxrd not present but other nxrd present )
 // 3.7099 2015_10_27 locfrag,hm - work on supporting multiple wxogl ( high impact - locfrag, HM, myapp )
@@ -4478,12 +4478,12 @@ goole play release Apr 9 2016
 // 3.7095 2015_10_26 cleanup in Widget*
 //                   HM - add remaining IMG for FMAP and QPF
 // 3.7094 2015_10_26 utildownload - goes img now uses util method instead of url
-//                   widger radar mosaic can now display cod warnings if configured in settings->widgets
+//                   widget radar mosaic can now display cod warnings if configured in settings->widgets
 //                   1km vis widget now respects goes/cod pref
 //                   removed to backup locfrag files
 //                   added UtilityWidgetDownload which is now used by UtilityWidget and the respect widget class files
 // 3.7093 2015_10_26 quick attempt to add warnings ( via settings->widgets ) to cod radar mosaics ( not tested )
-// 3.7092 2015_10_24 add check in UtilityImg.DrawableToBitmap for size of bitmap in response to playstore reported crash
+// 3.7092 2015_10_24 add check in UtilityImg.DrawableToBitmap for size of bitmap in response to play store reported crash
 //                   in utilitywidet add remoteViews.setImageViewUri(R.id.iv, Uri.parse("")); before each call with valid data ( workaround for bug )
 // 3.7091 2015_10_23 HM vis click, support cod or goes depending on setting
 //                   locfrag ( created backup ) move wxogl to arraylist for possible multiple wxogl in HM
@@ -4581,19 +4581,19 @@ goole play release Apr 9 2016
 // 3.7031 2015_10_09 change color accent for gray/black themes
 // 3.7030 2015_10_08 make accent color for blue and green a distinct lighter color and modify v21 style to use new color
 // 3.7029 2015_10_08 add elev to activities missed so far ( spccomp, us alerts as examples )
-// 3.7028 2015_10_08 upadte SREF/WFO/SPCMESO/RID/SND to use FAB and have elev
-// 3.7027 2015_10_08 Playlist autodownload - remove bottom toolbar with delete icon to top
+// 3.7028 2015_10_08 update SREF/WFO/SPCMESO/RID/SND to use FAB and have elev
+// 3.7027 2015_10_08 Playlist auto-download - remove bottom toolbar with delete icon to top
 //                   move FAB margins to dimens and reduce from 28 to 18
 //                   add elevation to NHC
 // 3.7026 2015_10_08 bugfix related to elevation in settings
-// 3.7025 2015_10_08 bugfix in autodownload FAB conversion ( forgot to comment add item in menu xml )
+// 3.7025 2015_10_08 bugfix in auto-download FAB conversion ( forgot to comment add item in menu xml )
 // 3.7024 2015_10_08 handle dp to px conversion for elevation
-//                   add FAB to settings -> playlist -> autodownload
+//                   add FAB to settings -> playlist -> auto-download
 // 3.7023 2015_10_08 add elevation setting to activities that don't use toolbar hide code, elev max change from 20 to 30
 // 3.7022 2015_10_08 add elevation in pref ( fab/cards/toolbars ) - need to check all activities
 // 3.7021 2015_10_07 in styles ( v21 and norm ) change colorAccent away from white to match primary
-//                   settings playlist, use floating actiom button to replace play button in bottom toolbar
-//                   with more room, moreve up/down out of submenu to bottom toolbar as icons
+//                   settings playlist, use floating action button to replace play button in bottom toolbar
+//                   with more room, move up/down out of submenu to bottom toolbar as icons
 //                   settings location listview - move to FAB
 // 3.7020 2015_10_07 revert elevation change
 // 3.7019 2015_10_07 NHC and US Alerts - move remaining text content to cards
@@ -4602,7 +4602,7 @@ goole play release Apr 9 2016
 // 3.7017 2015_10_05 bugfix - NHC Notif would crash when notif is selected
 //                   add commented out entries for OGL under emulation
 // 3.7016 2015_10_02 bugfix in SPC storms reports related to header entries ( removed "Reports" from conditional )
-// 3.7015 2015_09_29 storm reports formattings changes, cleanup
+// 3.7015 2015_09_29 storm reports formatting changes, cleanup
 // 3.7014 2015_09_29 cleanup AFD
 //                   NHC - fix bug related to EPAC Monthly summary
 //                   NHC - optimizations
@@ -4611,7 +4611,7 @@ goole play release Apr 9 2016
 // 3.7013 2015_09_29 NHC bugfix related to card change
 // 3.7012 2015_09_29 cleanup ( SREF, MESO, others )
 // 3.7011 2015_09_29 cards, change elevation to 0
-// 3.7010 2015_09_29 revert toolbar elevation change, cleanup in NCEP, move frmo roundered corner to square for cards
+// 3.7010 2015_09_29 revert toolbar elevation change, cleanup in NCEP, move from rounded corner to square for cards
 // 3.7009 2015_09_29 change elevation from 0 to 10 in dimens for top toolbar, refine cards, and UtilityTheme
 // 3.7008 2015_09_29 cards in NHC and USWARN, additional TTS abbrev
 // 3.7007 2015_09_29 bump up version code and apply crash fix to spcsnd
@@ -4640,11 +4640,11 @@ goole play release Apr 9 2016
 // 3.5964 2015_09_23 new external code GifDecoder
 //                   revamp SPCCompmap with GifDecoder, use more useful labels, show 12hr precip and MSLP by default
 // 3.5963 2015_09_22 cleanup in HRRR
-//                   switch build enviroment from F21 to Xubuntu ( bring over $HOME ), added doco in DOC
+//                   switch build environment from F21 to Xubuntu ( bring over $HOME ), added doco in DOC
 // 3.5962 2015_09_22 clear all -> Clear all in strings.xml
 //                   GOES, hide mesoanalysis submenu if not at WFO level or one higher
 //                   cleanup in model COD/NCEP
-// 3.5961 2015_09_22 COD/NCEP restore last used run position and optimize intial getcontent
+// 3.5961 2015_09_22 COD/NCEP restore last used run position and optimize initial getcontent
 //                   COD/NCEP/HRRR for arrow nav changes comment out getcontent as it creates a 2nd request after spinner change
 // 3.5960 2015_09_22 COD 1KM/REG, GOES, save zoom,x,y ( resets on sector change )
 // 3.5959 2015_09_21 WXOGL - add new product hydrometeor classification
@@ -4660,7 +4660,7 @@ goole play release Apr 9 2016
 // 3.5949 2015_09_18 spcmeso/sref save/restore zoom and x,y posn
 //                   cleanup in spcmeso add/modify fav and utilityfav
 // 3.5948 2015_09_18 spcmesov2 bugfix, write to pref on spinner change ( in addition to drawer change )
-// 3.5947 2015_09_18 spcmeso fav bugfix for star unselect ( andd in specmesoremovefav )
+// 3.5947 2015_09_18 spcmeso fav bugfix for star unselect ( and in specmesoremovefav )
 // 3.5946 2015_09_18 swap old spcmeso to if debug enabled
 // 3.5945 2015_09_18 continued work on SPCMeso with fav
 // 3.5944 2015_09_17 integrate SPCMeso v2 for future favorites dropdown
@@ -4668,11 +4668,11 @@ goole play release Apr 9 2016
 //                   cleanup
 // 3.5942 2015_09_16 substantial cleanup
 //                   change lightning activity default time period to 0.25
-//                   settings main, move restart alert diaglog to Utility
-// 3.5941 2015_09_16 COD/NCEP save and restore last run time on exit/entrace of activity ( like SREFv2 )( not working yet )
+//                   settings main, move restart alert dialog to Utility
+// 3.5941 2015_09_16 COD/NCEP save and restore last run time on exit/entrance of activity ( like SREFv2 )( not working yet )
 //                   remove legacy sref code and assets
 //                   cleanup
-// 3.5940 2015_09_16 ridremovefav, commnet settitle to fall back to xml
+// 3.5940 2015_09_16 ridremovefav, comment settitle to fall back to xml
 //                   add back recent warnings to uswarn
 // 3.5939 2015_09_16 in utilfav, remove toast, add ... , change remove to modify, change title in xml values
 // 3.5938 2015_09_15 sport SREFv2 remove fav changes to RID/WFO/SND
@@ -4693,7 +4693,7 @@ goole play release Apr 9 2016
 // 3.5928 2015_09_13 add addition about verbiage and swap title and subtitle in SPC SREF
 // 3.5927 2015_09_12 add myapp regexps for ncep/sref
 // 3.5926 2015_09_12 SPC frag swap locations tstorm and sref
-//                   in Misc frag move WPC Text down one row, obsolete Cod historical warniangs, add NCEP to middle top row ( currently both on SPC/MISC tab )
+//                   in Misc frag move WPC Text down one row, obsolete Cod historical warnings, add NCEP to middle top row ( currently both on SPC/MISC tab )
 //                   add size in playlist settings
 // 3.5925 2015_09_11 cleanup in GOES menu mesoanaly include remove pfalls and gusts, cap all
 // 3.5924 2015_09_11 added additional images on fragmentGOES
@@ -4708,7 +4708,7 @@ goole play release Apr 9 2016
 // 3.5916 2015_09_09 move UtilityFTP into DOC and comment out commons-net ( apache ftp ) in gradle build
 //                   add additional share options in SPCMCDSumm
 //                   set checktor and checkspc to false as a default so no data is pulled via notif for new user ( google play )
-//                   cleanup uneeded setindeterminatevisibility
+//                   cleanup unneeded setindeterminatevisibility
 //                   remove iowa mosaic from beta area
 // 3.5915 2015_09_08 split work in UtilityCanvas
 //                   comment out in utilcanvasstatelines and utilhelper ( and other canvas )
@@ -4780,7 +4780,7 @@ goole play release Apr 9 2016
 // 3.5696 2015_08_30 actionbarheight to myapp
 // 3.5695 2015_08_30 utilfav move some vars to class scope
 //                   actionbarheight to myapp ( partial )
-// 3.5694 2015_08_30 msic conversion from Boolean to boolean ( and double )
+// 3.5694 2015_08_30 misc conversion from Boolean to boolean ( and double )
 // 3.5693 2015_08_30 utilfav remove last arg first method, cleanup in afd,wxogl,uswarn,usalerts
 //                   move spinner_layout to myapp
 // 3.5692 2015_08_29 move main playlist var to myapp
@@ -4791,11 +4791,11 @@ goole play release Apr 9 2016
 // 3.5689 2015_08_29 usalerts detail accidentally left translate on
 // 3.5688 2015_08_29 additional notif related prefs and cod_mosaic_image_type
 // 3.5687 2015_08_29 move loc frag pref to MyApp and others
-//                   moved many notif prefs in AlertReciever to myapp
+//                   moved many notif prefs in AlertReceiver to myapp
 //                   moved rid/wfo/snd_fav to myapp ( didn't move  add/remove activities yet )
-//                   bugfix - lioghtning act in switch statement ( missing some breaks )
+//                   bugfix - lightning act in switch statement ( missing some breaks )
 // 3.5686 2015_08_28 settings location, finish activity if delete location
-// 3.5685 2015_08_28 move FGF from 91 to 95 in scale factor for goes mercato
+// 3.5685 2015_08_28 move FGF from 91 to 95 in scale factor for goes mercator
 //                   move more wxogl related prefs to myapp
 // 3.5684 2015_08_27 code cleanup widget and crit radar, delete aug2015 bck files
 // 3.5683 2015_08_27 code cleanup UtilNotif-end ( save widget and crit radar )
@@ -4809,7 +4809,7 @@ goole play release Apr 9 2016
 // 3.5677 2015_08_21 attempt to fix TDWR geo issue
 //                   massive addition of location prefs into MyApp
 // 3.5676 2015_08_20 cleanup and disable long press misc tab for NWS mosaic
-// 3.5675 2015_08_20 cleanup, remove warnings/cities pref in COD Nexrada and rely on global
+// 3.5675 2015_08_20 cleanup, remove warnings/cities pref in COD Nexrad and rely on global
 //                    move fullscreen_mode and lock_toolbars pref to MyApp
 // 3.5674 2015_08_20 move myapp pref init to method and call from startup after init cfg
 // 3.5673 2015_08_19 cleanup
@@ -4875,11 +4875,11 @@ goole play release Apr 9 2016
 // 3.5633 2015_07_30 adjust hail icon size and STI line width slightly
 // 3.5632 2015_07_30 hail icons now change size as zoomed, also increased default size
 // 3.5631 2015_07_29 init hail index for wxogl
-// 3.5630 2015_07_29 for to upadte menu for hourly in support of 29
+// 3.5630 2015_07_29 for to update menu for hourly in support of 29
 // 3.5629 2015_07_29 add TVS and HI debug support for building product
 //                   hourly debug for TVS/HI and added share support in Hourly
 // 3.5628 2015_07_29 storm tracks - correct typo in activity settings radar
-//                   change arror to be more closed
+//                   change arrow to be more closed
 //                   don't show arrow if storm track is new
 // 3.5627 2015_07_28 add arrow to end of storm track
 // 3.5626 2015_07_28 integrate storm tracks in WXOGL
@@ -4904,7 +4904,7 @@ goole play release Apr 9 2016
 //                   cleanup in WXOGL, USIowa, and COD models, COD vis, and COD KM vis, CAB, USNWSGoes, SPCSREF, SPCSWO, SPCSnd, SPCMeso
 //                   cleanup in FAV: SND, WFO, RID
 // 3.5617 2015_07_21 uswarn - remove bottom toolbar and icons which aren't adding much value
-//                   cleanup ( includ USUtilty )
+//                   cleanup ( include USUtilty )
 // 3.5616 2015_07_21 cleanup
 // 3.5615 2015_07_21 locfrag, add menu item to reset zoom and center
 //                   cleanup
@@ -4915,7 +4915,7 @@ goole play release Apr 9 2016
 //                   WXOGL add stoprepeating in onStop() ( just in case )
 // 3.5612 2015_07_20 attempt #2 fix WXOGL issue in 5611
 // 3.5611 2015_07_20 fix issue in WXOGL in which toolbars are hidden and radar does not refresh on restart
-//                   add reciever in locfrag so that if no location is added spinner data updates upon completion
+//                   add receiver in locfrag so that if no location is added spinner data updates upon completion
 //
 // 3.5610 2015_07_20 add loc_label in hourly
 //                   spc state graphics, add support for d2/d3
@@ -4932,14 +4932,14 @@ goole play release Apr 9 2016
 // 3.5604 2015_07_16 in datastore init county data regardless ( FIXME )
 // 3.5603 2015_07_16 large update in support of counties
 // 3.5602 2015_07_16 added option ( default ) to use higher res state lines
-// 3.5601 2015_07_15 update hourly and UtilityHelper in preparaation for potential work on state borders and add counties
+// 3.5601 2015_07_15 update hourly and UtilityHelper in preparation for potential work on state borders and add counties
 // 3.5600 2015_07_15 in wxoglv2 and locfrag do not compute geom if rid has not changed
 // 3.5599 2015_07_14 significant changes in locfrag, wxogl, oglrender ( old copies saved JUL14 ) to enable
 //                   geography showing before radar
 // 3.5598 2015_07_14 attempted fix for archive mode
 //                   locfrag - move wxogl init pref to method and also call on resume
 //                   locfrag,wxoglv2 - move locdot draw to last thing to be drawn ( found cities to overlap and hide )
-//                   wxoglv2 - test onfling ( later disabed )
+//                   wxoglv2 - test onfling ( later disabled )
 // 3.5597 2015_07_14 remove WXOGLV2 from settings radar spinner
 // 3.5596 2015_07_14 remove radar entry for v2 and move v2 to WXOGL, rename old WXOGL to old
 //                   in storm reports point to v2 TODO: most likely level2 will not work correctly with new v2, need to fix
@@ -4947,7 +4947,7 @@ goole play release Apr 9 2016
 // 3.5594 2015_07_13 WXGLSurfaceView support toolbar locking and hiding
 //                   rename layout used in WXOGLV2
 // 3.5593 2015_07_13 rename layout used in WXOGL, correct bugs related to new WXOGLV2 and locfrag init size support
-// 3.5592 2015_07_13 locfrag - honpor wxogl init size, add v2 of wxogl
+// 3.5592 2015_07_13 locfrag - honor wxogl init size, add v2 of wxogl
 // 3.5591 2015_07_11 locfrag radar time stamp and attempt to fix bug when radar site changes after x,y changed
 // 3.5590 2015_07_10 wxgxsurfaceview force height = widget
 // 3.5589 2015_07_10 LocationFrag - don't init wxglsurface view if not showing radar on front
@@ -4961,10 +4961,10 @@ goole play release Apr 9 2016
 //                   minor add to stringsHelp
 //                   minor cleanup
 // 3.5582 2015_07_08 fix SPCCompmap bug discovered while moving to okhttp
-//                   revert lihgtning activity to main bitmap download ( now okhttp ) instead of one-off retry
+//                   revert lightning activity to main bitmap download ( now okhttp ) instead of one-off retry
 // 3.5581 2015_07_08 add subclassed Activity class "MyActivity" to support singletons specifically okhttp
 //                   move utility and utilitydownload to use new singleton
-//                   move getinputstreamfromurl to new okhttp framekwork
+//                   move getinputstreamfromurl to new okhttp framework
 // 3.5580 2015_07_07 integrate OKHTTP via gradle and update Utility and UtilityDownload to use it in bitmap and 2 text dwnld
 // 3.5579 2015_07_07 numerous improvements in WPCImages ( added forecast database conus prod along with arrow keys to move through time periods )
 //                   added bottom toolbar to make layout more consistent with other activities
@@ -4983,8 +4983,8 @@ goole play release Apr 9 2016
 //                   in UtilityImg add methods to crop and scale bitmap ( currently not used )
 // 3.5573 2015_06_25 in canvas drawstatelines change stroke size from 2 to 1
 // 3.5572 2015_06_25 remove twitter WU image, refine twstate, twtornado, and goes nodip images
-//                   cleanup uneeded code in MISC tab after prior few days changes
-// 3.5571 2015_06_25 add seperate v21 layout for toast_shape as attr was crashing pre-LP
+//                   cleanup unneeded code in MISC tab after prior few days changes
+// 3.5571 2015_06_25 add separate v21 layout for toast_shape as attr was crashing pre-LP
 // 3.5570 2015_06_25 in WPCimages store img to pref and restore when activity is started ( similar to AFD and others )
 //                   toast now has 90 deg edges, moved to bottom center, white text and bgcolog matches toolbar color based off theme
 //                   USWX/COD/IOWA converted to makeToast from makeText
@@ -5011,12 +5011,12 @@ goole play release Apr 9 2016
 //                   bugfix in WXOGL new zoom setting
 //                   WXOGL blank out subtitle in preexec of getcontent
 //                   cleanup in WXOGL
-// 3.5560 2015_06_18 removed undeeded layout and menu XML files
+// 3.5560 2015_06_18 removed unneeded layout and menu XML files
 //                   add subtitles in various MCD/MPD files
 //                   add prelim support for #stwx but don't enable
 //                   set wxogl default size to 15
 // 3.5559 2015_06_18 fix WXOGL zoom bug
-// 3.5558 2015_06_17 SPC Meso - add few missing parms and use subtitle
+// 3.5558 2015_06_17 SPC Meso - add few missing params and use subtitle
 //                   SPC MCD Show and Lightning - use subtitle
 // 3.5557 2015_06_17 cleanup in wxogl and downstream files
 // 3.5556 2015_06_17 WXOGL add setting for original size on start
@@ -5029,7 +5029,7 @@ goole play release Apr 9 2016
 //                   remove SettingsNZLocation class file
 //                   WXOGL - disable resetZoom for rad/vis/ir/wv
 // 3.5553 2015_06_16 in TTS don't speak LAT...LON till end for MCD/MPD
-//                   cleanup in lower alpha through COD save alert reciever
+//                   cleanup in lower alpha through COD save alert receiver
 // 3.5552 2015_06_15 WPCMCD share bitmap now along with text
 //                   iv cleanup in COD Mos, KM, AU Rad, CA rad, Models: HRRR, NCEP, COD
 //                   iv cleanup in WXOGL, IOWA nexrad, NWS mosaics, GOES, COD nexrad, USWX
@@ -5053,7 +5053,7 @@ goole play release Apr 9 2016
 //                   in playlist store and show time of last download for each saved text product
 //                   revert changes in lightning made to debug a user reported problem
 //                   image show activity - update when content is local to storage ( for storm reports )
-//                   Storm reports - IOWA Meso now saves local and goes to seperate activity instead of using imageview at top
+//                   Storm reports - IOWA Meso now saves local and goes to separate activity instead of using imageview at top
 //                   WXOGL, if in archive mode hide bottom toolbar
 //                   WXOGL, archive mode now supports long press to move RID ( not yet tested )
 // 3.5543 2015_06_10 enhance formatting in CA alerts
@@ -5075,7 +5075,7 @@ goole play release Apr 9 2016
 //                   in location generic settings move map from submenu to bottom toolbar
 //                   in location generic settings if AU or CA don't show all or any notif switches
 //                   in lightning add bitmap size toast if debug is turned on
-//                   add all voice regognition tokens in help xml file
+//                   add all voice recognition tokens in help xml file
 //                   additional TTS after IWX AFD new tokens
 // 3.5536 2015_06_05 UtilityUS - change first token in summary away from Thi to a day ( needs testing )
 //
@@ -5122,9 +5122,9 @@ goole play release Apr 9 2016
 //                   in wxogl add extra pref checks so that going into settings from wxogl will have changes
 //                   take effect on restart
 // 3.5508 2015_05_26 remove setting for watch color in color settings
-//                   in ogl and canvas now use tstorm/tor colors and show each watch color depeninding on type
+//                   in ogl and canvas now use tstorm/tor colors and show each watch color depending on type
 // 3.5507 2015_05_26 add GOM to TTS
-//                   seperate radar settings from main settings
+//                   separate radar settings from main settings
 //                   add radar settings to wxogl menu
 //                   add evenly spaced icons ( false ) and alert once and cancel on open alert ( both true ) to pref2 - no impact existing users
 //                   add line width config for warn and wat-mcd in wxogl
@@ -5155,10 +5155,10 @@ goole play release Apr 9 2016
 // 3.5427 2015_05_14 if spc url increase init backoff by 2
 // 3.5426 2015_05_14 http caching fix
 //                   implement retry logic in 3 downloads, add expon backoff
-// 3.5425 2015_05_14 disable chaching in http requests
+// 3.5425 2015_05_14 disable caching in http requests
 // 3.5424 2015_05_14 increate 2 ftp timeouts
 // 3.5423 2015_05_13 rework getbitmap to close more streams ( not sure if this matters )
-// 3.5422 2015_05_13 remove disconnects in 3 data gathet methods
+// 3.5422 2015_05_13 remove disconnects in 3 data gather methods
 // 3.5421 2015_05_13 set max conn in startup
 // 3.5420 2015_05_13 set keep alive to false
 // 3.5419 2015_05_13 disable keepalive in bitmap download in utility
@@ -5172,18 +5172,18 @@ goole play release Apr 9 2016
 //                   remove ability to add locations in NZ due to unwillingness to meet legal restrictions of metservice
 // 3.5413 2015_05_11 add HRRR exper
 //                   move sunrise/sunset to UtilityDownload and out of location frag
-//                   change from commericial website to local java code for sunrise/sunset calc
+//                   change from commercial website to local java code for sunrise/sunset calc
 //                   cleanup in UtilityNotif*
 // 3.5412 2015_05_11 bugfix for WPC QPF and forecast graphic URL change
 // 3.5411 2015_05_07 COD Meso - add run times and animation
 // 3.5410 2015_05_07 COD Meso - add in beta ( no anims , only current img )
 // 3.5409 2015_05_07 implement autocancel setting for notifs
-// 3.5408 2015_05_06 disable loggin in new UtilNotifUtils
+// 3.5408 2015_05_06 disable logging in new UtilNotifUtils
 //                   regexp change in UtilityLocation.GetXYFromNWSZone needed after NWS format change ( US alerts long press save by zone )
 // 3.5407 2015_05_06 in simple mode hide top toolbar ( tabs )
 //                   in notifs add a backup notif_str ( old ) to also check in case network causes a bad run
 //                   in location list and generic location run notifs after location deleted
-//                   in AFD if prod not avail show msg instea of nothing
+//                   in AFD if prod not avail show msg instead of nothing
 // 3.5406 2015_05_05 continued work on alert notify once
 // 3.5405 2015_05_04 init support for alert once notifs in SPC SWO and FW ( alex )
 // 3.5404 2015_05_04 attempted bugfix D48 notif
@@ -5196,8 +5196,8 @@ goole play release Apr 9 2016
 //
 // released
 //
-// 3.5401 2015_04_30 SPC SWO notife refinements ( add D4-8 )
-// 3.5400 2015_04_30 SPC SWO notife refinements
+// 3.5401 2015_04_30 SPC SWO notif refinements ( add D4-8 )
+// 3.5400 2015_04_30 SPC SWO notif refinements
 // 3.5399 2015_04_29 loc SPC SWO refinements ( lines that extend off land - use bounding box )
 // 3.5398 2015_04_29 loc SPC SWO refinements
 //                   location generic - set label on search term
@@ -5222,7 +5222,7 @@ goole play release Apr 9 2016
 //                   HRRR fixes and move to icon in MISC tab ( replace SPC compmap )
 //                   new provider for lightning maps
 // 3.5383 2015_04_20 move share location to app private space ( use custom FileProvider ) vs using ext sdcard ( caused issues for at least one user )
-// 3.5381 2015_04_17 HRRR bugfix, need to "prime" before img dwnld ( images are generated on the fly to known file path )
+// 3.5381 2015_04_17 HRRR bugfix, need to "prime" before img download ( images are generated on the fly to known file path )
 // 3.5380 2015_04_17 in SPC conv otlk support ENH risk ( alert recv and utility )
 // 3.5379 2015_04_16 COD Model GFS out to 384 from 240
 //                   HRRR inject a few older models with simple math
@@ -5244,7 +5244,7 @@ goole play release Apr 9 2016
 // 3.5366 2015_04_04 add anim gif support in radar AU/CA/NZ, SPC Meso, Models
 // 3.5365 2015_04_04 anim gif refinement
 // 3.5364 2015_04_03 continued migration to UtilityImageMap ( everything but COD 1km )
-// 3.5363 2015_04_03 consolidate imagemap code for RID to seperate Utility and point COD/IOWA/WX/WXOGL to it
+// 3.5363 2015_04_03 consolidate imagemap code for RID to separate Utility and point COD/IOWA/WX/WXOGL to it
 // 3.5362 2015_04_03 animated gif sharing test - added to all save wxogl ( noticed GOES didn't have share enabled, fixed )
 //
 // release
@@ -5282,7 +5282,7 @@ goole play release Apr 9 2016
 // 3.5340 2015_03_24 add support for SPCWAT to utility download
 // 3.5339 2015_03_24 bugfix: SPCMCDsumm - watch add playlist keeps extra w
 //                   bugfix: GOES - if select current location via map does not switch to vis
-// 3.5338 2015_03_24 bugfix: in GOES on start with conus wv selecting locatiokn via map shows nothing
+// 3.5338 2015_03_24 bugfix: in GOES on start with conus wv selecting location via map shows nothing
 //                   add doco on radar/mosaic activities
 // 3.5337 2015_03_23 convert USCOD/IOWA/WX to 2 toolbars and toolbar hide
 // 3.5336 2015_03_23 more anim zoom/pan: COD/IOWA/WX
@@ -5292,7 +5292,7 @@ goole play release Apr 9 2016
 //                   for cloud icon make COD the default again
 //                   in NWS GOES hide meso unless debug on
 //                   add help for main screen ( forecast/conditions )
-//                   fix bug in uswarn which casued incorrect WFO/location to be shown in some cases 
+//                   fix bug in uswarn which caused incorrect WFO/location to be shown in some cases
 //                   in NAM/RAP labels add / Lifted Index to 2m dpt
 //                   in COD KM,COD,GOES,NWSMosiac,WXOGL make anim zoom/pan
 //
@@ -5317,7 +5317,7 @@ goole play release Apr 9 2016
 //                   add sounding to CAB menu
 // 3.5323 2015_03_17 CA trans
 //                   full screen add: hourly, obs, snd, nws mosaic
-//                   enhance FXCN01 dwnld when not all 3 are there
+//                   enhance FXCN01 download when not all 3 are there
 // 3.5322 2015_03_17 CA trans
 // 3.5321 2015_03_17 bugfix related to fullscreen: AFD, wxogl - need to hide after spinner first fired
 //                   cleanup
@@ -5325,7 +5325,7 @@ goole play release Apr 9 2016
 //                   add UtilityToolbar overloads
 // 3.5320 2015_03_16 textscreen tap fullscreen test ( and numerous other activities )
 //                   add option for fullscreen mode
-//                   cleanuo
+//                   cleanup
 // 3.5319 2015_03_16 new class file: UtilityTTSTranslations
 //                   cleanup through COD* ( also delete CODSoundingRidSelectActivity )
 //                   add share in CA/NZ/AU radar ( icon was there but method was not )
@@ -5337,7 +5337,7 @@ goole play release Apr 9 2016
 //                   COD km - if 2k make ir/wv vis on zoomout
 // 3.5316 2015_03_15 CA trans, text screen two title removal in xml
 // 3.5315 2015_03_14 CA trans
-// 3.5314 2015_03_13 CA trans, rmeove title in xml for codmosaic
+// 3.5314 2015_03_13 CA trans, remove title in xml for codmosaic
 // 3.5313 2015_03_13 CA trans
 // 3.5312 2015_03_12 backout MB removal in trans
 // 3.5311 2015_03_12 CA trans
@@ -5381,7 +5381,7 @@ goole play release Apr 9 2016
 //                   cleanup in style XML
 // 3.5292 2015_03_08 toolbar bottom: NZ AU CA radar
 // 3.5291 2015_03_08 CA trans and additional CA text playlist
-//                   location settings generic - after delete change label to new convetion
+//                   location settings generic - after delete change label to new convention
 // 3.5290 2015_03_08 toast crash in settings state and CA text
 // 3.5289 2015_03_08 CA trans
 // 3.5288 2015_03_08 CA text playlist support added
@@ -5430,9 +5430,9 @@ goole play release Apr 9 2016
 // 3.5259 2015_03_03 white/black theme ( enhance XML ) and move settheme to top
 //                   in loc frag only show sounding for US
 //                   BUGFIX: in NHC share was showing HTML tags
-//                   BUGFIX: in NHC tap iamge was causing crash
+//                   BUGFIX: in NHC tap image was causing crash
 // 3.5258 2015_03_02 toolbar conversion: textscreen image_show   SPCFire, SPCMCD*, SPC tstorm, SPC ConvO, WPC text, US Alerts, hourly, severe dash
-// 3.5257 2015_03_02 toolbar conversion: settigns main, settings color
+// 3.5257 2015_03_02 toolbar conversion: settings main, settings color
 // 3.5256 2015_03_02 fix for spinner bg color in AB in AFD
 // 3.5255 2015_03_02 attempted fix for spinner bg color in AB in AFD
 // 3.5254 2015_03_02 bugfix in WFO add ( add space )
@@ -5449,10 +5449,10 @@ goole play release Apr 9 2016
 // 3.5251 2015_03_02  models v3 - update AB to toolbar
 //                   update layout, add toolbar code, move theme stuff to top
 //                   NWS trans
-// 3.5250 2015_03_01  settigns widget toolbar as AB
+// 3.5250 2015_03_01  settings widget toolbar as AB
 //                    BUG report Pat ( plreardon ) for non-function drawer icon in SPC compmap, found in SPC storm reports as well
-// 3.5249 2015_03_01  settigns widget toolbar as AB
-// 3.5248 2015_03_01 test toolbar playlist settings ( didn't work ) and settigns widget ( didn't work yet )
+// 3.5249 2015_03_01  settings widget toolbar as AB
+// 3.5248 2015_03_01 test toolbar playlist settings ( didn't work ) and settings widget ( didn't work yet )
 // 3.5247 2015_03_01 nhc menu change ( more icons ) , model v3 code cleanup
 // 3.5246 2015_03_01 model v3 init2
 // 3.5245 2015_03_01 model v3 init
@@ -5510,7 +5510,7 @@ goole play release Apr 9 2016
 // 3.5208 2015_02_19 remove CAB from settings main, remove one forced icon from COD mosaic
 // 3.5207 2015_02_19 in menu force 4 icons to always be in AB
 //                   settings widget, disable global switch and move to ActionBarActivity
-// 3.5206 2015_02_18 bugfixs
+// 3.5206 2015_02_18 bugfixes
 // 3.5204 2015_02_18 attempt to fix bug causing crash on switch to settings notif act
 //                   remove v21 layout which had padding no longer needed for AB hide
 // 3.5203 2015_02_18 revert menu change in notif
@@ -5587,7 +5587,7 @@ goole play release Apr 9 2016
 //        spc meso - if help NA show custom text
 //        spc storm reports - add default for settitle
 //        loc frag - add text for status in case no load
-// 3.5126 2015_02_09 spc spounding - bugfix in share summary
+// 3.5126 2015_02_09 spc sounding - bugfix in share summary
 //        Models: for title and sharing show param label instead of param
 //        voice command: roaming location
 //        SPC Meso - init work on friendly setTitle
@@ -5609,11 +5609,11 @@ goole play release Apr 9 2016
 // 3.5118 add view text in playlist
 // 3.5117 additional work on up/down in playlist
 //        add download status dialogue
-//        re-enable spc meso help diaglogue ( getbasecontext crashes, changed to this )
+//        re-enable spc meso help dialogue ( getbasecontext crashes, changed to this )
 // 3.5116 take 2 on bugfix ( its SWOD48 )
 //        playlist - add mode to move up/down
 // 3.5115 fix bug in playlist when adding SWODY48
-// 3.5114 fix bug in conditins for western sites that don't list observation site code ( was showing as null )
+// 3.5114 fix bug in conditions for western sites that don't list observation site code ( was showing as null )
 // 3.5113 work on playlist
 // 3.5112 in playlist settings remove pref on delete
 // 3.5111 add help for some SPC meso entries ( not working yet , comment out since crashes prg )
@@ -5701,17 +5701,17 @@ goole play release Apr 9 2016
 // 3.4054 bug fix, add twitter to vr
 // 3.4053 VR - check for valid rid, storm reports - date picker cancel outside dialogue
 // 3.4052 replace hourly icon in CAB with vr icon
-//        more abbrev tranlastions for TTS
+//        more abbrev translations for TTS
 //        remove CAB for listview
 //        add vr icon to loc settings
 //        add vr add location and wpc text
-// 3.4048 move cod sonding to webscreenab
+// 3.4048 move cod sounding to webscreenab
 // 3.4047 VR work, add PTS to translate
 //        models - re-enable and update nam4km
 // 3.4045 CAB voice command
 // 3.4044 move to local icons for play/stop and also move voice search icons into local area
 // 3.4043 test VR in loc settings
-// 3.4042 NWS abbrev: trof and NHC to nove TTS global singleton
+// 3.4042 NWS abbrev: trof and NHC to move TTS global singleton
 // 3.4041 NWS abbrev: baroclinic, *
 //        for play/pause icons move to android standard
 //        move all consumers of TTS to global singleton
@@ -5721,7 +5721,7 @@ goole play release Apr 9 2016
 // 3.4037 NWS abbrev
 // 3.4036 NWS abbrev - numerous adds
 //        for shared TTS menu moved to icon for play ( which meant adjusting for theme )
-//        for AFD/WPC, removed capbility to show prior versions of products and instead used just play icon for TTS
+//        for AFD/WPC, removed capability to show prior versions of products and instead used just play icon for TTS
 //        for SPCSWO moved from turl to turl[] and updated spc frag, spc swo sum, and alert reciever to compensate
 //        fixed requestID issue in notifs related to new TTS functionality
 // 3.4035 NWS abbrev updated IN and PROGGED
@@ -5730,7 +5730,7 @@ goole play release Apr 9 2016
 //        removed SPC from title for act under SPC tab
 //        changed SWO to Convective outlook
 //        dialogue change in CAB and frag so that touch outside cancels
-//        modle interface: add FLT
+//        model interface: add FLT
 //        add audio button to location alert notif
 //        add spc help to soundings activity
 // 3.4032 more TTS ( spc mcd summ and spc mpd summ )
@@ -5762,7 +5762,7 @@ goole play release Apr 9 2016
 // 3.4014 fix bug in model exposed by material design
 // 3.4013 work around the fact that material design forces uppercase ( storm reports and location frag )
 // 3.4012 color tweaks for primary blue theme in material design
-// 3.4011 adjust SPC SWO to accomodate SPC's recent format change
+// 3.4011 adjust SPC SWO to accommodate SPC recent format change
 //        add space between main screen 7day day/night phrases
 //        add material design theme if using Android 5.0 ( further tweaks will be needed )
 // 3.4010 revert httpclient change for getBitmapFromURL as error handling is not working
@@ -5778,14 +5778,14 @@ goole play release Apr 9 2016
 // 3.4004 attempted fix for A5
 // 3.4003 enhance restart for afd - check if rid_fav changed
 // 3.4002 disable onresume in afd and disable nam4km
-// 3.4001 update util model to accomodate CODs recent URL change for precip images, also commented out more ukmet
+// 3.4001 update util model to accommodate CODs recent URL change for precip images, also commented out more ukmet
 // 3.4000 update manifest to indicate version 3.4 release
 // 3.3457 for lack of a better place added 3 CPC products to the WPC activity
 //        for main screen added toast for back button ( which is disabled )
 // 3.3456 reduced COD img frag tiles to 300x225
 // 3.3455 fix bug related to imagemap size in AFD and GOES
 //        add 6 new products under WPC
-//        more movent to common intent variable
+//        more movement to common intent variable
 //        other random cleanup minor perf changes
 // 3.3454 start moving to one intent var per activity or use CAB one
 // 3.3453 undo change in model in which getcontent was commented before get status
@@ -5811,10 +5811,10 @@ goole play release Apr 9 2016
 // 3.3442 minor cosmetic enhancements in location generic
 //        location add now has default name of "Location 2" as opposed to "loc2"
 //        changed widget alerts action to go to uswarn to be more consistent with other countries like canada
-// 3.3441 added UtilityFavorites and cleaaned up AFD/Obs with regards to this functionality
+// 3.3441 added UtilityFavorites and cleaned up AFD/Obs with regards to this functionality
 //        removed "alerts" from CAB since it wasn't adding value and could cause confusion
 //        minor cosmetic improvements in settings main
-//        removed uncessary getActionBar().setSelectedNavigationItem(0); in onCreate and in some onRestart
+//        removed unnecessary getActionBar().setSelectedNavigationItem(0); in onCreate and in some onRestart
 //        changed delim to space in AFD/Obs
 //        WXOGL - migrate to UtilityFavorites
 // 3.3440 created utility class to support ModelInterface
@@ -5852,7 +5852,7 @@ goole play release Apr 9 2016
 // 3.3431 optim in models and other files to add Final to large constant string arrays for best practice
 //        loc frag optim with rid, radar type, and zipcode var to minimize checking and put data closer to where it's needed
 //        in loc frag moved GetHazards() from AsyncTask to normal method
-//        added seperate config option for lakes
+//        added separate config option for lakes
 //        remove src files for radar providers NCAR and WU which are no longer supported
 // 3.3430 optim array adapter in frags and settings, optim loc frag
 // 3.3429 create new class "UtilityHelper" to house 2 methods to generate packed float conus files for state lines and highways ( later lakes )
@@ -5864,7 +5864,7 @@ goole play release Apr 9 2016
 //        NHC - images are now clickable and lead to outlook
 // 3.3427 cleanup including in UtilityLocation
 // 3.3426 cleanup
-// 3.3425 in projection split 4326 from mercato for performance, cleaned them both up
+// 3.3425 in projection split 4326 from mercator for performance, cleaned them both up
 //        optim in Utility, UtilityUS, and UtilityMath
 // 3.3424 no changes just a rev bump for a bad tarball on 23
 // 3.3423 in pref add - for GUA for lon
@@ -5875,14 +5875,14 @@ goole play release Apr 9 2016
 //        in manifest added parent activity for many of the new activities
 // 3.3421 move conversion of var from object to prim ( ie int ) and replaceAll to replace
 // 3.3420 in utilstring and utilus utilftp nexrad attr uswarn and ogl replace some replaceall with replace since no regexp used
-//        more optim in startup
+//        more optimization in startup
 // 3.3419 nexrad attr , moved patter compiles outside loop and replace replaceAll with replace
-//        major cleanup and minor optim
+//        major cleanup and minor optimization
 //        changed arg for all Pref methods used at startup
 // 3.3418 pl move to prim in US goes and goes mercator and loc frag
-// 3.3417 optim in CAB with regrads to theme string and in all act that use CAB
-//        minor optin AFD related to map icon setup based on theme
-//        optim in Utility.GetStringFromURL and GetStringFromURLSep and CAB
+// 3.3417 optimization in CAB with regards to theme string and in all act that use CAB
+//        minor optimization AFD related to map icon setup based on theme
+//        optimization in Utility.GetStringFromURL and GetStringFromURLSep and CAB
 // 3.3416 disabled anim sleep code in 415, needs more work later
 //        start to cleanup use of pref var in act that extend CAB
 // 3.3415 for WXOGL added a sleep if anim was going to fast in accordance with anim cfg speed
@@ -5908,14 +5908,14 @@ goole play release Apr 9 2016
 // 3.3407 revert chan ge in 506 as perf decreases substantially (surprisingly )
 // 3.3406 OGL L2 - use static vars for bin_word for performance ( todo: radial_start_angle )
 // 3.3405 add datastore init check to activities that rely on 
-//        in loc frag setzoom for antying containing WX not just equal
+//        in loc frag set zoom for anything containing WX not just equal
 // 3.3404 move datastore init to WX from startup
 // 3.3403 moved NexradProdString data from UtilityNexrad to new DataStore
 //        8bit canvas - moved to direct BB
 //        in uswarn from misc tab also show ffw
 // 3.3402 COD tiles - scaled down from 800x600 to 400x300 and cropped one also
 // 3.3401 main - scale down tiles by factor of 2 and set explicit size, also remove table padding
-// 3.3400 NWS mosiac - removed cleanairfilter method for performance and data preservation reasons
+// 3.3400 NWS mosaic - removed cleanairfilter method for performance and data preservation reasons
 //        move tile icons to 565 bm format
 // 3.3399 startup - remove image and delay to save time/memory
 //        convert legacy products using canvas to use new global data structure for state lines/hw
@@ -5928,20 +5928,20 @@ goole play release Apr 9 2016
 // 3.3394 major comment cleanup
 //        COD mosaics - don't show warnings even if enabled by default
 //        add stringbuilder in text act 2
-// 3.3393 optim in canvas 8bit nexrad
+// 3.3393 optimization in canvas 8bit nexrad
 //        test new sounding provider UOO ( Oklahoma Weather Lab )
-// 3.3392 optim in L2 and OGL ( and numerous others related to duplicate pref vars )
-// 3.3391 optim in Utility and UtilityUS
-// 3.3390 optim in Utility, UtilityNotif, AlertReciever
-// 3.3389 optim in storm report, nexrad attr, hourly, text prod -  goes extend act instead of CAB
-// 3.3388 optim in WX and WXOGL radar, fix bug introduced by CAB cleanup related to pref init
+// 3.3392 optimization in L2 and OGL ( and numerous others related to duplicate pref vars )
+// 3.3391 optimization in Utility and UtilityUS
+// 3.3390 optimization in Utility, UtilityNotif, AlertReceiver
+// 3.3389 optimization in storm report, nexrad attr, hourly, text prod -  goes extend act instead of CAB
+// 3.3388 optimization in WX and WXOGL radar, fix bug introduced by CAB cleanup related to pref init
 // 3.3387 optimizations in Utility and CAB, loc frag, UtilityString,  UtilityUS,  UtilityMath, and AFD
 // 3.3386 troubleshoot notif cc and create key to sign
 // 3.3385 NHC add summary menu entry
 //        cleanup in xml both menu and layout
 // 3.3384 NWS mosaic add more states to smissvyl
 //        SPC SWODY summary - change layout
-//        NHC add scroll to top for subcontent
+//        NHC add scroll to top for sub-content
 //        rename cod radar file
 // 3.3383 add System.setProperty("http.keepAlive", "false"); in http related code
 // 3.3382 legacy state lines - add AZ to EPZ, for WXOGL, restart even if L2
@@ -5949,12 +5949,12 @@ goole play release Apr 9 2016
 // 3.3381 cleanup in OGL and L2
 // 3.3380 for L2 add info for "about scan"
 //        disabled L2 from WX radar option ( not WXOGL ) - performance in canvas is not good and will not be worked on as focus is on WXOGL ( OpenGL - GLES 2.0 )
-//        added option to delete old radar files for emergency use until cachedir us used
+//        added option to delete old radar files for emergency use until cache dir us used
 // 3.3379 minor cleanup
 // 3.3378 WXOGL improvements to double tap centering accuracy ( split ab )
 // 3.3377 WXOGL improvements to double tap centering accuracy
 //        cleanup
-// 3.3376 WXOGL attempted refinement in longpress related to status/action bar size and impact in touchevent and also scale ration of OGL ortho to screensize
+// 3.3376 WXOGL attempted refinement in long-press related to status/action bar size and impact in touchevent and also scale ration of OGL ortho to screensize
 //        cleanup ( incl in JNI )
 // 3.3375 Models - disable UKMET as NOAAport ( and thus COD )  no longer supports as of Oct5
 //        NWS Mosaic - in state lines added additional states in NE and UPPERMSVLY
@@ -5967,7 +5967,7 @@ goole play release Apr 9 2016
 // 3.3373 OGL - cleanup
 //        Updated BUGS, TODO, README
 //        OGL - fix bug when using TDWR product and switching to non TDWR site causes crash
-// 3.3372 bugfix related to new long press mercato
+// 3.3372 bugfix related to new long press mercator
 // 3.3371 OGL long press now supports touch off-center
 //        cleanup
 // 3.3370 major cleanup
@@ -5980,8 +5980,8 @@ goole play release Apr 9 2016
 //        cleanup
 // 3.3368 cleanup
 // 3.3367 OGL - fix for TZL, range bins to 1390
-// 3.3366 OGL - added titlt support in decide8bit and did some cleanup
-//        OGL - renamed global scale_factor to scale_factor_ogl to remove confusion with mercato var scale_factor
+// 3.3366 OGL - added tilt support in decide8bit and did some cleanup
+//        OGL - renamed global scale_factor to scale_factor_ogl to remove confusion with mercator var scale_factor
 //        cleanup
 // 3.3365 OGL - removed some logging in 8bit jni decode and downsized output buffer to 1MB down from 2MB ( 600kb would be sufficient )
 //        OGL - in utility nexrad move one Float to float ( binsize for rd2 )
@@ -6010,11 +6010,11 @@ goole play release Apr 9 2016
 // 3.3351 convert to primitives in critical areas ( int, double, etc ) for mem/perf reasons
 //        OGL L2 - continue to work to optimize
 //        cleanup
-// 3.3350 OGL L2 perf enhance, convert to byte for init data grab and comment out undeeded code
+// 3.3350 OGL L2 perf enhance, convert to byte for init data grab and comment out unneeded code
 // 3.3348 OGL L2 - additional enhancement needed for change done in 3347
 // 3.3347 OGL L2 - enhance to support AFB sites which have 360 radials instead of 720 
 // 3.3346 OGL viewer - fixed bug in which scale var in viewer was not in sync with OGL render after location change
-//        OGL - removed mercato cars from stae/hw and made global, renamed one to mercato_scale_factor to not interfere with projection data
+//        OGL - removed mercator cars from state/hw and made global, renamed one to mercato_scale_factor to not interfere with projection data
 // 3.3345 OGL viewer - reinstate onrestart code to refresh, cleanup
 // 3.3344 OGL - cleanup
 //        OGL - added code to handle anim wrap for file range 0000 to 0250 at NWS
@@ -6064,11 +6064,11 @@ goole play release Apr 9 2016
 // 3.3319 OGL JNI add dual pol color array, add switch statement for color selection. move 94/99 array load to functions
 // 3.3318 OGL JNI more work on colors
 // 3.3317 OGL - more work on JNI
-// 3.3316 OGL - line width on warnings to 2, init framekwork for JNI, move 8bit into OGL object
+// 3.3316 OGL - line width on warnings to 2, init framework for JNI, move 8bit into OGL object
 // 3.3315 updated nearby states for CO and LWX(VA), misc updates, doubled chunk size unsigned short will handle up to 64k
 // 3.3314 OGL - more work on double tap, bring UCAR RandomAccessFile in, in OGL render remove color alpha form list and hardcode in array
 //              created packed float files with format to match OGL lines and now for any RID in OGL all states/hw are shown
-// 3.3313 OGL - double tap now recenters ( mostly )
+// 3.3313 OGL - double tap now re-centers ( mostly )
 // 3.3312 OGL - add BufferInputStream in 4/8bit radial
 // 3.3311 OGL - OGL - enhance pan gesture
 // 3.3310 OGL - OGL - optimize colors, enhances to zoom gestures
@@ -6077,7 +6077,7 @@ goole play release Apr 9 2016
 // 3.3308 OGL - fix bug for 4bit prod colors introduced by 307
 // 3.3307 OGL - enumerate float colors for 94 and 99
 // 3.3306 OGL - fix for ts/tor warn
-// 3.3305 OGL - add version of compute mercato number that retuns Float array for added precision now available via OpenGL
+// 3.3305 OGL - add version of compute mercator number that returns Float array for added precision now available via OpenGL
 // 3.3304 OGL - enhance single tap gesture to keep centered on zoom out
 //        OGL - add support for L2
 // 3.3303 OGL - gesture enhancements and removed z-value from state lines/hw for minor perf enhance
@@ -6102,13 +6102,13 @@ goole play release Apr 9 2016
 //        misc cleanup
 // 3.3284 bugfix related to support of non-48 states in L2 ( rid prefix )
 //        added demo code OpenGLDemo OpenGLRenderer and Square to start experimenting with OGL as possible render engine for radar
-// 3.3283 L2 background now creates intent to ImageShowAct, seperate submenu for L2 in WX 
+// 3.3283 L2 background now creates intent to ImageShowAct, separate submenu for L2 in WX
 //        misc work on L2 incl adding VEL
 // 3.3282 move to intent service for L2 processing
 // 3.3281 add method to process L2 in BG
 // 3.3280 4bit radial fix when angles do not end in 0
 //        cleanup 
-//         from  Unidata NetCD and others numerous classes brought in ( apachage and unrestricted license ) in support of beta L2 ref
+//         from  Unidata NetCD and others numerous classes brought in ( apache and unrestricted license ) in support of beta L2 ref
 // 3.3279 8bit radial fix when angles do not end in 0
 // 3.3278 in UtilityUSImg add methods to return class and extra depending on radar choice, update CAB to use
 //        pervasive updates to move to UtilityUSImg
@@ -6158,7 +6158,7 @@ goole play release Apr 9 2016
 // 3.3243 WX nexrad , add prefix for HI/AK/PR, add lookup for prod
 //        optimize mem alloc in render for WX nexrad
 //        minor code cleanup in WX nexrad
-//        moved WX nexrad from mercato to no projection to improve speed
+//        moved WX nexrad from mercator to no projection to improve speed
 //        WX nexrad tweaked scale factor
 // 3.3242 more work on nexrad decoder
 // 3.3241 more work on nexrad decoder
@@ -6177,12 +6177,12 @@ goole play release Apr 9 2016
 //        partial code cleanup related to canvas master
 // 3.3231 update HW for 6 states
 //        canvas state lines - update few states that had missing nearby states TN PA
-//        corrected bugs causing crashes for DFW and CLE TWDR related to pref3 or mapping in iowa util
+//        corrected bugs causing crashes for DFW and CLE TDWR related to pref3 or mapping in iowa util
 //        fixed bug for PR in uswarn in which NWS office is coming as JSJ instead of SJU to added entries for location and rid map in util pref
-//        added seperate config in main settings to control current location dot
+//        added separate config in main settings to control current location dot
 // 3.3230 added WU to master canvas method
 //        for canvas state line/hw added some additional states to NWS Sector state lists
-//        for Iowa mosaic, added to Canvas master framekwork and added class to handle image processing seperate from display in activity
+//        for Iowa mosaic, added to Canvas master framework and added class to handle image processing seperate from display in activity
 //        moved non-anim GOES to new canvas framework
 //        in canvas city slight logic change regarding label and size of dot
 // 3.3229 update hw for 16 states, init support for master canvas method 
@@ -6214,7 +6214,7 @@ goole play release Apr 9 2016
 //        hw update to ia mo ar la
 // 3.3216 iowa meso mosaic in beta now supports highways
 //        hw update tx ok ks ne sd nd
-// 3.3215 added a few more bordering states for tn and ky, highway line width is now a parametar and is larger for TDWR , 2 vs 1
+// 3.3215 added a few more bordering states for tn and ky, highway line width is now a parameter and is larger for TDWR , 2 vs 1
 //        refinements to states: nj, de, md, mi, ma, ga
 //        cleanup in UtilityUSImgIOWA
 //        moved iowa nexrad archived ( storm reports ) to new canvas architecture
@@ -6255,7 +6255,7 @@ goole play release Apr 9 2016
 // 3.3188 added CA WU support and added scale factor for TDWR
 //        added most TDWR lat/lon
 // 3.3187 added anim support for TDWR to Iowa, comments have need scale and xy data
-//        init support for WU, after reviewing legacl info on WU site this might need to be removed as an option ( but kept in src ) so others would need to enable manually
+//        init support for WU, after reviewing legal info on WU site this might need to be removed as an option ( but kept in src ) so others would need to enable manually
 //        for their own use. Benefits are TDWR support ( multiple prod ) and Canada with base velocity which EC doesn't even offer
 // 3.3186 scale and xy adjust to nws mosaic HI
 //        minor tweaks to white background for Iowa nexrad
@@ -6264,7 +6264,7 @@ goole play release Apr 9 2016
 // 3.3185 added few more AK cities and Lexington, KY
 //        adjusted most AK RID x/y
 //        fix bug ok GOES for AK/HI, removed GOES canvas files as no longer needed
-//        NWS mosaic now uses standard white/black fornt instead of green
+//        NWS mosaic now uses standard white/black font instead of green
 //        cleanup in canvas
 // 3.3184 added 10+ cities in HI/AK
 //        cleanup and bugfix in GOES
@@ -6279,7 +6279,7 @@ goole play release Apr 9 2016
 //        in beta move iowa mosaic from webview to ImageShowActivity
 //        add polygon width to projection num class
 //        iowa nexrad - use different font size for city depending on radar type
-// 3.3178 in Iowa nexrad viewer fix bug related to handling of turl[2], add projection for iowa128, move mercato_calc to canvasprojection
+// 3.3178 in Iowa nexrad viewer fix bug related to handling of turl[2], add projection for iowa128, move mercator_calc to canvasprojection
 // 3.3177 in Iowa cleaned up use of product names ( removed translations ) and added net and n0s, need to work on scaling for canvas operations
 // 3.3176 SPC storm reports, fix for times in 0000-0959 GMT range
 //         NKX RID San Diego x,y adjustment
@@ -6287,13 +6287,13 @@ goole play release Apr 9 2016
 // 3.3175 split up Iowa and MWS Mosaic from common util file, rename Iowa nexrad viewer, cleanup in Iowa util
 //        in Iowa nexrad JUA also has a different overlay ( like IWA ), added fix
 // 3.3174 added LGX site ( WA ) to NCAR image map both in xml and with a label in the GIF itself
-// 3.3173 menu,layout cleanup and iowa lgx iwa statye overlay fix
-// 3.3172 loc frag - standardize touchimageview vars and resetzoom on loc change
+// 3.3173 menu,layout cleanup and iowa lgx iwa state overlay fix
+// 3.3172 loc frag - standardize touchimageview vars and reset zoom on loc change
 //        additional work on storm reports / radar legacy integration
 //        init support for US UtilityLocation.GetNearestRid based off AU code to be used in Storm Reports and later uswarn
 // 3.3171 additional work on storm reports / radar legacy integration
 // 3.3170 framework for old radar scans in storm reports
-// 3.3169 major cleanup loc frag settings main camvas util nws img
+// 3.3169 major cleanup loc frag settings main canvas util nws img
 // 3.3168 init support in Iowa nexrad for init_zoom an changed max_zoom, new class for common projection methods/objects
 // 3.3167 bugs in new highway overlay for Iowa nexrad
 // 3.3166 nws mosaic supports black/white bg config, iowa nexrad - added highway option from menu
@@ -6311,11 +6311,11 @@ goole play release Apr 9 2016
 // 3.3159 iowa, erasebg to nws county overlay
 // 3.3158 iowa, revert to nws county overlay
 // 3.3157 state lines init support, bug fix in goes canvas mcd
-// 3.3156 scale factor tweak unprojected
+// 3.3156 scale factor tweak un-projected
 // 3.3155 test support anim  in revamp iowa meso
 // 3.3154 test support for warnings/cities in un-projected nws mosaic and revamp iowa meso
 // 3.3153 more GOES site fixes related to lat,lon or XY
-// 3.3152 in both canvas files changed from stroke to fill for addcity
+// 3.3152 in both canvas files changed from stroke to fill for add city
 //        cleanup in both canvas files
 //        add more options to goes canvas methods
 // 3.3151 further refinement for GOES mcd/wat/mpd overlay
@@ -6340,7 +6340,7 @@ goole play release Apr 9 2016
 //        in SPC Meso added effective shear to menu as shortcut
 //        GOES numerous scale factor fix
 //        GOES add sub-menu with mosaics
-// 3.3140 in UtilGOESCanvas seperate method and object to determine mercator #s, center lat/lon - scale factor shared by cities and polygon warnings
+// 3.3140 in UtilGOESCanvas separate method and object to determine mercator #s, center lat/lon - scale factor shared by cities and polygon warnings
 //        scale and lat/lon tweaks for numerous sites
 // 3.3139 in GOES added full list of NWS offices to nav and enabled in code
 //        cleanup in UtilityCanvas - remove old city listing
@@ -6401,12 +6401,12 @@ goole play release Apr 9 2016
 // 3.3117 init support for plymouth radar
 // 3.3116 NCAR scale factor mod in canvas warning
 // 3.3115 added anim for NCAR mosaic, added city support for NCAR
-// 3.3114 NCAR specific image map added, added CODwarnings for NCAR, added NCAR regional mosaic
+// 3.3114 NCAR specific image map added, added COD warnings for NCAR, added NCAR regional mosaic
 // 3.3113 init support NCAR radar in beta area, modify pref to support 3rd option, modif AB , utilwidget and locfrag
 // 3.3112 added CanadaTextActivity
 // 3.3111 added FOCN45 for CA for i button, possibly dedicated text viewer like AFD in future
 // 3.3110 init support for CA twitter searches, bugfix in UtilityUSImgNWSGOES.GetGOESSectorFromState ( missing states )
-//        bhcimg bugfix support AK with zoomout
+//        bhcimg bugfix support AK with zoom-out
 // 3.3109 lat/long update and img.resetZoom in NHCImg
 // 3.3108 lat/long updates
 // 3.3107 lat/long update and img.resetZoom in NHCImg
@@ -6444,14 +6444,14 @@ goole play release Apr 9 2016
 // 3.3079 expanded nhcimg and replaced nws anim in misc
 // 3.3078 work in NHCImg
 // 3.3077 init support for NHCImagesActivity
-// 3.3076 code cleanup in UtilityLocation and AlertReciever and CA/AU/NZ, implement UtilityString.ParseAndCount and use in Utility.CheckSPC
+// 3.3076 code cleanup in UtilityLocation and AlertReceiver and CA/AU/NZ, implement UtilityString.ParseAndCount and use in Utility.CheckSPC
 // 3.3075 code cleanup, NHC work, removed old touchimageview
 // 3.3074 code cleanup
 // 3.3073 code cleanup
 // 3.3072 init work on NHC activity to replace Nexrad Attr which is no longer offered by upstream provider, code cleanup
-// 3.3071 moved SPCCheck to Utility and commonized between widget and main prog
+// 3.3071 moved SPCCheck to Utility and made common between widget and main prog
 //        moved to GetHTMLandParse in SPC/WPC show act ( and summ )
-// 3.3070 moved NWS/COD img methods to seperate files
+// 3.3070 moved NWS/COD img methods to separate files
 // 3.3069 fix spc tstorm outlook, code cleanup, remove ca radar in beta
 // 3.3068 changed AB radar mosaic to COD sector, cleanup in utility
 // 3.3067 added sunrise/sunset times for NZ, added NZ alerts, forecast, and hourly
@@ -6462,9 +6462,9 @@ goole play release Apr 9 2016
 // 3.3060 added AustraliaForecastActivity called from i-button in AB, added UtilityString class
 //        in settings location AU/CA settitle after prov/state is selected
 //        map icon in settings location now works for AU/CA
-//        code cleanup in CODnexrad and COD 1km/2km
+//        code cleanup in COD nexrad and COD 1km/2km
 // 3.3059 init au best rid support
-// 3.3058 AU switch position of station and time for curr cond, code cleanup in AU. AU bigfix - ACT uses NSW curr cond page
+// 3.3058 AU switch position of station and time for curr cond, code cleanup in AU. AU bugfix - ACT uses NSW curr cond page
 //        status spinner in CA loc settings like new AU
 // 3.3057 added all AU cities via dynamic pull like CA and moved curr cond to different html page
 // 3.3056 created common method in UtilityImg for CODMosaics and moved to this for both COD activities
@@ -6472,13 +6472,13 @@ goole play release Apr 9 2016
 // 3.3054 init support for anim interval config ( COD not done ) 
 // 3.3049 work on AU and integration of AU into graphical widgets
 // 3.3048 add anim support for AU radars
-// 3.3047 more work on AU, modifed default config so that one radar shows on loc frag instead of 4
+// 3.3047 more work on AU, modified default config so that one radar shows on loc frag instead of 4
 // 3.3039 init location setting support for AU
 // 3.3038 minor bug fixes
 // 3.3037 fix GetRadarBitmapOptionsApplied had regex w/o try
 // 3.3036 add ca vis widget support
 // 3.3035 fixed intent bug for ca loc in nexrad widget, added LayerDrawableToBitmap method
-//        accomodate ca loc with rid as nat
+//        accommodate ca loc with rid as nat
 //        add ca radar mosaic widget support
 // 3.3034 ca ern mosaic city fix, added GetECSectorFromProv and GetCODSectorFromProv in UtilityCanada
 // 3.3033 fix ca bug inn cc when winds calm, ca cc honors pres mb setting
@@ -6514,31 +6514,31 @@ goole play release Apr 9 2016
 // 3.3006 bug fix in canada
 // 3.3005 init work on Utility.Canada
 // 3.3004 finish adding canada radar sites, init framework support in curr cond and save loc for canada
-// 3.3003 init support for candar radar sites in beta area
+// 3.3003 init support for canada radar sites in beta area
 // 3.3002 bug in set state list view
 // 3.3001 added on/off widget data config
 // 3.1999 in widget removed enablement of cc notif, in notif - added code to run through download if loc_num == widget num
 // 3.1998 widget updates did not take new location widget setting - added
 // 3.1997 init support for widget config rad mosaic and vis zoom level and loc_num
-// 3.1996 moved widget config items to seperate activity
+// 3.1996 moved widget config items to separate activity
 // 3.1995 changed long press on twitter to go to an activity with a ListView to choose state
 // 3.1994 fix bug in hourly related to nil ( temp fix )
 // 3.1993 NWSTextProdTrim - fixed bug which was removing text unnecessarily, code cleanup
 // 3.1992 for all widgets enabled cc1 notif when widget is enabled, in utility canvas moved tornado to last thing drawn so it's always on top
 // 3.1991 code cleanup and trim text for afd/hwo widgets ( esp important for small screen )
 //        deleted file WidgetReceiver and reference in manifest
-// 3.1990 for widgets changed update internval to 0 to disable since updates are triggered by notif runs
-//        changed status text in loc frag to syle small which gives a gray color
+// 3.1990 for widgets changed update interval to 0 to disable since updates are triggered by notif runs
+//        changed status text in loc frag to style small which gives a gray color
 //        added more submenus to nexrad viewer as the menu was getting too long
-// 3.1989 moved widget data download code to UtilityWidget from UtilityNotitification
+// 3.1989 moved widget data download code to UtilityWidget from UtilityNotification
 //        added manual code to fetch data when widget is added
 // 3.1988 ( from 3.1975 to 3.1988 also ) added HWO and AFD Text Prod widgets
 //        fine tuned new widgets
 //	      Changed cloud icon widget, Widget on enable on disable to mod configs
 //        Add config for afd and separate vis and rad
-//        Have widgets use utility funcs
-//        Remove tile mosaic or zoomout 
-// 3.1975 removed onRecieve override in all widgets that don't need it ( all but the main one )
+//        Have widgets use utility functions
+//        Remove tile mosaic or zoom-out
+// 3.1975 removed onReceive override in all widgets that don't need it ( all but the main one )
 // 3.1974 added WIDGETS doc, change click action for mosaic widgets to bring up 1km viewer
 //        in main widget, clicking on hazards now goes to textview with hazards raw instead of webviewer of url
 // 3.1973 implement smaller minResize for all widgets
@@ -6554,7 +6554,7 @@ goole play release Apr 9 2016
 // 3.1964 widget: check to see if global notifs disabled. 7day sum, move widget shorten code to global utility to improve readability
 //        added workaround for recent NWS 7day xml change which removed hazard titles ( get hazard url and store in pref , use in widget )
 //        applied the same workaround in loc frag
-// 3.1963 added abrev for Change and Thunderstorms in widget 7day text. moved iowa mesonet back to webviewAB due to memory issues
+// 3.1963 added abbreviations for Change and Thunderstorms in widget 7day text. moved iowa mesonet back to webviewAB due to memory issues
 //        added timestamp to widget
 // 3.1962 added simulated tab to top of widget
 // 3.1961 added buttons to top of widget
@@ -6574,10 +6574,10 @@ goole play release Apr 9 2016
 // 3.1947 code cleanup and in model interface and time str to time spinner
 // 3.1946 bug fix in last day of 7day just added
 // 3.1945 curr cond change to pull in last weather summary of 7day
-// 3.1944 changes to webview and twitter to enhance readbility ( needs more testing )
+// 3.1944 changes to webview and twitter to enhance readability ( needs more testing )
 // 3.1943 remove selectable text in severe dashboard causing double tap to be needed, added map overlays in cod mosaics ( station id, counties, roads, latlon )
 // 3.1942 most notifications now have color led support ( local alert - blue, ustor - red, mpd - green, mcd/wat yellow )
-// 3.1941 in loc settings title now shows specific locs being deleted, severe dashboard removed long press and onclick now goes to uswarn
+// 3.1941 in loc settings title now shows specific locations being deleted, severe dashboard removed long press and onclick now goes to uswarn
 // 3.1940 added prio notif, cc and 7day are min, local alerts are max, ustor are high, everything else is default
 // 3.1939 increased init array list size by one in utility curr cond, cleanup in same method and severe dashboard
 //        init support for zoom out in cod mosaic 1km
@@ -6600,7 +6600,7 @@ goole play release Apr 9 2016
 // 3.1925 add logic on location delete so that switching locations is only done when that location is currently the active one
 // 3.1924 in uswarn and textscreen2 translated %apos; to ' in area field
 // 3.1923 set init capacity for few array lists in currentconditionsv2
-//        updated toast msg in settings location to accomodate multiple deletes at one time
+//        updated toast msg in settings location to accommodate multiple deletes at one time
 // 3.1922 cleanup in currentconditionsv2 including conversion fro large static arrays to array lists
 // 3.1921 minor format changes in hourly, added white-gray theme
 // 3.1920 add newline to Utility and code cleanup. In settings location truncate X,Y to 6 char ( add apache derby str util )
@@ -6622,7 +6622,7 @@ goole play release Apr 9 2016
 //         don't show warn/cities when cod nexrad nvw chosen
 //         standardize actionbar icons between cod mosaic and cod mosaic 1km/2km
 // 3.1910 nexrad attr use state from RID loc as source data now shows --
-//        severe dasgboard: make images full size and add reciever from donotif
+//        severe dashboard: make images full size and add receiver from donotif
 //        nexrad rid getpref, make default have comma so that array split doesn't crash on bad data
 //        added Des Moines in city data
 //        changed order of last two debug ttftt outputs in settings location act
@@ -6633,7 +6633,7 @@ goole play release Apr 9 2016
 // 3.1907 fixed bug in dashboard and mpd sum
 // 3.1906 bugfix in uswarn to ( as example ) not show flash flood watch when flood watch selected
 //        timestamp for severe dashboard
-// 3.1905 added white-blue and white-yellow themese. modified theme check to contains white instead of equals white
+// 3.1905 added white-blue and white-yellow themes. modified theme check to contains white instead of equals white
 // 3.1904 vtec bug fix and enhancements in dashboard
 // 3.1903 bug in cod nexrad related to non-warn 2k
 // 3.1902 WPCMPDShowSum removes array and moved to array list
@@ -6660,16 +6660,16 @@ goole play release Apr 9 2016
 //        renamed UtilityPref4 to UtilityCanvas and moved codwarings there
 // 3.180 mercator formula was not used in all locations - fixed
 // 3.179 error checking on parse of LAT/LON from warn data
-// 3.178 previous updates maninly focused around figuring out the correct projection for COD nexrad and implementing cities and polygons
+// 3.178 previous updates mainly focused around figuring out the correct projection for COD nexrad and implementing cities and polygons
 // 3.169 modify pix per degree in cod warn
 // 3.168 NWSLayeredImg and NWSAnimation now respects cod warning option
 //       actionbar now respects cod warning option and applies to radar mosaic
 //       radar notif and radar6 now respect warnings option
 // 3.167 cod warnings to loc frag
-// 3.166 fixed cod mosaic 1km/2km bugs related to 1st start and also inteference from warnings in AB
+// 3.166 fixed cod mosaic 1km/2km bugs related to 1st start and also interference from warnings in AB
 //       cod warn default config
 // 3.165 updated all lat/lon for rid via nws rid website
-// 3.164 implement mecator for warnings on cod, scale factor not consistent between RIDs still
+// 3.164 implement mercator for warnings on cod, scale factor not consistent between RIDs still
 // 3.163 ustor warn code in notif now downloads tst/ffw data and stores in pref. main config for tor/tst/ffw controls this.
 //       in wx update of tab has  been separated from SPC check as data is in pref and does not have to be fetched
 // 3.161 white bg for cod radar as an option
@@ -6691,14 +6691,14 @@ goole play release Apr 9 2016
 //       Utility.GetXYFromLOC and GetRid ( and in UtilityLocation ), changed first arg from context to SharedPreferences
 // 3.150 tweak to formatting for severe dashboard - remove visible dividers
 //       new method in UtilityImg to resize and set image into IV or TIV
-//       severe dashboar now shows NWS office location after VTEC
+//       severe dashboard now shows NWS office location after VTEC
 // 3.149 added imagemap of US states to Observations to allow easy viewing w/o needing to add a location
 //       cod mosaic 1km and 2km now display last used sector instead of map
 // 3.148 fixed TVS indicator in nexrad; init support for Severe Dashboard
 // 3.147 added LSR/PNS to local NWS text product, scroll to top in uswarn on map show, uswarn radar mosaic use webscreenAB
 // 3.146 code cleanup
 // 3.145 code cleanup
-// 3.144 comment/code cleanup, locatioin settings now shows loc_num in setTitle
+// 3.144 comment/code cleanup, location settings now shows loc_num in setTitle
 //       mcd/wat sum - use array list instead of static array
 // 3.143 begin to add comments and code cleanup
 //       Observations now takes state as extra instead of looking at pref
@@ -6708,7 +6708,7 @@ goole play release Apr 9 2016
 // 3.140 in nws text prod if not prod avail show concise msg, code cleanup
 //       moved spc tstorm outlook to array list in one instance
 // 3.139 added version to about dialogue
-//       added commonly used parms for SPC Meso to action bar menu
+//       added commonly used params for SPC Meso to action bar menu
 //       modified getpref for ustor/warn/ffw to default to true if null to preserve legacy default settings
 // 3.138 for NWS text and national text Prod on product change will smooth scroll to top
 //       on misc tab for Forecast maps moved all but current to white background as opposed to terrain
@@ -6730,7 +6730,7 @@ goole play release Apr 9 2016
 //       enhanced support for PR and GU
 //       for SPC Rainfall include discussion for day1
 //       rename mpd
-//       cleanup in action bar, remove uneeded pref
+//       cleanup in action bar, remove unneeded pref
 //       add clear_all to COD meso
 // 3.126 moved spc compmap to beta area after implementation of COD Mosaic meso and moved SPC D1/2 fire outlook to Tile #12 on SPC Tab
 // 3.125 init support for COD Mesoanalysis in 1/2km
@@ -6739,11 +6739,11 @@ goole play release Apr 9 2016
 // 3.123 added new notif icons for tornado us warn adn wpc mpd
 //       changed notif icon for mcd so that mcd and spc watch do not share the same icon
 // 3.122 major code cleanup
-// 3.121 nws mosaic bug fix, new icon for lightnging, code cleanup and pref var cleanup
+// 3.121 nws mosaic bug fix, new icon for lightning, code cleanup and pref var cleanup
 //       fixed bug in locationwarn ( if only one loc and loc changes it won't work )
-// 3.119 spc and wpc summaries now use TouchImageView2, add nav menu to COD Mosaic and major interal rework of that activity
+// 3.119 spc and wpc summaries now use TouchImageView2, add nav menu to COD Mosaic and major internal rework of that activity
 // 3.118 fixed nexrad attr after website change
-// 3.117 bug fix in mpd and accomodate new wunderground ( sunrise )
+// 3.117 bug fix in mpd and accommodate new wunderground ( sunrise )
 // 3.116 init support for wpc mpd summ,show and notif
 // 3.115 COD nexrad won't reload if not mosaic and warnings toggled
 // 3.114 added show warnings to COD nexrad ( only works for mosaics )
@@ -6780,7 +6780,7 @@ goole play release Apr 9 2016
 // 2.981 fixed bug in storm reports where invalid data would cause app crash
 // 2.980 update uswarn tile icon needed after move to nav drawer
 //       in tabs changed MCD to M and removed : after MISC
-//       storm reports can go to earier reports after moving to non-filtered
+//       storm reports can go to earlier reports after moving to non-filtered
 //       minor adjustments to text in settings ( loc and spc m/w check )
 // 2.979 experimental simple mode added
 // 2.978 moved uswarn to nav drawer
@@ -6813,7 +6813,7 @@ goole play release Apr 9 2016
 // 2.951 nexrad: moved animations to submenu, added tilt options, added 3 more products
 // 2.950 update COD nam4km time interval, ad parent in manifest for spccomp, add nav drawwer icon for spccomp, spcmeso, and modelviewer
 //       textscreen now getcontent on restart
-// 2.949 updated COD nam4km with changed sectors and new parms
+// 2.949 updated COD nam4km with changed sectors and new params
 // 2.948 added spc compmap
 // 2.947 more asynctask to pool mode, settitle in StateSettings
 // 2.946 more asynctask to pool mode, correct actionbar text with white theme 
@@ -6841,13 +6841,13 @@ goole play release Apr 9 2016
 //       //new GetForecast().execute(); TO
 // 		new GetForecast().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 // 2.932 hardcoded nav drawer text color in SPC Meso so it works with white theme, minor cleanup as in 2.931, cod mosaic now maintains product on screen rotation
-//       add textsize 17 to style and begin to remove for activity XMLs ( backed out - not worth it )
+//       add text-size 17 to style and begin to remove for activity XMLs ( backed out - not worth it )
 //       uswarn was not setup to handle both themes - fixed
 // 2.931 saved most recently used sector/param for use in rotation and on start, minor cleanup ( THEM_BLUE check from null to "" )
 // 2.930 rid now stays the same on nexrad rotation 
 // 2.929 uswarn will autodetect if HI or AK and use NWS radar
 // 2.928 in models moved to last used pref so that on rotate it will keep image in place, image on launch scales properly now
-// 2.927 fixed bug that causes crash and prevents app from starting when loc is choosen and then deleted along with one other ( or more )
+// 2.927 fixed bug that causes crash and prevents app from starting when loc is chosen and then deleted along with one other ( or more )
 // 2.926 localwarn move setcontentview to the iv, uswarn move states to settitle, on change move focus to top of scrollview
 //       remove v2 uswarn, refresh on restart for uswarn
 // 2.925 maintain zoom in mosaic and nexrad, fix bug for uswarn shown in tab text, add refresh on restart to mosaic
@@ -6864,17 +6864,17 @@ goole play release Apr 9 2016
 //       framework code for showing image on launch, undecided on delaying app startup just to show it
 // 2.918 cleaned up ArrayList defs by adding <String> and fixed some other warnings
 // 2.917 modified storm reports to not recursively call itself but instead do getcontent on date change
-// 2.915 code cleanup in alertservice and add config for refresh_loc and seperate from refresh_main which is used for MCD/W// 2.914 code cleanup
+// 2.915 code cleanup in alertservice and add config for refresh_loc and separate from refresh_main which is used for MCD/W// 2.914 code cleanup
 // 2.913 added startup activity and move pref init and service start there to prevent rerun on device rotation etc
 // 2.912 radar mosaic - move state layer to top by making radar baselayer, change datepicker in storm reports to avoid deprecated code
 // 2.911 remove commented code in Notification files
-// 2.910 moved notification builder to seperate method for BigText and BigPicture
+// 2.910 moved notification builder to separate method for BigText and BigPicture
 // 2.909 added code so that the last used location would be used on screen rotate or app start
 // 2.908 added additional logic to prevent multiple back buttons being required on storm reports
 //       storm reports: setmin/max date from 2011_06_27 to current_day
 // 2.907 added launchMode=singleTop to main activity to prevent launcher icon from starting new instance of app
 // 2.903 changed default loc to Norman, OK
-// 2.902 remove joshuatee in class when possble, spc tstorm and mcd sum moved to chode chunks to getstringfromurl utility
+// 2.902 remove joshuatee in class when possible, spc tstorm and mcd sum moved to chode chunks to getstringfromurl utility
 // 2.901 rev bump, more thanks, remove joshuatee in class name when possible
 // 2.00.372 fix wv anim bug
 // 2.00.371 cod mosaic map scaling fix
@@ -6898,17 +6898,17 @@ goole play release Apr 9 2016
 // 2.00.321 cleanup and gmt offset support in models
 // 2.00.320 init support for refresh of loc frag
 // 2.00.319 moved other ivs to touchimageview, added more progress spinners, changed more anim to continual loop
-// 2.00.315 fixes to prevent constart refresh of forecast/radar
+// 2.00.315 fixes to prevent constat refresh of forecast/radar
 // 2.00.313 progress spinners in location frag and models
 // 2.00.312 progress spinners in imagery animations ( not model )
 // 2.00.311 notif enhancements - fix errors in stack, move to millsec for pendintent id, add parent in manifest, fixed array bug in suunrise location frag
 // 2.00.310 init support for sounding/hodo in COD weather models
-// 2.00.309 cleanup and removal of unncessary files
+// 2.00.309 cleanup and removal of unnecessary files
 // 2.00.306 removed default 2nd and 3rd loc, ability to delete loc above 1
 // 2.00.305 display VTEC in tor notif, remove XY on front page under loc selector
 // 2.00.304 update meso and model images, cleanup in misc and images
 // 2.00.286 more cleanup similar to 85
-// 2.00.285 cleanup uneeded class files
+// 2.00.285 cleanup unneeded class files
 //  disabled refresh in SPC automatically, must trigger to color D1-4
 //          can change via loc config, in manifest remove parent activity and comment out nexrad and 7day
 // 2.00.284 move everything to CommonActionBarFragment, remove config related to old main and loc1-3 on notif as 
@@ -6930,11 +6930,11 @@ goole play release Apr 9 2016
 // 2.00.251 cleanup
 // 2.00.250 move to one activity for radar/ir/vis/wv images . modify front act move warn/spc to top . move spcmeso models to front
 // 2.00.239 more cleanup especially in notifications
-// 2.00.238 code cleanup in receently added files
+// 2.00.238 code cleanup in recently added files
 // 2.00.237 edit location on twitter state
 // 2.00.236 fix radar6 nws - use high res
 // 2.00.234 cleanup - spc meso, state from front, auto pull mcd/w on spc. nwsradar add radar mosaic
-// 2.00.232 fixs in mcd/wa and front tstorm warn
+// 2.00.232 fixes in mcd/wa and front tstorm warn
 // 2.00.216 add large heap to manifest
 // 2.00.215 added iowa mesonet n0u/n0q to nws radar interface
 // 2.00.203 nws radar interface work
@@ -6952,7 +6952,7 @@ goole play release Apr 9 2016
 // 2.00.066 move cc notif to link to hourly, add default zipcodes
 // 2.00.060 init sunrise support all loc
 // 2.00.056 afd and sunrise fix
-// 2.00.052 textscreen now uses thread, remove uneeded files xmltest and textscreenalerts
+// 2.00.052 textscreen now uses thread, remove unneeded files xmltest and textscreenalerts
 // 2.00.050 locale cleanup and cleanup in location save
 // 2.00.045 cleanup in location generic and added new sounding with hodograph
 // 2.00.044 uswarn now uses zone data to add location

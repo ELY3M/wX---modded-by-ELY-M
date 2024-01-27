@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -114,7 +114,6 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
         mcdList = url.getHtml().parseColumn(patternStr)
         mcdList.forEach {
             if (number.contains("at")) {
-//                val mcdNo2 = String.format("%4s", it).replace(' ', '0')
                 val mcdNumber = To.stringPadLeftZeros(To.int(it), 4)
                 val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNumber + "_radar.gif"
                 mcdNumbers.add(mcdNumber)

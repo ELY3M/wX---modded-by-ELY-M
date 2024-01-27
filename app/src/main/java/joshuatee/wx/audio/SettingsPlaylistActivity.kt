@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,6 +22,7 @@
 package joshuatee.wx.audio
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -92,7 +93,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.connect2 { dialog, item -> addProductToPlayList(dialog, item, "AFD") }
 
-        diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labels)
+        diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labelsWithCodes)
         diaMain.connect2 { dialog, item -> addProductToPlayList(dialog, item, "") }
     }
 
@@ -116,7 +117,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun showAlreadyThere(product: String, dialog: DialogInterface) {
         dialog.dismiss()
-//        val rootView: View = window.decorView.findViewById(android.R.id.content)
         PopupMessage(recyclerView.get(), "$product already in playlist", PopupMessage.short)
     }
 
@@ -127,6 +127,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         adapter.setListener(::itemSelected)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun getContent() {
         FutureVoid(
                 { UtilityPlayList.downloadAll(this) })
@@ -223,11 +224,13 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         UIPreferences.playlistStr = playListString
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun moveDownItem(position: Int) {
         UIPreferences.playlistStr = UtilityUI.moveDown(this, prefToken, playListItems, position)
         adapter.notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun moveUpItem(position: Int) {
         UIPreferences.playlistStr = UtilityUI.moveUp(this, prefToken, playListItems, position)
         adapter.notifyDataSetChanged()

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,8 +21,8 @@
 <!-- modded by ELY M. -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="55851"
-    android:versionName="55851-elys">
+    android:versionCode="55870"
+    android:versionName="55870-elys">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -39,6 +39,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- Added for telecine API34 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
  
@@ -101,29 +102,13 @@
             android:windowSoftInputMode="stateHidden"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.TextScreenActivity"
+            android:name=".misc.TextScreenActivity"
             android:label="@string/title_activity_text_screen"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.RtmaActivity"
+            android:name=".misc.RtmaActivity"
             android:label=""
             android:parentActivityName="WX" />
-
-        <!--        <service-->
-        <!--            android:name=".audio.StopAudioService"-->
-        <!--            android:enabled="true" />-->
-        <!--        <service-->
-        <!--            android:name=".audio.PlayAudioService"-->
-        <!--            android:enabled="true" />-->
-        <!--        <service-->
-        <!--            android:name=".audio.AudioServiceToggleState"-->
-        <!--            android:enabled="true" />-->
-        <!--        <service-->
-        <!--            android:name=".audio.AudioServiceBack"-->
-        <!--            android:enabled="true" />-->
-        <!--        <service-->
-        <!--            android:name=".audio.AudioServiceForward"-->
-        <!--            android:enabled="true" />-->
 
         <receiver
             android:name=".notifications.AlertReceiver"
@@ -137,7 +122,7 @@
         </receiver>
 
         <activity
-            android:name=".activitiesmisc.USAlertsDetailActivity"
+            android:name=".misc.AlertsDetailActivity"
             android:parentActivityName="WX" />
         <activity
             android:name=".settings.SettingsLocationGenericActivity"
@@ -145,26 +130,26 @@
             android:windowSoftInputMode="stateHidden"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.HourlyActivity"
+            android:name=".misc.HourlyActivity"
             android:label="@string/title_activity_hourly"
             android:hardwareAccelerated="false"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.SpottersActivity"
+            android:name=".misc.SpottersActivity"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.SpotterReportsActivity"
+            android:name=".misc.SpotterReportsActivity"
             android:parentActivityName="WX" />
         <activity
-            android:name=".wpc.WpcImagesActivity"
+            android:name=".wpc.NationalImagesActivity"
             android:label="@string/title_activity_hourly"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.ImageCollectionActivity"
+            android:name=".misc.ImageCollectionActivity"
             android:label="@string/title_activity_hourly"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.NwsObsSitesActivity"
+            android:name=".misc.NwsObsSitesActivity"
             android:label="NWS Observation Sites"
             android:parentActivityName="WX" />
         <activity
@@ -180,12 +165,12 @@
             android:label="@string/title_activity_settings_notifications"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.WebView"
+            android:name=".misc.WebView"
             android:parentActivityName="WX" />
         <activity
-      	    android:name=".activitiesmisc.WebViewTwitter"
-      	    android:parentActivityName="WX" />
-  	<activity
+      	    android:name=".misc.WebViewTwitter"
+            android:parentActivityName="WX" />
+        <activity
             android:name=".spc.SpcMcdWatchShowActivity"
             android:parentActivityName="WX" />
         <activity
@@ -218,10 +203,10 @@
             android:parentActivityName="WX" />
         <activity
             android:name=".spc.SpcSwoSummaryActivity"
-            android:label="@string/title_activity_spcswosummary"
+            android:label="@string/title_activity_spc_swo_summary"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.USWarningsWithRadarActivity"
+            android:name=".misc.USAlertsActivity"
             android:label="@string/title_activity_uswarnings_with_radar_v3"
             android:parentActivityName="WX" />
         <activity
@@ -237,47 +222,50 @@
             android:label="@string/title_activity_spcfire_outlook"
             android:parentActivityName="WX" />
         <activity
-            android:name=".wpc.WpcRainfallForecastActivity"
-            android:label="@string/title_activity_hpcrainfall_forecast"
+            android:name=".wpc.RainfallOutlookActivity"
+            android:label="@string/title_activity_wpc_rainfall_forecast"
             android:parentActivityName="WX" />
         <activity
-            android:name=".wpc.WpcRainfallForecastSummaryActivity"
-            android:label="@string/title_activity_hpcrainfall_forecast"
+            android:name=".wpc.RainfallOutlookSummaryActivity"
+            android:label="@string/title_activity_wpc_rainfall_forecast"
             android:parentActivityName="WX" />
         <activity
             android:name=".spc.SpcSoundingsActivity"
-            android:label="@string/title_activity_spcsoundings"
+            android:label="@string/title_activity_spc_soundings"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.WfoTextActivity"
+            android:name=".misc.WfoTextActivity"
             android:label=""
             android:parentActivityName="WX" />
         <activity
-            android:name=".wpc.WpcTextProductsActivity"
+            android:name=".wpc.NationalTextActivity"
             android:label=""
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.SevereDashboardActivity"
+            android:name=".misc.SevereDashboardActivity"
             android:label="@string/title_activity_severe_dashboard"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.ForecastActivity"
+            android:name=".misc.ForecastActivity"
             android:label=""
             android:parentActivityName="WX" />
         <activity
             android:name=".settings.SettingsLocationRecyclerViewActivity"
             android:label="@string/title_activity_settings_location_list_view"
             android:parentActivityName="WX" />
+  	<service
+      	    android:name=".radar.SpotterNetworkPositionReportService"
+      	    android:enabled="true" />	    
         <activity
 	    android:name=".settings.SettingsSpotterNetwork"
       	    android:label="@string/title_activity_settings_spotternetwork_view"
-      	    android:parentActivityName="WX" />
-  	<activity
+            android:parentActivityName="WX" />
+        <activity
             android:name=".audio.SettingsPlaylistActivity"
             android:label="@string/title_activity_settings_playlist"
             android:parentActivityName="WX" />
         <activity
-            android:name=".activitiesmisc.ImageShowActivity"
+            android:name=".misc.ImageShowActivity"
             android:parentActivityName="WX" />
 
         <receiver
@@ -493,7 +481,7 @@
             android:parentActivityName="WX" />
         <activity
             android:name=".settings.FavRemoveActivity"
-            android:label="@string/title_activity_sndadd_fav"
+            android:label="@string/title_activity_snd_add_fav"
             android:parentActivityName="WX" />
         <activity
             android:name=".settings.SettingsColorPaletteActivity"
@@ -534,12 +522,6 @@
             android:foregroundServiceType="mediaProjection" />
 
         <receiver android:name="joshuatee.wx.telecine.RecordingSession$DeleteRecordingBroadcastReceiver" />
-
-        <!-- FingerDraw -->
-        <activity
-            android:name="joshuatee.wx.fingerdraw.FingerDrawActivity"
-            android:theme="@style/Theme.Telecine.Transparent"
-            android:parentActivityName="WX" />
 
         <!-- The widget provider android:icon="@drawable/widgetsevenday" -->
         <receiver

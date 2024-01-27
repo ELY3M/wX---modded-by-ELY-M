@@ -21,7 +21,9 @@
 
 <resources>
 
+    <!-- blue -->
     <style name="MyCustomTheme_NOAB" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="popupMenuBackground">@color/primary_dark_blue</item>
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="android:buttonTint">@color/off_white</item>
         <item name="colorPrimaryDark">@color/primary_dark_blue</item>
@@ -33,15 +35,14 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
-
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialButtonStyle">@style/MyButtonStyle</item>
-        <item name="popupMenuBackground">@color/primary_dark_blue</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">@color/primary_dark_blue</item>
     </style>
+
     <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/white</item>
         <item name="iconTint">@color/white</item>
@@ -57,7 +58,9 @@
         <item name="iconTint">@color/white</item>
     </style>
 
+    <!-- white -->
     <style name="MyCustomTheme_white_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="popupMenuBackground">@color/off_white</item>
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="android:buttonTint">@color/primary_blue</item>
         <item name="android:progressBackgroundTint">@color/light_blue</item>
@@ -71,17 +74,18 @@
         <item name="colorControlActivated">@color/bg_blue</item>
         <item name="colorSwitchThumbNormal">@color/blue_accent</item>
         <item name="android:editTextColor">@color/black</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
     </style>
 
+    <!-- whiteNew -->
     <style name="MyCustomTheme_whiter_NOAB" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="popupMenuBackground">@color/off_white</item>
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="android:buttonTint">@color/primary_blue</item>
         <item name="tabSelectedTextColor">@color/white</item>
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
-
         <item name="android:progressBackgroundTint">@color/light_blue</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/white</item>
@@ -99,11 +103,12 @@
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">@color/white</item>
-
     </style>
+
     <style name="MySnackBarStyle" parent="Widget.MaterialComponents.Snackbar">
         <item name="android:background">@color/black</item>
     </style>
+
     <style name="AppCompatAlertDialogStyle2" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
         <item name="colorAccent">@color/yellow</item>
         <item name="colorOnSecondary">@color/yellow</item>
@@ -114,16 +119,20 @@
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
     </style>
+
     <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/yellow</item>
     </style>
+
     <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/yellow</item>
     </style>
 
-
+    <!-- allWhite -->
     <style name="MyCustomTheme_whitest_NOAB" parent="Theme.Material3.Light.NoActionBar">
+        <item name="popupMenuBackground">@color/off_white</item>
         <item name="colorPrimary">@color/white</item>
+        <!--        <item name="popupMenuBackground">?attr/colorPrimary</item>-->
         <item name="android:buttonTint">@color/primary_blue</item>
         <item name="android:progressBackgroundTint">@color/light_blue</item>
         <item name="colorPrimaryDark">@color/white</item>
@@ -136,19 +145,18 @@
         <item name="colorControlActivated">@color/bg_blue</item>
         <item name="colorSwitchThumbNormal">@color/blue_accent</item>
         <item name="android:editTextColor">@color/black</item>
-<!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleWhite</item>-->
+        <!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleWhite</item>-->
         <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
         <item name="tabSelectedTextColor">@color/black</item>
-
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleLight</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyleLight</item>
         <item name="materialButtonStyle">@style/MyButtonStyleLight</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>
+
     <style name="AppCompatAlertDialogStyleLight" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
         <item name="colorAccent">@color/yellow</item>
         <item name="colorOnSecondary">@color/yellow</item>
@@ -159,9 +167,11 @@
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyleLight</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyleLight</item>
     </style>
+
     <style name="NegativeButtonStyleLight" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/primary_blue</item>
     </style>
+
     <style name="PositiveButtonStyleLight" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/primary_blue</item>
     </style>
@@ -178,9 +188,11 @@
     <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="Alert.Button.Negative" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="Alert.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/black</item>
     </style>
@@ -198,23 +210,17 @@
         <item name="android:buttonBarNegativeButtonStyle">@style/Alert.Button.Negative.Dark</item>
         <item name="android:buttonBarNeutralButtonStyle">@style/Alert.Button.Neutral.Dark</item>
     </style>
+
     <style name="Alert.Button.Positive.Dark" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/white</item>
     </style>
+
     <style name="Alert.Button.Negative.Dark" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/white</item>
     </style>
+
     <style name="Alert.Button.Neutral.Dark" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="AppCompatAlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
-        <item name="colorAccent">@color/yellow</item>
-        <item name="colorOnSecondary">@color/yellow</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white</item>
-        <item name="android:background">@color/primary_blue</item>
     </style>
 
     <style name="AppCompatAlertDialogStyleBlack" parent="Theme.MaterialComponents.Light.Dialog.Alert.Bridge">
@@ -233,17 +239,19 @@
         <item name="android:background">@color/black</item>
     </style>
 
-<!--    <style name="AppCompatAlertDialogStyleWhite" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">-->
-<!--        <item name="colorAccent">@color/black</item>-->
-<!--        <item name="colorOnSecondary">@color/black</item>-->
-<!--        <item name="android:textColor">@color/black</item>-->
-<!--        <item name="android:textColorPrimary">@color/black</item>-->
-<!--        <item name="android:textColorSecondary">@color/black</item>-->
-<!--        <item name="android:background">@color/white</item>-->
-<!--    </style>-->
+    <!--    <style name="AppCompatAlertDialogStyleWhite" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">-->
+    <!--        <item name="colorAccent">@color/black</item>-->
+    <!--        <item name="colorOnSecondary">@color/black</item>-->
+    <!--        <item name="android:textColor">@color/black</item>-->
+    <!--        <item name="android:textColorPrimary">@color/black</item>-->
+    <!--        <item name="android:textColorSecondary">@color/black</item>-->
+    <!--        <item name="android:background">@color/white</item>-->
+    <!--    </style>-->
 
+    <!-- mixedBlue -->
     <style name="MyCustomTheme_mixedBlue_NOAB" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/bg_blue</item>
+        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <item name="android:buttonTint">@color/bg_blue</item>
         <item name="colorPrimaryDark">@color/primary_dark_blue</item>
         <item name="colorAccent">@color/primary_blue</item>
@@ -253,19 +261,19 @@
         <item name="android:textColor">@color/white</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorControlActivated">@color/primary_dark_blue</item>
-<!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>-->
-
+        <!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>-->
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialButtonStyle">@style/MyButtonStyle</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>
 
+    <!-- darkBlue -->
     <style name="MyCustomTheme_DarkBlue_NOAB" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/bg_blue</item>
+        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <item name="android:buttonTint">@color/off_white</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/blue_accent</item>
@@ -274,36 +282,34 @@
         <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
         <item name="android:textColor">@color/white</item>
         <item name="windowActionModeOverlay">true</item>
-<!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>-->
-
+        <!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>-->
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialButtonStyle">@style/MyButtonStyle</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>
 
+    <!-- orange -->
     <style name="MyCustomTheme_orange_NOAB" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/bg_orange</item>
         <item name="android:buttonTint">@color/off_white</item>
         <item name="colorPrimaryDark">@color/dark_orange</item>
+        <item name="popupMenuBackground">?attr/colorPrimaryDark</item>
         <item name="colorAccent">@color/orange_accent</item>
         <item name="android:statusBarColor">@color/primary_orange</item>
         <item name="android:windowBackground">@color/primary_orange</item>
         <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
         <item name="android:textColor">@color/white</item>
         <item name="windowActionModeOverlay">true</item>
-<!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>-->
+        <!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>-->
         <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
-
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialButtonStyle">@style/MyButtonStyle</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>
@@ -317,54 +323,54 @@
         <item name="android:textColorSecondary">#B3FFFFFF</item>
     </style>
 
+    <!-- black -->
     <style name="MyCustomTheme_Holo_Dark_NOAB" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:textColor">@color/white</item>
         <item name="android:buttonTint">@color/white</item>
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/gray_light</item>
+        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <item name="android:windowBackground">@color/gray_dark</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlack</item>
-
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
-<!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>-->
+        <!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>-->
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialButtonStyle">@style/MyButtonStyleDark</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
-
         <item name="android:datePickerDialogTheme">@style/PickerDialogThemeDark</item>
         <item name="android:timePickerDialogTheme">@style/PickerDialogThemeDark</item>
     </style>
 
+    <!-- allBlack -->
     <style name="MyCustomTheme_Holo_Darkest_NOAB" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:textColor">@color/white</item>
         <item name="android:buttonTint">@color/white</item>
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/black</item>
+        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <item name="android:windowBackground">@color/black</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorControlActivated">@color/gray_normal</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlackest</item>
-
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
         <!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>-->
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialButtonStyle">@style/MyButtonStyleDark</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
-
         <item name="android:datePickerDialogTheme">@style/PickerDialogThemeDark</item>
         <item name="android:timePickerDialogTheme">@style/PickerDialogThemeDark</item>
     </style>
 
+    <!-- green -->
     <style name="MyCustomTheme_Green_NOAB" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="popupMenuBackground">@color/green_dark</item>
         <item name="android:textColor">@color/white</item>
         <item name="colorPrimary">@color/green_light</item>
         <item name="android:buttonTint">@color/white</item>
@@ -373,17 +379,17 @@
         <item name="android:windowBackground">@color/green_medium</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:statusBarColor">@color/green_dark</item>
-
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialButtonStyle">@style/MyButtonStyle</item>
-        <item name="popupMenuBackground">@color/green_dark</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">@color/green_dark</item>
     </style>
 
+    <!-- gray -->
     <style name="MyCustomTheme_Gray_NOAB" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="popupMenuBackground">@color/gray_dark</item>
         <item name="android:textColor">@color/white</item>
         <item name="colorPrimary">@color/gray_light</item>
         <item name="android:buttonTint">@color/white</item>
@@ -391,12 +397,10 @@
         <item name="colorAccent">@color/gray_accent</item>
         <item name="android:windowBackground">@color/gray_dark</item>
         <item name="windowActionModeOverlay">true</item>
-
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyle2</item>
         <item name="materialButtonStyle">@style/MyButtonStyle</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>
@@ -454,8 +458,9 @@
     </style>    
 
     <style name="MyCustomTheme_BlackAqua" parent="Theme.Material3.Dark.NoActionBar">
+		 <item name="popupMenuBackground">@color/black</item>
         <item name="android:textColor">@color/aqua</item>
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/black</item>		
         <item name="android:buttonTint">@color/aqua</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/aqua</item>
@@ -466,14 +471,14 @@
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlackAqua</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyleBlackAqua</item>
         <item name="materialButtonStyle">@style/MyButtonStyleBlackAqua</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>        
 
     <style name="MyCustomTheme_BlackNeonGreen" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="popupMenuBackground">@color/black</item>
         <item name="android:textColor">@color/lime</item>
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/black</item>		
         <item name="android:buttonTint">@color/lime</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/lime</item>
@@ -484,7 +489,6 @@
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlackNeonGreen</item>
         <item name="materialAlertDialogTheme">@style/AppCompatAlertDialogStyleBlackNeonGreen</item>
         <item name="materialButtonStyle">@style/MyButtonStyleBlackNeonGreen</item>
-        <item name="popupMenuBackground">?attr/colorPrimary</item>
         <!-- Navigation drawer background -->
         <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>

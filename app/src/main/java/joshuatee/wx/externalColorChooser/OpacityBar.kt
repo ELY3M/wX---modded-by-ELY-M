@@ -33,6 +33,7 @@ import joshuatee.wx.R
 import kotlin.math.min
 import kotlin.math.roundToInt
 
+@Suppress("SpellCheckingInspection")
 class OpacityBar : View {
 
     // FIXME reformat whole file

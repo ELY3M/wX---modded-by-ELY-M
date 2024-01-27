@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,7 +21,6 @@
 
 package joshuatee.wx.spc
 
-import java.util.Calendar
 import android.os.Bundle
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -39,6 +38,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.Route
@@ -51,7 +51,6 @@ import joshuatee.wx.ui.Image
 import joshuatee.wx.ui.NavDrawer
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.To
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityMap
 import joshuatee.wx.util.UtilityShare
@@ -74,16 +73,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var textUrl = ""
     private var iowaMesoStr = ""
     private val mapState = mutableMapOf<String, Int>()
-    private var date = ""
-    private var monthStr = ""
-    private var dayStr = ""
-    private var yearStr = ""
     private var year = 0
     private var month = 0
     private var day = 0
-    private var previousYear = 0
-    private var previousMonth = 0
-    private var previousDay = 0
     private var stateArray = listOf<String>()
     private var firstRun = true
     private var filter = "All"
@@ -124,23 +116,14 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun initializeData() {
-        val cal = Calendar.getInstance()
-        year = cal.get(Calendar.YEAR)
-        month = cal.get(Calendar.MONTH)
-        day = cal.get(Calendar.DAY_OF_MONTH)
-        UtilityLog.d("wx :::", year.toString())
-        UtilityLog.d("wx :::", month.toString())
-        UtilityLog.d("wx :::", day.toString())
+        val cal = ObjectDateTime()
+        year = cal.getYear()
+        month = cal.getMonth()
+        day = cal.getDayOfMonth()
         if (dayArgument == "yesterday") {
-            day -= 1
+            cal.addHours(-24)
+            day = cal.getDayOfMonth()
         }
-        previousYear = year
-        previousMonth = month
-        previousDay = day
-        updateIowaMesoData()
-        imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.gif"
-        textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.csv"
-        stateArray = listOf("")
     }
 
     private fun setupNavDrawer() {
@@ -159,6 +142,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
+        imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.gif"
+        textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.csv"
         scrollView.smoothScrollTo(0, 0)
         FutureVoid(::download, ::displayData)
         FutureBytes2(::downloadImage, ::updateImage)
@@ -196,40 +181,36 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             displayData()
         }
         stormReports = UtilitySpcStormReports.process(linesOfData)
-        var stormCnt = -3
+        var stormCount = 0
         stormReports.forEachIndexed { k, stormReport ->
-            val isHeader = stormReport.title == "Tornado Reports" || stormReport.title == "Wind Reports" || stormReport.title == "Hail Reports"
+            val isHeader = stormReport.damageHeader == "Tornado Reports" || stormReport.damageHeader == "Wind Reports" || stormReport.damageHeader == "Hail Reports"
             if (filter == "All" || stormReport.state == filter || isHeader) {
-                stormCnt += 1
                 if (stormReport.state != "") {
-                    val freq3 = mapState[stormReport.state]
-                    mapState[stormReport.state] = if (freq3 == null) 1 else freq3 + 1
+                    if (mapState.contains(stormReport.state)) {
+                        mapState[stormReport.state] = mapState[stormReport.state]!! + 1
+                    } else {
+                        mapState[stormReport.state] = 1
+                    }
                 }
-                val cardStormReportItem = CardStormReportItem(this)
-                cardStormReportItem.setId(k)
+                val cardStormReportItem = CardStormReportItem(this, stormReport, k)
                 boxText.addWidget(cardStormReportItem)
-                cardStormReportItem.setTextFields(stormReport)
                 if (!isHeader) {
                     cardStormReportItem.registerForContextMenu(this)
+                    stormCount += 1
                 }
-                val xStr = stormReport.lat
-                val yStr = stormReport.lon
                 cardStormReportItem.connect {
-                    Route.webView(this, UtilityMap.getUrl(xStr, yStr, "10"), "$xStr,$yStr")
+                    Route.webView(this, UtilityMap.getUrl(stormReport.lat, stormReport.lon, "10"), "${stormReport.lat},${stormReport.lon}")
                 }
-                if (!(stormReport.description.contains("(") && stormReport.description.contains(")"))) {
+                if (!(stormReport.damageReport.contains("(") && stormReport.damageReport.contains(")"))) {
                     cardStormReportItem.setTextHeader(stormReport)
                     cardStormReportItem.connect { scrollView.smoothScrollTo(0, 0) }
                 }
             }
             textForShare.append(stormReport.toString())
         }
-        var mapOut = mapState.toString()
-        mapOut = mapOut.replace("[{}]".toRegex(), "")
+        val mapOut = mapState.toString().replace("[{}]".toRegex(), "")
         cardText.text = mapOut
-//        textForShare.insert(0, Utility.fromHtml("<br><b>" + mapOut + GlobalVariables.newline + "</b><br>"))
         textForShare.insert(0, GlobalVariables.newline + mapOut + GlobalVariables.newline)
-//        UtilityLog.d("wx", ":::" + textForShare)
         if (firstRun) {
             stateArray = mapState.keys.sorted().toList()
             val stateArrayLabel = mutableListOf<String>()
@@ -241,8 +222,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
             firstRun = false
         }
-        setTitle("($stormCnt) Storm Reports - $filter", dayArgument + helpTitle)
-        if (stormCnt > 0) {
+        setTitle("($stormCount) Storm Reports - $filter", dayArgument + helpTitle)
+        if (stormCount > 0) {
             cardText.visibility = View.VISIBLE
         } else {
             cardText.visibility = View.GONE
@@ -253,18 +234,15 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         year = datePicker.year
         month = datePicker.month
         day = datePicker.day
-        if (previousMonth != month || previousYear != year || previousDay != day) {
-            updateIowaMesoData()
-            dayArgument = date + "_rpts"
-            imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.gif"
-            textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.csv"
-            firstRun = true
-            filter = "All"
-            getContent()
-            previousYear = year
-            previousMonth = month
-            previousDay = day
-        }
+        val monthStr = To.stringPadLeftZeros(month + 1, 2)
+        val dayStr = To.stringPadLeftZeros(day, 2)
+        val yearStr = year.toString().substring(2, 4)
+        val date = yearStr + monthStr + dayStr
+        iowaMesoStr = "20$yearStr$monthStr$dayStr"
+        dayArgument = date + "_rpts"
+        firstRun = true
+        filter = "All"
+        getContent()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -306,11 +284,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             radarSite = NexradUtil.getTdwrFromRid(radarSite)
         }
         if (To.int(stormReports[id].time) < 1000) {
-            monthStr = To.stringPadLeftZeros(month + 1, 2)
-            dayStr = To.stringPadLeftZeros(day + 1, 2)
-            yearStr = year.toString()
-            yearStr = yearStr.substring(2, 4)
-            date = yearStr + monthStr + dayStr
+            val monthStr = To.stringPadLeftZeros(month + 1, 2)
+            val dayStr = To.stringPadLeftZeros(day + 1, 2)
+            val yearStr = year.toString().substring(2, 4)
             iowaMesoStr = "20$yearStr$monthStr$dayStr"
         }
         val patternL2 = radarSite + "_" + iowaMesoStr + "_" + time
@@ -321,15 +297,6 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (prod == "L2REF" || prod == "L2VEL") {
             Route.radar(this, arrayOf(radarSite, "", prod, "", patternL2, x, y))
         }
-    }
-
-    private fun updateIowaMesoData() {
-        monthStr = To.stringPadLeftZeros(month + 1, 2)
-        dayStr = To.stringPadLeftZeros(day, 2)
-        yearStr = year.toString()
-        yearStr = yearStr.substring(2, 4)
-        date = yearStr + monthStr + dayStr
-        iowaMesoStr = "20$yearStr$monthStr$dayStr"
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -350,9 +317,10 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (navDrawer.onOptionsItemSelected(item)) {
-            return true
+        return if (navDrawer.onOptionsItemSelected(item)) {
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 }

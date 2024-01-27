@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,6 +21,7 @@
 
 package joshuatee.wx.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,13 +49,10 @@ class ObjectRecyclerView(activity: Activity, resourceId: Int, list: MutableList<
         recyclerView.adapter = adapter
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun notifyDataSetChanged() {
         adapter.notifyDataSetChanged()
     }
-
-//    fun setItem(index: Int, str: String) {
-//        adapter.setItem(index, str)
-//    }
 
     fun getItem(index: Int): String = adapter.getItem(index)
 

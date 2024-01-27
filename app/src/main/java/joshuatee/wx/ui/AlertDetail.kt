@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,10 +22,10 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import joshuatee.wx.parseMultiple
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.activitiesmisc.CapAlert
+import joshuatee.wx.misc.CapAlert
+import joshuatee.wx.misc.UtilityCapAlert
 import joshuatee.wx.objects.TextSize
 
 class AlertDetail(val context: Context, box: VBox) {
@@ -48,53 +48,19 @@ class AlertDetail(val context: Context, box: VBox) {
         }
     }
 
-    fun updateContent(capAlert: CapAlert, url: String) {
+    fun updateContent(capAlert: CapAlert) {
         val startTime: String
-        var endTime = ""
+        val endTime: String
         var wfo = ""
         if (capAlert.text.contains("This alert has expired")) {
             textViews[0].text = capAlert.text
             textViews[0].setSize(TextSize.LARGE)
         } else {
-            if (!url.contains("urn:oid")) {
-                if (capAlert.title.contains("until")) {
-                    val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
-                    title = items[0]
-                    startTime = items[1]
-                    endTime = items[2]
-                    wfo = items[3]
-                } else {
-                    val items = capAlert.title.parseMultiple("(.*?) issued (.*?) by (.*?)$", 3)
-                    title = items[0]
-                    startTime = items[1]
-                    wfo = items[2]
-                }
-            } else {
-                when {
-                    capAlert.title.contains("expiring") -> {
-                        val items = capAlert.title.parseMultiple("(.*?) issued (.*?) expiring (.*?) by (.*?)$", 4)
-                        title = items[0]
-                        startTime = items[1]
-                        endTime = items[2]
-                        wfo = items[3]
-                    }
-
-                    capAlert.title.contains("until") -> {
-                        val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
-                        title = items[0]
-                        startTime = items[1]
-                        endTime = items[2]
-                        wfo = items[3]
-                    }
-
-                    else -> {
-                        val items = capAlert.title.parseMultiple("(.*?) issued (.*?) by (.*?)$", 3)
-                        title = items[0]
-                        startTime = items[1]
-                        wfo = items[2]
-                    }
-                }
-            }
+            val items = UtilityCapAlert.times(capAlert)
+            startTime = items[0]
+            endTime = items[1]
+            title = items[2]
+            wfo = items[3]
             textViews[0].text = context.resources.getString(R.string.uswarn_start_time, startTime)
             textViews[1].text = context.resources.getString(R.string.uswarn_end_time, endTime)
             textViews[2].text = capAlert.area

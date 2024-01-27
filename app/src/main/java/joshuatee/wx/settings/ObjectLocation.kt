@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,7 +32,6 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
     val wfo: String
     val rid: String
     val state: String
-    private val nwsStateCurrent: String
     private val alertNotificationCurrent: String
     private val alertNotificationRadarCurrent: String
     private val alertCcNotificationCurrent: String
@@ -54,7 +53,6 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
         name = Utility.readPref(context, "LOC" + jStr + "_LABEL", "")
         wfo = Utility.readPref(context, "NWS$jStr", "")
         rid = Utility.readPref(context, "RID$jStr", "")
-        nwsStateCurrent = Utility.readPref(context, "NWS" + jStr + "_STATE", "")
         alertNotificationCurrent = Utility.readPref(context, "ALERT" + jStr + "_NOTIFICATION", "false")
         alertNotificationRadarCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$jStr", "false")
         alertCcNotificationCurrent = Utility.readPref(context, "ALERT_CC" + jStr + "_NOTIFICATION", "false")
@@ -86,7 +84,6 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
         Utility.writePref(context, "LOC" + iStr + "_LABEL", name)
         Utility.writePref(context, "NWS$iStr", wfo)
         Utility.writePref(context, "RID$iStr", rid)
-        Utility.writePref(context, "NWS" + iStr + "_STATE", nwsStateCurrent)
         Utility.writePref(context, "LOC" + iStr + "_OBSERVATION", observation)
         Location.refreshLocationData(context)
     }

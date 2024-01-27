@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,9 +28,11 @@ import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
 import joshuatee.wx.isEven
+import joshuatee.wx.parseColumn
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
 import joshuatee.wx.radar.Projection
+import java.math.RoundingMode
 
 class LatLon() {
 
@@ -121,6 +123,16 @@ class LatLon() {
             lonNum = To.double(newValue)
         }
 
+    val latForNws: String
+        get() {
+            return latNum.toBigDecimal().setScale(4, RoundingMode.UP).toDouble().toString()
+        }
+
+    val lonForNws: String
+        get() {
+            return lonNum.toBigDecimal().setScale(4, RoundingMode.UP).toDouble().toString()
+        }
+
     fun asList(): List<Double> = listOf(lat, lon)
 
     fun asPoint(): ExternalPoint = ExternalPoint(this)
@@ -192,6 +204,30 @@ class LatLon() {
                 warningList += startCoordinates
             }
             return warningList
+        }
+
+        internal fun storeWatchMcdLatLon(html: String): String {
+            val coordinates = html.parseColumn("([0-9]{8}).*?")
+            var string = ""
+            coordinates.forEach { temp ->
+                var xStrTmp = temp.substring(0, 4)
+                var yStrTmp = temp.substring(4, 8)
+                if (yStrTmp.matches("^0".toRegex())) {
+                    yStrTmp = yStrTmp.replace("^0".toRegex(), "")
+                    yStrTmp += "0"
+                }
+                xStrTmp = UtilityString.addPeriodBeforeLastTwoChars(xStrTmp)
+                yStrTmp = UtilityString.addPeriodBeforeLastTwoChars(yStrTmp)
+                var tmpDbl = To.double(yStrTmp)
+                if (tmpDbl < 40.00) {
+                    tmpDbl += 100.0
+                    yStrTmp = tmpDbl.toString()
+                }
+                string = "$string$xStrTmp $yStrTmp "
+            }
+            string += ":"
+            string = string.replace(" :", ":")
+            return string
         }
     }
 }

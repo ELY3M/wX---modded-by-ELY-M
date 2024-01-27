@@ -40,6 +40,7 @@ import java.io.IOException
 import java.nio.ByteBuffer
 import joshuatee.wx.util.UCARRandomAccessFile
 
+@Suppress("SpellCheckingInspection")
 internal class Level2Record @Throws(IOException::class)
 private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, messageOffset31: Long) {
 

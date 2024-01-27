@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -329,7 +329,7 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
         #
         # Format Color,MinZ,LR,LG,LB,HR,HG,HB
         # where LR,LG,LB =RGB color of MinZ value
-        # and HR,HG,HB =RGB color of Next line's MinZ minus one (e.g. upper end of the sections's range)
+        # and HR,HG,HB =RGB color of Next line's MinZ minus one (e.g. upper end of the sections' range)
         # MinZ is the minimum dBz value in the range.
         # Intermediate values are interpolated via HSB Interpolation
         # ND = Color for no detection generally black

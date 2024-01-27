@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,7 +28,7 @@ import joshuatee.wx.settings.UtilityLocation
 class ProjectionNumbers {
 
     var scale = 0.0
-    private var scaleFloat = 0.0f
+    var scaleFloat = 0.0f
     var oneDegreeScaleFactor = 0.0
     var x = "0.0"
     var y = "0.0"

@@ -28,7 +28,7 @@
             android:focusable="true" />
 
         <ImageButton
-            android:id="@+id/record_overlay_distancetool"
+            android:id="@+id/record_overlay_distance_tool"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

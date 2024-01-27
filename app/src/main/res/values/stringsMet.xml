@@ -27,7 +27,7 @@
     <string name="label_sfc_obs">Surface Observations</string>
     <string name="label_vis_sat">Visible Satellite</string>
     <string name="label_base_ref">Base Reflectivity</string>
-    <string name="label_thetae">Theta-e</string>
+    <string name="label_theta_e">Theta-e</string>
     <string name="label_ttd">Temp / Dew</string>
     <string name="label_mslp">MSLP</string>
 

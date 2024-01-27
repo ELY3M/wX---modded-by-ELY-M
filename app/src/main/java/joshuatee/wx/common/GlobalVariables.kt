@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,7 +33,8 @@ object GlobalVariables {
     const val packageNameAsString = "joshuatee.wx"
     const val packageNameFileNameAsString = "joshuatee_wx"
     const val emailAsString = "elymbmx@gmail.com"
-	
+    const val httpUserAgent = "Android $packageNameAsString $emailAsString"
+    	
 	//elys mod
     val FilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
     val PalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/pal/"

@@ -21,7 +21,7 @@
 //0. You just DO WHAT THE FUCK YOU WANT TO.
 
 //package dev.zotov.phototime.solarized
-@file:Suppress("LocalVariableName")
+@file:Suppress("LocalVariableName", "SpellCheckingInspection")
 
 package joshuatee.wx.externalSolarized
 
@@ -47,6 +47,7 @@ import kotlin.math.*
  * @param longitude of the viewer on earth
  * @param twilight what angle sun should reach
  */
+
 internal fun algorithm(
         time: DateTime,
         date: LocalDateTime,
@@ -156,10 +157,10 @@ internal fun Double.normalise(maximum: Double): Double {
 
 /** Define what position on sky relative to the earth sun should reach */
 internal sealed class Twilight {
-    object Official : Twilight()
-    object Civil : Twilight()
-    object Nautical : Twilight()
-    object Astronomical : Twilight()
+    data object Official : Twilight()
+    data object Civil : Twilight()
+    data object Nautical : Twilight()
+    data object Astronomical : Twilight()
     data class Custom(val value: Double) : Twilight()
 
     /**

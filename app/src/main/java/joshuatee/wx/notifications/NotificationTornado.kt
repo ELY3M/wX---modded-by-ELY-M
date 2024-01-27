@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,8 +23,8 @@ package joshuatee.wx.notifications
 
 import android.content.Context
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.CapAlert
-import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
+import joshuatee.wx.misc.CapAlert
+import joshuatee.wx.misc.AlertsDetailActivity
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
@@ -79,8 +79,8 @@ internal object NotificationTornado {
                     val text = title + ": " + capAlert.area + " " + capAlert.summary
                     val objectPendingIntents = ObjectPendingIntents(
                             context,
-                            USAlertsDetailActivity::class.java,
-                            USAlertsDetailActivity.URL,
+                            AlertsDetailActivity::class.java,
+                            AlertsDetailActivity.URL,
                             arrayOf(url, ""),
                             arrayOf(url, "sound")
                     )
