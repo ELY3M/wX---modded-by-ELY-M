@@ -74,7 +74,7 @@ class SettingsRadarSizesActivity : BaseActivity() {
             NumberPicker(this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530),
             NumberPicker(this, "Userpoints icon size", "RADAR_USERPOINT_SIZE", R.string.userpoints_size_np, 75, 1, 530),
             //elys mod end
-            NumberPicker(this, "Warning line size", "RADAR_WARN_LINESIZE", R.string.warn_linesize_np_label, RadarPreferences.warnLineSizeDefault, 1, 10),
+            NumberPicker(this, "Warning line size", "RADAR_WARN_LINESIZE", R.string.warn_linesize_np_label, RadarPreferences.WARNING_LINE_SIZE_DEFAULT, 1, 10),
             NumberPicker(this, "Wind barbs line size", "RADAR_WB_LINESIZE", R.string.wb_linesize_np, 3, 1, 10),
             NumberPicker(this, "WPC Fronts line size", "RADAR_WPC_FRONT_LINESIZE", R.string.wpc_fronts_linesize_np, 4, 1, 10),
             //NumberPicker(this, "WXOGL initial view size", "WXOGL_SIZE", R.string.wxogl_size_np, RadarPreferences.wxoglSizeDefault, 5, 25),
