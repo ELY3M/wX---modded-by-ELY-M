@@ -30,10 +30,10 @@ jobs:
           gradle-home-cache-cleanup: true
           
       - name: Get NDK
-      - uses: nttld/setup-ndk@v1
+        uses: nttld/setup-ndk@v1
         with:
           ndk-version: r26c
-      - run: ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=app/src/main/jni/Android.mk NDK_APPLICATION_MK=app/src/main/jni/Application.mk
+        run: ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=app/src/main/jni/Android.mk NDK_APPLICATION_MK=app/src/main/jni/Application.mk
      
         
       - name: Build APK
