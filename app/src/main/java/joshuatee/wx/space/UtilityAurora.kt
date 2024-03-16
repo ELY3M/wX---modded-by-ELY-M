@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013-2024  elymbmx@gmail.com
 
     This file is part of wX.
 
@@ -39,9 +39,9 @@ internal object UtilityAurora {
     )
 
     val urls = listOf(
-        "${GlobalVariables.nwsSwpcWebSitePrefix}/images/animations/ovation/north/latest.jpg",
-        "${GlobalVariables.nwsSwpcWebSitePrefix}/images/animations/ovation/south/latest.jpg",
-        "${GlobalVariables.nwsSwpcWebSitePrefix}/images/planetary-k-index.gif"
+        "${GlobalVariables.NWS_SWPC_WEBSITE_PREFIX}/images/animations/ovation/north/latest.jpg",
+        "${GlobalVariables.NWS_SWPC_WEBSITE_PREFIX}/images/animations/ovation/south/latest.jpg",
+        "${GlobalVariables.NWS_SWPC_WEBSITE_PREFIX}/images/planetary-k-index.gif"
     )
 
 /*
