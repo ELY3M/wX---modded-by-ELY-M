@@ -52,7 +52,7 @@ object UIPreferences {
     var translateText = false
     private var nwsTextRemovelinebreaks = false
     var recordScreenShare = false
-    var backgroundColor = Color.WHITE
+    var backgroundColor = Color.BLACK //elys mod
     var colorNotif = 0
     var colorBlack = 0
     var colorOffwhiteToolbar = 0
@@ -64,7 +64,7 @@ object UIPreferences {
     var tilesPerRow = 3
     var tilesPerRowDefault = 3
     var themeStr = ""
-    var themeInt = 0
+    var themeInt = 11 //elys mod
     val themes = listOf(
             "blue",
             "mixedBlue",
@@ -165,7 +165,7 @@ object UIPreferences {
             tilesPerRowDefault = 5
         }
         tilesPerRow = Utility.readPrefInt(context, "UI_TILES_PER_ROW", tilesPerRowDefault)
-        themeStr = Utility.readPref(context, "THEME_BLUE", "whiteNew")
+        themeStr = Utility.readPref(context, "THEME_BLUE", "BlackAqua")
         themeInt = Utility.theme(themeStr)
         if (themeInt == R.style.MyCustomTheme_white_NOAB || themeInt == R.style.MyCustomTheme_whiter_NOAB || themeInt == R.style.MyCustomTheme_whitest_NOAB) {
             textSmallThemeColor = Color.GRAY
