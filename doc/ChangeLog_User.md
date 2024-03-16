@@ -8,6 +8,12 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55873 2024_03_11 (BETA)
+
+* [FIX] update okhttp library to newest alpha version to fix ipv6 issue seen with GOES NESDIS site (
+  thanks to "ski warz" for the suggestion)
+* [FIX] "Aviation only AFD" was not working (thanks to "ski warz" for noticing and providing fix)
+
 ## 55869 2024_02_13
 
 * [FIX] WPC Rainfall Outlook Day 1 - 5, Title was truncated, move parts of Title to Sub-title

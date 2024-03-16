@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -71,9 +71,9 @@ public class SecondScale {
      * label formatter for the y labels
      * on the right side
      */
-    protected LabelFormatter mLabelFormatter;
+    protected final LabelFormatter mLabelFormatter;
 
-    protected double mReferenceY = Double.NaN;
+    protected final double mReferenceY = Double.NaN;
 
     /**
      * the paint to draw axis titles
@@ -109,38 +109,6 @@ public class SecondScale {
     }
 
     /**
-     * add a series to the second scale.
-     * Don't add this series also to the GraphView
-     * object.
-     *
-     * @param s the series
-     */
-    public void addSeries(Series s) {
-        s.onGraphViewAttached(mGraph);
-        mSeries.add(s);
-        mGraph.onDataChanged(false, false);
-    }
-
-    /**
-     * set the min y bounds
-     *
-     * @param d min y value
-     */
-    public void setMinY(double d) {
-        mReferenceY = d;
-        mCurrentViewport.bottom = d;
-    }
-
-    /**
-     * set the max y bounds
-     *
-     * @param d max y value
-     */
-    public void setMaxY(double d) {
-        mCurrentViewport.top = d;
-    }
-
-    /**
      * @return the series of the second scale
      */
     public List<Series> getSeries() {
@@ -173,36 +141,6 @@ public class SecondScale {
      */
     public LabelFormatter getLabelFormatter() {
         return mLabelFormatter;
-    }
-
-    /**
-     * Set a custom label formatter that is used
-     * for the y labels on the right side.
-     *
-     * @param formatter label formatter for the y labels
-     */
-    public void setLabelFormatter(LabelFormatter formatter) {
-        mLabelFormatter = formatter;
-        mLabelFormatter.setViewport(mGraph.getViewport());
-    }
-
-    /**
-     * Removes all series of the graph.
-     */
-    public void removeAllSeries() {
-        mSeries.clear();
-        mGraph.onDataChanged(false, false);
-    }
-
-    /**
-     * Remove a specific series of the
-     * second scale.
-     *
-     * @param series
-     */
-    public void removeSeries(Series series) {
-        mSeries.remove(series);
-        mGraph.onDataChanged(false, false);
     }
 
     /**
@@ -261,18 +199,6 @@ public class SecondScale {
     }
 
     /**
-     * @param mVerticalAxisTitle the title of the vertical axis
-     */
-    public void setVerticalAxisTitle(String mVerticalAxisTitle) {
-        if (mPaintAxisTitle == null) {
-            mPaintAxisTitle = new Paint();
-            mPaintAxisTitle.setTextSize(getVerticalAxisTitleTextSize());
-            mPaintAxisTitle.setTextAlign(Paint.Align.CENTER);
-        }
-        this.mVerticalAxisTitle = mVerticalAxisTitle;
-    }
-
-    /**
      * @return font size of the vertical axis title
      */
     public float getVerticalAxisTitleTextSize() {
@@ -294,13 +220,6 @@ public class SecondScale {
      */
     public int getVerticalAxisTitleColor() {
         return mVerticalAxisTitleColor;
-    }
-
-    /**
-     * @param verticalAxisTitleColor font color of the vertical axis title
-     */
-    public void setVerticalAxisTitleColor(int verticalAxisTitleColor) {
-        mVerticalAxisTitleColor = verticalAxisTitleColor;
     }
 
     /**

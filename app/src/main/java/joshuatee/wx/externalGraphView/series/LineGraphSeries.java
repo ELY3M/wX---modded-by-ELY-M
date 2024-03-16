@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -52,7 +52,7 @@ public class LineGraphSeries<E extends DataPointInterface> extends BaseSeries<E>
          * This option will be ignored if you are
          * using a custom paint via {@link #setCustomPaint(android.graphics.Paint)}
          */
-        private int thickness = 5;
+        private final int thickness = 5;
 
         /**
          * flag whether the area under the line to the bottom
@@ -61,7 +61,7 @@ public class LineGraphSeries<E extends DataPointInterface> extends BaseSeries<E>
          *
          * @see #backgroundColor
          */
-        private boolean drawBackground = false;
+        private final boolean drawBackground = false;
 
         /**
          * flag whether the data points are highlighted as
@@ -69,14 +69,14 @@ public class LineGraphSeries<E extends DataPointInterface> extends BaseSeries<E>
          *
          * @see #dataPointsRadius
          */
-        private boolean drawDataPoints = false;
+        private final boolean drawDataPoints = false;
 
         /**
          * the radius for the data points.
          *
          * @see #drawDataPoints
          */
-        private float dataPointsRadius = 10f;
+        private final float dataPointsRadius = 10f;
 
         /**
          * the background color for the filling under
@@ -151,14 +151,7 @@ public class LineGraphSeries<E extends DataPointInterface> extends BaseSeries<E>
      * By default we use drawLine because it has much more performance.
      * For some styling reasons it can make sense to draw as path.
      */
-    private boolean mDrawAsPath = false;
-
-    /**
-     * creates a series without data
-     */
-    public LineGraphSeries() {
-        init();
-    }
+    private final boolean mDrawAsPath = false;
 
     /**
      * creates a series with data
@@ -528,144 +521,12 @@ public class LineGraphSeries<E extends DataPointInterface> extends BaseSeries<E>
     }
 
     /**
-     * the thickness of the line.
-     * This option will be ignored if you are
-     * using a custom paint via {@link #setCustomPaint(android.graphics.Paint)}
-     *
-     * @return the thickness of the line
-     */
-    public int getThickness() {
-        return mStyles.thickness;
-    }
-
-    /**
-     * the thickness of the line.
-     * This option will be ignored if you are
-     * using a custom paint via {@link #setCustomPaint(android.graphics.Paint)}
-     *
-     * @param thickness thickness of the line
-     */
-    public void setThickness(int thickness) {
-        mStyles.thickness = thickness;
-    }
-
-    /**
-     * flag whether the area under the line to the bottom
-     * of the viewport will be filled with a
-     * specific background color.
-     *
-     * @return whether the background will be drawn
-     * @see #getBackgroundColor()
-     */
-    public boolean isDrawBackground() {
-        return mStyles.drawBackground;
-    }
-
-    /**
-     * flag whether the area under the line to the bottom
-     * of the viewport will be filled with a
-     * specific background color.
-     *
-     * @param drawBackground whether the background will be drawn
-     * @see #setBackgroundColor(int)
-     */
-    public void setDrawBackground(boolean drawBackground) {
-        mStyles.drawBackground = drawBackground;
-    }
-
-    /**
-     * flag whether the data points are highlighted as
-     * a visible point.
-     *
-     * @return flag whether the data points are highlighted
-     * @see #setDataPointsRadius(float)
-     */
-    public boolean isDrawDataPoints() {
-        return mStyles.drawDataPoints;
-    }
-
-    /**
-     * flag whether the data points are highlighted as
-     * a visible point.
-     *
-     * @param drawDataPoints flag whether the data points are highlighted
-     * @see #setDataPointsRadius(float)
-     */
-    public void setDrawDataPoints(boolean drawDataPoints) {
-        mStyles.drawDataPoints = drawDataPoints;
-    }
-
-    /**
-     * @return the radius for the data points.
-     * @see #setDrawDataPoints(boolean)
-     */
-    public float getDataPointsRadius() {
-        return mStyles.dataPointsRadius;
-    }
-
-    /**
-     * @param dataPointsRadius the radius for the data points.
-     * @see #setDrawDataPoints(boolean)
-     */
-    public void setDataPointsRadius(float dataPointsRadius) {
-        mStyles.dataPointsRadius = dataPointsRadius;
-    }
-
-    /**
-     * @return the background color for the filling under
-     * the line.
-     * @see #setDrawBackground(boolean)
-     */
-    public int getBackgroundColor() {
-        return mStyles.backgroundColor;
-    }
-
-    /**
      * @param backgroundColor the background color for the filling under
      *                        the line.
      * @see #setDrawBackground(boolean)
      */
     public void setBackgroundColor(int backgroundColor) {
         mStyles.backgroundColor = backgroundColor;
-    }
-
-    /**
-     * custom paint that can be used.
-     * this will ignore the thickness and color styles.
-     *
-     * @param customPaint the custom paint to be used for rendering the line
-     */
-    public void setCustomPaint(Paint customPaint) {
-        this.mCustomPaint = customPaint;
-    }
-
-    /**
-     * @param animated activate the animated rendering
-     */
-    public void setAnimated(boolean animated) {
-        this.mAnimated = animated;
-    }
-
-    /**
-     * flag whether the line should be drawn as a path
-     * or with single drawLine commands (more performance)
-     * By default we use drawLine because it has much more performance.
-     * For some styling reasons it can make sense to draw as path.
-     */
-    public boolean isDrawAsPath() {
-        return mDrawAsPath;
-    }
-
-    /**
-     * flag whether the line should be drawn as a path
-     * or with single drawLine commands (more performance)
-     * By default we use drawLine because it has much more performance.
-     * For some styling reasons it can make sense to draw as path.
-     *
-     * @param mDrawAsPath true to draw as path
-     */
-    public void setDrawAsPath(boolean mDrawAsPath) {
-        this.mDrawAsPath = mDrawAsPath;
     }
 
     /**

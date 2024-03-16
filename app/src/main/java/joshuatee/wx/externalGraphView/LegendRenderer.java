@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -273,22 +273,6 @@ public class LegendRenderer {
     }
 
     /**
-     * @return the spacing between the text lines
-     */
-    public int getSpacing() {
-        return mStyles.spacing;
-    }
-
-    /**
-     * set the spacing between the text lines
-     *
-     * @param spacing the spacing between the text lines
-     */
-    public void setSpacing(int spacing) {
-        mStyles.spacing = spacing;
-    }
-
-    /**
      * padding is the space between the edge of the box
      * and the beginning of the text
      *
@@ -329,51 +313,12 @@ public class LegendRenderer {
     }
 
     /**
-     * @return background color of the box
-     * it is recommended to use semi-transparent
-     * color.
-     */
-    public int getBackgroundColor() {
-        return mStyles.backgroundColor;
-    }
-
-    /**
      * @param backgroundColor background color of the box
      *                        it is recommended to use semi-transparent
      *                        color.
      */
     public void setBackgroundColor(int backgroundColor) {
         mStyles.backgroundColor = backgroundColor;
-    }
-
-    /**
-     * @return margin from the edge of the box
-     * to the corner of the graphview
-     */
-    public int getMargin() {
-        return mStyles.margin;
-    }
-
-    /**
-     * @param margin margin from the edge of the box
-     *               to the corner of the graphview
-     */
-    public void setMargin(int margin) {
-        mStyles.margin = margin;
-    }
-
-    /**
-     * @return the vertical alignment of the box
-     */
-    public LegendAlign getAlign() {
-        return mStyles.align;
-    }
-
-    /**
-     * @param align the vertical alignment of the box
-     */
-    public void setAlign(LegendAlign align) {
-        mStyles.align = align;
     }
 
     /**
@@ -388,16 +333,5 @@ public class LegendRenderer {
      */
     public void setTextColor(int textColor) {
         mStyles.textColor = textColor;
-    }
-
-    /**
-     * Use fixed coordinates to position the legend.
-     * This will override the align setting.
-     *
-     * @param x x coordinates in pixel
-     * @param y y coordinates in pixel
-     */
-    public void setFixedPosition(int x, int y) {
-        mStyles.fixedPosition = new Point(x, y);
     }
 }

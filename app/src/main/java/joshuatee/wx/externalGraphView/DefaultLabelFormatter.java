@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -53,17 +53,6 @@ public class DefaultLabelFormatter implements LabelFormatter {
      * uses the default number format for the labels
      */
     public DefaultLabelFormatter() {
-    }
-
-    /**
-     * use custom number format
-     *
-     * @param xFormat the number format for the x labels
-     * @param yFormat the number format for the y labels
-     */
-    public DefaultLabelFormatter(NumberFormat xFormat, NumberFormat yFormat) {
-        mNumberFormatter[0] = yFormat;
-        mNumberFormatter[1] = xFormat;
     }
 
     /**

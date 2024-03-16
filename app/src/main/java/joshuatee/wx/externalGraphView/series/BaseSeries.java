@@ -29,7 +29,6 @@ import joshuatee.wx.externalGraphView.GraphView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -324,10 +323,8 @@ public abstract class BaseSeries<E extends DataPointInterface> implements Series
         for (Map.Entry<PointF, E> entry : mDataPoints.entrySet()) {
             float x1 = entry.getKey().x;
             float y1 = entry.getKey().y;
-            float x2 = x;
-            float y2 = y;
 
-            float distance = (float) Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+            float distance = (float) Math.sqrt((x1 - x) * (x1 - x) + (y1 - y) * (y1 - y));
             if (shortest == null || distance < shortestDistance) {
                 shortestDistance = distance;
                 shortest = entry.getValue();
@@ -394,28 +391,6 @@ public abstract class BaseSeries<E extends DataPointInterface> implements Series
      */
     protected void resetDataPoints() {
         mDataPoints.clear();
-    }
-
-    /**
-     * clears the data of this series and sets new.
-     * will redraw the graph
-     *
-     * @param data the values must be in the correct order!
-     *             x-value has to be ASC. First the lowest x value and at least the highest x value.
-     */
-    public void resetData(E[] data) {
-        mData.clear();
-        Collections.addAll(mData, data);
-        checkValueOrder(null);
-
-        mHighestYCache = mLowestYCache = Double.NaN;
-
-        // update graphview
-        for (WeakReference<GraphView> gv : mGraphViews) {
-            if (gv != null && gv.get() != null) {
-                gv.get().onDataChanged(true, false);
-            }
-        }
     }
 
     /**
@@ -487,17 +462,6 @@ public abstract class BaseSeries<E extends DataPointInterface> implements Series
     }
 
     /**
-     * @param dataPoint     values the values must be in the correct order!
-     *                      x-value has to be ASC. First the lowest x value and at least the highest x value.
-     * @param scrollToEnd   true => graphview will scroll to the end (maxX)
-     * @param maxDataPoints if max data count is reached, the oldest data
-     *                      value will be lost to avoid memory leaks
-     */
-    public void appendData(E dataPoint, boolean scrollToEnd, int maxDataPoints) {
-        appendData(dataPoint, scrollToEnd, maxDataPoints, false);
-    }
-
-    /**
      * @return whether there are data points
      */
     @Override
@@ -534,19 +498,4 @@ public abstract class BaseSeries<E extends DataPointInterface> implements Series
     }
 
     public abstract void drawSelection(GraphView mGraphView, Canvas canvas, boolean b, DataPointInterface value);
-
-    public void clearCursorModeCache() {
-        mIsCursorModeCache = null;
-    }
-
-    @Override
-    public void clearReference(GraphView graphView) {
-        // find and remove
-        for (WeakReference<GraphView> view : mGraphViews) {
-            if (view != null && view.get() != null && view.get() == graphView) {
-                mGraphViews.remove(view);
-                break;
-            }
-        }
-    }
 }

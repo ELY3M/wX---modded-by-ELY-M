@@ -15,30 +15,25 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
 package joshuatee.wx.externalGraphView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import joshuatee.wx.externalGraphView.series.BaseSeries;
 import joshuatee.wx.externalGraphView.series.Series;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -468,7 +463,7 @@ public class GraphView extends View {
     }
 
     /**
-     *
+     * @noinspection EmptyMethod
      */
     @Override
     public void computeScroll() {
@@ -482,15 +477,6 @@ public class GraphView extends View {
      */
     public LegendRenderer getLegendRenderer() {
         return mLegendRenderer;
-    }
-
-    /**
-     * use a specific legend renderer
-     *
-     * @param mLegendRenderer the new legend renderer
-     */
-    public void setLegendRenderer(LegendRenderer mLegendRenderer) {
-        this.mLegendRenderer = mLegendRenderer;
     }
 
     /**
@@ -514,40 +500,6 @@ public class GraphView extends View {
     }
 
     /**
-     * @return the title font size
-     */
-    public float getTitleTextSize() {
-        return mStyles.titleTextSize;
-    }
-
-    /**
-     * Set the title's font size
-     *
-     * @param titleTextSize font size
-     * @see #setTitle(String)
-     */
-    public void setTitleTextSize(float titleTextSize) {
-        mStyles.titleTextSize = titleTextSize;
-    }
-
-    /**
-     * @return font color of the title
-     */
-    public int getTitleColor() {
-        return mStyles.titleColor;
-    }
-
-    /**
-     * Set the title's font color
-     *
-     * @param titleColor font color of the title
-     * @see #setTitle(String)
-     */
-    public void setTitleColor(int titleColor) {
-        mStyles.titleColor = titleColor;
-    }
-
-    /**
      * creates the second scale logic and returns it
      *
      * @return second scale object
@@ -562,35 +514,10 @@ public class GraphView extends View {
     }
 
     /**
-     * clears the second scale
-     */
-    public void clearSecondScale() {
-        if (mSecondScale != null) {
-            mSecondScale.removeAllSeries();
-            mSecondScale = null;
-        }
-    }
-
-    /**
      * Removes all series of the graph.
      */
     public void removeAllSeries() {
         mSeries.clear();
-        onDataChanged(false, false);
-    }
-
-    /**
-     * Remove a specific series of the graph.
-     * This will also re-draw the graph, but
-     * without recalculating the viewport and
-     * label sizes.
-     * If you want this, you have to call {@link #onDataChanged(boolean, boolean)}
-     * manually.
-     *
-     * @param series
-     */
-    public void removeSeries(Series<?> series) {
-        mSeries.remove(series);
         onDataChanged(false, false);
     }
 
@@ -604,52 +531,6 @@ public class GraphView extends View {
         Canvas canvas = new Canvas(bitmap);
         draw(canvas);
         return bitmap;
-    }
-
-    /**
-     * takes a snapshot, stores it and open the share dialog.
-     * Notice that you need the permission android.permission.WRITE_EXTERNAL_STORAGE
-     *
-     * @param context
-     * @param imageName
-     * @param title
-     */
-    public void takeSnapshotAndShare(Context context, String imageName, String title) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        Bitmap inImage = takeSnapshot();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, imageName, null);
-        if (path == null) {
-            // most likely a security problem
-            throw new SecurityException("Could not get path from MediaStore. Please check permissions.");
-        }
-
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("image/*");
-        i.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
-        try {
-            context.startActivity(Intent.createChooser(i, title));
-        } catch (android.content.ActivityNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void setCursorMode(boolean b) {
-        mIsCursorMode = b;
-        if (mIsCursorMode) {
-            if (mCursorMode == null) {
-                mCursorMode = new CursorMode(this);
-            }
-        } else {
-            mCursorMode = null;
-            invalidate();
-        }
-        for (Series series : mSeries) {
-            if (series instanceof BaseSeries) {
-                ((BaseSeries) series).clearCursorModeCache();
-            }
-        }
     }
 
     public CursorMode getCursorMode() {

@@ -127,7 +127,7 @@ public class CursorMode {
     }
 
     protected String getTextForSeries(Series s, DataPointInterface value) {
-        StringBuffer txt = new StringBuffer();
+        StringBuilder txt = new StringBuilder();
         if (s.getTitle() != null) {
             txt.append(s.getTitle());
             txt.append(": ");
@@ -200,6 +200,9 @@ public class CursorMode {
         }
     }
 
+    /**
+     * @noinspection SameReturnValue
+     */
     public boolean onUp(MotionEvent event) {
         mCursorVisible = false;
         findCurrentDataPoint();

@@ -388,6 +388,7 @@ public class TouchImageView2 extends AppCompatImageView {
      * Set the min zoom multiplier. Default value: 1.
      *
      * @param min min zoom multiplier.
+     * @noinspection SameParameterValue
      */
     private void setMinZoom(float min) {
         userSpecifiedMinScale = min;
@@ -1336,6 +1337,9 @@ public class TouchImageView2 extends AppCompatImageView {
             overScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
         }
 
+        /**
+         * @noinspection SameParameterValue
+         */
         void forceFinished(boolean finished) {
             overScroller.forceFinished(finished);
         }

@@ -345,8 +345,9 @@ object GlobalArrays {
             "LVX: KY, Louisville",
             "PAH: KY, Paducah",
             "POE: LA, Fort Polk",
+//            "HDC: LA, Hammond",      // to Begin NEXRAD Level III Product Dissemination on or around March 31, 2024 Service Change Notice 24-11
             "LCH: LA, Lake Charles",
-            "LIX: LA, New Orleans",
+            "LIX: LA, New Orleans",  // GONE as of late 2023
             "SHV: LA, Shreveport",
             "BOX: MA, Boston",
             "CBW: ME, Loring AFB",

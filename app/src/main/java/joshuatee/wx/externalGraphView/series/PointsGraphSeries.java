@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30  and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -113,13 +113,6 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
     private CustomShape mCustomShape;
 
     /**
-     * creates the series without data
-     */
-    public PointsGraphSeries() {
-        init();
-    }
-
-    /**
      * creates the series with data
      *
      * @param data data-points
@@ -169,8 +162,8 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
         Iterator<E> values = getValues(minX, maxX);
 
         // draw background
-        double lastEndY = 0;
-        double lastEndX = 0;
+//        double lastEndY = 0;
+//        double lastEndX = 0;
 
         // draw data
         mPaint.setColor(getColor());
@@ -183,10 +176,6 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
         float graphLeft = graphView.getGraphContentLeft();
         float graphTop = graphView.getGraphContentTop();
 
-        lastEndY = 0;
-        lastEndX = 0;
-//        float firstX = 0;
-        int i = 0;
         while (values.hasNext()) {
             E value = values.next();
 
@@ -197,9 +186,6 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
             double valX = value.getX() - minX;
             double ratX = valX / diffX;
             double x = graphWidth * ratX;
-
-//            double orgX = x;
-//            double orgY = y;
 
             // overdraw
             boolean overdraw = x > graphWidth;
@@ -236,7 +222,7 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
                 }
             }
 
-            i++;
+//            i++;
         }
 
     }
@@ -301,16 +287,6 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
      */
     public void setShape(Shape s) {
         mStyles.shape = s;
-    }
-
-    /**
-     * Use a custom handler to draw your own
-     * drawing for each data point.
-     *
-     * @param shape handler to use a custom drawing
-     */
-    public void setCustomShape(CustomShape shape) {
-        mCustomShape = shape;
     }
 
     @Override

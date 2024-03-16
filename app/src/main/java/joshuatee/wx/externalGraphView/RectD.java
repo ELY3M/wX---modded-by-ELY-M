@@ -15,13 +15,11 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
 package joshuatee.wx.externalGraphView;
-
-import android.graphics.RectF;
 
 /**
  * Created by jonas on 05.06.16.
@@ -52,9 +50,5 @@ public class RectD {
         right = lRight;
         top = lTop;
         bottom = lBottom;
-    }
-
-    public RectF toRectF() {
-        return new RectF((float) left, (float) top, (float) right, (float) bottom);
     }
 }

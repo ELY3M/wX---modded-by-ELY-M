@@ -37,6 +37,7 @@ private constructor(val semiMajorAxis: Double, val semiMinorAxis: Double, val fl
          * @param inverseFlattening
          * @return
          */
+        @Suppress("SameParameterValue")
         private fun fromAAndInverseF(semiMajor: Double, inverseFlattening: Double): ExternalEllipsoid {
             val f = 1.0 / inverseFlattening
             val b = (1.0 - f) * semiMajor

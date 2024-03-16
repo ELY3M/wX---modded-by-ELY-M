@@ -92,6 +92,7 @@ object NotificationPreferences {
     private fun getInitialPreference(pref: String, initValue: String): Boolean =
             (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
 
+    @Suppress("SameParameterValue")
     private fun getInitialPreferenceString(pref: String, initValue: String): String =
             MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

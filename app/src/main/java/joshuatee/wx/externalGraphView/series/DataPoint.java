@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -24,7 +24,6 @@ package joshuatee.wx.externalGraphView.series;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * default data point implementation.
@@ -40,11 +39,6 @@ public class DataPoint implements DataPointInterface, Serializable {
 
     public DataPoint(double x, double y) {
         this.x = x;
-        this.y = y;
-    }
-
-    public DataPoint(Date x, double y) {
-        this.x = x.getTime();
         this.y = y;
     }
 

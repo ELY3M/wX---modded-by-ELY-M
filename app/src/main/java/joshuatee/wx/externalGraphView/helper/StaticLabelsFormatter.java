@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -77,49 +77,6 @@ public class StaticLabelsFormatter implements LabelFormatter {
     }
 
     /**
-     * creates the formatter without any static labels.
-     * define your static labels via {@link #setHorizontalLabels(String[])} and {@link #setVerticalLabels(String[])}
-     *
-     * @param graphView             reference to the graphview
-     * @param dynamicLabelFormatter the label formatter that will format the labels
-     *                              for that there are no static labels defined.
-     */
-    public StaticLabelsFormatter(GraphView graphView, LabelFormatter dynamicLabelFormatter) {
-        mGraphView = graphView;
-        init(null, null, dynamicLabelFormatter);
-    }
-
-    /**
-     * creates the formatter with static labels defined.
-     *
-     * @param graphView        reference to the graphview
-     * @param horizontalLabels the horizontal labels, ordered form the left to the right
-     *                         if it is null, the labels will be generated via the #dynamicLabelFormatter
-     * @param verticalLabels   the vertical labels, ordered from bottom to the top
-     *                         if it is null, the labels will be generated via the #dynamicLabelFormatter
-     */
-    public StaticLabelsFormatter(GraphView graphView, String[] horizontalLabels, String[] verticalLabels) {
-        mGraphView = graphView;
-        init(horizontalLabels, verticalLabels, null);
-    }
-
-    /**
-     * creates the formatter with static labels defined.
-     *
-     * @param graphView             reference to the graphview
-     * @param horizontalLabels      the horizontal labels, ordered form the left to the right
-     *                              if it is null, the labels will be generated via the #dynamicLabelFormatter
-     * @param verticalLabels        the vertical labels, ordered from bottom to the top
-     *                              if it is null, the labels will be generated via the #dynamicLabelFormatter
-     * @param dynamicLabelFormatter the label formatter that will format the labels
-     *                              for that there are no static labels defined.
-     */
-    public StaticLabelsFormatter(GraphView graphView, String[] horizontalLabels, String[] verticalLabels, LabelFormatter dynamicLabelFormatter) {
-        mGraphView = graphView;
-        init(horizontalLabels, verticalLabels, dynamicLabelFormatter);
-    }
-
-    /**
      * @param horizontalLabels      the horizontal labels, ordered form the left to the right
      *                              if it is null, the labels will be generated via the #dynamicLabelFormatter
      * @param verticalLabels        the vertical labels, ordered from bottom to the top
@@ -135,38 +92,6 @@ public class StaticLabelsFormatter implements LabelFormatter {
 
         mHorizontalLabels = horizontalLabels;
         mVerticalLabels = verticalLabels;
-    }
-
-    /**
-     * Set a label formatter that will be used for the labels
-     * that don't have static labels.
-     * For example if you only use static labels for horizontal labels,
-     * graphview will use the dynamicLabelFormatter for the vertical labels.
-     *
-     * @param dynamicLabelFormatter the label formatter that will format the labels
-     *                              for that there are no static labels defined.
-     */
-    public void setDynamicLabelFormatter(LabelFormatter dynamicLabelFormatter) {
-        this.mDynamicLabelFormatter = dynamicLabelFormatter;
-        adjust();
-    }
-
-    /**
-     * @param horizontalLabels the horizontal labels, ordered form the left to the right
-     *                         if it is null, the labels will be generated via the #dynamicLabelFormatter
-     */
-    public void setHorizontalLabels(String[] horizontalLabels) {
-        this.mHorizontalLabels = horizontalLabels;
-        adjust();
-    }
-
-    /**
-     * @param verticalLabels the vertical labels, ordered from bottom to the top
-     *                       if it is null, the labels will be generated via the #dynamicLabelFormatter
-     */
-    public void setVerticalLabels(String[] verticalLabels) {
-        this.mVerticalLabels = verticalLabels;
-        adjust();
     }
 
     /**

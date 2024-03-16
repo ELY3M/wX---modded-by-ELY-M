@@ -178,6 +178,7 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
         else -> Short.MIN_VALUE
     }
 
+    @Suppress("SameParameterValue")
     @Throws(IOException::class)
     private fun getDataBlockValue(ucarRandomAccessFile: UCARRandomAccessFile, offset: Short, skip: Int): Short {
         val off = offset.toLong() + messageOffset + MESSAGE_HEADER_SIZE.toLong()
@@ -186,6 +187,7 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
         return ucarRandomAccessFile.readShort()
     }
 
+    @Suppress("SameParameterValue")
     @Throws(IOException::class)
     private fun getDataBlockStringValue(ucarRandomAccessFile: UCARRandomAccessFile, offset: Short, skip: Int, size: Int): String {
         val off = offset.toLong() + messageOffset + MESSAGE_HEADER_SIZE.toLong()

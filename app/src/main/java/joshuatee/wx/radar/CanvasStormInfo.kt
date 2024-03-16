@@ -149,6 +149,7 @@ object CanvasStormInfo {
     }
 
     // FIXME are these the same as in Level3Common ?
+    @Suppress("SameParameterValue")
     private fun drawTickMarks(
             list: MutableList<Double>,
             startPoint: LatLon,
@@ -164,6 +165,7 @@ object CanvasStormInfo {
         list += Projection.computeMercatorNumbers(ec, pn).toList()
     }
 
+    @Suppress("SameParameterValue")
     private fun drawLine(
             list: MutableList<Double>,
             startPoint: DoubleArray,

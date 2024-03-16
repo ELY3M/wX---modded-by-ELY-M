@@ -201,7 +201,7 @@ class NexradDownload {
             return try {
                 val request = Request.Builder().url(url).header("Range", "bytes=0-$byteEnd").build()
                 val response = MyApplication.httpClient.newCall(request).execute()
-                response.body!!.byteStream()
+                response.body.byteStream()
             } catch (e: IOException) {
                 null
             }

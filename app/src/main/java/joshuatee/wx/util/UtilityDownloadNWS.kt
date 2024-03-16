@@ -61,7 +61,7 @@ object UtilityDownloadNws {
                     .addHeader("Accept", "application/atom+xml")
                     .build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body!!.byteStream())
+            val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
@@ -85,7 +85,7 @@ object UtilityDownloadNws {
                     .header("User-Agent", USER_AGENT)
                     .build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body!!.byteStream())
+            val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
@@ -111,7 +111,7 @@ object UtilityDownloadNws {
                     .addHeader("Accept", ACCEPT_HEADER)
                     .build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body!!.byteStream())
+            val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
@@ -137,7 +137,7 @@ object UtilityDownloadNws {
                     .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1") // TODO FIXME, not valid defaulting to application/geo+json
                     .build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body!!.byteStream())
+            val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {

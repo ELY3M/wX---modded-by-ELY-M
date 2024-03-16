@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.widget.EdgeEffect;
 import android.widget.OverScroller;
 
 import joshuatee.wx.externalGraphView.series.DataPointInterface;
@@ -510,14 +511,14 @@ public class Viewport {
      * 0 means use the bounds of the actual data that is
      * available
      */
-    protected double mMaxXAxisSize = 0;
+    protected final double mMaxXAxisSize = 0;
 
     /**
      * maximum allowed viewport size (vertical)
      * 0 means use the bounds of the actual data that is
      * available
      */
-    protected double mMaxYAxisSize = 0;
+    protected final double mMaxYAxisSize = 0;
 
     /**
      * this holds the whole range of the data
@@ -565,22 +566,22 @@ public class Viewport {
     /**
      * not used
      */
-    private final EdgeEffectCompat mEdgeEffectTop;
+    private final EdgeEffect mEdgeEffectTop;
 
     /**
      * not used
      */
-    private final EdgeEffectCompat mEdgeEffectBottom;
+    private final EdgeEffect mEdgeEffectBottom;
 
     /**
      * glow effect when scrolling left
      */
-    private final EdgeEffectCompat mEdgeEffectLeft;
+    private final EdgeEffect mEdgeEffectLeft;
 
     /**
      * glow effect when scrolling right
      */
-    private final EdgeEffectCompat mEdgeEffectRight;
+    private final EdgeEffect mEdgeEffectRight;
 
     /**
      * state of the x axis
@@ -642,10 +643,10 @@ public class Viewport {
      */
     Viewport(GraphView graphView) {
         mScroller = new OverScroller(graphView.getContext());
-        mEdgeEffectTop = new EdgeEffectCompat(graphView.getContext());
-        mEdgeEffectBottom = new EdgeEffectCompat(graphView.getContext());
-        mEdgeEffectLeft = new EdgeEffectCompat(graphView.getContext());
-        mEdgeEffectRight = new EdgeEffectCompat(graphView.getContext());
+        mEdgeEffectTop = new EdgeEffect(graphView.getContext());
+        mEdgeEffectBottom = new EdgeEffect(graphView.getContext());
+        mEdgeEffectLeft = new EdgeEffect(graphView.getContext());
+        mEdgeEffectRight = new EdgeEffect(graphView.getContext());
         mGestureDetector = new GestureDetector(graphView.getContext(), mGestureListener);
         mScaleGestureDetector = new ScaleGestureDetector(graphView.getContext(), mScaleGestureListener);
 
@@ -680,58 +681,6 @@ public class Viewport {
             }
         }
         return b;
-    }
-
-    /**
-     * change the state of the x axis.
-     * normally you do not call this method.
-     * If you want to set manual axis use
-     * {@link #setXAxisBoundsManual(boolean)} and {@link #setYAxisBoundsManual(boolean)}
-     *
-     * @param s state
-     */
-    public void setXAxisBoundsStatus(AxisBoundsStatus s) {
-        mXAxisBoundsStatus = s;
-    }
-
-    /**
-     * change the state of the y axis.
-     * normally you do not call this method.
-     * If you want to set manual axis use
-     * {@link #setXAxisBoundsManual(boolean)} and {@link #setYAxisBoundsManual(boolean)}
-     *
-     * @param s state
-     */
-    public void setYAxisBoundsStatus(AxisBoundsStatus s) {
-        mYAxisBoundsStatus = s;
-    }
-
-    /**
-     * @return whether the viewport is scrollable
-     */
-    public boolean isScrollable() {
-        return mIsScrollable;
-    }
-
-    /**
-     * @param mIsScrollable whether is viewport is scrollable
-     */
-    public void setScrollable(boolean mIsScrollable) {
-        this.mIsScrollable = mIsScrollable;
-    }
-
-    /**
-     * @return the x axis state
-     */
-    public AxisBoundsStatus getXAxisBoundsStatus() {
-        return mXAxisBoundsStatus;
-    }
-
-    /**
-     * @return the y axis state
-     */
-    public AxisBoundsStatus getYAxisBoundsStatus() {
-        return mYAxisBoundsStatus;
     }
 
     /**
@@ -947,39 +896,6 @@ public class Viewport {
     }
 
     /**
-     * not used currently
-     *
-     * @param velocityX
-     * @param velocityY
-     */
-    private void fling(int velocityX, int velocityY) {
-        velocityY = 0;
-        releaseEdgeEffects();
-        // Flings use math in pixels (as opposed to math based on the viewport).
-        int maxX = (int) ((mCurrentViewport.width() / mCompleteRange.width()) * (float) mGraphView.getGraphContentWidth()) - mGraphView.getGraphContentWidth();
-        int maxY = (int) ((mCurrentViewport.height() / mCompleteRange.height()) * (float) mGraphView.getGraphContentHeight()) - mGraphView.getGraphContentHeight();
-        int startX = (int) ((mCurrentViewport.left - mCompleteRange.left) / mCompleteRange.width()) * maxX;
-        int startY = (int) ((mCurrentViewport.top - mCompleteRange.top) / mCompleteRange.height()) * maxY;
-        mScroller.forceFinished(true);
-        mScroller.fling(
-                startX,
-                startY,
-                velocityX,
-                velocityY,
-                0, maxX,
-                0, maxY,
-                mGraphView.getGraphContentWidth() / 2,
-                mGraphView.getGraphContentHeight() / 2);
-        ViewCompat.postInvalidateOnAnimation(mGraphView);
-    }
-
-    /**
-     * not used currently
-     */
-//    public void computeScroll() {
-//    }
-
-    /**
      * Draws the overscroll "glow" at the four edges of the chart region, if necessary.
      *
      * @see EdgeEffectCompat
@@ -1003,7 +919,7 @@ public class Viewport {
         if (!mEdgeEffectBottom.isFinished()) {
             final int restoreCount = canvas.save();
             canvas.translate(mGraphView.getGraphContentLeft(), mGraphView.getGraphContentTop() + mGraphView.getGraphContentHeight());
-            canvas.rotate(180, mGraphView.getGraphContentWidth() / 2, 0);
+            canvas.rotate(180, (float) mGraphView.getGraphContentWidth() / 2, 0);
             mEdgeEffectBottom.setSize(mGraphView.getGraphContentWidth(), mGraphView.getGraphContentHeight());
             if (mEdgeEffectBottom.draw(canvas)) {
                 needsInvalidate = true;
@@ -1103,6 +1019,7 @@ public class Viewport {
 
     /**
      * @return background of the viewport area
+     * @noinspection unused
      */
     public int getBackgroundColor() {
         return mBackgroundColor;
@@ -1114,30 +1031,6 @@ public class Viewport {
      */
     public void setBackgroundColor(int mBackgroundColor) {
         this.mBackgroundColor = mBackgroundColor;
-    }
-
-    /**
-     * @return whether the viewport is scalable
-     */
-    public boolean isScalable() {
-        return mIsScalable;
-    }
-
-    /**
-     * active the scaling/zooming feature
-     * notice: sets the x axis bounds to manual
-     *
-     * @param mIsScalable whether the viewport is scalable
-     */
-    public void setScalable(boolean mIsScalable) {
-        this.mIsScalable = mIsScalable;
-        if (mIsScalable) {
-            mIsScrollable = true;
-
-            // set viewport to manual
-            setXAxisBoundsManual(true);
-        }
-
     }
 
     /**
@@ -1169,18 +1062,6 @@ public class Viewport {
     }
 
     /**
-     * @param mYAxisBoundsManual whether the y axis bounds are manual
-     * @see #setMaxY(double)
-     * @see #setMinY(double)
-     */
-    public void setYAxisBoundsManual(boolean mYAxisBoundsManual) {
-        this.mYAxisBoundsManual = mYAxisBoundsManual;
-        if (mYAxisBoundsManual) {
-            mYAxisBoundsStatus = AxisBoundsStatus.FIX;
-        }
-    }
-
-    /**
      * forces the viewport to scroll to the end
      * of the range by keeping the current viewport size.
      * <p>
@@ -1200,34 +1081,6 @@ public class Viewport {
     }
 
     /**
-     * @return the listener when there is one registered.
-     */
-    public OnXAxisBoundsChangedListener getOnXAxisBoundsChangedListener() {
-        return mOnXAxisBoundsChangedListener;
-    }
-
-    /**
-     * set a listener to notify when x bounds changed after
-     * scaling or scrolling.
-     * This can be used to load more detailed data.
-     *
-     * @param l the listener to use
-     */
-    public void setOnXAxisBoundsChangedListener(OnXAxisBoundsChangedListener l) {
-        mOnXAxisBoundsChangedListener = l;
-    }
-
-    /**
-     * optional draw a border between the labels
-     * and the viewport
-     *
-     * @param drawBorder true to draw the border
-     */
-    public void setDrawBorder(boolean drawBorder) {
-        this.mDrawBorder = drawBorder;
-    }
-
-    /**
      * the border color used. will be ignored when
      * a custom paint is set.
      *
@@ -1239,36 +1092,6 @@ public class Viewport {
             return mBorderColor;
         }
         return mGraphView.getGridLabelRenderer().getGridColor();
-    }
-
-    /**
-     * the border color used. will be ignored when
-     * a custom paint is set.
-     *
-     * @param borderColor null to reset
-     */
-    public void setBorderColor(Integer borderColor) {
-        this.mBorderColor = borderColor;
-    }
-
-    /**
-     * custom paint to use for the border. border color
-     * will be ignored
-     *
-     * @param borderPaint
-     * @see #setDrawBorder(boolean)
-     */
-    public void setBorderPaint(Paint borderPaint) {
-        this.mBorderPaint = borderPaint;
-    }
-
-    /**
-     * activate/deactivate the vertical scrolling
-     *
-     * @param scrollableY true to activate
-     */
-    public void setScrollableY(boolean scrollableY) {
-        this.scrollableY = scrollableY;
     }
 
     /**
@@ -1289,79 +1112,5 @@ public class Viewport {
             // starting from 0 so that the steps have nice numbers
             return 0;
         }
-    }
-
-    /**
-     * activate or deactivate the vertical zooming/scaling functionality.
-     * This will automatically activate the vertical scrolling and the
-     * horizontal scaling/scrolling feature.
-     *
-     * @param scalableY true to activate
-     */
-    public void setScalableY(boolean scalableY) {
-        if (scalableY) {
-            this.scrollableY = true;
-            setScalable(true);
-
-        }
-        this.scalableY = scalableY;
-    }
-
-    /**
-     * maximum allowed viewport size (horizontal)
-     * 0 means use the bounds of the actual data that is
-     * available
-     */
-    public double getMaxXAxisSize() {
-        return mMaxXAxisSize;
-    }
-
-    /**
-     * maximum allowed viewport size (vertical)
-     * 0 means use the bounds of the actual data that is
-     * available
-     */
-    public double getMaxYAxisSize() {
-        return mMaxYAxisSize;
-    }
-
-    /**
-     * Set the max viewport size (horizontal)
-     * This can prevent the user from zooming out too much. E.g. with a 24 hours graph, it
-     * could force the user to only be able to see 2 hours of data at a time.
-     * Default value is 0 (disabled)
-     *
-     * @param mMaxXAxisViewportSize maximum size of viewport
-     */
-    public void setMaxXAxisSize(double mMaxXAxisViewportSize) {
-        this.mMaxXAxisSize = mMaxXAxisViewportSize;
-    }
-
-    /**
-     * Set the max viewport size (vertical)
-     * This can prevent the user from zooming out too much. E.g. with a 24 hours graph, it
-     * could force the user to only be able to see 2 hours of data at a time.
-     * Default value is 0 (disabled)
-     *
-     * @param mMaxYAxisViewportSize maximum size of viewport
-     */
-    public void setMaxYAxisSize(double mMaxYAxisViewportSize) {
-        this.mMaxYAxisSize = mMaxYAxisViewportSize;
-    }
-
-    /**
-     * minimal viewport used for scaling and scrolling.
-     * this is used if the data that is available is
-     * less then the viewport that we want to be able to display.
-     * <p>
-     * if Double.NaN is used, then this value is ignored
-     *
-     * @param minX
-     * @param maxX
-     * @param minY
-     * @param maxY
-     */
-    public void setMinimalViewport(double minX, double maxX, double minY, double maxY) {
-        mMinimalViewport.set(minX, maxY, maxX, minY);
     }
 }

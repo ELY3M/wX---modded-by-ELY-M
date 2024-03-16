@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -59,18 +59,6 @@ public class DateAsXAxisLabelFormatter extends DefaultLabelFormatter {
      */
     public DateAsXAxisLabelFormatter(Context context) {
         mDateFormat = android.text.format.DateFormat.getDateFormat(context);
-        mCalendar = Calendar.getInstance();
-    }
-
-    /**
-     * create the formatter with your own custom
-     * date format to convert the x-values.
-     *
-     * @param context    the application context
-     * @param dateFormat custom date format
-     */
-    public DateAsXAxisLabelFormatter(Context context, DateFormat dateFormat) {
-        mDateFormat = dateFormat;
         mCalendar = Calendar.getInstance();
     }
 

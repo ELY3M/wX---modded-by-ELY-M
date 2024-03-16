@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-// Downloaded from the following URL on 2023-12-30
+// Downloaded from the following URL on 2023-12-30 and local modifications have been made
 // https://github.com/jjoe64/GraphView
 // Please see license at doc/COPYING.GraphView (APL2.0)
 
@@ -124,11 +124,4 @@ public interface Series<E extends DataPointInterface> {
      * @return whether there are data points
      */
     boolean isEmpty();
-
-    /**
-     * clear reference to view and activity
-     *
-     * @param graphView
-     */
-    void clearReference(GraphView graphView);
 }

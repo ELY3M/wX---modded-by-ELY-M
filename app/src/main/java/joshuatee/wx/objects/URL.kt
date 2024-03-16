@@ -21,7 +21,7 @@ class URL(val url: String) {
         try {
             val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            return response.body!!.string()
+            return response.body.string()
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -41,7 +41,7 @@ class URL(val url: String) {
                     .addHeader("Accept", "application/atom+xml")
                     .build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            return response.body!!.string()
+            return response.body.string()
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -53,7 +53,7 @@ class URL(val url: String) {
         return try {
             val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            response.body!!.bytes()
+            response.body.bytes()
         } catch (e: Exception) {
             UtilityLog.handleException(e)
             ByteArray(0)

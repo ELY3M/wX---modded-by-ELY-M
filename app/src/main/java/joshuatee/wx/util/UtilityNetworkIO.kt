@@ -40,7 +40,7 @@ object UtilityNetworkIO {
         try {
             val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
             val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body!!.byteStream())
+            val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
@@ -75,9 +75,9 @@ object UtilityNetworkIO {
         if (url.contains("hazards_d8_14_contours.png")) {
             val options = BitmapFactory.Options()
             options.inPreferredConfig = Bitmap.Config.RGB_565
-            BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()), null, options)!!
+            BitmapFactory.decodeStream(BufferedInputStream(response.body.byteStream()), null, options)!!
         } else {
-            BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()))
+            BitmapFactory.decodeStream(BufferedInputStream(response.body.byteStream()))
         }
     } catch (e: Exception) {
         UtilityImg.getBlankBitmap()
@@ -91,7 +91,7 @@ object UtilityNetworkIO {
         Utility.logDownload("getInputStreamFromUrl: $url")
         val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
         val response = MyApplication.httpClient.newCall(request).execute()
-        response.body!!.byteStream()
+        response.body.byteStream()
     } catch (e: IOException) {
         UtilityLog.handleException(e)
         null

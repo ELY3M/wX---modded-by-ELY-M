@@ -122,20 +122,12 @@ public class BarGraphSeries<E extends DataPointInterface> extends BaseSeries<E> 
     /**
      * animation interpolator
      */
-    private AccelerateInterpolator mAnimationInterpolator;
+    private final AccelerateInterpolator mAnimationInterpolator;
 
     /**
      * frame number of animation to avoid lagging
      */
     private int mAnimationStartFrameNo;
-
-
-    /**
-     * creates bar series without any data
-     */
-    public BarGraphSeries() {
-        mPaint = new Paint();
-    }
 
     /**
      * creates bar series with data
@@ -376,96 +368,6 @@ public class BarGraphSeries<E extends DataPointInterface> extends BaseSeries<E> 
     }
 
     /**
-     * set a hook to make the color of the bars depending
-     * on the actually value/data.
-     *
-     * @param mValueDependentColor hook
-     *                             null to disable
-     */
-    public void setValueDependentColor(ValueDependentColor<E> mValueDependentColor) {
-        this.mValueDependentColor = mValueDependentColor;
-    }
-
-    /**
-     * @return the spacing between the bars in percentage
-     */
-    public int getSpacing() {
-        return mSpacing;
-    }
-
-    /**
-     * @param mSpacing spacing between the bars in percentage.
-     *                 0 => no spacing
-     *                 100 => the space between the bars is as big as the bars itself
-     */
-    public void setSpacing(int mSpacing) {
-        this.mSpacing = mSpacing;
-    }
-
-    /**
-     * @return the interval between data points
-     */
-    public double getDataWidth() {
-        return mDataWidth;
-    }
-
-    /**
-     * @param mDataWidth width of a data point (sampling period)
-     *                   0 => no prior knowledge of sampling period, interval between bars will be calculated automatically
-     *                   >0 => value is the total distance from one bar to another
-     */
-    public void setDataWidth(double mDataWidth) {
-        this.mDataWidth = mDataWidth;
-    }
-
-    /**
-     * @return whether the values should be drawn above the bars
-     */
-    public boolean isDrawValuesOnTop() {
-        return mDrawValuesOnTop;
-    }
-
-    /**
-     * @param mDrawValuesOnTop flag whether the values should drawn
-     *                         above the bars as text
-     */
-    public void setDrawValuesOnTop(boolean mDrawValuesOnTop) {
-        this.mDrawValuesOnTop = mDrawValuesOnTop;
-    }
-
-    /**
-     * @return font color of the values on top of the bars
-     * @see #setDrawValuesOnTop(boolean)
-     */
-    public int getValuesOnTopColor() {
-        return mValuesOnTopColor;
-    }
-
-    /**
-     * @param mValuesOnTopColor the font color of the values on top of the bars
-     * @see #setDrawValuesOnTop(boolean)
-     */
-    public void setValuesOnTopColor(int mValuesOnTopColor) {
-        this.mValuesOnTopColor = mValuesOnTopColor;
-    }
-
-    /**
-     * @return font size of the values above the bars
-     * @see #setDrawValuesOnTop(boolean)
-     */
-    public float getValuesOnTopSize() {
-        return mValuesOnTopSize;
-    }
-
-    /**
-     * @param mValuesOnTopSize font size of the values above the bars
-     * @see #setDrawValuesOnTop(boolean)
-     */
-    public void setValuesOnTopSize(float mValuesOnTopSize) {
-        this.mValuesOnTopSize = mValuesOnTopSize;
-    }
-
-    /**
      * resets the cached coordinates of the bars
      */
     @Override
@@ -490,42 +392,6 @@ public class BarGraphSeries<E extends DataPointInterface> extends BaseSeries<E> 
             }
         }
         return null;
-    }
-
-    /**
-     * custom paint that can be used.
-     * this will ignore the value dependent color.
-     *
-     * @return custom paint or null
-     */
-    public Paint getCustomPaint() {
-        return mCustomPaint;
-    }
-
-    /**
-     * custom paint that can be used.
-     * this will ignore the value dependent color.
-     *
-     * @param mCustomPaint custom paint to use or null
-     */
-    public void setCustomPaint(Paint mCustomPaint) {
-        this.mCustomPaint = mCustomPaint;
-    }
-
-    /**
-     * draw the series with an animation
-     *
-     * @param animated animation activated or not
-     */
-    public void setAnimated(boolean animated) {
-        this.mAnimated = animated;
-    }
-
-    /**
-     * @return rendering is animated or not
-     */
-    public boolean isAnimated() {
-        return mAnimated;
     }
 
     @Override

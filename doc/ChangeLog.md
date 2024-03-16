@@ -2,9 +2,12 @@
 
 # Developer ChangeLog
 
-## 55874 2024_03_09
+## 55874 2024_03_10
 
-*
+* [ADD] Prelim KHDC data (commented out) for Service Change Notice 24-11 Hammond, LA WSR-88D (KHDC)
+  to Begin NEXRAD Level III
+  Product Dissemination on or around March 31, 2024
+* [FIX] lint cleanup
 
 ## 55873 2024_03_09
 
