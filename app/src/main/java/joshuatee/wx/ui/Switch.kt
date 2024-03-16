@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.  
 
 package joshuatee.wx.ui
 
@@ -68,7 +69,7 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
                 "RECORD_SCREEN_SHARE",
                 "PREF_PREVENT_ACCIDENTAL_EXIT",
                 "COD_LOCDOT_DEFAULT",
-                "UI_MAIN_SCREEN_RADAR_FAB",
+                ///"UI_MAIN_SCREEN_RADAR_FAB", //elys mod - I hate fab buttons
                 "RADAR_TOOLBAR_TRANSPARENT",
                 "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
                 "USE_NWS_API_HOURLY",
