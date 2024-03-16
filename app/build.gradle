@@ -35,6 +35,7 @@ android {
         }
     }
 
+/*
     def ndkDir = "D:\\android-sdk\\android-ndk-r26c"
     tasks.register('buildNative', Exec) {
         commandLine "$ndkDir\\ndk-build.cmd",
@@ -48,7 +49,7 @@ android {
                 '-C', file('src/main/jni').absolutePath,
                 'clean'
     }
-
+*/
     clean.dependsOn 'cleanNative'
 
     tasks.withType(JavaCompile).configureEach {
