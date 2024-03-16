@@ -29,7 +29,9 @@ jobs:
           gradle-home-cache-cleanup: true
           
       - name: Build APK
-        run: ./gradlew assembleRelease
+        run: | 
+         chmod +x gradlew 
+         ./gradlew assembleRelease
         
       - name: current dir
         run: | 
