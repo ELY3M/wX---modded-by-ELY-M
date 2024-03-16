@@ -72,19 +72,6 @@ jobs:
         
       - name: Output Signed APK
         run:  echo 'Signed APK is ${{ steps.sign_app.outputs.signedReleaseFile }}' 
-        
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4            
-        id: upload
-        with:
-          name: release-apk
-          path: app/build/outputs/apk/**/*.apk
-        
-      - name: Output artifact ID
-        run:  echo 'Artifact ID is ${{ steps.upload.outputs.artifact-id }}'        
-          
-      - name: Output Artifact URL
-        run:  echo 'Artifact URL is ${{ steps.upload.outputs.artifact-url }}'
           
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
