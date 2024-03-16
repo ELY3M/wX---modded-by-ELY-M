@@ -80,8 +80,8 @@ internal class RecordingSession(
     private val mainThread = Handler(Looper.getMainLooper())
     private val picturesDir: File? = context.getExternalFilesDir(DIRECTORY_DCIM)
     private val moviesDir: File? = context.getExternalFilesDir(DIRECTORY_MOVIES)
-    private val videoFileFormat = SimpleDateFormat("'${GlobalVariables.packageNameFileNameAsString}'yyyyMMddHHmmss'.mp4'", Locale.US)
-    private val audioFileFormat = SimpleDateFormat("'${GlobalVariables.packageNameFileNameAsString}'yyyyMMddHHmmss'.jpeg'", Locale.US)
+    private val videoFileFormat = SimpleDateFormat("'${GlobalVariables.PACKAGE_NAME_FILE}'yyyyMMddHHmmss'.mp4'", Locale.US)
+    private val audioFileFormat = SimpleDateFormat("'${GlobalVariables.PACKAGE_NAME_FILE}'yyyyMMddHHmmss'.jpeg'", Locale.US)
     private val notificationManager: NotificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     private val windowManager: WindowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
     private var projectionManager: MediaProjectionManager? = null
@@ -277,7 +277,7 @@ internal class RecordingSession(
             recorder!!.release()
         }
         display!!.release()
-        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", File(outputFile!!))
+        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.PACKAGE_NAME}.fileprovider", File(outputFile!!))
         mainThread.post { showNotification(uri, null) }
     }
 
@@ -325,7 +325,7 @@ internal class RecordingSession(
                     NexradRenderState.ridGlobal, NexradRenderSurfaceView.scaleFactorGlobal,
                     NexradRenderState.positionXGlobal,
                     NexradRenderState.positionYGlobal,
-                    NexradRenderState.ortIntGlobal.toFloat(),
+                    NexradRenderState.ORT_INT_GLOBAL,
                     NexradRenderState.oneDegreeScaleFactorGlobal
             )
             windowManager.addView(distanceToolObject, params)
@@ -393,7 +393,7 @@ internal class RecordingSession(
                         fos = FileOutputStream(outputFile!!)
                         croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
                         //UtilityLog.d("wx", outputFile.toString())
-                        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", File(outputFile!!))
+                        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.PACKAGE_NAME}.fileprovider", File(outputFile!!))
                         showScreenshotNotification(uri, null)
                     }
                 } catch (e: Exception) {
@@ -435,7 +435,7 @@ internal class RecordingSession(
         val share = context.getText(R.string.notification_captured_share)
         val builder: NotificationCompat.Builder?
         val actionShare = NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent).build()
-        builder = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
+        builder = NotificationCompat.Builder(context, UtilityNotification.NOTIFICATION_CHANNEL_STRING_NO_SOUND)
                 .setContentTitle(title)
                 .setContentText(subtitle)
                 .setWhen(ObjectDateTime.currentTimeMillis())
@@ -492,7 +492,7 @@ internal class RecordingSession(
         val subtitle = context.getText(R.string.notification_screenshot_captured_subtitle)
         val share = context.getText(R.string.notification_captured_share)
         val actionShare = NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent).build()
-        val builder = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
+        val builder = NotificationCompat.Builder(context, UtilityNotification.NOTIFICATION_CHANNEL_STRING_NO_SOUND)
                 .setContentTitle(title)
                 .setContentText(subtitle)
                 .setWhen(ObjectDateTime.currentTimeMillis())

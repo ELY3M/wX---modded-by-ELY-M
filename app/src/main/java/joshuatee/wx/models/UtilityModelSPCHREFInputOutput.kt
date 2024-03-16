@@ -40,7 +40,7 @@ internal object UtilityModelSpcHrefInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val htmlRunStatus = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/".getHtml()
+            val htmlRunStatus = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/".getHtml()
             val html = htmlRunStatus.parse("\\{model: \"href\",product: \"500mb_mean\",sector: \"conus\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",\\})")
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
@@ -77,18 +77,18 @@ internal object UtilityModelSpcHrefInputOutput {
         products.forEach {
             val url = if (it.contains("cref_members")) {
                 val paramArr = it.split(" ")
-                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
+                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/graphics/models/href/" + year +
                         "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" +
                         paramArr[0] + "." + sector.lowercase(Locale.US) + ".f0" + time +
                         "00." + paramArr[1] + ".tl00.png"
             } else {
-                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
+                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/graphics/models/href/" + year +
                         "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + it +
                         "." + sector.lowercase(Locale.US) + ".f0" + time + "00.png"
             }
             if (it.contains("cref_members")) {
                 val paramArr = it.split(" ")
-                val infoUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
+                val infoUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/graphics/models/href/" + year +
                         "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" +
                         paramArr[0] + "." + sector.lowercase(Locale.US) + ".f0" + time +
                         "00.png"
@@ -97,9 +97,9 @@ internal object UtilityModelSpcHrefInputOutput {
             urls.add(url)
         }
         if (products.contains("cref_ps")) {
-            urls.add("${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.ps.href.png")
+            urls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/graphics/blank_maps/$sector.ps.href.png")
         } else {
-            urls.add("${GlobalVariables.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.png")
+            urls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/graphics/blank_maps/$sector.png")
         }
         urls.forEach {
             bitmaps.add(it.getImage())

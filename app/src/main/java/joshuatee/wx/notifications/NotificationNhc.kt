@@ -88,6 +88,6 @@ object NotificationNhc {
             )
             objectNotification.send(cancelString)
         }
-        return cancelString + NotificationPreferences.notificationStrSep
+        return cancelString + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
     }
 }

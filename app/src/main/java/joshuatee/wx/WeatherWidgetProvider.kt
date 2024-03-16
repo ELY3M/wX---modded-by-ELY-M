@@ -102,7 +102,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                     (0 until count).forEach {
                         val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
                         val values = ContentValues()
-                        values.put(WeatherDataProvider.Columns.TEMPERATURE, Random().nextInt(maxDegrees))
+                        values.put(WeatherDataProvider.Columns.TEMPERATURE, Random().nextInt(MAX_DEGREES))
                         contentResolver.update(uri, values, null, null)
                     }
                     contentResolver.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, weatherDataProviderObserver!!)
@@ -147,13 +147,13 @@ class WeatherWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
-        const val CLICK_ACTION = "${GlobalVariables.packageNameAsString}.weatherlistwidget.CLICK"
-        const val REFRESH_ACTION = "${GlobalVariables.packageNameAsString}.weatherlistwidget.REFRESH"
-        const val EXTRA_DAY_ID = "${GlobalVariables.packageNameAsString}.weatherlistwidget.day"
+        const val CLICK_ACTION = "${GlobalVariables.PACKAGE_NAME}.weatherlistwidget.CLICK"
+        const val REFRESH_ACTION = "${GlobalVariables.PACKAGE_NAME}.weatherlistwidget.REFRESH"
+        const val EXTRA_DAY_ID = "${GlobalVariables.PACKAGE_NAME}.weatherlistwidget.day"
         var workerThread: HandlerThread? = null
         var workerQueue: Handler? = null
         var weatherDataProviderObserver: WeatherDataProviderObserver? = null
-        private const val maxDegrees = 96
+        private const val MAX_DEGREES = 96
         var isLargeLayout = true
 
         fun buildLayout(context: Context, appWidgetId: Int, largeLayout: Boolean): RemoteViews {

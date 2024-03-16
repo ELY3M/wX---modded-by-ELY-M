@@ -276,7 +276,7 @@ public class SecondScale {
      * @return font size of the vertical axis title
      */
     public float getVerticalAxisTitleTextSize() {
-        if (getVerticalAxisTitle() == null || getVerticalAxisTitle().length() == 0) {
+        if (getVerticalAxisTitle() == null || getVerticalAxisTitle().isEmpty()) {
             return 0;
         }
         return mVerticalAxisTitleTextSize;
@@ -310,7 +310,7 @@ public class SecondScale {
      * @param canvas canvas
      */
     protected void drawVerticalAxisTitle(Canvas canvas) {
-        if (mVerticalAxisTitle != null && mVerticalAxisTitle.length() > 0) {
+        if (mVerticalAxisTitle != null && !mVerticalAxisTitle.isEmpty()) {
             mPaintAxisTitle.setColor(getVerticalAxisTitleColor());
             mPaintAxisTitle.setTextSize(getVerticalAxisTitleTextSize());
             float x = canvas.getWidth() - getVerticalAxisTitleTextSize() / 2;

@@ -80,38 +80,38 @@ object DownloadImage {
             "USWARN" -> url = "https://forecast.weather.gov/wwamap/png/US.png"
             "AKWARN" -> url = "https://forecast.weather.gov/wwamap/png/ak.png"
             "HIWARN" -> url = "https://forecast.weather.gov/wwamap/png/hi.png"
-            "FMAP" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/noaa/noaad1.gif"
-            "FMAPD2" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/noaa/noaad2.gif"
-            "FMAPD3" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/noaa/noaad3.gif"
-            "FMAP12" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/92fwbg.gif"
-            "FMAP24" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/94fwbg.gif"
-            "FMAP36" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/96fwbg.gif"
-            "FMAP48" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/basicwx/98fwbg.gif"
-            "FMAP72" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf072.gif"
-            "FMAP96" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf096.gif"
-            "FMAP120" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf120.gif"
-            "FMAP144" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf144.gif"
-            "FMAP168" -> url = GlobalVariables.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf168.gif"
-            "FMAP3D" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/medr/9jhwbg_conus.gif"
-            "FMAP4D" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/medr/9khwbg_conus.gif"
-            "FMAP5D" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/medr/9lhwbg_conus.gif"
-            "FMAP6D" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/medr/9mhwbg_conus.gif"
-            "QPF1" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/fill_94qwbg.gif"
-            "QPF2" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/fill_98qwbg.gif"
-            "QPF3" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/fill_99qwbg.gif"
-            "QPF1-2" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/d12_fill.gif"
-            "QPF1-3" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/d13_fill.gif"
-            "QPF4-5" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/95ep48iwbg_fill.gif"
-            "QPF6-7" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/97ep48iwbg_fill.gif"
-            "QPF1-5" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/p120i.gif"
-            "QPF1-7" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/p168i.gif"
-            "WPC_ANALYSIS" -> url = "${GlobalVariables.nwsWPCwebsitePrefix}/images/wwd/radnat/NATRAD_24.gif"
-            "NHC2ATL" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png"
-            "NHC5ATL" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_7d0.png"
-            "NHC2EPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png"
-            "NHC5EPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_7d0.png"
-            "NHC2CPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png"
-            "NHC5CPAC" -> url = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
+            "FMAP" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/noaa/noaad1.gif"
+            "FMAPD2" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/noaa/noaad2.gif"
+            "FMAPD3" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/noaa/noaad3.gif"
+            "FMAP12" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/basicwx/92fwbg.gif"
+            "FMAP24" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/basicwx/94fwbg.gif"
+            "FMAP36" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/basicwx/96fwbg.gif"
+            "FMAP48" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/basicwx/98fwbg.gif"
+            "FMAP72" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf072.gif"
+            "FMAP96" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf096.gif"
+            "FMAP120" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf120.gif"
+            "FMAP144" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf144.gif"
+            "FMAP168" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf168.gif"
+            "FMAP3D" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/medr/9jhwbg_conus.gif"
+            "FMAP4D" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/medr/9khwbg_conus.gif"
+            "FMAP5D" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/medr/9lhwbg_conus.gif"
+            "FMAP6D" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/medr/9mhwbg_conus.gif"
+            "QPF1" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/fill_94qwbg.gif"
+            "QPF2" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/fill_98qwbg.gif"
+            "QPF3" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/fill_99qwbg.gif"
+            "QPF1-2" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/d12_fill.gif"
+            "QPF1-3" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/d13_fill.gif"
+            "QPF4-5" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/95ep48iwbg_fill.gif"
+            "QPF6-7" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/97ep48iwbg_fill.gif"
+            "QPF1-5" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/p120i.gif"
+            "QPF1-7" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/p168i.gif"
+            "WPC_ANALYSIS" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/images/wwd/radnat/NATRAD_24.gif"
+            "NHC2ATL" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_2d0.png"
+            "NHC5ATL" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_7d0.png"
+            "NHC2EPAC" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_2d0.png"
+            "NHC5EPAC" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_7d0.png"
+            "NHC2CPAC" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_2d0.png"
+            "NHC5CPAC" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_5d0.png"
             "SPC_TST" -> {
                 needsBitmap = false
                 val images = UtilitySpc.thunderStormOutlookImages
@@ -158,7 +158,7 @@ object DownloadImage {
                 bitmap = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.defaultSector),
+                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
@@ -173,7 +173,7 @@ object DownloadImage {
                 bitmap = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.defaultSector),
+                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
@@ -188,7 +188,7 @@ object DownloadImage {
                 bitmap = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.defaultSector),
+                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
@@ -203,7 +203,7 @@ object DownloadImage {
                 bitmap = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.defaultSector),
+                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
@@ -218,7 +218,7 @@ object DownloadImage {
                 bitmap = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.defaultSector),
+                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
@@ -233,7 +233,7 @@ object DownloadImage {
                 bitmap = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.defaultSector),
+                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
                         UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }

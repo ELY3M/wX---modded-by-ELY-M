@@ -30,48 +30,27 @@ object GlobalVariables {
 
     val newline: String = System.lineSeparator()
 
-    const val packageNameAsString = "joshuatee.wx"
-    const val packageNameFileNameAsString = "joshuatee_wx"
-    const val emailAsString = "elymbmx@gmail.com"
-    const val httpUserAgent = "Android $packageNameAsString $emailAsString"
-    	
-	//elys mod
-    val FilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
-    val PalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/pal/"
-    val BackupFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/"
-    val BackupPalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/pal/"
+    const val PACKAGE_NAME = "joshuatee.wx"
+    const val PACKAGE_NAME_FILE = "joshuatee_wx"
+    const val EMAIL = "elymbmx@gmail.com"
+    const val HTTP_USER_AGENT = "Android $PACKAGE_NAME $EMAIL"
 
-	//conus radar for zoom out
-    //const val nwsConusRadar = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
-    //const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
-
-    //const val nwsConusRadar = "https://atlas.niu.edu/analysis/radar/CONUS/usrad_current_b.gif"  //backup url
-    //const val nwsConusRadar = "https://www.aviationweather.gov/data/obs/radar/rad_rala_us.gif"
-    //testing//
-    const val nwsConusRadar = "https://radar.weather.gov/ridge/standard/CONUS-LARGE_0.gif"
-    const val conusImageName = "conus.gif"
-
-    //testing
-    //const val nwsConusRadarNew = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_raw/ows?service=wms&version=1.3.0&request=GetCapabilities"
-	//end of elys mod 
-
-    const val nwsRadarPub = "https://tgftp.nws.noaa.gov/"
-    const val nwsSPCwebsitePrefix = "https://www.spc.noaa.gov"
-    const val nwsWPCwebsitePrefix = "https://www.wpc.ncep.noaa.gov"
-    const val nwsAWCwebsitePrefix = "https://www.aviationweather.gov"
-    const val nwsGraphicalWebsitePrefix = "https://graphical.weather.gov"
-    const val nwsCPCNcepWebsitePrefix = "https://www.cpc.ncep.noaa.gov"
-    const val nwsGoesWebsitePrefix = "https://www.goes.noaa.gov"
-    const val nwsOpcWebsitePrefix = "https://ocean.weather.gov"
-    const val nwsNhcWebsitePrefix = "https://www.nhc.noaa.gov"
-    const val nwsMagNcepWebsitePrefix = "https://mag.ncep.noaa.gov"
-    const val goes16Url = "https://cdn.star.nesdis.noaa.gov"
-    const val goes16AnimUrl = "https://www.star.nesdis.noaa.gov"
-    const val nwsApiUrl = "https://api.weather.gov"
-    const val nwsSwpcWebSitePrefix = "https://services.swpc.noaa.gov"
-    const val tgftpSitePrefix = "https://tgftp.nws.noaa.gov"
-    const val sep = "ABC123"
-    const val pre2Pattern = "<pre>(.*?)</pre>"
+    const val NWS_SPC_WEBSITE_PREFIX = "https://www.spc.noaa.gov"
+    const val NWS_WPC_WEBSITE_PREFIX = "https://www.wpc.ncep.noaa.gov"
+    const val NWS_AWC_WEBSITE_PREFIX = "https://www.aviationweather.gov"
+    const val NWS_GRAPHICAL_WEBSITE_PREFIX = "https://graphical.weather.gov"
+    const val NWS_CPC_NCEP_WEBSITE_PREFIX = "https://www.cpc.ncep.noaa.gov"
+    const val NWS_GOES_WEBSITE_PREFIX = "https://www.goes.noaa.gov"
+    const val NWS_OPC_WEBSITE_PREFIX = "https://ocean.weather.gov"
+    const val NWS_NHC_WEBSITE_PREFIX = "https://www.nhc.noaa.gov"
+    const val NWS_MAG_NCEP_WEBSITE_PREFIX = "https://mag.ncep.noaa.gov"
+    const val GOES16_URL = "https://cdn.star.nesdis.noaa.gov"
+    const val GOES16_ANIM_URL = "https://www.star.nesdis.noaa.gov"
+    const val NWS_API_URL = "https://api.weather.gov"
+    const val NWS_SWPC_WEBSITE_PREFIX = "https://services.swpc.noaa.gov"
+    const val TGFTP_WEBSITE_PREFIX = "https://tgftp.nws.noaa.gov"
+    const val SEP = "ABC123"
+    const val PRE2_PATTERN = "<pre>(.*?)</pre>"
 
     val ICON_ALERT_2 = R.drawable.ic_report_24dp
     val ICON_MAP = R.drawable.ic_public_24dp_white
@@ -105,10 +84,10 @@ object GlobalVariables {
     val ICON_PLAYLIST = R.drawable.ic_playlist_play_24dp
     val ICON_REORDER = R.drawable.ic_reorder_24dp
 
-    const val degreeSymbol = "\u00B0"
-    const val prefSeparator = " : : :"
+    const val DEGREE_SYMBOL = "\u00B0"
+    const val PREFERENCE_SEPARATOR = " : : :"
     const val WIDGET_FILE_BAK = "BAK"
-    const val preferencesHelpTitle = "Please tap on text for additional help."
+    const val PREFERENCES_HELP_TITLE = "Please tap on text for additional help."
 
     //
     // Legacy forecast support
@@ -116,4 +95,30 @@ object GlobalVariables {
     val utilUSWeatherSummaryPattern: Pattern = Pattern.compile(".*?weather-summary=(.*?)/>.*?")
     val utilUSPeriodNamePattern: Pattern = Pattern.compile(".*?period-name=(.*?)>.*?")
     val xmlValuePattern: Pattern = Pattern.compile("<value>")
+    
+    
+    
+    //elys mod
+    val FilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
+    val PalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/pal/"
+    val BackupFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/"
+    val BackupPalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/pal/"
+
+	//conus radar for zoom out
+    //const val nwsConusRadar = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
+    //const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
+
+    //const val nwsConusRadar = "https://atlas.niu.edu/analysis/radar/CONUS/usrad_current_b.gif"  //backup url
+    //const val nwsConusRadar = "https://www.aviationweather.gov/data/obs/radar/rad_rala_us.gif"
+    //testing//
+    const val nwsConusRadar = "https://radar.weather.gov/ridge/standard/CONUS-LARGE_0.gif"
+    const val conusImageName = "conus.gif"
+
+    //testing
+    //const val nwsConusRadarNew = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_raw/ows?service=wms&version=1.3.0&request=GetCapabilities"
+	//end of elys mod     
+    
+    
+    
+    
 }

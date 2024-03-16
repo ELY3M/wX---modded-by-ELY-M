@@ -37,7 +37,7 @@ import joshuatee.wx.util.UtilityFavorites
 object UIPreferences {
 
     // These are set in myapp still
-    const val telecineSwitchShowTouches = false
+    const val TELECINE_SWITCH_SHOW_TOUCHES = false
     var telecineVideoSizePercentage = 0
     var telecineSwitchShowCountdown = false
     var telecineSwitchRecordingNotification = false
@@ -131,8 +131,8 @@ object UIPreferences {
     var textSizeNormal = 0.0f
     var textSizeLarge = 0.0f
 
-    const val animationIntervalDefault = 8
-    const val homeScreenFavDefault = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
+    const val ANIMATION_INTERVAL_DEFAULT = 8
+    const val HOMESCREEN_FAVORITE_DEFAULT = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
 
     fun initPreferences(context: Context) {
         useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
@@ -207,10 +207,10 @@ object UIPreferences {
             nwsIconSizeDefault = 6
         }
         nwsIconSize = MyApplication.preferences.getInt("NWS_ICON_SIZE_PREF", nwsIconSizeDefault)
-        homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", homeScreenFavDefault)
+        homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", HOMESCREEN_FAVORITE_DEFAULT)
         isNexradOnMainScreen = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
         FavoriteType.entries.forEach {
-            favorites[it] = getInitialPreferenceString(UtilityFavorites.getPrefToken(it), GlobalVariables.prefSeparator)
+            favorites[it] = getInitialPreferenceString(UtilityFavorites.getPrefToken(it), GlobalVariables.PREFERENCE_SEPARATOR)
         }
         spotterFav = getInitialPreferenceString("SPOTTER_FAV", "")
         wfoTextFav = getInitialPreferenceString("WFO_TEXT_FAV", "AFD")

@@ -28,7 +28,6 @@ import joshuatee.wx.external.ExternalPolygon
 import joshuatee.wx.spc.SpcFireOutlookSummaryActivity
 import android.content.Context
 import joshuatee.wx.getHtml
-import joshuatee.wx.getHtmlSep
 import joshuatee.wx.parse
 import joshuatee.wx.parseColumn
 import joshuatee.wx.common.GlobalVariables
@@ -67,20 +66,19 @@ internal object NotificationSpcFireWeather {
             )
             objectNotification.send(cancelString)
         }
-        return cancelString + NotificationPreferences.notificationStrSep
+        return cancelString + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
     }
 
     fun sendD12Location(context: Context): String {
         var notificationUrls = ""
         val threatList = listOf("EXTR", "CRIT", "ELEV", "SDRT", "IDRT")
         (1..2).forEach { day ->
-            val urlLocal = "${GlobalVariables.nwsSPCwebsitePrefix}/products/fire_wx/fwdy" + day.toString() + ".html"
-//            var urlBlob = UtilityString.getHtmlAndParse(urlLocal, "CLICK FOR <a href=.(.*?txt).>DAY [12] FIREWX AREAL OUTLINE PRODUCT .KWNSPFWFD[12].</a>")
+            val urlLocal = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/fire_wx/fwdy" + day.toString() + ".html"
             var urlBlob = urlLocal.getHtml().parse("CLICK FOR <a href=.(.*?txt).>DAY [12] FIREWX AREAL OUTLINE PRODUCT .KWNSPFWFD[12].</a>")
-            urlBlob = "${GlobalVariables.nwsSPCwebsitePrefix}$urlBlob"
-            var html = urlBlob.getHtmlSep()
+            urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}$urlBlob"
+            var html = urlBlob.getHtml()
             val validTime = html.parse("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
-            html = html.replace("<br>", " ")
+            html = html.replace(GlobalVariables.newline, " ")
             val htmlBlob = html.parse("FIRE WEATHER OUTLOOK POINTS DAY $day(.*?&)&") // was (.*?)&&
             threatList.forEach { threat ->
                 var string = ""

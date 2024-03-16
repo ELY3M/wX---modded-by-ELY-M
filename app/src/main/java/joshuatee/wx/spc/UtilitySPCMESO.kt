@@ -88,7 +88,7 @@ object UtilitySpcMeso {
         }
     }
 
-    const val defaultSector = "19"
+    const val DEFAULT_SECTOR = "19"
 
     val sectorMap = mapOf(
             "19" to "US",

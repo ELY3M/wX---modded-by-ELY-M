@@ -40,13 +40,13 @@ import joshuatee.wx.settings.UtilityLocation
 
 internal object NexradRenderUI {
 
-    private const val lastRadarTimePref = "NEXRADDOWNLOAD_TIME_LAST_RAN"
+    private const val LAST_RADAR_TIME_PREF = "NEXRADDOWNLOAD_TIME_LAST_RAN"
 
     fun updateLastRadarTime(context: Context) {
-        Utility.writePref(context, lastRadarTimePref, ObjectDateTime.getCurrentLocalTimeAsString())
+        Utility.writePref(context, LAST_RADAR_TIME_PREF, ObjectDateTime.getCurrentLocalTimeAsString())
     }
 
-    fun getLastRadarTime(context: Context): String = Utility.readPref(context, lastRadarTimePref, "")
+    fun getLastRadarTime(context: Context): String = Utility.readPref(context, LAST_RADAR_TIME_PREF, "")
 
     fun showRadarStatus(activity: Activity, radarSite: String) {
         FutureText2(

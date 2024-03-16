@@ -34,7 +34,7 @@ class TelecineService : Service() {
 
     private val listener = object : RecordingSession.Listener {
         override fun onStart() {
-            if (UIPreferences.telecineSwitchShowTouches) {
+            if (UIPreferences.TELECINE_SWITCH_SHOW_TOUCHES) {
                 Settings.System.putInt(MyApplication.contentResolverLocal, SHOW_TOUCHES, 1)
             }
             if (!UIPreferences.telecineSwitchRecordingNotification) {
@@ -47,7 +47,7 @@ class TelecineService : Service() {
             val context = applicationContext
             val title = context.getString(R.string.notification_recording_title)
             val subtitle = context.getString(R.string.notification_recording_subtitle)
-            val notification = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
+            val notification = NotificationCompat.Builder(context, UtilityNotification.NOTIFICATION_CHANNEL_STRING_NO_SOUND)
                     .setContentTitle(title)
                     .setContentText(subtitle)
                     .setSmallIcon(R.drawable.ic_videocam_24dp)
@@ -66,7 +66,7 @@ class TelecineService : Service() {
         }
 
         override fun onStop() {
-            if (UIPreferences.telecineSwitchShowTouches) {
+            if (UIPreferences.TELECINE_SWITCH_SHOW_TOUCHES) {
                 Settings.System.putInt(MyApplication.contentResolverLocal, SHOW_TOUCHES, 0)
             }
         }
@@ -116,7 +116,7 @@ class TelecineService : Service() {
         val requestIDLong = ObjectDateTime.currentTimeMillis()
         val requestID = ObjectDateTime.currentTimeMillis().toInt()
         UtilityNotification.initChannels(this)
-        val notification = NotificationCompat.Builder(this, UtilityNotification.notiChannelStrNoSound)
+        val notification = NotificationCompat.Builder(this, UtilityNotification.NOTIFICATION_CHANNEL_STRING_NO_SOUND)
                 .setSmallIcon(GlobalVariables.ICON_RADAR)
                 .setWhen(requestIDLong)
                 .setContentTitle("wX")

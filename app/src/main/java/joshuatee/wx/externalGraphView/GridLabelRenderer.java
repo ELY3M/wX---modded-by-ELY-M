@@ -647,8 +647,6 @@ public class GridLabelRenderer {
                     exactSteps = oldSteps;
                 }
             }
-        } else {
-            // first time
         }
 
         // find the first data point that is relevant to display
@@ -786,8 +784,6 @@ public class GridLabelRenderer {
                     exactSteps = oldSteps;
                 }
             }
-        } else {
-            // first time
         }
 
         // find the first data point that is relevant to display
@@ -925,10 +921,7 @@ public class GridLabelRenderer {
                     exactSteps = oldSteps;
                 }
             }
-        } else {
-            // first time
         }
-
 
         // starting from 1st datapoint
         // goal is to start with the minX or 1 step before
@@ -1148,7 +1141,7 @@ public class GridLabelRenderer {
      * @param canvas canvas
      */
     protected void drawHorizontalAxisTitle(Canvas canvas) {
-        if (mHorizontalAxisTitle != null && mHorizontalAxisTitle.length() > 0) {
+        if (mHorizontalAxisTitle != null && !mHorizontalAxisTitle.isEmpty()) {
             mPaintAxisTitle.setColor(getHorizontalAxisTitleColor());
             mPaintAxisTitle.setTextSize(getHorizontalAxisTitleTextSize());
             float x = canvas.getWidth() / 2;
@@ -1164,7 +1157,7 @@ public class GridLabelRenderer {
      * @param canvas canvas
      */
     protected void drawVerticalAxisTitle(Canvas canvas) {
-        if (mVerticalAxisTitle != null && mVerticalAxisTitle.length() > 0) {
+        if (mVerticalAxisTitle != null && !mVerticalAxisTitle.isEmpty()) {
             mPaintAxisTitle.setColor(getVerticalAxisTitleColor());
             mPaintAxisTitle.setTextSize(getVerticalAxisTitleTextSize());
             float x = getVerticalAxisTitleWidth();
@@ -1181,7 +1174,7 @@ public class GridLabelRenderer {
      * or 0 if there is no title
      */
     public int getHorizontalAxisTitleHeight() {
-        if (mHorizontalAxisTitle != null && mHorizontalAxisTitle.length() > 0) {
+        if (mHorizontalAxisTitle != null && !mHorizontalAxisTitle.isEmpty()) {
             return (int) getHorizontalAxisTitleTextSize();
         } else {
             return 0;
@@ -1193,7 +1186,7 @@ public class GridLabelRenderer {
      * or 0 if there is no title
      */
     public int getVerticalAxisTitleWidth() {
-        if (mVerticalAxisTitle != null && mVerticalAxisTitle.length() > 0) {
+        if (mVerticalAxisTitle != null && !mVerticalAxisTitle.isEmpty()) {
             return (int) getVerticalAxisTitleTextSize();
         } else {
             return 0;
@@ -1349,11 +1342,8 @@ public class GridLabelRenderer {
             }
 
             //if draw the label above or below the line, we mustn't draw the first for last label, for beautiful design.
-            boolean isDrawLabel = true;
-            if ((mStyles.verticalLabelsVAlign == VerticalLabelsVAlign.ABOVE && currentLine == 1)
-                    || (mStyles.verticalLabelsVAlign == VerticalLabelsVAlign.BELOW && currentLine == numberOfLine)) {
-                isDrawLabel = false;
-            }
+            boolean isDrawLabel = (mStyles.verticalLabelsVAlign != VerticalLabelsVAlign.ABOVE || currentLine != 1)
+                    && (mStyles.verticalLabelsVAlign != VerticalLabelsVAlign.BELOW || currentLine != numberOfLine);
 
             // draw label
             if (isVerticalLabelsVisible() && isDrawLabel) {

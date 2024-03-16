@@ -59,7 +59,7 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
 
     init {
         obsClosest = Metar.findClosestObservation(context, location, index)
-        val urlMetar = "${GlobalVariables.nwsRadarPub}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
+        val urlMetar = "${GlobalVariables.TGFTP_WEBSITE_PREFIX}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
         val metarData = urlMetar.getHtmlWithNewLine()
         temperature = metarData.parse("Temperature: (.*?) F")
         dewPoint = metarData.parse("Dew Point: (.*?) F")
@@ -142,6 +142,6 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         }
         val conditionModified = condition.split(";")[0]
         val shortCondition = UtilityMetarConditions.iconFromCondition[conditionModified] ?: ""
-        return GlobalVariables.nwsApiUrl + "/icons/land/$timeOfDay/$shortCondition?size=medium"
+        return GlobalVariables.NWS_API_URL + "/icons/land/$timeOfDay/$shortCondition?size=medium"
     }
 }

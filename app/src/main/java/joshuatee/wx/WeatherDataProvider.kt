@@ -92,7 +92,7 @@ class WeatherDataProvider : ContentProvider() {
     }
 
     companion object {
-        val CONTENT_URI: Uri = Uri.parse("content://${GlobalVariables.packageNameAsString}.weatherlistwidget.provider")
+        val CONTENT_URI: Uri = Uri.parse("content://${GlobalVariables.PACKAGE_NAME}.weatherlistwidget.provider")
 
         /**
          * Generally, this data will be stored in an external and persistent location (ie. File,

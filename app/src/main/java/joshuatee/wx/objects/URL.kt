@@ -14,8 +14,6 @@ import okhttp3.Request
 
 class URL(val url: String) {
 
-    private val userAgent = "Android ${GlobalVariables.packageNameAsString} ${GlobalVariables.emailAsString}"
-
     @Suppress("unused")
     fun getText(): String {
         Utility.logDownload("getHtml $url")
@@ -38,7 +36,7 @@ class URL(val url: String) {
         try {
             val request = Request.Builder()
                     .url(url)
-                    .header("User-Agent", userAgent)
+                    .header("User-Agent", GlobalVariables.HTTP_USER_AGENT)
                     //.addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1")
                     .addHeader("Accept", "application/atom+xml")
                     .build()

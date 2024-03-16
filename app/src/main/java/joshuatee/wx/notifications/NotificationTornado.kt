@@ -98,7 +98,7 @@ internal object NotificationTornado {
                         )
                         objectNotification.send(url)
                     }
-                    notificationUrls += url + NotificationPreferences.notificationStrSep
+                    notificationUrls += url + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
                 }
             }
         }

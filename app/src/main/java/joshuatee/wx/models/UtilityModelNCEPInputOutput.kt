@@ -39,14 +39,14 @@ internal object UtilityModelNcepInputOutput {
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
         val runCompletionDataStr = StringBuilder(100)
-        val url = "${GlobalVariables.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model=" + model.uppercase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area"
+        val url = "${GlobalVariables.NWS_MAG_NCEP_WEBSITE_PREFIX}/model-guidance-model-parameter.php?group=Model%20Guidance&model=" + model.uppercase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area"
         val fullHtml = url.getHtml()
         val html = fullHtml.parse(pattern2).replace("UTC", "Z").replace(" ", "")
         runCompletionDataStr.append(html.replace("Z", " UTC"))
         if (runCompletionDataStr.length > 8) {
             runCompletionDataStr.insert(8, " ")
         }
-        val timeCompleteUrl = "${GlobalVariables.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.lowercase(Locale.US) +
+        val timeCompleteUrl = "${GlobalVariables.NWS_MAG_NCEP_WEBSITE_PREFIX}/model-fhrs.php?group=Model%20Guidance&model=" + model.lowercase(Locale.US) +
                 "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" + spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" +
                 runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
         val timeCompleteHtml = timeCompleteUrl.replace(" ", "%20").getHtml()
@@ -62,14 +62,14 @@ internal object UtilityModelNcepInputOutput {
             time
         }
         val imgUrl = when (om.model) {
-            "GFS" -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+            "GFS" -> "${GlobalVariables.NWS_MAG_NCEP_WEBSITE_PREFIX}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.sector.lowercase(Locale.US) + "/" + om.currentParam + "/" + om.model.lowercase(Locale.US) + "_" +
                     om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
 
-            "HRRR" -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+            "HRRR" -> "${GlobalVariables.NWS_MAG_NCEP_WEBSITE_PREFIX}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + modifiedTime + "_" + om.currentParam + ".gif"
 
-            else -> "${GlobalVariables.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+            else -> "${GlobalVariables.NWS_MAG_NCEP_WEBSITE_PREFIX}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }
         return imgUrl.getImage()

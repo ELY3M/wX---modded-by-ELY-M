@@ -227,8 +227,8 @@ internal object UtilityWidgetDownload {
     }
 
     private fun nhc(context: Context, type: WidgetFile) {
-        val bitmap1 = Nhc.widgetImageUrlBottom.getImage()
-        val bitmap2 = Nhc.widgetImageUrlTop.getImage()
+        val bitmap1 = Nhc.WIDGET_IMAGE_URL_BOTTOM.getImage()
+        val bitmap2 = Nhc.WIDGET_IMAGE_URL_TOP.getImage()
         val combinedBitmap = UtilityImg.mergeImagesVertically(listOf(bitmap1, bitmap2))
         saveImage(context, combinedBitmap, type.fileName + "0")
     }

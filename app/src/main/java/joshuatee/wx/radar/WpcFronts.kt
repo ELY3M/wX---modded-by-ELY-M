@@ -201,14 +201,14 @@ object WpcFronts {
         if (timer.isRefreshNeeded()) {
             pressureCenters.clear()
             fronts.clear()
-            val urlBlob = GlobalVariables.nwsWPCwebsitePrefix + "/basicwx/coded_srp.txt"
+            val urlBlob = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/basicwx/coded_srp.txt"
             var html = urlBlob.getHtmlWithNewLine()
-                    .replace(GlobalVariables.newline, GlobalVariables.sep)
+                    .replace(GlobalVariables.newline, GlobalVariables.SEP)
 
             val timestamp = html.parseFirst("SURFACE PROG VALID ([0-9]{12}Z)")
             Utility.writePref("WPC_FRONTS_TIMESTAMP", timestamp)
-            html = html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" + GlobalVariables.sep + " " + GlobalVariables.sep)
-                    .replace(GlobalVariables.sep, GlobalVariables.newline)
+            html = html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" + GlobalVariables.SEP + " " + GlobalVariables.SEP)
+                    .replace(GlobalVariables.SEP, GlobalVariables.newline)
             val lines = html.split(GlobalVariables.newline).toMutableList()
             lines.indices.forEach { index ->
                 if (index < lines.size - 1) {

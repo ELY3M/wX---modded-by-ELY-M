@@ -68,7 +68,7 @@ package joshuatee.wx.externalBzip2
  */
 interface BZip2Constants {
     companion object {
-        const val baseBlockSize = 100000
+        const val BASE_BLOCK_SIZE = 100000
         const val MAX_ALPHA_SIZE = 258
         const val MAX_CODE_LEN = 23
         const val RUNA = 0

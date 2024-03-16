@@ -46,18 +46,18 @@ internal object UtilityGoesFullDisk {
     )
 
     val urls = listOf(
-            "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GMIR.JPG",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GMVS.JPG",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GIIR.JPG",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/FULLDISK/GIVS.JPG",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/rb/10.gif",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/ir4/10.gif",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/wv/10.gif",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/wvblue/10.gif",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/vis/10.gif",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/avn/10.gif",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/ft/10.gif",
-            "${GlobalVariables.nwsGoesWebsitePrefix}/dimg/jma/fd/rbtop/10.gif"
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/FULLDISK/GMIR.JPG",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/FULLDISK/GMVS.JPG",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/FULLDISK/GIIR.JPG",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/FULLDISK/GIVS.JPG",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/dimg/jma/fd/rb/10.gif",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/dimg/jma/fd/ir4/10.gif",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/dimg/jma/fd/wv/10.gif",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/dimg/jma/fd/wvblue/10.gif",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/dimg/jma/fd/vis/10.gif",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/dimg/jma/fd/avn/10.gif",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/dimg/jma/fd/ft/10.gif",
+            "${GlobalVariables.NWS_GOES_WEBSITE_PREFIX}/dimg/jma/fd/rbtop/10.gif"
     )
 
     fun getAnimation(context: Context, urlOriginal: String): AnimationDrawable {

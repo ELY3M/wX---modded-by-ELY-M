@@ -55,7 +55,7 @@ class PolygonWarning(val context: Context, val type: PolygonWarningType) {
 
     private fun getUrlToken(): String = longName[type] ?: ""
 
-    private fun getUrl(): String = baseUrl + getUrlToken()
+    private fun getUrl(): String = BASE_URL + getUrlToken()
 
     private fun getTypeName(): String = type.toString().replace("PolygonType.", "")
 
@@ -120,7 +120,7 @@ class PolygonWarning(val context: Context, val type: PolygonWarningType) {
                 PolygonWarningType.FlashFloodWarning to "Flash%20Flood%20Warning",
         )
 
-        const val baseUrl = "https://api.weather.gov/alerts/active?event="
+        const val BASE_URL = "https://api.weather.gov/alerts/active?event="
 
         fun areAnyEnabled(): Boolean {
             var anyEnabled = false

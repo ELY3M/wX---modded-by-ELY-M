@@ -52,7 +52,7 @@ object NotificationPreferences {
     var alertOnlyOnce = false
     var notifSoundUri = ""
 
-    const val notificationStrSep = ","
+    const val NOTIFICATION_STRING_SEPARATOR = ","
     var notifTextProdStr = ""
 
     fun initPreferences() {

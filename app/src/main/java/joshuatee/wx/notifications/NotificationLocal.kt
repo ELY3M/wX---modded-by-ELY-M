@@ -99,7 +99,7 @@ object NotificationLocal {
                         notifier2.notify(url2 + "radar", 1, noti2)
                     }
                 }
-                notificationUrls += url2 + "radar" + NotificationPreferences.notificationStrSep
+                notificationUrls += url2 + "radar" + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
             } // end if for radar
         } // end of if to test if alerts are enabled
         return notificationUrls
@@ -121,10 +121,10 @@ object NotificationLocal {
             val currentUpdateTime = ObjectDateTime.currentTimeMillis()
             val lastUpdateTime = Utility.readPrefLong(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
             if (Location.locations[locationIndex].ccNotification) {
-                notificationUrls += url + "CC" + NotificationPreferences.notificationStrSep
+                notificationUrls += url + "CC" + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
             }
             if (Location.locations[locationIndex].sevenDayNotification) {
-                notificationUrls += url + "7day" + NotificationPreferences.notificationStrSep
+                notificationUrls += url + "7day" + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
             }
             if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
                 Utility.writePrefLong(context, "CC" + locNum + "_LAST_UPDATE", ObjectDateTime.currentTimeMillis())
@@ -160,7 +160,7 @@ object NotificationLocal {
             //
             // determine temp icon to show
             //
-            val tmpArr = text.split(GlobalVariables.degreeSymbol.toRegex()).dropLastWhile { it.isEmpty() }
+            val tmpArr = text.split(GlobalVariables.DEGREE_SYMBOL.toRegex()).dropLastWhile { it.isEmpty() }
             var smallIconResource = R.drawable.temp_0
             if (tmpArr.isNotEmpty()) {
                 smallIconResource = if (Location.isUS(locationIndex)) {
@@ -258,7 +258,7 @@ object NotificationLocal {
                         )
                         objectNotification.send(url)
                     }
-                    notificationUrls += url + NotificationPreferences.notificationStrSep
+                    notificationUrls += url + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
                 }
             }
         }

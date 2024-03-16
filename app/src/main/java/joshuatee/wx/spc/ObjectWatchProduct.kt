@@ -56,21 +56,21 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         when (type) {
             PolygonType.WATCH_TORNADO, PolygonType.WATCH -> {
                 this.productNumber = productNumber.replace("w".toRegex(), "")
-                imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + productNumber + "_radar.gif"
-                textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww$productNumber.html"
+                imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww" + productNumber + "_radar.gif"
+                textUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww$productNumber.html"
                 title = "Watch $productNumber"
                 prod = "SPCWAT$productNumber"
             }
 
             PolygonType.MCD -> {
-                imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$productNumber.png"
-                textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/md$productNumber.html"
+                imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/mcd$productNumber.png"
+                textUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/md$productNumber.html"
                 title = "MCD $productNumber"
                 prod = "SPCMCD$productNumber"
             }
 
             PolygonType.MPD -> {
-                imgUrl = "${GlobalVariables.nwsWPCwebsitePrefix}/metwatch/images/mcd$productNumber.gif"
+                imgUrl = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/metwatch/images/mcd$productNumber.gif"
                 title = "MPD $productNumber"
                 prod = "WPCMPD$productNumber"
             }
@@ -102,8 +102,8 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
             center.lon += it.lon
         }
         val totalPoints = latLons.size
-        center.lat = center.lat / totalPoints
-        center.lon = center.lon / totalPoints
+        center.lat /= totalPoints
+        center.lon /= totalPoints
         return center
     }
 

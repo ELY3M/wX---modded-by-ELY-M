@@ -30,7 +30,7 @@ import kotlin.math.*
 
 internal object NexradDecodeEightBit {
 
-    private const val M_180_div_PI = (180.0 / PI).toFloat()
+    private const val M_180_DIV_PI = (180.0 / PI).toFloat()
 
     fun andCreateRadials(context: Context, radarBuffers: OglRadarBuffers): Int {
         var totalBins = 0
@@ -79,10 +79,10 @@ internal object NexradDecodeEightBit {
                 } else {
                     angle0
                 }
-                angleVCos = cos(angleV / M_180_div_PI)
-                angleVSin = sin(angleV / M_180_div_PI)
-                angleCos = cos(angle / M_180_div_PI)
-                angleSin = sin(angle / M_180_div_PI)
+                angleVCos = cos(angleV / M_180_DIV_PI)
+                angleVSin = sin(angleV / M_180_DIV_PI)
+                angleCos = cos(angle / M_180_DIV_PI)
+                angleSin = sin(angle / M_180_DIV_PI)
                 for (bin in 0 until numberOfRleHalfWords) {
                     curLevel = (dataInputStream.readUnsignedByte() and 0xFF).toByte()
                     if (bin == 0) {
@@ -164,10 +164,10 @@ internal object NexradDecodeEightBit {
             } else {
                 radialStart.getFloat(0)
             }
-            angleVCos = cos(angleV / M_180_div_PI)
-            angleVSin = sin(angleV / M_180_div_PI)
-            angleCos = cos(angle / M_180_div_PI)
-            angleSin = sin(angle / M_180_div_PI)
+            angleVCos = cos(angleV / M_180_DIV_PI)
+            angleVSin = sin(angleV / M_180_DIV_PI)
+            angleCos = cos(angle / M_180_DIV_PI)
+            angleSin = sin(angle / M_180_DIV_PI)
             for (bin in 0 until radarBuffers.numRangeBins) {
                 curLevel = binBuff.get(binIndex).toInt()
                 binIndex += 1
@@ -248,13 +248,13 @@ internal object NexradDecodeEightBit {
     //
     fun rect8bit(rBuff: ByteBuffer, binStart: Float, binSize: Float, levelCount: Int, angle: Float, angleV: Float, centerX: Int, centerY: Int) {
         rBuff.position(0)
-        rBuff.putFloat(binStart * cos(angle / M_180_div_PI) + centerX)
-        rBuff.putFloat((binStart * sin(angle / M_180_div_PI) - centerY) * -1.0f)
-        rBuff.putFloat((binStart + binSize * levelCount) * cos(angle / M_180_div_PI) + centerX)
-        rBuff.putFloat(((binStart + binSize * levelCount) * sin(angle / M_180_div_PI) - centerY) * -1.0f)
-        rBuff.putFloat((binStart + binSize * levelCount) * cos((angle - angleV) / M_180_div_PI) + centerX)
-        rBuff.putFloat(((binStart + binSize * levelCount) * sin((angle - angleV) / M_180_div_PI) - centerY) * -1.0f)
-        rBuff.putFloat(binStart * cos((angle - angleV) / M_180_div_PI) + centerX)
-        rBuff.putFloat((binStart * sin((angle - angleV) / M_180_div_PI) - centerY) * -1.0f)
+        rBuff.putFloat(binStart * cos(angle / M_180_DIV_PI) + centerX)
+        rBuff.putFloat((binStart * sin(angle / M_180_DIV_PI) - centerY) * -1.0f)
+        rBuff.putFloat((binStart + binSize * levelCount) * cos(angle / M_180_DIV_PI) + centerX)
+        rBuff.putFloat(((binStart + binSize * levelCount) * sin(angle / M_180_DIV_PI) - centerY) * -1.0f)
+        rBuff.putFloat((binStart + binSize * levelCount) * cos((angle - angleV) / M_180_DIV_PI) + centerX)
+        rBuff.putFloat(((binStart + binSize * levelCount) * sin((angle - angleV) / M_180_DIV_PI) - centerY) * -1.0f)
+        rBuff.putFloat(binStart * cos((angle - angleV) / M_180_DIV_PI) + centerX)
+        rBuff.putFloat((binStart * sin((angle - angleV) / M_180_DIV_PI) - centerY) * -1.0f)
     }
 }

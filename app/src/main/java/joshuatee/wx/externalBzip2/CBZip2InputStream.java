@@ -492,7 +492,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
         int i, j, nextSym, limitLast;
         int EOB, groupNo, groupPos;
 
-        limitLast = Companion.baseBlockSize * blockSize100k;
+        limitLast = Companion.BASE_BLOCK_SIZE * blockSize100k;
         origPtr = bsGetIntVS(24);
 
         recvDecodingTables();
@@ -851,7 +851,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
 
         //Modified  5-30-2006 by unidata to allow for reuse of the ll8 and tt buffers
 
-        int n = Companion.baseBlockSize * newSize100k;
+        int n = Companion.BASE_BLOCK_SIZE * newSize100k;
 
         if (ll8 != null && ll8.length != n) {
             ll8 = null;

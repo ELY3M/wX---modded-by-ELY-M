@@ -1433,7 +1433,7 @@ Caused by: java.lang.AssertionError:
 40170 2017_05_07 add new enum GeographyType for later use in wxglrender
 40169 2017_05_07 wxglrender - continued refactor and framework to split up watch/warn
 40168 2017_05_07 cleanup
-                 convert remaing count ( L3 text / spotter/locdot ) to ObjectOglBuffers
+                 convert remaining count ( L3 text / spotter/locdot ) to ObjectOglBuffers
 40167 2017_05_07 wxglrender - fold init/downloaded into ObjectOglBuffers
 40166 2017_05_07 work on L3 text prod and locdot in wxglrender
 40165 2017_05_07 convert more elements to object ( breaksize, etc ) - STI, SWO
@@ -1455,7 +1455,7 @@ Caused by: java.lang.AssertionError:
 40153 2017_05_05 convert Hashtable to HashMap
                  implement Class ObjectOglBuffers ( Spotters )
 40152 2017_05_05 deal with 56 and 165
-40151 2017_05_05 continued work with ObjectColorPalette (convert rest of normal colormaps)
+40151 2017_05_05 continued work with ObjectColorPalette (convert rest of normal color maps)
 40150 2017_05_05  (bugfix) wxoglrender - cast productCode from short to int in hashmap for colormap
 40149 2017_05_05 continued work with ObjectColorPalette ( store in HashMap in MyApp)
 40148 2017_05_05 code cleanup
@@ -1661,11 +1661,11 @@ Caused by: java.lang.AssertionError:
                  rework WCPMPDShowSummaryActivity to use util methods and not raw java RE
 40008 2017_03_20 WXGLDownload camelCase on method and initialize 2 properties to blank strings
 40007 2017_03_19 utilImg getAnim - get value from disk instead of myapp.var due to issue in wxogl
-                add UtilitySpotter.getSpotterReports for parity with wXIOS
+                add UtilitySpotter.getSpotterReports for parity with iOS
 40006 2017_03_18 support lib to 25.3.0
                  SPC Meso conversion to submenu and major update to params/labels
-40005 2017_03_11 add try block in wxglrednder,contructpolygons right at end
-40004 2017_03_11 wxglredner in spotter data construction set spotterinit false at start to try and prevent crash ( 3 in past week )
+40005 2017_03_11 add try block in wxglrender, contructpolygons right at end
+40004 2017_03_11 wxglrender in spotter data construction set spotterinit false at start to try and prevent crash ( 3 in past week )
 40003 2017_03_10 utilString cleanup from legacy NWS API
                  settings->Location add true or false if an alert is present
 40002 2017_03_09 add back windChill, heatIndex from new NWS API
@@ -1778,7 +1778,7 @@ Caused by: java.lang.AssertionError:
 39099 2017_02_08 convert all models over to new ObjectSpinner
 39098 2017_02_08 (bugfix) save sector across model change in ESRL
 39097 2017_02_08 (bugfix) save posn across model change in ESRL
-39096 2017_02_08 more work on ESRL and CLCFS, convert SPC HRRR
+39096 2017_02_08 more work on ESRL and GLCFS, convert SPC HRRR
 39095 2017_02_08 ObjectSpinner class  use in ESRL ( objectspinner now has list inside class )
 39094 2017_02_08 ObjectSpinner class  use in sounding, GLCFS, SPC Meso
                  add UtilityArray.toarray
@@ -1800,7 +1800,7 @@ Caused by: java.lang.AssertionError:
 39080 2017_02_05 locfrag - convert textProd to object
 39079 2017_02_05 locfrag - start to use new UI objects ( 7day and CC )
 39078 2017_02_05 MCD/MPD - convert to new UI objects
-                 convert wxgl activities to new videorecord oncreate
+                 convert wxgl activities to new video record oncreate
 39077 2017_02_05 convert to VideoRecordActivity - OPC , NWS Mosaic, Lightning
                  AudioPlayAct - rename toolbar_bottom to toolbarBottom
 39076 2017_02_05 extends AudioPlayActivity - move boilerplate top code to parent class
@@ -1817,7 +1817,7 @@ Caused by: java.lang.AssertionError:
                  cleanup in settings
 39067 2017_02_04 settings - start to migrate to objects ( settings color )
 39066 2017_02_03 settings - start to migrate to objects ( notif )
-39065 2017_02_03 settings - start to migrate to objects ( telicine, notif )
+39065 2017_02_03 settings - start to migrate to objects ( telecine, notif )
 39064 2017_02_03 settings - start to migrate to objects ( radar )
 39063 2017_02_03 settings - start to migrate to objects ( ui )
 39062 2017_02_03 settings - start to migrate to objects ( ui )
@@ -1886,8 +1886,8 @@ Caused by: java.lang.AssertionError:
 39027 2017_01_06 implement java coding style ( JCS )
 39026 2017_01_05 implement java coding style ( JCS ) - up through radarcolorpal
                  (bugfix) LocationSave, check for valid values in label/lat/lon
-                 (bugifx) add null check in WXGLTextObject.HideSpotters
-                 (bugfix) UtilityTTS.SynthesizeTextAndPlayPlaylist check index vs arraylength
+                 (bugfix) add null check in WXGLTextObject.HideSpotters
+                 (bugfix) UtilityTTS.SynthesizeTextAndPlayPlaylist check index vs array length
 39025 2017_01_04 implement java coding style ( JCS )
 39024 2017_01_04 implement java coding style ( JCS )
 39023 2017_01_04 implement java coding style ( JCS )
@@ -2028,17 +2028,17 @@ Caused by: java.lang.AssertionError:
 // 38939 2016_12_05 metar - add vis on METAR radar display
 // 38938 2016_12_05 metar - move wind dir to parens and add wind direction as # back
 // 38937 2016_12_05 settings->radar add setting to control how close you need to zoom to see metar
-// 38936 2016_12_04 (widget) wind barbs - add windgust support
-// 38935 2016_12_04 wind barbs - add windgust support
+// 38936 2016_12_04 (widget) wind barbs - add wind gust support
+// 38935 2016_12_04 wind barbs - add wind gust support
 // 38934 2016_12_04 lint and code cleanup
-//                  UtilityNotificationUtils.CheckBlackOut() use UtilityTime and move away from depreacated code
+//                  UtilityNotificationUtils.CheckBlackOut() use UtilityTime and move away from deprecated code
 //                  move more code to UtilityTime ( SPCSWO, Radar, utilhourly, nhcstorm, etc )
 // 38933 2016_12_04 nexrad widget - add support for storm tracks
 // 38932 2016_12_04 nexrad widget offset - change to 1/3
 //                  lint and code cleanup
 // 38931 2016_12_03 (bugfix) ncep inputoutput getrunstatus check stringbuilder len before insert
 //                  nexrad widget offset - cut in half
-// 38930 2016_12_03 double widget windbarb line thickness
+// 38930 2016_12_03 double widget wind barb line thickness
 //                  add setting in widgets to control which quadrant nexrad site is centered in
 // 38929 2016_12_03 add back wind barbs to scale_type "nws_goes"
 // 38928 2016_12_03 prevent wind barbs from showing on Mosaics
@@ -2222,7 +2222,7 @@ Caused by: java.lang.AssertionError:
 // 38633 2016_09_19 Android Studio update 2.1.3 -> 2.2.0
 //                  this caused upgrade Android Gradle Plugin to 2.2.0
 //                  this caused upgrade Gradle to 2.14.1
-//                  GOES readjust parms for main image get
+//                  GOES read just parms for main image get
 //                  add UtilityGOES to get more code out of UI
 // 38632 2016_09_19 add UtilityImg.GetBitmapAddWhiteBG and use in SPCSND
 //                  SPC Soundings - change content provider to SPC from UCAR for upper air charts
@@ -2297,7 +2297,7 @@ Caused by: java.lang.AssertionError:
 //                  ca borders ( 161792, ca.bin redo ) from http://www.nws.noaa.gov/geodata/catalog/national/html/province.htm
 //                  combined 313344
 //                  wxogl - hide lakes / rivers past 0.40 zoom
-// 38535 2016_09_11 wxogl - enhance lakes dataset to add rivers from naturalearth
+// 38535 2016_09_11 wxogl - enhance lakes dataset to add rivers from natural earth
 //                  wxogl - lakes on is no longer the default as combined dataset size is not trivial
 // 38534 2016_09_11 (bugfix continued) more bm1 null check in canvas
 // 38533 2016_09_11 (bugfix partial) GOES crashes when select IR FIRE from NA view - add some null checks on bitmaps at various spots
@@ -2471,7 +2471,7 @@ Caused by: java.lang.AssertionError:
 // 38375 2016_08_18 Level2 - rename methods/functions both in Java/native to more descriptive names
 // 38374 2016_08_17 update support lib 24.1.1 -> 24.2.0
 //                  cleanup in JNI
-// 38373 2016_08_17 JNI - comment out PI def and use M_PI, use other math defs up top to remove repeated calcs
+// 38373 2016_08_17 JNI - comment out PI def and use M_PI, use other math definitions up top to remove repeated calculations
 //                  JNI - decode,radial add bin_size_times_level_count
 //                  JNI - rename numerous files to match Java counterpart
 // 38372 2016_08_17 JNI - reimplement triangle ( ie city )
@@ -2479,7 +2479,7 @@ Caused by: java.lang.AssertionError:
 // 38370 2016_08_17 make JNI the default, move spotter native code back in place
 // 38369 2016_08_17 JNI - bring back geom/indexgen(line)
 // 38368 2016_08_17 utilwxoglperf - math refinements triangle, circle, circle_loc
-// 38367 2016_08_17 myapp cleanup ( move colorpalette/radar geom init to seperate file )
+// 38367 2016_08_17 myapp cleanup ( move colorpalette/radar geom init to separate file )
 // 38366 2016_08_16 AS update 2.1.3
 //                  'com.android.tools.build:gradle:2.1.3'
 //                  cleanups
@@ -2552,7 +2552,7 @@ Caused by: java.lang.AssertionError:
 // 38332 2016_08_10 UtilityWXOGLPerf.decode8bitwx - replace unused vars with skipbytes
 //                  wxglrender - minor code cleanup
 // 38331 2016_08_09 wxglrender wat/warn/mcd/mpd - move to last draw order and perform another shader switch
-// 38330 2016_08_09 remove one unsed AU drawable-nodpi
+// 38330 2016_08_09 remove one unused AU drawable-nodpi
 //                  utilwxoglperf - geom,city,spotter,locdot_circle,rect8bitwx change to void from return dummy int
 //                  other misc lint cleanup
 // 38329 2016_08_09 revert widget code to version 24 ( need to retest on samsung )
@@ -2583,7 +2583,7 @@ Caused by: java.lang.AssertionError:
 // 38314 2016_08_06 (bugfix) android 7.0 emulator was showing distorted radar in locfrag 20% of time, disable parallelism and multiple requestRender
 // 38312 2016_08_06 (bugfix) change spotter to not setposition to 0 on start and instead do indexed puts - was clashing with requestrender on pinch zoom
 //                            retire the following native codes: spotter geom
-// 38311 2016_08_06 (bugfix) in city (used by hi,tvs), add aditional arg to control updating color, don't update on zoom change
+// 38311 2016_08_06 (bugfix) in city (used by hi,tvs), add additional arg to control updating color, don't update on zoom change
 //                  (bugfix) in city (used by hi,tvs), set position to 0 for 3 bytebuffers
 // 38310 2016_08_06 retire the following native codes: colorgen indexgen indexgenline
 //                                                     geom decode8bitwx rect8bitwx
@@ -2613,7 +2613,7 @@ Caused by: java.lang.AssertionError:
 //                  utilwxoglperf move float to class scope as final static
 // 38295 2016_08_04 UtilWXOGLPerf - remove unneeded args in radialv2
 // 38294 2016_08_03 UtilWXOGLPerf - remove need for ibuff/obuff for decode8bit and decode8bitwx
-//                  UtilWXOGLPerf.decode8bit - skipbytes instead of reading by small chunks and not using
+//                  UtilWXOGLPerf.decode8bit - skip bytes instead of reading by small chunks and not using
 //                  UtilWXOGLPerf - cleanup
 // 38293 2016_08_03 (bugfix) add tilt fix in UtilityWXOGLPerf decode8bit
 // 38292 2016_08_03 WXGLNexradLevel2 - don't allocate ibuff/obuff if not using JNI
@@ -2715,7 +2715,7 @@ Caused by: java.lang.AssertionError:
 //                  WPC Images - add NDFD MinT
 // 38221 2016_07_16 WPC Images - move datastructures to util file, cleanup
 // 38220 2016_07_16 typo in strings help
-//                  WPC Images - move from linear to nest struction for drawer ( similar to SPC Meso )
+//                  WPC Images - move from linear to nest construction for drawer ( similar to SPC Meso )
 // 38219 2016_07_15 change from 1024 in proj gradle.properties: org.gradle.jvmargs=-Xmx2048m
 //                  cleanup ( activitiesmisc S* T* US* Ut* We* )
 // 38218 2016_07_15 test switch from jdk1.8.0_91 to openjdk-8-jdk located in /usr/lib/jvm/java-8-openjdk-amd64
@@ -2725,11 +2725,11 @@ Caused by: java.lang.AssertionError:
 //                  also change pref editor.apply() to editor.commit()
 // 38217 2016_07_15 update Gradle from 2.10 to 2.14
 //                  update NDK android-ndk-r12 to android-ndk-r12b
-//                  clould icon now uses last viewed image type
+//                  cloud icon now uses last viewed image type
 //                  cod image_type across the board changed from rad to vis
 // 38216 2016_07_15 (bugfix) NWS changed impact graphic xml (exper) cities
 //                  add pref to show either 2km or 1km for cod from cloud icon
-// 38215 2016_07_12 cleanup ( activitiesmisc/A* C* H I L M N O ) and add new build from scratch doco in prep for Linux Mint 18
+// 38215 2016_07_12 cleanup ( activitiesmisc/A* C* H I L M N O ) and add new build from scratch doc in prep for Linux Mint 18
 // 38214 2016_07_09 have Level 2 radar feed option change take effect immediately
 // 38212 2016_07_09 add option in settings radar to use NWS Level2 radar feed
 // 38211 2016_07_09 COD 1KM and REG - save/restore meso/overlays and move clearall to top of submenus
@@ -2781,15 +2781,15 @@ Caused by: java.lang.AssertionError:
 // 38185 2016_06_28 update gradle/wrapper/gradle-wrapper.properties to point to 2.10 gradle
 //                  add DOTFILES to DOCS dir , need to set JDK if using "./gradlew assembleRelease"
 // 38184 2016_06_28 cc widget - white text, transparent background
-// 38183 2016_06_27 (bugfix) CConly widget was not updating appropriately
-//                   change cconly widget from 4x4 to 4x1
-//                   cconly widget formatting changes
+// 38183 2016_06_27 (bugfix) CC only widget was not updating appropriately
+//                   change cc only widget from 4x4 to 4x1
+//                   cc only widget formatting changes
 // 38182 2016_06_27 in L3 text prod: STI, TVS, HI change IOException to Exception in one spot per file
 //                  lint and comment cleanup
 // 38181 2016_06_26 (bugfix) change in utilsunmoon of tz from (ex) 4:00 to 4.00
 // 38180 2016_06_26 replace raw icon resources with myapp ints in audioplayact and playlist, utilnotif, removefav acts, homescreen mg
 //                  moved settingsplaylist/autodwlnd into audio package
-//                  playlist autodwlnd remove redundant title
+//                  playlist auto download remove redundant title
 // 38179 2016_06_26 (bugfix) had to modify menu for settings loc generic and modify path to arrayadaptersearchview
 // 38178 2016_06_26 [VERY HIGH IMPACT] subdir migration try 2
 // 38177 2016_06_26 regrettably backed out moving src into subdirs as this seemed to break widgets, will try later and exclude widgets
@@ -2883,7 +2883,7 @@ Caused by: java.lang.AssertionError:
 // 3.8131 2016_06_05 Telecine cleanup
 //                   reinstate WRITE_SETTINGS in manifest, needed for telecine show touches when recording
 // 3.8130 2016_06_05 transform Telecine to not rely on dagger, javax, butterknife, etc ( remove external dependencies )
-// 3.8129 2016_06_05 remove TelecineApplication file, cleanup in Telecin
+// 3.8129 2016_06_05 remove TelecineApplication file, cleanup in Telecine
 //                   rename TelecineActivity to SettingsTelecineActivity
 //                   convert Telecine settings to wX framework
 // 3.8128 2016_06_04 settings playlist - minor tweaks to match AudioPlayActivity
@@ -2902,8 +2902,8 @@ Caused by: java.lang.AssertionError:
 // 3.8122 2016_06_04 (bugfix) revert UtilityTTS chunksize from 250 back to 1000 - not working on LG G2
 // 3.8121 2016_06_04 add AudioPlayActivity from which all TTS activities will extend
 // 3.8120 2016_06_04 NHC - add 2/5 day graphics in ATL, PAC weather outlooks
-// 3.8119 2016_06_03 (bugix) voice command icon not working after 117
-// 3.8118 2016_06_03 (bugix) voice command icon not working after 117
+// 3.8119 2016_06_03 (bugfix) voice command icon not working after 117
+// 3.8118 2016_06_03 (bugfix) voice command icon not working after 117
 // 3.8117 2016_06_03 migrate completely off old TTS code UtilityTTS.StopTTS() UtilityTTS.speakText
 // 3.8116 2016_06_03 (bugfix) TTS media notif - back/forward were not handling boundary conditions
 //                   TTS - move chunk count from 1000 char down to 250 char to speed up initial tts
@@ -2913,7 +2913,7 @@ Caused by: java.lang.AssertionError:
 //                   move spcswo, spcmcd, and wpctext to new TTS framework
 // 3.8112 2016_06_03 modify media notif and part of playlist activity to use new file based TTS framework
 //
-// 3.8111 is targeted for playstore release on Sun 6/5/2016
+// 3.8111 is targeted for PlayStore release on Sun 6/5/2016
 //
 // 3.8111 2016_06_03 lint and code cleanup ( esp in new integrated code ) ( wX convert VPA and toolbar_bottom to local var )
 //                   Utilspotter, FormatSpotterReports - if no spotter reports say so
@@ -2930,11 +2930,11 @@ Caused by: java.lang.AssertionError:
 // 3.8104 2016_06_02 add drawtool to screen recording bar
 // 3.8103 2016_06_02 rename telecine layout files
 //                   add alpha code for drawtool to telecine but then disable
-//                   add vector assetts to replace original telecine icons
+//                   add vector assets to replace original telecine icons
 // 3.8102 2016_06_01 StopAudioService and PlayAudioService - add debug flag to use new TTS/MediaPlayer code
 // 3.8101 2016_06_01 add TeleListener.java and add code to UtilityTTS for LISTEN_CALL_STATE
 // 3.8099 2016_06_01 TTSTest
-// 3.8098 2016_06_01 TTSTest - break into chunks/mult files
+// 3.8098 2016_06_01 TTSTest - break into chunks/multiple files
 //                   if debug on , new code is used
 // 3.8097 2016_06_01 TTSTest converted textedit to textview to simplify code
 //                   add test code to pause Media player when incoming call, add perm READ_PHONE_STATE
@@ -2977,7 +2977,7 @@ Caused by: java.lang.AssertionError:
 //                   lint cleanup
 //                   Telecine - change default to not do 3sec countdown
 //                   Telecine - Android 6.0 if external storage write is allow go to overlay perm screen
-// 3.8072 2016_05_28 locfrag - another attempt to fix bug #1 using isAdded() in postexecute
+// 3.8072 2016_05_28 locfrag - another attempt to fix bug #1 using isAdded() in post-execute
 // 3.8071 2016_05_28 Telecine - RecordingSession - for media recorder add a few checks to see if null and surround stop() with try/catch
 //                   Telecine settings - hide "hide from recents" , NA to embedded version
 // 3.8070 2016_05_28 Telecine - add support for multiple notifications by adjust notificationManager.notify, receiver, and implement unique requestcode
@@ -3007,7 +3007,7 @@ Caused by: java.lang.AssertionError:
 //                   JNI cleanup ( nexradl2ogl radialv2 )
 //                   remove UtilityNexradAnim
 //                   cleanup in SPCMeso and COD Model ( incl multipane )
-// 3.8050 2016_05_25 locfrag replace getActivity() with getActivitiyReference() in response to crashes in postexecture of forecast
+// 3.8050 2016_05_25 locfrag replace getActivity() with getActivitiyReference() in response to crashes in post-execute of forecast
 //                   the thinking is fragment gets destroyed and created while http is in transit and activity reference is gone
 // 3.8049 2016_05_25 hourly formatting enhancement ( update utildownload as well since changes in utilushourly )
 // 3.8048 2016_05_25 move getInputStreamFromURL_L2 from UtilityDownload to WXGLDownload ( and others in UtilityNexradAnim related to L2)
@@ -3031,7 +3031,7 @@ Caused by: java.lang.AssertionError:
 //                   ModelsCOD (single/multi pane) - move animationdrawable creation to new class UtilityModelCODIO
 //                   various lint cleanups
 // 3.8037 2016_05_23 add trailing 1 to lat/lon of default location as NWS not displaying correctly
-//                   removed doco related old city dataset
+//                   removed doc related old city dataset
 //                   update title for SPC Meso ( single/dual pane ) in strings/manifest
 //                   spcmeso change multi pane to dual pane in submenu
 // 3.8036 2016_05_22 remove raw resources city by state files ( legacy/outdated/not used ) and additional code cleanup
@@ -3065,7 +3065,7 @@ Caused by: java.lang.AssertionError:
 //                   rename wxogl layout ( forgot v on end )
 //                   declare "private" and "final" for various vars to appease lint
 //                   (bugfix) images tab was not properly saving/restoring image_type
-//                   SPC Meso single/multi pange - move getimage content into UtilSPCMeso
+//                   SPC Meso single/multi pane - move getimage content into UtilSPCMeso
 //                   rename SPCMESOAdd/Remove Fav to be consistent
 //                   disable OOM popup in wxoglrender
 // 3.8018 2016_05_20 CA focn45 and other text prod - remove line breaks if configured
@@ -3089,7 +3089,7 @@ Caused by: java.lang.AssertionError:
 // 3.8012 2016_05_18 settings->notif , remove displaying the uri of current sound to avoid confusion
 //                   cod/spc meso multi pane - choose current image in subtitle similar to multipane radar
 //                   Support Lib BUG - NOTE: it was found that call toolbar.setSubtitle would reset the X/Y of any touchimageviews
-//                   COD SPC Meso - use setsubtitle in UtilityModels that saves/restores current image location
+//                   COD SPC Meso - use set subtitle in UtilityModels that saves/restores current image location
 //                   cleanup in COD SPC Meso dualpane
 // 3.8011 2016_05_17 due to NWS site retirement, replace list of NWS obs sites in NWS obs activity, file is in raw
 // 3.8010 2016_05_17 changes to help ensure compliance with wX's status under the GNU GPLv3 license
@@ -3107,7 +3107,7 @@ Caused by: java.lang.AssertionError:
 // 3.8003 2016_05_15 spc meso multipane
 // 3.8002 2016_05_15 spc meso multipane
 // 3.8001 2016_05_15 cod model dual pane
-//                   (bugfix) COD models - add whitebg for HRRR
+//                   (bugfix) COD models - add white background for HRRR
 // 3.8000 2016_05_15 cod model dual pane, rename utilcodmodelinterface
 // 3.7999 2016_05_15 cod model dual pane
 // 3.7998 2016_05_15 colormap dkenh - minor changes
@@ -3128,14 +3128,14 @@ Caused by: java.lang.AssertionError:
 // 3.7989 2016_05_13 severe dash - remove logging added in 88
 // 3.7988 2016_05_13 (bugfix) HIGH IMPACT revert NWS source for warning polygons to what it was before last fall
 //                   current source stopped working tonight, change URLs in AlertReciever, seemed to work
-// 3.7987 2016_05_13 (bugfix?) in WX and locfrag move super.onrestart() and super.onresume() to first line in overriden method
+// 3.7987 2016_05_13 (bugfix?) in WX and locfrag move super.onrestart() and super.onresume() to first line in override method
 //                   hoping to fix rotation issues and occasional blank cards after restart
 // 3.7986 2016_05_13 (bugfix) fixed crash on entrance for SREF and HRRR when network is down
 //                   (bugfix) GOES - hide zoom for certain sectors, when select WFO from top pull down change image type to vis
 // 3.7985 2016_05_13 before this release in wxglrender only 2 precip products continued to allocate BB when range_bins==0
 //                   removed restriction and open to any radar product, reduce crashing when network is down
 //                   instead fail silently
-// 3.7984 2016_05_13 multipane radar, move radar_cnt_str scope inside asynctask ( suspect casuing bugs when user starts multiple anims )
+// 3.7984 2016_05_13 multipane radar, move radar_cnt_str scope inside asynctask ( suspect causing bugs when user starts multiple anims )
 // 3.7983 2016_05_13 minor refinement in radialv2 ( JNI )
 //                   handle DAA 170 stubfiles like 172
 // 3.7982 2016_05_13 add gradle.properties tweak to give 2GB of mem
@@ -3147,7 +3147,7 @@ Caused by: java.lang.AssertionError:
 // 3.7978 2016_05_12 wxgl - add prod 170 ( beta, no legend ) digital accum array (1hr)
 // 3.7977 2016_05_12 make new nws remove line break option the default
 //                   rename DSP to correct name
-//                   usalertsdetail - remove linebreaks in instructions
+//                   usalertsdetail - remove line breaks in instructions
 // 3.7976 2016_05_11 utilusalertsdetail - add extra space to more closely mimic alerts.weather.gov
 //                   migrate off GetAFDforWidget to standard textprod download code
 //                   Utility.GetHazardsCard - add new code to enhance text formatting for small screens
@@ -3163,7 +3163,7 @@ Caused by: java.lang.AssertionError:
 // 3.7968 2016_05_10 (bugfix) multipane radar sharing not working
 // 3.7967 2016_05_09 continue from 61
 //                   wxogl move file delete to start of activity to prevent crash before L2 loaded
-// 3.7965 2016_05_09 reversion to 43 in case need backout after abnormally high crash count
+// 3.7965 2016_05_09 reversion to 43 in case need back-out after abnormally high crash count
 // 3.7961 2016_05_09 wxglrender and l3 - cleanup and move some vars to global
 //
 //  Google Play release below
@@ -3190,7 +3190,7 @@ Caused by: java.lang.AssertionError:
 // 3.7951 2016_05_07
 // 3.7950 2016_05_07 (HIGH IMPACT) wxogl color buffers, allocate on demand
 //                   (bugfix) attempt to fix launch bug when using legacy interface ( disable ability to not use cards for now )
-// 3.7949 2016_05_07 (VERY HIGH IMAPCT ) create and move to WXGLNexradLevel3
+// 3.7949 2016_05_07 (VERY HIGH IMPACT ) create and move to WXGLNexradLevel3
 //                   rename multiple classes involved with radar
 // 3.7948 2016_05_07 (bugfix) multipane parallel getcontent not working for L2
 //                   cleanup in WXGLNexradLevel2
@@ -3201,7 +3201,7 @@ Caused by: java.lang.AssertionError:
 // 3.7943 2016_05_06 COD NAM model - add 3 more parms
 // 3.7942 2016_05_06 COD NAM model - add MW
 // 3.7941 2016_05_06 COD NAM model - image upgrade
-// 3.7940 2016_05_06 wxgltextobj - for loc frag mult max_cities by 0.75 since it's not full screen
+// 3.7940 2016_05_06 wxgltextobj - for loc frag multiply max_cities by 0.75 since it's not full screen
 //                   cleanup
 //                   move textview_magic_fudge_factor and device_scale needed for WXOGLTextObject to myapp
 // 3.7939 2016_05_05 (bugfix) spotter labels was causing crash onrestart when panning ( fix in WXGLTextObject get rid of spotter_label_size )
@@ -3247,7 +3247,7 @@ Caused by: java.lang.AssertionError:
 //                   quad pane - cleanup
 //                   quad pane - remove white space in subtitle
 // 3.7909 2016_05_01 quad pane, anim to arrays
-// 3.7908 2016_05_01 quad pane, move getcontent ( non-anim ) setsubtitle to factored method ( anim is causing issues )
+// 3.7908 2016_05_01 quad pane, move getcontent ( non-anim ) set subtitle to factored method ( anim is causing issues )
 //                   quad pane, if share position don't repeat RID 4 times
 // 3.7907 2016_04_30 dual/quad dismiss long press dialogue before getcontent happens, code cleanup in quad
 // 3.7906 2016_04_30 quad panel ( bugfix when not synced pos and using map )
@@ -3257,7 +3257,7 @@ Caused by: java.lang.AssertionError:
 // 3.7903 2016_04_30 quad panel
 // 3.7902 2016_04_30 quad panel
 // 3.7901 2016_04_30 quad panel
-// 3.7900 2016_04_29 (HIGH IMPACT) JNI cleanup and unecessary comment removal
+// 3.7900 2016_04_29 (HIGH IMPACT) JNI cleanup and unnecessary comment removal
 // 3.7899 2016_04_29 (HIGH IMPACT) move all JNI functions into JNI class and update all C code to reflect this, minor cleanup in C code
 // 3.7898 2016_04_29 JNI added comments and did cleanup in a few files ( Level 2 related )
 // 3.7897 2016_04_29 oglr - add additional try around radialv2
@@ -3303,7 +3303,7 @@ Caused by: java.lang.AssertionError:
 // 3.7868 2016_04_23 wxogl getcontent preexec - add bool flag for tdwr to replace multiple method calls to check
 // 3.7867 2016_04_23 Level 2 JNI - read bins in chunks vs separately (nexradl2ogl.c/readData)
 // 3.7866 2016_04_23 Level 2 JNI velocity now working
-// 3.7865 2016_04_23 WIP/HIGHIMPACT WXOGL Level 2 to full JNI
+// 3.7865 2016_04_23 WIP/HIGH IMPACT WXOGL Level 2 to full JNI
 // 3.7864 2016_04_22 work on nexradl2ogl
 // 3.7863 2016_04_22 work on nexradl2ogl
 // 3.7862 2016_04_22 COD GFS - add AK sector

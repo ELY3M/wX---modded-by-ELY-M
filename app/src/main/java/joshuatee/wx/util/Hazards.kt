@@ -41,7 +41,7 @@ class Hazards {
     constructor(locationNumber: Int) {
         if (Location.isUS(locationNumber) && UIPreferences.homescreenFav.contains("TXT-HAZ")) {
             hazards = getHazardsHtml(Location.getLatLon(locationNumber))
-            urls = hazards.parseColumn("\"id\": \"(" + GlobalVariables.nwsApiUrl + ".*?)\"")
+            urls = hazards.parseColumn("\"id\": \"(" + GlobalVariables.NWS_API_URL + ".*?)\"")
             titles = hazards.parseColumn("\"event\": \"(.*?)\"")
         }
     }
@@ -49,7 +49,7 @@ class Hazards {
     // adhoc forecast
     constructor(latLon: LatLon) {
         hazards = getHazardsHtml(latLon)
-        urls = hazards.parseColumn("\"id\": \"(" + GlobalVariables.nwsApiUrl + ".*?)\"")
+        urls = hazards.parseColumn("\"id\": \"(" + GlobalVariables.NWS_API_URL + ".*?)\"")
         titles = hazards.parseColumn("\"event\": \"(.*?)\"")
     }
 

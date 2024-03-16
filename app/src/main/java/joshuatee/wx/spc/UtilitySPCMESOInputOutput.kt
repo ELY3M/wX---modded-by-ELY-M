@@ -51,7 +51,7 @@ object UtilitySpcMesoInputOutput {
         } else {
             ".gif"
         }
-        val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
+        val imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
         val bitmap = imgUrl.getImage()
         drawables.add(ColorDrawable(Color.WHITE))
         if (param == "hodo" || param.startsWith("skewt")) {
@@ -81,10 +81,10 @@ object UtilitySpcMesoInputOutput {
             BitmapDrawable(context.resources, UtilityImg.eraseBackground(url.getImage(), -1))
 
     fun getAnimation(product: String, sector: String, frameCount: Int): List<String> {
-        val timeList = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
+        val timeList = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
         return if (timeList.size > frameCount) {
             (frameCount - 1 downTo 0).map {
-                "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + product + "/" + product + "_" + timeList[it] + ".gif"
+                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s" + sector + "/" + product + "/" + product + "_" + timeList[it] + ".gif"
             }
         } else {
             emptyList()

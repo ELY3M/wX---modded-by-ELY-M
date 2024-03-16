@@ -56,15 +56,15 @@ object UtilityNotification {
                 .build()
         )
         notificationManager.createNotificationChannel(channel)
-        val channelNoSound = NotificationChannel(notiChannelStrNoSound, "wX No Sound", NotificationManager.IMPORTANCE_HIGH)
+        val channelNoSound = NotificationChannel(NOTIFICATION_CHANNEL_STRING_NO_SOUND, "wX No Sound", NotificationManager.IMPORTANCE_HIGH)
         channelNoSound.description = "wX weather no sound"
         channelNoSound.setSound(null, null)
         notificationManager.createNotificationChannel(channelNoSound)
         notificationChannelInitialized = true
     }
 
-    private const val notiChannelStr = "default"
-    const val notiChannelStrNoSound = "defaultNoSound2"
+    private const val NOTIFICATION_CHANNEL_STRING = "default"
+    const val NOTIFICATION_CHANNEL_STRING_NO_SOUND = "defaultNoSound2"
 
     fun createNotificationBigPicture(
             context: Context,
@@ -75,7 +75,7 @@ object UtilityNotification {
     ): Notification {
         initChannels(context)
         val notification: Notification = NotificationCompat.BigPictureStyle(
-                NotificationCompat.Builder(context, notiChannelStrNoSound)
+                NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_STRING_NO_SOUND)
                         .setContentTitle(title)
                         .setSmallIcon(iconRadar)
                         .setSound(null)
@@ -95,7 +95,7 @@ object UtilityNotification {
         val notification: Notification
         if (objectNotification.sound) {
             notification = NotificationCompat.BigTextStyle(
-                    NotificationCompat.Builder(objectNotification.context, notiChannelStr)
+                    NotificationCompat.Builder(objectNotification.context, NOTIFICATION_CHANNEL_STRING)
                             .setContentTitle(objectNotification.title)
                             .setContentText(objectNotification.text)
                             .setContentIntent(objectNotification.objectPendingIntents.resultPendingIntent)
@@ -120,7 +120,7 @@ object UtilityNotification {
             }
         } else {
             notification = NotificationCompat.BigTextStyle(
-                    NotificationCompat.Builder(objectNotification.context, notiChannelStrNoSound)
+                    NotificationCompat.Builder(objectNotification.context, NOTIFICATION_CHANNEL_STRING_NO_SOUND)
                             .setContentTitle(objectNotification.title)
                             .setContentText(objectNotification.text)
                             .setContentIntent(objectNotification.objectPendingIntents.resultPendingIntent)
@@ -158,7 +158,7 @@ object UtilityNotification {
         val notification: Notification
         if (sound) {
             notification = NotificationCompat.BigTextStyle(
-                    NotificationCompat.Builder(context, notiChannelStr)
+                    NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_STRING)
                             .setContentTitle(title)
                             .setContentText(text)
                             .setContentIntent(resultPendingIntent)
@@ -176,7 +176,7 @@ object UtilityNotification {
                 UtilityTts.synthesizeTextAndPlay(context, title, title)
         } else {
             notification = NotificationCompat.BigTextStyle(
-                    NotificationCompat.Builder(context, notiChannelStrNoSound)
+                    NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_STRING_NO_SOUND)
                             .setContentTitle(title)
                             .setContentText(text)
                             .setSound(null)

@@ -185,7 +185,7 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
 
         lastEndY = 0;
         lastEndX = 0;
-        float firstX = 0;
+//        float firstX = 0;
         int i = 0;
         while (values.hasNext()) {
             E value = values.next();
@@ -198,8 +198,8 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
             double ratX = valX / diffX;
             double x = graphWidth * ratX;
 
-            double orgX = x;
-            double orgY = y;
+//            double orgX = x;
+//            double orgY = y;
 
             // overdraw
             boolean overdraw = x > graphWidth;

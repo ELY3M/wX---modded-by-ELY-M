@@ -63,7 +63,7 @@ internal object SwoDayOne {
             val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
             val day = 1
 //            val html = ("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlSep()
-            val html = ("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlWithNewLine()
+            val html = ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlWithNewLine()
 
             val htmlChunk = html.parseAcrossLines("... CATEGORICAL ...(.*?&)&")
             threatList.indices.forEach { threatIndex ->

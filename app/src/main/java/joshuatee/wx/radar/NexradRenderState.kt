@@ -35,7 +35,7 @@ class NexradRenderState(val paneNumber: Int, val data: NexradRenderData, val sca
         var ridGlobal = ""
         var positionXGlobal = 0.0f
         var positionYGlobal = 0.0f
-        const val ortIntGlobal = 400
+        const val ORT_INT_GLOBAL = 400.0f
         var oneDegreeScaleFactorGlobal = 0.0f
     }
 

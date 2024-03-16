@@ -221,7 +221,7 @@ internal object Metar {
     //
     fun findClosestMetar(context: Context, location: LatLon): String {
         val localMetarSite = findClosestObservation(context, location)
-        return (GlobalVariables.nwsRadarPub + "data/observations/metar/decoded/" + localMetarSite.name + ".TXT").getHtmlWithNewLine()
+        return (GlobalVariables.TGFTP_WEBSITE_PREFIX + "/data/observations/metar/decoded/" + localMetarSite.name + ".TXT").getHtmlWithNewLine()
     }
 
     //

@@ -54,7 +54,7 @@ class CardSevenDay(context: Context, iconUrl: String, isUS: Boolean, forecast: S
                         items[0] + " (" + UtilityLocationFragment.extractTemperature(
                                 items[1]
                         )
-                                + GlobalVariables.degreeSymbol
+                                + GlobalVariables.DEGREE_SYMBOL
                                 + UtilityLocationFragment.extractWindDirection(items[1].substring(1))
                                 + UtilityLocationFragment.extract7DayMetrics(items[1].substring(1)) + ")"
                 )

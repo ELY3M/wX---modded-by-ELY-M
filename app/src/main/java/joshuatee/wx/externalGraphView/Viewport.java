@@ -976,8 +976,8 @@ public class Viewport {
     /**
      * not used currently
      */
-    public void computeScroll() {
-    }
+//    public void computeScroll() {
+//    }
 
     /**
      * Draws the overscroll "glow" at the four edges of the chart region, if necessary.

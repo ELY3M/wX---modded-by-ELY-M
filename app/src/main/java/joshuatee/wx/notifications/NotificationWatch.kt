@@ -66,7 +66,7 @@ internal object NotificationWatch {
                             )
                             objectNotification.send(cancelString)
                         }
-                        notificationUrls += cancelString + NotificationPreferences.notificationStrSep
+                        notificationUrls += cancelString + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
                     }
                 }
             } catch (e: Exception) {

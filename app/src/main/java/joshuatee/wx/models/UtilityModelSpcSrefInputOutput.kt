@@ -31,15 +31,15 @@ import joshuatee.wx.parseColumn
 
 internal object UtilityModelSpcSrefInputOutput {
 
-    private const val pattern1 = "([0-9]{10}z</a>&nbsp in through <b>f[0-9]{3})"
-    private const val pattern2 = "<tr><td class=.previous.><a href=.sref.php\\?run=[0-9]{10}&id=SREF_H5__.>([0-9]{10}z)</a></td></tr>"
+    private const val PATTERN_1 = "([0-9]{10}z</a>&nbsp in through <b>f[0-9]{3})"
+    private const val PATTERN_2 = "<tr><td class=.previous.><a href=.sref.php\\?run=[0-9]{10}&id=SREF_H5__.>([0-9]{10}z)</a></td></tr>"
 
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val html = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/".getHtml()
-            val tmpTxt = html.parse(pattern1)
-            val runTimes = html.parseColumn(pattern2)
+            val html = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/sref/".getHtml()
+            val tmpTxt = html.parse(PATTERN_1)
+            val runTimes = html.parseColumn(PATTERN_2)
             val latestRunAl = tmpTxt.split("</a>").dropLastWhile { it.isEmpty() }
             if (latestRunAl.isNotEmpty()) {
                 runData.listRunAdd(latestRunAl[0])
@@ -54,7 +54,7 @@ internal object UtilityModelSpcSrefInputOutput {
 
     fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
         val run = om.run.replace("z", "")
-        val url = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
+        val url = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
         return UtilityImg.getBitmapAddWhiteBackground(context, url)
     }
 }

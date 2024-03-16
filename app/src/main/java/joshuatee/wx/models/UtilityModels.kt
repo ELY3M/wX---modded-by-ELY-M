@@ -40,7 +40,6 @@ import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityShare
 
 object UtilityModels {
@@ -188,44 +187,44 @@ object UtilityModels {
         }
     }
 
-    fun convertTimeRunToTimeStringNew(runStrOrig: String, timeStrFunc: String, showDate: Boolean): String {
-        val runStr = runStrOrig.takeLast(2)
-        UtilityLog.d("wxRUN", runStr)
-        val timeStr = timeStrFunc.split(" ")[0].take(3)
-//        val a = LocalDateTime.now(ZoneOffset.UTC)
-//        val time = a.withHour(To.int(runStr.takeLast(2)))
-        val runInt = To.int(runStr)
-        val timeInt = To.int(timeStr)
-        val realTimeGmt = runInt + timeInt
-        val offsetFromUtc = ObjectDateTime.offsetFromUtcInSeconds()
-        val realTime = realTimeGmt + offsetFromUtc / 60 / 60
-        var hourOfDay = realTime % 24
-        var amPm: String
-        if (hourOfDay > 11) {
-            amPm = "pm"
-            if (hourOfDay > 12) {
-                hourOfDay -= 12
-            }
-        } else {
-            amPm = "am"
-        }
-        var day = realTime / 24
-        if (hourOfDay < 0) {
-            hourOfDay += 12
-            amPm = "pm"
-            day -= 1
-        }
-        val objectDateTime = ObjectDateTime(runInt, 0)
-        objectDateTime.addHours(timeInt.toLong() + offsetFromUtc / 60 / 60)
-        val month = objectDateTime.getMonth()
-        val dayOfMonth = objectDateTime.getDayOfMonth()
-        return if (showDate) {
-            "${objectDateTime.format("E")}  $hourOfDay$amPm ($month/$dayOfMonth)"
-            //"$futureDay  $hourOfDay$amPm ($month/$dayOfMonth)"
-        } else {
-            "${objectDateTime.format("E")}  $hourOfDay$amPm"
-        }
-    }
+//    fun convertTimeRunToTimeStringNew(runStrOrig: String, timeStrFunc: String, showDate: Boolean): String {
+//        val runStr = runStrOrig.takeLast(2)
+//        UtilityLog.d("wxRUN", runStr)
+//        val timeStr = timeStrFunc.split(" ")[0].take(3)
+////        val a = LocalDateTime.now(ZoneOffset.UTC)
+////        val time = a.withHour(To.int(runStr.takeLast(2)))
+//        val runInt = To.int(runStr)
+//        val timeInt = To.int(timeStr)
+//        val realTimeGmt = runInt + timeInt
+//        val offsetFromUtc = ObjectDateTime.offsetFromUtcInSeconds()
+//        val realTime = realTimeGmt + offsetFromUtc / 60 / 60
+//        var hourOfDay = realTime % 24
+//        var amPm: String
+//        if (hourOfDay > 11) {
+//            amPm = "pm"
+//            if (hourOfDay > 12) {
+//                hourOfDay -= 12
+//            }
+//        } else {
+//            amPm = "am"
+//        }
+//        var day = realTime / 24
+//        if (hourOfDay < 0) {
+//            hourOfDay += 12
+//            amPm = "pm"
+//            day -= 1
+//        }
+//        val objectDateTime = ObjectDateTime(runInt, 0)
+//        objectDateTime.addHours(timeInt.toLong() + offsetFromUtc / 60 / 60)
+//        val month = objectDateTime.getMonth()
+//        val dayOfMonth = objectDateTime.getDayOfMonth()
+//        return if (showDate) {
+//            "${objectDateTime.format("E")}  $hourOfDay$amPm ($month/$dayOfMonth)"
+//            //"$futureDay  $hourOfDay$amPm ($month/$dayOfMonth)"
+//        } else {
+//            "${objectDateTime.format("E")}  $hourOfDay$amPm"
+//        }
+//    }
 
     fun updateTime(runOriginal: String, modelCurrentTimeF: String, listTime: MutableList<String>, prefix: String, showDate: Boolean) {
         var run = runOriginal.replace("Z", "").replace("z", "")

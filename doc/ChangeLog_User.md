@@ -8,7 +8,7 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
-## 55855 2024_01_15 (BETA)
+## 55869 2024_02_13
 
 * [FIX] WPC Rainfall Outlook Day 1 - 5, Title was truncated, move parts of Title to Sub-title
 * [ADD] Previously, the graph in the hourly activity was set to a fixed size height.

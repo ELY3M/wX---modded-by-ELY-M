@@ -60,7 +60,7 @@ internal object UtilityModelWpcGefsInputOutput {
         } else {
             ""
         }
-        val url = "${GlobalVariables.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
+        val url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
         return url.getImage()
     }
 }

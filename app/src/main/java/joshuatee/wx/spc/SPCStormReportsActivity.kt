@@ -142,8 +142,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.gif"
-        textUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/$dayArgument.csv"
+        imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/climo/reports/$dayArgument.gif"
+        textUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/climo/reports/$dayArgument.csv"
         scrollView.smoothScrollTo(0, 0)
         FutureVoid(::download, ::displayData)
         FutureBytes2(::downloadImage, ::updateImage)

@@ -48,7 +48,7 @@ object UtilityWidget {
     private fun uriShareAndGenerate(context: Context, fileName: String): Uri {
         val dir = File(context.filesDir.toString() + "/shared")
         val file = File(dir, fileName)
-        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", file)
+        val uri = FileProvider.getUriForFile(context, "${GlobalVariables.PACKAGE_NAME}.fileprovider", file)
         UtilityLog.d("WXRADAR", uri.toString())
         val localPackageManager = context.packageManager
         val intentHome = Intent("android.intent.action.MAIN")

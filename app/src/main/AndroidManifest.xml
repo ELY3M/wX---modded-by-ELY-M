@@ -21,8 +21,8 @@
 <!-- modded by ELY M. -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="55870"
-    android:versionName="55870-elys">
+    android:versionCode="55874"
+    android:versionName="55874-elys">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />

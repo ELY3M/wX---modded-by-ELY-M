@@ -28,14 +28,14 @@ import joshuatee.wx.util.To
 @Suppress("SpellCheckingInspection")
 object UtilityNwsRadarMosaic {
 
-    private const val baseUrl = "https://radar.weather.gov/ridge/standard/"
+    private const val BASE_URL = "https://radar.weather.gov/ridge/standard/"
 
     fun getNearest(latLon: LatLon): String = UtilityLocation.getNearest(latLon, cityToLatLon)
 
     fun get(sector: String): String = if (sector == "CONUS") {
-        baseUrl + "CONUS-LARGE_0.gif"
+        BASE_URL + "CONUS-LARGE_0.gif"
     } else {
-        baseUrl + sector + "_0.gif"
+        BASE_URL + sector + "_0.gif"
     }
 
     fun getAnimation(sector: String): List<String> {
@@ -45,7 +45,7 @@ object UtilityNwsRadarMosaic {
             ""
         }
         return (9 downTo 0).map {
-            baseUrl + sector + add + "_" + To.string(it) + ".gif"
+            BASE_URL + sector + add + "_" + To.string(it) + ".gif"
         }
     }
 

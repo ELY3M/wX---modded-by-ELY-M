@@ -107,7 +107,7 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         } else { //if (buffers.breakSize > 0) {
             buffers.chunkCount = totalBinsGeneric / buffers.breakSize
             remainder = totalBinsGeneric - buffers.breakSize * buffers.chunkCount
-            buffers.chunkCount = buffers.chunkCount + 1
+            buffers.chunkCount += 1
         }
         // FIXME need a better solution then this hack
         if (buffers.warningType == null) {
@@ -223,7 +223,7 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             data.swoBuffers.breakSize = totalBinsSwo
         } else {
             data.swoBuffers.chunkCount = totalBinsSwo / data.swoBuffers.breakSize
-            data.swoBuffers.chunkCount = data.swoBuffers.chunkCount + 1
+            data.swoBuffers.chunkCount += 1
         }
         (0..4).forEach {
             if (hashSwo[it] != null) {

@@ -35,7 +35,7 @@ android {
         }
     }
 
-    def ndkDir = "D:\\android-sdk\\android-ndk-r26b"
+    def ndkDir = "D:\\android-sdk\\android-ndk-r26c"
     tasks.register('buildNative', Exec) {
         commandLine "$ndkDir\\ndk-build.cmd",
                 '-C', file('src/main/jni').absolutePath,
@@ -100,8 +100,8 @@ android {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
     // https://developer.android.com/jetpack/androidx/versions
     implementation 'com.google.android.material:material:1.9.0'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
@@ -115,7 +115,7 @@ dependencies {
 //    implementation "com.squareup.okhttp3:okhttp:4.12.0"
     //elys mods
     //fixes ipv6 delays by upgrading to okhttp 5. fixes joshua.tee/wx#25
-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.11"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.12"
     // implementation "androidx.navigation:navigation-compose:1.0.0-alpha07"
 
     // https://developer.android.com/studio/write/java8-support

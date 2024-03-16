@@ -80,8 +80,8 @@ class Nhc(val context: Context, box: VBox) {
 
     companion object {
 
-        const val widgetImageUrlTop = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png"
-        const val widgetImageUrlBottom = "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png"
+        const val WIDGET_IMAGE_URL_TOP = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_0d0.png"
+        const val WIDGET_IMAGE_URL_BOTTOM = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_0d0.png"
 
         fun getTextData(context: Context): List<NhcStormDetails> {
             val nhcStormDetailsList = mutableListOf<NhcStormDetails>()
@@ -91,7 +91,7 @@ class Nhc(val context: Context, box: VBox) {
             val forecastAdvisories = mutableListOf<String>()
             val forecastDiscussions = mutableListOf<String>()
             val windSpeedProbabilities = mutableListOf<String>()
-            val url = GlobalVariables.nwsNhcWebsitePrefix + "/CurrentStorms.json"
+            val url = GlobalVariables.NWS_NHC_WEBSITE_PREFIX + "/CurrentStorms.json"
             //val url = "https://www.nhc.noaa.gov/productexamples/NHC_JSON_Sample.json"
             val html = url.getHtml()
             val ids = html.parseColumn("\"id\": \"(.*?)\"")

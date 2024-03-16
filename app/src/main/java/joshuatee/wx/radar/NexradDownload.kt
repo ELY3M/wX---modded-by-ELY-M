@@ -47,7 +47,7 @@ class NexradDownload {
 
         // in response to 56+ hr maint on 2022-04-19 to nomads, change URL to backup
         // https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf
-        private const val nwsRadarLevel2Pub = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+        private const val NWS_RADAR_LEVEL2_PUB = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
 
         // private const val nwsRadarLevel2Pub = "https://ftpprd.ncep.noaa.gov/data/nccf/radar/nexrad_level2/"
         private val pattern1: Pattern = Pattern.compile(">(sn.[0-9]{4})</a>")
@@ -91,7 +91,7 @@ class NexradDownload {
             return if (!product.contains("L2")) {
                 getLevel3FilesForAnimation(context, frameCount, product, ridPrefix, radarSite.lowercase(Locale.US))
             } else {
-                getLevel2FilesForAnimation(context, nwsRadarLevel2Pub + ridPrefix.uppercase(Locale.US) + radarSite.uppercase(Locale.US) + "/", frameCount)
+                getLevel2FilesForAnimation(context, NWS_RADAR_LEVEL2_PUB + ridPrefix.uppercase(Locale.US) + radarSite.uppercase(Locale.US) + "/", frameCount)
             }
         }
 
@@ -169,7 +169,7 @@ class NexradDownload {
 
         fun getLevel2Url(radarSite: String): String {
             val ridPrefix = getRidPrefix(radarSite, "N0Q").uppercase(Locale.US)
-            val baseUrl = "$nwsRadarLevel2Pub$ridPrefix$radarSite/"
+            val baseUrl = "$NWS_RADAR_LEVEL2_PUB$ridPrefix$radarSite/"
             val list = (baseUrl + "dir.list").getHtmlWithNewLine().replace(GlobalVariables.newline, " ").split(" ").dropLastWhile { it.isEmpty() }
             if (list.size < 4) {
                 return ""
@@ -217,10 +217,10 @@ class NexradDownload {
 
         fun getRadarFileUrl(radarSite: String, product: String): String {
             val ridPrefix = getRidPrefix(radarSite, product)
-            return GlobalVariables.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/sn.last"
+            return GlobalVariables.TGFTP_WEBSITE_PREFIX + "/SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/sn.last"
         }
 
         private fun getRadarDirectoryUrl(radarSite: String, product: String, ridPrefix: String): String =
-                GlobalVariables.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/"
+                GlobalVariables.TGFTP_WEBSITE_PREFIX + "/SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/"
     }
 }

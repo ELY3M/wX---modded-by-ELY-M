@@ -27,18 +27,18 @@ import joshuatee.wx.common.GlobalVariables
 internal object UtilityObservations {
 
     val urls = listOf(
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/sfcobs/large_latestsfc.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namswsfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namscsfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namsesfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namcwsfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namccsfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namcesfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namnwsfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namncsfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namnesfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namaksfcwbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/sfc/namak2sfcwbg.gif"
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/sfcobs/large_latestsfc.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namswsfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namscsfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namsesfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namcwsfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namccsfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namcesfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namnwsfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namncsfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namnesfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namaksfcwbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/namak2sfcwbg.gif"
     )
 
     val labels = listOf(

@@ -28,14 +28,14 @@ import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import joshuatee.wx.settings.UIPreferences
 
-class PopupMessage(view: View, message: String, duration: Int = indefinite) {
+class PopupMessage(view: View, message: String, duration: Int = INDEFINITE) {
 
     init {
         val snack = Snackbar.make(view, message, duration)
         snack.setActionTextColor(Color.YELLOW)
         snack.setAction("DISMISS") { snack.dismiss() }
         val viewSnack = snack.view
-        val textView = viewSnack.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+        val textView: TextView = viewSnack.findViewById(com.google.android.material.R.id.snackbar_text)
         val fgColor = Color.WHITE
         textView.setTextColor(fgColor)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
@@ -43,7 +43,7 @@ class PopupMessage(view: View, message: String, duration: Int = indefinite) {
     }
 
     companion object {
-        const val indefinite = Snackbar.LENGTH_INDEFINITE
-        const val short = Snackbar.LENGTH_SHORT
+        const val INDEFINITE = Snackbar.LENGTH_INDEFINITE
+        const val SHORT = Snackbar.LENGTH_SHORT
     }
 }

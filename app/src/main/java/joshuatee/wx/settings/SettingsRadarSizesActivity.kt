@@ -37,7 +37,7 @@ class SettingsRadarSizesActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        setTitle("Radar Line / Marker sizes", GlobalVariables.preferencesHelpTitle)
+        setTitle("Radar Line / Marker sizes", GlobalVariables.PREFERENCES_HELP_TITLE)
         box = VBox.fromResource(this)
         addNumberPicker()
     }

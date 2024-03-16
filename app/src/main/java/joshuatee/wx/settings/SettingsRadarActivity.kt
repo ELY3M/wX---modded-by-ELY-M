@@ -49,7 +49,7 @@ class SettingsRadarActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        setTitle("Radar", GlobalVariables.preferencesHelpTitle)
+        setTitle("Radar", GlobalVariables.PREFERENCES_HELP_TITLE)
         box = VBox.fromResource(this)
         addCards()
         addSwitch1()
@@ -153,7 +153,7 @@ class SettingsRadarActivity : BaseActivity() {
 
     private fun addNumberPickers() {
         val numberPickers = listOf(
-                NumberPicker(this, "Animation speed", "ANIM_INTERVAL", R.string.animation_interval_np_label, UIPreferences.animationIntervalDefault, 1, 15),
+                NumberPicker(this, "Animation speed", "ANIM_INTERVAL", R.string.animation_interval_np_label, UIPreferences.ANIMATION_INTERVAL_DEFAULT, 1, 15),
                 NumberPicker(this, "GPS update interval", "RADAR_LOCATION_UPDATE_INTERVAL", R.string.gps_update_interval_label, 10, 1, 60),
                 NumberPicker(this, "Refresh interval", "RADAR_REFRESH_INTERVAL", R.string.wxogl_refresh_interval_label, 3, 1, 15),
                 NumberPicker(this, "Detailed observations Zoom", "RADAR_OBS_EXT_ZOOM", R.string.obs_ext_zoom_label, 7, 1, 10),

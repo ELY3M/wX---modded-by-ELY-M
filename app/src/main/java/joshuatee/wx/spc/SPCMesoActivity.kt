@@ -373,7 +373,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun getHelp() {
         FutureText2(
-                { ("${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() },
+                { ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() },
                 { s ->
                     var helpText = s
                     if (helpText.contains("Page Not Found")) {

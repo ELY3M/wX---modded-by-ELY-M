@@ -81,14 +81,14 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
         number = intent.getStringArrayExtra(NO)!![0]
         if (number.contains("wat")) {
             number = number.replace("w", "")
-            url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/"
+            url = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/"
             patternStr = "[om] Watch #([0-9]*?)</a>"
             nothingPresentStr = "No active watches"
             activityLabel = "Watches"
             product = "SPCWAT$number"
             polygonType = PolygonType.WATCH
         } else {
-            url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/"
+            url = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/"
             patternStr = "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
             nothingPresentStr = "No active MCDs"
             activityLabel = "MCDs"
@@ -115,11 +115,11 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
         mcdList.forEach {
             if (number.contains("at")) {
                 val mcdNumber = To.stringPadLeftZeros(To.int(it), 4)
-                val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNumber + "_radar.gif"
+                val imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww" + mcdNumber + "_radar.gif"
                 mcdNumbers.add(mcdNumber)
                 bitmaps.add(imgUrl.getImage())
             } else {
-                val imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/products/md/mcd$it.png"
+                val imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/mcd$it.png"
                 mcdNumbers.add(it)
                 bitmaps.add(imgUrl.getImage())
             }

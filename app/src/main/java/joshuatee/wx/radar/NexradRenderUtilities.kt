@@ -31,9 +31,9 @@ import kotlin.math.*
 
 internal object NexradRenderUtilities {
 
-    private const val M_180_div_PI = (180.0 / PI).toFloat()
-    private const val M_PI_div_4 = (PI / 4.0).toFloat()
-    private const val M_PI_div_360 = (PI / 360.0).toFloat()
+    private const val M_180_DIV_PI = (180.0 / PI).toFloat()
+    private const val M_PI_DIV_4 = (PI / 4.0).toFloat()
+    private const val M_PI_DIV_360 = (PI / 360.0).toFloat()
     private const val TWICE_PI = (2.0 * PI).toFloat()
 
     fun generateIndex(indexBuff: ByteBuffer, length: Int, breakSizeF: Int) {
@@ -104,8 +104,8 @@ internal object NexradRenderUtilities {
         var test2: Float
         buffers.setToPositionZero()
         (0 until buffers.count).forEach { index ->
-            test1 = M_180_div_PI * log(tan(M_PI_div_4 + buffers.xList[index] * M_PI_div_360), E).toFloat()
-            test2 = M_180_div_PI * log(tan(M_PI_div_4 + projectionNumbers.xDbl * M_PI_div_360), E).toFloat()
+            test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + buffers.xList[index] * M_PI_DIV_360), E).toFloat()
+            test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + projectionNumbers.xDbl * M_PI_DIV_360), E).toFloat()
             pixYD = -1.0f * ((test1 - test2) * projectionNumbers.oneDegreeScaleFactorFloat) + projectionNumbers.yCenter.toFloat()
             pixXD = (-1.0f * ((buffers.yList[index] - projectionNumbers.yDbl) * projectionNumbers.oneDegreeScaleFactor) + projectionNumbers.xCenter).toFloat()
             buffers.putFloat(pixXD)
@@ -134,8 +134,8 @@ internal object NexradRenderUtilities {
         var test2: Float
         buffers.setToPositionZero()
         (0 until buffers.count).forEach { index ->
-            test1 = M_180_div_PI * log(tan(M_PI_div_4 + buffers.xList[index] * M_PI_div_360), E).toFloat()
-            test2 = M_180_div_PI * log(tan(M_PI_div_4 + projectionNumbers.xDbl * M_PI_div_360), E).toFloat()
+            test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + buffers.xList[index] * M_PI_DIV_360), E).toFloat()
+            test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + projectionNumbers.xDbl * M_PI_DIV_360), E).toFloat()
             pixYD = -1.0f * ((test1 - test2) * projectionNumbers.oneDegreeScaleFactorFloat) + projectionNumbers.yCenter.toFloat()
             pixXD = (-1.0f * ((buffers.yList[index] - projectionNumbers.yDbl) * projectionNumbers.oneDegreeScaleFactor) + projectionNumbers.xCenter).toFloat()
             buffers.putFloat(pixXD)
@@ -168,8 +168,8 @@ internal object NexradRenderUtilities {
         var bufferIndex = 0
         buffers.setToPositionZero()
         (0 until buffers.count).forEach { index ->
-            test1 = M_180_div_PI * log(tan(M_PI_div_4 + buffers.xList[index] * M_PI_div_360), E).toFloat()
-            test2 = M_180_div_PI * log(tan(M_PI_div_4 + projectionNumbers.xDbl * M_PI_div_360), E).toFloat()
+            test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + buffers.xList[index] * M_PI_DIV_360), E).toFloat()
+            test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + projectionNumbers.xDbl * M_PI_DIV_360), E).toFloat()
             pixYD = -1.0f * ((test1 - test2) * projectionNumbers.oneDegreeScaleFactorFloat) + projectionNumbers.yCenter.toFloat()
             pixXD = (-1.0 * ((buffers.yList[index] - projectionNumbers.yDbl) * projectionNumbers.oneDegreeScaleFactor) + projectionNumbers.xCenter).toFloat()
             (0 until triangleAmount).forEach {
@@ -213,8 +213,8 @@ internal object NexradRenderUtilities {
                 col[0] = Color.red(buffers.colorIntArray[iCount]).toByte()
                 col[1] = Color.green(buffers.colorIntArray[iCount]).toByte()
                 col[2] = Color.blue(buffers.colorIntArray[iCount]).toByte()
-                test1 = M_180_div_PI * log(tan(M_PI_div_4 + buffers.xList[iCount] * M_PI_div_360), E).toFloat()
-                test2 = M_180_div_PI * log(tan(M_PI_div_4 + projectionNumbers.xDbl * M_PI_div_360), E).toFloat()
+                test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + buffers.xList[iCount] * M_PI_DIV_360), E).toFloat()
+                test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + projectionNumbers.xDbl * M_PI_DIV_360), E).toFloat()
                 pixYD = -1.0f * ((test1 - test2) * projectionNumbers.oneDegreeScaleFactorFloat) + projectionNumbers.yCenter.toFloat()
                 pixXD = (-1.0 * ((buffers.yList[iCount] - projectionNumbers.yDbl) * projectionNumbers.oneDegreeScaleFactor) + projectionNumbers.xCenter).toFloat()
                 (0 until triangleAmount).forEach {
@@ -243,8 +243,8 @@ internal object NexradRenderUtilities {
 /* NOT USED by ELY M.
     fun genCircleLocdot(buffers: OglBuffers, projectionNumbers: ProjectionNumbers, latLon: LatLon) {
         buffers.setToPositionZero()
-        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + latLon.lat * M_PI_div_360), E).toFloat()
-        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + projectionNumbers.xDbl * M_PI_div_360), E).toFloat()
+        val test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + latLon.lat * M_PI_DIV_360), E).toFloat()
+        val test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + projectionNumbers.xDbl * M_PI_DIV_360), E).toFloat()
         val length = buffers.lenInit * 2.0f
         val triangleAmount = buffers.triangleCount
         var indexCount = 0
@@ -264,8 +264,8 @@ internal object NexradRenderUtilities {
     //elys mod
     fun genLocdot(buffers: OglBuffers, projectionNumbers: ProjectionNumbers, latLon: LatLon) {
         buffers.setToPositionZero()
-        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + latLon.lat * M_PI_div_360), E).toFloat()
-        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + projectionNumbers.xDbl * M_PI_div_360), E).toFloat()
+        val test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + latLon.lat * M_PI_DIV_360), E).toFloat()
+        val test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + projectionNumbers.xDbl * M_PI_DIV_360), E).toFloat()
         val length = buffers.lenInit * 2.0f
         val triangleAmount = buffers.triangleCount
         var indexCount = 0
@@ -305,8 +305,8 @@ internal object NexradRenderUtilities {
         if (count * 4 <= outBuff.limit()) {
             for (iCount in 0 until count step 2) {
                 outBuff.putFloat(iCount * 4 + 4,
-                        ((M_180_div_PI * log(tan((M_PI_div_4 + inBuff.getFloat(iCount * 4) * M_PI_div_360).toDouble()), E).toFloat() - M_180_div_PI * log(
-                                tan((M_PI_div_4 + pnXFloat * M_PI_div_360).toDouble()), E).toFloat()) * oneDegreeScaleFactor) + pnYCenter)
+                        ((M_180_DIV_PI * log(tan((M_PI_DIV_4 + inBuff.getFloat(iCount * 4) * M_PI_DIV_360).toDouble()), E).toFloat() - M_180_DIV_PI * log(
+                                tan((M_PI_DIV_4 + pnXFloat * M_PI_DIV_360).toDouble()), E).toFloat()) * oneDegreeScaleFactor) + pnYCenter)
                 outBuff.putFloat(iCount * 4, -1.0f * ((inBuff.getFloat(iCount * 4 + 4) - pnYFloat) * oneDegreeScaleFactor) + pnXCenter)
             }
         }
@@ -335,8 +335,8 @@ internal object NexradRenderUtilities {
         val pixYD: Float
         val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
         var ixCount = 0
-        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + x * M_PI_div_360), E).toFloat()
-        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+        val test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + x * M_PI_DIV_360), E).toFloat()
+        val test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + pn.xDbl * M_PI_DIV_360), E).toFloat()
         val len = 1 //buffers.lenInit * 2.0f
         val triangleAmount = 1 //buffers.triangleCount
         pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
@@ -357,8 +357,8 @@ internal object NexradRenderUtilities {
         val pixYD: Float
         val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
         var ixCount = 0
-        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + x * M_PI_div_360), E).toFloat()
-        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+        val test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + x * M_PI_DIV_360), E).toFloat()
+        val test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + pn.xDbl * M_PI_DIV_360), E).toFloat()
         val len = 0f
         val triangleAmount = 1
         pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
@@ -391,8 +391,8 @@ internal object NexradRenderUtilities {
         while (iCount < buffers.count) {
             pointX = x[iCount]
             pointY = y[iCount]
-            test1 = M_180_div_PI * log(tan(M_PI_div_4 + pointX * M_PI_div_360), E).toFloat()
-            test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+            test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + pointX * M_PI_DIV_360), E).toFloat()
+            test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + pn.xDbl * M_PI_DIV_360), E).toFloat()
             pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
             pixXD = (-((pointY - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
             (0 until triangleAmount).forEach {

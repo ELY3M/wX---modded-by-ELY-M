@@ -152,21 +152,21 @@ object NexradUtil {
         else -> 460
     }
 
-    const val radarLocationUpdateDistanceInMeters = 30.0f
-    private const val binSize54 = 2.0f
-    private const val binSize13 = 0.50f
-    private const val binSize08 = 0.295011f
-    private const val binSize16 = 0.590022f
-    private const val binSize110 = 2.0f * binSize54
+    const val RADAR_LOCATION_UPDATE_DISTANCE_IN_METERS = 30.0f
+    private const val BIN_SIZE_54 = 2.0f
+    private const val BIN_SIZE_13 = 0.50f
+    private const val BIN_SIZE_08 = 0.295011f
+    private const val BIN_SIZE_16 = 0.590022f
+    private const val BIN_SIZE_110 = 2.0f * BIN_SIZE_54
 
     fun getBinSize(prodId: Int): Float = when (prodId) {
-        134, 135 -> binSize54
-        186 -> binSize16
-        159, 161, 163, 165, 99, 170, 172 -> binSize13
-        180, 181, 182 -> binSize08
-        78, 80 -> binSize110
-        153, 154, 2153, 2154 -> binSize13
-        else -> binSize54
+        134, 135 -> BIN_SIZE_54
+        186 -> BIN_SIZE_16
+        159, 161, 163, 165, 99, 170, 172 -> BIN_SIZE_13
+        180, 181, 182 -> BIN_SIZE_08
+        78, 80 -> BIN_SIZE_110
+        153, 154, 2153, 2154 -> BIN_SIZE_13
+        else -> BIN_SIZE_54
     }
 
     fun getTdwrFromRid(rid: String): String = closestTdwrToNexrad[rid] ?: ""

@@ -96,7 +96,7 @@ class FavAddActivity : BaseActivity() {
 
     private fun itemClicked(position: Int) {
         val item = data[position]
-        var favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.initialValue)
+        var favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.INITIAL_VALUE)
         val sourceString = when (type) {
             FavoriteType.SPCMESO -> dataTokens[position]
             FavoriteType.SND -> GlobalArrays.soundingSites[position]

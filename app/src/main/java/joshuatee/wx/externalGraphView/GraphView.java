@@ -350,7 +350,7 @@ public class GraphView extends View {
      * @param canvas Canvas
      */
     protected void drawTitle(Canvas canvas) {
-        if (mTitle != null && mTitle.length() > 0) {
+        if (mTitle != null && !mTitle.isEmpty()) {
             mPaintTitle.setColor(mStyles.titleColor);
             mPaintTitle.setTextSize(mStyles.titleTextSize);
             mPaintTitle.setTextAlign(Paint.Align.CENTER);
@@ -368,7 +368,7 @@ public class GraphView extends View {
      * returned.
      */
     protected int getTitleHeight() {
-        if (mTitle != null && mTitle.length() > 0) {
+        if (mTitle != null && !mTitle.isEmpty()) {
             return (int) mPaintTitle.getTextSize();
         } else {
             return 0;
@@ -473,7 +473,7 @@ public class GraphView extends View {
     @Override
     public void computeScroll() {
         super.computeScroll();
-        mViewport.computeScroll();
+//        mViewport.computeScroll();
     }
 
     /**

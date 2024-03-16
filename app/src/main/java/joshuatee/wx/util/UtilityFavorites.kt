@@ -32,15 +32,15 @@ import joshuatee.wx.wpc.UtilityWpcText
 
 object UtilityFavorites {
 
-    const val initialValue = " : : :"
+    const val INITIAL_VALUE = " : : :"
 
     private fun checkAndCorrect(context: Context, type: FavoriteType) {
         if (UIPreferences.favorites[type]!!.contains("::")) {
             val newFav = UIPreferences.favorites[type]!!.replace(":{2,}".toRegex(), ":")
             savePref(context, newFav, type)
         }
-        if (!UIPreferences.favorites[type]!!.contains(GlobalVariables.prefSeparator)) {
-            val newFav = GlobalVariables.prefSeparator + UIPreferences.favorites[type]!!.trimStart()
+        if (!UIPreferences.favorites[type]!!.contains(GlobalVariables.PREFERENCE_SEPARATOR)) {
+            val newFav = GlobalVariables.PREFERENCE_SEPARATOR + UIPreferences.favorites[type]!!.trimStart()
             savePref(context, newFav, type)
         }
     }
@@ -79,7 +79,7 @@ object UtilityFavorites {
     }
 
     fun toggle(context: Context, value: String, star: MenuItem, type: FavoriteType) {
-        var favoriteString = Utility.readPref(context, getPrefToken(type), initialValue)
+        var favoriteString = Utility.readPref(context, getPrefToken(type), INITIAL_VALUE)
         if (favoriteString.contains(value)) {
             favoriteString = favoriteString.replace("$value:", "")
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)

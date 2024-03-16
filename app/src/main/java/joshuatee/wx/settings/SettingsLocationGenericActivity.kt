@@ -157,7 +157,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         FutureText2(
                 { Location.save(this, locationNumber, lat, lon, label) })
         { saveStatus ->
-            PopupMessage(relativeLayout, saveStatus, PopupMessage.short)
+            PopupMessage(relativeLayout, saveStatus, PopupMessage.SHORT)
             updateSubTitle()
             if (lat.startsWith("CANADA:")) {
                 settingsLocationGenericSwitches.notificationsCanada(true)

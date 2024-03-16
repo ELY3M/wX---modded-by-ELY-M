@@ -34,10 +34,10 @@ internal object UtilityWpcRainfallForecast {
     )
 
     val urls = listOf(
-            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/99ewbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/ero_d45/images/d4wbg.gif",
-            "${GlobalVariables.nwsWPCwebsitePrefix}/qpf/ero_d45/images/d5wbg.gif"
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/94ewbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/98ewbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/99ewbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/ero_d45/images/d4wbg.gif",
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/ero_d45/images/d5wbg.gif"
     )
 }

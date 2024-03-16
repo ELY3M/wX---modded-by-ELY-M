@@ -31,7 +31,7 @@ import joshuatee.wx.settings.UIPreferences
 class Card : Widget {
 
     companion object {
-        private const val padding = 2
+        private const val PADDING = 2
     }
 
     private val card: CardView
@@ -45,7 +45,7 @@ class Card : Widget {
         with(card) {
             setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
             cardElevation = UIPreferences.cardElevation
-            setContentPadding(padding, padding, padding, padding)
+            setContentPadding(PADDING, PADDING, PADDING, PADDING)
             radius = UIPreferences.cardCorners
             useCompatPadding = true
             preventCornerOverlap = true

@@ -127,7 +127,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             R.id.action_radar -> dialogueRadar.show()
             R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.homescreen_help_label))
             R.id.action_reset -> {
-                UIPreferences.homescreenFav = UIPreferences.homeScreenFavDefault
+                UIPreferences.homescreenFav = UIPreferences.HOMESCREEN_FAVORITE_DEFAULT
                 updateList()
             }
 

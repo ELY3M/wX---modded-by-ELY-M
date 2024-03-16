@@ -38,7 +38,7 @@ object UtilityNetworkIO {
         Utility.logDownload("getStringFromUrlNew $withNewLine: $url")
         val out = StringBuilder(5000)
         try {
-            val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.httpUserAgent).build()
+            val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -67,34 +67,10 @@ object UtilityNetworkIO {
     // String.getHtmlWithNewLine()
     fun getStringFromUrlWithNewLine(url: String): String = getStringFromUrlNew(url, true)
 
-    // String.getHtmlSep()
-    // output has newlines removed and a different separator added
-    fun getStringFromUrlWithSeparator(url: String): String {
-        Utility.logDownload("getStringFromUrlWithSeparator: $url")
-        val breakStr = "ABC123_456ZZ"
-        val out = StringBuilder(5000)
-        try {
-            val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.httpUserAgent).build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body!!.byteStream())
-            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-            var line: String? = bufferedReader.readLine()
-            while (line != null) {
-                out.append(line)
-                out.append(breakStr)
-                line = bufferedReader.readLine()
-            }
-            bufferedReader.close()
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return out.toString().replace(breakStr, "<br>")
-    }
-
     // String.getImage()
     fun getBitmapFromUrl(url: String): Bitmap = try {
         Utility.logDownload("getBitmapFromUrl: $url")
-        val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.httpUserAgent).build()
+        val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
         val response = MyApplication.httpClient.newCall(request).execute()
         if (url.contains("hazards_d8_14_contours.png")) {
             val options = BitmapFactory.Options()
@@ -113,7 +89,7 @@ object UtilityNetworkIO {
     // raw downloads - nexrad radar files, etc
     fun getInputStreamFromUrl(url: String): InputStream? = try {
         Utility.logDownload("getInputStreamFromUrl: $url")
-        val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.httpUserAgent).build()
+        val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
         val response = MyApplication.httpClient.newCall(request).execute()
         response.body!!.byteStream()
     } catch (e: IOException) {

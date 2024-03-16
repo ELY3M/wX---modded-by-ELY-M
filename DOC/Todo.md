@@ -2,7 +2,6 @@
 
 ## Refactor
 
-* [REF] remove usage of String.getHtmlSep() (used only in NotificationSpcFireWeather)
 * [ADD] https://developer.android.com/studio/write/lint#config
 * [REF] remove usage of legacy java.util.Calendar
 

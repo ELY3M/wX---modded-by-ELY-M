@@ -84,7 +84,7 @@ class FavRemoveActivity : BaseActivity() {
             FavoriteType.SREF -> verboseTitle = "parameters"
             FavoriteType.SPCMESO -> verboseTitle = "parameters"
         }
-        favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.initialValue)
+        favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.INITIAL_VALUE)
     }
 
     private fun updateList() {

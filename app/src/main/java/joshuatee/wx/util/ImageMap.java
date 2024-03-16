@@ -443,9 +443,10 @@ public class ImageMap extends AppCompatImageView {
         //densityFactor = getResources().getDisplayMetrics().density;
     }
 
-    /*
+    /**
      * These methods will be called when images or drawables are set
      * in the XML for the view. We handle either bitmaps or drawables
+     *
      * @see android.widget.ImageView#setImageBitmap(android.graphics.Bitmap)
      */
     @Override
@@ -493,8 +494,9 @@ public class ImageMap extends AppCompatImageView {
         textOutlinePaint.setStrokeWidth(2);
     }
 
-    /*
+    /**
      * Called by the scroller when flinging
+     *
      * @see android.view.View#computeScroll()
      */
     @Override

@@ -55,7 +55,7 @@ class SettingsUIActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_ui, null, false)
-        setTitle("User Interface", GlobalVariables.preferencesHelpTitle)
+        setTitle("User Interface", GlobalVariables.PREFERENCES_HELP_TITLE)
         box = VBox.fromResource(this)
         tilesPerRowStart = UIPreferences.tilesPerRow
         navDrawerMainScreen = UIPreferences.navDrawerMainScreen

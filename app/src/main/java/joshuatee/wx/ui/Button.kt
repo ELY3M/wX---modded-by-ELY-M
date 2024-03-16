@@ -31,10 +31,6 @@ import joshuatee.wx.util.Utility
 
 class Button(context: Context, title: String, icon: Int) : Widget {
 
-    companion object {
-        private const val padding = 15
-    }
-
     private val button = MaterialButton(context)
 
     init {
@@ -42,7 +38,7 @@ class Button(context: Context, title: String, icon: Int) : Widget {
             text = title
             setIconResource(icon)
             setBackgroundColor(Color.TRANSPARENT)
-            button.setPadding(padding)
+            button.setPadding(15)
             if (Utility.isThemeAllWhite()) {
                 iconTintMode = PorterDuff.Mode.DARKEN
             }

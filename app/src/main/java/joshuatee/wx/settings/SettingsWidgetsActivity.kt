@@ -43,7 +43,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
-        setTitle("Widgets", GlobalVariables.preferencesHelpTitle)
+        setTitle("Widgets", GlobalVariables.PREFERENCES_HELP_TITLE)
         box = VBox.fromResource(this)
         addTopSwitch()
         addSwitch()

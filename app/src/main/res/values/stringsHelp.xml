@@ -378,9 +378,9 @@ Turn on alerts for US-wide SPC Mesoscale discussions.</string>
     <string name="b_wat">
 Turn on alerts for US-wide SPC Watches.</string>
     <string name="b_swo">
-Turn on alerts for US-wide SPC convective outlooks. Days 1-3 are inspected for high, moderate, or enhanced risk.</string>
+Turn on alerts for US–wide SPC convective outlooks. Days 1–3 are inspected for high, moderate, or enhanced risk.</string>
     <string name="b_swo2">
-For convective outlooks in Days 1-3 also notify if slight risk is present.</string>
+For convective outlooks in Days 1–3 also notify if slight risk is present.</string>
     <string name="b_mpd">
 Turn on alerts for US-wide WPC MPDs.</string>
     <string name="b_nhc_epac">

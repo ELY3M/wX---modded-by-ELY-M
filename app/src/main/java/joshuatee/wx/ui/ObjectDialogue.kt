@@ -39,7 +39,7 @@ import joshuatee.wx.util.Utility
 class ObjectDialogue {
 
     companion object {
-        private const val checkedItem = -1
+        private const val CHECKED_ITEM = -1
 
         fun generic(context: Activity, list: List<String>, getContent: () -> Unit, fn: (Int) -> Unit) {
             val objectDialogue = ObjectDialogue(context, list)
@@ -69,7 +69,7 @@ class ObjectDialogue {
         arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
-                val textView = view.findViewById(android.R.id.text1) as TextView
+                val textView: TextView = view.findViewById(android.R.id.text1)
                 setupTextView(textView)
                 return view
             }
@@ -87,7 +87,7 @@ class ObjectDialogue {
         arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
-                val textView = view.findViewById(android.R.id.text1) as TextView
+                val textView: TextView = view.findViewById(android.R.id.text1)
                 setupTextView(textView)
                 return view
             }
@@ -128,11 +128,11 @@ class ObjectDialogue {
     }
 
     fun connect(listener: DialogInterface.OnClickListener) {
-        alertDialog.setSingleChoiceItems(arrayAdapter, checkedItem, listener)
+        alertDialog.setSingleChoiceItems(arrayAdapter, CHECKED_ITEM, listener)
     }
 
     fun connect2(fn: (DialogInterface, String) -> Unit) {
-        alertDialog.setSingleChoiceItems(arrayAdapter, checkedItem) { dialog, index ->
+        alertDialog.setSingleChoiceItems(arrayAdapter, CHECKED_ITEM) { dialog, index ->
             val s = arrayAdapter.getItem(index) ?: ""
             fn(dialog, s)
         }

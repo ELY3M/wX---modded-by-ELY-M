@@ -157,10 +157,10 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
     private fun getTypeName(): String = type.toString().replace("PolygonType.", "")
 
     fun getUrl(): String = when (type) {
-        PolygonType.MCD -> GlobalVariables.nwsSPCwebsitePrefix + "/products/md/"
-        PolygonType.WATCH -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
-        PolygonType.WATCH_TORNADO -> GlobalVariables.nwsSPCwebsitePrefix + "/products/watch/"
-        PolygonType.MPD -> GlobalVariables.nwsWPCwebsitePrefix + "/metwatch/metwatch_mpd.php"
+        PolygonType.MCD -> GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/md/"
+        PolygonType.WATCH -> GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/watch/"
+        PolygonType.WATCH_TORNADO -> GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/watch/"
+        PolygonType.MPD -> GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/metwatch/metwatch_mpd.php"
         else -> ""
     }
 
@@ -220,7 +220,7 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
         }
 
         fun getLatLonWatch(number: String): String =
-                UtilityString.getHtmlAndParseLastMatch("${GlobalVariables.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
+                UtilityString.getHtmlAndParseLastMatch("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/wou$number.html", RegExp.pre2Pattern)
 
     }
 }

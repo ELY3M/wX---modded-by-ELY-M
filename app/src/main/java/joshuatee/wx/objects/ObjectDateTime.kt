@@ -113,7 +113,7 @@ class ObjectDateTime() {
         // is t1 greater then t2 by m minutes
         fun timeDifference(t1: LocalDateTime, t2: LocalDateTime, m: Int): Boolean = Duration.between(t1, t2).toMinutes() > m * -1
 
-        fun offsetFromUtcInSeconds() = ZonedDateTime.now().offset.totalSeconds
+//        fun offsetFromUtcInSeconds() = ZonedDateTime.now().offset.totalSeconds
 
         //
         // Misc

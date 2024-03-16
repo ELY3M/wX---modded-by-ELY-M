@@ -117,7 +117,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun showAlreadyThere(product: String, dialog: DialogInterface) {
         dialog.dismiss()
-        PopupMessage(recyclerView.get(), "$product already in playlist", PopupMessage.short)
+        PopupMessage(recyclerView.get(), "$product already in playlist", PopupMessage.SHORT)
     }
 
     private fun setupRecyclerView() {

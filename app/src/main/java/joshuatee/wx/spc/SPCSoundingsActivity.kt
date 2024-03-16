@@ -114,8 +114,8 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun downloadSpcPlot(): Bitmap {
-        imgUrl = "${GlobalVariables.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
-        val html = "${GlobalVariables.nwsSPCwebsitePrefix}/obswx/maps/".getHtml()
+        imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/obswx/maps/$upperAir"
+        val html = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/obswx/maps/".getHtml()
         val date = html.parse("/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
         return UtilityImg.getBitmapAddWhiteBackground(this, imgUrl + "_" + date + ".gif")
     }
@@ -138,7 +138,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
             R.id.action_sfc -> setPlotAndGet("sfc")
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_fav -> toggleFavorite()
-            R.id.action_spc_help -> Route.webView(this, "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", office)
+            R.id.action_spc_help -> Route.webView(this, "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/help/begin.html", office)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

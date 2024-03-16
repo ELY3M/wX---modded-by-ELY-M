@@ -58,13 +58,13 @@ class CurrentConditions {
 
     private fun process(context: Context, latLon: LatLon, index: Int = 0) {
         val objectMetar = ObjectMetar(context, latLon, index)
-        data = objectMetar.temperature + GlobalVariables.degreeSymbol
+        data = objectMetar.temperature + GlobalVariables.DEGREE_SYMBOL
         if (objectMetar.windChill != "NA") {
-            data += "(${objectMetar.windChill}${GlobalVariables.degreeSymbol})"
+            data += "(${objectMetar.windChill}${GlobalVariables.DEGREE_SYMBOL})"
         } else if (objectMetar.heatIndex != "NA" && objectMetar.heatIndex != objectMetar.temperature) {
-            data += "(${objectMetar.heatIndex}${GlobalVariables.degreeSymbol})"
+            data += "(${objectMetar.heatIndex}${GlobalVariables.DEGREE_SYMBOL})"
         }
-        data += " / ${objectMetar.dewPoint}${GlobalVariables.degreeSymbol}(${objectMetar.relativeHumidity}%) - "
+        data += " / ${objectMetar.dewPoint}${GlobalVariables.DEGREE_SYMBOL}(${objectMetar.relativeHumidity}%) - "
         data += "${objectMetar.seaLevelPressure} - ${objectMetar.windDirection} ${objectMetar.windSpeed}"
         if (objectMetar.windGust != "") {
             data += " G "

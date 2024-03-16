@@ -45,7 +45,7 @@ object UtilityShare {
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         }
         val file = File(dir, filename)
-        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.PACKAGE_NAME}.fileprovider", file)
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
@@ -110,7 +110,7 @@ object UtilityShare {
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         }
         val file = File(dir, "img1.png")
-        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.PACKAGE_NAME}.fileprovider", file)
         try {
             val fos = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)

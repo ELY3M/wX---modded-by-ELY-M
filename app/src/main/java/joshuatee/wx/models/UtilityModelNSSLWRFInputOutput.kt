@@ -33,7 +33,7 @@ import joshuatee.wx.parse
 
 internal object UtilityModelNsslWrfInputOutput {
 
-    private const val baseUrl = "https://cams.nssl.noaa.gov"
+    private const val BASE_URL = "https://cams.nssl.noaa.gov"
     fun runTime(om: ObjectModel): RunTimeData {
         val runData = RunTimeData()
         var modelCode = ""
@@ -54,7 +54,7 @@ internal object UtilityModelNsslWrfInputOutput {
                 modelCode = "fv3_nssl"
             }
         }
-        val htmlRunStatus = ("$baseUrl/?model=$modelCode").getHtml()
+        val htmlRunStatus = ("$BASE_URL/?model=$modelCode").getHtml()
         val html = htmlRunStatus.parse("\\{model: \"$modelCode\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
         val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
         val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
@@ -86,7 +86,7 @@ internal object UtilityModelNsslWrfInputOutput {
             val month = om.run.substring(4, 6)
             val day = om.run.substring(6, 8)
             val hour = om.run.substring(8, 10)
-            val url = baseUrl + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" + day + "/" + hour + "00/f" +
+            val url = BASE_URL + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" + day + "/" + hour + "00/f" +
                     time + "00/" + om.currentParam + ".spc_" + sector.lowercase(Locale.US) + ".f" + time + "00.png"
             val baseLayerImage = baseLayerUrl.getImage()
             val productLayerImage = url.getImage()

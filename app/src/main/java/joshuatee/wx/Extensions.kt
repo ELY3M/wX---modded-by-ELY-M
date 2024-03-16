@@ -74,8 +74,6 @@ fun String.getHtmlWithNewLine() = UtilityNetworkIO.getStringFromUrlWithNewLine(t
 
 fun String.getNwsHtml() = UtilityDownloadNws.getStringFromUrlBaseNoAcceptHeader1(this)
 
-fun String.getHtmlSep() = UtilityNetworkIO.getStringFromUrlWithSeparator(this)
-
 fun String.parseColumnAll(pattern: Pattern) = UtilityString.parseColumnAll(this, pattern)
 
 fun String.parseLastMatch(pattern: Pattern) = UtilityString.parseLastMatch(this, pattern)

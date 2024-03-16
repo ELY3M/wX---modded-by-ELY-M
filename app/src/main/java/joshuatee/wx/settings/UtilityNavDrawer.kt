@@ -152,12 +152,12 @@ internal object UtilityNavDrawer {
     // This is referenced in ObjectSettingsCheckBox so that they are all true by default
     fun getPrefVar(token: String): String = "XZ_NAV_DRAWER_$token"
 
-    private const val navDrawerTokenPref = "NAV_DRAWER_TOKEN_LIST"
+    private const val NAV_DRAWER_TOKEN_PREF = "NAV_DRAWER_TOKEN_LIST"
 
-    fun getNavDrawerTokenList(context: Context): String = Utility.readPref(context, navDrawerTokenPref, "")
+    fun getNavDrawerTokenList(context: Context): String = Utility.readPref(context, NAV_DRAWER_TOKEN_PREF, "")
 
     private fun setNavDrawerTokenList(context: Context, value: String) {
-        Utility.writePref(context, navDrawerTokenPref, value)
+        Utility.writePref(context, NAV_DRAWER_TOKEN_PREF, value)
         Utility.commitPref(context)
     }
 

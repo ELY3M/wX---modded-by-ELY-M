@@ -83,7 +83,7 @@ internal object NotificationSwo {
                         )
                         objectNotification.send(cancelString)
                     }
-                    notificationUrls += cancelString + NotificationPreferences.notificationStrSep
+                    notificationUrls += cancelString + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
                 }
             }
         }
@@ -113,7 +113,7 @@ internal object NotificationSwo {
         var notificationUrls = ""
         val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
         (1..3).forEach { day ->
-            val urlBlob = "${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
+            val urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
             val html = urlBlob.getHtmlWithNewLine()
             val validTime = html.parseAcrossLines("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
             val htmlBlob = html.parseAcrossLines("... CATEGORICAL ...(.*?&)&")
@@ -193,7 +193,7 @@ internal object NotificationSwo {
             )
             objectNotification.send(cancelString)
         }
-        return cancelString + NotificationPreferences.notificationStrSep
+        return cancelString + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
     }
 
     //
@@ -202,8 +202,8 @@ internal object NotificationSwo {
     fun sendD48Location(context: Context): String {
         var notificationUrls = ""
         val threatList = listOf("SPC30percent", "SPC15percent")
-        var urlBlob = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/day4-8/".getHtml().parse("CLICK TO GET <a href=.(.*?txt).>WUUS48 PTSD48</a>")
-        urlBlob = "${GlobalVariables.nwsSPCwebsitePrefix}$urlBlob"
+        var urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/exper/day4-8/".getHtml().parse("CLICK TO GET <a href=.(.*?txt).>WUUS48 PTSD48</a>")
+        urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}$urlBlob"
         var html = urlBlob.getHtmlWithNewLine()
         val validTime = html.parseAcrossLines("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
         html = html.replace(GlobalVariables.newline, " ").replace("0.30", "SPC30percent").replace("0.15", "SPC15percent")

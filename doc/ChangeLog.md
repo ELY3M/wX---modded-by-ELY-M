@@ -2,9 +2,59 @@
 
 # Developer ChangeLog
 
-## 55870 2024_01_24
+## 55874 2024_03_09
 
+*
+
+## 55873 2024_03_09
+
+* [FIX] (thanks to "ski warz" for the suggestion) despite alpha tag update okhttp, "safe to run in
+  production" and works better with ipv6 hopefully fix GOES slowness
+  with [https://www.star.nesdis.noaa.gov/goes/index.php](https://www.star.nesdis.noaa.gov/goes/index.php):
+  [https://square.github.io/okhttp/changelogs/changelog/](https://square.github.io/okhttp/changelogs/changelog/)
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:4.12.0"
++    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.12"
+```
+
+* [FIX] (thanks to "ski warz" for noticing and providing fix) "Aviation only AFD" was not working
+
+## 55872 2024_03_05
+
+* NDK update
+
+```
+-    def ndkVersion = "android-ndk-r26b"
++    def ndkVersion = "android-ndk-r26c"
+```
+
+## 55871 2024_03_02
+
+* [REF] lint - constant renames to upper (part1)
+* [REF] deprecate String.getHtmlSep() (UtilityNetworkIO.getStringFromUrlWithSeparator) used in
+  NotificationSpcFireWeather.kt
+
+## 55870 2024_03_01
+
+* [REF] minor lint
 * [ADD] tool upgrade
+  2024_03_01:
+
+```
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
+
+-        classpath 'com.android.tools.build:gradle:8.2.2'
++        classpath 'com.android.tools.build:gradle:8.3.0'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-all.zip
+```
+
+2024_01_24:
 
 ```
 -        classpath 'com.android.tools.build:gradle:8.2.1'

@@ -14,7 +14,7 @@ internal object OpenGLShaderUniform {
      * This shader is for rendering a colored primitive.
      *
      */
-    const val vs_SolidColorUniform =
+    const val VS_SOLID_COLOR_UNIFORM =
             "uniform    mat4        uMVPMatrix;" +
                     "attribute  vec4        vPosition;" +
                     "attribute  vec4        a_Color;" + // was attribute
@@ -25,7 +25,7 @@ internal object OpenGLShaderUniform {
                     "  v_Color = a_Color;" +
                     "}"
 
-    const val fs_SolidColorUniform =
+    const val FS_SOLID_COLOR_UNIFORM =
             "precision mediump float;" +
                     "uniform vec4 v_Color;" +
                     "void main() {" +

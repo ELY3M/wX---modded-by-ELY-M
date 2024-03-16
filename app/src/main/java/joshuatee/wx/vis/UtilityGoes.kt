@@ -57,7 +57,7 @@ object UtilityGoes {
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/cgl/12/latest.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES17/ABI/CONUS/GEOCOLOR/1250x750.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/1250x750.jpg
-        var url = GlobalVariables.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
+        var url = GlobalVariables.GOES16_URL + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
         if (product == "GLM") {
             url = url.replace("ABI", "GLM")
                     .replace("$sectorLocal/GLM", "$sectorLocal/EXTENT3")
@@ -77,9 +77,9 @@ object UtilityGoes {
         val productLocal = product.replace("GLM", "EXTENT3")
         val url = when (sector) {
             // https://www.star.nesdis.noaa.gov/GOES/fulldisk_band.php?sat=G17&band=GEOCOLOR&length=12
-            "FD", "FD-G17" -> GlobalVariables.goes16AnimUrl + "/GOES/fulldisk_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
-            "CONUS", "CONUS-G17" -> GlobalVariables.goes16AnimUrl + "/GOES/conus_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
-            else -> GlobalVariables.goes16AnimUrl + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$productLocal&length=$frameCountString"
+            "FD", "FD-G17" -> GlobalVariables.GOES16_ANIM_URL + "/GOES/fulldisk_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
+            "CONUS", "CONUS-G17" -> GlobalVariables.GOES16_ANIM_URL + "/GOES/conus_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
+            else -> GlobalVariables.GOES16_ANIM_URL + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$productLocal&length=$frameCountString"
         }
         val html = url.getHtml()
                 .replace("\n", "")

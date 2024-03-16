@@ -238,7 +238,7 @@ class NexradUI(
                     locationManager?.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             (RadarPreferences.locationUpdateInterval * 1000).toLong(),
-                            NexradUtil.radarLocationUpdateDistanceInMeters,
+                            NexradUtil.RADAR_LOCATION_UPDATE_DISTANCE_IN_METERS,
                             locationListener
                     )
                 }

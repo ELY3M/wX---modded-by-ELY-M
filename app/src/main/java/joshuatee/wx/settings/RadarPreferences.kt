@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -85,7 +85,7 @@ object RadarPreferences {
     var tvsSize = 0
     var defaultLinesize = 0
     var warnLineSize = 5.0f
-    const val warnLineSizeDefault = 5
+    const val WARNING_LINE_SIZE_DEFAULT = 5
     var watchMcdLineSize = 4.0f
     var watchMcdLineSizeDefault = 4
     var iconsLevel2 = false
@@ -193,7 +193,7 @@ object RadarPreferences {
         hiTextSize = getInitialPreference("RADAR_HI_TEXT_SIZE", 1.0f)
         tvsSize = getInitialPreference("RADAR_TVS_SIZE", 75)
         defaultLinesize = getInitialPreference("RADAR_DEFAULT_LINESIZE", 1)
-        warnLineSize = getInitialPreference("RADAR_WARN_LINESIZE", warnLineSizeDefault).toFloat()
+        warnLineSize = getInitialPreference("RADAR_WARN_LINESIZE", WARNING_LINE_SIZE_DEFAULT).toFloat()
         watchMcdLineSize = getInitialPreference("RADAR_WATMCD_LINESIZE", watchMcdLineSizeDefault).toFloat()
         gpsCircleLineSize = getInitialPreference("RADAR_GPSCIRCLE_LINESIZE", 5)
         stiLineSize = getInitialPreference("RADAR_STI_LINESIZE", 3)

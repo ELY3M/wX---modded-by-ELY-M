@@ -41,12 +41,12 @@ class NhcRegionSummary(region: NhcOceanEnum) {
                         "ATL: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_atl_7d0.png"
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_0d0.png",
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_2d0.png",
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_7d0.png"
                 )
                 replaceString = "NHC Atlantic Wallet"
-                baseUrl = "${GlobalVariables.nwsNhcWebsitePrefix}/nhc_at"
+                baseUrl = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/nhc_at"
             }
 
             NhcOceanEnum.EPAC -> {
@@ -56,12 +56,12 @@ class NhcRegionSummary(region: NhcOceanEnum) {
                         "EPAC: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_pac_7d0.png"
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_0d0.png",
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_2d0.png",
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_7d0.png"
                 )
                 replaceString = "NHC Eastern Pacific Wallet"
-                baseUrl = "${GlobalVariables.nwsNhcWebsitePrefix}/nhc_ep"
+                baseUrl = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/nhc_ep"
             }
 
             NhcOceanEnum.CPAC -> {
@@ -71,9 +71,9 @@ class NhcRegionSummary(region: NhcOceanEnum) {
                         "CPAC: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_0d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png",
-                        "${GlobalVariables.nwsNhcWebsitePrefix}/xgtwo/two_cpac_7d0.png"
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_0d0.png",
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_2d0.png",
+                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_7d0.png"
                 )
                 replaceString = ""
                 baseUrl = ""

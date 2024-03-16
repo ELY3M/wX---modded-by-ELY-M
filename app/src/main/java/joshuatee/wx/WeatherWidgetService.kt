@@ -72,7 +72,7 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
             if (list.size > 1) {
                 t1 = list[0].replace(":", " ") + " (" +
                         UtilityLocationFragment.extractTemperature(list[1]) +
-                        GlobalVariables.degreeSymbol +
+                        GlobalVariables.DEGREE_SYMBOL +
                         UtilityLocationFragment.extractWindDirection(list[1].substring(1)) +
                         UtilityLocationFragment.extract7DayMetrics(list[1].substring(1)) + ")"
                 t2 = list[1]

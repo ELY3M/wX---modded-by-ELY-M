@@ -45,7 +45,7 @@ object UtilityTts {
 
     //    private const val TEXT_OLD = ""
     var mediaPlayer: MediaPlayer? = null
-    private const val FILENAME = "/${GlobalVariables.packageNameAsString}_tts.wav"
+    private const val FILENAME = "/${GlobalVariables.PACKAGE_NAME}_tts.wav"
     private var mpInit = false
     private var fileCount = 0
     private var currentFile = 0
@@ -171,7 +171,7 @@ object UtilityTts {
         val txt = UtilityTtsTranslations.translateAbbreviation(txtF)
         val myHashRender = HashMap<String, String>()
         val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-        val wxDir = File(musicDir, GlobalVariables.packageNameAsString)
+        val wxDir = File(musicDir, GlobalVariables.PACKAGE_NAME)
         if (!wxDir.exists() && !wxDir.mkdirs()) {
             return
         }
@@ -202,7 +202,7 @@ object UtilityTts {
 
     private fun playMediaPlayerFile(context: Context, fileNum: Int) {
         val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-        val wxDir = File(musicDir, GlobalVariables.packageNameAsString)
+        val wxDir = File(musicDir, GlobalVariables.PACKAGE_NAME)
         if (!wxDir.exists() && !wxDir.mkdirs()) {
             return
         }

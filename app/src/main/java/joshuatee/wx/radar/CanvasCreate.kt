@@ -38,9 +38,9 @@ import joshuatee.wx.settings.RadarPreferences
 
 object CanvasCreate {
 
-    private const val imageWidth = 1000
-    private const val imageHeight = 1000
-    private const val citySize = 18
+    private const val IMAGE_WIDTH = 1000
+    private const val IMAGE_HEIGHT = 1000
+    private const val CITY_SIZE = 18
 
     fun layeredImage(context: Context, radarSiteArg: String, product: String): Bitmap {
         var radarSite = radarSiteArg
@@ -67,7 +67,7 @@ object CanvasCreate {
         val layers = mutableListOf<Drawable>()
         val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
         try {
-            var bitmapCanvas = Bitmap.createBitmap(imageWidth, imageHeight, Config.ARGB_8888)
+            var bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
             if (!product.startsWith("L2")) {
                 // TODO FIXME method to detect 4bit project?
                 if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {
@@ -78,7 +78,7 @@ object CanvasCreate {
             } else {
                 CanvasLevel2.decodeAndPlot(context, bitmapCanvas, product)
             }
-            CanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, citySize)
+            CanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, CITY_SIZE)
             bitmapCanvas = UtilityImg.drawText(context, bitmapCanvas)
             layers.add(colorDrawable)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
@@ -99,7 +99,7 @@ object CanvasCreate {
         }
         val layers = mutableListOf<Drawable>()
         val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
-        var bitmapCanvas = Bitmap.createBitmap(imageWidth, imageHeight, Config.ARGB_8888)
+        var bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
         if (!product.startsWith("L2")) {
             // TODO FIXME method to detect 4bit project?
             if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {
@@ -110,7 +110,7 @@ object CanvasCreate {
         } else {
             CanvasLevel2.decodeAndPlot(context, bitmapCanvas, product)
         }
-        CanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, citySize)
+        CanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, CITY_SIZE)
         bitmapCanvas = UtilityImg.drawText(context, bitmapCanvas)
         layers.add(colorDrawable)
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
@@ -128,7 +128,7 @@ object CanvasCreate {
             ColorDrawable(Color.WHITE)
         }
         try {
-            val bitmapCanvas = Bitmap.createBitmap(imageWidth, imageHeight, Config.ARGB_8888)
+            val bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
             CanvasRadial8Bit.decodeAndPlot(context, bitmapCanvas, fileName, NexradUtil.productCodeStringToCode[product]
                     ?: "N0Q")
             layers.add(colorDrawable)

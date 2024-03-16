@@ -34,7 +34,7 @@ object UtilityString {
     fun extractPre(html: String): String {
         val separator = "ABC123E"
         val htmlOneLine = html.replace(GlobalVariables.newline, separator)
-        val parsedText = htmlOneLine.parse(GlobalVariables.pre2Pattern)
+        val parsedText = htmlOneLine.parse(GlobalVariables.PRE2_PATTERN)
         return parsedText.replace(separator, GlobalVariables.newline)
     }
 

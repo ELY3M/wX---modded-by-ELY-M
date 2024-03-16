@@ -36,18 +36,18 @@ import joshuatee.wx.radar.Warnings
 
 object UtilitySpc {
 
-    fun getStormReportsTodayUrl() = "${GlobalVariables.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
+    fun getStormReportsTodayUrl() = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/climo/reports/" + "today" + ".gif"
 
     internal val thunderStormOutlookImages: List<Bitmap>
         get() {
-            val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
+            val url = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/exper/enhtstm/"
             val html = url.getHtml()
             val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
             return dates.map { "${url}imgs/enh_$it.gif".getImage() }
         }
 
     internal fun thunderStormOutlookUrls(): List<String> {
-        val url = "${GlobalVariables.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
+        val url = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/exper/enhtstm/"
         val html = url.getHtml()
         val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
         return dates.map { "${url}imgs/enh_$it.gif" }

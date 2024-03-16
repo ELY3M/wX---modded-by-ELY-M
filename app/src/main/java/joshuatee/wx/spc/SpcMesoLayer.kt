@@ -57,7 +57,7 @@ class SpcMesoLayer(val context: Context, val type: SpcMesoLayerType, objectToolb
         getFunction()
     }
 
-    fun getUrl(sector: String) = "${GlobalVariables.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/${urlToken[type]}/${urlToken[type]}.gif"
+    fun getUrl(sector: String) = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s$sector/${urlToken[type]}/${urlToken[type]}.gif"
 
     companion object {
         val prefTokens = mapOf(

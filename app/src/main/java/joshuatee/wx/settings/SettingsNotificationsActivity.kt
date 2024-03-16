@@ -56,7 +56,7 @@ class SettingsNotificationsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        setTitle("Notifications", GlobalVariables.preferencesHelpTitle)
+        setTitle("Notifications", GlobalVariables.PREFERENCES_HELP_TITLE)
         box = VBox.fromResource(this)
         addCards()
         addSwitch()

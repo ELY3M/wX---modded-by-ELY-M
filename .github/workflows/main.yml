@@ -1,0 +1,86 @@
+name: Build APK and publish
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+  workflow_call:
+
+permissions: write-all
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-home-cache-cleanup: true
+          
+      - name: Build APK
+        run: ./gradlew assembleRelease
+        
+      - name: current dir
+        run: | 
+            pwd    
+
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+         BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+         echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+         echo Last build tool version is: $BUILD_TOOL_VERSION
+       
+      - name: Sign APK
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/release/
+          signingKeyBase64: ${{ secrets.KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.PASSWORD }}
+          keyPassword: ${{ secrets.PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+        
+      - name: Output Signed APK
+        run:  echo 'Signed APK is ${{ steps.sign_app.outputs.signedReleaseFile }}' 
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4            
+        id: upload
+        with:
+          name: release-apk
+          path: app/build/outputs/apk/**/*.apk
+        
+      - name: Output artifact ID
+        run:  echo 'Artifact ID is ${{ steps.upload.outputs.artifact-id }}'        
+          
+      - name: Output Artifact URL
+        run:  echo 'Artifact URL is ${{ steps.upload.outputs.artifact-url }}'
+          
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.run_number }}
+          prerelease: false
+          draft: false
+          body: ${{ github.event.head_commit.message }}
+          files: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          name: ${{ github.run_number }} 
+
+          
+        
+        
+      
