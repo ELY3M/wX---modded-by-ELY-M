@@ -84,7 +84,7 @@ object UIPreferences {
     var textSmallThemeColor = 0
     var themeIsWhite = false //elys mod
     var hideTopToolbar = false
-    var mainScreenRadarFab = true
+    var mainScreenRadarFab = false //elys mod - I hate fab buttons
     var locfragDontShowIcons = false
     var nwsIconSizeDefault = 20
     var nwsIconSize = 0
