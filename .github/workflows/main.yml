@@ -22,7 +22,7 @@ jobs:
           submodules: true
           
       - name: Getting Version Name
-         run: |
+        run: |
           VERSIONNAME=$(grep -Po 'android:versionName="(.*)"' app/src/main/AndroidManifest.xml | sed -r 's/.*android:versionName="([^ ]+)".*/\1/')
           echo "VERSIONNAME=$VERSIONNAME" >> $GITHUB_ENV
           echo VERSIONNAME is: $VERSIONNAME
