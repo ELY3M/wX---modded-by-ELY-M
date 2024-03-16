@@ -147,7 +147,7 @@ object UIPreferences {
         textSizeNormal = UtilityUI.spToPx(normalTextSize, context)
         textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, context)
         locfragDontShowIcons = Utility.readPref(context, "UI_LOCFRAG_NO_ICONS", "false").startsWith("t")
-        mainScreenRadarFab = Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "true").startsWith("t")
+        mainScreenRadarFab = Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t") //elys mods - I hate fab buttons
         homescreenTextLength = Utility.readPrefInt(context, "HOMESCREEN_TEXT_LENGTH_PREF", 500)
         refreshLocMin = Utility.readPrefInt(context, "REFRESH_LOC_MIN", 10)
         translateText = Utility.readPref(context, "TRANSLATE_TEXT", "false").startsWith("t")
