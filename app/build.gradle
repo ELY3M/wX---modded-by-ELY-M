@@ -49,12 +49,14 @@ android {
                 '-C', file('src/main/jni').absolutePath,
                 'clean'
     }
-*/
+
     clean.dependsOn 'cleanNative'
 
     tasks.withType(JavaCompile).configureEach {
         compileTask -> compileTask.dependsOn buildNative
     }
+
+*/
 
     // Flag to tell aapt to keep the attribute ids around - (2016_02_25 add 23.2 )
     //aaptOptions {
