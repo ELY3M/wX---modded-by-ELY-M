@@ -46,6 +46,7 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.NumberPicker
 import joshuatee.wx.ui.Switch
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
 
@@ -174,10 +175,10 @@ class SettingsNotificationsActivity : BaseActivity() {
             }
         }
         var theme = R.style.PickerDialogTheme
-        if (Utility.isThemeAllBlack()) {
+        if (UtilityUI.isThemeAllBlack()) {
             theme = R.style.PickerDialogThemeDark
         }
-        val alertDialog = if (Utility.isThemeMaterial3()) {
+        val alertDialog = if (UtilityUI.isThemeMaterial3()) {
             MaterialAlertDialogBuilder(this)
         } else {
             AlertDialog.Builder(this, theme)

@@ -272,7 +272,13 @@ class NexradUI(
             }
         }
 
-        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+        @Deprecated(
+                message = "This method was deprecated in API level 29. This callback will never be invoked on Android Q and above.",
+                replaceWith = ReplaceWith("nothing"),
+                level = DeprecationLevel.WARNING
+        )
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
+        }
 
         override fun onProviderEnabled(provider: String) {}
 

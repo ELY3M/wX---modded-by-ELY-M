@@ -42,6 +42,7 @@ import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.util.UtilityUS
 import joshuatee.wx.vis.GoesActivity
 import java.util.regex.Pattern
 
@@ -98,7 +99,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         remoteViews.setTextViewText(R.id.widget_time, "Updated: " + ObjectDateTime.getDateAsString("h:mm a")) // "%k:%M:%S"
         UtilityWidget.setupIntent(context, remoteViews, SpcSoundingsActivity::class.java, R.id.cc, SpcSoundingsActivity.URL, arrayOf(wfo, ""), actionCc)
         UtilityWidget.setupIntent(context, remoteViews, TextScreenActivity::class.java, R.id.forecast, TextScreenActivity.URL, arrayOf(sdExt, locLabel), actionSd)
-        var hazardsExt = Utility.getHazards(hazardRaw)
+        var hazardsExt = UtilityUS.getHazardsCCLegacy(hazardRaw)
         hazardsExt = hazardsExt.replace("<hr /><br />", "")
         UtilityWidget.setupIntent(context, remoteViews, TextScreenActivity::class.java, R.id.hazard, TextScreenActivity.URL, arrayOf(hazardsExt, "Local Hazards"), actionHazard)
         UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.b_radar, WXGLRadarActivity.RID, arrayOf(radarSite), actionRadar)

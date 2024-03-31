@@ -52,7 +52,7 @@ object UtilityDownloadNws {
 
     // used for CapAlert (XML)
     private fun getStringFromUrlXml(url: String): String {
-        Utility.logDownload("getStringFromURLBase: $url")
+        UtilityLog.download("getStringFromURLBase: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
@@ -77,7 +77,7 @@ object UtilityDownloadNws {
 
     // target for String.getNwsHtml()
     fun getStringFromUrlBaseNoAcceptHeader1(url: String): String {
-        Utility.logDownload("getStringFromUrlBaseNoAcceptHeader1 getNwsHtml: $url")
+        UtilityLog.download("getStringFromUrlBaseNoAcceptHeader1 getNwsHtml: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
@@ -102,7 +102,7 @@ object UtilityDownloadNws {
     // PolygonWarning.kt
     // FYI - this is probably not needed and could use getStringFromUrlBaseNoAcceptHeader1 instead
     fun getStringFromUrlBaseNoHeader1(url: String): String {
-        Utility.logDownload("getStringFromUrlBaseNoHeader1: $url")
+        UtilityLog.download("getStringFromUrlBaseNoHeader1: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
@@ -127,7 +127,7 @@ object UtilityDownloadNws {
 
     // used by CapAlert.kt
     fun getStringFromUrlSep(url: String): String {
-        Utility.logDownload("getStringFromUrlSep: $url")
+        UtilityLog.download("getStringFromUrlSep: $url")
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {

@@ -34,7 +34,7 @@ import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import joshuatee.wx.ui.Text
-import joshuatee.wx.util.Utility
+import joshuatee.wx.ui.UtilityUI
 
 class BottomSheetFragment(
         private val actContext: Context,
@@ -54,12 +54,12 @@ class BottomSheetFragment(
         fragmentView = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
         label = fragmentView!!.findViewById(R.id.label)
         when {
-            Utility.isThemeAllWhite() -> {
+            UtilityUI.isThemeAllWhite() -> {
                 label.setTextColor(Color.BLACK)
                 label.setBackgroundColor(Color.LTGRAY)
             }
 
-            Utility.isThemeAllBlack() -> {
+            UtilityUI.isThemeAllBlack() -> {
                 label.setTextColor(Color.WHITE)
                 label.setBackgroundColor(Color.BLACK)
             }
@@ -75,7 +75,7 @@ class BottomSheetFragment(
             textViewList.add(item)
             item.setPadding(60, 30, 0, 30)
             item.gravity = Gravity.CENTER_HORIZONTAL
-            if (Utility.isThemeAllBlack()) {
+            if (UtilityUI.isThemeAllBlack()) {
                 item.color = Color.WHITE
                 item.setBackgroundColor(Color.BLACK)
             } else {

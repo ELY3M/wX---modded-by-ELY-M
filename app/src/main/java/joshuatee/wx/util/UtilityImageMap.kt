@@ -98,7 +98,7 @@ object UtilityImageMap {
         R.id.LZK -> "LZK"
         R.id.POE -> "POE"
         R.id.LCH -> "LCH"
-        R.id.LIX -> "LIX"
+        R.id.HDC -> "HDC"
         R.id.SHV -> "SHV"
         R.id.AMA -> "AMA"
         R.id.EWX -> "EWX"

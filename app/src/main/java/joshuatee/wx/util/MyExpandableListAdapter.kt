@@ -10,6 +10,7 @@ import android.widget.CheckedTextView
 import android.widget.LinearLayout
 import android.widget.TextView
 import joshuatee.wx.R
+import joshuatee.wx.ui.UtilityUI
 
 class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Group>) : BaseExpandableListAdapter() {
 
@@ -28,11 +29,11 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
         val text: TextView = convertView!!.findViewById(R.id.textView1)
         val linearLayout: LinearLayout = convertView.findViewById(R.id.linearLayout)
         text.text = children
-        if (Utility.isThemeAllWhite()) {
+        if (UtilityUI.isThemeAllWhite()) {
             linearLayout.setBackgroundColor(Color.WHITE)
             text.setBackgroundColor(Color.WHITE)
             text.setTextColor(Color.BLACK)
-        } else if (Utility.isThemeAllBlack()) {
+        } else if (UtilityUI.isThemeAllBlack()) {
             linearLayout.setBackgroundColor(Color.BLACK)
             text.setBackgroundColor(Color.BLACK)
             text.setTextColor(Color.WHITE)
@@ -56,10 +57,10 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
         val group = getGroup(groupPosition) as Group
         (convertView as CheckedTextView).text = group.string
         convertView.isChecked = isExpanded
-        if (Utility.isThemeAllWhite()) {
+        if (UtilityUI.isThemeAllWhite()) {
             convertView.setBackgroundColor(Color.WHITE)
             convertView.setTextColor(Color.BLACK)
-        } else if (Utility.isThemeAllBlack()) {
+        } else if (UtilityUI.isThemeAllBlack()) {
             convertView.setBackgroundColor(Color.BLACK)
             convertView.setTextColor(Color.WHITE)
         }

@@ -16,4 +16,8 @@ object UtilityLog {
     fun handleException(exception: Exception): Unit = exception.printStackTrace()
 
     fun handleException(exception: OutOfMemoryError): Unit = exception.printStackTrace()
+
+    fun download(s: String) {
+        d("WXDOWNLOAD", s)
+    }
 }

@@ -62,7 +62,8 @@ internal object UtilityModelNcepInterface {
             "SOUTH-PAC",
             "ARTIC",
             "INDIA",
-            "US-SAMOA"
+            "US-SAMOA",
+            "PAC-REGION"
     )
 
     val sectorsNam = listOf(
@@ -704,7 +705,16 @@ internal object UtilityModelNcepInterface {
             "850_temp",
             "850_vort_ht",
             "850_wnd",
-            "925_wnd"
+            "925_wnd",
+            "10th_percentile_10m_wnd",
+            "50th_percentile_10m_wnd",
+            "90th_percentile_10m_wnd",
+            "extreme_index_10m_wnd",
+            "10th_percentile_2m_temp",
+            "50th_percentile_2m_temp",
+            "90th_percentile_2m_temp",
+            "extreme_index_2m_temp",
+            "extreme_index_mslp",
     )
 
     val labelsNaefs = listOf(
@@ -722,7 +732,16 @@ internal object UtilityModelNcepInterface {
             "850mb Temperature",
             "850mb Vorticity and Height",
             "850mb Winds",
-            "925mb Winds"
+            "925mb Winds",
+            "10th percentile 10m wind",
+            "50th percentile 10m wind",
+            "90th percentile 10m wind",
+            "extreme index 10m wind",
+            "10th percentile 2m temp",
+            "50th percentile 2m temp",
+            "90th percentile 2m temp",
+            "extreme index 2m temp",
+            "extreme index mslp",
     )
 
     val paramsPolar = listOf("ice_drift")
@@ -1092,8 +1111,8 @@ internal object UtilityModelNcepInterface {
             "blend_mean_precip_p01",
             "blend_mean_precip_p03",
             "blend_mean_precip_ptot",
-            "pmm_refd_1km",
-            "pmm_refd_max",
+            "pmm_refd_1km_emsl",
+            "pmm_refd_max_emsl",
             "prob_refd_40dbz",
             "prob_refd_max_40dbz",
             "prob_cref_40dbz",
@@ -1140,7 +1159,21 @@ internal object UtilityModelNcepInterface {
             "prob_vwshr_30kt",
             "prob_max_hlcy_25",
             "prob_max_hlcy_75",
-            "prob_max_hlcy_100"
+            "prob_max_hlcy_100",
+            "eas_prob_1h_rain_0.01in",
+            "eas_prob_1h_rain_0.25in",
+            "eas_prob_1h_rain_0.50in",
+            "eas_prob_3h_rain_0.01in",
+            "eas_prob_3h_rain_0.25in",
+            "eas_prob_3h_rain_0.50in",
+            "eas_prob_1h_snow_0.1in",
+            "eas_prob_1h_snow_0.3in",
+            "eas_prob_3h_snow_0.1in",
+            "eas_prob_1h_snow_0.1in",
+            "lpmm_mean_precip_p01",
+            "lpmm_mean_precip_p03",
+            "lpmm_mean_precip_ptot",
+            "prob_lowIFR_IFR",
     )
 
     val labelsHref = listOf(
@@ -1198,7 +1231,21 @@ internal object UtilityModelNcepInterface {
             "Probability of vertical wind shear greater than 30kts",
             "Probability of max updraft helicity greater than 25m**2/s**2",
             "Probability of max updraft helicity greater than 75m**2/s**2",
-            "Probability of max updraft helicity greater than 100m**2/s**2"
+            "Probability of max updraft helicity greater than 100m**2/s**2",
+            "Ensemble Agreement Scale probability of 0.01” rain in 1 hour",
+            "Ensemble Agreement Scale probability of 0.25” rain in 1 hour",
+            "Ensemble Agreement Scale probability of 0.50” rain in 1 hour",
+            "Ensemble Agreement Scale probability of 0.01” rain in 3 hours",
+            "Ensemble Agreement Scale probability of 0.25” rain in 3 hours",
+            "Ensemble Agreement Scale probability of 0.50” rain in 3 hours",
+            "Ensemble Agreement Scale probability of 0.1” snow in 1 hour",
+            "Ensemble Agreement Scale probability of 0.3” snow in 1 hour",
+            "Ensemble Agreement Scale probability of 0.1” snow in 3 hours",
+            "Ensemble Agreement Scale probability of 0.3” snow in 3 hours",
+            "Localized probability matched mean mean precip 1 hour plot",
+            "Localized probability matched mean mean precip 3 hour plot",
+            "Localized probability matched mean mean precip total hour plot",
+            "Probability Values for IFR/LIFR"
     )
 
     val paramsNbm = listOf(

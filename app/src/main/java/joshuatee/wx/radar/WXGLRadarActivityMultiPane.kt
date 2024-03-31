@@ -98,13 +98,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         val layoutType: Int
         if (numberOfPanes == 2) {
             if (landScape) {
-                layoutType = if (Utility.isThemeAllWhite())
+                layoutType = if (UtilityUI.isThemeAllWhite())
                     R.layout.activity_uswxoglmultipane_immersive_landscape_white
                 else
                     R.layout.activity_uswxoglmultipane_immersive_landscape
                 heightDivider = 1
             } else {
-                layoutType = if (Utility.isThemeAllWhite())
+                layoutType = if (UtilityUI.isThemeAllWhite())
                     R.layout.activity_uswxoglmultipane_white
                 else {
                     R.layout.activity_uswxoglmultipane
@@ -112,7 +112,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             }
             super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, bottomToolbar = true)
         } else {
-            layoutType = if (Utility.isThemeAllWhite())
+            layoutType = if (UtilityUI.isThemeAllWhite())
                 R.layout.activity_uswxoglmultipane_quad_immersive_white
             else
                 R.layout.activity_uswxoglmultipane_quad_immersive

@@ -41,6 +41,7 @@ import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.RecyclerViewGeneric
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityMap
@@ -111,7 +112,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun changeSearchViewTextColor(view: View?) {
-        if (!Utility.isThemeAllWhite()) {
+        if (!UtilityUI.isThemeAllWhite()) {
             if (view != null) {
                 if (view is TextView) {
                     view.setTextColor(Color.WHITE)

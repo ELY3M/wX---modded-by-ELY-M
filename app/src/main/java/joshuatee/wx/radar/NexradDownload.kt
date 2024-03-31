@@ -35,7 +35,6 @@ import joshuatee.wx.parseAcrossLines
 import joshuatee.wx.common.GlobalDictionaries
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.To
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
@@ -190,7 +189,7 @@ class NexradDownload {
             // experimentation has shown that L2REF and L2VEL lowest tiles are at the start of the
             // file so "Range" HTTP header is used to download just what is needed based on prod
             // requested
-            Utility.logDownload("getInputStreamFromUrlL2: $url")
+            UtilityLog.download("getInputStreamFromUrlL2: $url")
             if (url == "") {
                 return null
             }

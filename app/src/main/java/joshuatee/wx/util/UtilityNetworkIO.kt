@@ -35,7 +35,7 @@ import okhttp3.Request
 object UtilityNetworkIO {
 
     private fun getStringFromUrlNew(url: String, withNewLine: Boolean): String {
-        Utility.logDownload("getStringFromUrlNew $withNewLine: $url")
+        UtilityLog.download("getStringFromUrlNew $withNewLine: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
@@ -69,7 +69,7 @@ object UtilityNetworkIO {
 
     // String.getImage()
     fun getBitmapFromUrl(url: String): Bitmap = try {
-        Utility.logDownload("getBitmapFromUrl: $url")
+        UtilityLog.download("getBitmapFromUrl: $url")
         val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
         val response = MyApplication.httpClient.newCall(request).execute()
         if (url.contains("hazards_d8_14_contours.png")) {
@@ -88,7 +88,7 @@ object UtilityNetworkIO {
     // String.getInputStream()
     // raw downloads - nexrad radar files, etc
     fun getInputStreamFromUrl(url: String): InputStream? = try {
-        Utility.logDownload("getInputStreamFromUrl: $url")
+        UtilityLog.download("getInputStreamFromUrl: $url")
         val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
         val response = MyApplication.httpClient.newCall(request).execute()
         response.body.byteStream()

@@ -34,7 +34,6 @@ import android.view.ViewGroup
 import android.view.View
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.util.Utility
 
 class ObjectDialogue {
 
@@ -60,7 +59,7 @@ class ObjectDialogue {
     private val arrayAdapter: ArrayAdapter<String>
 
     constructor(context: Context, title: String, list: List<String>) {
-        alertDialog = if (Utility.isThemeMaterial3()) {
+        alertDialog = if (UtilityUI.isThemeMaterial3()) {
             MaterialAlertDialogBuilder(context)
         } else {
             AlertDialog.Builder(context)
@@ -79,7 +78,7 @@ class ObjectDialogue {
     }
 
     constructor(context: Context, list: List<String>) {
-        alertDialog = if (Utility.isThemeMaterial3()) {
+        alertDialog = if (UtilityUI.isThemeMaterial3()) {
             MaterialAlertDialogBuilder(context)
         } else {
             AlertDialog.Builder(context)
@@ -98,7 +97,7 @@ class ObjectDialogue {
 
     constructor(context: Context, text: String) {
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item)
-        alertDialog = if (Utility.isThemeMaterial3()) {
+        alertDialog = if (UtilityUI.isThemeMaterial3()) {
             MaterialAlertDialogBuilder(context)
         } else {
             AlertDialog.Builder(context)
@@ -115,7 +114,7 @@ class ObjectDialogue {
 
     fun setupTextView(textView: TextView) {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-        if (Utility.isThemeAllWhite()) {
+        if (UtilityUI.isThemeAllWhite()) {
             textView.setTextColor(Color.BLACK)
         } else {
             textView.setTextColor(Color.WHITE)

@@ -26,6 +26,7 @@ import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.parse
 import java.util.regex.Matcher
 
 object UtilityUS {
@@ -186,6 +187,9 @@ object UtilityUS {
         sb.append(")")
         return sb.toString().replace("Chance", "Chc").replace("Thunderstorms", "Tstorms")
     }
+
+    // TODO FIXME remove
+    fun getHazardsCCLegacy(url: String): String = url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
 
     private val regexpList = listOf(
             "<temperature type=.apparent. units=.Fahrenheit..*?>(.*?)</temperature>",

@@ -71,6 +71,11 @@ class Drawer(
             headerLayout.setBackgroundColor(colorForWhite)
             tint = ColorStateList.valueOf(colorForWhite)
         }
+        if (UtilityUI.isThemeLight()) {
+            navigationView.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+        } else {
+            navigationView.backgroundTintList = ColorStateList.valueOf(Color.BLACK)
+        }
         //
         // Status text for Warning/watch count if configured
         //

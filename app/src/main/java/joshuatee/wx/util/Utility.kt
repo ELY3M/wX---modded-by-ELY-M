@@ -57,10 +57,6 @@ object Utility {
         return diagnostics
     }
 
-    fun logDownload(s: String) {
-        UtilityLog.d("WXDOWNLOAD", s)
-    }
-
     fun getVersion(context: Context): String = try {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName
     } catch (e: Exception) {
@@ -138,49 +134,6 @@ object Utility {
 
     // FIXME deprecate these
     fun readPref(key: String, value: String): String = MyApplication.preferences.getString(key, value)!!
-
-    fun theme(themeStr: String): Int = when {
-        themeStr.startsWith("blue") -> R.style.MyCustomTheme_NOAB
-        themeStr == "black" -> R.style.MyCustomTheme_Holo_Dark_NOAB
-        themeStr == "allBlack" -> R.style.MyCustomTheme_Holo_Darkest_NOAB
-        themeStr.startsWith("green") -> R.style.MyCustomTheme_Green_NOAB
-        themeStr.startsWith("gray") -> R.style.MyCustomTheme_Gray_NOAB
-        themeStr.startsWith("darkBlue") -> R.style.MyCustomTheme_DarkBlue_NOAB
-        themeStr.startsWith("mixedBlue") -> R.style.MyCustomTheme_mixedBlue_NOAB
-        themeStr == "white" -> R.style.MyCustomTheme_white_NOAB
-        themeStr.startsWith("whiteNew") -> R.style.MyCustomTheme_whiter_NOAB
-        themeStr.startsWith("allWhite") -> R.style.MyCustomTheme_whitest_NOAB
-        themeStr.startsWith("orange") -> R.style.MyCustomTheme_orange_NOAB
-        themeStr.startsWith("BlackAqua") -> R.style.MyCustomTheme_BlackAqua
-        themeStr.startsWith("BlackNeonGreen") -> R.style.MyCustomTheme_BlackNeonGreen
-        themeStr.startsWith("WhiteToolbar") -> R.style.MyCustomTheme_white_NOAB
-        else -> R.style.MyCustomTheme_NOAB
-    }
-
-    fun isThemeMaterial3(): Boolean = when (UIPreferences.themeInt) {
-        R.style.MyCustomTheme_whiter_NOAB -> true
-        R.style.MyCustomTheme_NOAB -> true
-        R.style.MyCustomTheme_Green_NOAB -> true
-        R.style.MyCustomTheme_Gray_NOAB -> true
-        R.style.MyCustomTheme_orange_NOAB -> true
-        R.style.MyCustomTheme_Holo_Dark_NOAB -> true
-        R.style.MyCustomTheme_Holo_Darkest_NOAB -> true
-        R.style.MyCustomTheme_mixedBlue_NOAB -> true
-        R.style.MyCustomTheme_DarkBlue_NOAB -> true
-        R.style.MyCustomTheme_whitest_NOAB -> true
-        R.style.MyCustomTheme_BlackAqua -> true
-        R.style.MyCustomTheme_BlackNeonGreen -> true
-        else -> false
-    }
-
-    fun isThemeAllBlack(): Boolean =
-            UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Dark_NOAB || UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Darkest_NOAB
-
-    fun isThemeAllWhite(): Boolean =
-            UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB
-
-    // TODO FIXME remove
-    fun getHazards(url: String): String = url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
 
     fun fromHtml(source: String): String =
             Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY).toString()

@@ -22,6 +22,7 @@
 
 package joshuatee.wx.radar
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -33,6 +34,7 @@ import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.UtilityLog
 
+@SuppressLint("ViewConstructor")
 class ViewColorLegend(context: Context, private val product: String) : View(context) {
 
     private val myPaint = Paint()

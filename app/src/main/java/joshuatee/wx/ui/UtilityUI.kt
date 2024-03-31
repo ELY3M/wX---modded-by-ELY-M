@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M. 
 
 package joshuatee.wx.ui
 
@@ -28,6 +29,7 @@ import android.util.TypedValue
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import joshuatee.wx.R
 import joshuatee.wx.swap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.UIPreferences
@@ -35,7 +37,6 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import kotlin.math.pow
 import kotlin.math.sqrt
-
 
 object UtilityUI {
 
@@ -126,4 +127,48 @@ object UtilityUI {
 
     fun isLandScape(context: Context): Boolean =
             context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    fun theme(themeStr: String): Int = when {
+        themeStr.startsWith("blue") -> R.style.MyCustomTheme_NOAB
+        themeStr == "black" -> R.style.MyCustomTheme_Holo_Dark_NOAB
+        themeStr == "allBlack" -> R.style.MyCustomTheme_Holo_Darkest_NOAB
+        themeStr.startsWith("green") -> R.style.MyCustomTheme_Green_NOAB
+        themeStr.startsWith("gray") -> R.style.MyCustomTheme_Gray_NOAB
+        themeStr.startsWith("darkBlue") -> R.style.MyCustomTheme_DarkBlue_NOAB
+        themeStr.startsWith("mixedBlue") -> R.style.MyCustomTheme_mixedBlue_NOAB
+        themeStr == "white" -> R.style.MyCustomTheme_white_NOAB
+        themeStr.startsWith("whiteNew") -> R.style.MyCustomTheme_whiter_NOAB
+        themeStr.startsWith("allWhite") -> R.style.MyCustomTheme_whitest_NOAB
+        themeStr.startsWith("orange") -> R.style.MyCustomTheme_orange_NOAB
+        themeStr.startsWith("BlackAqua") -> R.style.MyCustomTheme_BlackAqua
+        themeStr.startsWith("BlackNeonGreen") -> R.style.MyCustomTheme_BlackNeonGreen
+        themeStr.startsWith("WhiteToolbar") -> R.style.MyCustomTheme_white_NOAB
+        else -> R.style.MyCustomTheme_NOAB
+    }
+
+    fun isThemeMaterial3(): Boolean = when (UIPreferences.themeInt) {
+        R.style.MyCustomTheme_whiter_NOAB -> true
+        R.style.MyCustomTheme_NOAB -> true
+        R.style.MyCustomTheme_Green_NOAB -> true
+        R.style.MyCustomTheme_Gray_NOAB -> true
+        R.style.MyCustomTheme_orange_NOAB -> true
+        R.style.MyCustomTheme_Holo_Dark_NOAB -> true
+        R.style.MyCustomTheme_Holo_Darkest_NOAB -> true
+        R.style.MyCustomTheme_mixedBlue_NOAB -> true
+        R.style.MyCustomTheme_DarkBlue_NOAB -> true
+        R.style.MyCustomTheme_whitest_NOAB -> true
+        R.style.MyCustomTheme_BlackAqua -> true
+        R.style.MyCustomTheme_BlackNeonGreen -> true
+        else -> false
+    }
+
+    fun isThemeAllBlack(): Boolean =
+            UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Dark_NOAB || UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Darkest_NOAB
+
+    fun isThemeAllWhite(): Boolean =
+            UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB
+
+    fun isThemeLight(): Boolean =
+            UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB || UIPreferences.themeInt == R.style.MyCustomTheme_whiter_NOAB
+                    || UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB
 }

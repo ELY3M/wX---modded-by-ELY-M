@@ -54,6 +54,7 @@ import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.PopupMessage
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
@@ -228,7 +229,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_white)
             }
 
-            Utility.isThemeAllBlack() -> {
+            UtilityUI.isThemeAllBlack() -> {
                 autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_black)
             }
 

@@ -36,7 +36,6 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
 abstract class AudioPlayActivity : AppCompatActivity() {
@@ -72,7 +71,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         toolbar.setOnClickListener { toolbarBottom.showOverflowMenu() }
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         UtilityToolbar.setElevation(toolbar)
-        pausePressedIcon = if (Utility.isThemeAllWhite()) {
+        pausePressedIcon = if (UtilityUI.isThemeAllWhite()) {
             GlobalVariables.ICON_PAUSE_PRESSED_BLUE
         } else {
             GlobalVariables.ICON_PAUSE_PRESSED

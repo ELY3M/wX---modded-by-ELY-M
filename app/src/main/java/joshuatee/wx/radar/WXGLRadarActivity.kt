@@ -106,7 +106,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun setupLayout(savedInstanceState: Bundle?) {
-        if (Utility.isThemeAllWhite()) {
+        if (UtilityUI.isThemeAllWhite()) {
             super.onCreate(savedInstanceState, R.layout.activity_uswxogl_white, R.menu.uswxoglradar, bottomToolbar = true)
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_uswxogl, R.menu.uswxoglradar, bottomToolbar = true)

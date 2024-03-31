@@ -421,7 +421,6 @@ public class UncompressInputStream extends FilterInputStream {
         }
 
         // suggested replacement requires API26 FIXME TODO
-        //noinspection IOStreamConstructor
         InputStream in = new UncompressInputStream(new FileInputStream(args[0]));
 
         byte[] buf = new byte[100000];

@@ -197,7 +197,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     override fun onDown(event: MotionEvent): Boolean = true
 
     // API34 changed first arg to Optional
-    override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean = true
+    override fun onFling(event1: MotionEvent?, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean = true
 
     override fun onLongPress(event: MotionEvent) {
         if (fullScreen) {
@@ -227,7 +227,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     }
 
     // API34 changed first arg to Optional
-    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
         var panned = false
         if (!locationFragment && !RadarPreferences.wxoglCenterOnLocation) {
             if (abs(distanceX) > 0.001f) {

@@ -49,9 +49,9 @@ class NavDrawerCombo(
     var imgGroupIdx: Int
 
     init {
-        if (Utility.isThemeAllWhite()) {
+        if (UtilityUI.isThemeAllWhite()) {
             listView.setBackgroundColor(Color.WHITE)
-        } else if (Utility.isThemeAllBlack()) {
+        } else if (UtilityUI.isThemeAllBlack()) {
             listView.setBackgroundColor(Color.BLACK)
         }
         listView.setAdapter(MyExpandableListAdapter(activity, items))

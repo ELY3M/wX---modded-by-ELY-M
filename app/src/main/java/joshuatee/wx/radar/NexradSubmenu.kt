@@ -21,7 +21,6 @@
 
 package joshuatee.wx.radar
 
-import android.os.Build
 import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
@@ -76,9 +75,7 @@ class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState:
         // FIXME TODO disable new Level3 super-res until NWS is past deployment phase
         objectToolbarBottom.hide(R.id.action_n0b)
         objectToolbarBottom.hide(R.id.action_n0g)
-        if (Build.VERSION.SDK_INT > 32) {
-            objectToolbarBottom.find(R.id.action_share).title = "Drawing Tools"
-        }
+        objectToolbarBottom.find(R.id.action_share).title = "Drawing Tools"
     }
 
     fun adjustTiltAndProductMenus() {

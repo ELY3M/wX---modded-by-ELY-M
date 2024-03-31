@@ -2,12 +2,114 @@
 
 # Developer ChangeLog
 
-## 55874 2024_03_10
+## 55878 2024_03_27
+
+* [ADD] In support of **SCN24-02: New Forecast Product “Offshore Waters Forecast for SW N Atlantic
+  Ocean”
+  Will Start on March 26, 2024**
+  add `offnt5` and rename title for `offnt3`. These products are accessed via "National Text"
+  activity.
+* [FIX] lint in UtilityTheme.setPrimaryColor by using different methods
+
+## 55877 2024_03_26
+
+* [ADD] add support for Nexrad "KHDC" for Service Change Notice 24-11 Hammond, LA WSR-88D (KHDC)
+  to Begin NEXRAD Level III Product Dissemination on or around March 31, 2024.
+
+## 55876 2024_03_25
+
+* [REF] remove compose until needed (app size grows by 8MB)
+* [REF] move some methods to new files
+* [REF] lint
+
+## 55875 2024_03_25
+
+* [REF] cleanup from 55874
+* [FIX] migration to API34 (or a newer material lib, etc) required NavigationView background to be
+  hardcoded in Drawer.kt
+* [ADD] enable compose
+* [REF] fix build
+  warning `warning: [options] source value 8 is obsolete and will be removed in a future release`
+
+```
+-        sourceCompatibility JavaVersion.VERSION_1_8
+-        targetCompatibility JavaVersion.VERSION_1_8
++        sourceCompatibility JavaVersion.VERSION_11
++        targetCompatibility JavaVersion.VERSION_11
+
+     kotlinOptions {
+-        jvmTarget = "1.8"
++        jvmTarget = "11"
+     }
+```
+
+## 55874 2024_03_24
+
+* [ADD] per upcoming changes: wX Android screen recording (**but not** associated drawing tools)
+  will not be available
+  after May 1, 2024 Please use native screen recording and screen shot capabilities instead.
+  This existing functionality does not fall within Google's accepted "Foreground Service Type" once
+  the app
+  targets API34 (Android 14) which is required by sometime later in 2024.
+* [ADD] Target the latest version of Android (API 34, this is periodically required to be compliant
+  with
+  Google Play Store)
+* [ADD] update libs
+
+```
+-    implementation 'com.google.android.material:material:1.9.0'
+-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
++    implementation 'com.google.android.material:material:1.11.0'
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+
+-    implementation 'androidx.core:core-ktx:1.10.0'
+-    implementation 'androidx.media:media:1.6.0'
++    implementation 'androidx.core:core-ktx:1.12.0'
++    implementation 'androidx.media:media:1.7.0'
+```
 
 * [ADD] Prelim KHDC data (commented out) for Service Change Notice 24-11 Hammond, LA WSR-88D (KHDC)
   to Begin NEXRAD Level III
   Product Dissemination on or around March 31, 2024
 * [FIX] lint cleanup
+* [ADD] NCEP MAG updates [MAG 5.0 - March 2024](https://mag.ncep.noaa.gov/version_updates.php)
+
+```
+Added the following new domain to Global Forecast System (GFS):
+  Pacific (PAC-REGION)
+Renamed the following products to HREF:
+  pmm_refd_1km → pmm_refd_1km_emsl
+  pmm_refd_max → pmm_refd_max_emsl
+
+ Added the following products to HREF:
+    Ensemble Agreement Scale probability of 0.01” rain in 1 hour (eas_prob_1h_rain_0.01in)
+    Ensemble Agreement Scale probability of 0.25” rain in 1 hour (eas_prob_1h_rain_0.25in)
+    Ensemble Agreement Scale probability of 0.50” rain in 1 hour (eas_prob_1h_rain_0.50in)
+    Ensemble Agreement Scale probability of 0.01” rain in 3 hours (eas_prob_3h_rain_0.01in)
+    Ensemble Agreement Scale probability of 0.25” rain in 3 hours (eas_prob_3h_rain_0.25in)
+    Ensemble Agreement Scale probability of 0.50” rain in 3 hours (eas_prob_3h_rain_0.50in)
+    Ensemble Agreement Scale probability of 0.1” snow in 1 hour (eas_prob_1h_snow_0.1in)
+    Ensemble Agreement Scale probability of 0.3” snow in 1 hour (eas_prob_1h_snow_0.3in)
+    Ensemble Agreement Scale probability of 0.1” snow in 3 hours (eas_prob_3h_snow_0.1in)
+    Ensemble Agreement Scale probability of 0.3” snow in 3 hours (eas_prob_1h_snow_0.1in)
+    Localized probability matched mean mean precip 1 hour plot (lpmm_mean_precip_p01)
+    Localized probability matched mean mean precip 3 hour plot (lpmm_mean_precip_p03)
+    Localized probability matched mean mean precip total hour plot (lpmm_mean_precip_ptot)
+    prob_lowIFR_IFR
+    pmm_refd_1km
+    pmm_refd_max
+
+Added the following products to NAEFS:
+    10th_percentile_10m_wnd
+    50th_percentile_10m_wnd
+    90th_percentile_10m_wnd
+    extreme_index_10m_wnd
+    10th_percentile_2m_temp
+    50th_percentile_2m_temp
+    90th_percentile_2m_temp
+    extreme_index_2m_temp
+    extreme_index_mslp
+```
 
 ## 55873 2024_03_09
 

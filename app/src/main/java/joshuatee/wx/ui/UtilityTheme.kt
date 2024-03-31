@@ -23,6 +23,7 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Color
+import com.google.android.material.color.MaterialColors
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
@@ -40,15 +41,19 @@ object UtilityTheme {
         return primaryColor
     }
 
+    // This supports changing color theme dynamically, without an app restart is required
+    // and on program start
     fun setPrimaryColor(context: Context) {
-        val attrs = intArrayOf(androidx.appcompat.R.attr.colorPrimary, androidx.appcompat.R.attr.colorPrimaryDark, androidx.appcompat.R.attr.colorAccent)
-        val ta = context.theme.obtainStyledAttributes(attrs)
+        // val attrs = intArrayOf(androidx.appcompat.R.attr.colorPrimary, androidx.appcompat.R.attr.colorPrimaryDark, androidx.appcompat.R.attr.colorAccent)
+        // val ta = context.theme.obtainStyledAttributes(attrs)
         if (UIPreferences.themeInt != R.style.MyCustomTheme_mixedBlue_NOAB && !UIPreferences.themeIsWhite) {
-            UIPreferences.primaryColor = ta.getColor(0, Color.BLACK) // 1 index for primaryColorDark
+            //UIPreferences.primaryColor = ta.getColor(0, Color.BLACK) // 1 index for primaryColorDark
+            UIPreferences.primaryColor = MaterialColors.getColor(context, androidx.appcompat.R.attr.colorPrimary, Color.BLACK)
         } else {
-            UIPreferences.primaryColor = ta.getColor(2, Color.BLACK) // 1 index for primaryColorDark
+            //UIPreferences.primaryColor = ta.getColor(2, Color.BLACK) // 1 index for primaryColorDark
+            UIPreferences.primaryColor = MaterialColors.getColor(context, androidx.appcompat.R.attr.colorAccent, Color.BLACK)
         }
         Utility.writePrefInt(context, "MYAPP_PRIMARY_COLOR", UIPreferences.primaryColor)
-        ta.recycle()
+        // ta.recycle()
     }
 }

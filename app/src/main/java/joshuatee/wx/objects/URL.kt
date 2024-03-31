@@ -8,7 +8,6 @@ package joshuatee.wx.objects
 
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.MyApplication
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import okhttp3.Request
 
@@ -16,7 +15,7 @@ class URL(val url: String) {
 
     @Suppress("unused")
     fun getText(): String {
-        Utility.logDownload("getHtml $url")
+        UtilityLog.download("getHtml $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).build()
@@ -30,7 +29,7 @@ class URL(val url: String) {
 
     @Suppress("unused")
     fun getTextXmlAcceptHeader(): String {
-        Utility.logDownload("getStringFromUrlBaseNoHeader: $url")
+        UtilityLog.download("getStringFromUrlBaseNoHeader: $url")
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
@@ -49,7 +48,7 @@ class URL(val url: String) {
     }
 
     fun getBytes(): ByteArray {
-        Utility.logDownload("getByte $url")
+        UtilityLog.download("getByte $url")
         return try {
             val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient.newCall(request).execute()

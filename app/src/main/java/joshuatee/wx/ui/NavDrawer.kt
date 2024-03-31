@@ -34,7 +34,6 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import joshuatee.wx.R
-import joshuatee.wx.util.Utility
 
 class NavDrawer(val activity: Activity, private var labels: List<String>) {
 
@@ -45,7 +44,7 @@ class NavDrawer(val activity: Activity, private var labels: List<String>) {
     var index = 0
 
     init {
-        if (Utility.isThemeAllWhite()) {
+        if (UtilityUI.isThemeAllWhite()) {
             listView.setBackgroundColor(Color.WHITE)
             listView.adapter = object : ArrayAdapter<String>(activity, R.layout.drawer_list_item, labels) {
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -68,7 +67,7 @@ class NavDrawer(val activity: Activity, private var labels: List<String>) {
 
     fun updateLists(items: List<String>, tokens: List<String>) {
         listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
-        if (Utility.isThemeAllWhite()) {
+        if (UtilityUI.isThemeAllWhite()) {
             listView.setBackgroundColor(Color.WHITE)
             listView.adapter = object : ArrayAdapter<String>(activity, R.layout.drawer_list_item, items) {
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -86,7 +85,7 @@ class NavDrawer(val activity: Activity, private var labels: List<String>) {
 
     fun updateLists(items: List<String>) {
         listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
-        if (Utility.isThemeAllWhite()) {
+        if (UtilityUI.isThemeAllWhite()) {
             listView.setBackgroundColor(Color.WHITE)
             listView.adapter = object : ArrayAdapter<String>(activity, R.layout.drawer_list_item, items) {
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

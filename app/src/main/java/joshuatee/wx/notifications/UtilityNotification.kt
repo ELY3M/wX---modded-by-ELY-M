@@ -43,7 +43,7 @@ object UtilityNotification {
     // June 2019
     // change NotificationManager.IMPORTANCE_DEFAULT and NotificationManager.IMPORTANCE_LOW to NotificationManager.IMPORTANCE_HIGH
     // in attempt to automatically have notifications in Android Q show up in status bar
-    fun initChannels(context: Context) {
+    private fun initChannels(context: Context) {
         if (Build.VERSION.SDK_INT < 26 || notificationChannelInitialized) {
             return
         }
@@ -64,7 +64,7 @@ object UtilityNotification {
     }
 
     private const val NOTIFICATION_CHANNEL_STRING = "default"
-    const val NOTIFICATION_CHANNEL_STRING_NO_SOUND = "defaultNoSound2"
+    private const val NOTIFICATION_CHANNEL_STRING_NO_SOUND = "defaultNoSound2"
 
     fun createNotificationBigPicture(
             context: Context,
