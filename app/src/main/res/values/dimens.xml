@@ -16,7 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<!-- modded by ELY M. -->
 
 <!--<resources xmlns:tools="http://schemas.android.com/tools">-->
 <resources>
@@ -57,8 +56,11 @@
     <dimen name="fab_margin_mini_2">80dp</dimen>
 
     <!-- telecine -->
-    <dimen name="overlay_width">144dp</dimen>
+    <!--    <dimen name="overlay_width">144dp</dimen>-->
+    <!--    <dimen name="overlay_jellybean_width">96dp</dimen>-->
+    <dimen name="overlay_width">96dp</dimen>
     <dimen name="overlay_jellybean_width">96dp</dimen>
+
     <!-- TODO move to values-23/ as overlay_height overload when M is released. -->
     <dimen name="overlay_height_m">24dp</dimen>
 

@@ -43,8 +43,6 @@
     <color name="offwhite_toolbar">#B3FFFFFF</color>
     <color name="light_blue">#566D87</color>
     <!-- telecine -->
-    <color name="primary_normal">#ff455a64</color>
-    <color name="accent_pressed">#ffa72600</color>
     <color name="gray_normal">#ff757575</color>
     <color name="fuchsia">#FF00FF</color>
     <color name="red">#FF0000</color>

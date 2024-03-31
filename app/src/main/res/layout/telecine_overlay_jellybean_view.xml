@@ -7,7 +7,6 @@
     joshua.tee@gmail.com
 
 -->
-<!-- modded by ELY M. -->
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -45,40 +44,5 @@
             android:layout_weight="1"
             android:background="@color/gray_dark"
             android:contentDescription="@string/clear" />
-
-        <ImageButton
-            android:id="@+id/record_overlay_screenshot"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/gray_dark"
-            android:contentDescription="@string/clear" />
-
-        <ImageButton
-            android:id="@+id/record_overlay_start"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/gray_dark"
-            android:contentDescription="@string/record" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/record_overlay_recording"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray_dark"
-        android:gravity="center"
-        android:text="@string/record"
-        android:textAllCaps="true"
-        android:textColor="#fff"
-        android:textStyle="bold"
-        android:visibility="invisible" />
-
-    <View
-        android:id="@+id/record_overlay_stop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible" />
-
 </merge>

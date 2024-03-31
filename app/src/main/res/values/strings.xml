@@ -169,24 +169,6 @@
 
     <!-- telecine -->
     <string name="clear">Clear</string>
-    <string name="record">Record</string>
-    <string name="countdown_one">1…</string>
-    <string name="countdown_two">2…</string>
-    <string name="countdown_three">3…</string>
-    <string name="notification_captured_title">wX screen recording captured.</string>
-    <string name="notification_captured_subtitle">Touch to view your screen recording.</string>
-    <string name="notification_captured_share">Share</string>
-    <string name="notification_recording_title">Recording screen.</string>
-    <string name="notification_recording_subtitle">Touch the clock area to stop recording.</string>
-
-    <array name="countdown">
-        <item>@string/countdown_three</item>
-        <item>@string/countdown_two</item>
-        <item>@string/countdown_one</item>
-    </array>
-
-    <string name="notification_screenshot_captured_title">wX screenshot captured.</string>
-    <string name="notification_screenshot_captured_subtitle">Touch to view your screenshot.</string>
 
     <!-- For google weather list widget demo -->
     <string name="toast_format_string">%1$s!</string>
