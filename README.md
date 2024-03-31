@@ -33,7 +33,6 @@ http://bmx3r.com/wx/switch
 ## TO DO List: 
 
 * change up how Spotter icons is - green for active - yellow for idle based on their time of their last location report.
-* conus radar overlay when you zoom out like on pykl3   
 * add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs    
 * add LSR reports from SN spotters/option to turn on/off LSR reports  
 * as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
@@ -44,8 +43,9 @@ http://bmx3r.com/wx/switch
 * would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
 * make VAD Wind Profile more better and friendly  like the one at cod.edu    
 * color tables for SRM 
-* get dbz and wind speed from point via long press - request by Mike T.      
-
+* get dbz and wind speed from point via long press - request by Mike T.   
+* find very good open source video recording library and add ability to record app's screen.        
+* remove conus radar overlay.  it is way too buggy.  you can still view the conus from the long press menu 
 
 #
 ## DONE!
