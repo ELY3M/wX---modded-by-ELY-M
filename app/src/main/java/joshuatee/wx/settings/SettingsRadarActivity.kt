@@ -35,7 +35,6 @@ import joshuatee.wx.objects.PolygonWarning
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.radar.RadarGeometry
-import joshuatee.wx.telecine.SettingsTelecineActivity
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.NumberPicker
@@ -62,7 +61,6 @@ class SettingsRadarActivity : BaseActivity() {
         box.addWidget(CardText(this, "Colors", SettingsColorsActivity::class.java))
         box.addWidget(CardText(this, "Color Palettes (Beta)", SettingsColorPaletteListingActivity::class.java))
         box.addWidget(CardText(this, "Line / Marker sizes", SettingsRadarSizesActivity::class.java))
-        box.addWidget(CardText(this, "Screen Recorder", SettingsTelecineActivity::class.java))
     }
 
     private fun addSwitch1() {

@@ -37,7 +37,7 @@ import joshuatee.wx.util.UtilityFavorites
 object UIPreferences {
 
     // These are set in myapp still
-    const val TELECINE_SWITCH_SHOW_TOUCHES = false
+//    const val TELECINE_SWITCH_SHOW_TOUCHES = false
     var telecineVideoSizePercentage = 0
     var telecineSwitchShowCountdown = false
     var telecineSwitchRecordingNotification = false
@@ -166,7 +166,7 @@ object UIPreferences {
         }
         tilesPerRow = Utility.readPrefInt(context, "UI_TILES_PER_ROW", tilesPerRowDefault)
         themeStr = Utility.readPref(context, "THEME_BLUE", "BlackAqua")
-        themeInt = Utility.theme(themeStr)
+        themeInt = UtilityUI.theme(themeStr)
         if (themeInt == R.style.MyCustomTheme_white_NOAB || themeInt == R.style.MyCustomTheme_whiter_NOAB || themeInt == R.style.MyCustomTheme_whitest_NOAB) {
             textSmallThemeColor = Color.GRAY
             textHighlightColor = Color.rgb(14, 71, 161)
