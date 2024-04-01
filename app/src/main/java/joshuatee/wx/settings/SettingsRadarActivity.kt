@@ -114,9 +114,6 @@ class SettingsRadarActivity : BaseActivity() {
                 Switch(this, "Canadian and Mexican borders", "RADAR_CAMX_BORDERS", R.string.camx_borders_label),
                 Switch(this, "Center radar on location", "RADAR_CENTER_ON_LOCATION", R.string.radar_center_on_location_default_label),
                 Switch(this, "Cities", "COD_CITIES_DEFAULT", R.string.cod_cities_default_label),
-	    	    //elys mod
-	    	    Switch(this, "Conus Radar", "CONUS_RADAR", R.string.conus_radar_label),
-	    	    //elys mod end
                 Switch(this, "Counties", "RADAR_SHOW_COUNTY", R.string.show_county_label),
                 Switch(this, "County labels", "RADAR_COUNTY_LABELS", R.string.show_county_labels_label),
                 Switch(this, "Hail index", "RADAR_SHOW_HI", R.string.show_hi_label),

@@ -31,6 +31,7 @@ object GlobalVariables {
     val newline: String = System.lineSeparator()
 
     const val PACKAGE_NAME = "joshuatee.wx"
+
     //    const val PACKAGE_NAME_FILE = "joshuatee_wx"
     const val EMAIL = "elymbmx@gmail.com"
     const val HTTP_USER_AGENT = "Android $PACKAGE_NAME $EMAIL"
@@ -103,20 +104,7 @@ object GlobalVariables {
     val PalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/pal/"
     val BackupFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/"
     val BackupPalFilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/pal/"
-
-	//conus radar for zoom out
-    //const val nwsConusRadar = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
-    //const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
-
-    //const val nwsConusRadar = "https://atlas.niu.edu/analysis/radar/CONUS/usrad_current_b.gif"  //backup url
-    //const val nwsConusRadar = "https://www.aviationweather.gov/data/obs/radar/rad_rala_us.gif"
-    //testing//
-    const val nwsConusRadar = "https://radar.weather.gov/ridge/standard/CONUS-LARGE_0.gif"
-    const val conusImageName = "conus.gif"
-
-    //testing
-    //const val nwsConusRadarNew = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_raw/ows?service=wms&version=1.3.0&request=GetCapabilities"
-	//end of elys mod     
+	//end of elys mod
     
     
     

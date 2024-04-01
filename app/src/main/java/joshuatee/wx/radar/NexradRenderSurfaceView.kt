@@ -34,6 +34,7 @@ import android.view.View
 import android.widget.TextView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
@@ -140,7 +141,8 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                         wxglRenders.forEachIndexed { index, wxgl ->
                             textObjects[index].hideLabels()
                             wxgl.state.displayHold = true
-                            wxgl.displayConus = true
+                            //wxgl.displayConus = true
+                            Route.radarMosaicConus(context)
                         }
                     }
                 } else {
@@ -148,7 +150,8 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                         wxglRenders.forEachIndexed { index, wxgl ->
                             textObjects[index].hideLabels()
                             wxgl.state.displayHold = true
-                            wxgl.displayConus = false
+                            //wxgl.displayConus = false
+                            //Route.radarMosaicConus(context)
                         }
                     }
                 }

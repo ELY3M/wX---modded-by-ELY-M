@@ -108,21 +108,6 @@ internal object NexradDraw {
             oldRadarSites[index] = wxglRenders[index].state.rid
         }
 
-	    //elys mod - conus radar
-        Thread {
-            if (RadarPreferences.conusRadar) {
-                try {
-                    wxglRenders[index].construct.ConusRadar()
-                    wxglSurfaceViews[index].requestRender()
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
-            }
-	        //else {
-            //    wxglRenders[index].deconstructConusRadar()
-            //  }
-        }.start()
-
         Thread {
             PolygonWarning.byType.values.forEach {
                 if (it.isEnabled) {

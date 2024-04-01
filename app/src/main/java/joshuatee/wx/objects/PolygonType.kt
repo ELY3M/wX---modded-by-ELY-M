@@ -48,7 +48,6 @@ enum class PolygonType(var color: Int, private val typeAsString: String, var pre
     SWO(RadarPreferences.colorHi, "SWO", RadarPreferences.swo, RadarPreferences.swoLineSize.toFloat()),
     WPC_FRONTS(RadarPreferences.colorHi, "WPC_FRONTS", RadarPreferences.wpcFronts, RadarPreferences.wpcFrontLineSize.toFloat()),
     USERPOINTS(0, "USERPOINTS", RadarPreferences.userPoints, 0.0f),
-    CONUS(0, "CONUS", RadarPreferences.conusRadar, 0.0f),
     NONE(0, "", false, 0.0f);
 
     override fun toString() = typeAsString
@@ -78,7 +77,6 @@ enum class PolygonType(var color: Int, private val typeAsString: String, var pre
             OBS.pref = RadarPreferences.obs
             SWO.pref = RadarPreferences.swo
             USERPOINTS.pref = RadarPreferences.userPoints
-            CONUS.pref = RadarPreferences.conusRadar
             MCD.color = RadarPreferences.colorMcd
             MPD.color = RadarPreferences.colorMpd
             WATCH.color = RadarPreferences.colorTstormWatch

@@ -456,14 +456,6 @@ class NexradRenderTextObject(
                             color,
                     )
                 }
-		//elys mod
-                ///Fix to hide the wpc pressure center texts from conus radar.
-                if (RadarPreferences.conusRadar) {
-                    if (state.zoom < (RadarPreferences.conusRadarZoom / 1000.0).toFloat()) {
-                        hideWpcPressureCenters()
-                    }
-                }
-                //
 
             } else {
                 hideWpcPressureCenters()

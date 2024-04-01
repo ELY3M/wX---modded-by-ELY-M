@@ -178,48 +178,7 @@ object CanvasMain {
             CanvasDraw.cities(projectionType, bitmapCanvas, projectionNumbers, citySize)
         }
     }
-    //elys mod
-    //for Conus Radar
-    fun addCanvasConus(
-        context: Context,
-        bitmapCanvas: Bitmap,
-        projectionType: ProjectionType,
-        radarSite: String
-    ) {
-        val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
-        listOf(
-            RadarGeometryTypeEnum.CountyLines,
-            RadarGeometryTypeEnum.StateLines,
-            RadarGeometryTypeEnum.HwLines,
-            RadarGeometryTypeEnum.LakeLines
-        ).forEach {
-            CanvasDraw.geometry(
-                projectionType,
-                bitmapCanvas,
-                radarSite,
-                it, RadarGeometry.dataByType[it]!!.lineData
-            )
-        }
-        if (PolygonType.LOCDOT.pref) {
-                CanvasDraw.locationDotForCurrentLocation(projectionType, bitmapCanvas, projectionNumbers)
-        }
-        /*
-        if (PolygonType.MCD.pref) {
-            arrayOf(PolygonType.MCD, PolygonType.WATCH, PolygonType.WATCH_TORNADO).forEach {
-                CanvasDraw.mcd(projectionType, bitmapCanvas, projectionNumbers, it)
-            }
-        }
-        if (PolygonType.MPD.pref) {
-            CanvasDraw.mcd(projectionType, bitmapCanvas, projectionNumbers, PolygonType.MPD)
-        }
-        if (PolygonType.TST.pref) {
-            CanvasDraw.addWarnings(projectionType, bitmapCanvas, projectionNumbers)
-        }
-        */
-        //if (RadarPreferences.cities) {
-        //    UtilityCanvas.drawCitiesUS(projectionType, bitmapCanvas, projectionNumbers, citySize)
-        //}
-    }
+
 
     private fun getLocalGeometryData(context: Context): GeometryData {
         val canadaResId = R.raw.ca

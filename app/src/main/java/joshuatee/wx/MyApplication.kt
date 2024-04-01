@@ -22,33 +22,19 @@
 
 package joshuatee.wx
 
-import android.Manifest
 import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Build.VERSION.SDK_INT
-import android.os.Environment
-import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import androidx.preference.PreferenceManager
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import android.widget.Toast
-import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.content.ContextCompat
 import java.util.concurrent.TimeUnit
 import joshuatee.wx.audio.UtilityTts
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.RadarGeometry
 import joshuatee.wx.radar.NexradUtil
-import joshuatee.wx.radar.SpotterNetworkPositionReportService
-import joshuatee.wx.radar.UtilityConusRadar
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.radarcolorpalettes.ColorPalette
 import joshuatee.wx.settings.Location
@@ -56,7 +42,6 @@ import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityHomeScreen
-import joshuatee.wx.util.UtilityLog
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.acra.BuildConfig

@@ -245,9 +245,6 @@ class NexradUI(
             }
             activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             startRepeatingTask()
-	        //elys mod
-            //download latest conus image
-            UtilityConusRadar.getConusImage()
         }
     }
 

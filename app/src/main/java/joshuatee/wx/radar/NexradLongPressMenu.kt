@@ -155,7 +155,7 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
             }
             //elys mod
             if (RadarPreferences.spotters || RadarPreferences.spottersLabel) longPressList.add("Spotter Info")
-	    longPressList.add("Userpoint info: " + latLonTitle)
+	        longPressList.add("Userpoint info: " + latLonTitle)
             longPressList.add("Add userpoint for: " + latLonTitle)
             longPressList.add("Delete userpoint for: " + latLonTitle)
             longPressList.add("Delete all userpoints")

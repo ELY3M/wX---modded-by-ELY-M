@@ -41,8 +41,6 @@ object RadarPreferences {
     //
     // Radar Preferences
     //
-    var conusRadar = false
-    var conusRadarZoom = 75 //was 173
     var showRadarWhenPan = true
     var warnings = false
     var locationDotFollowsGps = false
@@ -145,8 +143,6 @@ object RadarPreferences {
         showRadarWhenPan = getInitialPreference("SHOW_RADAR_WHEN_PAN", "true")
         wpcFronts = getInitialPreference("RADAR_SHOW_WPC_FRONTS", "false")
         locationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
-        conusRadar = getInitialPreference("CONUS_RADAR", "false")
-        conusRadarZoom = getInitialPreference("CONUS_RADAR_ZOOM", 75)
         warnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
         locationDotFollowsGps = getInitialPreference("LOCDOT_FOLLOWS_GPS", "false")
         locdotBug = getInitialPreference("LOCDOT_BUG", "false")

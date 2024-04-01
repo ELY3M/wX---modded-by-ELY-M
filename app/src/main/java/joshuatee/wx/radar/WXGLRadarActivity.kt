@@ -46,7 +46,6 @@ import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.misc.WebView
 import joshuatee.wx.util.UtilityLog
 
-
 class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     //
@@ -73,6 +72,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
     //elys mod
     private var radarHidden = false
+
     private var nexradArguments = NexradArgumentsSinglePane()
     private lateinit var nexradState: NexradStatePane
     private lateinit var nexradSubmenu: NexradSubmenu
@@ -413,4 +413,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             UtilityLog.d("radarshow", "showRadar() radarShowRadar: "+RadarPreferences.hideRadar)
         }
     }
+
+
 }

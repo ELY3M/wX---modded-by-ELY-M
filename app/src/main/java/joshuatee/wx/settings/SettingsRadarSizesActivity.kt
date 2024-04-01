@@ -47,7 +47,6 @@ class SettingsRadarSizesActivity : BaseActivity() {
             //elys mod
             NumberPicker(this, "Color Legend width", "RADAR_SHOW_LEGEND_WIDTH", R.string.showlegendwidth, 50, 1, 100),
             NumberPicker(this, "Color Legend text size", "RADAR_SHOW_LEGEND_TEXTSIZE", R.string.showlegendtextsize, 30, 1, 100),
-            NumberPicker(this, "Conus Radar Zoom", "CONUS_RADAR_ZOOM", R.string.conus_radar_zoom_label, 75, 0, 530),
             NumberPicker(this, "Default line size", "RADAR_DEFAULT_LINESIZE", R.string.default_linesize_np_label, 1, 1, 15),
             //elys mod end
             NumberPicker(this, "Aviation dot size", "RADAR_AVIATION_SIZE", R.string.aviation_size_label, RadarPreferences.aviationSizeDefault, 1, 50),

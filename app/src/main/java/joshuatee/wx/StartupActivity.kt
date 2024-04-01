@@ -5,7 +5,6 @@ package joshuatee.wx
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
@@ -14,15 +13,12 @@ import android.os.Environment
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.markodevcic.peko.PermissionRequester
 import com.markodevcic.peko.PermissionResult
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.SpotterNetworkPositionReportService
-import joshuatee.wx.radar.UtilityConusRadar
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
 import joshuatee.wx.settings.*
 import joshuatee.wx.util.Utility
@@ -73,10 +69,27 @@ class StartupActivity : Activity() {
     private fun askPerms() {
         PermissionRequester.initialize(applicationContext)
         val requester = PermissionRequester.instance()
+
+        if (SDK_INT >= 34){
+            CoroutineScope(Dispatchers.Main).launch {
+                requester.request(
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.FOREGROUND_SERVICE, Manifest.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION
+                ).collect { p ->
+                    when (p) {
+                        is PermissionResult.Granted -> {
+                            askExternalStorageManager()
+                        }
+                        else -> {}
+                    }
+
+                }
+            }
+        }
+
         if(SDK_INT >= 30) {
             CoroutineScope(Dispatchers.Main).launch {
                 requester.request(
-                    Manifest.permission.ACCESS_FINE_LOCATION
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.FOREGROUND_SERVICE,
                 ).collect { p ->
                     when (p) {
                         is PermissionResult.Granted -> {
@@ -163,10 +176,6 @@ class StartupActivity : Activity() {
         checkpalfiles(R.raw.colormapownenhvel, "colormapownenhvel.txt")
         //need to run it again
         ColorPalettes.initialize(applicationContext)
-
-        //make to download new conus everytime the app start...
-        UtilityLog.d("wx-elys", "downloading conus on start....")
-        UtilityConusRadar.getConusImage()
 
         //start service for Spotter Network Location Auto Reporting
         if (RadarPreferences.sn_locationreport) {

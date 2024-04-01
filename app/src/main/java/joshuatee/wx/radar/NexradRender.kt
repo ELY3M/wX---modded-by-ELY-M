@@ -54,18 +54,6 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
     // and it's much easier to debug issue
     //
 
-    companion object {
-        //elys mod
-        //used for conus radar
-        var degreesPerPixellat = -0.017971305190311 //had -
-        var degreesPerPixellon = 0.017971305190311
-        var north = 0.toDouble()
-        var south = 0.toDouble()
-        var west = 0.toDouble()
-        var east = 0.toDouble()
-        var newbottom = 0.toDouble()
-        var newleft = 0.toDouble()
-    }
     val data = NexradRenderData(context)
     val state = NexradRenderState(paneNumber, data, ::scaleLength)
     private val matrixProjection = FloatArray(16)
@@ -84,12 +72,10 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
     private var chunkCount = 0
     private var totalBins = 0
     private var totalBinsOgl = 0
+
     //elys mod
-    var displayConus = false
     private var sizeHandle = 0
     private var iTexture: Int = 0
-
-    private var conusradarId = -1
     private var userPointId = -1
     private var locationId = -1
     private var locationBugId = -1
@@ -193,11 +179,7 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         GLES20.glAttachShader(OpenGLShader.sp_loadimage, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.vs_loadimage))
         GLES20.glAttachShader(OpenGLShader.sp_loadimage, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_loadimage))
         GLES20.glLinkProgram(OpenGLShader.sp_loadimage)
-        //shader for conus
-        OpenGLShader.sp_conus = GLES20.glCreateProgram()
-        GLES20.glAttachShader(OpenGLShader.sp_conus, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.vs_conus))
-        GLES20.glAttachShader(OpenGLShader.sp_conus, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_conus))
-        GLES20.glLinkProgram(OpenGLShader.sp_conus)
+
 
     }
 
@@ -376,277 +358,13 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
                 drawElement(it)
             }
         }
-
-
-
         } //displayHold
-
-//TODO  remove this conus radar....   
-//elys mod
-////Conus Radar
-/*
-        //TODO try to use real plotting without adding usa map....
-        //hack job!!!
-        if (!displayHold) {
-            Log.i(TAG, "zoom: " + zoom)
-            Log.i(TAG, "zoom setting: "+RadarPreferences.radarConusRadarZoom+ " math: "+(RadarPreferences.radarConusRadarZoom / 1000.0))
-            if (RadarPreferences.radarConusRadar) {
-                if (state.zoom < (RadarPreferences.radarConusRadarZoom / 1000.0).toFloat()) {
-                    Log.i(TAG, "zoom out to conusradar")
-                    drawConusRadarTest(conusRadarBuffers)
-                }
-            }
-        }
-        */
-
-        if (displayConus) {
-            try {
-                drawConusRadarTest(data.conusRadarBuffers)
-            } catch (e: Exception) {
-                UtilityLog.d("wx-elys", "conus crashed: " + e.message)
-            }
-        } 
-        //TODO try to use real plotting without adding usa map....
-        //hack job!!!
-        if (!state.displayHold) {
-            //UtilityLog.d("wx-elys", "zoom: " + state.zoom)
-            //UtilityLog.d("wx-elys", "zoom setting: "+RadarPreferences.conusRadarZoom+ " math: "+(RadarPreferences.conusRadarZoom / 1000.0))
-            if (RadarPreferences.conusRadar) {
-                if (state.zoom < (RadarPreferences.conusRadarZoom / 1000.0).toFloat()) {
-                    UtilityLog.d("wx-elys", "zoom out to conusradar")
-                    displayConus = true
-                } else { 
-		displayConus = false 
-		}
-            }
-        }
-//////////////////Conus Radar End////////////////
-
-
-
-
 
     } //onDrawFrame(gl: GL10) End
 
 
-//elys mod
-////////Conus Radar///////////
-private fun drawConusRadarTest(buffers: OglBuffers) {
-    if (buffers.isInitialized) {
-        buffers.setToPositionZero()
-
-        var vertexBuffer: FloatBuffer
-        var drawListBuffer: ShortBuffer
-        var uvBuffer: FloatBuffer
-
-
-        //use conus shader
-        GLES20.glUseProgram(OpenGLShader.sp_conus)
-
-
-
-        val conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
-        val ridx = Utility.readPref(context, "RID_" + state.rid + "_X", "0.0f").toFloat()
-        val ridy = Utility.readPref(context, "RID_" + state.rid + "_Y", "0.0f").toFloat() / -1.0
-        UtilityLog.d("wx-elys", state.rid + " rid x: " + ridx + " y: " + ridy)
-/*
-
-            UtilityLog.d("wx-elys", "gfw1: " + UtilityConusRadar.gfw1)
-            UtilityLog.d("wx-elys", "gfw2: " + UtilityConusRadar.gfw2)
-            UtilityLog.d("wx-elys", "gfw3: " + UtilityConusRadar.gfw3)
-            UtilityLog.d("wx-elys", "gfw4: " + UtilityConusRadar.gfw4)
-            UtilityLog.d("wx-elys", "gfw5: " + UtilityConusRadar.gfw5)
-            UtilityLog.d("wx-elys", "gfw6: " + UtilityConusRadar.gfw6)
-            degreesPerPixellon = UtilityConusRadar.gfw1.toDouble()
-            degreesPerPixellat = UtilityConusRadar.gfw4.toDouble()
-            west = UtilityConusRadar.gfw5.toDouble()
-            north = UtilityConusRadar.gfw6.toDouble()
-            south = north + conusbitmap!!.height.toDouble() * degreesPerPixellat
-            east = west + conusbitmap!!.width.toDouble() * degreesPerPixellon
-
-
-            UtilityLog.d("wx-elys", "north: " + north)
-            UtilityLog.d("wx-elys", "south: " + south)
-            UtilityLog.d("wx-elys", "west: " + west)
-            UtilityLog.d("wx-elys", "east: " + east)
-
-            //from aweather
-            //https://github.com/Andy753421/AWeather
-            val awest = UtilityConusRadar.gfw5.toDouble()
-            val anorth = UtilityConusRadar.gfw6.toDouble()
-            val asouth = anorth - UtilityConusRadar.gfw1.toDouble() * conusbitmap.height.toDouble()
-            val aeast = awest + UtilityConusRadar.gfw1.toDouble() * conusbitmap.width.toDouble()
-
-            val midofwest = awest + UtilityConusRadar.gfw1.toDouble() * conusbitmap.width.toDouble() / 2
-            val midofsouth = anorth - UtilityConusRadar.gfw1.toDouble() * conusbitmap.height.toDouble() / 2
-
-            UtilityLog.d("wx-elys", "awest: " + awest)
-            UtilityLog.d("wx-elys", "anorth: " + anorth)
-            UtilityLog.d("wx-elys", "asouth: " + asouth)
-            UtilityLog.d("wx-elys", "aeast: " + aeast)
-            UtilityLog.d("wx-elys", "midofwest: " + midofwest)
-            UtilityLog.d("wx-elys", "midofsouth: " + midofsouth)
-*/
-
-
-
-        /*
-        val mRatio = conusbitmap.width / conusbitmap.height
-        val mLeft = awest.toFloat()
-        val mBottom = asouth.toFloat()
-        val mTop = anorth.toFloat()
-        val near = 1.0f
-        val far = 10.0f
-        Matrix.frustumM(matrixProjectionAndView, 0, mLeft, mRatio.toFloat(), mBottom, mTop, near, far)
-        */
-
-
-        //val riddist = LatLon.distance(LatLon(ridx.toDouble(), ridy.toDouble()), LatLon(south, west), DistanceUnit.MILE)
-        //UtilityLog.d("wx-elys", "riddist: " + riddist)
-        //getNewConusPoint(south, west, riddist)
-
-
-        /*
-
-gchar *clear = g_malloc0(2048*2048*4);
-glBindTexture(GL_TEXTURE_2D, tile->tex);
-
-glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-glPixelStorei(GL_PACK_ALIGNMENT, 1);
-glTexImage2D(GL_TEXTURE_2D, 0, 4, 2048, 2048, 0,GL_RGBA, GL_UNSIGNED_BYTE, clear);
-glTexSubImage2D(GL_TEXTURE_2D, 0, 1,1, CONUS_WIDTH/2,CONUS_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-tile->coords.n = 1.0/(CONUS_WIDTH/2);
-tile->coords.w = 1.0/ CONUS_HEIGHT;
-tile->coords.s = tile->coords.n +  CONUS_HEIGHT   / 2048.0;
-tile->coords.e = tile->coords.w + (CONUS_WIDTH/2) / 2048.0;
-glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-glFlush();
-g_free(clear);
-
-         */
-
-
-        //triangle
-        val base = RectF(-conusbitmap!!.width.toFloat(), conusbitmap.height.toFloat(), conusbitmap.width.toFloat(), -conusbitmap.height.toFloat())
-        val scale = 3.0f //was 2.0f
-
-        UtilityLog.d("wx-elys", "left: " + base.left)
-        UtilityLog.d("wx-elys", "right: " + base.right)
-        UtilityLog.d("wx-elys", "bottom: " + base.bottom)
-        UtilityLog.d("wx-elys", "top: " + base.top)
-
-        val left = base.left * scale
-        val right = base.right * scale
-        val bottom = base.bottom * scale
-        val top = base.top * scale
-
-        /*
-        val westnorth = LatLon(west, north)
-        val westsouth = LatLon(west, south)
-        val eastsouth = LatLon(east, south)
-        val eastnorth = LatLon(east, north)
-
-        UtilityLog.d("wx-elys", "westnorth: " + westnorth)
-        UtilityLog.d("wx-elys", "westsouth: " + westsouth)
-        UtilityLog.d("wx-elys", "eastsouth: " + eastsouth)
-        UtilityLog.d("wx-elys", "eastnorth: " + eastnorth)
-        */
-
-
-        val vertices = floatArrayOf(
-            left, top, 0.0f,
-            left, bottom, 0.0f,
-            right, bottom, 0.0f,
-            right, top, 0.0f)
-
-
-        val indices = shortArrayOf(0, 1, 2, 0, 2, 3) // The order of vertexrendering.
-
-        // The vertex buffer.
-        val vbb = ByteBuffer.allocateDirect(vertices.size * 4)
-        vbb.order(ByteOrder.nativeOrder())
-        vertexBuffer = vbb.asFloatBuffer()
-        vertexBuffer.put(vertices)
-        vertexBuffer.position(0)
-
-        // initialize byte buffer for the draw list
-        val dlb = ByteBuffer.allocateDirect(indices.size * 2)
-        dlb.order(ByteOrder.nativeOrder())
-        drawListBuffer = dlb.asShortBuffer()
-        drawListBuffer.put(indices)
-        drawListBuffer.position(0)
-
-
-        //texture
-        val uvs = floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f)
-
-        // The texture buffer
-        val tbb = ByteBuffer.allocateDirect(uvs.size * 4)
-        tbb.order(ByteOrder.nativeOrder())
-        uvBuffer = tbb.asFloatBuffer()
-        uvBuffer.put(uvs)
-        uvBuffer.position(0)
-        OpenGLShader.LoadImage(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
-
-        val mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_conus, "vPosition")
-        GLES20.glEnableVertexAttribArray(mPositionHandle)
-        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer)
-
-        val mTexCoordLoc = GLES20.glGetAttribLocation(OpenGLShader.sp_conus, "a_texCoords")
-        GLES20.glEnableVertexAttribArray(mTexCoordLoc)
-        GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT, false, 0, uvBuffer)
-        val mtrxhandle = GLES20.glGetUniformLocation(OpenGLShader.sp_conus, "uMVPMatrix")
-        GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, matrixProjectionAndView, 0)
-        val conusTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_conus, "u_texture")
-        GLES20.glUniform1i(conusTexture, 0)
-        GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.size, GLES20.GL_UNSIGNED_SHORT, drawListBuffer)
-
-        // Disable vertex array
-        GLES20.glDisableVertexAttribArray(mPositionHandle)
-        GLES20.glDisableVertexAttribArray(mTexCoordLoc)
-        //back to regular shader
-        GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-
-    }
-
-}
-//////////Conus Radar End/////////////////////
-
-
-
 
 //elys mod
-//point sprite blah//
-    private fun drawConusRadar(buffers: OglBuffers) {
-        if (buffers.isInitialized) {
-            buffers.setToPositionZero()
-            GLES20.glUseProgram(OpenGLShader.sp_loadimage)
-            positionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
-            GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
-            sizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            //var conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(RadarPreferences.FilesPath + "conus.gif")
-
-            GLES20.glUniform1f(sizeHandle, 1600f) //was 1600f
-            iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
-            //val conusbitmap: Bitmap? = ///UtilityConusRadar.nwsConusRadar(context)
-            conusradarId = OpenGLShader.LoadTexture(GlobalVariables.FilesPath + GlobalVariables.conusImageName)
-            GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-            GLES20.glEnableVertexAttribArray(positionHandle)
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, conusradarId)
-            GLES20.glUniform1i(iTexture, 0)
-            GLES20.glEnable(GLES20.GL_BLEND);
-            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-            //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-            GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-            GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-        }
-    }
 
     private fun drawUserPoints(buffers: OglBuffers) {
         if (buffers.isInitialized) {

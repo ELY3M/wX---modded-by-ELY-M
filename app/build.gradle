@@ -132,6 +132,7 @@ dependencies {
     implementation 'ch.acra:acra-core:5.9.7'
     implementation 'com.markodevcic:peko:3.0.1'
     implementation 'org.shredzone.commons:commons-suncalc:3.5'
+    implementation 'com.github.HBiSoft:HBRecorder:3.0.3'
 
 //    def composeBom = platform('androidx.compose:compose-bom:2024.03.00')
 //    implementation composeBom

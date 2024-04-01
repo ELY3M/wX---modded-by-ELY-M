@@ -15,11 +15,11 @@
 * color tables for SRM 
 * get dbz and wind speed from point via long press - request by Mike T.   
 * find very good open source video recording library and add ability to record app's screen.        
-* remove conus radar overlay.  it is way too buggy.  you can still view the conus from the long press menu 
 
 #
 ## DONE!
 ====================================
+* removed conus radar overlay.  you can see conus radar map by accessing it from long press menu in radar.   
 * Fixed few bugs esp in Spotter functions.  
 * Re-did the permissions.  
 * added option to show both first name or only last name for Spotter labels.   
