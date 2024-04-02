@@ -5,6 +5,7 @@ Changes were made to this file for inclusion in the wX program.
 joshua.tee@gmail.com
 
  */
+//modded by ELY M. - changed from yellow to white color for icons.  
 
 package joshuatee.wx.telecine
 
@@ -78,15 +79,15 @@ internal class OverlayView private constructor(
         distanceToolView.visibility = View.VISIBLE
         drawToolView.background = UtilityImg.bitmapToLayerDrawable(
                 context,
-                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_edit_24dp, Color.YELLOW)
+                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_edit_24dp, Color.WHITE)
         )
         distanceToolView.background = UtilityImg.bitmapToLayerDrawable(
                 context,
-                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_adjust_24dp, Color.YELLOW)
+                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_adjust_24dp, Color.WHITE)
         )
         cancelView.background = UtilityImg.bitmapToLayerDrawable(
                 context,
-                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.YELLOW)
+                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.WHITE)
         )
         if (getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL) {
             animationWidth = -animationWidth // Account for animating in from the other side of screen.
