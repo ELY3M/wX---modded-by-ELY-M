@@ -43,6 +43,8 @@ class SettingsAboutActivity : BaseActivity() {
     private val faqUrl = "https://gitlab.com/joshua.tee/wxl23/-/tree/master/doc/FAQ.md"
     //private val releaseNotesUrl = "https://gitlab.com/joshua.tee/wx/-/tree/master/doc/ChangeLog_User.md"
     private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
+	private val releasesPage = "https://github.com/ELY3M/wX---modded-by-ELY-M/releases"
+	private val latestAPK = "https://github.com/ELY3M/wX---modded-by-ELY-M/releases/latest/download/app-release-unsigned-signed.apk"
     private lateinit var box: VBox
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -60,6 +62,8 @@ class SettingsAboutActivity : BaseActivity() {
     private fun addCards() {
         val faqButton = CardText(this, "View FAQ") { Route.web(this, faqUrl) }
         val releaseNotesButton = CardText(this, "View Release Notes") { Route.web(this, releaseNotesUrl) }
+		val releasePageButton = CardText(this, "View Release APKs") { Route.web(this, releasePage) }
+		val latestAPKButton = CardText(this, "Latest Release APK (Direct Download)") { Route.web(this, releaseAPK) }
         val developerSettingsCard = CardText(this, "Developer Settings", SettingsDeveloperActivity::class.java)
         cardText = CardText(this, Utility.showVersion(this))
         val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
@@ -68,8 +72,9 @@ class SettingsAboutActivity : BaseActivity() {
         }
         box.addWidget(faqButton)
         box.addWidget(releaseNotesButton)
-        box.addWidget(CardText(this, "Celsius to fahrenheit table"
-        ) { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") })
+        box.addWidget(releasePageButton)
+		box.addWidget(latestAPKButton)
+        box.addWidget(CardText(this, "Celsius to fahrenheit table") { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") })
         box.addWidget(developerSettingsCard)
         box.addWidget(cardText)
         box.addWidget(cardDeleteFiles)
