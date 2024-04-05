@@ -26,18 +26,18 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import android.text.Html
 import androidx.preference.PreferenceManager
-import joshuatee.wx.parse
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.radar.NexradRenderUI
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.ui.UtilityUI
 import kotlin.system.exitProcess
+//elys mod - for checking internet
+import android.net.ConnectivityManager
+import joshuatee.wx.ui.ObjectDialogue
 
 object Utility {
 
