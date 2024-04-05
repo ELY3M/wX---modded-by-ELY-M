@@ -25,14 +25,16 @@ package joshuatee.wx.ui
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
 import android.util.TypedValue
+import android.view.WindowInsets
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import joshuatee.wx.R
-import joshuatee.wx.swap
 import joshuatee.wx.MyApplication
+import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
+import joshuatee.wx.swap
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import kotlin.math.pow
@@ -78,10 +80,12 @@ object UtilityUI {
         return value
     }
 
+
+    // distance tool, quad pane, image map,
     fun statusBarHeight(context: Context): Int {
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
         return if (resourceId > 0) {
-            UtilityLog.d("wxsize", context.resources.getDimensionPixelSize(resourceId).toString())
+            UtilityLog.d("wxsize2", context.resources.getDimensionPixelSize(resourceId).toString())
             context.resources.getDimensionPixelSize(resourceId)
         } else {
             UtilityLog.d("wxsize", "error in getting status bar height")
@@ -89,20 +93,40 @@ object UtilityUI {
         }
     }
 
-    // only used to size multipane radar
-    fun navigationBarHeight(context: Context): Int {
-        val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        // assume no nav bar in Android 13
-//        if (Build.VERSION.SDK_INT > 32) {
-//            return 0
-//        }
-        return if (resourceId > 0) {
-            // context.resources.getDimensionPixelSize(resourceId)
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, context.resources.getDimensionPixelSize(resourceId).toFloat(), MyApplication.dm).toInt()
+    // quad pane: Caused by: java.lang.NullPointerException: getRootWindowInsets(...) must not be null
+    // view is not attached
+    fun statusBarHeightNew(activity: Activity): Int {
+        return if (Build.VERSION.SDK_INT >= 30) {
+            val windowInsets: WindowInsets = activity.window.decorView.rootWindowInsets
+            val statusBarHeight = windowInsets.getInsets(WindowInsets.Type.statusBars()).top
+            UtilityLog.d("wxsize2", statusBarHeight.toString())
+            statusBarHeight
         } else {
-            0
+            val resourceId = activity.resources.getIdentifier("status_bar_height", "dimen", "android")
+            if (resourceId > 0) {
+                UtilityLog.d("wxsize1", activity.resources.getDimensionPixelSize(resourceId).toString())
+                activity.resources.getDimensionPixelSize(resourceId)
+            } else {
+                UtilityLog.d("wxsize0", "error in getting status bar height")
+                0
+            }
         }
     }
+
+    // only used to size multipane radar
+//    fun navigationBarHeight(context: Context): Int {
+//        val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+//        // assume no nav bar in Android 13
+////        if (Build.VERSION.SDK_INT > 32) {
+////            return 0
+////        }
+//        return if (resourceId > 0) {
+//            // context.resources.getDimensionPixelSize(resourceId)
+//            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, context.resources.getDimensionPixelSize(resourceId).toFloat(), MyApplication.dm).toInt()
+//        } else {
+//            0
+//        }
+//    }
 
     fun spToPx(sp: Int, context: Context): Float =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)

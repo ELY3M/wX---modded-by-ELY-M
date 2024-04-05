@@ -23,14 +23,10 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import android.view.View
-import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 class NexradStatePane(
         val activity: VideoRecordActivity,
@@ -61,23 +57,25 @@ class NexradStatePane(
             relativeLayouts.add(activity.findViewById(relativeLayoutResIdList[it]))
             relativeLayouts.last().addView(wxglSurfaceViews[it])
             //
-            // setup special sizing for multipane
+            // setup special sizing for quad
             //
-            if (numberOfPanes == 4) {
-                val params = relativeLayouts[it].layoutParams
-                if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)
-                    params.height = MyApplication.dm.heightPixels / 2 + UtilityUI.statusBarHeight(activity)
-                else
-                    params.height = MyApplication.dm.heightPixels /
-                            2 - UIPreferences.actionBarHeight /
-                            2 - UtilityUI.statusBarHeight(activity) / 2 -
-                            (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
-                if (UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode) {
-                    UtilityLog.d("wxsize", MyApplication.dm.heightPixels.toString())
-                    params.height = MyApplication.dm.heightPixels / 2
-                }
-                params.width = MyApplication.dm.widthPixels / 2
-            }
+
+            // disabled Apr 2024 after changes in layout xml
+//            if (numberOfPanes == 4) {
+//                val params = relativeLayouts[it].layoutParams
+//                if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)
+//                    params.height = MyApplication.dm.heightPixels / 2 + UtilityUI.statusBarHeight(activity)
+//                else
+//                    params.height = MyApplication.dm.heightPixels /
+//                            2 - UIPreferences.actionBarHeight /
+//                            2 - UtilityUI.statusBarHeight(activity) / 2 -
+//                            (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
+//                if (UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode) {
+//                    // UtilityLog.d("wxsize", MyApplication.dm.heightPixels.toString())
+//                    params.height = MyApplication.dm.heightPixels / 2
+//                }
+//                params.width = MyApplication.dm.widthPixels / 2
+//            }
         }
         wxglSurfaceViews.indices.forEach {
             wxglTextObjects.add(NexradRenderTextObject(activity,

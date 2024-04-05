@@ -35,5 +35,3 @@
         android:title="@string/rtma"
         app:showAsAction="ifRoom" />
 </menu>
-
-

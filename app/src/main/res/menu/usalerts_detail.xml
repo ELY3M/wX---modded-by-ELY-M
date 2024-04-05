@@ -41,5 +41,3 @@
         android:title="@string/label_playlist"
         app:showAsAction="never" />
 </menu>
-
-

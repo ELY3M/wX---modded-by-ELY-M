@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -49,12 +49,12 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(
             breakSize = remainder;
         }
         for (int j = 0; j < breakSize; j++) {
-            iBuff[i++] = (short)(0 + incr);
-            iBuff[i++] = (short)(1 + incr);
-            iBuff[i++] = (short)(2 + incr);
-            iBuff[i++] = (short)(0 + incr);
-            iBuff[i++] = (short)(2 + incr);
-            iBuff[i++] = (short)(3 + incr);
+            iBuff[i++] = (short) (0 + incr);
+            iBuff[i++] = (short) (1 + incr);
+            iBuff[i++] = (short) (2 + incr);
+            iBuff[i++] = (short) (0 + incr);
+            iBuff[i++] = (short) (2 + incr);
+            iBuff[i++] = (short) (3 + incr);
             incr += 4;
         }
     }
@@ -79,7 +79,7 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(
     } else {
         chunk_count = total_bins / breakSize;
         remainder = total_bins - breakSize * chunk_count;
-        chunk_count++;
+        chunk_count += 1;
     }
     int chunk_index = 0;
     for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
@@ -88,8 +88,8 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(
             breakSize = remainder;
         }
         for (int j = 0; j < breakSize; j++) {
-            iBuff[i++] = (short)(0 + incr);
-            iBuff[i++] = (short)(1 + incr);
+            iBuff[i++] = (short) (0 + incr);
+            iBuff[i++] = (short) (1 + incr);
             incr += 2;
         }
     }

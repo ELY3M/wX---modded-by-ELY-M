@@ -30,5 +30,4 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="@dimen/padding_ll" />
-
 </ScrollView>

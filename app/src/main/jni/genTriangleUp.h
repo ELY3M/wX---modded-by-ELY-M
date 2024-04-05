@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,7 +30,22 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangleUp(JNIEnv *, jclass, jobject, jobject, jfloat, jfloat, jfloat, jfloat, jfloat, jdoubleArray, jdoubleArray , jint, jfloat, jobject, jbooleanArray);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangleUp(
+    JNIEnv *,
+    jclass,
+    jobject,
+    jobject,
+    jfloat,
+    jfloat,
+    jfloat,
+    jfloat,
+    jfloat,
+    jdoubleArray,
+    jdoubleArray,
+    jint,
+    jfloat,
+    jobject,
+    jbooleanArray);
 
 #ifdef __cplusplus
 }

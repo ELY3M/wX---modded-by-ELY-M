@@ -54,12 +54,12 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
 
     override fun getViewAt(position: Int): RemoteViews {
         var day = "Unknown Day"
-        var temp = 0
+//        var temp = 0
         if (cursor!!.moveToPosition(position)) {
             val dayColIndex = cursor!!.getColumnIndex(WeatherDataProvider.Columns.DAY)
-            val tempColIndex = cursor!!.getColumnIndex(WeatherDataProvider.Columns.TEMPERATURE)
+//            val tempColIndex = cursor!!.getColumnIndex(WeatherDataProvider.Columns.TEMPERATURE)
             day = cursor!!.getString(dayColIndex)
-            temp = cursor!!.getInt(tempColIndex)
+//            temp = cursor!!.getInt(tempColIndex)
         }
         var t1 = ""
         var t2 = ""

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -72,7 +72,7 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircleWithColor(
     double W_180_DIV_PI = 180.0 / M_PI;
     double W_PI_DIV_360 = M_PI / 360.0 ;
     double W_PI_DIV_4 = M_PI / 4.0;
-    len = len * 0.50;
+    len *= 0.50;
     for (i_count = 0; i_count < count; i_count++) {
         col_arr[0] = red(col_arrInt[i_count]);
         col_arr[1] = green(col_arrInt[i_count]);
@@ -91,8 +91,8 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircleWithColor(
             lBuff[l_count++] = pix_x_d + (len * cos((i + 1) *  twicePi / triangleAmount));
             lBuff[l_count++] = -1.0 * pix_y_d + (len * sin((i + 1) * twicePi / triangleAmount));
             iBuff[ix_count] = ix_count;
-            iBuff[ix_count+1] = ix_count+1;
-            iBuff[ix_count+2] = ix_count+2;
+            iBuff[ix_count+1] = ix_count + 1;
+            iBuff[ix_count+2] = ix_count + 2;
             ix_count += 3;
             cBuff[c_count] = col_arr[0];
             cBuff[c_count + 1] = col_arr[1];

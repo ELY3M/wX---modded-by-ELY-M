@@ -31,6 +31,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -223,7 +224,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             changeSearchViewTextColor(searchView)
         }
         // the SearchView's AutoCompleteTextView drop down. For some reason this wasn't working in styles.xml
-        val autoCompleteTextView: SearchView.SearchAutoComplete = searchView.findViewById(androidx.constraintlayout.widget.R.id.search_src_text)
+//        val autoCompleteTextView: SearchView.SearchAutoComplete = searchView.findViewById(androidx.constraintlayout.widget.R.id.search_src_text)
+        val autoCompleteTextView = searchView.findViewById<AutoCompleteTextView>(androidx.constraintlayout.widget.R.id.search_src_text)
         when {
             UIPreferences.themeIsWhite -> {
                 autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_white)

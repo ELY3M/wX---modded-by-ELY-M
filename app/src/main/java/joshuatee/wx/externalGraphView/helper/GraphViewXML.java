@@ -66,9 +66,6 @@ public class GraphViewXML extends GraphView {
     /**
      * creates the graphview object with data and
      * other options from xml attributes.
-     *
-     * @param context
-     * @param attrs
      */
     public GraphViewXML(Context context, AttributeSet attrs) {
         super(context, attrs);

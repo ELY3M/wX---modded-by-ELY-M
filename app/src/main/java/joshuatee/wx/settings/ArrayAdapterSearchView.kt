@@ -11,11 +11,13 @@ import androidx.appcompat.widget.SearchView
 import android.util.AttributeSet
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.R
 
 class ArrayAdapterSearchView : SearchView {
 
-    private var searchAutoComplete: SearchAutoComplete = findViewById(R.id.search_src_text)
+    // private var searchAutoComplete: SearchAutoComplete = findViewById(R.id.search_src_text)
+    private var searchAutoComplete = findViewById<AutoCompleteTextView>(R.id.search_src_text)
 
     constructor(context: Context) : super(context) {
         initialize()

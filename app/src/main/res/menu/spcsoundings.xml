@@ -68,4 +68,3 @@
         android:title="@string/spc_help"
         app:showAsAction="never" />
 </menu>
-

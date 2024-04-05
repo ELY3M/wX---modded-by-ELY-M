@@ -331,7 +331,7 @@ public class GraphView extends View {
     protected void onDraw(Canvas canvas) {
         if (isInEditMode()) {
             canvas.drawColor(Color.rgb(200, 200, 200));
-            canvas.drawText("GraphView: No Preview available", canvas.getWidth() / 2, canvas.getHeight() / 2, mPreviewPaint);
+            canvas.drawText("GraphView: No Preview available", getWidth() / 2, getHeight() / 2, mPreviewPaint);
         } else {
             drawGraphElements(canvas);
         }

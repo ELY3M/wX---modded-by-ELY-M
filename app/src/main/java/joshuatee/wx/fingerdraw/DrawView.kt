@@ -9,10 +9,9 @@ This class is used for the drawing tool accessible from the screen recording too
 
 package joshuatee.wx.fingerdraw
 
-import android.content.Context
+import android.app.Activity
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
@@ -37,11 +36,13 @@ class DrawView : View {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         setMeasuredDimension(
                 MyApplication.dm.widthPixels,
-                MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) - UIPreferences.actionBarHeight
+                MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(activity) - UIPreferences.actionBarHeight
         )
     }
 
     private val undoButton: Button? = null
+
+    private val activity: Activity
 
     /** the paint holds the draw options like colors  */
     private val paint = Paint()
@@ -57,12 +58,14 @@ class DrawView : View {
     private val drawListener = DrawListener()
 
     /** this constructor allows us to use this in an xml layout  */
-    constructor(context: Context, attribs: AttributeSet) : super(context, attribs) {
-        setup()
-    }
+//    constructor(activity: Activity, attribs: AttributeSet) : super(activity, attribs) {
+//        this.activity = activity
+//        setup()
+//    }
 
     /** default constructor  */
-    constructor(context: Context) : super(context) {
+    constructor(activity: Activity) : super(activity) {
+        this.activity = activity
         setup()
     }
 

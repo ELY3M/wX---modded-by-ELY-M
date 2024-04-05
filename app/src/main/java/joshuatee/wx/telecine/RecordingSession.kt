@@ -8,7 +8,7 @@ joshua.tee@gmail.com
 
 package joshuatee.wx.telecine
 
-import android.content.Context
+import android.app.Activity
 import android.os.Build
 import android.view.Gravity
 import android.view.WindowManager
@@ -24,7 +24,7 @@ import joshuatee.wx.fingerdraw.DrawLineView
 import joshuatee.wx.fingerdraw.DrawView
 import joshuatee.wx.radar.NexradRenderState
 
-internal class RecordingSession(private val context: Context) {
+internal class RecordingSession(private val context: Activity) {
     private val windowManager: WindowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
     private var overlayView: OverlayView? = null
     private var drawToolActive = false

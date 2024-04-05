@@ -8,14 +8,14 @@ joshua.tee@gmail.com
 
 package joshuatee.wx.telecine
 
-import android.content.Context
+import android.app.Activity
 
 class TelecineService {
 
     private var recordingSession: RecordingSession? = null
 
-    fun start(context: Context) {
-        recordingSession = RecordingSession(context)
+    fun start(activity: Activity) {
+        recordingSession = RecordingSession(activity)
         recordingSession!!.showOverlay()
     }
 }

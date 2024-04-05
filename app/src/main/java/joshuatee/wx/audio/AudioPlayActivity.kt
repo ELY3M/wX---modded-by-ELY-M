@@ -21,15 +21,12 @@
 
 package joshuatee.wx.audio
 
-import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
@@ -147,16 +144,21 @@ abstract class AudioPlayActivity : AppCompatActivity() {
 
     private val isStoragePermissionGranted: Boolean
         get() {
-            if (Build.VERSION.SDK_INT >= 33) {
-                return true
-            }
-            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                true
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-                false
-            }
+            return true
         }
+
+//    private val isStoragePermissionGranted: Boolean
+//        get() {
+//            if (Build.VERSION.SDK_INT >= 33) {
+//                return true
+//            }
+//            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                true
+//            } else {
+//                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+//                false
+//            }
+//        }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {

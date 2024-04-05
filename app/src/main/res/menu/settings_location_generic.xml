@@ -32,5 +32,3 @@
         android:title="@string/locate"
         app:showAsAction="ifRoom" />
 </menu>
-
-

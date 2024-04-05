@@ -39,5 +39,3 @@
         android:title="@string/load_from_file"
         app:showAsAction="never" />
 </menu>
-
-

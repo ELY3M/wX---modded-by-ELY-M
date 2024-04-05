@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,16 +26,16 @@ union CharToStruct {
     unsigned short value;
 };
 
-unsigned short toShort(char* value){
+unsigned short toShort(char* value) {
     union CharToStruct cs;
-    cs.charArray[0] = value[1]; // most significant bit of short is not first bit of char array
+    cs.charArray[0] = value[1];  // most significant bit of short is not first bit of char array
     cs.charArray[1] = value[0];
     return cs.value;
 }
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials (
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
     JNIEnv * env,
-    jobject clazz, // was jclass
+    jobject clazz,  // was jclass
     jstring src,
     jlong seekStart,
     jint length,
@@ -97,7 +97,7 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials (
         //      perror("error reading file");
         //}
     }
-    BZ2_bzBuffToBuffDecompress((char *)oBuff, (unsigned int *)&ret_size, (char *)iBuff, length, 1, 0);  // 1 for small, 0 verbosity
+    BZ2_bzBuffToBuffDecompress((char *) oBuff, (unsigned int *) &ret_size, (char *) iBuff, length, 1, 0);  // 1 for small, 0 verbosity
     int o_idx = 20;
     char array[2];
     array[0] = oBuff[o_idx++];
@@ -123,11 +123,11 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials (
         array[0] = oBuff[o_idx + number_of_rle_halfwords + 2];
         array[1] = oBuff[o_idx + number_of_rle_halfwords + 3];
         tn_next = toShort(array);
-        angle_next = (float)(450 - (tn_next / 10.0));
-        angle = (float)(450 - (tn / 10.0));
-        if (r == 0)
+        angle_next = (float) (450 - (tn_next / 10.0));
+        angle = (float) (450 - (tn / 10.0));
+        if (r == 0) {
             angle_0 = angle;
-
+        }
         level = 0;
         level_count = 0;
         bin_start = binSize;
@@ -141,9 +141,9 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials (
         double angleCos = cos(angle / W_180_DIV_PI);
         double angleSin = sin(angle / W_180_DIV_PI);
         for (bin = 0; bin < number_of_rle_halfwords; bin++) {
-            cur_level = (unsigned char)oBuff[o_idx++];
-            if (cur_level == level){
-                level_count++;
+            cur_level = (unsigned char) oBuff[o_idx++];
+            if (cur_level == level) {
+                level_count += 1;
             } else {
                 bin_size_times_level_count = binSize * level_count;
 
@@ -160,16 +160,16 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials (
                 rBuff[r_i++] = bin_start * angleSin;
 
                 for (color_for = 0; color_for < 4; color_for++) {
-                    cBuff[c_i++] = (jbyte)color_r[level];
-                    cBuff[c_i++] = (jbyte)color_g[level];
-                    cBuff[c_i++] = (jbyte)color_b[level];
+                    cBuff[c_i++] = (jbyte) color_r[level];
+                    cBuff[c_i++] = (jbyte) color_g[level];
+                    cBuff[c_i++] = (jbyte) color_b[level];
                 }
-                total_bins++;
+                total_bins += 1;
                 level = cur_level;
                 bin_start = bin * binSize;
                 level_count = 1;
             }
-        } // end looping over bins in one radial
+        }  // end looping over bins in one radial
     }
     fclose(fp_src);
     return total_bins;

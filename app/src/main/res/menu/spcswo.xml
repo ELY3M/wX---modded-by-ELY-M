@@ -96,6 +96,3 @@
         android:title="@string/state_graphics"
         app:showAsAction="never" />
 </menu>
-
-
-

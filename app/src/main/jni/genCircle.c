@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -58,7 +58,7 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircle(
     double W_180_DIV_PI = 180.0 / M_PI;
     double W_PI_DIV_360 = M_PI / 360.0 ;
     double W_PI_DIV_4 = M_PI / 4.0;
-    len = len * 0.50;
+    len *= 0.50;
     for (int i_count = 0; i_count < count; i_count++) {
         point_x = x_arr[i_count];
         point_y = y_arr[i_count];

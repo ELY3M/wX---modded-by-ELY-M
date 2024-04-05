@@ -25,4 +25,3 @@
         android:title="@string/help_menu_item"
         app:showAsAction="always" />
 </menu>
-

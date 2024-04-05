@@ -38,22 +38,20 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.ui.UtilityUI
 import kotlin.system.exitProcess
-import android.net.ConnectivityManager
-import joshuatee.wx.ui.ObjectDialogue
 
 object Utility {
 
-    private fun showDiagnostics(context: Context): String {
+    private fun showDiagnostics(activity: Activity): String {
         var diagnostics = ""
         diagnostics += MyApplication.dm.widthPixels.toString() + " Screen width" + GlobalVariables.newline
         diagnostics += MyApplication.dm.heightPixels.toString() + " Screen height" + GlobalVariables.newline
-        diagnostics += UtilityUI.statusBarHeight(context).toString() + " Status bar height" + GlobalVariables.newline
+        diagnostics += UtilityUI.statusBarHeight(activity).toString() + " Status bar height" + GlobalVariables.newline
         var landScape = false
-        if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             landScape = true
         }
         diagnostics += landScape.toString() + " Landscape" + GlobalVariables.newline
-        diagnostics += "Homescreen navdrawer list: " + UtilityNavDrawer.getNavDrawerTokenList(context) + GlobalVariables.newline
+        diagnostics += "Homescreen navdrawer list: " + UtilityNavDrawer.getNavDrawerTokenList(activity) + GlobalVariables.newline
         return diagnostics
     }
 

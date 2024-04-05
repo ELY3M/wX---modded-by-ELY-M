@@ -21,22 +21,22 @@
 
 package joshuatee.wx.audio
 
-import java.io.File
-import java.util.HashMap
-import java.util.Locale
 import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Environment
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.NotificationPreferences
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
+import java.io.File
 import java.io.IOException
+import java.util.Locale
 import kotlin.math.min
+
 
 object UtilityTts {
 
@@ -131,7 +131,13 @@ object UtilityTts {
                 }
             }
 
-            override fun onError(utteranceId: String) {}
+            @Deprecated(
+                    message = "This method was deprecated in API level 21.",
+                    replaceWith = ReplaceWith("nothing"),
+                    level = DeprecationLevel.WARNING
+            )
+            override fun onError(utteranceId: String) {
+            }
 
             override fun onStart(utteranceId: String) {}
         })
@@ -158,7 +164,13 @@ object UtilityTts {
                 }
             }
 
-            override fun onError(utteranceId: String) {}
+            @Deprecated(
+                    message = "This method was deprecated in API level 21.",
+                    replaceWith = ReplaceWith("nothing"),
+                    level = DeprecationLevel.WARNING
+            )
+            override fun onError(utteranceId: String) {
+            }
 
             override fun onStart(utteranceId: String) {}
         })
@@ -169,19 +181,25 @@ object UtilityTts {
             mediaPlayer!!.stop()
         }
         val txt = UtilityTtsTranslations.translateAbbreviation(txtF)
-        val myHashRender = HashMap<String, String>()
-        val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-        val wxDir = File(musicDir, GlobalVariables.PACKAGE_NAME)
-        if (!wxDir.exists() && !wxDir.mkdirs()) {
-            return
-        }
+//        val myHashRender = HashMap<String, String>()
+//        val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+//        val wxDir = File(musicDir, GlobalVariables.PACKAGE_NAME)
+//        if (!wxDir.exists() && !wxDir.mkdirs()) {
+//            return
+//        }
         val chunks = splitInChunks(Utility.fromHtml(txt))
         fileCount = chunks.size
         (0 until fileCount).forEach {
-            myHashRender.clear()
-            myHashRender[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = it.toString() + prod
-            val fileName = File(wxDir, FILENAME + it.toString()).absolutePath
-            ttobjGlobal!!.synthesizeToFile(chunks[it], myHashRender, fileName)
+//            myHashRender.clear()
+//            myHashRender[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = it.toString() + prod
+//            val fileName = File(wxDir, FILENAME + it.toString()).absolutePath
+//            val fileName = File(context.filesDir, FILENAME + it.toString()).absolutePath
+            val fileName = File(context.filesDir, FILENAME + it.toString())
+
+//            ttobjGlobal!!.synthesizeToFile(chunks[it], myHashRender, fileName)
+            val bundle = Bundle()
+            bundle.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, it.toString() + prod)
+            ttobjGlobal!!.synthesizeToFile(chunks[it], bundle, fileName, it.toString() + prod)
         }
     }
 
@@ -201,13 +219,14 @@ object UtilityTts {
     }
 
     private fun playMediaPlayerFile(context: Context, fileNum: Int) {
-        val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-        val wxDir = File(musicDir, GlobalVariables.PACKAGE_NAME)
-        if (!wxDir.exists() && !wxDir.mkdirs()) {
-            return
-        }
+//        val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+//        val wxDir = File(musicDir, GlobalVariables.PACKAGE_NAME)
+//        if (!wxDir.exists() && !wxDir.mkdirs()) {
+//            return
+//        }
         mediaPlayer?.reset()
-        val fileName = File(wxDir, FILENAME + fileNum.toString()).absolutePath
+//        val fileName = File(wxDir, FILENAME + fileNum.toString()).absolutePath
+        val fileName = File(context.filesDir, FILENAME + fileNum.toString()).absolutePath
         val uri = Uri.parse("file://$fileName")
         try {
             mediaPlayer?.setDataSource(context, uri)

@@ -33,7 +33,24 @@
 extern "C" {
 #endif
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(JNIEnv *, jobject, jstring, jlong, jint, jobject, jobject, jobject, jobject, jfloat, jbyte, jbyte, jbyte, jobject, jobject, jobject, jint);
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
+    JNIEnv *,
+    jobject,
+    jstring,
+    jlong,
+    jint,
+    jobject,
+    jobject,
+    jobject,
+    jobject,
+    jfloat,
+    jbyte,
+    jbyte,
+    jbyte,
+    jobject,
+    jobject,
+    jobject,
+    jint);
 
 #ifdef __cplusplus
 }

@@ -97,13 +97,6 @@ public abstract class BaseSeries<E extends DataPointInterface> implements Series
     private Boolean mIsCursorModeCache;
 
     /**
-     * creates series without data
-     */
-    public BaseSeries() {
-        mGraphViews = new ArrayList<>();
-    }
-
-    /**
      * creates series with data
      *
      * @param data data points
@@ -182,7 +175,7 @@ public abstract class BaseSeries<E extends DataPointInterface> implements Series
         if (from <= getLowestValueX() && until >= getHighestValueX()) {
             return mData.iterator();
         } else {
-            return new Iterator<E>() {
+            return new Iterator<>() {
                 final Iterator<E> org = mData.iterator();
                 E nextValue = null;
                 E nextNextValue = null;
@@ -276,8 +269,6 @@ public abstract class BaseSeries<E extends DataPointInterface> implements Series
      * set the color of the series. This will be used in
      * plotting (depends on the series implementation) and
      * is used in the legend.
-     *
-     * @param mColor
      */
     public void setColor(int mColor) {
         this.mColor = mColor;
@@ -343,9 +334,7 @@ public abstract class BaseSeries<E extends DataPointInterface> implements Series
         E shortest = null;
         for (Map.Entry<PointF, E> entry : mDataPoints.entrySet()) {
             float x1 = entry.getKey().x;
-            float x2 = x;
-
-            float distance = Math.abs(x1 - x2);
+            float distance = Math.abs(x1 - x);
             if (shortest == null || distance < shortestDistance) {
                 shortestDistance = distance;
                 shortest = entry.getValue();

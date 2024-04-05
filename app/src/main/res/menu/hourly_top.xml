@@ -30,4 +30,3 @@
         android:icon="@drawable/ic_settings_24dp_white"
         android:title="@string/label_settings" />
 </menu>
-

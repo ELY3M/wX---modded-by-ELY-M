@@ -2,7 +2,23 @@
 
 # Developer ChangeLog
 
-## 55878 2024_03_27
+## 55880 2024_04_05
+
+*
+
+## 55879 2024_04_05
+
+* [ADD] move to non-deprecated method "synthesizeToFile" in UtilityTts.kt
+* [ADD] make changes in the following files to avoid computing pane sizes in quad pane nexrad (use
+  layout from dual pane)
+
+```
+	modified:   app/src/main/java/joshuatee/wx/radar/NexradStatePane.kt
+	modified:   app/src/main/res/layout/activity_uswxoglmultipane_quad_immersive.xml
+	modified:   app/src/main/res/layout/activity_uswxoglmultipane_quad_immersive_white.xml
+```
+
+## 55878 2024_04_03
 
 * [ADD] In support of **SCN24-02: New Forecast Product “Offshore Waters Forecast for SW N Atlantic
   Ocean”
@@ -10,6 +26,9 @@
   add `offnt5` and rename title for `offnt3`. These products are accessed via "National Text"
   activity.
 * [FIX] lint in UtilityTheme.setPrimaryColor by using different methods
+* [REF] native code formatting
+* [ADD] move Text To Speech (TTS) data files into private storage to remove the need for this:
+  android.permission.WRITE_EXTERNAL_STORAGE
 
 ## 55877 2024_03_26
 

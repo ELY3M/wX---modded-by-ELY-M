@@ -334,5 +334,3 @@
         android:title="@string/label_blank"
         app:showAsAction="never" />
 </menu>
-
-

@@ -21,19 +21,4 @@
         android:text=""
         android:textColor="#fff"
         android:textSize="@dimen/normal_text" />
-
-    <!--    <View-->
-    <!--        android:id="@+id/spacing"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="1dp"-->
-    <!--        android:background="?attr/colorPrimary"-->
-    <!--        android:focusable="false" />-->
 </LinearLayout>
-
-    <!--
-    TextView
-    android:drawablePadding="5dp"
-
-    all three elements had
-    android:background="@color/primary_dark_blue"
-    -->

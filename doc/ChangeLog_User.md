@@ -8,12 +8,13 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
-## 55877 2024_03_26 (BETA)
+## 55877 2024_04_03
 
 * [ADD] add support for Nexrad "KHDC" for Service Change Notice 24-11 Hammond, LA WSR-88D (KHDC)
   to Begin NEXRAD Level III Product Dissemination on or around March 31, 2024.
 * [ADD] per upcoming changes: wX Android screen recording (**but not** associated drawing tools)
-  will not be available after May 1, 2024 Please use native screen recording and screen shot capabilities instead.
+  will not be available. Please use native screen recording and screen shot
+  capabilities instead.
   This existing functionality does not fall within Google's accepted "Foreground Service Type" once
   the app targets API34 (Android 14) which is required by sometime later in 2024.
 * [ADD] Target the latest version of Android (API 34, this is periodically required to be compliant
