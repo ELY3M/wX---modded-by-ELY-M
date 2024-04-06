@@ -62,8 +62,8 @@ class SettingsAboutActivity : BaseActivity() {
     private fun addCards() {
         val faqButton = CardText(this, "View FAQ") { Route.web(this, faqUrl) }
         val releaseNotesButton = CardText(this, "View Release Notes") { Route.web(this, releaseNotesUrl) }
-		val releasePageButton = CardText(this, "View Release APKs") { Route.web(this, releasePage) }
-		val latestAPKButton = CardText(this, "Latest Release APK (Direct Download)") { Route.web(this, releaseAPK) }
+		val releasePageButton = CardText(this, "View Release APKs") { Route.web(this, releasesPage) }
+		val latestAPKButton = CardText(this, "Latest Release APK (Direct Download)") { Route.web(this, latestAPK) }
         val developerSettingsCard = CardText(this, "Developer Settings", SettingsDeveloperActivity::class.java)
         cardText = CardText(this, Utility.showVersion(this))
         val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
