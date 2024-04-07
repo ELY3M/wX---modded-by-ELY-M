@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import java.util.Locale
 import android.os.Bundle
 import android.view.Menu
@@ -83,6 +84,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.lsrbywfo)
         val arguments = intent.getStringArrayExtra(URL)!!

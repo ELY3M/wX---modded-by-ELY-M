@@ -21,6 +21,7 @@
 
 package joshuatee.wx.misc
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
@@ -66,6 +67,7 @@ class USAlertsActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer, R.menu.uswarn, false)
         val arguments = intent.getStringArrayExtra(URL)!!

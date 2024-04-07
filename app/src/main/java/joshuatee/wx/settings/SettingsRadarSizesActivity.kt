@@ -22,6 +22,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
@@ -35,6 +36,7 @@ class SettingsRadarSizesActivity : BaseActivity() {
 
     private lateinit var box: VBox
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Radar Line / Marker sizes", GlobalVariables.PREFERENCES_HELP_TITLE)

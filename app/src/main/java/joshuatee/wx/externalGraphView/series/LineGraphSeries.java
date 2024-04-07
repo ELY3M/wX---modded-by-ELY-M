@@ -50,7 +50,7 @@ public class LineGraphSeries<E extends DataPointInterface> extends BaseSeries<E>
         /**
          * the thickness of the line.
          * This option will be ignored if you are
-         * using a custom paint via {@link #setCustomPaint(android.graphics.Paint)}
+         * using a custom paint via #setCustomPaint(android.graphics.Paint)
          */
         private final int thickness = 5;
 
@@ -523,7 +523,7 @@ public class LineGraphSeries<E extends DataPointInterface> extends BaseSeries<E>
     /**
      * @param backgroundColor the background color for the filling under
      *                        the line.
-     * @see #setDrawBackground(boolean)
+     *                        see #setDrawBackground(boolean)
      */
     public void setBackgroundColor(int backgroundColor) {
         mStyles.backgroundColor = backgroundColor;

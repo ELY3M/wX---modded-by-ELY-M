@@ -26,6 +26,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.R
@@ -37,10 +39,10 @@ import joshuatee.wx.util.UtilityLog
 
 abstract class VideoRecordActivity : AppCompatActivity() {
 
-    companion object {
-        /** code to post/handler request for permission  */
-        private const val REQUEST_CODE_PERM = 999
-    }
+//    companion object {
+//        /** code to post/handler request for permission  */
+//        private const val REQUEST_CODE_PERM = 999
+//    }
 
     protected var showDistanceTool = "false"
     lateinit var toolbar: Toolbar
@@ -85,24 +87,40 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         checkDrawOverlayPermission()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_PERM) {
-            if (Settings.canDrawOverlays(this)) {
-                telecineService = TelecineService()
-                telecineService.start(this)
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        if (requestCode == REQUEST_CODE_PERM) {
+//            if (Settings.canDrawOverlays(this)) {
+//                telecineService = TelecineService()
+//                telecineService.start(this)
+//            }
+//        }
+//    }
 
     private fun checkDrawOverlayPermission() {
         if (!Settings.canDrawOverlays(this)) {
             UtilityLog.d("wx", "checkDrawOverlayPermission - perm check")
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-            startActivityForResult(intent, REQUEST_CODE_PERM)
+//            startActivityForResult(intent, REQUEST_CODE_PERM)
+            startForResult.launch(intent)
         } else {
             telecineService = TelecineService()
             telecineService.start(this)
         }
+    }
+
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _: ActivityResult ->
+        if (Settings.canDrawOverlays(this)) {
+            telecineService = TelecineService()
+            telecineService.start(this)
+        }
+
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val intent = result.data
+//            if (Settings.canDrawOverlays(this)) {
+//                telecineService = TelecineService()
+//                telecineService.start(this)
+//            }
+//        }
     }
 
     // https://developer.android.com/training/permissions/requesting.html
@@ -114,6 +132,8 @@ abstract class VideoRecordActivity : AppCompatActivity() {
                     checkDrawOverlayPermission()
                 }
             }
+
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 }

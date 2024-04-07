@@ -22,6 +22,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import joshuatee.wx.MyApplication
@@ -39,6 +40,7 @@ class SettingsColorsActivity : BaseActivity() {
     private var objectSettingsColorLabels = listOf<ColorLabel>()
     private lateinit var box: VBox
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Colors", "Tap on item to change color.")

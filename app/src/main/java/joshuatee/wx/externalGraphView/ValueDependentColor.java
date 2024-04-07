@@ -26,8 +26,8 @@ import joshuatee.wx.externalGraphView.series.DataPointInterface;
 /**
  * you can change the color depending on the value.
  * takes only effect for BarGraphSeries.
- *
- * @see joshuatee.wx.externalGraphView.graphview.series.BarGraphSeries#setValueDependentColor(ValueDependentColor)
+ * <p>
+ * see graphview.series.BarGraphSeries#setValueDependentColor(ValueDependentColor)
  */
 public interface ValueDependentColor<T extends DataPointInterface> {
     /**

@@ -21,6 +21,7 @@
 
 package joshuatee.wx.misc
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
@@ -72,6 +73,7 @@ class HourlyActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, false)
         locationNumber = To.int(intent.getStringExtra(LOC_NUM)!!) - 1

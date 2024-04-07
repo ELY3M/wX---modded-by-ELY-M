@@ -21,6 +21,7 @@
 
 package joshuatee.wx.misc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -58,6 +59,7 @@ class AlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var arguments: Array<String>
     private lateinit var fab: Fab
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.usalerts_detail)
         arguments = intent.getStringArrayExtra(URL)!!

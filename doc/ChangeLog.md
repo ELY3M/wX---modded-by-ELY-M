@@ -2,9 +2,23 @@
 
 # Developer ChangeLog
 
-## 55880 2024_04_05
+## 55881 2024_04_07
 
 *
+
+## 55880 2024_04_07
+
+* [REF] In nexrad layout remove unnecessary layouts
+* [REF] lint, including the following
+
+```
+	modified:   app/src/main/java/joshuatee/wx/externalColorChooser/SVBar.kt
+	modified:   app/src/main/java/joshuatee/wx/externalColorChooser/SaturationBar.kt
+	modified:   app/src/main/java/joshuatee/wx/externalColorChooser/ValueBar.kt
+	modified:   app/src/main/res/values/attrs.xml
+```
+
+* [ADD] migrate to new UtilityUI.statusBarHeight
 
 ## 55879 2024_04_05
 

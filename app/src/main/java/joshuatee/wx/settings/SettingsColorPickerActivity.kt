@@ -21,6 +21,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import android.os.Bundle
@@ -54,6 +55,7 @@ class SettingsColorPickerActivity : BaseActivity(), OnColorChangedListener {
     private lateinit var vBar: ValueBar
     private lateinit var sBar: SaturationBar
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_color_picker, null, false)
         val arguments = intent.getStringArrayExtra(INFO)!!

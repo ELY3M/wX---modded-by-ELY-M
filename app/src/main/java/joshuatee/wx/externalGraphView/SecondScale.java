@@ -34,7 +34,7 @@ import java.util.List;
  * on the graph.
  * The second scale has always to have
  * manual bounds.
- * Use {@link #setMinY(double)} and {@link #setMaxY(double)}
+ * Use #setMinY(double) and #setMaxY(double)
  * to set them.
  * The second scale has it's own array of series.
  *
@@ -98,7 +98,7 @@ public class SecondScale {
     /**
      * creates the second scale.
      * normally you do not call this constructor.
-     * Use {@link com.jjoe64.graphview.GraphView#getSecondScale()}
+     * Use graphview.GraphView#getSecondScale()
      * in order to get the instance.
      */
     SecondScale(GraphView graph) {

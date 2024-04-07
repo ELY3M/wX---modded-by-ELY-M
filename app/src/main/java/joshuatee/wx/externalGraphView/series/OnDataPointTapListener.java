@@ -24,7 +24,7 @@ package joshuatee.wx.externalGraphView.series;
 /**
  * Listener for the tap event which will be
  * triggered when the user touches on a datapoint.
- * Use this in {@link com.jjoe64.graphview.series.BaseSeries#setOnDataPointTapListener(OnDataPointTapListener)}
+ * Use this in graphview.series.BaseSeries#setOnDataPointTapListener(OnDataPointTapListener)
  *
  * @author jjoe64
  */

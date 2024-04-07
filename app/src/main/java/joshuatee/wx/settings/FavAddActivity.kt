@@ -21,6 +21,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
@@ -51,6 +52,7 @@ class FavAddActivity : BaseActivity() {
     private lateinit var type: FavoriteType
     private var verboseTitle = ""
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         type = FavoriteType.stringToType(intent.getStringArrayExtra(TYPE)!![0])

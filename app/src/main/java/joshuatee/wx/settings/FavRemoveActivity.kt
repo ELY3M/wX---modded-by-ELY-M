@@ -21,6 +21,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.swap
 import joshuatee.wx.R
@@ -54,6 +55,7 @@ class FavRemoveActivity : BaseActivity() {
     private val initialValue = " : : "
     private var verboseTitle = ""
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         type = FavoriteType.stringToType(intent.getStringArrayExtra(TYPE)!![0])

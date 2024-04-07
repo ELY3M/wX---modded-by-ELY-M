@@ -145,27 +145,27 @@ class SVBar : View {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val a = context.obtainStyledAttributes(attrs, R.styleable.ColorBars, defStyle, 0)
+        val a = context.obtainStyledAttributes(attrs, R.styleable.SVBar, defStyle, 0)
         val b = context.resources
         mBarThickness = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_thickness,
+                R.styleable.SVBar_bar_thickness_svbar,
                 b.getDimensionPixelSize(R.dimen.bar_thickness)
         )
         mBarLength = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_length,
+                R.styleable.SVBar_bar_length_svbar,
                 b.getDimensionPixelSize(R.dimen.bar_length)
         )
         mPreferredBarLength = mBarLength
         mBarPointerRadius = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_pointer_radius,
+                R.styleable.SVBar_bar_pointer_radius_svbar,
                 b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
         )
         mBarPointerHaloRadius = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_pointer_halo_radius,
+                R.styleable.SVBar_bar_pointer_halo_radius_svbar,
                 b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
         )
         mOrientation = a.getBoolean(
-                R.styleable.ColorBars_bar_orientation_horizontal, ORIENTATION_DEFAULT
+                R.styleable.SVBar_bar_orientation_horizontal_svbar, ORIENTATION_DEFAULT
         )
 
         a.recycle()

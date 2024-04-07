@@ -43,7 +43,7 @@ import java.util.NoSuchElementException;
  * graph type.
  * This implementation uses a internal Array to store
  * the data. If you want to implement a custom data provider
- * you may want to implement {@link com.jjoe64.graphview.series.Series}.
+ * you may want to implement Series.
  *
  * @author jjoe64
  */

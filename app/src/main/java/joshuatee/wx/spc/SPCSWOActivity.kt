@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -67,6 +68,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var imagesPerRow = 2
     private lateinit var downloadTimer: DownloadTimer
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcswo)
         arguments = intent.getStringArrayExtra(NUMBER)!!

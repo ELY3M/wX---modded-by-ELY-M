@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.Menu
@@ -75,6 +76,7 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdsummary, false)
         box = VBox.fromResource(this)

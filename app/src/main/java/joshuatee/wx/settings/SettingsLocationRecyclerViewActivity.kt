@@ -46,6 +46,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     private lateinit var settingsLocationAdapterList: SettingsLocationAdapterList
     private var currentConditionsList = mutableListOf<CurrentConditions>()
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
         FabExtended(this, R.id.fab_add, GlobalVariables.ICON_ADD, "Add Location") { addLocation() }

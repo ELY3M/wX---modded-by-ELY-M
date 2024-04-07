@@ -21,6 +21,7 @@
 
 package joshuatee.wx.wpc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -51,6 +52,7 @@ class RainfallOutlookSummaryActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
         setTitle("WPC", "Excessive Rainfall Outlooks")

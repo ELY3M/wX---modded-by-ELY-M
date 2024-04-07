@@ -21,6 +21,7 @@
 
 package joshuatee.wx.misc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -60,6 +61,7 @@ class NwsObsSitesActivity : BaseActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, R.menu.nwsobssites, bottomToolbar = false)
         title = titleString

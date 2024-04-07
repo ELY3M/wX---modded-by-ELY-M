@@ -21,6 +21,7 @@
 
 package joshuatee.wx.misc
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -60,6 +61,7 @@ class ImageShowActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show, R.menu.image_show_activity, false)
         val arguments = intent.getStringArrayExtra(URL)!!

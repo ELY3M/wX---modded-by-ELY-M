@@ -21,6 +21,7 @@
 
 package joshuatee.wx.misc
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import java.util.Locale
 import android.os.Bundle
@@ -105,6 +106,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.afd)
         arguments = intent.getStringArrayExtra(URL)!!

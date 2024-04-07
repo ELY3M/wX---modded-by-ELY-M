@@ -22,6 +22,7 @@
 
 package joshuatee.wx.radar
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -63,6 +64,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private lateinit var nexradUI: NexradUI
     private lateinit var nexradAnimation: NexradAnimation
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         nexradArguments.process(intent.getStringArrayExtra(RID))
         landScape = UtilityUI.isLandScape(this)

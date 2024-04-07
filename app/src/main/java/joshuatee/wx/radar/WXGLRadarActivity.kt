@@ -22,6 +22,7 @@
 
 package joshuatee.wx.radar
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.core.app.NavUtils
 import androidx.core.app.TaskStackBuilder
@@ -91,6 +92,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         nexradArguments.process(intent.getStringArrayExtra(RID))
         setupLayout(savedInstanceState)

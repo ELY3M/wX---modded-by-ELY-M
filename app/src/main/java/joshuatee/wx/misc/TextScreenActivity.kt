@@ -21,6 +21,7 @@
 
 package joshuatee.wx.misc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -52,6 +53,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var cardText: CardText
     private lateinit var box: VBox
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
         arguments = intent.getStringArrayExtra(URL)!!

@@ -21,6 +21,7 @@
 
 package joshuatee.wx.misc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.objects.Route
@@ -39,6 +40,7 @@ class SpotterReportsActivity : BaseActivity() {
 
     private lateinit var recyclerViewGeneric: RecyclerViewGeneric
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         recyclerViewGeneric = RecyclerViewGeneric(this, R.id.card_list)

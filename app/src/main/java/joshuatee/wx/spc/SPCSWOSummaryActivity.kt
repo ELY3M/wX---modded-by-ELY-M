@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -50,6 +51,7 @@ class SpcSwoSummaryActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.spc_swo_summary, false)
         setTitle("Convective Outlooks", "SPC")

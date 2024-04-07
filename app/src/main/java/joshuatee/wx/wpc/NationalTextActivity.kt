@@ -21,6 +21,7 @@
 
 package joshuatee.wx.wpc
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
@@ -82,6 +83,7 @@ class NationalTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpctextproducts, R.menu.wpctext_products)
         arguments = intent.getStringArrayExtra(URL)!!

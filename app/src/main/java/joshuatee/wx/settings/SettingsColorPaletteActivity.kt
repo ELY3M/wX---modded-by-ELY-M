@@ -62,6 +62,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_twofab_colorpal, null, false)
         type = intent.getStringArrayExtra(TYPE)!![0]

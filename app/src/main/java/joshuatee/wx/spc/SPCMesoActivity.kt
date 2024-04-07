@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
 import android.os.Build
@@ -92,6 +93,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         var arguments = intent.getStringArrayExtra(INFO)
         // Keep for static pinned shortcuts

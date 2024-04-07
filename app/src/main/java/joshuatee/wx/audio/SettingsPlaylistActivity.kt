@@ -21,14 +21,11 @@
 
 package joshuatee.wx.audio
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import androidx.core.app.ActivityCompat
 import java.util.Locale
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.settings.UIPreferences
@@ -61,6 +58,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private lateinit var diaAfd: ObjectDialogue
     private lateinit var recyclerView: RecyclerViewGeneric
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
         setTitle("PlayList", "Tap item to play, view, delete or move.")
@@ -171,23 +169,28 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private val isStoragePermissionGranted: Boolean
         get() {
-            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                true
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-                false
-            }
+            return true
         }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            1 -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
-            }
-        }
-    }
+//    private val isStoragePermissionGranted: Boolean
+//        get() {
+//            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                true
+//            } else {
+//                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+//                false
+//            }
+//        }
+
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+//        when (requestCode) {
+//            1 -> {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+//                    UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
+//            }
+//        }
+//    }
 
     private fun playItemFab() {
         if (UtilityTts.mediaPlayer != null) {

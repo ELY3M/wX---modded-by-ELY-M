@@ -23,6 +23,7 @@
 package joshuatee.wx.settings
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
@@ -46,6 +47,7 @@ class SettingsRadarActivity : BaseActivity() {
 
     private lateinit var box: VBox
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Radar", GlobalVariables.PREFERENCES_HELP_TITLE)

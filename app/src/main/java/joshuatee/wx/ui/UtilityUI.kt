@@ -40,6 +40,7 @@ import joshuatee.wx.util.UtilityLog
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+
 object UtilityUI {
 
     fun immersiveMode(activity: Activity) {
@@ -81,21 +82,20 @@ object UtilityUI {
     }
 
 
-    // distance tool, quad pane, image map,
-    fun statusBarHeight(context: Context): Int {
-        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-        return if (resourceId > 0) {
-            UtilityLog.d("wxsize2", context.resources.getDimensionPixelSize(resourceId).toString())
-            context.resources.getDimensionPixelSize(resourceId)
-        } else {
-            UtilityLog.d("wxsize", "error in getting status bar height")
-            0
-        }
-    }
+    // distance tool, image map,
+//    fun statusBarHeight(context: Context): Int {
+//        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+//        return if (resourceId > 0) {
+//            UtilityLog.d("wxsize2", context.resources.getDimensionPixelSize(resourceId).toString())
+//            context.resources.getDimensionPixelSize(resourceId)
+//        } else {
+//            UtilityLog.d("wxsize", "error in getting status bar height")
+//            0
+//        }
+//    }
 
-    // quad pane: Caused by: java.lang.NullPointerException: getRootWindowInsets(...) must not be null
-    // view is not attached
-    fun statusBarHeightNew(activity: Activity): Int {
+    // distance tool, image map
+    fun statusBarHeight(activity: Activity): Int {
         return if (Build.VERSION.SDK_INT >= 30) {
             val windowInsets: WindowInsets = activity.window.decorView.rootWindowInsets
             val statusBarHeight = windowInsets.getInsets(WindowInsets.Type.statusBars()).top

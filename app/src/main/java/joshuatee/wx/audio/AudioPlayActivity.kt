@@ -21,7 +21,6 @@
 
 package joshuatee.wx.audio
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -160,15 +159,15 @@ abstract class AudioPlayActivity : AppCompatActivity() {
 //            }
 //        }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            1 -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    UtilityTts.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
-                    pause.setIcon(GlobalVariables.ICON_PAUSE)
-                }
-            }
-        }
-    }
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+//        when (requestCode) {
+//            1 -> {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    UtilityTts.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
+//                    pause.setIcon(GlobalVariables.ICON_PAUSE)
+//                }
+//            }
+//        }
+//    }
 }

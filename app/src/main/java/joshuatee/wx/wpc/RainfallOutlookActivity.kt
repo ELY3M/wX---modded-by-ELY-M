@@ -21,6 +21,7 @@
 
 package joshuatee.wx.wpc
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -57,6 +58,7 @@ class RainfallOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var cardText: CardText
     private lateinit var box: VBox
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.wpc_rainfall_forecast)
         val arguments = intent.getStringArrayExtra(NUMBER)!!

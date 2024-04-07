@@ -45,7 +45,7 @@ object Utility {
         var diagnostics = ""
         diagnostics += MyApplication.dm.widthPixels.toString() + " Screen width" + GlobalVariables.newline
         diagnostics += MyApplication.dm.heightPixels.toString() + " Screen height" + GlobalVariables.newline
-        diagnostics += UtilityUI.statusBarHeight(activity).toString() + " Status bar height" + GlobalVariables.newline
+//        diagnostics += UtilityUI.statusBarHeight(activity).toString() + " Status bar height" + GlobalVariables.newline
         var landScape = false
         if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             landScape = true

@@ -57,7 +57,7 @@ class WebView : BaseActivity() {
         return true
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint("SetJavaScriptEnabled", "MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_webview_toolbar, null, false)
         val arguments = intent.getStringArrayExtra(URL)!!

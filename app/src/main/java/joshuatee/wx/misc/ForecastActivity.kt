@@ -22,6 +22,7 @@
 package joshuatee.wx.misc
 
 //import android.annotation.SuppressLint
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -70,6 +71,7 @@ class ForecastActivity : BaseActivity() {
     }
 
     //    @SuppressLint("MissingSuperCall")
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         val arguments = intent.getStringArrayExtra(URL)!!

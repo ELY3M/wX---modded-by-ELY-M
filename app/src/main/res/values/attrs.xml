@@ -14,14 +14,27 @@
         <attr name="color_pointer_radius" format="dimension" />
         <attr name="color_pointer_halo_radius" format="dimension" />
     </declare-styleable>
-    <declare-styleable name="ColorBars">
+    <declare-styleable name="SaturationBar">
         <attr name="bar_thickness" format="dimension" />
         <attr name="bar_length" format="dimension" />
         <attr name="bar_pointer_radius" format="dimension" />
         <attr name="bar_pointer_halo_radius" format="dimension" />
         <attr name="bar_orientation_horizontal" format="boolean" />
     </declare-styleable>
-
+    <declare-styleable name="SVBar">
+        <attr name="bar_thickness_svbar" format="dimension" />
+        <attr name="bar_length_svbar" format="dimension" />
+        <attr name="bar_pointer_radius_svbar" format="dimension" />
+        <attr name="bar_pointer_halo_radius_svbar" format="dimension" />
+        <attr name="bar_orientation_horizontal_svbar" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="ValueBar">
+        <attr name="bar_thickness_vbar" format="dimension" />
+        <attr name="bar_length_vbar" format="dimension" />
+        <attr name="bar_pointer_radius_vbar" format="dimension" />
+        <attr name="bar_pointer_halo_radius_vbar" format="dimension" />
+        <attr name="bar_orientation_horizontal_vbar" format="boolean" />
+    </declare-styleable>
     <declare-styleable name="OpacityBar">
         <attr name="obar_thickness" format="dimension" />
         <attr name="obar_length" format="dimension" />

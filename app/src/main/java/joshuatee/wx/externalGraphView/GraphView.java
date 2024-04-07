@@ -250,7 +250,7 @@ public class GraphView extends View {
     /**
      * important: do not do modifications on the list
      * object that will be returned.
-     * Use {@link #removeSeries(com.jjoe64.graphview.series.Series)} and {@link #addSeries(com.jjoe64.graphview.series.Series)}
+     * Use removeSeries(graphview.series.Series) and addSeries(graphview.series.Series)
      *
      * @return all series
      */
@@ -264,8 +264,8 @@ public class GraphView extends View {
      * recalculate the viewport.
      * This will be called when a new series
      * was added or removed and when data
-     * was appended via {@link com.jjoe64.graphview.series.BaseSeries#appendData(com.jjoe64.graphview.series.DataPointInterface, boolean, int)}
-     * or {@link com.jjoe64.graphview.series.BaseSeries#resetData(com.jjoe64.graphview.series.DataPointInterface[])}.
+     * was appended via graphview.series.BaseSeries#appendData(graphview.series.DataPointInterface, boolean, int)
+     * or graphview.series.BaseSeries#resetData(graphview.series.DataPointInterface[]).
      *
      * @param keepLabelsSize true if you don't want
      *                       to recalculate the size of
@@ -372,7 +372,7 @@ public class GraphView extends View {
 
     /**
      * @return the viewport of the Graph.
-     * @see com.jjoe64.graphview.Viewport
+     * graphview.Viewport
      */
     public Viewport getViewport() {
         return mViewport;
@@ -473,7 +473,7 @@ public class GraphView extends View {
 
     /**
      * @return the legend renderer.
-     * @see com.jjoe64.graphview.LegendRenderer
+     * graphview.LegendRenderer
      */
     public LegendRenderer getLegendRenderer() {
         return mLegendRenderer;
@@ -492,8 +492,8 @@ public class GraphView extends View {
      * be shown above the graph's viewport.
      *
      * @param mTitle the title
-     * @see #setTitleColor(int) to set the font color
-     * @see #setTitleTextSize(float) to set the font size
+     *               see #setTitleColor(int) to set the font color
+     *               see #setTitleTextSize(float) to set the font size
      */
     public void setTitle(String mTitle) {
         this.mTitle = mTitle;

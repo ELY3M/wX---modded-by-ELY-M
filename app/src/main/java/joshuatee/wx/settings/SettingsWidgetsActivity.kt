@@ -21,6 +21,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.widget.CompoundButton
@@ -41,6 +42,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
 
     private lateinit var box: VBox
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
         setTitle("Widgets", GlobalVariables.PREFERENCES_HELP_TITLE)

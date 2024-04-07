@@ -61,7 +61,7 @@ public class PointsGraphSeries<E extends DataPointInterface> extends BaseSeries<
     /**
      * choose a predefined shape to draw for
      * each data point.
-     * You can also draw a custom drawing via {@link com.jjoe64.graphview.series.PointsGraphSeries.CustomShape}
+     * You can also draw a custom drawing via graphview.series.PointsGraphSeries.CustomShape
      */
     public enum Shape {
         /**

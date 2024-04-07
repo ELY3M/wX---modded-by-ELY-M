@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
@@ -69,6 +70,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, bottomToolbar = false)
         day = intent.getStringArrayExtra(NO)!![0]

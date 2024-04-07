@@ -22,6 +22,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
 import joshuatee.wx.R
@@ -39,6 +40,7 @@ class SettingsMainActivity : BaseActivity() {
     private var notifStatus = ""
     private lateinit var notifCard: CardText
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Settings", Utility.getVersion(this) + ", tap on text for additional help.")

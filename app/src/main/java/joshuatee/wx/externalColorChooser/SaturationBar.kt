@@ -169,29 +169,29 @@ class SaturationBar : View {
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         val a = context.obtainStyledAttributes(
                 attrs,
-                R.styleable.ColorBars, defStyle, 0
+                R.styleable.SaturationBar, defStyle, 0
         )
         val b = context.resources
 
         mBarThickness = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_thickness,
+                R.styleable.SaturationBar_bar_thickness,
                 b.getDimensionPixelSize(R.dimen.bar_thickness)
         )
         mBarLength = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_length,
+                R.styleable.SaturationBar_bar_length,
                 b.getDimensionPixelSize(R.dimen.bar_length)
         )
         mPreferredBarLength = mBarLength
         mBarPointerRadius = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_pointer_radius,
+                R.styleable.SaturationBar_bar_pointer_radius,
                 b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
         )
         mBarPointerHaloRadius = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_pointer_halo_radius,
+                R.styleable.SaturationBar_bar_pointer_halo_radius,
                 b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
         )
         mOrientation = a.getBoolean(
-                R.styleable.ColorBars_bar_orientation_horizontal, ORIENTATION_DEFAULT
+                R.styleable.SaturationBar_bar_orientation_horizontal, ORIENTATION_DEFAULT
         )
 
         a.recycle()

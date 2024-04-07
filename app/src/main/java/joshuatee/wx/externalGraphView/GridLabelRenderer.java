@@ -1434,8 +1434,8 @@ public class GridLabelRenderer {
 
     /**
      * @param textSize the general text size of the axis titles.
-     *                 can be overwritten with {@link #setVerticalAxisTitleTextSize(float)}
-     *                 and {@link #setHorizontalAxisTitleTextSize(float)}
+     *                 can be overwritten with #setVerticalAxisTitleTextSize(float)
+     *                 and #setHorizontalAxisTitleTextSize(float)
      */
     public void setTextSize(float textSize) {
         mStyles.textSize = textSize;

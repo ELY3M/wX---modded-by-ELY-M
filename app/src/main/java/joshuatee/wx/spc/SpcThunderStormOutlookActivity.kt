@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.Menu
@@ -51,6 +52,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
         setTitle("Thunderstorm Outlooks", "SPC")

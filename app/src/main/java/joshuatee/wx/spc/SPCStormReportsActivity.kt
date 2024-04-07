@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -91,6 +92,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var datePicker: DatePicker
     private val helpTitle = " - tap image for date picker"
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer_bottom_toolbar, R.menu.spc_stormreports)
         val arguments = intent.getStringArrayExtra(DAY)!!

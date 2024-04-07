@@ -22,8 +22,10 @@
 package joshuatee.wx.settings
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
@@ -88,6 +90,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var settingsLocationGenericSwitches: SettingsLocationGenericSwitches
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_generic, R.menu.settings_location_generic_bottom, true)
         locationNumber = intent.getStringArrayExtra(LOC_NUM)!![0]
@@ -120,7 +123,9 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             notifText.visibility = View.VISIBLE
             notifText.setOnClickListener {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
                 }
             }
         }

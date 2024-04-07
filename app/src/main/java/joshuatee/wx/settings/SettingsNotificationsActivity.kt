@@ -22,6 +22,7 @@
 package joshuatee.wx.settings
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
@@ -31,6 +32,7 @@ import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
@@ -55,6 +57,7 @@ class SettingsNotificationsActivity : BaseActivity() {
     private lateinit var box: VBox
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         setTitle("Notifications", GlobalVariables.PREFERENCES_HELP_TITLE)
@@ -117,7 +120,9 @@ class SettingsNotificationsActivity : BaseActivity() {
     private fun requestPermission() {
         requestPermissionLauncher = registerForActivityResult(RequestPermission()) {}
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            if (Build.VERSION.SDK_INT >= 33) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
     }
 

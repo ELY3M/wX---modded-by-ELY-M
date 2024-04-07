@@ -21,6 +21,7 @@
 
 package joshuatee.wx.radar
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
@@ -69,6 +70,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.radarnwsmosaic, bottomToolbar = false)
         val arguments = intent.getStringArrayExtra(URL)!!

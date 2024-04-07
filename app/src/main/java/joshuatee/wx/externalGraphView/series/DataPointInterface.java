@@ -23,9 +23,9 @@ package joshuatee.wx.externalGraphView.series;
 
 /**
  * interface of data points. Implement this in order
- * to use your class in {@link com.jjoe64.graphview.series.Series}.
+ * to use your class in graphview.series.Series.
  * <p>
- * You can also use the default implementation {@link com.jjoe64.graphview.series.DataPoint} so
+ * You can also use the default implementation graphview.series.DataPoint so
  * you do not have to implement it for yourself.
  *
  * @author jjoe64

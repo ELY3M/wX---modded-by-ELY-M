@@ -23,6 +23,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
@@ -53,6 +54,7 @@ class SettingsUIActivity : BaseActivity() {
     private lateinit var et2: EditText
     private lateinit var et3: EditText
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_ui, null, false)
         setTitle("User Interface", GlobalVariables.PREFERENCES_HELP_TITLE)

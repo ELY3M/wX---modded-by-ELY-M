@@ -27,7 +27,7 @@ import joshuatee.wx.ui.UtilityUI
  * @author Chris Lizon
  */
 
-class DrawView : View {
+class DrawView(private val activity: Activity) : View(activity) {
 
     companion object {
         private const val ACTION_ADDSEGMENT = 0
@@ -41,8 +41,6 @@ class DrawView : View {
     }
 
     private val undoButton: Button? = null
-
-    private val activity: Activity
 
     /** the paint holds the draw options like colors  */
     private val paint = Paint()
@@ -63,9 +61,7 @@ class DrawView : View {
 //        setup()
 //    }
 
-    /** default constructor  */
-    constructor(activity: Activity) : super(activity) {
-        this.activity = activity
+    init {
         setup()
     }
 

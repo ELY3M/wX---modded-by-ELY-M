@@ -67,7 +67,7 @@ public class StaticLabelsFormatter implements LabelFormatter {
 
     /**
      * creates the formatter without any static labels
-     * define your static labels via {@link #setHorizontalLabels(String[])} and {@link #setVerticalLabels(String[])}
+     * define your static labels via #setHorizontalLabels(String[]) and #setVerticalLabels(String[])
      *
      * @param graphView reference to the graphview
      */

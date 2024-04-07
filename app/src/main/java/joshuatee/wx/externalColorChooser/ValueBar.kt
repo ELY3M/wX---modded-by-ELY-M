@@ -167,14 +167,14 @@ class ValueBar : View {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val a = context.obtainStyledAttributes(attrs, R.styleable.ColorBars, defStyle, 0)
+        val a = context.obtainStyledAttributes(attrs, R.styleable.ValueBar, defStyle, 0)
         val b = context.resources
-        mBarThickness = a.getDimensionPixelSize(R.styleable.ColorBars_bar_thickness, b.getDimensionPixelSize(R.dimen.bar_thickness))
-        mBarLength = a.getDimensionPixelSize(R.styleable.ColorBars_bar_length, b.getDimensionPixelSize(R.dimen.bar_length))
+        mBarThickness = a.getDimensionPixelSize(R.styleable.ValueBar_bar_thickness_vbar, b.getDimensionPixelSize(R.dimen.bar_thickness))
+        mBarLength = a.getDimensionPixelSize(R.styleable.ValueBar_bar_length_vbar, b.getDimensionPixelSize(R.dimen.bar_length))
         mPreferredBarLength = mBarLength
-        mBarPointerRadius = a.getDimensionPixelSize(R.styleable.ColorBars_bar_pointer_radius, b.getDimensionPixelSize(R.dimen.bar_pointer_radius))
-        mBarPointerHaloRadius = a.getDimensionPixelSize(R.styleable.ColorBars_bar_pointer_halo_radius, b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius))
-        mOrientation = a.getBoolean(R.styleable.ColorBars_bar_orientation_horizontal, ORIENTATION_DEFAULT)
+        mBarPointerRadius = a.getDimensionPixelSize(R.styleable.ValueBar_bar_pointer_radius_vbar, b.getDimensionPixelSize(R.dimen.bar_pointer_radius))
+        mBarPointerHaloRadius = a.getDimensionPixelSize(R.styleable.ValueBar_bar_pointer_halo_radius_vbar, b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius))
+        mOrientation = a.getBoolean(R.styleable.ValueBar_bar_orientation_horizontal_vbar, ORIENTATION_DEFAULT)
         a.recycle()
         mBarPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mBarPaint!!.shader = shader

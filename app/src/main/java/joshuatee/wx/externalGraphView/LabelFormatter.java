@@ -25,7 +25,7 @@ package joshuatee.wx.externalGraphView;
  * Interface to use as label formatter.
  * Implement this in order to generate
  * your own labels format.
- * It is recommended to override {@link com.jjoe64.graphview.DefaultLabelFormatter}.
+ * It is recommended to override graphview.DefaultLabelFormatter.
  *
  * @author jjoe64
  */

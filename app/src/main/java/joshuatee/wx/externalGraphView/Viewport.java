@@ -49,9 +49,9 @@ import java.util.List;
  * where there is a horizontal x-axis and a
  * vertical y-axis.
  * This viewport is compatible with
- * - {@link joshuatee.wx.externalGraphView.graphview.series.BarGraphSeries}
- * - {@link joshuatee.wx.externalGraphView.graphview.series.LineGraphSeries}
- * - {@link joshuatee.wx.externalGraphView.graphview.series.PointsGraphSeries}
+ * - graphview.series.BarGraphSeries
+ * - graphview.series.LineGraphSeries
+ * - graphview.series.PointsGraphSeries
  *
  * @author jjoe64
  */
@@ -624,15 +624,15 @@ public class Viewport {
 
     /**
      * color of the border
-     *
-     * @see #setDrawBorder(boolean)
+     * <p>
+     * see #setDrawBorder(boolean)
      */
     private Integer mBorderColor;
 
     /**
      * custom paint to use for the border
-     *
-     * @see #setDrawBorder(boolean)
+     * <p>
+     * see #setDrawBorder(boolean)
      */
     private Paint mBorderPaint;
 
@@ -844,7 +844,7 @@ public class Viewport {
     /**
      * set the maximal y value for the current viewport.
      * Make sure to set the y bounds to manual via
-     * {@link #setYAxisBoundsManual(boolean)}
+     * #setYAxisBoundsManual(boolean)
      *
      * @param y max / highest value
      */
@@ -855,7 +855,7 @@ public class Viewport {
     /**
      * set the minimal y value for the current viewport.
      * Make sure to set the y bounds to manual via
-     * {@link #setYAxisBoundsManual(boolean)}
+     * #setYAxisBoundsManual(boolean)
      *
      * @param y min / lowest value
      */
@@ -1085,7 +1085,7 @@ public class Viewport {
      * a custom paint is set.
      *
      * @return border color. by default the grid color is used
-     * @see #setDrawBorder(boolean)
+     * see #setDrawBorder(boolean)
      */
     public int getBorderColor() {
         if (mBorderColor != null) {

@@ -22,6 +22,7 @@
 
 package joshuatee.wx.settings
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -62,6 +63,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     private lateinit var palTitle: EditText
     private lateinit var palContent: EditText
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_color_palette_editor, R.menu.settings_color_palette_editor, true)
 

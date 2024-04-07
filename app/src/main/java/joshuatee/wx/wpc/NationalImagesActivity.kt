@@ -21,6 +21,7 @@
 
 package joshuatee.wx.wpc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -71,6 +72,7 @@ class NationalImagesActivity : VideoRecordActivity(), View.OnClickListener {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, bottomToolbar = false)
         val arguments = intent.getStringArrayExtra(URL)!!

@@ -86,6 +86,7 @@ class SpottersActivity : BaseActivity() {
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab_spotters, null, false)
         setTitle(titleString, "Tap on name for actions.")
