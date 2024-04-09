@@ -204,17 +204,17 @@ class ValueBar : View {
             MeasureSpec.AT_MOST -> min(intrinsicSize, lengthSize)
             else -> intrinsicSize
         }
-        val barPointerHaloRadiusx2 = mBarPointerHaloRadius * 2
-        mBarLength = length - barPointerHaloRadiusx2
+        val barPointerHaloRadiusX2 = mBarPointerHaloRadius * 2
+        mBarLength = length - barPointerHaloRadiusX2
         if (mOrientation == ORIENTATION_VERTICAL) {
             setMeasuredDimension(
-                    barPointerHaloRadiusx2,
-                    mBarLength + barPointerHaloRadiusx2
+                    barPointerHaloRadiusX2,
+                    mBarLength + barPointerHaloRadiusX2
             )
         } else {
             setMeasuredDimension(
-                    mBarLength + barPointerHaloRadiusx2,
-                    barPointerHaloRadiusx2
+                    mBarLength + barPointerHaloRadiusX2,
+                    barPointerHaloRadiusX2
             )
         }
     }

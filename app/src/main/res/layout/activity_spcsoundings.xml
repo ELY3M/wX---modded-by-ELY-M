@@ -54,7 +54,7 @@
                 android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/sndgmap"
+                android:src="@drawable/sounding_map"
                 ctc:map="soundings" />
 
         </TableLayout>

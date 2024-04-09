@@ -21,7 +21,6 @@ internal class TileAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolders {
         val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.cardview_tiles, parent, false)
-//        val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.cardview_tiles, null)
         layoutView.layoutParams.height = MyApplication.dm.widthPixels / tilesPerRow
         layoutView.layoutParams.width = MyApplication.dm.widthPixels / tilesPerRow
         return RecyclerViewHolders(layoutView, itemList)

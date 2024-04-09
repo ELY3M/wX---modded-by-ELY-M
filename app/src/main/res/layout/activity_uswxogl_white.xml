@@ -29,7 +29,6 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/drawing_screen_drawlocation"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignParentTop="true"

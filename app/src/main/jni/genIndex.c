@@ -29,8 +29,6 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(
     jint breakSize
 ) {
     jshort * iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
-    int i = 0;
-    int incr = 0;
     int remainder = 0;
     int chunk_count = 1;
     int total_bins = len;
@@ -42,8 +40,10 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(
         remainder = total_bins - breakSize * chunk_count;
         chunk_count++;
     }
-    int chunk_index = 0;
-    for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
+//    int chunk_index = 0;
+    int incr = 0;
+    int i = 0;
+    for (int chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
         incr = 0;
         if (chunk_index == (chunk_count - 1)) {
             breakSize = remainder;
@@ -68,8 +68,6 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(
     jint breakSize
 ) {
     jshort * iBuff = (*env)->GetDirectBufferAddress(env, indexBuffer);
-    int i = 0;
-    int incr = 0;
     int remainder = 0;
     int chunk_count = 1;
     int total_bins = len / 4;
@@ -81,8 +79,10 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(
         remainder = total_bins - breakSize * chunk_count;
         chunk_count += 1;
     }
-    int chunk_index = 0;
-    for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
+//    int chunk_index = 0;
+    int incr = 0;
+    int i = 0;
+    for (int chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
         incr = 0;
         if (chunk_index == (chunk_count - 1)) {
             breakSize = remainder;
