@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.EdgeEffectCompat;
 
@@ -321,7 +322,7 @@ public class Viewport {
         }
 
         @Override
-        public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
+        public boolean onScroll(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
             // cursor mode
             if (mGraphView.isCursorMode()) {
                 return true;
@@ -329,7 +330,7 @@ public class Viewport {
             if (!mIsScrollable || mScalingActive) return false;
 
             // Scrolling uses math based on the viewport (as opposed to math using pixels).
-            /**
+            /*
              * Pixel offset is the offset in screen pixels, while viewport offset is the
              * offset within the current viewport. For additional information on surface sizes
              * and pixel offsets, see the docs for {@link computeScrollSurfaceSize()}. For
@@ -457,7 +458,7 @@ public class Viewport {
         }
 
         @Override
-        public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
+        public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2,
                                float velocityX, float velocityY) {
             //fling((int) -velocityX, (int) -velocityY);
             return true;

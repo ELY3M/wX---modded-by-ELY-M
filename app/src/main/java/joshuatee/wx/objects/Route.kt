@@ -333,6 +333,11 @@ class Route() {
             Route(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(url, title))
         }
 
+        // url could be a chunk of text
+        fun textPlaySound(context: Context, url: String, title: String) {
+            Route(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(url, title, "sound"))
+        }
+
         fun wfoText(context: Context) {
             if (Location.isUS) {
                 Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, arrayOf(Location.wfo, ""))

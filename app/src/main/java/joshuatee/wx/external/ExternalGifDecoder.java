@@ -401,11 +401,11 @@ public class ExternalGifDecoder {
     /**
      * Reads color table as 256 RGB integer values
      *
-     * @param ncolors int number of colors to read
+     * @param numberColors int number of colors to read
      * @return int array containing 256 colors (packed ARGB with full alpha)
      */
-    private int[] readColorTable(int ncolors) {
-        int nbytes = 3 * ncolors;
+    private int[] readColorTable(int numberColors) {
+        int nbytes = 3 * numberColors;
         int[] tab = null;
         byte[] c = new byte[nbytes];
         int n = 0;
@@ -420,7 +420,7 @@ public class ExternalGifDecoder {
             tab = new int[256]; // max size to avoid bounds checks
             int i = 0;
             int j = 0;
-            while (i < ncolors) {
+            while (i < numberColors) {
                 int r = ((int) c[j++]) & 0xff;
                 int g = ((int) c[j++]) & 0xff;
                 int b = ((int) c[j++]) & 0xff;

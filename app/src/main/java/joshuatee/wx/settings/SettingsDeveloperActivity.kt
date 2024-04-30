@@ -59,6 +59,8 @@ class SettingsDeveloperActivity : BaseActivity() {
                 Switch(this, "Black background", "NWS_RADAR_BG_BLACK", R.string.nws_black_bg_label),
                 Switch(this, "Radar with transparent toolbars", "RADAR_TOOLBAR_TRANSPARENT", R.string.radar_toolbar_transparent_label),
                 Switch(this, "Radar with transparent status bar", "RADAR_STATUSBAR_TRANSPARENT", R.string.radar_statusbar_transparent_label),
+                Switch(this, "Show graph in hourly activity", "HOURLY_SHOW_GRAPH", R.string.hourly_show_graph),
+                Switch(this, "Main screen scroll to top on restart", "MAIN_SCREEN_SCROLL_TOP_RESTART", R.string.main_screen_scroll_top_restart),
         )
         configs.forEach {
             box.addWidget(it)

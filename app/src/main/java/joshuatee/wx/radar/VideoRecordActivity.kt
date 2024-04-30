@@ -44,7 +44,6 @@ abstract class VideoRecordActivity : AppCompatActivity() {
 //        private const val REQUEST_CODE_PERM = 999
 //    }
 
-    protected var showDistanceTool = "false"
     lateinit var toolbar: Toolbar
     lateinit var toolbarBottom: Toolbar
     lateinit var objectToolbar: ObjectToolbar

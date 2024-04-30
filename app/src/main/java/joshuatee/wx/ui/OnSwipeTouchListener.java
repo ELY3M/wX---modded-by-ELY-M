@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 // thanks Edward Brey http://stackoverflow.com/questions/4139288/android-how-to-handle-right-to-left-swipe-gestures
 
@@ -45,7 +46,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         }
 
         @Override
-        public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+        public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
             if (e1 == null || e2 == null) {
                 return false;
             }

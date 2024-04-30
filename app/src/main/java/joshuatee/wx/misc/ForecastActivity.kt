@@ -21,7 +21,6 @@
 
 package joshuatee.wx.misc
 
-//import android.annotation.SuppressLint
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu

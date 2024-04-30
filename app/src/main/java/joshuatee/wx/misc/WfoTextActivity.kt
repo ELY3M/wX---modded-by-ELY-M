@@ -70,7 +70,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // Arguments
     // 1: NWS office
     // 2: product
-    //
+    // 3: "sound" (optional)
 
     companion object {
         const val URL = ""

@@ -30,7 +30,7 @@ import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownloadNws
 
-object UtilityUSHourly {
+object UtilityHourly {
 
     internal fun getStringForActivity(html: String): Hourly {
         val startTimes = html.parseColumn("\"startTime\": \"(.*?)\",")

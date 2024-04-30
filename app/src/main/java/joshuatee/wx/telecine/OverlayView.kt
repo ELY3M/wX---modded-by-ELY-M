@@ -42,17 +42,6 @@ internal class OverlayView private constructor(
         /** Called when cancel is clicked. This view is unusable once this callback is invoked.  */
         fun onCancel()
 
-        /**
-         * Called when start is clicked and it is appropriate to start recording. This view will hide
-         * itself completely before invoking this callback.
-         */
-        fun onStart()
-
-        /** Called when stop is clicked. This view is unusable once this callback is invoked.  */
-        fun onStop()
-
-        fun onScreenshot()
-
         /** Called when screenshot is clicked. This view will hide itself completely before invoking
          * this callback. It will reappear once the screenshot has been saved.
          */

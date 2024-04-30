@@ -29,6 +29,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.common.RegExp
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
@@ -349,9 +350,13 @@ class NexradRenderTextObject(
                 indexSpotterReport += 1
             }
             val latLon = if (!report) {
-                UtilitySpotter.spotterList[indexSpotter].latLon
+                // UtilitySpotter.spotterList[indexSpotter].latLon
+                val spotter = UtilitySpotter.spotterList.getOrNull(indexSpotter)
+                spotter?.latLon ?: LatLon(0.0, 0.0)
             } else {
-                UtilitySpotter.reports[indexSpotterReport].latLon
+//                UtilitySpotter.reports[indexSpotterReport].latLon
+                val spotter = UtilitySpotter.reports.getOrNull(indexSpotterReport)
+                spotter?.latLon ?: LatLon(0.0, 0.0)
             }
             scale = getScale()
             oglrZoom = 1.0f
@@ -456,7 +461,6 @@ class NexradRenderTextObject(
                             color,
                     )
                 }
-
             } else {
                 hideWpcPressureCenters()
             }

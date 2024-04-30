@@ -250,7 +250,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun startScreenRecord() {
         if (UIPreferences.recordScreenShare) {
-            showDistanceTool = "true"
             checkOverlayPerms()
         } else {
             NexradRenderUI.showImageForShare(this, "0", nexradState.render.state.rid, nexradState.render.state.product)

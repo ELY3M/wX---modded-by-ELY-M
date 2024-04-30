@@ -34,6 +34,7 @@ import android.widget.OverScroller;
 import joshuatee.wx.R;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import joshuatee.wx.MyApplication;
@@ -912,7 +913,7 @@ public class TouchImageView2 extends AppCompatImageView {
         }
 
         @Override
-        public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+        public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
             if (fling != null) {
                 //
                 // If a previous fling is still active, it should be cancelled so that two flings

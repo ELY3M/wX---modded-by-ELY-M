@@ -122,7 +122,8 @@ object UtilityVoiceCommand {
 
             vrStringOriginal.contains("forecast") -> {
                 val forecast = Utility.readPref(context, "FCST", "")
-                UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")
+//                UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")
+                Route.textPlaySound(context, forecast, "Forecast for " + Location.latLon.prettyPrint())
             }
 
             vrStringOriginal.contains("playlist") -> UtilityTts.synthesizeTextAndPlayPlaylist(context, 1)

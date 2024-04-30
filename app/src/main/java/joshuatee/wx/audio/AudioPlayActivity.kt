@@ -32,7 +32,6 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.util.UtilityLog
 
 abstract class AudioPlayActivity : AppCompatActivity() {
 
@@ -102,12 +101,8 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         ttsTxt = txt
         when (item) {
             R.id.action_read_aloud -> {
-                if (isStoragePermissionGranted) {
-                    UtilityTts.synthesizeTextAndPlay(this, txt, prod)
-                    pause.setIcon(GlobalVariables.ICON_PAUSE)
-                } else {
-                    UtilityLog.d("wx", "perm to write to storage was not granted")
-                }
+                UtilityTts.synthesizeTextAndPlay(this, txt, prod)
+                pause.setIcon(GlobalVariables.ICON_PAUSE)
             }
 
             R.id.action_stop -> {
@@ -140,34 +135,4 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         UtilityTts.shutdownTts()
         super.onDestroy()
     }
-
-    private val isStoragePermissionGranted: Boolean
-        get() {
-            return true
-        }
-
-//    private val isStoragePermissionGranted: Boolean
-//        get() {
-//            if (Build.VERSION.SDK_INT >= 33) {
-//                return true
-//            }
-//            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-//                true
-//            } else {
-//                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-//                false
-//            }
-//        }
-
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-//        when (requestCode) {
-//            1 -> {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    UtilityTts.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
-//                    pause.setIcon(GlobalVariables.ICON_PAUSE)
-//                }
-//            }
-//        }
-//    }
 }

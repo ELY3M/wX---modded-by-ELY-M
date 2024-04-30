@@ -32,7 +32,7 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(
     int remainder = 0;
     int chunk_count = 1;
     int total_bins = len;
-    if (total_bins < breakSize){
+    if (total_bins < breakSize) {
         breakSize = total_bins;
         remainder = breakSize;
     } else {
@@ -40,7 +40,6 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(
         remainder = total_bins - breakSize * chunk_count;
         chunk_count++;
     }
-//    int chunk_index = 0;
     int incr = 0;
     int i = 0;
     for (int chunk_index = 0; chunk_index < chunk_count; chunk_index++) {

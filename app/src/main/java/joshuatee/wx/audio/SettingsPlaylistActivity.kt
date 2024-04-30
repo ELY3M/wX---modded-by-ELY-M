@@ -167,31 +167,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                     "unknown"
             ) + "  (size: " + Utility.readPref(this, "PLAYLIST_$code", "").length + ")"
 
-    private val isStoragePermissionGranted: Boolean
-        get() {
-            return true
-        }
-
-//    private val isStoragePermissionGranted: Boolean
-//        get() {
-//            return if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-//                true
-//            } else {
-//                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-//                false
-//            }
-//        }
-
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-//        when (requestCode) {
-//            1 -> {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-//                    UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
-//            }
-//        }
-//    }
-
     private fun playItemFab() {
         if (UtilityTts.mediaPlayer != null) {
             UtilityTts.playMediaPlayer(1)
@@ -206,9 +181,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun playAll() {
         fabPause.set(GlobalVariables.ICON_PAUSE)
-        if (isStoragePermissionGranted) {
-            UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
-        }
+        UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
     }
 
     private fun itemSelected(position: Int) {

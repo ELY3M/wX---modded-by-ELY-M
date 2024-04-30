@@ -32,6 +32,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import joshuatee.wx.externalGraphView.series.Series;
 
 import java.util.ArrayList;
@@ -328,7 +330,7 @@ public class GraphView extends View {
      * @param canvas Canvas
      */
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         if (isInEditMode()) {
             canvas.drawColor(Color.rgb(200, 200, 200));
             canvas.drawText("GraphView: No Preview available", getWidth() / 2, getHeight() / 2, mPreviewPaint);

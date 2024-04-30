@@ -2,9 +2,74 @@
 
 # Developer ChangeLog
 
-## 55881 2024_04_08
+## 55887 2024_04_30
+
+* [ADD]
+
+## 55886 2024_04_30
+
+* [FIX] NexradRenderConstruct.lines: check greater then zero (was commented out as analyzer suggests
+  it's always true)
+
+```
+Exception java.lang.ArithmeticException: divide by zero
+  at joshuatee.wx.radar.NexradRenderConstruct.lines (NexradRenderConstruct.kt:106)
+```
+
+## 55885 2024_04_28
+
+* [FIX] check for null in NexradRenderTextObject.addSpotter
+* [FIX] National Text now shows play/pause button similar to other text viewing activities
+
+## 55884 2024_04_27
+
+* [ADD] VR "forecast" now goes to text screen showing forecast (was not working) - not able to test
+  via emulator
+* [FIX] VR popup changed to short duration from indefinite
+
+## 55883 2024_04_24
+
+* [ADD] add dev option to scroll to top of main screen on restart/resume
+* [ADD] dep update
+
+```
+-    implementation 'androidx.core:core-ktx:1.12.0'
++    implementation 'androidx.core:core-ktx:1.13.0'
+```
+
+## 55882 2024_04_21
+
+* [ADD] add dev option to show hourly graph
+* [ADD] per user request add the following to notification filters
+
+```
+"Coastal Flood Warning",
+"Coastal Flood Watch",
+"Coastal Flood Advisory"
+```
+
+* [ADD] okhttp update
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.12"
++    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
+```
+
+* [REF] rename
+
+```
+	renamed:    app/src/main/java/joshuatee/wx/misc/UtilityUSHourly.kt -> app/src/main/java/joshuatee/wx/misc/UtilityHourly.kt
+```
+
+## 55881 2024_04_10
 
 * [REF] lint
+* [ADD] tool update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.3.1'
++        classpath 'com.android.tools.build:gradle:8.3.2'
+```
 
 ## 55880 2024_04_07
 

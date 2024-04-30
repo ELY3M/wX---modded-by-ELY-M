@@ -100,11 +100,11 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         buffers.breakSize = 15000
         buffers.chunkCount = 1
         val totalBinsGeneric = points.size / 4
-        val remainder: Int
+        var remainder = 0
         if (totalBinsGeneric < buffers.breakSize) {
             buffers.breakSize = totalBinsGeneric
             remainder = buffers.breakSize
-        } else { //if (buffers.breakSize > 0) {
+        } else if (buffers.breakSize > 0) {
             buffers.chunkCount = totalBinsGeneric / buffers.breakSize
             remainder = totalBinsGeneric - buffers.breakSize * buffers.chunkCount
             buffers.chunkCount += 1

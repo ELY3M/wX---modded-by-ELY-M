@@ -130,7 +130,8 @@ object UIPreferences {
     var textSizeSmall = 0.0f
     var textSizeNormal = 0.0f
     var textSizeLarge = 0.0f
-
+    var hourlyShowGraph = true
+    var mainScreenRefreshToTop = false
     const val ANIMATION_INTERVAL_DEFAULT = 8
     const val HOMESCREEN_FAVORITE_DEFAULT = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
 
@@ -217,6 +218,8 @@ object UIPreferences {
         wpcTextFav = getInitialPreferenceString("WPC_TEXT_FAV", "pmdspd")
         playlistStr = getInitialPreferenceString("PLAYLIST", "")
         widgetCCShow7Day = getInitialPreference("WIDGET_CC_DONOTSHOW_7_DAY", "true")
+        hourlyShowGraph = getInitialPreference("HOURLY_SHOW_GRAPH", "true")
+        mainScreenRefreshToTop = getInitialPreference("MAIN_SCREEN_SCROLL_TOP_RESTART", "false")
         primaryColor = MyApplication.preferences.getInt("MYAPP_PRIMARY_COLOR", 0)
         spinnerLayout = if (themeIsWhite) {
             R.layout.spinner_row_white

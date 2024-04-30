@@ -581,5 +581,11 @@ Set the radius of any card widget. Larger numbers create a more rounded corner. 
     <string name="tiles_per_row_label">
 Set the number of images tiles in the 2nd and 3rd tab. Default is 3. Requires an app restart.</string>
 
+    <string name="hourly_show_graph">
+Show graph in hourly activity.</string>
+
+    <string name="main_screen_scroll_top_restart">
+When returning to the main forecast screen, scroll to the top.</string>
+
     <string name="androidNotificationWarning">Please make sure notifications are explicitly allowed if you enable any items below. If using Android 13 or higher, tap here to allow permissions.</string>
 </resources>

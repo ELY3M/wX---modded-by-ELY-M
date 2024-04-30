@@ -1,7 +1,18 @@
 # TODOs
 
+## Features
+
+* [ADD] vr button when using nav drawer
+* [ADD] more granular downloads for widgets "WIDGETS_ENABLED"
+* [FIX] separate the cc/7day notif timer from the widget download timer
+* [ADD] UtilityWidget.uriShareAndGenerate try some new suggested code for grant perms on
+  fileprovider
+* [ADD] debug option with circular log for downloads
+* [REF] migrate all to Future* (BackgroundFetch)
+
 ## Refactor
 
+* [ADD] option to not show graph in hourly
 * [ADD] https://developer.android.com/studio/write/lint#config
 * [REF] remove usage of legacy java.util.Calendar
 
@@ -21,15 +32,6 @@
   don't refresh
 * [FIX] USAlerts state count is not accurate
 * [FIX] storm reports - having location follow gps breaks the location marker
-
-## Features
-
-* [ADD] more granular downloads for widgets "WIDGETS_ENABLED"
-* [FIX] separate the cc/7day notif timer from the widget download timer
-* [ADD] UtilityWidget.uriShareAndGenerate try some new suggested code for grant perms on
-  fileprovider
-* [ADD] debug option with circular log for downloads
-* [REF] migrate all to Future* (BackgroundFetch)
 
 ## Deprecations
 

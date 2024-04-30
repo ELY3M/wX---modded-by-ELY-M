@@ -165,7 +165,17 @@ class SettingsNotificationsActivity : BaseActivity() {
     }
 
     private fun showWFONotificationFilterDialogue() {
-        val items = listOf("Air Quality Alert", "Wind Advisory", "Lake Wind Advisory", "Child Abduction Emergency", "Freeze Warning", "Test Message")
+        val items = listOf(
+                "Air Quality Alert",
+                "Wind Advisory",
+                "Lake Wind Advisory",
+                "Child Abduction Emergency",
+                "Freeze Warning",
+                "Test Message",
+                "Coastal Flood Warning",
+                "Coastal Flood Watch",
+                "Coastal Flood Advisory"
+        )
         val checkedItems = BooleanArray(items.size)
         val selectedItems = mutableListOf<Int>()
         val nwsWfoFilterStr = Utility.readPref(this, "NOTIF_WFO_FILTER", "")

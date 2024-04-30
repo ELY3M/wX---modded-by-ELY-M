@@ -78,7 +78,8 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
                 "ALERT_BLACKOUT_TORNADO",
                 "LOCK_TOOLBARS",
                 "ALERT_ONLYONCE",
-                "ALERT_AUTOCANCEL"
+                "ALERT_AUTOCANCEL",
+                "HOURLY_SHOW_GRAPH"
         )
         checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
                 || (pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")

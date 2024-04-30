@@ -61,12 +61,6 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
     int total_bins = 0;
     float angle;
     float angle_v;
-    int level = 0;
-    int level_count = 0;
-    float bin_start;
-    int bin = 0;
-    int color_for = 0;
-    float bin_size_times_level_count;
     double W_180_DIV_PI = 180.0 / M_PI;
     jfloat * rBuff = (*env)->GetDirectBufferAddress(env, radarBuffer);
     jbyte * cBuff = (*env)->GetDirectBufferAddress(env, colorBuffer);
@@ -90,12 +84,6 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
     size_t fread_return = fread(iBuff, sizeof(char), length, fp_src);
     if (fread_return != length) {
         return -1;
-        //} else {
-        //   if (feof(fp_src))
-        //      printf("error reading file: unexpected end of file\n");
-        //   else if (ferror(fp_src)) {
-        //      perror("error reading file");
-        //}
     }
     BZ2_bzBuffToBuffDecompress((char *) oBuff, (unsigned int *) &ret_size, (char *) iBuff, length, 1, 0);  // 1 for small, 0 verbosity
     int o_idx = 20;
@@ -128,9 +116,9 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
         if (r == 0) {
             angle_0 = angle;
         }
-        level = 0;
-        level_count = 0;
-        bin_start = binSize;
+        int level = 0;
+        int level_count = 0;
+        float bin_start = binSize;
         if (r < 359) {
             angle_v = angle_next;
         } else {
@@ -140,12 +128,12 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
         double angleVSin = sin(angle_v / W_180_DIV_PI);
         double angleCos = cos(angle / W_180_DIV_PI);
         double angleSin = sin(angle / W_180_DIV_PI);
-        for (bin = 0; bin < number_of_rle_halfwords; bin++) {
+        for (int bin = 0; bin < number_of_rle_halfwords; bin++) {
             cur_level = (unsigned char) oBuff[o_idx++];
             if (cur_level == level) {
                 level_count += 1;
             } else {
-                bin_size_times_level_count = binSize * level_count;
+                float bin_size_times_level_count = binSize * level_count;
 
                 rBuff[r_i++] = bin_start * angleVCos;
                 rBuff[r_i++] = bin_start * angleVSin;
@@ -159,7 +147,7 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
                 rBuff[r_i++] = bin_start * angleCos;
                 rBuff[r_i++] = bin_start * angleSin;
 
-                for (color_for = 0; color_for < 4; color_for++) {
+                for (int color_for = 0; color_for < 4; color_for++) {
                     cBuff[c_i++] = (jbyte) color_r[level];
                     cBuff[c_i++] = (jbyte) color_g[level];
                     cBuff[c_i++] = (jbyte) color_b[level];

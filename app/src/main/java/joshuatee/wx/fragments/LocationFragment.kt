@@ -271,6 +271,9 @@ class LocationFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (UIPreferences.mainScreenRefreshToTop) {
+            scrollView.smoothScrollTo(0, 0)
+        }
         if (glviewInitialized) {
             nexradState.onResume()
         }

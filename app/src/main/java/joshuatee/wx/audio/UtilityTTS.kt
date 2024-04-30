@@ -42,8 +42,6 @@ object UtilityTts {
 
     private var ttsInit = false
     private var ttobjGlobal: TextToSpeech? = null
-
-    //    private const val TEXT_OLD = ""
     var mediaPlayer: MediaPlayer? = null
     private const val FILENAME = "/${GlobalVariables.PACKAGE_NAME}_tts.wav"
     private var mpInit = false

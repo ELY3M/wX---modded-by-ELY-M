@@ -38,15 +38,6 @@ internal class RecordingSession(private val context: Activity) {
                 cancelOverlay()
             }
 
-            override fun onStart() {
-            }
-
-            override fun onStop() {
-            }
-
-            override fun onScreenshot() {
-            }
-
             override fun onDrawTool() {
                 addDrawTool()
             }

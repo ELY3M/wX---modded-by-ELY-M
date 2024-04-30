@@ -24,7 +24,7 @@ package joshuatee.wx.util
 
 import java.util.Locale
 import android.content.Context
-import joshuatee.wx.misc.UtilityUSHourly
+import joshuatee.wx.misc.UtilityHourly
 import joshuatee.wx.audio.UtilityPlayList
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location

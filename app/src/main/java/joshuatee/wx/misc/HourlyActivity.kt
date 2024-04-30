@@ -104,14 +104,14 @@ class HourlyActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid({ htmlShare = UtilityUSHourly.get(locationNumber) }, ::update)
+        FutureVoid({ htmlShare = UtilityHourly.get(locationNumber) }, ::update)
     }
 
     private fun update() {
         hourly = if (UIPreferences.useNwsApiForHourly) {
-            UtilityUSHourly.getStringForActivity(htmlShare[1])
+            UtilityHourly.getStringForActivity(htmlShare[1])
         } else {
-            UtilityUSHourly.getStringForActivityFromOldApi(htmlShare[1])
+            UtilityHourly.getStringForActivityFromOldApi(htmlShare[1])
         }
         cardVerticalText.set(listOf(
                 hourly.time,
@@ -120,7 +120,9 @@ class HourlyActivity : BaseActivity() {
                 hourly.windDir,
                 hourly.conditions))
         plotData()
-        graphCard.visibility = View.VISIBLE
+        if (UIPreferences.hourlyShowGraph) {
+            graphCard.visibility = View.VISIBLE
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
