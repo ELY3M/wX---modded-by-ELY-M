@@ -54,7 +54,7 @@ object DownloadText {
             prod == "VFDLOC" -> text = byProduct(context, "vfd" + Location.wfo.lowercase(Locale.US))
             //elys mod
 	        prod == "SUNMOON" -> text = UtilityTimeSunMoon.getData(latLon)
-            prod == "HOURLY" -> text = UtilityUSHourly.get(Location.currentLocation)[0]
+            prod == "HOURLY" -> text = UtilityHourly.get(Location.currentLocation)[0]
             prod == "QPF94E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "1"
                 val html = textUrl.getHtmlWithNewLine()
