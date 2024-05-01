@@ -30,7 +30,7 @@ import joshuatee.wx.ui.ObjectToolbar
 
 class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState: NexradState) {
 
-    var starButton: MenuItem
+    var starButton: MenuItem = objectToolbarBottom.getFavIcon()
     private var animateButton: MenuItem
     private var tiltMenu: MenuItem
     private var tiltMenuOption4: MenuItem
@@ -44,7 +44,6 @@ class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState:
     private val resumeButtonString = "Resume animation"
 
     init {
-        starButton = objectToolbarBottom.getFavIcon()
         with(objectToolbarBottom) {
             animateButton = find(R.id.action_a)
             tiltMenu = find(R.id.action_tilt)

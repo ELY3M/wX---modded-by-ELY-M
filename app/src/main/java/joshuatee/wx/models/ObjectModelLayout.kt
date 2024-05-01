@@ -26,14 +26,13 @@ import joshuatee.wx.util.To
 
 class ObjectModelLayout(prefModel: String, numPanesStr: String) {
 
-    private val numPanes: Int
+    // private val numPanes: Int = To.int(numPanesStr)
     var layoutSinglePane = R.layout.activity_models_generic_nospinner
     var layoutMultiPane = R.layout.activity_models_generic_multipane_nospinner
     var menuResId = R.menu.models_generic
     var topMenuResId = R.menu.models_generic_top
 
     init {
-        numPanes = To.int(numPanesStr)
         when (prefModel) {
             "WPCGEFS" -> {
 

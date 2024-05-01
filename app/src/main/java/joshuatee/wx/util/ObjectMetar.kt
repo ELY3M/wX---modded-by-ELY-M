@@ -55,10 +55,9 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
     private var rawMetar = ""
     private var metarSkyCondition = ""
     private var metarWeatherCondition = ""
-    val obsClosest: RID
+    val obsClosest: RID = Metar.findClosestObservation(context, location, index)
 
     init {
-        obsClosest = Metar.findClosestObservation(context, location, index)
         val urlMetar = "${GlobalVariables.TGFTP_WEBSITE_PREFIX}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
         val metarData = urlMetar.getHtmlWithNewLine()
         temperature = metarData.parse("Temperature: (.*?) F")

@@ -32,11 +32,10 @@ import joshuatee.wx.settings.UIPreferences
 
 class FabExtended(activity: Activity, resId: Int, iconID: Int, text: String, fn: View.OnClickListener) {
 
-    private val fab: ExtendedFloatingActionButton
+    private val fab: ExtendedFloatingActionButton = activity.findViewById(resId)
     private val context: Context = activity
 
     init {
-        fab = activity.findViewById(resId)
         setupFab(iconID, text)
         connect(fn)
     }

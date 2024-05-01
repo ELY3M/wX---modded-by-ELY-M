@@ -101,6 +101,7 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         buffers.chunkCount = 1
         val totalBinsGeneric = points.size / 4
         var remainder = 0
+        @Suppress("KotlinConstantConditions")
         if (totalBinsGeneric < buffers.breakSize) {
             buffers.breakSize = totalBinsGeneric
             remainder = buffers.breakSize
@@ -486,17 +487,7 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         linesShort(data.wbGustsBuffers, NexradLevel3WindBarbs.decodeAndPlot(state.rid, state.projectionType, true, state.paneNumber))
         wBCircle(state.paneNumber)
     }
-
-    //elys mod - Conus Radar
-    fun ConusRadar() {
-        data.conusRadarBuffers.lenInit = 0f
-        data.conusRadarBuffers.isInitialized = true
-    }
-
-    //fun deconstructConusRadar() {
-    //    data.conusRadarBuffers.isInitialized = false
-    //}
-
+    
     //elys mod - hail icon mod
     fun setHiInit(hiInit: Boolean) {
         data.hiBuffersList.forEach { it.isInitialized = hiInit }

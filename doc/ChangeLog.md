@@ -4,7 +4,15 @@
 
 ## 55887 2024_04_30
 
-* [ADD]
+* [ADD] updates and lint
+
+```
+-        classpath 'com.android.tools.build:gradle:8.3.2'
++        classpath 'com.android.tools.build:gradle:8.4.0'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-all.zip
+```
 
 ## 55886 2024_04_30
 
