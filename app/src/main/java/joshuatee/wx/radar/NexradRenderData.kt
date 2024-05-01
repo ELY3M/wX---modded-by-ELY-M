@@ -68,5 +68,4 @@ class NexradRenderData(val context: Context) {
     val warningBuffers = mutableMapOf<PolygonWarningType, OglBuffers>()		
 	//elys mod
     val userPointsBuffers = OglBuffers(PolygonType.USERPOINTS, zoomToHideMiscFeatures)
-	val conusRadarBuffers = OglBuffers()
 }

@@ -312,45 +312,6 @@ internal object NexradRenderUtilities {
         }
     }
 
-    /*
-    //elys mod - keeping this for now.
-    fun generate4326Projection(inBuff: ByteBuffer, outBuff: ByteBuffer, pn: ProjectionNumbers, count: Int) {
-        val pnXFloat = pn.xFloat
-        val pnYFloat = pn.yFloat
-        val pnXCenter = pn.xCenter
-        val pnYCenter = pn.yCenter
-        val pnScaleFloat = pn.scaleFloat
-        if (count * 4 <= outBuff.limit()) {
-            for (iCount in 0 until count step 2) {
-                outBuff.putFloat(iCount * 4, (-((inBuff.getFloat(iCount * 4 + 4) - pnYFloat) * pnScaleFloat) + pnXCenter.toFloat()))
-                outBuff.putFloat(iCount * 4 + 4, -(-((inBuff.getFloat(iCount * 4) - pnXFloat) * pnScaleFloat) + pnYCenter.toFloat()))
-            }
-        }
-    }
-    */
-
-    //elys mods
-    fun genConus(buffers: OglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
-        buffers.setToPositionZero()
-        val pixYD: Float
-        val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
-        var ixCount = 0
-        val test1 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + x * M_PI_DIV_360), E).toFloat()
-        val test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + pn.xDbl * M_PI_DIV_360), E).toFloat()
-        val len = 1 //buffers.lenInit * 2.0f
-        val triangleAmount = 1 //buffers.triangleCount
-        pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
-        (0 until triangleAmount).forEach {
-            buffers.putFloat(pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(-pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(-pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putIndex(ixCount.toShort())
-            buffers.putIndex((ixCount + 1).toShort())
-            ixCount += 2
-        }
-    }
-
     //for single images
     fun genMarker(buffers: OglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
         buffers.setToPositionZero()
@@ -415,14 +376,8 @@ internal object NexradRenderUtilities {
                 buffers.putIndex(iI, (ixCount + 2).toShort())
                 iI += 2
                 ixCount += 3
-
             }
             iCount += 1
         }
     }
-
-
-
-
-
 }
