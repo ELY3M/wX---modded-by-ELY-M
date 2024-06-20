@@ -28,13 +28,13 @@ import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.Utility
-import joshuatee.wx.wpc.NationalTextActivity
 
 object UtilityVoiceCommand {
 
-    fun processCommand(context: Context, vrStringOriginal: String, radarSiteArg: String, wfoOriginal: String, state: String): Boolean {
-        var radarSite = radarSiteArg
-        var wfo = wfoOriginal
+    fun processCommand(context: Context, vrStringOriginal: String): Boolean {
+        var radarSite = Location.rid
+        var wfo = Location.wfo
+        val state = Location.state
         var gotHit = true
         val tokens = RegExp.space.split(vrStringOriginal)
         when {
@@ -56,7 +56,7 @@ object UtilityVoiceCommand {
                     wfo = tokens[1].uppercase(Locale.US)
                 }
                 if (wfo == "WPC") {
-                    Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
+                    Route.wpcTextWithSound(context, "pmdspd", "Short Range Forecast Discussion")
                 } else {
                     Route.wfoText(context, arrayOf(wfo, "AFD", "sound"))
                 }
@@ -122,7 +122,6 @@ object UtilityVoiceCommand {
 
             vrStringOriginal.contains("forecast") -> {
                 val forecast = Utility.readPref(context, "FCST", "")
-//                UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")
                 Route.textPlaySound(context, forecast, "Forecast for " + Location.latLon.prettyPrint())
             }
 

@@ -169,7 +169,12 @@ object UtilityDownloadNws {
     fun get7DayData(latLon: LatLon): String = if (UIPreferences.useNwsApi) {
         val pointsData = getLocationPointData(latLon)
         val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
-        forecastUrl.getNwsHtml()
+        var html = forecastUrl.getNwsHtml()
+        if (html.length < 3000) {
+            Thread.sleep(1000)
+            html = forecastUrl.getNwsHtml()
+        }
+        html
     } else {
         UtilityUS.getLocationHtml(latLon)
     }

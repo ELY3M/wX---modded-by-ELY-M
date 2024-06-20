@@ -107,7 +107,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
 
             R.id.action_stop -> {
                 if (UtilityTts.mediaPlayer != null) {
-                    UtilityTts.playMediaPlayer(1)
+                    UtilityTts.playMediaPlayer()
                 }
                 if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
                     pause.setIcon(pausePressedIcon)

@@ -96,7 +96,7 @@ object UtilityUI {
 
     // distance tool, image map
     fun statusBarHeight(activity: Activity): Int {
-        return if (Build.VERSION.SDK_INT >= 30) {
+        return if (Build.VERSION.SDK_INT >= 30 && activity.window.decorView.rootWindowInsets != null) {
             val windowInsets: WindowInsets = activity.window.decorView.rootWindowInsets
             val statusBarHeight = windowInsets.getInsets(WindowInsets.Type.statusBars()).top
             UtilityLog.d("wxsize2", statusBarHeight.toString())

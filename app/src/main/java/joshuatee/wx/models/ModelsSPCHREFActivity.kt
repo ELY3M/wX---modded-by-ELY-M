@@ -100,7 +100,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             arguments = arrayOf("1", "SPCHREF", "SPC HREF")
         }
         title = arguments[2]
-        objectModelLayout = ObjectModelLayout(arguments[1], arguments[0])
+        objectModelLayout = ObjectModelLayout(arguments[1])
         if (To.int(arguments[0]) == 1) {
             super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, bottomToolbar = true)
         } else {

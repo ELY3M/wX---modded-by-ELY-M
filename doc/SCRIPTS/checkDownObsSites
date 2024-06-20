@@ -2,6 +2,7 @@
 cd /var/tmp/download || exit 1
 for site in $(cat /var/tmp/badObs2 | awk '{print $1}')
 do
+ # after 2024-06-04 per Service Change Notice 24-44 will be https://forecast.weather.gov/data/obhistory/${site}.html
  curl https://w1.weather.gov/obhistory/${site}.html > ${site}.html 
  grep "The page you requested cannot be found" ${site}.html
  sleep 1

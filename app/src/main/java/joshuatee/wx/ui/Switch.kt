@@ -72,6 +72,7 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
                 ///"UI_MAIN_SCREEN_RADAR_FAB", //elys mod - I hate fab buttons
                 "RADAR_TOOLBAR_TRANSPARENT",
                 "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
+                "USE_NWS_API_SEVEN_DAY",
                 "USE_NWS_API_HOURLY",
                 "LIGHTNING_USE_GOES",
                 "SHOW_RADAR_WHEN_PAN",

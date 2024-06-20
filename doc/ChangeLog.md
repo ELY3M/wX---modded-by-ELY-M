@@ -2,8 +2,139 @@
 
 # Developer ChangeLog
 
-## 55887 2024_04_30
+## 55897 2024_06_14
 
+* [ADD]
+
+## 55896 2024_06_14
+
+* [ADD] back ability to use NWS API or old for forecast/hourly since NWS has changed due date from
+  end of June to TBD. But, API is now the default for forecast
+* [ADD] tooling update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.4.1'
++        classpath 'com.android.tools.build:gradle:8.5.0'
+
+-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1"
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2"
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.7-all.zip
+
+
+
+```
+
+## 55895 2024_06_05
+
+* [ADD] increase mind size for 2nd retry for hourly download with new API
+* [ADD] library update
+
+```
+-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0"
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1"
+```
+
+## 55894 2024_05_29
+
+* [ADD] 2nd retry for forecast download with new API
+* [ADD] add 1 sec sleep in 2nd retry for hourly download with new API
+* [REF] in response to **SCN24-19: The National Centers for Environmental Prediction (NCEP) Climate
+  Prediction Center (CPC) will Change the Depiction and Output Formats of Several Ultraviolet
+  Index (UVI) Product Graphics on or about May 25, 2024**
+
+```
+--- a/app/src/main/java/joshuatee/wx/wpc/UtilityWpcImages.kt
++++ b/app/src/main/java/joshuatee/wx/wpc/UtilityWpcImages.kt
+@@ -303,10 +303,10 @@ internal object UtilityWpcImages {
+             "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/expert_assessment/month_drought.png",
+             "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/expert_assessment/sdohomeweb.png",
+             "https://droughtmonitor.unl.edu/data/png/current/current_usdm.png",
+-            "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/stratosphere/uv_index/gif_files/uvi_usa_f1_wmo.gif",
+-            "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/stratosphere/uv_index/gif_files/uvi_usa_f2_wmo.gif",
+-            "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/stratosphere/uv_index/gif_files/uvi_usa_f3_wmo.gif",
+-            "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/stratosphere/uv_index/gif_files/uvi_usa_f4_wmo.gif",
++            "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/stratosphere/uv_index/gif_files/uvi_usa_f1_who.png",
++            "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/stratosphere/uv_index/gif_files/uvi_usa_f2_who.png",
++            "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/stratosphere/uv_index/gif_files/uvi_usa_f3_who.png",
++            "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/stratosphere/uv_index/gif_files/uvi_usa_f4_who.png",
+```
+
+## 55893 2024_05_22
+
+* [ADD] updates
+
+```
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0'
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
+
+-        classpath 'com.android.tools.build:gradle:8.4.0'
++        classpath 'com.android.tools.build:gradle:8.4.1'
+```
+
+## 55892 2024_05_17
+
+* [FIX] pre-launch crash report: Exception java.lang.NullPointerException:
+  at joshuatee.wx.audio.UtilityTts.synthesizeTextAndPlay (UtilityTts.kt:152)
+* [REF] general cleanup in UtilityTts
+
+## 55891 2024_05_16
+
+* [ADD] per **SCN24-50: Migration of JSON and DWML Data Services to NWS’s API Application at
+  api.weather.gov and Removal from forecast.weather.gov, Effective June 27, 2024**
+  remove options to not use "new NWS API" and force everyone to use "new NWS API"
+
+## 55890 2024_05_03
+
+* [FIX] 2 crashes only seen in Pre-launch report: UtilityTts.kt and UtilityUI.kt
+
+```
+-        return if (Build.VERSION.SDK_INT >= 30) {
++        return if (Build.VERSION.SDK_INT >= 30 && activity.window.decorView.rootWindowInsets != null) {
+
+         ttobjGlobal.let {
+-            ttobjGlobal!!.stop()
+-            ttobjGlobal!!.shutdown()
++            ttobjGlobal?.stop()
++            ttobjGlobal?.shutdown()
+         }
+
+```
+
+## 55889 2024_05_03
+
+* [ADD] lib update
+
+```
+-    implementation 'com.google.android.material:material:1.11.0'
++    implementation 'com.google.android.material:material:1.12.0'
+```
+
+* [REF] lint
+
+## 55888 2024_05_02
+
+* [ADD] tool update
+
+```
+-    implementation 'androidx.core:core-ktx:1.13.0'
++    implementation 'androidx.core:core-ktx:1.13.1'
+```
+
+* [REF] remove unused VoiceCommandActivity.kt
+* [FIX] add UtilityTts.initTts(this) in CommonActionBarFragment.kt when VR is invoked
+* [FIX] UtilityTts.initTts, move 2 statements into callback
+
+## 55887 2024_05_01
+
+* [FIX] crash java.lang.IndexOutOfBoundsException at
+  joshuatee.wx.ui.SingleTextAdapterList.deleteItem (SingleTextAdapterList.kt:45)
+  at joshuatee.wx.ui.ObjectRecyclerView.deleteItem (ObjectRecyclerView.kt:60)
+  at joshuatee.wx.settings.FavRemoveActivity.deleteItem (FavRemoveActivity.kt:128)
+* [FIX] VR "forecast" was not playing audio at start
 * [ADD] updates and lint
 
 ```

@@ -87,6 +87,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     UtilityTts.mediaPlayer!!.stop()
                     UtilityTts.ttsIsPaused = true
                 }
+                UtilityTts.initTts(this)
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
                 try {
@@ -106,9 +107,9 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            PopupMessage(view, thingsYouSaid!![0])
-            val string = thingsYouSaid[0]
-            UtilityVoiceCommand.processCommand(this, string, Location.rid, Location.wfo, Location.state)
+            val spokenCommand = thingsYouSaid!![0]
+            PopupMessage(view, spokenCommand, PopupMessage.SHORT)
+            UtilityVoiceCommand.processCommand(this, spokenCommand)
         }
     }
 

@@ -42,8 +42,10 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
 
     @SuppressLint("NotifyDataSetChanged")
     fun deleteItem(index: Int) {
-        dataSet.removeAt(index)
-        notifyDataSetChanged()
+        if (dataSet.size > index) {
+            dataSet.removeAt(index)
+            notifyDataSetChanged()
+        }
     }
 
     // used in FavRemoveActivity for SPCMeso

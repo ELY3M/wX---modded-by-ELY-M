@@ -37,7 +37,6 @@ import java.io.IOException
 import java.util.Locale
 import kotlin.math.min
 
-
 object UtilityTts {
 
     private var ttsInit = false
@@ -66,9 +65,9 @@ object UtilityTts {
                 if (status != TextToSpeech.ERROR) {
                     ttobjGlobal?.language = Locale.US
                 }
+                ttsInit = true
+                ttobjGlobal?.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10.0f)
             }
-            ttsInit = true
-            ttobjGlobal!!.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10.0f)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -76,8 +75,8 @@ object UtilityTts {
 
     fun shutdownTts() {
         ttobjGlobal.let {
-            ttobjGlobal!!.stop()
-            ttobjGlobal!!.shutdown()
+            ttobjGlobal?.stop()
+            ttobjGlobal?.shutdown()
         }
     }
 
@@ -88,7 +87,7 @@ object UtilityTts {
 
     private fun initMediaPlayer(context: Context) {
         mediaPlayer = MediaPlayer()
-        mediaPlayer!!.setOnCompletionListener {
+        mediaPlayer?.setOnCompletionListener {
             if (currentFile < fileCount) {
                 playMediaPlayerFile(context, currentFile)
                 currentFile += 1
@@ -116,12 +115,12 @@ object UtilityTts {
             initTts(context)
         }
         // clear the queue of any pending objects
-        ttobjGlobal!!.stop()
+        ttobjGlobal?.stop()
         if (!mpInit) {
             initMediaPlayer(context)
         }
         synthesizeText(context, Utility.readPref(context, "PLAYLIST_" + playlistArr[index], ""), prodg)
-        ttobjGlobal!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+        ttobjGlobal?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onDone(utteranceId: String) {
                 if (currentFile == 0 && utteranceId.contains(prodg)) {
                     playMediaPlayerFile(context, 0)
@@ -149,12 +148,12 @@ object UtilityTts {
             initTts(context)
         }
         // clear the queue of any pending objects
-        ttobjGlobal!!.stop()
+        ttobjGlobal?.stop()
         if (!mpInit) {
             initMediaPlayer(context)
         }
         synthesizeText(context, txt, prod)
-        ttobjGlobal!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+        ttobjGlobal?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onDone(utteranceId: String) {
                 if (currentFile == 0 && utteranceId.contains(prod)) {
                     playMediaPlayerFile(context, 0)
@@ -176,54 +175,31 @@ object UtilityTts {
 
     private fun synthesizeText(context: Context, txtF: String, prod: String) {
         if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
-            mediaPlayer!!.stop()
+            mediaPlayer?.stop()
         }
         val txt = UtilityTtsTranslations.translateAbbreviation(txtF)
-//        val myHashRender = HashMap<String, String>()
-//        val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-//        val wxDir = File(musicDir, GlobalVariables.PACKAGE_NAME)
-//        if (!wxDir.exists() && !wxDir.mkdirs()) {
-//            return
-//        }
         val chunks = splitInChunks(Utility.fromHtml(txt))
         fileCount = chunks.size
         (0 until fileCount).forEach {
-//            myHashRender.clear()
-//            myHashRender[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = it.toString() + prod
-//            val fileName = File(wxDir, FILENAME + it.toString()).absolutePath
-//            val fileName = File(context.filesDir, FILENAME + it.toString()).absolutePath
             val fileName = File(context.filesDir, FILENAME + it.toString())
-
-//            ttobjGlobal!!.synthesizeToFile(chunks[it], myHashRender, fileName)
             val bundle = Bundle()
             bundle.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, it.toString() + prod)
-            ttobjGlobal!!.synthesizeToFile(chunks[it], bundle, fileName, it.toString() + prod)
+            ttobjGlobal?.synthesizeToFile(chunks[it], bundle, fileName, it.toString() + prod)
         }
     }
 
-    internal fun playMediaPlayer(status: Int) {
-        if (status == 0) {
-            mediaPlayer!!.start()
-        }
-        if (status == 1) {
-            ttsIsPaused = if (!ttsIsPaused) {
-                mediaPlayer!!.pause()
-                true
-            } else {
-                mediaPlayer!!.start()
-                false
-            }
+    internal fun playMediaPlayer() {
+        ttsIsPaused = if (!ttsIsPaused) {
+            mediaPlayer?.pause()
+            true
+        } else {
+            mediaPlayer?.start()
+            false
         }
     }
 
     private fun playMediaPlayerFile(context: Context, fileNum: Int) {
-//        val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-//        val wxDir = File(musicDir, GlobalVariables.PACKAGE_NAME)
-//        if (!wxDir.exists() && !wxDir.mkdirs()) {
-//            return
-//        }
         mediaPlayer?.reset()
-//        val fileName = File(wxDir, FILENAME + fileNum.toString()).absolutePath
         val fileName = File(context.filesDir, FILENAME + fileNum.toString()).absolutePath
         val uri = Uri.parse("file://$fileName")
         try {

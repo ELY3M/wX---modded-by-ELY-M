@@ -19,7 +19,7 @@
 <!-- modded by ELY M. -->
 <resources>
 
-    <string name="use_nws_api">
+        <string name="use_nws_api">
          Use the new NWS API for 7 day forecasts. If having issues with 7 day forecasts you can turn this off to use the older method.
 </string>
 
@@ -27,7 +27,7 @@
          Use the new NWS API for Hourly forecast. If having issues with hourly forecasts you can turn this off to use the older method.
 </string>
 
-      <string name="nav_drawer_main_screen_toggle">
+    <string name="nav_drawer_main_screen_toggle">
          Toggle items on or off from showing in the main screen navigation drawer if that UI mode is selected.
 </string>
 

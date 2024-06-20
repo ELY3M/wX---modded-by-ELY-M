@@ -38,9 +38,12 @@ import joshuatee.wx.ui.VBox
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     //
-    // arg0  URL or text chunk depending on if start with "http"
-    // arg1  Title
-    // arg2 if "sound" will play TTS on first load
+    // Display raw text, if text is a URL download and display
+    //
+    // Arguments
+    // 1:  URL or text chunk depending on if start with "http"
+    // 2:  Title
+    // 3: if "sound" will play TTS on first load
     //
 
     companion object {
@@ -67,6 +70,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 cardText.text = url
             }
             html = url
+            UtilityTts.conditionalPlay(arguments, 2, applicationContext, html, "textscreen")
         } else {
             getContent()
         }

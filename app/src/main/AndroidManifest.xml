@@ -21,8 +21,8 @@
 <!-- modded by ELY M. -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="55887"
-    android:versionName="55887-elys">
+    android:versionCode="55897"
+    android:versionName="55897-elys">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -37,12 +37,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- Added for telecine API34 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
-    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
- 
+    
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
@@ -495,9 +490,6 @@
             android:name=".settings.SettingsHomeScreenActivity"
             android:label="Manage Home Screen"
             android:parentActivityName="WX" />
-        <activity
-            android:name=".audio.VoiceCommandActivity"
-            android:theme="@style/Theme.Transparent" />
 
         <provider
             android:name=".util.FileProvider"
@@ -533,7 +525,8 @@
         <provider
             android:name="WeatherDataProvider"
             android:exported="true"
-            android:authorities="joshuatee.wx.weatherlistwidget.provider" />
+            android:authorities="joshuatee.wx.weatherlistwidget.provider"
+            tools:ignore="ExportedContentProvider" />
 
         <service
             android:name="joshuatee.wx.notifications.WXJobService"

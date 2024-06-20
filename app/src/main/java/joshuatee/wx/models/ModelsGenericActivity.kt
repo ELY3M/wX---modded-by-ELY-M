@@ -105,7 +105,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             titleString = arguments[2]
         }
         title = titleString
-        objectModelLayout = ObjectModelLayout(prefModelToken, numberOfPanes)
+        objectModelLayout = ObjectModelLayout(prefModelToken)
         if (To.int(numberOfPanes) == 1) {
             super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, bottomToolbar = true)
         } else {

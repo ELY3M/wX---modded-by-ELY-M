@@ -396,6 +396,11 @@ class Route() {
         fun wpcText(context: Context, product: String) {
             Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf(product))
         }
+
+        fun wpcTextWithSound(context: Context, product: String, label: String) {
+            Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf(product, label, "sound"))
+        }
+		
         //elys mod - keeping twitter
         fun webViewTwitterStates(context: Context) {
             Route(context, WebViewTwitter::class.java)

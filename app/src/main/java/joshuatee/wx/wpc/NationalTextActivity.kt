@@ -55,6 +55,8 @@ class NationalTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     //
     // Arguments
     // 1: text product (lower case)
+    // 2: title (not used?)
+    // 3: if "sound" will play TTS on first load
     //
 
     companion object {

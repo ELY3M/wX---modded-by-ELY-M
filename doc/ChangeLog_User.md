@@ -8,6 +8,41 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55896 2024_06_16 (BETA)
+
+* [ADD] using the new NWS API for forecast data is now the default since NWS is deprecating the
+  older format
+* [ADD] 2nd retry for forecast download with new API
+* [ADD] add 1 sec sleep in 2nd retry for hourly download with new API
+* [REF] URL Fix in response to **SCN24-19: The National Centers for Environmental Prediction (NCEP)
+  Climate
+  Prediction Center (CPC) will Change the Depiction and Output Formats of Several Ultraviolet
+  Index (UVI) Product Graphics on or about May 25, 2024**
+* [FIX] one crash report
+
+## 55890 2024_05_05 (BETA)
+
+* [FIX] 2 crashes only seen in Pre-launch report: UtilityTts.kt and UtilityUI.kt
+
+## 55888 2024_05_03 (BETA)
+
+* [FIX] National Text now shows play/pause button similar to other text viewing activities
+* [ADD] per user request add the following to notification filters
+
+```
+"Coastal Flood Warning",
+"Coastal Flood Watch",
+"Coastal Flood Advisory"
+```
+
+* [ADD] In support of **SCN24-02: New Forecast Product “Offshore Waters Forecast for SW N Atlantic
+  Ocean”
+  Will Start on March 26, 2024**
+  add `offnt5` and rename title for `offnt3`. These products are accessed via "National Text"
+  activity.
+* [FIX] 2 crashes seen via crash reporter
+* [REF] simplify code in nexrad layout and text to speech
+
 ## 55877 2024_04_03
 
 * [ADD] add support for Nexrad "KHDC" for Service Change Notice 24-11 Hammond, LA WSR-88D (KHDC)

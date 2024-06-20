@@ -51,8 +51,6 @@ internal class PlayListAdapter(val context: Context, private val dataSet: Mutabl
         with(holder) {
             label.text = items[0]
             timeAndSize.text = items[1]
-//            val string = Utility.fromHtml(Utility.readPref(context, "PLAYLIST_" + items[0], ""))
-//            val s = Utility.readPref(context, "PLAYLIST_" + items[0], "")
             contentPreview.text = Utility.readPref(context, "PLAYLIST_" + items[0], "")
                     .replace(GlobalVariables.newline, " ")
                     .take(maxLength)
@@ -61,7 +59,6 @@ internal class PlayListAdapter(val context: Context, private val dataSet: Mutabl
 
     fun deleteItem(index: Int) {
         dataSet.removeAt(index)
-        // notifyDataSetChanged()
         notifyItemRemoved(index)
     }
 

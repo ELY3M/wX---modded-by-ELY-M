@@ -169,7 +169,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun playItemFab() {
         if (UtilityTts.mediaPlayer != null) {
-            UtilityTts.playMediaPlayer(1)
+            UtilityTts.playMediaPlayer()
         }
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             GlobalVariables.ICON_PAUSE_PRESSED
