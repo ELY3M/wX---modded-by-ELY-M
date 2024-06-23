@@ -51,33 +51,34 @@ object UtilityForecastIcon {
     //  ntsra,80
     //  legacy: i=nsn;j=nsn;ip=60;jp=30
     //  legacy add - 2nd condition
-    private fun parseBitmapString(context: Context, url: String): Bitmap = if (url.contains("/") || url.contains(";j=") || (url.contains("i=") && url.contains("j="))) {
-        val conditions = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
-        if (conditions.size > 1) {
-            getDualBitmapWithNumbers(context, conditions[0], conditions[1])
-        } else {
-            // legacy add
-            val urlTmp = url.replace("i=", "")
+    private fun parseBitmapString(context: Context, url: String): Bitmap =
+        if (url.contains("/") || url.contains(";j=") || (url.contains("i=") && url.contains("j="))) {
+            val conditions = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
+            if (conditions.size > 1) {
+                getDualBitmapWithNumbers(context, conditions[0], conditions[1])
+            } else {
+                // legacy add
+                val urlTmp = url.replace("i=", "")
                     .replace("j=", "")
                     .replace("ip=", "")
                     .replace("jp=", "")
-            val items = urlTmp.split(";")
-            if (items.size > 3) {
-                getDualBitmapWithNumbers(context, items[0] + items[2], items[1] + items[3])
-            } else if (items.size > 2) {
-                if (url.contains(";jp=")) {
-                    getDualBitmapWithNumbers(context, items[0], items[1] + items[2])
+                val items = urlTmp.split(";")
+                if (items.size > 3) {
+                    getDualBitmapWithNumbers(context, items[0] + items[2], items[1] + items[3])
+                } else if (items.size > 2) {
+                    if (url.contains(";jp=")) {
+                        getDualBitmapWithNumbers(context, items[0], items[1] + items[2])
+                    } else {
+                        getDualBitmapWithNumbers(context, items[0] + items[2], items[1])
+                    }
                 } else {
-                    getDualBitmapWithNumbers(context, items[0] + items[2], items[1])
+                    getDualBitmapWithNumbers(context, items[0], items[1])
                 }
-            } else {
-                getDualBitmapWithNumbers(context, items[0], items[1])
+                // legacy add end
             }
-            // legacy add end
+        } else {
+            getBitmapWithOneNumber(context, url)
         }
-    } else {
-        getBitmapWithOneNumber(context, url)
-    }
 
     // Given two strings return a custom bitmap made of two bitmaps with optional numeric label
     // input examples
@@ -85,7 +86,11 @@ object UtilityForecastIcon {
     //  nrain_showers,80 nrain_showers,70
     //  ntsra_hi,40 ntsra_hi
     //  bkn rain
-    private fun getDualBitmapWithNumbers(context: Context, iconLeftString: String, iconRightString: String): Bitmap {
+    private fun getDualBitmapWithNumbers(
+        context: Context,
+        iconLeftString: String,
+        iconRightString: String
+    ): Bitmap {
         val leftTokens = iconLeftString.split(",").dropLastWhile { it.isEmpty() }
         val rightTokens = iconRightString.split(",").dropLastWhile { it.isEmpty() }
         var leftNumber = if (leftTokens.size > 1) {
@@ -150,18 +155,20 @@ object UtilityForecastIcon {
 
     private fun getFilename(url: String): String {
         var fileName = url.replace("?size=medium", "")
-                .replace("?size=small", "")
-                .replace("https://api.weather.gov/icons/land/", "")
-                .replace("http://api.weather.gov/icons/land/", "")
-                .replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
-                .replace("day/", "")
-                // legacy add
-                .replace("http://forecast.weather.gov/newimages/medium/", "")
-                .replace("https://forecast.weather.gov/newimages/medium/", "")
-                .replace(".png", "")
-                .replace("http://forecast.weather.gov/DualImage.php?", "")
-                .replace("https://forecast.weather.gov/DualImage.php?", "")
-                .replace("&amp", "")
+            .replace("?size=small", "")
+            .replace("https://api.weather.gov/icons/land/", "")
+            .replace("http://api.weather.gov/icons/land/", "")
+            .replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
+            // below line added as a work around in response to this bug: https://github.com/weather-gov/api/discussions/733
+            .replace("/icons/land/", "")
+            .replace("day/", "")
+            // legacy add
+            .replace("http://forecast.weather.gov/newimages/medium/", "")
+            .replace("https://forecast.weather.gov/newimages/medium/", "")
+            .replace(".png", "")
+            .replace("http://forecast.weather.gov/DualImage.php?", "")
+            .replace("https://forecast.weather.gov/DualImage.php?", "")
+            .replace("&amp", "")
         // legacy add end
         if (fileName.contains("night")) {
             fileName = fileName.replace("night/", "n").replace("/", "/n")

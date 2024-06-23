@@ -2,9 +2,13 @@
 
 # Developer ChangeLog
 
-## 55897 2024_06_14
+## 55898 2024_06_20
 
 * [ADD]
+
+## 55897 2024_06_20
+
+* [FIX] icons for NWS API were broken due to NWS issue, add workaround
 
 ## 55896 2024_06_14
 
