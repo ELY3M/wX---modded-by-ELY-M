@@ -2,13 +2,16 @@
 
 # Developer ChangeLog
 
-## 55898 2024_06_20
+## 55898 2024_06_30
 
-* [ADD]
+* [FIX] URL for **Weeks 2-3 Global Tropics Hazards Outlook (GTH)** had changed, this is accessed
+  under **National Images -> CPC**
+* [FIX] The following text product was not working: High Seas Forecasts - SE Pacific
 
 ## 55897 2024_06_20
 
-* [FIX] icons for NWS API were broken due to NWS issue, add workaround
+* [FIX] icons for NWS API were broken due to NWS issue, add
+  workaround https://github.com/weather-gov/api/discussions/733
 
 ## 55896 2024_06_14
 

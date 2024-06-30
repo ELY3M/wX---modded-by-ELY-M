@@ -8,6 +8,10 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55897 2024_06_24 (BETA)
+
+* [FIX] icons for NWS API were broken due to NWS issue, add workaround
+
 ## 55896 2024_06_16 (BETA)
 
 * [ADD] using the new NWS API for forecast data is now the default since NWS is deprecating the
