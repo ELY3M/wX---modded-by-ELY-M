@@ -52,7 +52,12 @@ internal object NotificationMpd {
                 val mpdData = PolygonWatch.byType[PolygonType.MPD]!!.getImmediate(context)
                 mpdData.numberList.forEachIndexed { index, s ->
                     if (NotificationPreferences.alertWpcMpdNotification) {
-                        notificationUrls += sendMpd(context, "CONUS", s, mpdData.htmlList[index].replace("<.*?>".toRegex(), " "))
+                        notificationUrls += sendMpd(
+                            context,
+                            "CONUS",
+                            s,
+                            mpdData.htmlList[index].replace("<.*?>".toRegex(), " ")
+                        )
                     }
                 }
             } catch (e: Exception) {
@@ -78,8 +83,10 @@ internal object NotificationMpd {
                 val polygon2 = poly2.build()
                 (1..Location.numLocations).forEach { n ->
                     val locNum = n.toString()
-                    if (Location.locations[n - 1].notificationWpcMpd) {
-                        // if location is watching for MCDs pull ib lat/lon and iterate over polygons
+                    // have received crash reports for array out of bounds
+                    if (Location.locations.getOrNull(n - 1)?.notificationWpcMpd == true) {
+//                    if (Location.locations[n - 1].notificationWpcMpd) {
+                        // if location is watching for MPDs pull ib lat/lon and iterate over polygons
                         // call secondary method to send notification if required
                         val contains = polygon2.contains(Location.getLatLon(n - 1).asPoint())
                         if (contains) {
@@ -92,7 +99,12 @@ internal object NotificationMpd {
         return notificationUrls
     }
 
-    private fun sendMpd(context: Context, locNum: String, mdNo: String, bodyText: String = ""): String {
+    private fun sendMpd(
+        context: Context,
+        locNum: String,
+        mdNo: String,
+        bodyText: String = ""
+    ): String {
         val locationIndex = To.int(locNum) - 1
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val locationLabel = if (locNum == "CONUS") {
@@ -113,28 +125,32 @@ internal object NotificationMpd {
         val label = "$locationLabel WPC MPD #$mdNo"
         val polygonType = PolygonType.MPD
         val objectPendingIntents = ObjectPendingIntents(
-                context,
-                SpcMcdWatchShowActivity::class.java,
-                SpcMcdWatchShowActivity.NUMBER,
-                arrayOf(mdNo, polygonType.toString(), ""),
-                arrayOf(mdNo, polygonType.toString(), "sound")
+            context,
+            SpcMcdWatchShowActivity::class.java,
+            SpcMcdWatchShowActivity.NUMBER,
+            arrayOf(mdNo, polygonType.toString(), ""),
+            arrayOf(mdNo, polygonType.toString(), "sound")
         )
         val cancelString = "wpcmpdloc$mdNo$locNum"
-        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
+        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelString
+            ))
+        ) {
             val sound = if (locNum == "CONUS") {
                 NotificationPreferences.alertNotificationSoundWpcmpd && !inBlackout
             } else {
                 Location.locations[locationIndex].sound && !inBlackout
             }
             val objectNotification = ObjectNotification(
-                    context,
-                    sound,
-                    label,
-                    text,
-                    objectPendingIntents,
-                    iconAlert,
-                    GlobalVariables.ICON_ACTION,
-                    context.resources.getString(R.string.read_aloud)
+                context,
+                sound,
+                label,
+                text,
+                objectPendingIntents,
+                iconAlert,
+                GlobalVariables.ICON_ACTION,
+                context.resources.getString(R.string.read_aloud)
             )
             objectNotification.send(cancelString)
         }

@@ -33,7 +33,8 @@ object UtilityWXJobService {
     private var kJobId = 0
 
     fun startService(context: Context) {
-        val alertNotificationIntervalCurrent = Utility.readPrefInt(context, "ALERT_NOTIFICATION_INTERVAL", -1)
+        val alertNotificationIntervalCurrent =
+            Utility.readPrefInt(context, "ALERT_NOTIFICATION_INTERVAL", -1)
         if (alertNotificationIntervalCurrent < 121) {
             start(context)
         } else {
@@ -44,21 +45,32 @@ object UtilityWXJobService {
     }
 
     fun start(context: Context) {
-        val alertNotificationIntervalCurrent = Utility.readPrefInt(context, "ALERT_NOTIFICATION_INTERVAL", -1)
+        val alertNotificationIntervalCurrent =
+            Utility.readPrefInt(context, "ALERT_NOTIFICATION_INTERVAL", -1)
         val serviceName = ComponentName(context, WXJobService::class.java)
         val jobInfo = JobInfo.Builder(kJobId++, serviceName)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setRequiresDeviceIdle(false)
-                .setRequiresCharging(false)
-                .setPersisted(true)
-                .setPeriodic((alertNotificationIntervalCurrent * 1000 * 60).toLong(), 60000) // final arg is one minute
-                .build()
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            .setRequiresDeviceIdle(false)
+            .setRequiresCharging(false)
+            .setPersisted(true)
+            .setPeriodic(
+                (alertNotificationIntervalCurrent * 1000 * 60).toLong(),
+                60000
+            ) // final arg is one minute
+            .build()
         val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        var jobCount = scheduler.allPendingJobs.count()
+        UtilityLog.d("wx", "Job Count Before: $jobCount")
+        if (jobCount > 0) {
+            scheduler.cancelAll()
+        }
         val result = scheduler.schedule(jobInfo)
         if (result == JobScheduler.RESULT_SUCCESS) {
             UtilityLog.d("wx", "Job scheduled successfully - jobService")
         } else {
             UtilityLog.d("wx", "Job scheduled with error - jobService")
         }
+        jobCount = scheduler.allPendingJobs.count()
+        UtilityLog.d("wx", "Job Count After: $jobCount")
     }
 }

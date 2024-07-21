@@ -147,8 +147,8 @@ class NexradLevel3 internal constructor() {
             }
             operationalMode = dis.readUnsignedShort().toShort()
             volumeCoveragePattern = dis.readUnsignedShort().toShort()
-            val sequenceNumber = dis.readUnsignedShort().toShort()
-            val volumeScanNumber = dis.readUnsignedShort().toShort()
+            dis.readUnsignedShort().toShort()    // sequenceNumber
+            dis.readUnsignedShort().toShort()    // volumeScanNumber
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
             writeTime(context, volumeScanDate, volumeScanTime, radarStatus, site)
@@ -156,7 +156,7 @@ class NexradLevel3 internal constructor() {
             // it is necessary to further dissect the header. Previously we skipped 74 bytes
             // hw 24-30
             dis.skipBytes(10)
-            val elevationNumber = dis.readUnsignedShort()
+            dis.readUnsignedShort() // elevationNumber
             val elevationAngle = dis.readShort()
             degree = elevationAngle.toInt() / 10.0f
             // hw 31-32 as a int
@@ -186,7 +186,13 @@ class NexradLevel3 internal constructor() {
         }
     }
 
-    private fun writeTime(context: Context, volumeScanDate: Short, volumeScanTime: Int, radarStatus: String, site: String) {
+    private fun writeTime(
+        context: Context,
+        volumeScanDate: Short,
+        volumeScanTime: Int,
+        radarStatus: String,
+        site: String
+    ) {
         val date = ObjectDateTime.radarTime(volumeScanDate, volumeScanTime)
         val radarInfo = formatRadarString(date)
         NexradUtil.writeRadarInfo(context, radarStatus, radarInfo)
@@ -196,7 +202,12 @@ class NexradLevel3 internal constructor() {
     }
 
     // Used for Legacy 4bit radar - SRM, comp ref
-    fun decodeAndPlotFourBit(context: Context, fileName: String, site: String, radarStatus: String) {
+    fun decodeAndPlotFourBit(
+        context: Context,
+        fileName: String,
+        site: String,
+        radarStatus: String
+    ) {
         try {
             val fis = context.openFileInput(fileName)
             val dis = DataInputStream(BufferedInputStream(fis))
@@ -217,13 +228,13 @@ class NexradLevel3 internal constructor() {
             init4Bit(productCode)
             operationalMode = dis.readUnsignedShort().toShort()
             volumeCoveragePattern = dis.readUnsignedShort().toShort()
-            val sequenceNumber = dis.readUnsignedShort().toShort()
-            val volumeScanNumber = dis.readUnsignedShort().toShort()
+            dis.readUnsignedShort().toShort()   // sequenceNumber
+            dis.readUnsignedShort().toShort()   // volumeScanNumber
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
             writeTime(context, volumeScanDate, volumeScanTime, radarStatus, site)
-            val productGenerationDate = dis.readUnsignedShort().toShort()
-            val productGenerationTime = dis.readInt()
+            dis.readUnsignedShort().toShort() // productGenerationDate
+            dis.readInt()                     // productGenerationTime
             //final short        product_generation_date = (short) dis.readUnsignedShort();
             //final int        product_generation_time    = dis.readInt() ;
             //dis.skipBytes(6)
@@ -272,11 +283,12 @@ class NexradLevel3 internal constructor() {
             //final int  index_of_first_range_bin  = dis.readUnsignedShort() ;
             dis.skipBytes(32)
             dis.close()
-            numberOfRangeBins = if (productCode.toInt() == 37 || productCode.toInt() == 38 || productCode.toInt() == 41 || productCode.toInt() == 57) {
-                NexradDecodeFourBit.raster(context, fileName, binWord)
-            } else {
-                NexradDecodeFourBit.radial(context, fileName, radialStart, binWord)
-            }
+            numberOfRangeBins =
+                if (productCode.toInt() == 37 || productCode.toInt() == 38 || productCode.toInt() == 41 || productCode.toInt() == 57) {
+                    NexradDecodeFourBit.raster(context, fileName, binWord)
+                } else {
+                    NexradDecodeFourBit.radial(context, fileName, radialStart, binWord)
+                }
             binSize = NexradUtil.getBinSize(productCode.toInt())
         } catch (e: IOException) {
             UtilityLog.handleException(e)
@@ -286,12 +298,12 @@ class NexradLevel3 internal constructor() {
     }
 
     private fun formatRadarString(date: String): String =
-            date + GlobalVariables.newline +
-                    "Radar Mode: " + operationalMode + GlobalVariables.newline +
-                    "VCP: " + volumeCoveragePattern + GlobalVariables.newline +
-                    "Product Code: " + productCode + GlobalVariables.newline +
-                    "Radar height: " + radarHeight + GlobalVariables.newline +
-                    "Radar Lat: " + latitudeOfRadar + GlobalVariables.newline +
-                    "Radar Lon: " + longitudeOfRadar
+        date + GlobalVariables.newline +
+                "Radar Mode: " + operationalMode + GlobalVariables.newline +
+                "VCP: " + volumeCoveragePattern + GlobalVariables.newline +
+                "Product Code: " + productCode + GlobalVariables.newline +
+                "Radar height: " + radarHeight + GlobalVariables.newline +
+                "Radar Lat: " + latitudeOfRadar + GlobalVariables.newline +
+                "Radar Lon: " + longitudeOfRadar
 
 }

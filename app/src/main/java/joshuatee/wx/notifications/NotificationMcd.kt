@@ -52,7 +52,12 @@ internal object NotificationMcd {
                 val mcdData = PolygonWatch.byType[PolygonType.MCD]!!.getImmediate(context)
                 mcdData.numberList.forEachIndexed { index, mcdNumber ->
                     if (NotificationPreferences.alertSpcMcdNotification) {
-                        notificationUrls += sendMcd(context, "CONUS", mcdNumber, mcdData.htmlList[index].replace("<.*?>".toRegex(), " "))
+                        notificationUrls += sendMcd(
+                            context,
+                            "CONUS",
+                            mcdNumber,
+                            mcdData.htmlList[index].replace("<.*?>".toRegex(), " ")
+                        )
                     }
                 }
             } catch (e: Exception) {
@@ -76,7 +81,8 @@ internal object NotificationMcd {
                 val polygonShape = polygonFrame.build()
                 for (n in 1..Location.numLocations) {
                     val locNum = n.toString()
-                    if (Location.locations[n - 1].notificationMcd) {
+                    if (Location.locations.getOrNull(n - 1)?.notificationMcd == true) {
+//                    if (Location.locations[n - 1].notificationMcd) {
                         // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                         // call secondary method to send notif if required
                         if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {
@@ -89,7 +95,12 @@ internal object NotificationMcd {
         return notificationUrls
     }
 
-    private fun sendMcd(context: Context, locNum: String, mdNo: String, bodyText: String = ""): String {
+    private fun sendMcd(
+        context: Context,
+        locNum: String,
+        mdNo: String,
+        bodyText: String = ""
+    ): String {
         val locationIndex = To.int(locNum) - 1
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val locationLabel = if (locNum == "CONUS") {
@@ -110,28 +121,32 @@ internal object NotificationMcd {
         val label = "$locationLabel SPC MCD #$mdNo"
         val polygonType = PolygonType.MCD
         val objectPendingIntents = ObjectPendingIntents(
-                context,
-                SpcMcdWatchShowActivity::class.java,
-                SpcMcdWatchShowActivity.NUMBER,
-                arrayOf(mdNo, polygonType.toString()),
-                arrayOf(mdNo, polygonType.toString(), "sound")
+            context,
+            SpcMcdWatchShowActivity::class.java,
+            SpcMcdWatchShowActivity.NUMBER,
+            arrayOf(mdNo, polygonType.toString()),
+            arrayOf(mdNo, polygonType.toString(), "sound")
         )
         val cancelString = "spcmcdloc$mdNo$locNum"
-        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
+        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelString
+            ))
+        ) {
             val sound = if (locNum == "CONUS") {
                 NotificationPreferences.alertNotificationSoundSpcmcd && !inBlackout
             } else {
                 Location.locations[locationIndex].sound && !inBlackout
             }
             val objectNotification = ObjectNotification(
-                    context,
-                    sound,
-                    label,
-                    text,
-                    objectPendingIntents,
-                    iconAlert,
-                    GlobalVariables.ICON_ACTION,
-                    context.resources.getString(R.string.read_aloud)
+                context,
+                sound,
+                label,
+                text,
+                objectPendingIntents,
+                iconAlert,
+                GlobalVariables.ICON_ACTION,
+                context.resources.getString(R.string.read_aloud)
             )
             objectNotification.send(cancelString)
         }

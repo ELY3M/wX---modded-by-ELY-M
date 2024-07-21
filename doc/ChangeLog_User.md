@@ -8,6 +8,17 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55899 2024_07_14 (BETA)
+
+* [FIX] URL for **Weeks 2-3 Global Tropics Hazards Outlook (GTH)** had changed, this is accessed
+  under **National Images -> CPC**
+* [FIX] The following text product was not working: High Seas Forecasts - SE Pacific
+* [FIX] JobScheduler (for background processing) - cancel any existing before starting new (needs
+  testing)
+* [ADD] lib update - androidx.lifecycle:lifecycle-viewmodel-ktx
+* [FIX] in response to crash report **Exception java.lang.ArrayIndexOutOfBoundsException: length=0;
+    index=0 at joshuatee.wx.radar.NexradRenderUtilities.genTriangleUp (NexradRenderUtilities.kt:139)**
+
 ## 55897 2024_06_24 (BETA)
 
 * [FIX] icons for NWS API were broken due to NWS issue, add workaround

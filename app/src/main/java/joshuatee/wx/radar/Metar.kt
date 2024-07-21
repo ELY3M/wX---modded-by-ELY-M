@@ -56,6 +56,7 @@ internal object Metar {
     private val pattern4: Pattern = Pattern.compile("Z ([0-9].*?KT) .*?")
     private val pattern5: Pattern = Pattern.compile("SM (.*?) M?[0-9]{2}/")
 
+    @Synchronized
     fun get(context: Context, rid: String, paneNumber: Int) {
         if (timer.isRefreshNeeded() || rid != data[paneNumber].obsStateOld) {
             val obsAl = mutableListOf<String>()
@@ -68,7 +69,8 @@ internal object Metar {
             data[paneNumber].obsStateOld = rid
             val obsList = getNearbyObsSites(context, rid)
 
-            val html = "https://www.aviationweather.gov/cgi-bin/data/metar.php?ids=$obsList".getHtmlWithNewLine()
+            val html =
+                "https://www.aviationweather.gov/cgi-bin/data/metar.php?ids=$obsList".getHtmlWithNewLine()
             val metarsTmp = html.split(GlobalVariables.newline)
             val metars = condense(metarsTmp)
             initObsMap(context)
@@ -136,7 +138,9 @@ internal object Metar {
                     // IFR 	1 mi or more but less than 3 mi 	and/or 500 ft or more but less than 1,000 ft
                     // Low IFR 	< 1 mi 	and/or < 500 ft
                     if (pressureBlob.length == 4) {
-                        pressureBlob = StringBuilder(pressureBlob).insert(pressureBlob.length - 2, ".").toString()
+                        pressureBlob =
+                            StringBuilder(pressureBlob).insert(pressureBlob.length - 2, ".")
+                                .toString()
                         pressureBlob = UtilityMath.unitsPressure(pressureBlob)
                     }
                     // 19011G16KT
@@ -149,7 +153,8 @@ internal object Metar {
                         windDir = windBlob.substring(0, 3)
                         windInKt = windBlob.substring(3, 5)
                         val windDirD = To.double(windDir)
-                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " + windInKt + " kt"
+                        windBlob =
+                            windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " + windInKt + " kt"
                     } else if (windBlob.contains("KT") && windBlob.length == 10) {
                         validWind = true
                         validWindGust = true
@@ -157,7 +162,8 @@ internal object Metar {
                         windInKt = windBlob.substring(3, 5)
                         windGustInKt = windBlob.substring(6, 8)
                         val windDirD = To.double(windDir)
-                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " + windInKt + " G " + windGustInKt + " kt"
+                        windBlob =
+                            windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " + windInKt + " G " + windGustInKt + " kt"
                     }
                     if (tdArr.size > 1) {
                         var temperature = tdArr[0]
@@ -169,11 +175,11 @@ internal object Metar {
                         if (latLon.latString != "0.0") {
                             obsAl.add("$latLon:$temperature/$dewPoint")
                             obsAlExt.add(
-                                    latLon.toString() + ":" + temperature + "/" + dewPoint + " (" + obsSite + ")"
-                                            + GlobalVariables.newline + pressureBlob + " - " + visBlobDisplay
-                                            + GlobalVariables.newline + windBlob
-                                            + GlobalVariables.newline + conditionsBlob
-                                            + GlobalVariables.newline + timeBlob
+                                latLon.toString() + ":" + temperature + "/" + dewPoint + " (" + obsSite + ")"
+                                        + GlobalVariables.newline + pressureBlob + " - " + visBlobDisplay
+                                        + GlobalVariables.newline + windBlob
+                                        + GlobalVariables.newline + conditionsBlob
+                                        + GlobalVariables.newline + timeBlob
                             )
                             if (validWind) {
                                 obsAlWb.add("$latLon:$windDir:$windInKt")
@@ -192,7 +198,6 @@ internal object Metar {
             data[paneNumber].obsArrExt = obsAlExt.toList()
             data[paneNumber].obsArrWb = obsAlWb.toList()
             data[paneNumber].x = DoubleArray(obsAlX.size)
-
             obsAlX.indices.forEach {
                 data[paneNumber].x[it] = obsAlX[it]
             }
@@ -208,7 +213,8 @@ internal object Metar {
     @Synchronized
     private fun initObsMap(context: Context) {
         if (obsLatLon.isEmpty()) {
-            val lines = UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.us_metar3)
+            val lines =
+                UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.us_metar3)
             lines.forEach { line ->
                 val tokens = line.split(" ")
                 obsLatLon[tokens[0]] = LatLon(tokens[1], tokens[2])
@@ -238,7 +244,8 @@ internal object Metar {
     @Synchronized
     private fun loadMetarData(context: Context) {
         if (metarSites.isEmpty()) {
-            val metarDataAsList = UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.us_metar3)
+            val metarDataAsList =
+                UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.us_metar3)
             metarDataAsList.forEach {
                 val tokens = it.split(" ")
                 metarSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2]), 0.0))
@@ -256,7 +263,8 @@ internal object Metar {
 //            it.distance = LatLon.distance(location, it.location, DistanceUnit.MILE).toInt()
 //        }
         for (it in obsSites.indices) {
-            obsSites[it].distance = LatLon.distance(location, obsSites[it].location, DistanceUnit.MILE)
+            obsSites[it].distance =
+                LatLon.distance(location, obsSites[it].location, DistanceUnit.MILE)
         }
         try {
             obsSites.sortBy { it.distance }

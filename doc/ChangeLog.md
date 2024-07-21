@@ -2,11 +2,51 @@
 
 # Developer ChangeLog
 
-## 55898 2024_06_30
+## 55901 2024_07_21
+
+* [FIX] move temp_*.png from res/drawable to res/drawable-nodpi (ideally there would be multiple
+  sized images for mdpi,ldpi,hdpi,xhdpi)
+
+## 55900 2024_07_21
+
+* [FIX] add @Synchronized to Metar.get
+* [FIX] Exception java.lang.IndexOutOfBoundsException: Index 7 out of bounds for length 7
+  at joshuatee.wx.notifications.NotificationMpd.sendLocation (NotificationMpd.kt:81) (do this in Mcd
+  as well)
+
+## 55899 2024_07_12
+
+* [ADD] tool update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.5.0'
++        classpath 'com.android.tools.build:gradle:8.5.1'
+```
+
+* [FIX] in response to crash report **Exception java.lang.ArrayIndexOutOfBoundsException: length=0;
+  index=0 at joshuatee.wx.radar.NexradRenderUtilities.genTriangleUp (NexradRenderUtilities.kt:139)**
+
+```
+// likely a rare timing issue but should not crash on this just not show data since there is none
+// make 2 changes around this line like
+buffers.yList[index]
+// change to
+(buffers.yList.getOrNull(index) ?: 0.0)
+```
+
+## 55898 2024_07_11
 
 * [FIX] URL for **Weeks 2-3 Global Tropics Hazards Outlook (GTH)** had changed, this is accessed
   under **National Images -> CPC**
 * [FIX] The following text product was not working: High Seas Forecasts - SE Pacific
+* [FIX] JobScheduler (for background processing) - cancel any existing before starting new (needs
+  testing)
+* [ADD] lib update
+
+```
+-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2"
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3"
+```
 
 ## 55897 2024_06_20
 

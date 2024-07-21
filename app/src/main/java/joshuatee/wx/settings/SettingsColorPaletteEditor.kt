@@ -65,9 +65,13 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_settings_color_palette_editor, R.menu.settings_color_palette_editor, true)
-
-        showLoadFromFileMenuItem()
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_settings_color_palette_editor,
+            R.menu.settings_color_palette_editor,
+            true
+        )
+	showLoadFromFileMenuItem()
         arguments = intent.getStringArrayExtra(URL)!!
         type = arguments[0]
         typeAsInt = type.toIntOrNull() ?: 94
@@ -80,7 +84,13 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             arguments[1] + "_" + formattedDate
         }
         palTitle.setText(name)
-        palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1]))
+        palContent.setText(
+            UtilityColorPalette.getColorMapStringFromDisk(
+                this,
+                typeAsInt,
+                arguments[1]
+            )
+        )
     }
 
     private fun setupUI() {
@@ -106,10 +116,19 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             var textToSave = palContent.text.toString()
             textToSave = textToSave.replace(",,".toRegex(), ",")
             palContent.setText(textToSave)
-            Utility.writePref(context, "RADAR_COLOR_PAL_" + type + "_" + palTitle.text.toString(), textToSave)
+            Utility.writePref(
+                context,
+                "RADAR_COLOR_PAL_" + type + "_" + palTitle.text.toString(),
+                textToSave
+            )
             if (!ColorPalette.radarColorPaletteList[typeAsInt]!!.contains(palTitle.text.toString())) {
-                ColorPalette.radarColorPaletteList[typeAsInt] = ColorPalette.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text.toString()
-                Utility.writePref(context, "RADAR_COLOR_PALETTE_" + type + "_LIST", ColorPalette.radarColorPaletteList[typeAsInt]!!)
+                ColorPalette.radarColorPaletteList[typeAsInt] =
+                    ColorPalette.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text.toString()
+                Utility.writePref(
+                    context,
+                    "RADAR_COLOR_PALETTE_" + type + "_LIST",
+                    ColorPalette.radarColorPaletteList[typeAsInt]!!
+                )
             }
 	    //elys mod
             savepalfile(palTitle.text.toString()+"_"+type+".txt", textToSave)
@@ -145,7 +164,8 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                         }
                         priorValue = To.double(list[1])
                         if (To.double(list[2]) > 255.0 || To.double(list[2]) < 0.0) {
-                            errors = errors + "Red value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
+                            errors =
+                                errors + "Red value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
                         if (To.double(list[3]) > 255.0 || To.double(list[3]) < 0.0) {
                             errors += "Green value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
@@ -168,12 +188,25 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         return errors
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_reset -> palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1]))
+            R.id.action_reset -> palContent.setText(
+                UtilityColorPalette.getColorMapStringFromDisk(
+                    this,
+                    typeAsInt,
+                    arguments[1]
+                )
+            )
+
             R.id.action_clear -> palContent.setText("")
-            R.id.action_share -> UtilityShare.textAsAttachment(this, palTitle.text.toString(), palContent.text.toString(), "wX_colormap_" + palTitle.text.toString() + ".txt")
-            R.id.action_load -> loadSettings()
+            R.id.action_share -> UtilityShare.textAsAttachment(
+                this,
+                palTitle.text.toString(),
+                palContent.text.toString(),
+                "wX_colormap_" + palTitle.text.toString() + ".txt"
+            )
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
