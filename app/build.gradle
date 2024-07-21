@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'joshuatee.wx'
+    namespace 'elys.joshuatee.wx'
 //    compileSdkVersion 33
 //    buildToolsVersion '33.0.1'
 
@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "joshuatee.wx"
+        applicationId "elys.joshuatee.wx"
         // 2023-09-09 changed from 23 to 25
         minSdkVersion 25
         targetSdkVersion 34
