@@ -1,0 +1,2 @@
+git -C E:\phonedev\wx pull
+pause
