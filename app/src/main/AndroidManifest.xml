@@ -500,7 +500,7 @@
 
         <provider
             android:name=".util.FileProvider"
-            android:authorities="joshuatee.wx.fileprovider"
+            android:authorities="elys.joshuatee.wx.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
