@@ -2,10 +2,32 @@
 
 # Developer ChangeLog
 
-## 55901 2024_07_21
+## 55903 2024_07_31
 
+* [FIX]
+
+## 55902 2024_07_31
+
+* [ADD] NCEP MAG [v5.1](https://mag.ncep.noaa.gov/version_updates.php):
+    - Added the following new domains to NAEFS and GEFS-MEAN-SPRD:
+        - Continental United States (CONUS)
+        - Alaska
+    - Added the following new products to RTMA:
+        - Ceiling (ceiling -- not included for Guam)
+        - Visibility (vis)
+
+## 55901 2024_07_26
+
+* [FIX] per SCN24-66: Termination of the Day 3-7 Hemispheric Charts: Effective July 24, 2024, remove
+  5 images in National Images -> Forecast Maps
 * [FIX] move temp_*.png from res/drawable to res/drawable-nodpi (ideally there would be multiple
   sized images for mdpi,ldpi,hdpi,xhdpi)
+* [REF] lib update
+
+```
+-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3"
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4"
+```
 
 ## 55900 2024_07_21
 

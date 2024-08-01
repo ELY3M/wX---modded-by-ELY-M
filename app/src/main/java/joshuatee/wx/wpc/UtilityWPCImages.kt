@@ -31,7 +31,7 @@ internal object UtilityWpcImages {
 
     private val titles = listOf(
         MenuTitle("Surface Analysis", 9),
-        MenuTitle("Forecast Maps", 22),
+        MenuTitle("Forecast Maps", 17),
         MenuTitle("QPF", 29),
         MenuTitle("Snow / Ice", 17),
         MenuTitle("National Digital Forecast Database", 15),
@@ -68,11 +68,6 @@ internal object UtilityWpcImages {
         "WPC Fronts - 5day",
         "WPC Fronts - 6day",
         "WPC Fronts - 7day",
-        "Forecast map - 3day (NHEM)",
-        "Forecast map - 4day (NHEM)",
-        "Forecast map - 5day (NHEM)",
-        "Forecast map - 6day (NHEM)",
-        "Forecast map - 7day (NHEM)",
 
         "QPF Day 1",
         "QPF Day 2",
@@ -214,11 +209,6 @@ internal object UtilityWpcImages {
         GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/9lhwbg_conus.gif",
         GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/9mhwbg_conus.gif",
         GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/9nhwbg_conus.gif",
-        GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/9jh.gif",
-        GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/9kh.gif",
-        GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/9lh.gif",
-        GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/9mh.gif",
-        GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/9nh.gif",
 
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/fill_94qwbg.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/fill_98qwbg.gif",

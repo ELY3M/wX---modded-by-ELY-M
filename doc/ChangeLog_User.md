@@ -8,6 +8,42 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55899 2024_07_25
+
+* [ADD] using the new NWS API for forecast data is now the default since NWS is deprecating the
+  older format
+* [FIX] URL for **Weeks 2-3 Global Tropics Hazards Outlook (GTH)** had changed, this is accessed
+  under **National Images -> CPC**
+* [FIX] The following text product was not working: High Seas Forecasts - SE Pacific
+* [FIX] JobScheduler (for background processing) - cancel any existing before starting new
+* [ADD] lib update - androidx.lifecycle:lifecycle-viewmodel-ktx
+* [FIX] in response to crash report **Exception java.lang.ArrayIndexOutOfBoundsException: length=0;
+  index=0 at joshuatee.wx.radar.NexradRenderUtilities.genTriangleUp (NexradRenderUtilities.kt:139)
+* [ADD] 2nd retry for forecast download with new API
+* [ADD] add 1 sec sleep in 2nd retry for hourly download with new API
+* [REF] URL Fix in response to **SCN24-19: The National Centers for Environmental Prediction (NCEP)
+  Climate
+  Prediction Center (CPC) will Change the Depiction and Output Formats of Several Ultraviolet
+  Index (UVI) Product Graphics on or about May 25, 2024**
+* [FIX] one crash report
+* [FIX] 2 crashes only seen in Pre-launch report: UtilityTts.kt and UtilityUI.kt
+* [FIX] National Text now shows play/pause button similar to other text viewing activities
+* [ADD] per user request add the following to notification filters
+
+```
+"Coastal Flood Warning",
+"Coastal Flood Watch",
+"Coastal Flood Advisory"
+```
+
+* [ADD] In support of **SCN24-02: New Forecast Product “Offshore Waters Forecast for SW N Atlantic
+  Ocean”
+  Will Start on March 26, 2024**
+  add `offnt5` and rename title for `offnt3`. These products are accessed via "National Text"
+  activity.
+* [FIX] 2 crashes seen via crash reporter
+* [REF] simplify code in nexrad layout and text to speech
+
 ## 55899 2024_07_14 (BETA)
 
 * [FIX] URL for **Weeks 2-3 Global Tropics Hazards Outlook (GTH)** had changed, this is accessed
@@ -17,7 +53,7 @@ impacting all or some users.
   testing)
 * [ADD] lib update - androidx.lifecycle:lifecycle-viewmodel-ktx
 * [FIX] in response to crash report **Exception java.lang.ArrayIndexOutOfBoundsException: length=0;
-    index=0 at joshuatee.wx.radar.NexradRenderUtilities.genTriangleUp (NexradRenderUtilities.kt:139)**
+  index=0 at joshuatee.wx.radar.NexradRenderUtilities.genTriangleUp (NexradRenderUtilities.kt:139)**
 
 ## 55897 2024_06_24 (BETA)
 

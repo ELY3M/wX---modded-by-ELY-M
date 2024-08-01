@@ -30,64 +30,69 @@ import joshuatee.wx.util.UtilityString
 object UtilityRtma {
 
     val labels = listOf(
-            "2-Meter Temperature (F)",
-            "10-Meter Wind Speed (Knots) / Direction",
-            "2-Meter Dew Point (F)",
+        "2-Meter Temperature (F)",
+        "10-Meter Wind Speed (Knots) / Direction",
+        "2-Meter Dew Point (F)",
+        "Cloud Ceiling (AGL FT X 100)",
+        "Visibility (Miles)"
     )
 
     val codes = listOf(
-            "2m_temp",
-            "10m_wnd",
-            "2m_dwpt",
+        "2m_temp",
+        "10m_wnd",
+        "2m_dwpt",
+        "ceiling",
+        "vis"
     )
 
     val sectors = listOf(
-            "alaska",
-            "ca",
-            "co",
-            "fl",
-            "guam",
-            "gulf-coast",
-            "mi",
-            "mid-atl",
-            "mid-west",
-            "mt",
-            "nc_sc",
-            "nd_sd",
-            "new-eng",
-            "nw-pacific",
-            "ohio-valley",
-            "sw_us",
-            "tx",
-            "wi"
+        "alaska",
+        "ca",
+        "co",
+        "fl",
+        "guam",
+        "gulf-coast",
+        "mi",
+        "mid-atl",
+        "mid-west",
+        "mt",
+        "nc_sc",
+        "nd_sd",
+        "new-eng",
+        "nw-pacific",
+        "ohio-valley",
+        "sw_us",
+        "tx",
+        "wi"
     )
 
     // approx based off inspection
     private val sectorToLatLon = mapOf(
-            "alaska" to LatLon(63.25, -156.5),
-            "ca" to LatLon(38.0, -118.5),
-            "co" to LatLon(39.0, -105.25),
-            "fl" to LatLon(27.5, -83.25),
-            "guam" to LatLon(13.5, 144.75),
-            "gulf-coast" to LatLon(32.75, -90.25),
-            "mi" to LatLon(43.75, -84.75),
-            "mid-atl" to LatLon(39.75, -75.75),
-            "mid-west" to LatLon(39.5, -93.0),
-            "mt" to LatLon(45.0, -109.25),
-            "nc_sc" to LatLon(34.5, -79.75),
-            "nd_sd" to LatLon(45.5, -98.25),
-            "new-eng" to LatLon(43.0, -71.25),
-            "nw-pacific" to LatLon(45.5, -122.75),
-            "ohio-valley" to LatLon(39.0, -84.75),
-            "sw_us" to LatLon(34.5, -104.25),
-            "tx" to LatLon(32.0, -100.25),
-            "wi" to LatLon(44.25, -89.75)
+        "alaska" to LatLon(63.25, -156.5),
+        "ca" to LatLon(38.0, -118.5),
+        "co" to LatLon(39.0, -105.25),
+        "fl" to LatLon(27.5, -83.25),
+        "guam" to LatLon(13.5, 144.75),
+        "gulf-coast" to LatLon(32.75, -90.25),
+        "mi" to LatLon(43.75, -84.75),
+        "mid-atl" to LatLon(39.75, -75.75),
+        "mid-west" to LatLon(39.5, -93.0),
+        "mt" to LatLon(45.0, -109.25),
+        "nc_sc" to LatLon(34.5, -79.75),
+        "nd_sd" to LatLon(45.5, -98.25),
+        "new-eng" to LatLon(43.0, -71.25),
+        "nw-pacific" to LatLon(45.5, -122.75),
+        "ohio-valley" to LatLon(39.0, -84.75),
+        "sw_us" to LatLon(34.5, -104.25),
+        "tx" to LatLon(32.0, -100.25),
+        "wi" to LatLon(44.25, -89.75)
     )
 
     fun getNearest(latLon: LatLon): String = UtilityLocation.getNearest(latLon, sectorToLatLon)
 
     fun getTimes(): List<String> {
-        val html = "https://mag.ncep.noaa.gov/observation-parameter.php?group=Observations%20and%20Analyses&obstype=RTMA&area=MI&ps=area".getHtml()
+        val html =
+            "https://mag.ncep.noaa.gov/observation-parameter.php?group=Observations%20and%20Analyses&obstype=RTMA&area=MI&ps=area".getHtml()
         // title="20221116 00 UTC"
         return UtilityString.parseColumn(html, "([0-9]{8} [0-9]{2} UTC)").distinct()
     }
