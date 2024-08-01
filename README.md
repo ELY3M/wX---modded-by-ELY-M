@@ -37,7 +37,6 @@ http://bmx3r.com/wx/switch
 * add LSR reports from SN spotters/option to turn on/off LSR reports  
 * as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
 * move show color legend to bottom as a option.  there will be option to choose which side.     
-* rename application id and change icon color so someone can run both versions of wX   
 * 8-bit SRM like in pykl3  
 * android wear support. I own android wear watches and love them.      
 * would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
@@ -49,6 +48,7 @@ http://bmx3r.com/wx/switch
 #
 ## DONE!
 ====================================
+* rename application id and change icon color so someone can run both versions of wX - Now you can run my app version along with Joshuas app.      
 * removed conus radar overlay.  you can see conus radar map by accessing it from long press menu in radar.   
 * Fixed few bugs esp in Spotter functions.  
 * Re-did the permissions.  
