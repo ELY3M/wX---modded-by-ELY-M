@@ -2,9 +2,21 @@
 
 # Developer ChangeLog
 
-## 55903 2024_07_31
+## 55904 2024_08_23
 
-* [FIX]
+* [ADD]
+
+## 55903 2024_08_23
+
+* [ADD] tool update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.5.1'
++        classpath 'com.android.tools.build:gradle:8.5.2'
+```
+
+* [ADD] unsafe OkHttpClient that does not check certs in case NWS does not respond by early next
+  week to cert renewal issue
 
 ## 55902 2024_07_31
 

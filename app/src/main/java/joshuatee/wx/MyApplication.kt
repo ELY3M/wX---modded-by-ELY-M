@@ -42,6 +42,7 @@ import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityHomeScreen
+import joshuatee.wx.util.HttpUnsafe
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.acra.BuildConfig
@@ -102,13 +103,26 @@ class MyApplication : Application() {
         val res = resources
         dm = res.displayMetrics
         UIPreferences.deviceScale = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, dm)
-        UIPreferences.padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, res.getDimension(R.dimen.padding_dynamic_tv), dm).toInt()
-        UIPreferences.paddingSettings = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, res.getDimension(R.dimen.padding_dynamic_tv_settings), dm).toInt()
-        UIPreferences.paddingSmall = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, res.getDimension(R.dimen.padding_dynamic_tv_small), dm).toInt()
+        UIPreferences.padding = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            res.getDimension(R.dimen.padding_dynamic_tv),
+            dm
+        ).toInt()
+        UIPreferences.paddingSettings = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            res.getDimension(R.dimen.padding_dynamic_tv_settings),
+            dm
+        ).toInt()
+        UIPreferences.paddingSmall = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            res.getDimension(R.dimen.padding_dynamic_tv_small),
+            dm
+        ).toInt()
         UIPreferences.lLpadding = res.getDimension(R.dimen.padding_ll)
         val tv = TypedValue()
         if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            UIPreferences.actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, res.displayMetrics)
+            UIPreferences.actionBarHeight =
+                TypedValue.complexToDimensionPixelSize(tv.data, res.displayMetrics)
         }
         initPreferences(this)
         Location.refreshLocationData(this)
@@ -130,10 +144,12 @@ class MyApplication : Application() {
             response
         }
         val httpClient = OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .addInterceptor(okHttp3Interceptor)
-                .build()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(okHttp3Interceptor)
+            .build()
+
+        val httpClientUnsafe = HttpUnsafe.getUnsafeOkHttpClient()
 
         lateinit var preferences: SharedPreferences
         private lateinit var preferencesTelecine: SharedPreferences
@@ -149,13 +165,22 @@ class MyApplication : Application() {
             RadarPreferences.radarGeometrySetColors()
             NotificationPreferences.initPreferences()
             NexradUtil.colorPaletteProducts.forEach {
-                ColorPalette.radarColorPalette[it] = getInitialPreferenceString("RADAR_COLOR_PALETTE_$it", "CODENH")
-                ColorPalette.radarColorPaletteList[it] = getInitialPreferenceString("RADAR_COLOR_PALETTE_" + it + "_LIST", "")
+                ColorPalette.radarColorPalette[it] =
+                    getInitialPreferenceString("RADAR_COLOR_PALETTE_$it", "CODENH")
+                ColorPalette.radarColorPaletteList[it] =
+                    getInitialPreferenceString("RADAR_COLOR_PALETTE_" + it + "_LIST", "")
             }
-            UIPreferences.cardCorners = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(), dm)
-            UIPreferences.telecineVideoSizePercentage = preferencesTelecine.getInt("video-size", 100)
-            UIPreferences.telecineSwitchShowCountdown = preferencesTelecine.getBoolean("show-countdown", false)
-            UIPreferences.telecineSwitchRecordingNotification = preferencesTelecine.getBoolean("recording-notification", false)
+            UIPreferences.cardCorners = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(),
+                dm
+            )
+            UIPreferences.telecineVideoSizePercentage =
+                preferencesTelecine.getInt("video-size", 100)
+            UIPreferences.telecineSwitchShowCountdown =
+                preferencesTelecine.getBoolean("show-countdown", false)
+            UIPreferences.telecineSwitchRecordingNotification =
+                preferencesTelecine.getBoolean("recording-notification", false)
             Location.currentLocationStr = getInitialPreferenceString("CURRENT_LOC_FRAGMENT", "1")
             PolygonWatch.load(context)
         }

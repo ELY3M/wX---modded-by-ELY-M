@@ -38,8 +38,11 @@ object UtilityNetworkIO {
         UtilityLog.download("getStringFromUrlNew $withNewLine: $url")
         val out = StringBuilder(5000)
         try {
-            val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
-            val response = MyApplication.httpClient.newCall(request).execute()
+            val request =
+                Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT)
+                    .build()
+//            val response = MyApplication.httpClient.newCall(request).execute()
+            val response = MyApplication.httpClientUnsafe.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
@@ -70,12 +73,17 @@ object UtilityNetworkIO {
     // String.getImage()
     fun getBitmapFromUrl(url: String): Bitmap = try {
         UtilityLog.download("getBitmapFromUrl: $url")
-        val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
+        val request =
+            Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
         val response = MyApplication.httpClient.newCall(request).execute()
         if (url.contains("hazards_d8_14_contours.png")) {
             val options = BitmapFactory.Options()
             options.inPreferredConfig = Bitmap.Config.RGB_565
-            BitmapFactory.decodeStream(BufferedInputStream(response.body.byteStream()), null, options)!!
+            BitmapFactory.decodeStream(
+                BufferedInputStream(response.body.byteStream()),
+                null,
+                options
+            )!!
         } else {
             BitmapFactory.decodeStream(BufferedInputStream(response.body.byteStream()))
         }
@@ -89,8 +97,10 @@ object UtilityNetworkIO {
     // raw downloads - nexrad radar files, etc
     fun getInputStreamFromUrl(url: String): InputStream? = try {
         UtilityLog.download("getInputStreamFromUrl: $url")
-        val request = Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
-        val response = MyApplication.httpClient.newCall(request).execute()
+        val request =
+            Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
+//        val response = MyApplication.httpClient.newCall(request).execute()
+        val response = MyApplication.httpClientUnsafe.newCall(request).execute()
         response.body.byteStream()
     } catch (e: IOException) {
         UtilityLog.handleException(e)
