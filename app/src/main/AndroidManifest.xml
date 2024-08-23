@@ -77,7 +77,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name="elys.joshuatee.wx.StartupActivity"
+            android:name=".StartupActivity"
       android:requestLegacyExternalStorage="true"
             android:launchMode="singleTop"
             android:exported="true">
@@ -91,7 +91,7 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name="elys.joshuatee.wx.WX"
+            android:name=".WX"
             android:launchMode="singleTop"
             android:theme="@style/MyCustomTheme_whiter_NOAB" />
         <activity
@@ -536,7 +536,7 @@
             tools:ignore="ExportedContentProvider" />
 
         <service
-            android:name="elys.joshuatee.wx.notifications.WXJobService"
+            android:name=".notifications.WXJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="true" />
 
