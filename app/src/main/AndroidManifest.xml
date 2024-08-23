@@ -532,7 +532,7 @@
         <provider
             android:name="WeatherDataProvider"
             android:exported="true"
-            android:authorities="joshuatee.wx.weatherlistwidget.provider"
+            android:authorities=".weatherlistwidget.provider"
             tools:ignore="ExportedContentProvider" />
 
         <service
