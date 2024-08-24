@@ -41,8 +41,8 @@ object UtilityNetworkIO {
             val request =
                 Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT)
                     .build()
-//            val response = MyApplication.httpClient.newCall(request).execute()
-            val response = MyApplication.httpClientUnsafe.newCall(request).execute()
+            val response = MyApplication.httpClient.newCall(request).execute()
+//            val response = MyApplication.httpClientUnsafe.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
@@ -99,8 +99,8 @@ object UtilityNetworkIO {
         UtilityLog.download("getInputStreamFromUrl: $url")
         val request =
             Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
-//        val response = MyApplication.httpClient.newCall(request).execute()
-        val response = MyApplication.httpClientUnsafe.newCall(request).execute()
+        val response = MyApplication.httpClient.newCall(request).execute()
+//        val response = MyApplication.httpClientUnsafe.newCall(request).execute()
         response.body.byteStream()
     } catch (e: IOException) {
         UtilityLog.handleException(e)

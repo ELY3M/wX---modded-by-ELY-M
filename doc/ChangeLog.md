@@ -4,7 +4,8 @@
 
 ## 55904 2024_08_23
 
-* [ADD]
+* [ADD] revert unsafe OkHttpClient as NWS seems to have fixed, leave code in place in case needed
+  again
 
 ## 55903 2024_08_23
 
