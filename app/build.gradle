@@ -59,11 +59,7 @@ android {
     }
 
 */
-
     // Flag to tell aapt to keep the attribute ids around - (2016_02_25 add 23.2 )
-    //aaptOptions {
-    //    additionalParameters "--no-version-vectors"
-    //}
 
     buildTypes {
         release {
@@ -78,11 +74,6 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
-
-    // Enables Jetpack Compose for this module
-    /*buildFeatures {
-        compose true
-    }*/
 
     compileOptions {
         // Flag to enable support for the new language APIs
@@ -124,7 +115,7 @@ dependencies {
     // https://developer.android.com/studio/write/java8-support
     // https://developer.android.com/studio/write/java8-support-table
     // https://developer.android.com/reference/java/time/package-summary
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.1'
 
     //elys mods
     implementation 'ch.acra:acra-mail:5.9.7'
@@ -182,6 +173,3 @@ repositories {
         url "https://maven.google.com"
     }
 }
-
-
-

@@ -2,10 +2,28 @@
 
 # Developer ChangeLog
 
-## 55904 2024_08_23
+## 55905 2024_08_29
+
+* [ADD] lib/tool updates
+
+```
+-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.0'
++    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.1'
+
+-        classpath 'com.android.tools.build:gradle:8.5.2'
++        classpath 'com.android.tools.build:gradle:8.6.0'
+```
+
+## 55904 2024_08_26
 
 * [ADD] revert unsafe OkHttpClient as NWS seems to have fixed, leave code in place in case needed
   again
+* [ADD] lib update
+
+```
+-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
++    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.0'
+```
 
 ## 55903 2024_08_23
 
