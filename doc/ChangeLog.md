@@ -2,16 +2,35 @@
 
 # Developer ChangeLog
 
-## 55905 2024_08_29
+## 55907 2024_09_14
+
+* [ADD]
+
+## 55906 2024_09_14
+
+* [FIX] GOES "Full Disk" (Misc Tab) images location and product names have changed, animations are
+  now available for all products. They have been
+  moved here (there are many more Himawari images that have been added which are not yet
+  incorporated):
+    - [https://www.ospo.noaa.gov/products/imagery/meteosat.html](https://www.ospo.noaa.gov/products/imagery/meteosat.html)
+    - [https://www.ospo.noaa.gov/products/imagery/meteosatio.html](https://www.ospo.noaa.gov/products/imagery/meteosatio.html)
+    - [https://www.ospo.noaa.gov/products/imagery/fulldisk.html](https://www.ospo.noaa.gov/products/imagery/fulldisk.html)
+
+## 55905 2024_09_05
 
 * [ADD] lib/tool updates
 
 ```
 -    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.0'
-+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.1'
++    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.2'
 
 -        classpath 'com.android.tools.build:gradle:8.5.2'
 +        classpath 'com.android.tools.build:gradle:8.6.0'
+
+
+-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4"
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5"
+
 ```
 
 ## 55904 2024_08_26

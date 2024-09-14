@@ -64,7 +64,6 @@ internal object UtilityWpcText {
     val labelsWithCodes = listOf(
         "pmdspd: Short Range Forecast Discussion",
         "pmdepd: Extended Forecast Discussion",
-
         "pmdhi: Hawaii Extended Forecast Discussion",
         "pmdak: Alaska Extended Forecast Discussion",
         "pmdca: Tropical Discussion",
@@ -116,7 +115,6 @@ internal object UtilityWpcText {
         "offafg: Offshore Waters fsct - US Artic Waters",
         "offhfo: Offshore Waters fsct - Hawaii",
         "offn10: Navtex Marine fcst for Hawaii",
-
         "offn14: Navtex Marine fcst for Kodiak, AK (NW)",
         "offn15: Navtex Marine fcst for Kodiak, AK (Arctic)",
 

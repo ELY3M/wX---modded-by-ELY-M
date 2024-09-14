@@ -66,7 +66,8 @@ class ImageCollectionActivity : VideoRecordActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
-        if (navDrawer.url.contains("jma") && imageCollection.title == "GOESFD") {
+//        if (navDrawer.url.contains("jma") && imageCollection.title == "GOESFD") {
+        if (imageCollection.title == "GOESFD") {
             actionAnimate.isVisible = true
         }
         if (imageCollection.title != "Observations") {
@@ -77,7 +78,12 @@ class ImageCollectionActivity : VideoRecordActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.imagecollection, bottomToolbar = false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer,
+            R.menu.imagecollection,
+            bottomToolbar = false
+        )
         val arguments = intent.getStringArrayExtra(TYPE)!!
         val typeOfCollection = arguments[0]
         setupUI(typeOfCollection)
@@ -99,7 +105,7 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     private fun getContent() {
-        setTitle(imageCollection.title, navDrawer.getLabel())
+        setTitle(imageCollection.title.replace("GOESFD", "GOES Full Disk"), navDrawer.getLabel())
         FutureBytes(navDrawer.url, ::showImage)
     }
 
@@ -151,7 +157,7 @@ class ImageCollectionActivity : VideoRecordActivity() {
 
     private fun getAnimate() {
         FutureVoid(
-                { animDrawable = UtilityGoesFullDisk.getAnimation(this, navDrawer.url) })
+            { animDrawable = UtilityGoesFullDisk.getAnimation(this, navDrawer.url) })
         { UtilityImgAnim.startAnimation(animDrawable, touchImage) }
     }
 }
