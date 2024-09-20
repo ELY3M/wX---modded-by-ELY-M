@@ -31,7 +31,6 @@ import android.location.LocationManager
 import android.os.*
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
@@ -39,11 +38,9 @@ import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityImg
@@ -69,7 +66,13 @@ class NexradUI(
 
     // delay between animation frames
     var delay = 0
-    val objectImageMap = ObjectImageMap(activity, R.id.map, activity.objectToolbar, activity.objectToolbarBottom, nexradState.wxglSurfaceViews)
+    val objectImageMap = ObjectImageMap(
+        activity,
+        R.id.map,
+        activity.objectToolbar,
+        activity.objectToolbarBottom,
+        nexradState.wxglSurfaceViews
+    )
 
     // auto refresh and GPS location
     val handler = Handler(Looper.getMainLooper())
@@ -91,25 +94,11 @@ class NexradUI(
         activity.objectToolbar.connectClick { Route.severeDashboard(activity) }
         UtilityFileManagement.deleteCacheFiles(activity)
         delay = UtilityImg.animInterval(activity)
-
-        if (nexradState.numberOfPanes == 1) {
-            if (UIPreferences.radarStatusBarTransparent) {
-//            This constant was deprecated in API level 30.
-//            Use Window#setStatusBarColor(int) with a half-translucent color instead.
-//            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//            window.statusBarColor = Color.TRANSPARENT
-                if (Build.VERSION.SDK_INT >= 30) {
-                    activity.window.statusBarColor = Color.TRANSPARENT
-                    WindowCompat.setDecorFitsSystemWindows(activity.window, false)
-                } else {
-                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                }
-            }
-        }
     }
 
     fun getContentPrep() {
-        nexradState.radarSitesForFavorites = UtilityFavorites.setupMenu(activity, nexradState.radarSite, FavoriteType.RID)
+        nexradState.radarSitesForFavorites =
+            UtilityFavorites.setupMenu(activity, nexradState.radarSite, FavoriteType.RID)
         activity.invalidateOptionsMenu()
         nexradState.adjustForTdwrSinglePane()
         activity.title = nexradState.product
@@ -130,7 +119,6 @@ class NexradUI(
         val objectDialogue = ObjectDialogue(activity, GlobalArrays.tdwrRadars)
         objectDialogue.connectCancel { dialog, _ ->
             dialog.dismiss()
-            UtilityUI.immersiveMode(activity)
         }
         objectDialogue.connect { dialog, itemIndex ->
             val s = GlobalArrays.tdwrRadars[itemIndex]
@@ -145,8 +133,16 @@ class NexradUI(
         if (nexradState.numberOfPanes == 1) {
             ObjectDialogue(activity, NexradUtil.getRadarInfo(activity, ""))
         } else {
-            val scanInfoList = nexradState.wxglRenders.indices.map { NexradUtil.getRadarInfo(activity, (it + 1).toString()) }
-            ObjectDialogue(activity, scanInfoList.joinToString(GlobalVariables.newline + GlobalVariables.newline))
+            val scanInfoList = nexradState.wxglRenders.indices.map {
+                NexradUtil.getRadarInfo(
+                    activity,
+                    (it + 1).toString()
+                )
+            }
+            ObjectDialogue(
+                activity,
+                scanInfoList.joinToString(GlobalVariables.newline + GlobalVariables.newline)
+            )
         }
     }
 
@@ -188,7 +184,12 @@ class NexradUI(
         // make sure the list is the correct size (more then 3 elements)
         // create another list consisting of the 4th item of each list (the HH:MM:SS)
         // set the subtitle to a string which is the new list joined by "/"
-        val radarInfoList = nexradState.wxglRenders.indices.map { NexradUtil.getRadarInfo(activity, (it + 1).toString()) }
+        val radarInfoList = nexradState.wxglRenders.indices.map {
+            NexradUtil.getRadarInfo(
+                activity,
+                (it + 1).toString()
+            )
+        }
         val tmpArray = radarInfoList.map { it.split(" ") }
         if (tmpArray.all { it.size > 3 }) {
             val tmpArray2 = tmpArray.map { it[3] }
@@ -230,16 +231,22 @@ class NexradUI(
         if (RadarPreferences.wxoglRadarAutoRefresh || RadarPreferences.locationDotFollowsGps) {
             interval = 60000 * Utility.readPrefInt(activity, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            if (ContextCompat.checkSelfPermission(
+                    activity,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(
+                    activity,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
             ) {
                 val gpsEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 if (gpsEnabled != null && gpsEnabled) {
                     locationManager?.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            (RadarPreferences.locationUpdateInterval * 1000).toLong(),
-                            NexradUtil.RADAR_LOCATION_UPDATE_DISTANCE_IN_METERS,
-                            locationListener
+                        LocationManager.GPS_PROVIDER,
+                        (RadarPreferences.locationUpdateInterval * 1000).toLong(),
+                        NexradUtil.RADAR_LOCATION_UPDATE_DISTANCE_IN_METERS,
+                        locationListener
                     )
                 }
             }
@@ -270,9 +277,9 @@ class NexradUI(
         }
 
         @Deprecated(
-                message = "This method was deprecated in API level 29. This callback will never be invoked on Android Q and above.",
-                replaceWith = ReplaceWith("nothing"),
-                level = DeprecationLevel.WARNING
+            message = "This method was deprecated in API level 29. This callback will never be invoked on Android Q and above.",
+            replaceWith = ReplaceWith("nothing"),
+            level = DeprecationLevel.WARNING
         )
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
         }
@@ -335,8 +342,14 @@ class NexradUI(
         inOglAnim = false
         stopRepeatingTask()
         locationManager?.let {
-            if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            if (ContextCompat.checkSelfPermission(
+                    activity,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(
+                    activity,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
             )
                 it.removeUpdates(locationListener)
         }
@@ -348,7 +361,10 @@ class NexradUI(
         // if an L2 anim is in process sleep for 1 second to let the current decode/render finish
         // otherwise the new selection might overwrite in the OGLR object - hack
         if (nexradState.numberOfPanes > 1) {
-            if (nexradState.wxglRenders[0].state.product.contains("L2") || nexradState.wxglRenders[1].state.product.contains("L2")) {
+            if (nexradState.wxglRenders[0].state.product.contains("L2") || nexradState.wxglRenders[1].state.product.contains(
+                    "L2"
+                )
+            ) {
                 SystemClock.sleep(2000)
             }
         } else {
@@ -406,6 +422,11 @@ class NexradUI(
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(activity, nexradState.radarSite, nexradSubmenu.starButton, FavoriteType.RID)
+        UtilityFavorites.toggle(
+            activity,
+            nexradState.radarSite,
+            nexradSubmenu.starButton,
+            FavoriteType.RID
+        )
     }
 }

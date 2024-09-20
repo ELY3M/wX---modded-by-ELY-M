@@ -17,14 +17,14 @@ android {
 //    }
 
     defaultConfig {
-        compileSdk 34
+        compileSdk 35
     }
 
     defaultConfig {
         applicationId "elys.joshuatee.wx"
         // 2023-09-09 changed from 23 to 25
-        minSdkVersion 25
-        targetSdkVersion 34
+        minSdkVersion 27
+        targetSdkVersion 35
         // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
         // vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -38,13 +38,27 @@ android {
     }
 
 /*
-    def ndkDir = "D:\\android-sdk\\android-ndk-r26c"
+    def ndkDir = "D:\\android-sdk\\android-ndk-r27c"
     tasks.register('buildNative', Exec) {
         commandLine "$ndkDir\\ndk-build.cmd",
                 '-C', file('src/main/jni').absolutePath,
+                '-Wl,-z,max-page-size=16384',
                 '-j', Runtime.runtime.availableProcessors(),
                 'all'
     }
+
+//    defaultConfig {
+//        ...
+//        // This block is different from the one you use to link Gradle
+//        // to your CMake or ndk-build script.
+//        externalNativeBuild {
+//            // For ndk-build, instead use the ndkBuild block.
+//            cmake {
+//                // Passes optional arguments to CMake.
+//                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+//            }
+//        }
+//    }
 
     tasks.register('cleanNative', Exec) {
         commandLine "$ndkDir\\ndk-build.cmd",
@@ -59,6 +73,17 @@ android {
     }
 
 */
+
+
+    // required to support API 35+ 16KB page sizes
+    // see https://developer.android.com/guide/practices/page-sizes#build
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+
+
     // Flag to tell aapt to keep the attribute ids around - (2016_02_25 add 23.2 )
 
     buildTypes {
@@ -96,11 +121,11 @@ android {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
     // https://developer.android.com/jetpack/androidx/versions
     implementation 'com.google.android.material:material:1.12.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6"
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.media:media:1.7.0'

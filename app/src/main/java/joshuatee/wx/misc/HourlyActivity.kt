@@ -75,7 +75,12 @@ class HourlyActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_hourly,
+            R.menu.shared_multigraphics,
+            false
+        )
         locationNumber = To.int(intent.getStringExtra(LOC_NUM)!!) - 1
         setTitle("Hourly Forecast", Location.getName(locationNumber))
         setupUI()
@@ -113,12 +118,15 @@ class HourlyActivity : BaseActivity() {
         } else {
             UtilityHourly.getStringForActivityFromOldApi(htmlShare[1])
         }
-        cardVerticalText.set(listOf(
+        cardVerticalText.set(
+            listOf(
                 hourly.time,
                 hourly.temp,
                 hourly.windSpeed,
                 hourly.windDir,
-                hourly.conditions))
+                hourly.conditions
+            )
+        )
         plotData()
         if (UIPreferences.hourlyShowGraph) {
             graphCard.visibility = View.VISIBLE
@@ -127,7 +135,12 @@ class HourlyActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> if (htmlShare.size > 1) UtilityShare.text(this, "Hourly", htmlShare[1])
+            R.id.action_share -> if (htmlShare.size > 1) UtilityShare.text(
+                this,
+                "Hourly",
+                htmlShare[1]
+            )
+
             R.id.action_settings -> Route.settings(this)
             else -> return super.onOptionsItemSelected(item)
         }

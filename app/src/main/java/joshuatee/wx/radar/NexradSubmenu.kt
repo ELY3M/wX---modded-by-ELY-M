@@ -61,15 +61,13 @@ class NexradSubmenu(objectToolbarBottom: ObjectToolbar, private val nexradState:
             val quadPaneJump = objectToolbarBottom.find(R.id.action_radar_4)
             quadPaneJump.isVisible = false
         }
-        if (!UIPreferences.radarImmersiveMode) {
-            with(objectToolbarBottom) {
-                hide(R.id.action_blank)
-                hide(R.id.action_level3_blank)
-                hide(R.id.action_level2_blank)
-                hide(R.id.action_animate_blank)
-                hide(R.id.action_tilt_blank)
-                hide(R.id.action_tools_blank)
-            }
+        with(objectToolbarBottom) {
+            hide(R.id.action_blank)
+            hide(R.id.action_level3_blank)
+            hide(R.id.action_level2_blank)
+            hide(R.id.action_animate_blank)
+            hide(R.id.action_tilt_blank)
+            hide(R.id.action_tools_blank)
         }
         // FIXME TODO disable new Level3 super-res until NWS is past deployment phase
         objectToolbarBottom.hide(R.id.action_n0b)

@@ -69,9 +69,11 @@ class Fab {
 
     private fun setupFab(icon: Int) {
         if (UIPreferences.themeIsWhite) {
-            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+            fab.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         } else {
-            fab.backgroundTintList = ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
+            fab.backgroundTintList =
+                ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
         }
         set(icon)
         fab.elevation = UIPreferences.fabElevation
@@ -80,11 +82,17 @@ class Fab {
 
     private fun setupFab(context: Context) {
         if (UIPreferences.themeIsWhite) {
-            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+            fab.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         } else {
-            fab.backgroundTintList = ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
+            fab.backgroundTintList =
+                ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
         }
         fab.elevation = UIPreferences.fabElevation
         fab.translationZ = UIPreferences.fabElevationDepressed
+    }
+
+    fun get(): FloatingActionButton {
+        return fab
     }
 }

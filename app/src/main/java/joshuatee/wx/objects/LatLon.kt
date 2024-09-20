@@ -144,12 +144,18 @@ class LatLon() {
     fun prettyPrint(): String = "${latString.take(6)}, ${lonString.take(7)}"
 
     companion object {
+
+        fun empty() = LatLon(0.0, 0.0)
+
         // 1.1515 is the number of statute miles in a nautical mile
         // 1.609344 is the number of kilometres in a mile
         fun distance(location1: LatLon, location2: LatLon, unit: DistanceUnit): Double {
             val theta = location1.lon - location2.lon
-            var dist = sin(UtilityMath.deg2rad(location1.lat)) * sin(UtilityMath.deg2rad(location2.lat)) + cos(UtilityMath.deg2rad(location1.lat)) *
-                    cos(UtilityMath.deg2rad(location2.lat)) * cos(UtilityMath.deg2rad(theta))
+            var dist =
+                sin(UtilityMath.deg2rad(location1.lat)) * sin(UtilityMath.deg2rad(location2.lat)) + cos(
+                    UtilityMath.deg2rad(location1.lat)
+                ) *
+                        cos(UtilityMath.deg2rad(location2.lat)) * cos(UtilityMath.deg2rad(theta))
             dist = acos(dist)
             dist = UtilityMath.rad2deg(dist)
             dist *= 60.0 * 1.1515
@@ -163,7 +169,11 @@ class LatLon() {
         // take a space separated list of numbers and return a list of LatLon, list is of the format
         // lon0 lat0 lon1 lat1 for watch
         // for UtilityWatch need to multiply Y by -1.0
-        fun parseStringToLatLons(stringOfNumbers: String, multiplier: Double = 1.0, isWarning: Boolean = true): List<LatLon> {
+        fun parseStringToLatLons(
+            stringOfNumbers: String,
+            multiplier: Double = 1.0,
+            isWarning: Boolean = true
+        ): List<LatLon> {
             val list = stringOfNumbers.split(" ").dropLastWhile { it.isEmpty() }
             val x = mutableListOf<Double>()
             val y = mutableListOf<Double>()
@@ -191,13 +201,19 @@ class LatLon() {
             return latLons
         }
 
-        fun latLonListToListOfDoubles(latLons: List<LatLon>, projectionNumbers: ProjectionNumbers): List<Double> {
+        fun latLonListToListOfDoubles(
+            latLons: List<LatLon>,
+            projectionNumbers: ProjectionNumbers
+        ): List<Double> {
             val warningList = mutableListOf<Double>()
             if (latLons.isNotEmpty()) {
-                val startCoordinates = Projection.computeMercatorNumbers(latLons[0], projectionNumbers).toList()
+                val startCoordinates =
+                    Projection.computeMercatorNumbers(latLons[0], projectionNumbers).toList()
                 warningList += startCoordinates
                 (1 until latLons.size).forEach { index ->
-                    val coordinates = Projection.computeMercatorNumbers(latLons[index], projectionNumbers).toList()
+                    val coordinates =
+                        Projection.computeMercatorNumbers(latLons[index], projectionNumbers)
+                            .toList()
                     warningList += coordinates
                     warningList += coordinates
                 }

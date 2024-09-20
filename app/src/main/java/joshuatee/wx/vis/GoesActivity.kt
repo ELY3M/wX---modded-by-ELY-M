@@ -88,8 +88,12 @@ class GoesActivity : VideoRecordActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.goes16, bottomToolbar = false)
-        UtilityShortcut.hidePinIfNeeded(toolbarBottom)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer,
+            R.menu.goes16,
+            bottomToolbar = false
+        )
         arguments = intent.getStringArrayExtra(RID)!!
         setupUI()
         readPrefs()
@@ -257,9 +261,21 @@ class GoesActivity : VideoRecordActivity() {
 
     private fun getAnimate(frameCount: Int) {
         if (!goesFloater) {
-            objectAnimate.animateClicked({ getContent(sector) }) { UtilityGoes.getAnimation(navDrawer.url, sector, frameCount) }
+            objectAnimate.animateClicked({ getContent(sector) }) {
+                UtilityGoes.getAnimation(
+                    navDrawer.url,
+                    sector,
+                    frameCount
+                )
+            }
         } else {
-            objectAnimate.animateClicked({ getContent(sector) }) { UtilityGoes.getAnimationGoesFloater(navDrawer.url, sector, frameCount) }
+            objectAnimate.animateClicked({ getContent(sector) }) {
+                UtilityGoes.getAnimationGoesFloater(
+                    navDrawer.url,
+                    sector,
+                    frameCount
+                )
+            }
         }
     }
 }

@@ -20,10 +20,13 @@
 
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:background="?attr/colorPrimary"
+        android:fitsSystemWindows="true"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
@@ -31,6 +34,7 @@
         <include layout="@layout/widget_toolbar_top" />
 
         <TableLayout
+            android:background="?attr/popupMenuBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/dividerColor"

@@ -38,11 +38,11 @@ import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.To
 import kotlin.math.*
 
-class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
+    GestureDetector.OnDoubleTapListener {
 
     //
     // currently used in LocationFragment and WXGLRadarActivity / WXGLRadarActivityMultiPane to more clearly separate touch events
@@ -104,13 +104,22 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         scaleDetector = ScaleGestureDetector(context, ScaleListener())
     }
 
-    fun setRenderVar(wxglRender: NexradRender, wxglRenders: List<NexradRender>, wxglSurfaceViews: List<NexradRenderSurfaceView>) {
+    fun setRenderVar(
+        wxglRender: NexradRender,
+        wxglRenders: List<NexradRender>,
+        wxglSurfaceViews: List<NexradRenderSurfaceView>
+    ) {
         this.wxglRenders = wxglRenders
         this.wxglRender = wxglRender
         this.wxglSurfaceViews = wxglSurfaceViews
     }
 
-    fun setRenderVar(wxglRender: NexradRender, wxglRenders: List<NexradRender>, wxglSurfaceViews: List<NexradRenderSurfaceView>, activity: Activity) {
+    fun setRenderVar(
+        wxglRender: NexradRender,
+        wxglRenders: List<NexradRender>,
+        wxglSurfaceViews: List<NexradRenderSurfaceView>,
+        activity: Activity
+    ) {
         this.wxglRenders = wxglRenders
         this.wxglRender = wxglRender
         this.wxglSurfaceViews = wxglSurfaceViews
@@ -125,9 +134,6 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                         textObjects[index].hideLabels()
                         wxgl.state.displayHold = true
                     }
-                }
-                if (!locationFragment && wxglRenders.size == 1 && fullScreen || (wxglRenders.size > 1 && !locationFragment)) {
-                    UtilityUI.immersiveMode(activity!!)
                 }
             }
 	        //elys mod - 3 finger to show conus radar map
@@ -200,7 +206,12 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     override fun onDown(event: MotionEvent): Boolean = true
 
     // API34 changed first arg to Optional
-    override fun onFling(event1: MotionEvent?, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean = true
+    override fun onFling(
+        event1: MotionEvent?,
+        event2: MotionEvent,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean = true
 
     override fun onLongPress(event: MotionEvent) {
         if (fullScreen) {
@@ -225,12 +236,18 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         val test2 = 180.0 / PI * log(tan(PI / 4.0 + centerX * (PI / 180.0) / 2.0), E)
         newY = test2 + (-1.0 * wxglRender.state.y / mScaleFactor + diffY) / ppd
         newY = (180.0 / PI * (2.0 * atan(exp(newY * PI / 180.0)) - PI / 2.0))
-        wxglRender.state.closestRadarSites = UtilityLocation.getNearestRadarSites(LatLon(newY, newX * -1.0), 5)
+        wxglRender.state.closestRadarSites =
+            UtilityLocation.getNearestRadarSites(LatLon(newY, newX * -1.0), 5)
         listener?.onProgressChanged(index, index, idxInt)
     }
 
     // API34 changed first arg to Optional
-    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
         var panned = false
         if (!locationFragment && !RadarPreferences.wxoglCenterOnLocation) {
             if (abs(distanceX) > 0.001f) {
@@ -330,13 +347,21 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
             if (RadarPreferences.dualpaneshareposn && !locationFragment) {
                 mScaleFactor *= zoomFactor
                 wxglRenders.forEachIndexed { index, wxgl ->
-                    wxgl.setViewInitial(mScaleFactor, wxgl.state.x * zoomFactor, wxgl.state.y * zoomFactor)
+                    wxgl.setViewInitial(
+                        mScaleFactor,
+                        wxgl.state.x * zoomFactor,
+                        wxgl.state.y * zoomFactor
+                    )
                     wxglSurfaceViews[index].mScaleFactor = mScaleFactor
                     wxglSurfaceViews[index].requestRender()
                 }
             } else {
                 mScaleFactor *= zoomFactor
-                wxglRender.setViewInitial(mScaleFactor, wxglRender.state.x * zoomFactor, wxglRender.state.y * zoomFactor)
+                wxglRender.setViewInitial(
+                    mScaleFactor,
+                    wxglRender.state.x * zoomFactor,
+                    wxglRender.state.y * zoomFactor
+                )
                 requestRender()
             }
             scaleFactorGlobal = mScaleFactor
@@ -356,9 +381,9 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                 mScaleFactor *= 2.0f
                 wxglRenders.forEachIndexed { index, wxgl ->
                     wxgl.setViewInitial(
-                            mScaleFactor,
-                            wxgl.state.x * 2.0f + (xPos - xMiddle) * -2.0f * density,
-                            wxgl.state.y * 2.0f + (yMiddle - yPos) * -2.0f * density
+                        mScaleFactor,
+                        wxgl.state.x * 2.0f + (xPos - xMiddle) * -2.0f * density,
+                        wxgl.state.y * 2.0f + (yMiddle - yPos) * -2.0f * density
                     )
                     wxglSurfaceViews[index].mScaleFactor = mScaleFactor
                     wxglSurfaceViews[index].requestRender()
@@ -366,9 +391,9 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
             } else {
                 mScaleFactor *= 2.0f
                 wxglRender.setViewInitial(
-                        mScaleFactor,
-                        wxglRender.state.x * 2.0f + (xPos - xMiddle) * -2.0f * density,
-                        wxglRender.state.y * 2.0f + (yMiddle - yPos) * -2.0f * density
+                    mScaleFactor,
+                    wxglRender.state.x * 2.0f + (xPos - xMiddle) * -2.0f * density,
+                    wxglRender.state.y * 2.0f + (yMiddle - yPos) * -2.0f * density
                 )
                 requestRender()
             }
@@ -382,7 +407,11 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                 }
             } else {
                 mScaleFactor *= 2.0f
-                wxglRender.setViewInitial(mScaleFactor, wxglRender.state.x * 2.0f, wxglRender.state.y * 2.0f)
+                wxglRender.setViewInitial(
+                    mScaleFactor,
+                    wxglRender.state.x * 2.0f,
+                    wxglRender.state.y * 2.0f
+                )
                 requestRender()
             }
         }
@@ -402,7 +431,11 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                 wxglSurfaceViews[index].requestRender()
             }
         } else {
-            wxglRender.setViewInitial(mScaleFactor, wxglRender.state.x * 2.0f, wxglRender.state.y * 2.0f)
+            wxglRender.setViewInitial(
+                mScaleFactor,
+                wxglRender.state.x * 2.0f,
+                wxglRender.state.y * 2.0f
+            )
             requestRender()
         }
         scaleFactorGlobal = mScaleFactor
@@ -423,7 +456,11 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                 wxglSurfaceViews[index].requestRender()
             }
         } else {
-            wxglRender.setViewInitial(mScaleFactor, wxglRender.state.x / 2.0f, wxglRender.state.y / 2.0f)
+            wxglRender.setViewInitial(
+                mScaleFactor,
+                wxglRender.state.x / 2.0f,
+                wxglRender.state.y / 2.0f
+            )
             requestRender()
         }
         scaleFactorGlobal = mScaleFactor
@@ -441,7 +478,11 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                 wxglSurfaceViews[index].requestRender()
             }
         } else {
-            wxglRender.setViewInitial(mScaleFactor, wxglRender.state.x / 2.0f, wxglRender.state.y / 2.0f)
+            wxglRender.setViewInitial(
+                mScaleFactor,
+                wxglRender.state.x / 2.0f,
+                wxglRender.state.y / 2.0f
+            )
             requestRender()
         }
         scaleFactorGlobal = mScaleFactor
@@ -480,18 +521,10 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
                 this.setMeasuredDimension(width, width)
             }
         } else {
-            width =
-                    if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)
-                        MyApplication.dm.widthPixels / widthDivider
-                    else
-                        MyApplication.dm.widthPixels / widthDivider
-            if ((UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)) {
+            width = MyApplication.dm.widthPixels / widthDivider
+            height = MyApplication.dm.heightPixels / heightDivider
+            if (wxglRenders.size == 2) {
                 height = MyApplication.dm.heightPixels / heightDivider
-                if (wxglRenders.size == 2) {
-                    height = MyApplication.dm.heightPixels / heightDivider
-                }
-            } else {
-                height = MyApplication.dm.heightPixels / heightDivider - UIPreferences.actionBarHeight
             }
             this.setMeasuredDimension(width, height)
         }

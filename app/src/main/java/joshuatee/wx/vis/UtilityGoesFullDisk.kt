@@ -276,7 +276,7 @@ internal object UtilityGoesFullDisk {
                 urls,
                 UtilityImg.animInterval(context)
             )
-        } else if (!urlOriginal.contains("GUAM") && !urlOriginal.contains("https://www.ospo.noaa.gov/Products/imagery/sohemi")) {
+        } else {
             val product = urlOriginal.split("/").last().split(".").first()
             val urlBase = urlOriginal.replace("$product.jpg", "").replace("$product.gif", "")
             val urlFile = urlBase + "txtfiles/" + product + "_names.txt"
@@ -292,8 +292,13 @@ internal object UtilityGoesFullDisk {
                 urls,
                 UtilityImg.animInterval(context)
             )
-        } else { // TODO FIXME Guam https://www.ospo.noaa.gov/Products_imagery/guam/guamloops/palau.cfg
-            return AnimationDrawable()
         }
+    }
+
+    fun canAnimate(url: String): Boolean {
+        return !url.contains("GUAM")
+                && !url.contains("https://www.ospo.noaa.gov/Products/imagery/sohemi")
+                && !url.contains("https://www.ospo.noaa.gov/img/samoa_.PNG")
+                && !url.contains("https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/tsp/Sandwich/900x540.jpg")
     }
 }

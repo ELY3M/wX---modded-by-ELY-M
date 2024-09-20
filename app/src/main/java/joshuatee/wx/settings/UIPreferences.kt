@@ -58,9 +58,6 @@ object UIPreferences {
     var colorOffwhiteToolbar = 0
     var dualpaneRadarIcon = false
     var homescreenTextLength = 0
-    var radarToolbarTransparent = true
-    var radarStatusBarTransparent = false
-    var radarImmersiveMode = false
     var tilesPerRow = 3
     var tilesPerRowDefault = 3
     var themeStr = ""
@@ -138,30 +135,33 @@ object UIPreferences {
     fun initPreferences(context: Context) {
         useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "true").startsWith("t")
         useNwsApiForHourly = Utility.readPref(context, "USE_NWS_API_HOURLY", "true").startsWith("t")
-        navDrawerMainScreen = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
-        navDrawerMainScreenOnRight = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
+        navDrawerMainScreen =
+            Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
+        navDrawerMainScreenOnRight =
+            Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
         if (UtilityUI.isTablet()) {
             normalTextSizeDefault = 18
         }
-        normalTextSize = Utility.readPrefInt(context, "TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
+        normalTextSize =
+            Utility.readPrefInt(context, "TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
         textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, context)
         textSizeNormal = UtilityUI.spToPx(normalTextSize, context)
         textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, context)
         locfragDontShowIcons = Utility.readPref(context, "UI_LOCFRAG_NO_ICONS", "false").startsWith("t")
-        mainScreenRadarFab = Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t") //elys mods - I hate fab buttons
+        //elys mod - I fucking hate fabs!!!!   
+	mainScreenRadarFab = Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t") //elys mods - I hate fab buttons
         homescreenTextLength = Utility.readPrefInt(context, "HOMESCREEN_TEXT_LENGTH_PREF", 500)
         refreshLocMin = Utility.readPrefInt(context, "REFRESH_LOC_MIN", 10)
         translateText = Utility.readPref(context, "TRANSLATE_TEXT", "false").startsWith("t")
-        nwsTextRemovelinebreaks = Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
+        nwsTextRemovelinebreaks =
+            Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
         recordScreenShare = Utility.readPref(context, "RECORD_SCREEN_SHARE", "true").startsWith("t")
-        dualpaneRadarIcon = Utility.readPref(context, "DUALPANE_RADAR_ICON", "false").startsWith("t")
+        dualpaneRadarIcon =
+            Utility.readPref(context, "DUALPANE_RADAR_ICON", "false").startsWith("t")
         hideTopToolbar = Utility.readPref(context, "HIDE_TOP_TOOLBAR", "false").startsWith("t")
         colorNotif = ContextCompat.getColor(context, R.color.primary_dark_blue)
         colorBlack = ContextCompat.getColor(context, R.color.black)
         colorOffwhiteToolbar = ContextCompat.getColor(context, R.color.offwhite_toolbar)
-        radarToolbarTransparent = Utility.readPref(context, "RADAR_TOOLBAR_TRANSPARENT", "true").startsWith("t")
-        radarStatusBarTransparent = Utility.readPref(context, "RADAR_STATUSBAR_TRANSPARENT", "false").startsWith("t")
-        radarImmersiveMode = Utility.readPref(context, "RADAR_IMMERSIVE_MODE", "false").startsWith("t")
         if (UtilityUI.isTablet()) {
             tilesPerRowDefault = 5
         }
@@ -193,7 +193,8 @@ object UIPreferences {
         nwsIconTextColor = getInitialPreference("NWS_ICON_TEXT_COLOR", Color.rgb(38, 97, 139))
         nwsIconBottomColor = getInitialPreference("NWS_ICON_BOTTOM_COLOR", Color.rgb(255, 255, 255))
         elevationPref = getInitialPreference("ELEVATION_PREF", elevationPrefDefault).toFloat()
-        elevationPref = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, MyApplication.dm)
+        elevationPref =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, MyApplication.dm)
         cardElevation = elevationPref
         fabElevation = elevationPref
         fabElevationDepressed = elevationPref * 2
@@ -211,7 +212,10 @@ object UIPreferences {
         homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", HOMESCREEN_FAVORITE_DEFAULT)
         isNexradOnMainScreen = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
         FavoriteType.entries.forEach {
-            favorites[it] = getInitialPreferenceString(UtilityFavorites.getPrefToken(it), GlobalVariables.PREFERENCE_SEPARATOR)
+            favorites[it] = getInitialPreferenceString(
+                UtilityFavorites.getPrefToken(it),
+                GlobalVariables.PREFERENCE_SEPARATOR
+            )
         }
         spotterFav = getInitialPreferenceString("SPOTTER_FAV", "")
         wfoTextFav = getInitialPreferenceString("WFO_TEXT_FAV", "AFD")
@@ -229,11 +233,11 @@ object UIPreferences {
     }
 
     private fun getInitialPreference(pref: String, initValue: Int): Int =
-            MyApplication.preferences.getInt(pref, initValue)
+        MyApplication.preferences.getInt(pref, initValue)
 
     private fun getInitialPreference(pref: String, initValue: String): Boolean =
-            (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
+        (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
 
     private fun getInitialPreferenceString(pref: String, initValue: String): String =
-            MyApplication.preferences.getString(pref, initValue) ?: initValue
+        MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

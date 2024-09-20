@@ -64,66 +64,68 @@ object UtilityShortcut {
     fun create(context: Context, type: ShortcutType) {
         // https://developer.android.com/guide/topics/ui/shortcuts
         // Pinned shortcuts in API 26 8.0
-        if (android.os.Build.VERSION.SDK_INT > 25) {
-            val intent: Intent?
-            var imageId = 0
-            when (type) {
-                ShortcutType.SevereDashboard -> {
-                    intent = ObjectIntentShortcut(context, SevereDashboardActivity::class.java).intent
-                    imageId = R.drawable.ntor
-                }
-
-                ShortcutType.AFD -> {
-                    intent = ObjectIntentShortcut(context, WfoTextActivity::class.java, WfoTextActivity.URL, arrayOf(Location.wfo, "")).intent
-                    imageId = R.drawable.widget_afd
-                }
-
-                ShortcutType.GOES16 -> {
-                    intent = ObjectIntentShortcut(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("")).intent
-                    imageId = R.drawable.goes
-                }
-
-                ShortcutType.RADAR_MOSAIC -> {
-                    intent = ObjectIntentShortcut(context, RadarMosaicNwsActivity::class.java).intent
-                    imageId = R.drawable.widget_radar_mosaic
-                }
-
-                ShortcutType.SPC_SWO_SUMMARY -> {
-                    intent = ObjectIntentShortcut(context, SpcSwoSummaryActivity::class.java).intent
-                    imageId = R.drawable.spc_sum
-                }
+        val intent: Intent?
+        var imageId = 0
+        when (type) {
+            ShortcutType.SevereDashboard -> {
+                intent = ObjectIntentShortcut(context, SevereDashboardActivity::class.java).intent
+                imageId = R.drawable.ntor
             }
-            val shortcutId = type.toString()
-            val shortcutManager = context.getSystemService(ShortcutManager::class.java)
-            val shortcut = ShortcutInfo.Builder(context, shortcutId)
-                    .setShortLabel(shortcutId)
-                    .setLongLabel(shortcutId)
-                    .setIcon(Icon.createWithResource(context, imageId))
-                    .setIntents(arrayOf(Intent(Intent.ACTION_MAIN, Uri.EMPTY, context, joshuatee.wx.WX::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK), intent))
-                    .build()
-            val pinnedShortcutCallbackIntent = shortcutManager!!.createShortcutResultIntent(shortcut)
-            val successCallback = PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, PendingIntent.FLAG_IMMUTABLE)
-            shortcutManager.requestPinShortcut(shortcut, successCallback.intentSender)
-        }
-    }
 
-    fun hidePinIfNeeded(toolbar: Toolbar) {
-        if (android.os.Build.VERSION.SDK_INT < 26) {
-            try {
-                toolbar.menu.findItem(R.id.action_pin).isVisible = false
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
+            ShortcutType.AFD -> {
+                intent = ObjectIntentShortcut(
+                    context,
+                    WfoTextActivity::class.java,
+                    WfoTextActivity.URL,
+                    arrayOf(Location.wfo, "")
+                ).intent
+                imageId = R.drawable.widget_afd
+            }
+
+            ShortcutType.GOES16 -> {
+                intent = ObjectIntentShortcut(
+                    context,
+                    GoesActivity::class.java,
+                    GoesActivity.RID,
+                    arrayOf("")
+                ).intent
+                imageId = R.drawable.goes
+            }
+
+            ShortcutType.RADAR_MOSAIC -> {
+                intent = ObjectIntentShortcut(context, RadarMosaicNwsActivity::class.java).intent
+                imageId = R.drawable.widget_radar_mosaic
+            }
+
+            ShortcutType.SPC_SWO_SUMMARY -> {
+                intent = ObjectIntentShortcut(context, SpcSwoSummaryActivity::class.java).intent
+                imageId = R.drawable.spc_sum
             }
         }
-    }
-
-    fun hidePinIfNeeded(menu: Menu) {
-        if (android.os.Build.VERSION.SDK_INT < 26) {
-            try {
-                menu.findItem(R.id.action_pin).isVisible = false
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-        }
+        val shortcutId = type.toString()
+        val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+        val shortcut = ShortcutInfo.Builder(context, shortcutId)
+            .setShortLabel(shortcutId)
+            .setLongLabel(shortcutId)
+            .setIcon(Icon.createWithResource(context, imageId))
+            .setIntents(
+                arrayOf(
+                    Intent(
+                        Intent.ACTION_MAIN,
+                        Uri.EMPTY,
+                        context,
+                        joshuatee.wx.WX::class.java
+                    ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK), intent
+                )
+            )
+            .build()
+        val pinnedShortcutCallbackIntent = shortcutManager!!.createShortcutResultIntent(shortcut)
+        val successCallback = PendingIntent.getBroadcast(
+            context,
+            0,
+            pinnedShortcutCallbackIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        shortcutManager.requestPinShortcut(shortcut, successCallback.intentSender)
     }
 }

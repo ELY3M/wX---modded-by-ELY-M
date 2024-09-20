@@ -56,21 +56,26 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         when (type) {
             PolygonType.WATCH_TORNADO, PolygonType.WATCH -> {
                 this.productNumber = productNumber.replace("w".toRegex(), "")
-                imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww" + productNumber + "_radar.gif"
-                textUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww$productNumber.html"
+                imgUrl =
+                    "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww" + productNumber + "_radar.gif"
+                textUrl =
+                    "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww$productNumber.html"
                 title = "Watch $productNumber"
                 prod = "SPCWAT$productNumber"
             }
 
             PolygonType.MCD -> {
-                imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/mcd$productNumber.png"
-                textUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/md$productNumber.html"
+                imgUrl =
+                    "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/mcd$productNumber.png"
+                textUrl =
+                    "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/md$productNumber.html"
                 title = "MCD $productNumber"
                 prod = "SPCMCD$productNumber"
             }
 
             PolygonType.MPD -> {
-                imgUrl = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/metwatch/images/mcd$productNumber.gif"
+                imgUrl =
+                    "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/metwatch/images/mcd$productNumber.gif"
                 title = "MPD $productNumber"
                 prod = "WPCMPD$productNumber"
             }
@@ -96,7 +101,7 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
     }
 
     private fun getCenterOfPolygon(latLons: List<LatLon>): LatLon {
-        val center = LatLon(0.0, 0.0)
+        val center = LatLon.empty()
         latLons.forEach {
             center.lat += it.lat
             center.lon += it.lon

@@ -41,11 +41,6 @@ internal object NexradLevel3TVS {
     fun decode(radarSite: String): List<Double> {
         val location = UtilityLocation.getSiteLocation(radarSite, OfficeTypeEnum.RADAR)
         val data = NexradLevel3TextProduct.download("TVS", radarSite)
-
-        //for testing TVS
-        //File(GlobalVariables.FilesPath+"tvstest").copyTo(File("/data/user/0/joshuatee.wx/files/nids_tvs_tab0"), true);
-        //val data = NexradLevel3TextProduct.readFile(MyApplication.appContext, "nids_tvs_tab0")
-
         // P  TVS    R7   216/ 50    29    57    57/ 6.5    15.9    6.5/ 22.4    18/ 6.5    &#0;
         val tvs = data.parseColumn(pattern1)
         val stormList = mutableListOf<Double>()

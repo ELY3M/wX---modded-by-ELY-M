@@ -67,19 +67,18 @@ class SevereDashboardActivity : BaseActivity() {
     private lateinit var boxWarnings: VBox
     private var downloadTimer = DownloadTimer("SEVERE_DASHBOARD_ACTIVITY")
     private val watchesByType = mapOf(
-            PolygonType.WATCH to SevereNotice(PolygonType.WATCH),
-            PolygonType.MCD to SevereNotice(PolygonType.MCD),
-            PolygonType.MPD to SevereNotice(PolygonType.MPD),
+        PolygonType.WATCH to SevereNotice(PolygonType.WATCH),
+        PolygonType.MCD to SevereNotice(PolygonType.MCD),
+        PolygonType.MPD to SevereNotice(PolygonType.MPD),
     )
     private val warningsByType = mapOf(
-            PolygonWarningType.TornadoWarning to SevereWarning(PolygonWarningType.TornadoWarning),
-            PolygonWarningType.ThunderstormWarning to SevereWarning(PolygonWarningType.ThunderstormWarning),
-            PolygonWarningType.FlashFloodWarning to SevereWarning(PolygonWarningType.FlashFloodWarning),
+        PolygonWarningType.TornadoWarning to SevereWarning(PolygonWarningType.TornadoWarning),
+        PolygonWarningType.ThunderstormWarning to SevereWarning(PolygonWarningType.ThunderstormWarning),
+        PolygonWarningType.FlashFloodWarning to SevereWarning(PolygonWarningType.FlashFloodWarning),
     )
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.severe_dashboard, menu)
-        UtilityShortcut.hidePinIfNeeded(menu)
         return true
     }
 
@@ -113,7 +112,10 @@ class SevereDashboardActivity : BaseActivity() {
                 FutureVoid({ downloadWatch(it) }, ::showItems)
             }
             FutureVoid({ bitmaps[0] = DownloadImage.byProduct(this, "USWARN") }, ::showItems)
-            FutureVoid({ bitmaps[1] = UtilitySpc.getStormReportsTodayUrl().getImage() }, ::showItems)
+            FutureVoid(
+                { bitmaps[1] = UtilitySpc.getStormReportsTodayUrl().getImage() },
+                ::showItems
+            )
             // TODO FIXME .values()
             warningsByType.forEach { (_, severeWarning) ->
                 FutureVoid({ severeWarning.download() }, ::updateWarnings)
@@ -129,10 +131,19 @@ class SevereDashboardActivity : BaseActivity() {
     @Synchronized
     private fun updateWarnings() {
         boxWarnings.removeChildrenAndLayout()
-        listOf(PolygonWarningType.TornadoWarning, PolygonWarningType.ThunderstormWarning, PolygonWarningType.FlashFloodWarning).forEach {
+        listOf(
+            PolygonWarningType.TornadoWarning,
+            PolygonWarningType.ThunderstormWarning,
+            PolygonWarningType.FlashFloodWarning
+        ).forEach {
             val severeWarning = warningsByType[it]!!
             if (severeWarning.getCount() > 0) {
-                boxWarnings.addWidget(CardBlackHeaderText(this, "(" + severeWarning.getCount() + ") " + severeWarning.getName()))
+                boxWarnings.addWidget(
+                    CardBlackHeaderText(
+                        this,
+                        "(" + severeWarning.getCount() + ") " + severeWarning.getName()
+                    )
+                )
                 severeWarning.warningList.forEach { w ->
                     if (w.isCurrent) {
                         val cardDashAlertItem = CardDashAlertItem(this, w)
@@ -158,8 +169,9 @@ class SevereDashboardActivity : BaseActivity() {
             }
         }
         if (warningsByType[PolygonWarningType.TornadoWarning]!!.getCount() > 0
-                || warningsByType[PolygonWarningType.ThunderstormWarning]!!.getCount() > 0
-                || warningsByType[PolygonWarningType.FlashFloodWarning]!!.getCount() > 0) {
+            || warningsByType[PolygonWarningType.ThunderstormWarning]!!.getCount() > 0
+            || warningsByType[PolygonWarningType.FlashFloodWarning]!!.getCount() > 0
+        ) {
             subTitle += " (${warningsByType[PolygonWarningType.ThunderstormWarning]!!.getCount()},${warningsByType[PolygonWarningType.TornadoWarning]!!.getCount()},${warningsByType[PolygonWarningType.FlashFloodWarning]!!.getCount()})"
         }
         return subTitle

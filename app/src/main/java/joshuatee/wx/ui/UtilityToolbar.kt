@@ -28,10 +28,8 @@ import joshuatee.wx.settings.UIPreferences
 object UtilityToolbar {
 
     fun transparentToolbars(toolbar: ObjectToolbar, toolbarBottom: ObjectToolbar) {
-        if (UIPreferences.radarToolbarTransparent) {
-            toolbar.background.mutate().alpha = 0
-            toolbarBottom.background.mutate().alpha = 0
-        }
+        toolbar.background.mutate().alpha = 0
+        toolbarBottom.background.mutate().alpha = 0
     }
 
     fun fullScreenMode(toolbar: Toolbar, toolbarBottom: Toolbar) {

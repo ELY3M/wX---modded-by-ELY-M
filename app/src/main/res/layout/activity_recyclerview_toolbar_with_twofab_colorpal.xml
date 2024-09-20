@@ -20,6 +20,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_above="@id/toolbar_bottom"
@@ -29,11 +30,13 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main_content"
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cardList"
+            android:background="?attr/popupMenuBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/padding" />

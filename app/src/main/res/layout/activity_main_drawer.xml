@@ -31,6 +31,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main_content"
+        android:background="?attr/colorPrimary"
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -43,6 +45,7 @@
 
             <LinearLayout
                 android:id="@+id/ll"
+                android:background="?attr/popupMenuBackground"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_above="@id/toolbar_bottom"
@@ -69,7 +72,7 @@
             android:layout_above="@id/fab"
             android:layout_gravity="bottom|end"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="92dp"
+            android:layout_marginBottom="102dp"
             app:elevation="@dimen/fab_elevation"
             app:layout_anchor="@id/rl"
             app:layout_anchorGravity="bottom|right"
@@ -84,7 +87,7 @@
             android:layout_above="@id/ll"
             android:layout_gravity="bottom|end"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="34dp"
             app:elevation="@dimen/fab_elevation"
             app:layout_anchor="@id/rl"
             app:layout_anchorGravity="bottom|right"

@@ -79,22 +79,24 @@ internal class OverlayView private constructor(
                 UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.WHITE)
         )
         if (getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL) {
-            animationWidth = -animationWidth // Account for animating in from the other side of screen.
+            animationWidth =
+                -animationWidth // Account for animating in from the other side of screen.
         }
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         translationX = animationWidth.toFloat()
-        animate().translationX(0f).setDuration(DURATION_ENTER_EXIT.toLong()).interpolator = DecelerateInterpolator()
+        animate().translationX(0f).setDuration(DURATION_ENTER_EXIT.toLong()).interpolator =
+            DecelerateInterpolator()
     }
 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.record_overlay_cancel -> animate().translationX(animationWidth.toFloat())
-                    .setDuration(DURATION_ENTER_EXIT.toLong())
-                    .setInterpolator(AccelerateInterpolator())
-                    .withEndAction { listener.onCancel() }
+                .setDuration(DURATION_ENTER_EXIT.toLong())
+                .setInterpolator(AccelerateInterpolator())
+                .withEndAction { listener.onCancel() }
 
             R.id.record_overlay_drawtool -> {
                 drawToolView.isActivated = !drawToolView.isActivated
@@ -112,25 +114,22 @@ internal class OverlayView private constructor(
         private const val DURATION_ENTER_EXIT = 300
 
         fun create(
-                context: Context,
-                listener: Listener,
+            context: Context,
+            listener: Listener,
         ): OverlayView = OverlayView(context, listener)
 
         fun createLayoutParams(context: Context): WindowManager.LayoutParams {
             val res = context.resources
             val width = res.getDimensionPixelSize(R.dimen.overlay_width)
             val height = res.getDimensionPixelSize(R.dimen.overlay_height_m)
-            val layoutFlag: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val layoutFlag: Int =
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
-            }
             val params = WindowManager.LayoutParams(
-                    width,
-                    height,
-                    layoutFlag,
-                    FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
-                    TRANSLUCENT
+                width,
+                height,
+                layoutFlag,
+                FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
+                TRANSLUCENT
             )
             params.gravity = Gravity.TOP or gravityEndLocaleHack()
             return params

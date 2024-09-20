@@ -40,11 +40,15 @@ class ObjectDialogue {
     companion object {
         private const val CHECKED_ITEM = -1
 
-        fun generic(context: Activity, list: List<String>, getContent: () -> Unit, fn: (Int) -> Unit) {
+        fun generic(
+            context: Activity,
+            list: List<String>,
+            getContent: () -> Unit,
+            fn: (Int) -> Unit
+        ) {
             val objectDialogue = ObjectDialogue(context, list)
             objectDialogue.connectCancel { dialog, _ ->
                 dialog.dismiss()
-                UtilityUI.immersiveMode(context)
             }
             objectDialogue.connect { dialog, which ->
                 fn(which)
@@ -65,14 +69,15 @@ class ObjectDialogue {
             AlertDialog.Builder(context)
         }
         alertDialog.setTitle(title)
-        arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent)
-                val textView: TextView = view.findViewById(android.R.id.text1)
-                setupTextView(textView)
-                return view
+        arrayAdapter =
+            object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getView(position, convertView, parent)
+                    val textView: TextView = view.findViewById(android.R.id.text1)
+                    setupTextView(textView)
+                    return view
+                }
             }
-        }
         arrayAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
         alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }
     }
@@ -83,14 +88,15 @@ class ObjectDialogue {
         } else {
             AlertDialog.Builder(context)
         }
-        arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent)
-                val textView: TextView = view.findViewById(android.R.id.text1)
-                setupTextView(textView)
-                return view
+        arrayAdapter =
+            object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getView(position, convertView, parent)
+                    val textView: TextView = view.findViewById(android.R.id.text1)
+                    setupTextView(textView)
+                    return view
+                }
             }
-        }
         arrayAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
         alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }
     }

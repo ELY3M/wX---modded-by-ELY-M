@@ -65,10 +65,6 @@
 Prevent tapping on a widget from opening the app. Please note that after changing this setting you must then delete and re-add any widget that you want this to take effect for.
 </string>
 
-    <string name="main_screen_radar_button">
-Show a floating action button on the main screen for access to radar.
-</string>
-
     <string name="hide_top_toolbar_label">
 Hide the top toolbar on the main screen.
 </string>
@@ -141,7 +137,7 @@ Show nearby wind barbs for the state the currently selected radar is in.
     <string name="drawtool_size_label">
 Set the line width for the drawing and distance tools available in radar. Default is 3.
 </string>
-
+<!-- modded ELY M. -->
     <string name="showlegendwidth">
 Set the color legend width in radar. Default is 50.
 </string>
@@ -149,16 +145,6 @@ Set the color legend width in radar. Default is 50.
     <string name="showlegendtextsize">
 Set the color legend text size in radar. Default is 10.
 </string>
-
-    <string name="radar_toolbar_transparent_label">
-Nexrad radar single pane activity will have transparent toolbars if enabled.</string>
-
-    <string name="radar_statusbar_transparent_label">
-Nexrad radar single pane activity will have transparent status bar if enabled.</string>
-
-    <string name="radar_immersive_mode_label">
-Nexrad radar single pane activity will have the status bar and navigation bar hidden
-     </string>
 
     <string name="record_screen_share_label">
 Use screen recording technology for sharing in activities involving just images and offering animations. After touching the record button in

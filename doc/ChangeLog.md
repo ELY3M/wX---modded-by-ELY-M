@@ -2,9 +2,103 @@
 
 # Developer ChangeLog
 
-## 55907 2024_09_14
+## 55913 2024_09_20
 
 * [ADD]
+
+## 55912 2024_09_20
+
+* [REF] cleanup from prior releases
+* [REF] lint - remove obsolete SDK checks, including
+
+```
+	renamed:    mipmap-anydpi-v26/ic_launcher_new.xml -> mipmap-anydpi/ic_launcher_new.xml
+```
+
+* [ADD] convenience LatLon.empty()
+
+## 55911 2024_09_19
+
+* [ADD] (WIP) edge-to-edge workarounds
+* [ADD] deprecate these options as mentioned
+  in [upcoming changes document](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
+
+- (added 2023-09-10) wX Android setting "Radar with transparent toolbars" will be retired after
+  2024-09-10
+- (added 2023-09-10) wX Android setting "Radar with transparent status bar" will be retired after
+  2024-09-10
+- (added 2023-09-10) wX Android setting "Radar: immersive mode" will be retired after 2024-09-10
+- (added 2023-09-10) wX Android setting "Main screen radar button (requires restart)" will be
+  retired after 2024-09-10
+
+```
+files impacted - need to be cleaned up later
+
+	modified:   app/src/main/java/joshuatee/wx/WX.kt
+	modified:   app/src/main/java/joshuatee/wx/radar/NexradLongPressMenu.kt
+	modified:   app/src/main/java/joshuatee/wx/radar/NexradRenderSurfaceView.kt
+	modified:   app/src/main/java/joshuatee/wx/radar/NexradSubmenu.kt
+	modified:   app/src/main/java/joshuatee/wx/radar/NexradUI.kt
+	modified:   app/src/main/java/joshuatee/wx/radar/WXGLRadarActivity.kt
+	modified:   app/src/main/java/joshuatee/wx/radar/WXGLRadarActivityMultiPane.kt
+	modified:   app/src/main/java/joshuatee/wx/settings/SettingsDeveloperActivity.kt
+	modified:   app/src/main/java/joshuatee/wx/settings/UIPreferences.kt
+	modified:   app/src/main/java/joshuatee/wx/ui/ObjectDialogue.kt
+	modified:   app/src/main/java/joshuatee/wx/ui/Switch.kt
+	modified:   app/src/main/java/joshuatee/wx/ui/UtilityToolbar.kt
+	modified:   app/src/main/java/joshuatee/wx/ui/UtilityUI.kt
+```
+
+* [ADD] lib update
+
+```
+-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5"
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6"
+```
+
+## 55910 2024_09_19
+
+* [ADD] (WIP) edge-to-edge workarounds
+
+## 55909 2024_09_18
+
+* [ADD] (WIP) edge-to-edge workarounds
+
+* [ADD] API 35 Support 16 KB page sizes
+    - https://developer.android.com/guide/practices/page-sizes
+    - changes in `app/src/main/jni/Application.mk` and `app/build.gradle`
+* [ADD] (WIP) prelim work in WX (main screen), SPC Meso, Image Collection, Hourly to work around
+  edge-to-edge
+
+## 55908 2024_09_18
+
+* [ADD] per upcoming changes, change minSdkVersion from 25 to 27
+* [ADD] change targetSdkVersion/compileSdk from 34 to 35
+* [ADD] tool update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.6.0'
++        classpath 'com.android.tools.build:gradle:8.6.1'
+```
+
+## 55907 2024_09_15
+
+* [ADD] more GOES "Full Disk" development
+* [ADD] NDK update
+
+```
+-    def ndkVersion = "android-ndk-r26d"
++    def ndkVersion = "android-ndk-r27b"
+```
+
+* [ADD] dep updates
+
+```
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
+```
 
 ## 55906 2024_09_14
 

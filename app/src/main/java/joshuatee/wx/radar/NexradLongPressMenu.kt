@@ -36,14 +36,18 @@ import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMath
 import kotlin.math.roundToInt
 //elys mod
 import joshuatee.wx.MyApplication //elys mod //need context...
 
-class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, nexradArguments: NexradArguments, longPressFunction: (String) -> Unit) {
+class NexradLongPressMenu(
+    val activity: Activity,
+    val nexradState: NexradState,
+    nexradArguments: NexradArguments,
+    longPressFunction: (String) -> Unit
+) {
 
     private val radarLongPressItems = mutableListOf<String>()
     private var longPressDialogue = ObjectDialogue(activity, radarLongPressItems)
@@ -51,14 +55,14 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
     init {
         longPressDialogue.connectCancel { dialog, _ ->
             dialog.dismiss()
-            UtilityUI.immersiveMode(activity)
         }
         longPressDialogue.connect { dialog, itemIndex ->
-            doLongPressAction(activity,
-                    radarLongPressItems[itemIndex],
-                    nexradState.surface.latLon,
-                    nexradState.render.state.closestRadarSites.first().name,
-                    longPressFunction
+            doLongPressAction(
+                activity,
+                radarLongPressItems[itemIndex],
+                nexradState.surface.latLon,
+                nexradState.render.state.closestRadarSites.first().name,
+                longPressFunction
             )
             dialog.dismiss()
         }
@@ -75,15 +79,15 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
                         curRadar = idx
                     }
                     setupContextMenu(
-                            activity,
-                            radarLongPressItems,
-                            nexradArguments.locXCurrent,
-                            nexradArguments.locYCurrent,
-                            surface.latLon,
-                            render.wxglNexradLevel3,
-                            render.state.rid,
-                            render.state.closestRadarSites,
-                            longPressDialogue
+                        activity,
+                        radarLongPressItems,
+                        nexradArguments.locXCurrent,
+                        nexradArguments.locYCurrent,
+                        surface.latLon,
+                        render.wxglNexradLevel3,
+                        render.state.rid,
+                        render.state.closestRadarSites,
+                        longPressDialogue
                     )
                 }
             } else {
@@ -97,15 +101,15 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
     companion object {
 
         fun setupContextMenu(
-                context: Context,
-                longPressList: MutableList<String>,
-                locX: Double,
-                locY: Double,
-                latLon: LatLon,
-                wxglNexradLevel3: NexradLevel3,
-                radarSite: String,
-                closestRadarSites: List<RID>,
-                longPressDialogue: ObjectDialogue
+            context: Context,
+            longPressList: MutableList<String>,
+            locX: Double,
+            locY: Double,
+            latLon: LatLon,
+            wxglNexradLevel3: NexradLevel3,
+            radarSite: String,
+            closestRadarSites: List<RID>,
+            longPressDialogue: ObjectDialogue
         ) {
             longPressList.clear()
             val dist = LatLon.distance(LatLon(locX, locY), latLon, DistanceUnit.MILE)
@@ -116,7 +120,8 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
             longPressDialogue.setTitle(latLonTitle)
             longPressList.add("${dist.toString().take(6)} miles from location")
             longPressList.add("${distRid.toString().take(6)} miles from $radarSite")
-            val heightAgl = UtilityMath.getRadarBeamHeight(wxglNexradLevel3.degree.toDouble(), distRidKm)
+            val heightAgl =
+                UtilityMath.getRadarBeamHeight(wxglNexradLevel3.degree.toDouble(), distRidKm)
             val heightMsl = wxglNexradLevel3.radarHeight + heightAgl
             //elys mod - WIP
 	    val dbz = ""
@@ -164,20 +169,41 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
 
         private fun getWpcFrontTimeStamp(context: Context): String {
             var timeStamp = Utility.readPref(context, "WPC_FRONTS_TIMESTAMP", "")
-                    .replace(ObjectDateTime.getYear().toString(), "")
+                .replace(ObjectDateTime.getYear().toString(), "")
             if (timeStamp.length > 6) {
                 timeStamp = timeStamp.insert(4, " ")
             }
             return timeStamp
         }
 
-        fun doLongPressAction(activity: Activity, s: String, latLon: LatLon, radarSite: String, function: (String) -> Unit) {
+        fun doLongPressAction(
+            activity: Activity,
+            s: String,
+            latLon: LatLon,
+            radarSite: String,
+            function: (String) -> Unit
+        ) {
             when {
                 s.contains("miles from") -> {}
                 s.contains("Show Warning") -> NexradRenderUI.showNearestWarning(activity, latLon)
-                s.contains("Show Watch") -> NexradRenderUI.showNearestMcd(activity, PolygonType.WATCH, latLon)
-                s.contains("Show MCD") -> NexradRenderUI.showNearestMcd(activity, PolygonType.MCD, latLon)
-                s.contains("Show MPD") -> NexradRenderUI.showNearestMcd(activity, PolygonType.MPD, latLon)
+                s.contains("Show Watch") -> NexradRenderUI.showNearestMcd(
+                    activity,
+                    PolygonType.WATCH,
+                    latLon
+                )
+
+                s.contains("Show MCD") -> NexradRenderUI.showNearestMcd(
+                    activity,
+                    PolygonType.MCD,
+                    latLon
+                )
+
+                s.contains("Show MPD") -> NexradRenderUI.showNearestMcd(
+                    activity,
+                    PolygonType.MPD,
+                    latLon
+                )
+
                 //elys mod
                 s.contains("Radar Mosaic") -> Route.radarMosaicConus(activity)
                 s.contains("GOES Satellite") -> Route.vis00(activity)
@@ -185,7 +211,11 @@ class NexradLongPressMenu(val activity: Activity, val nexradState: NexradState, 
                 s.startsWith("Observation") -> NexradRenderUI.showMetar(activity, latLon)
                 s.startsWith("Forecast") -> Route.forecast(activity, latLon)
                 s.startsWith("Meteogram") -> NexradRenderUI.showNearestMeteogram(activity, latLon)
-                s.startsWith("Radar status message") -> NexradRenderUI.showRadarStatus(activity, radarSite)
+                s.startsWith("Radar status message") -> NexradRenderUI.showRadarStatus(
+                    activity,
+                    radarSite
+                )
+
                 s.startsWith("Beam") -> {}
             	//elys mod //need context....
             	s.contains("Spotter Info") -> NexradRenderUI.showSpotterInfo(activity, latLon)

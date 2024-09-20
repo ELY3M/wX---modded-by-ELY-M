@@ -67,7 +67,7 @@ class WX : CommonActionBarFragment() {
         setupFab()
         setupTabs()
         setupNavDrawer()
-	    checkinternet()
+	    checkinternet() //elys mod
         refreshDynamicContent()
     }
 
@@ -99,6 +99,22 @@ class WX : CommonActionBarFragment() {
         toolbarBottom.inflateMenu(R.menu.cab)
         objectToolbarBottom.connect(this)
         objectToolbarBottom.connectClick { toolbarBottom.showOverflowMenu() }
+
+//        ViewCompat.setOnApplyWindowInsetsListener(toolbarBottom) { v, windowInsets ->
+//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            // Apply the insets as a margin to the view. This solution sets
+//            // only the bottom, left, and right dimensions, but you can apply whichever
+//            // insets are appropriate to your layout. You can also update the view padding
+//            // if that's more appropriate.
+//            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+//                leftMargin = insets.left
+//                bottomMargin = insets.bottom
+//                rightMargin = insets.right
+//            }
+//            // Return CONSUMED if you don't want want the window insets to keep passing
+//            // down to descendant views.
+//            WindowInsetsCompat.CONSUMED
+//        }
     }
 
     private fun setupVoiceRecognition() {
@@ -113,12 +129,8 @@ class WX : CommonActionBarFragment() {
         //
         // radar floating action button unless disabled
         //
-        val fab = Fab(this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
-        if (UIPreferences.mainScreenRadarFab || UIPreferences.navDrawerMainScreen) {
-            objectToolbarBottom.hideRadar()
-        } else {
-            fab.visibility = View.GONE
-        }
+        Fab(this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
+        objectToolbarBottom.hideRadar()
     }
 
     private fun setupTabs() {
@@ -176,7 +188,8 @@ class WX : CommonActionBarFragment() {
     }
 
     override fun onResume() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(onBroadcast, IntentFilter("notifran"))
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(onBroadcast, IntentFilter("notifran"))
         super.onResume()
     }
 
@@ -214,7 +227,11 @@ class WX : CommonActionBarFragment() {
             KeyEvent.KEYCODE_G -> if (event.isCtrlPressed) openRainfallOutlookSummary()
             KeyEvent.KEYCODE_2 -> if (event.isCtrlPressed) openActivity(this, "RADAR_DUAL_PANE")
             KeyEvent.KEYCODE_4 -> if (event.isCtrlPressed) openActivity(this, "RADAR_QUAD_PANE")
-            KeyEvent.KEYCODE_E, KeyEvent.KEYCODE_Z -> if (event.isCtrlPressed) openActivity(this, "SPCMESO1")
+            KeyEvent.KEYCODE_E, KeyEvent.KEYCODE_Z -> if (event.isCtrlPressed) openActivity(
+                this,
+                "SPCMESO1"
+            )
+
             KeyEvent.KEYCODE_N -> if (event.isCtrlPressed) openActivity(this, "MODEL_NCEP")
             KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) findViewById<Toolbar>(R.id.toolbar_bottom).showOverflowMenu()
             KeyEvent.KEYCODE_H -> if (event.isCtrlPressed) openHourly()
@@ -227,7 +244,11 @@ class WX : CommonActionBarFragment() {
             KeyEvent.KEYCODE_I -> if (event.isCtrlPressed) openNationalImages()
             KeyEvent.KEYCODE_S -> if (event.isCtrlPressed) openSpcSwoSummary()
             KeyEvent.KEYCODE_T -> if (event.isCtrlPressed) openNationalText()
-            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showMainScreenShortCuts())
+            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(
+                this,
+                Utility.showMainScreenShortCuts()
+            )
+
             KeyEvent.KEYCODE_J -> if (event.isCtrlPressed) {
                 tabIndex += -1
                 if (tabIndex < 0) {

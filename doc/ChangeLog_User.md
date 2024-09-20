@@ -8,6 +8,25 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55907 2024_09_18 (BETA)
+
+* [FIX] GOES "Full Disk" (Misc Tab) images location and product names have changed, animations are
+  now available for all products. They have been
+  moved here (there are many more Himawari images that have been added which are not yet
+  incorporated):
+    - [https://www.ospo.noaa.gov/products/imagery/meteosat.html](https://www.ospo.noaa.gov/products/imagery/meteosat.html)
+    - [https://www.ospo.noaa.gov/products/imagery/meteosatio.html](https://www.ospo.noaa.gov/products/imagery/meteosatio.html)
+    - [https://www.ospo.noaa.gov/products/imagery/fulldisk.html](https://www.ospo.noaa.gov/products/imagery/fulldisk.html)
+* [ADD] NCEP MAG [v5.1](https://mag.ncep.noaa.gov/version_updates.php):
+    - Added the following new domains to NAEFS and GEFS-MEAN-SPRD:
+        - Continental United States (CONUS)
+        - Alaska
+    - Added the following new products to RTMA:
+        - Ceiling (ceiling -- not included for Guam)
+        - Visibility (vis)
+* [FIX] per SCN24-66: Termination of the Day 3-7 Hemispheric Charts: Effective July 24, 2024, remove
+  5 images in National Images -> Forecast Maps
+
 ## 55899 2024_07_25
 
 * [ADD] using the new NWS API for forecast data is now the default since NWS is deprecating the

@@ -45,22 +45,48 @@ class SettingsDeveloperActivity : BaseActivity() {
 
     private fun addSwitch() {
         val configs = listOf(
-                Switch(this, "Alert only once", "ALERT_ONLYONCE", R.string.alert_onlyonce_label),
-                Switch(this, "Auto cancel notifs", "ALERT_AUTOCANCEL", R.string.alert_autocancel_label),
-                Switch(this, "NWS Text: remove line breaks", "NWS_TEXT_REMOVELINEBREAKS", R.string.nws_text_remove_linebreak_label),
-                Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.main_screen_radar_button),
-                Switch(this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label),
-                Switch(this, "Radar: immersive mode", "RADAR_IMMERSIVE_MODE", R.string.radar_immersive_mode_label),
-                Switch(this, "Lock toolbars", "LOCK_TOOLBARS", R.string.lock_toolbars_label),
-                Switch(this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label),
-                Switch(this, "Multipurpose radar icons", "WXOGL_ICONS_LEVEL2", R.string.radar_icons_level2_label),
-                Switch(this, "Counties use high resolution data", "RADAR_COUNTY_HIRES", R.string.county_hires_label),
-                Switch(this, "States use high resolution data", "RADAR_STATE_HIRES", R.string.state_hires_label),
-                Switch(this, "Black background", "NWS_RADAR_BG_BLACK", R.string.nws_black_bg_label),
-                Switch(this, "Radar with transparent toolbars", "RADAR_TOOLBAR_TRANSPARENT", R.string.radar_toolbar_transparent_label),
-                Switch(this, "Radar with transparent status bar", "RADAR_STATUSBAR_TRANSPARENT", R.string.radar_statusbar_transparent_label),
-                Switch(this, "Show graph in hourly activity", "HOURLY_SHOW_GRAPH", R.string.hourly_show_graph),
-                Switch(this, "Main screen scroll to top on restart", "MAIN_SCREEN_SCROLL_TOP_RESTART", R.string.main_screen_scroll_top_restart),
+            Switch(this, "Alert only once", "ALERT_ONLYONCE", R.string.alert_onlyonce_label),
+            Switch(this, "Auto cancel notifs", "ALERT_AUTOCANCEL", R.string.alert_autocancel_label),
+            Switch(
+                this,
+                "NWS Text: remove line breaks",
+                "NWS_TEXT_REMOVELINEBREAKS",
+                R.string.nws_text_remove_linebreak_label
+            ),
+            Switch(this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label),
+            Switch(this, "Lock toolbars", "LOCK_TOOLBARS", R.string.lock_toolbars_label),
+            Switch(this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label),
+            Switch(
+                this,
+                "Multipurpose radar icons",
+                "WXOGL_ICONS_LEVEL2",
+                R.string.radar_icons_level2_label
+            ),
+            Switch(
+                this,
+                "Counties use high resolution data",
+                "RADAR_COUNTY_HIRES",
+                R.string.county_hires_label
+            ),
+            Switch(
+                this,
+                "States use high resolution data",
+                "RADAR_STATE_HIRES",
+                R.string.state_hires_label
+            ),
+            Switch(this, "Black background", "NWS_RADAR_BG_BLACK", R.string.nws_black_bg_label),
+            Switch(
+                this,
+                "Show graph in hourly activity",
+                "HOURLY_SHOW_GRAPH",
+                R.string.hourly_show_graph
+            ),
+            Switch(
+                this,
+                "Main screen scroll to top on restart",
+                "MAIN_SCREEN_SCROLL_TOP_RESTART",
+                R.string.main_screen_scroll_top_restart
+            ),
         )
         configs.forEach {
             box.addWidget(it)

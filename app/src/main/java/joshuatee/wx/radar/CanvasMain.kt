@@ -164,7 +164,7 @@ object CanvasMain {
             }
         }
         if (PolygonType.MCD.pref) {
-            listOf(PolygonType.MCD, PolygonType.WATCH, PolygonType.WATCH_TORNADO).forEach {
+            arrayOf(PolygonType.MCD, PolygonType.WATCH, PolygonType.WATCH_TORNADO).forEach {
                 CanvasDraw.mcd(projectionType, bitmapCanvas, projectionNumbers, it)
             }
         }

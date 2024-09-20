@@ -1,7 +1,22 @@
 # TODOs
 
+## Bugs
+
+* [ADD] Color Pal - vel not well developed
+* [FIX] Color Pal - have to select before delete even though subtitle shows
+* [FIX] Beam height is truncated
+* [FIX] nexrad crash with ConcurrentModificationException in NexradRender:
+  data.wpcFrontBuffersList.forEach {
+* [FIX] nexrad with cities, zoom in on location and then long press to current radar - text objects
+  don't refresh
+* [FIX] USAlerts state count is not accurate
+* [FIX] storm reports - having location follow gps breaks the location marker
+
 ## Features
 
+* [ADD] edge-to-edge
+    - https://developer.android.com/about/versions/15/behavior-changes-15#ux
+    - https://developer.android.com/develop/ui/compose/layouts/insets
 * [ADD] vr button when using nav drawer
 * [ADD] more granular downloads for widgets "WIDGETS_ENABLED"
 * [FIX] separate the cc/7day notif timer from the widget download timer
@@ -20,18 +35,6 @@
 ./app/src/main/java/joshuatee/wx/models/UtilityModels.kt:import java.util.Calendar
 ./app/src/main/java/joshuatee/wx/notifications/AlertService.kt:import java.util.Calendar
 ```
-
-## Bugs
-
-* [ADD] Color Pal - vel not well developed
-* [FIX] Color Pal - have to select before delete even though subtitle shows
-* [FIX] Beam height is truncated
-* [FIX] nexrad crash with ConcurrentModificationException in NexradRender:
-  data.wpcFrontBuffersList.forEach {
-* [FIX] nexrad with cities, zoom in on location and then long press to current radar - text objects
-  don't refresh
-* [FIX] USAlerts state count is not accurate
-* [FIX] storm reports - having location follow gps breaks the location marker
 
 ## Deprecations
 

@@ -122,12 +122,17 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         box = VBox.fromResource(this)
         objectToolbarBottom.connect(this)
         navDrawer = NavDrawer(this, UtilityWfoText.labels, UtilityWfoText.codes, ::changeProduct)
-        UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         cardText = CardText(this, toolbar, toolbarBottom)
         box.addWidget(cardText)
         star = objectToolbarBottom.getFavIcon()
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
-        imageMap = ObjectImageMap(this, R.id.map, objectToolbar, objectToolbarBottom, listOf<View>(cardText.getView(), scrollView))
+        imageMap = ObjectImageMap(
+            this,
+            R.id.map,
+            objectToolbar,
+            objectToolbarBottom,
+            listOf<View>(cardText.getView(), scrollView)
+        )
         imageMap.connect(::mapSwitch, UtilityImageMap::mapToWfo)
     }
 
@@ -266,8 +271,19 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.AFD)
-            R.id.action_website -> Route.webView(this, "https://www.weather.gov/" + wfo.lowercase(Locale.US), wfo, "extended")
-            R.id.action_hazards -> Route.image(this, "https://www.weather.gov/wwamap/png/" + wfo.lowercase(Locale.US) + ".png", "$wfo WWA Map")
+            R.id.action_website -> Route.webView(
+                this,
+                "https://www.weather.gov/" + wfo.lowercase(Locale.US),
+                wfo,
+                "extended"
+            )
+
+            R.id.action_hazards -> Route.image(
+                this,
+                "https://www.weather.gov/wwamap/png/" + wfo.lowercase(Locale.US) + ".png",
+                "$wfo WWA Map"
+            )
+
             R.id.action_share -> UtilityShare.text(this, product + wfo, textToShare)
             else -> return super.onOptionsItemSelected(item)
         }
@@ -385,10 +401,26 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) toolbarBottom.showOverflowMenu()
             KeyEvent.KEYCODE_D -> if (event.isCtrlPressed) navDrawer.openGravity(GravityCompat.START)
             KeyEvent.KEYCODE_F -> if (event.isCtrlPressed) toggleFavorite()
-            KeyEvent.KEYCODE_P -> if (event.isCtrlPressed) audioPlayMenu(R.id.action_read_aloud, cardText.text, product, product + wfo)
-            KeyEvent.KEYCODE_S -> if (event.isCtrlPressed) audioPlayMenu(R.id.action_stop, cardText.text, product, product + wfo)
+            KeyEvent.KEYCODE_P -> if (event.isCtrlPressed) audioPlayMenu(
+                R.id.action_read_aloud,
+                cardText.text,
+                product,
+                product + wfo
+            )
+
+            KeyEvent.KEYCODE_S -> if (event.isCtrlPressed) audioPlayMenu(
+                R.id.action_stop,
+                cardText.text,
+                product,
+                product + wfo
+            )
+
             KeyEvent.KEYCODE_L -> if (event.isCtrlPressed) imageMap.toggleMap()
-            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showWfoTextShortCuts())
+            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(
+                this,
+                Utility.showWfoTextShortCuts()
+            )
+
             else -> super.onKeyUp(keyCode, event)
         }
         return true

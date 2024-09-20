@@ -40,12 +40,12 @@ import joshuatee.wx.util.To
 import kotlin.math.*
 
 class NexradRenderTextObject(
-        private val context: Context,
-        private val relativeLayout: RelativeLayout,
-        private val wxglSurfaceView: NexradRenderSurfaceView,
-        private val state: NexradRenderState,
-        private val numberOfPanes: Int,
-        private val paneNumber: Int
+    private val context: Context,
+    private val relativeLayout: RelativeLayout,
+    private val wxglSurfaceView: NexradRenderSurfaceView,
+    private val state: NexradRenderState,
+    private val numberOfPanes: Int,
+    private val paneNumber: Int
 ) {
     private var citiesInitialized = false
     private var countyLabelsInitialized = false
@@ -96,11 +96,11 @@ class NexradRenderTextObject(
                 for (index in 0 until cityExtLength) {
                     if (wxglSurfaceView.cities.size < maxCitiesPerGlview) {
                         checkAndDrawText(
-                                wxglSurfaceView.cities,
-                                CitiesExtended.lat[index],
-                                CitiesExtended.lon[index],
-                                CitiesExtended.labels[index],
-                                RadarPreferences.colorCity,
+                            wxglSurfaceView.cities,
+                            CitiesExtended.lat[index],
+                            CitiesExtended.lon[index],
+                            CitiesExtended.labels[index],
+                            RadarPreferences.colorCity,
                         )
                     } else {
                         break
@@ -135,7 +135,8 @@ class NexradRenderTextObject(
         }
     }
 
-    private fun getScale(): Float = 8.1f * state.zoom / UIPreferences.deviceScale * (glviewWidth / 800.0f * UIPreferences.deviceScale) / textViewFudgeFactor
+    private fun getScale(): Float =
+        8.1f * state.zoom / UIPreferences.deviceScale * (glviewWidth / 800.0f * UIPreferences.deviceScale) / textViewFudgeFactor
 
     private fun addCountyLabels() {
         if (RadarPreferences.countyLabels && countyLabelsInitialized) {
@@ -151,11 +152,11 @@ class NexradRenderTextObject(
             if (state.zoom > 1.50) {
                 CountyLabels.labels.indices.forEach {
                     checkAndDrawText(
-                            wxglSurfaceView.countyLabels,
-                            CountyLabels.lat[it],
-                            CountyLabels.lon[it],
-                            CountyLabels.labels[it],
-                            RadarPreferences.colorCountyLabels,
+                        wxglSurfaceView.countyLabels,
+                        CountyLabels.lat[it],
+                        CountyLabels.lon[it],
+                        CountyLabels.labels[it],
+                        RadarPreferences.colorCountyLabels,
                     )
                 }
             } else {
@@ -251,7 +252,13 @@ class NexradRenderTextObject(
         }
     }
     
-    private fun checkAndDrawText(textViews: MutableList<TextView>, lat: Double, lon: Double, text: String, color: Int) {
+    private fun checkAndDrawText(
+        textViews: MutableList<TextView>,
+        lat: Double,
+        lon: Double,
+        text: String,
+        color: Int
+    ) {
         val renderX: Float
         val renderY: Float
         if (RadarPreferences.wxoglCenterOnLocation) {
@@ -270,19 +277,46 @@ class NexradRenderTextObject(
             relativeLayout.addView(textView.getView())
             if ((coordinates[1] * scale).toInt() < 0) {
                 if ((coordinates[0] * scale).toInt() < 0)
-                    textView.setPadding(0, 0, (-(coordinates[0] * scale)).toInt(), (-(coordinates[1] * scale)).toInt())
+                    textView.setPadding(
+                        0,
+                        0,
+                        (-(coordinates[0] * scale)).toInt(),
+                        (-(coordinates[1] * scale)).toInt()
+                    )
                 else
-                    textView.setPadding((coordinates[0] * scale).toInt(), 0, 0, (-(coordinates[1] * scale)).toInt())
+                    textView.setPadding(
+                        (coordinates[0] * scale).toInt(),
+                        0,
+                        0,
+                        (-(coordinates[1] * scale)).toInt()
+                    )
             } else {
                 if ((coordinates[0] * scale).toInt() < 0)
-                    textView.setPadding(0, (coordinates[1] * scale).toInt(), (-(coordinates[0] * scale)).toInt(), 0)
+                    textView.setPadding(
+                        0,
+                        (coordinates[1] * scale).toInt(),
+                        (-(coordinates[0] * scale)).toInt(),
+                        0
+                    )
                 else
-                    textView.setPadding((coordinates[0] * scale).toInt(), (coordinates[1] * scale).toInt(), 0, 0)
+                    textView.setPadding(
+                        (coordinates[0] * scale).toInt(),
+                        (coordinates[1] * scale).toInt(),
+                        0,
+                        0
+                    )
             }
         }
     }
 
-    private fun checkButDoNotDrawText(textViews: MutableList<TextView>, lat: Double, lon: Double, color: Int, textSizeTv: Float, singleLine: Boolean): Boolean {
+    private fun checkButDoNotDrawText(
+        textViews: MutableList<TextView>,
+        lat: Double,
+        lon: Double,
+        color: Int,
+        textSizeTv: Float,
+        singleLine: Boolean
+    ): Boolean {
         val coordinates = Projection.computeMercatorNumbers(lat, lon, projectionNumbers)
         if (RadarPreferences.wxoglCenterOnLocation) {
             coordinates[0] = coordinates[0] + state.gpsLatLonTransformed[0]
@@ -294,7 +328,8 @@ class NexradRenderTextObject(
         var drawText = false
         if (abs(coordinates[0] * scale) < glviewWidth && abs(coordinates[1] * scale) < glviewHeight) {
             drawText = true
-            val textView = TextViewMetal(context, "", color, textSizeTv, singleLine, drawText = false)
+            val textView =
+                TextViewMetal(context, "", color, textSizeTv, singleLine, drawText = false)
             textViews.add(textView.getView())
 //            textView.setTextColor(color)
 //            textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
@@ -304,14 +339,34 @@ class NexradRenderTextObject(
 //            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizeTv)
             if ((coordinates[1] * scale).toInt() < 0) {
                 if ((coordinates[0] * scale).toInt() < 0)
-                    textView.setPadding(0, 0, (-(coordinates[0] * scale)).toInt(), (-(coordinates[1] * scale)).toInt())
+                    textView.setPadding(
+                        0,
+                        0,
+                        (-(coordinates[0] * scale)).toInt(),
+                        (-(coordinates[1] * scale)).toInt()
+                    )
                 else
-                    textView.setPadding((coordinates[0] * scale).toInt(), 0, 0, (-(coordinates[1] * scale)).toInt())
+                    textView.setPadding(
+                        (coordinates[0] * scale).toInt(),
+                        0,
+                        0,
+                        (-(coordinates[1] * scale)).toInt()
+                    )
             } else {
                 if ((coordinates[0] * scale).toInt() < 0)
-                    textView.setPadding(0, (coordinates[1] * scale).toInt(), (-(coordinates[0] * scale)).toInt(), 0)
+                    textView.setPadding(
+                        0,
+                        (coordinates[1] * scale).toInt(),
+                        (-(coordinates[0] * scale)).toInt(),
+                        0
+                    )
                 else
-                    textView.setPadding((coordinates[0] * scale).toInt(), (coordinates[1] * scale).toInt(), 0, 0)
+                    textView.setPadding(
+                        (coordinates[0] * scale).toInt(),
+                        (coordinates[1] * scale).toInt(),
+                        0,
+                        0
+                    )
             }
 //            val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
 //            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
@@ -352,11 +407,11 @@ class NexradRenderTextObject(
             val latLon = if (!report) {
                 // UtilitySpotter.spotterList[indexSpotter].latLon
                 val spotter = UtilitySpotter.spotterList.getOrNull(indexSpotter)
-                spotter?.latLon ?: LatLon(0.0, 0.0)
+                spotter?.latLon ?: LatLon.empty()
             } else {
 //                UtilitySpotter.reports[indexSpotterReport].latLon
                 val spotter = UtilitySpotter.reports.getOrNull(indexSpotterReport)
-                spotter?.latLon ?: LatLon(0.0, 0.0)
+                spotter?.latLon ?: LatLon.empty()
             }
             scale = getScale()
             oglrZoom = 1.0f
@@ -365,12 +420,12 @@ class NexradRenderTextObject(
             }
             if (state.zoom > 0.5) {
                 val drawText = checkButDoNotDrawText(
-                        wxglSurfaceView.spotterTextView,
-                        latLon.lat,
-                        latLon.lon * -1.0,
-                        RadarPreferences.colorSpotter,
-                        UIPreferences.textSizeSmall * oglrZoom * 1.5f * RadarPreferences.textSize,
-                        true
+                    wxglSurfaceView.spotterTextView,
+                    latLon.lat,
+                    latLon.lon * -1.0,
+                    RadarPreferences.colorSpotter,
+                    UIPreferences.textSizeSmall * oglrZoom * 1.5f * RadarPreferences.textSize,
+                    true
                 )
                 if (drawText) {
                     if (!report) {
@@ -454,11 +509,11 @@ class NexradRenderTextObject(
                         color = Color.RED
                     }
                     checkAndDrawText(
-                            wxglSurfaceView.pressureCenterLabels,
-                            it.lat,
-                            it.lon,
-                            it.pressureInMb,
-                            color,
+                        wxglSurfaceView.pressureCenterLabels,
+                        it.lat,
+                        it.lon,
+                        it.pressureInMb,
+                        color,
                     )
                 }
             } else {
@@ -497,12 +552,12 @@ class NexradRenderTextObject(
                             lon = To.double(observations[1])
                         }
                         val drawText = checkButDoNotDrawText(
-                                wxglSurfaceView.observations,
-                                lat,
-                                lon * -1.0,
-                                RadarPreferences.colorObs,
-                                textSize,
-                                false
+                            wxglSurfaceView.observations,
+                            lat,
+                            lon * -1.0,
+                            RadarPreferences.colorObs,
+                            textSize,
+                            false
                         )
                         if (drawText) {
                             if (state.zoom > obsExtZoom) {

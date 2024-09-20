@@ -28,7 +28,11 @@ import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.ProjectionNumbers
 
-class NexradRenderState(val paneNumber: Int, val data: NexradRenderData, val scaleLength: (Float) -> Float) {
+class NexradRenderState(
+    val paneNumber: Int,
+    val data: NexradRenderData,
+    val scaleLength: (Float) -> Float
+) {
 
     companion object {
         // all static used by RecordingSession.kt for draw tool
@@ -93,7 +97,7 @@ class NexradRenderState(val paneNumber: Int, val data: NexradRenderData, val sca
     }
     var product = "N0Q"
     var projectionNumbers = ProjectionNumbers()
-    var gpsLatLon = LatLon(0.0, 0.0)
+    var gpsLatLon = LatLon.empty()
     var gpsLatLonTransformed = floatArrayOf(0.0f, 0.0f)
 
     // used in the filename for various radar files, possibly states at "1" and not "0"

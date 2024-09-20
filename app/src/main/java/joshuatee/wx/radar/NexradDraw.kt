@@ -107,7 +107,6 @@ internal object NexradDraw {
             wxglTextObjects[index].addLabels()
             oldRadarSites[index] = wxglRenders[index].state.rid
         }
-
         Thread {
             PolygonWarning.byType.values.forEach {
                 if (it.isEnabled) {

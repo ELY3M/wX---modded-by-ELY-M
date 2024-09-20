@@ -72,7 +72,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         //
         // determine correct layout to use
         //
-        heightDivider = setupLayout(savedInstanceState, nexradArguments.numberOfPanes, heightDivider)
+        heightDivider =
+            setupLayout(savedInstanceState, nexradArguments.numberOfPanes, heightDivider)
         val widthDivider = if (nexradArguments.numberOfPanes == 4) {
             2
         } else if (nexradArguments.numberOfPanes == 2 && landScape) {
@@ -80,30 +81,41 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         } else {
             1
         }
-        nexradState = NexradStatePane(this,
-                nexradArguments.numberOfPanes,
-                listOf(R.id.rl1, R.id.rl2, R.id.rl3, R.id.rl4),
-                widthDivider,
-                heightDivider)
+        nexradState = NexradStatePane(
+            this,
+            nexradArguments.numberOfPanes,
+            listOf(R.id.rl1, R.id.rl2, R.id.rl3, R.id.rl4),
+            widthDivider,
+            heightDivider
+        )
         nexradState.setupMultiPaneObjects(nexradArguments)
         nexradSubmenu = NexradSubmenu(objectToolbarBottom, nexradState)
         nexradUI = NexradUI(this, nexradState, nexradSubmenu, nexradArguments, ::getContentParallel)
-        nexradLongPressMenu = NexradLongPressMenu(this, nexradState, nexradArguments, nexradUI::longPressRadarSiteSwitch)
+        nexradLongPressMenu = NexradLongPressMenu(
+            this,
+            nexradState,
+            nexradArguments,
+            nexradUI::longPressRadarSiteSwitch
+        )
         nexradAnimation = NexradAnimation(this, nexradState, nexradUI)
         nexradState.initGlView(nexradLongPressMenu.changeListener)
         nexradState.readPreferencesMultipane(this, nexradArguments)
         getContentParallel()
     }
 
-    private fun setupLayout(savedInstanceState: Bundle?, numberOfPanes: Int, heightDividerF: Int): Int {
+    private fun setupLayout(
+        savedInstanceState: Bundle?,
+        numberOfPanes: Int,
+        heightDividerF: Int
+    ): Int {
         var heightDivider = heightDividerF
         val layoutType: Int
         if (numberOfPanes == 2) {
             if (landScape) {
                 layoutType = if (UtilityUI.isThemeAllWhite())
-                    R.layout.activity_uswxoglmultipane_immersive_landscape_white
+                    R.layout.activity_uswxoglmultipane_landscape_white
                 else
-                    R.layout.activity_uswxoglmultipane_immersive_landscape
+                    R.layout.activity_uswxoglmultipane_landscape
                 heightDivider = 1
             } else {
                 layoutType = if (UtilityUI.isThemeAllWhite())
@@ -112,13 +124,23 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     R.layout.activity_uswxoglmultipane
                 }
             }
-            super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, bottomToolbar = true)
+            super.onCreate(
+                savedInstanceState,
+                layoutType,
+                R.menu.uswxoglradarmultipane,
+                bottomToolbar = true
+            )
         } else {
             layoutType = if (UtilityUI.isThemeAllWhite())
-                R.layout.activity_uswxoglmultipane_quad_immersive_white
+                R.layout.activity_uswxoglmultipane_quad_white
             else
-                R.layout.activity_uswxoglmultipane_quad_immersive
-            super.onCreate(savedInstanceState, layoutType, R.menu.uswxoglradarmultipane, bottomToolbar = true)
+                R.layout.activity_uswxoglmultipane_quad
+            super.onCreate(
+                savedInstanceState,
+                layoutType,
+                R.menu.uswxoglradarmultipane,
+                bottomToolbar = true
+            )
         }
         objectToolbarBottom.connect(this)
         return heightDivider
@@ -139,7 +161,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         nexradUI.getContentPrepMultiPane(z)
         initGeom(z)
         FutureVoid({
-            NexradDraw.plotRadar(nexradState.wxglRenders[z], nexradUI::getGPSFromDouble, nexradState::getLatLon, false)
+            NexradDraw.plotRadar(
+                nexradState.wxglRenders[z],
+                nexradUI::getGPSFromDouble,
+                nexradState::getLatLon,
+                false
+            )
         }) {
             nexradState.showViews()
             nexradState.draw(z)
@@ -150,35 +177,31 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             }
         }
         NexradLayerDownload.download(
-                this,
-                nexradState.wxglRenders[z],
-                nexradState.wxglSurfaceViews[z],
-                nexradState.wxglTextObjects,
-                nexradUI::setTitleWithWarningCountsMultiPane)
+            this,
+            nexradState.wxglRenders[z],
+            nexradState.wxglSurfaceViews[z],
+            nexradState.wxglTextObjects,
+            nexradUI::setTitleWithWarningCountsMultiPane
+        )
     }
 
     private fun initGeom(z: Int) {
-        NexradDraw.initGeom(z,
-                nexradState.oldRadarSites,
-                nexradState.wxglRenders,
-                nexradState.wxglTextObjects,
-                nexradUI.objectImageMap,
-                nexradState.wxglSurfaceViews,
-                nexradUI::getGPSFromDouble,
-                nexradState::getLatLon,
-                false,
-                nexradUI.settingsVisited
+        NexradDraw.initGeom(
+            z,
+            nexradState.oldRadarSites,
+            nexradState.wxglRenders,
+            nexradState.wxglTextObjects,
+            nexradUI.objectImageMap,
+            nexradState.wxglSurfaceViews,
+            nexradUI::getGPSFromDouble,
+            nexradState::getLatLon,
+            false,
+            nexradUI.settingsVisited
         )
         nexradUI.settingsVisited = false
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        UtilityUI.immersiveMode(this)
-    }
-
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        UtilityUI.immersiveMode(this)
         if (nexradUI.inOglAnim && (item.itemId != R.id.action_fav) && (item.itemId != R.id.action_share) && (item.itemId != R.id.action_tools)) {
             nexradUI.stopAnimationAndGetContent()
             if (item.itemId == R.id.action_a) {
@@ -193,8 +216,20 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             }
 
             R.id.action_radar_markers -> Route.image(this, "raw:radar_legend", "Radar Markers")
-            R.id.action_radar_site_status_l3 -> Route.webView(this, "http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3), "extended")
-            R.id.action_radar_site_status_l2 -> Route.webView(this, "http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2), "extended")
+            R.id.action_radar_site_status_l3 -> Route.webView(
+                this,
+                "http://radar3pub.ncep.noaa.gov",
+                resources.getString(R.string.action_radar_site_status_l3),
+                "extended"
+            )
+
+            R.id.action_radar_site_status_l2 -> Route.webView(
+                this,
+                "http://radar2pub.ncep.noaa.gov",
+                resources.getString(R.string.action_radar_site_status_l2),
+                "extended"
+            )
+
             R.id.action_radar1 -> switchRadar(0)
             R.id.action_radar2 -> switchRadar(1)
             R.id.action_radar3 -> switchRadar(2)
@@ -252,7 +287,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         if (UIPreferences.recordScreenShare) {
             checkOverlayPerms()
         } else {
-            NexradRenderUI.showImageForShare(this, "1", nexradState.render.state.rid, nexradState.render.state.product)
+            NexradRenderUI.showImageForShare(
+                this,
+                "1",
+                nexradState.render.state.rid,
+                nexradState.render.state.product
+            )
         }
     }
 
@@ -327,7 +367,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             KeyEvent.KEYCODE_A -> if (event.isCtrlPressed) toggleAnimate()
             KeyEvent.KEYCODE_R -> if (event.isCtrlPressed) nexradState.getReflectivity(::getContentIntelligent)
             KeyEvent.KEYCODE_V -> if (event.isCtrlPressed) nexradState.getVelocity(::getContentIntelligent)
-            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showRadarShortCuts())
+            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(
+                this,
+                Utility.showRadarShortCuts()
+            )
+
             KeyEvent.KEYCODE_REFRESH -> getContentIntelligent()
             KeyEvent.KEYCODE_DPAD_UP -> if (event.isCtrlPressed) {
                 //wxglSurfaceViews.forEach{ it.zoomOutByKey(numberOfPanes.toFloat()) }
@@ -345,8 +389,20 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
             }
 
-            KeyEvent.KEYCODE_DPAD_LEFT -> nexradState.wxglSurfaceViews.forEach { it.onScrollByKeyboard(-20.0f, 0.0f) }
-            KeyEvent.KEYCODE_DPAD_RIGHT -> nexradState.wxglSurfaceViews.forEach { it.onScrollByKeyboard(20.0f, 0.0f) }
+            KeyEvent.KEYCODE_DPAD_LEFT -> nexradState.wxglSurfaceViews.forEach {
+                it.onScrollByKeyboard(
+                    -20.0f,
+                    0.0f
+                )
+            }
+
+            KeyEvent.KEYCODE_DPAD_RIGHT -> nexradState.wxglSurfaceViews.forEach {
+                it.onScrollByKeyboard(
+                    20.0f,
+                    0.0f
+                )
+            }
+
             else -> return super.onKeyUp(keyCode, event)
         }
         return true

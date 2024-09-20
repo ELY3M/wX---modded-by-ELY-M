@@ -47,13 +47,17 @@ class SpcSwoSummaryActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spc_swo_summary, menu)
-        UtilityShortcut.hidePinIfNeeded(menu)
         return true
     }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.spc_swo_summary, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout,
+            R.menu.spc_swo_summary,
+            false
+        )
         setTitle("Convective Outlooks", "SPC")
         box = VBox.fromResource(this)
         imageSummary = ImageSummary(this, box, bitmaps)
@@ -68,10 +72,14 @@ class SpcSwoSummaryActivity : BaseActivity() {
     private fun getContent() {
         if (downloadTimer.isRefreshNeeded()) {
             (0..2).forEach {
-                FutureVoid({ bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage() }) { update(it) }
+                FutureVoid({
+                    bitmaps[it] = UtilitySpcSwo.getUrls((it + 1).toString())[0].getImage()
+                }) { update(it) }
             }
             (3..7).forEach {
-                FutureVoid({ bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage() }) { update(it) }
+                FutureVoid({
+                    bitmaps[it] = UtilitySpcSwo.getImageUrlsDays48((it + 1).toString()).getImage()
+                }) { update(it) }
             }
         }
     }

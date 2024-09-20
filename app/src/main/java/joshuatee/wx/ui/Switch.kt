@@ -59,31 +59,37 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
         hbox.addWidget(text)
         checkBox.gravity = Gravity.CENTER_VERTICAL
         val truePrefs = listOf(
-                "COD_HW_DEFAULT",
-                "RADAR_SHOW_COUNTY",
-                "DUALPANE_SHARE_POSN",
-                "UNITS_F",
-                "UNITS_M",
-                "FAB_IN_MODELS",
-                "NWS_TEXT_REMOVELINEBREAKS",
-                "RECORD_SCREEN_SHARE",
-                "PREF_PREVENT_ACCIDENTAL_EXIT",
-                "COD_LOCDOT_DEFAULT",
-                ///"UI_MAIN_SCREEN_RADAR_FAB", //elys mod - I hate fab buttons
-                "RADAR_TOOLBAR_TRANSPARENT",
-                "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
-                "USE_NWS_API_SEVEN_DAY",
-                "USE_NWS_API_HOURLY",
-                "LIGHTNING_USE_GOES",
-                "SHOW_RADAR_WHEN_PAN",
-                "ALERT_BLACKOUT_TORNADO",
-                "LOCK_TOOLBARS",
-                "ALERT_ONLYONCE",
-                "ALERT_AUTOCANCEL",
-                "HOURLY_SHOW_GRAPH"
+            "COD_HW_DEFAULT",
+            "RADAR_SHOW_COUNTY",
+            "DUALPANE_SHARE_POSN",
+            "UNITS_F",
+            "UNITS_M",
+            "FAB_IN_MODELS",
+            "NWS_TEXT_REMOVELINEBREAKS",
+            "RECORD_SCREEN_SHARE",
+            "COD_LOCDOT_DEFAULT",
+            ///"UI_MAIN_SCREEN_RADAR_FAB", //elys mod - I hate fab buttons
+            "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
+            "USE_NWS_API_SEVEN_DAY",
+            "USE_NWS_API_HOURLY",
+            "LIGHTNING_USE_GOES",
+            "SHOW_RADAR_WHEN_PAN",
+            "ALERT_BLACKOUT_TORNADO",
+            "LOCK_TOOLBARS",
+            "ALERT_ONLYONCE",
+            "ALERT_AUTOCANCEL",
+            "HOURLY_SHOW_GRAPH"
         )
-        checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
-                || (pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")
+        checkBox.isChecked = Utility.readPref(
+            context,
+            pref,
+            java.lang.Boolean.toString(truePrefs.contains(pref))
+        ) == "true"
+                || (pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(
+            context,
+            pref,
+            ""
+        ) != "false")
         checkBox.setOnCheckedChangeListener { compoundButton, _ ->
             if (compoundButton.isChecked) {
                 //
@@ -96,39 +102,59 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
             } else {
                 if (pref == "MEDIA_CONTROL_NOTIF") {
                     if (Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "").startsWith("t")) {
-                        val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        val notifier =
+                            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                         notifier.cancel("wx_media", 1)
                     }
                 }
                 Utility.writePref(context, pref, "false")
             }
             if (pref == "SIMPLE_MODE") {
-                if (UIPreferences.simpleMode != Utility.readPref(context, "SIMPLE_MODE", "false").startsWith("t")) {
+                if (UIPreferences.simpleMode != Utility.readPref(context, "SIMPLE_MODE", "false")
+                        .startsWith("t")
+                ) {
                     Utility.commitPref(context)
                     Utility.restart()
                 }
             }
             if (pref == "HIDE_TOP_TOOLBAR") {
-                if (UIPreferences.hideTopToolbar != Utility.readPref(context, "HIDE_TOP_TOOLBAR", "false").startsWith("t")) {
-                    Utility.commitPref(context)
-                    Utility.restart()
-                }
-            }
-            if (pref == "UI_MAIN_SCREEN_RADAR_FAB") {
-                if (UIPreferences.mainScreenRadarFab != Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t")) {
+                if (UIPreferences.hideTopToolbar != Utility.readPref(
+                        context,
+                        "HIDE_TOP_TOOLBAR",
+                        "false"
+                    ).startsWith("t")
+                ) {
                     Utility.commitPref(context)
                     Utility.restart()
                 }
             }
             if (pref == "NOTIF_TTS") {
-                if (NotificationPreferences.notifTts != Utility.readPref(context, "NOTIF_TTS", "false").startsWith("t")) {
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 5002)
+                if (NotificationPreferences.notifTts != Utility.readPref(
+                        context,
+                        "NOTIF_TTS",
+                        "false"
+                    ).startsWith("t")
+                ) {
+                    if (ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        ActivityCompat.requestPermissions(
+                            context,
+                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                            5002
+                        )
                     }
                 }
             }
             when (pref) {
-                "COD_WARNINGS_DEFAULT", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
+                "COD_WARNINGS_DEFAULT", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(
+                    context,
+                    "RESTART_NOTIF",
+                    "true"
+                )
+
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
                     MyApplication.initPreferences(context)
                     when (pref) {

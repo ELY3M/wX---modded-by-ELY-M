@@ -20,12 +20,15 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ctc="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include layout="@layout/widget_toolbar_bottom" />
 
     <LinearLayout
+        android:background="?attr/colorPrimary"
+        android:fitsSystemWindows="true"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/toolbar_bottom"
@@ -34,6 +37,7 @@
         <include layout="@layout/widget_toolbar_top" />
 
         <TableLayout
+            android:background="?attr/popupMenuBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/dividerColor"

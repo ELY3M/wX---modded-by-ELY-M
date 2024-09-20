@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M. 
 
 package joshuatee.wx.objects
 
@@ -81,10 +80,10 @@ class PolygonWarning(val context: Context, val type: PolygonWarningType) {
 
         // NWS default colors: https://www.weather.gov/help-map
         private val defaultColors = mapOf(
-            	PolygonWarningType.TornadoWarning to Color.RED,
-            	PolygonWarningType.ThunderstormWarning to Color.YELLOW,
-            	PolygonWarningType.FlashFloodWarning to Color.GREEN,
-    	    	PolygonWarningType.SpecialMarineWarning to Color.CYAN,
+                PolygonWarningType.TornadoWarning to Color.rgb(243, 85, 243),
+                PolygonWarningType.ThunderstormWarning to Color.rgb(255, 255, 0),
+                PolygonWarningType.FlashFloodWarning to Color.rgb(0, 255, 0),
+                PolygonWarningType.SpecialMarineWarning to Color.rgb(255, 165, 0),
                 PolygonWarningType.SnowSquallWarning to Color.rgb(199, 21, 133),
                 PolygonWarningType.DustStormWarning to Color.rgb(255, 228, 196),
                 PolygonWarningType.SpecialWeatherStatement to Color.rgb(255, 228, 181)

@@ -25,7 +25,8 @@ import joshuatee.wx.fingerdraw.DrawView
 import joshuatee.wx.radar.NexradRenderState
 
 internal class RecordingSession(private val context: Activity) {
-    private val windowManager: WindowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
+    private val windowManager: WindowManager =
+        context.getSystemService(WINDOW_SERVICE) as WindowManager
     private var overlayView: OverlayView? = null
     private var drawToolActive = false
     private var distanceToolActive = false
@@ -70,18 +71,15 @@ internal class RecordingSession(private val context: Activity) {
     }
 
     private fun addDrawTool() {
-        val layoutFlag: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val layoutFlag: Int =
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        } else {
-            WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
-        }
         if (!drawToolActive) {
             val params = WindowManager.LayoutParams(
-                    MyApplication.dm.widthPixels,
-                    MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context),
-                    layoutFlag,
-                    FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
-                    TRANSLUCENT
+                MyApplication.dm.widthPixels,
+                MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context),
+                layoutFlag,
+                FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
+                TRANSLUCENT
             )
             params.gravity = Gravity.BOTTOM
             drawObject = DrawView(context)
@@ -95,26 +93,24 @@ internal class RecordingSession(private val context: Activity) {
     }
 
     private fun addDistanceTool() {
-        val layoutFlag: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val layoutFlag: Int =
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        } else {
-            WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
-        }
         if (!distanceToolActive) {
             val params = WindowManager.LayoutParams(
-                    MyApplication.dm.widthPixels,
-                    MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) * 2,
-                    layoutFlag,
-                    FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
-                    TRANSLUCENT
+                MyApplication.dm.widthPixels,
+                MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) * 2,
+                layoutFlag,
+                FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
+                TRANSLUCENT
             )
             params.gravity = Gravity.BOTTOM
-            distanceToolObject = DrawLineView(context,
-                    NexradRenderState.ridGlobal, NexradRenderSurfaceView.scaleFactorGlobal,
-                    NexradRenderState.positionXGlobal,
-                    NexradRenderState.positionYGlobal,
-                    NexradRenderState.ORT_INT_GLOBAL,
-                    NexradRenderState.oneDegreeScaleFactorGlobal
+            distanceToolObject = DrawLineView(
+                context,
+                NexradRenderState.ridGlobal, NexradRenderSurfaceView.scaleFactorGlobal,
+                NexradRenderState.positionXGlobal,
+                NexradRenderState.positionYGlobal,
+                NexradRenderState.ORT_INT_GLOBAL,
+                NexradRenderState.oneDegreeScaleFactorGlobal
             )
             windowManager.addView(distanceToolObject, params)
             distanceToolActive = true

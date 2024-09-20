@@ -105,3 +105,8 @@ http://almanydesigns.com/grx/
 Launcher Icon ( http://creativecommons.org/licenses/by/3.0/ ):
 thanks to Roman Nurik for this website to design and generate necessary icons
 http://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=text&foreground.space.trim=1&foreground.space.pad=0.1&foreground.text.text=wX&foreground.text.font=&foreColor=fff%2C100&crop=0&backgroundShape=square&backColor=2e3f59%2C100&effects=none
+
+site is now [https://icon.kitchen/](https://icon.kitchen/)
+- background: 2E3F59 46,63,89 (this matches primary_dark_blue in `colors.xml`
+- font: Roboto Bold
+- 0% padding

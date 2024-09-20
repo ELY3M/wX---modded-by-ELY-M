@@ -75,8 +75,12 @@ class RtmaActivity : VideoRecordActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.rtma, bottomToolbar = false)
-        UtilityShortcut.hidePinIfNeeded(toolbarBottom)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer,
+            R.menu.rtma,
+            bottomToolbar = false
+        )
         arguments = intent.getStringArrayExtra(RID)!!
         setupUI()
         readPrefs()
@@ -99,15 +103,23 @@ class RtmaActivity : VideoRecordActivity() {
 
     private fun getContent() {
         setTitle(sector, navDrawer.getLabel())
-        FutureBytes(UtilityRtma.getUrl(navDrawer.url, sector, runTimes.getOrNull(runTimeIndex)
-                ?: ""), ::display)
+        FutureBytes(
+            UtilityRtma.getUrl(
+                navDrawer.url, sector, runTimes.getOrNull(runTimeIndex)
+                    ?: ""
+            ), ::display
+        )
     }
 
     private fun getContentBySector(sector: String) {
         this.sector = sector
         setTitle(sector, navDrawer.getLabel())
-        FutureBytes(UtilityRtma.getUrl(navDrawer.url, sector, runTimes.getOrNull(0)
-                ?: ""), ::display)
+        FutureBytes(
+            UtilityRtma.getUrl(
+                navDrawer.url, sector, runTimes.getOrNull(0)
+                    ?: ""
+            ), ::display
+        )
     }
 
     private fun display(bitmap: Bitmap) {
@@ -142,7 +154,12 @@ class RtmaActivity : VideoRecordActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_time -> ObjectDialogue.generic(this, runTimes, ::getContent) { i -> runTimeIndex = i }
+            R.id.action_time -> ObjectDialogue.generic(
+                this,
+                runTimes,
+                ::getContent
+            ) { i -> runTimeIndex = i }
+
             R.id.action_alaska -> getContentBySector("alaska")
             R.id.action_ca -> getContentBySector("ca")
             R.id.action_co -> getContentBySector("co")

@@ -38,7 +38,7 @@ class CurrentConditions {
     var status = ""
         private set
     private var timeStringUtc = ""
-    var latLon = LatLon(0.0, 0.0)
+    var latLon = LatLon.empty()
 
     constructor()
 
@@ -71,7 +71,11 @@ class CurrentConditions {
         }
         data += "${objectMetar.windGust} mph - ${objectMetar.visibility} mi - ${objectMetar.condition}"
         iconUrl = objectMetar.icon
-        status = UtilityUS.getStatusViaMetar(context, objectMetar.conditionsTimeStr, objectMetar.obsClosest.name)
+        status = UtilityUS.getStatusViaMetar(
+            context,
+            objectMetar.conditionsTimeStr,
+            objectMetar.obsClosest.name
+        )
         timeStringUtc = objectMetar.timeStringUtc
     }
 
