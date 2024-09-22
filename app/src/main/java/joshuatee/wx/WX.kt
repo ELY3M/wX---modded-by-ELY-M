@@ -47,7 +47,6 @@ import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 class WX : CommonActionBarFragment() {
 
@@ -134,10 +133,8 @@ class WX : CommonActionBarFragment() {
         val fab = Fab(this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
         if (UIPreferences.mainScreenRadarFab || UIPreferences.navDrawerMainScreen) {
             objectToolbarBottom.hideRadar()
-			UtilityLog.d("elys-wx", "showing radar fab")
         } else {
             fab.visibility = View.GONE
-			UtilityLog.d("elys-wx", "hiding radar fab")
 			
         }
     }
