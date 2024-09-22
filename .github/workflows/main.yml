@@ -75,7 +75,7 @@ jobs:
           SIGNEDAPKNAME: ${{ steps.sign_app.outputs.signedReleaseFile }} 
         run: |
          echo 'Signed APK is ${{ steps.sign_app.outputs.signedReleaseFile }}'
-         SIGNEDAPKNAME=$(ls | grep signed)
+         SIGNEDAPKNAME=${{ steps.sign_app.outputs.signedReleaseFile }}
          echo "SIGNEDAPKNAME=$SIGNEDAPKNAME" >> $GITHUB_ENV
          echo SIGNEDAPKNAME: $SIGNEDAPKNAME
          
