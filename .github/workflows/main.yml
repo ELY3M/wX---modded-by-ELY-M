@@ -90,7 +90,7 @@ jobs:
           prerelease: false
           draft: false
           body: ${{ github.event.head_commit.message }}
-          files: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          files: ${{ env.VERSIONNAME }}.apk
           name: APK Release ${{ env.VERSIONNAME }} 
 
           
