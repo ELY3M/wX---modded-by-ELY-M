@@ -38,7 +38,7 @@ jobs:
           
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r26c
+          ndk-version: r27c
       - run: ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=app/src/main/jni/Android.mk NDK_APPLICATION_MK=app/src/main/jni/Application.mk
      
         
@@ -72,7 +72,17 @@ jobs:
         
       - name: Output Signed APK
         run:  echo 'Signed APK is ${{ steps.sign_app.outputs.signedReleaseFile }}' 
-          
+        env:
+          SIGNEDAPKNAME: ${{ steps.sign_app.outputs.signedReleaseFile }} 
+        run: |
+         SIGNEDAPKNAME=$(ls | grep signed)
+         echo "SIGNEDAPKNAME=$SIGNEDAPKNAME" >> $GITHUB_ENV
+         echo SIGNEDAPKNAME: $SIGNEDAPKNAME
+         
+      - name: Rename release APK
+        run: | 
+         pwd, ls -la     
+       
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
