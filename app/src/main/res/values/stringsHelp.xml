@@ -64,6 +64,10 @@
     <string name="widget_prevent_tap">
 Prevent tapping on a widget from opening the app. Please note that after changing this setting you must then delete and re-add any widget that you want this to take effect for.
 </string>
+<!-- elys mod - I hate fab buttons!!! -->
+    <string name="main_screen_radar_button">
+Show a floating action button on the main screen for access to radar.
+</string>
 
     <string name="hide_top_toolbar_label">
 Hide the top toolbar on the main screen.
