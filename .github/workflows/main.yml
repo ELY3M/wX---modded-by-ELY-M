@@ -81,7 +81,7 @@ jobs:
          
       - name: Rename release APK
         run: | 
-         pwd, ls -la     
+           cp ${{ steps.sign_app.outputs.signedReleaseFile }} ${{ env.VERSIONNAME }}.apk
        
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
