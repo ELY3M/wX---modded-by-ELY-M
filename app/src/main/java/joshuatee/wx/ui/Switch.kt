@@ -128,6 +128,13 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
                     Utility.restart()
                 }
             }
+	    //elys mod - I hate fab buttons!!!
+            if (pref == "UI_MAIN_SCREEN_RADAR_FAB") {
+                if (UIPreferences.mainScreenRadarFab != Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t")) {
+                    Utility.commitPref(context)
+                    Utility.restart()
+                }
+            }	    
             if (pref == "NOTIF_TTS") {
                 if (NotificationPreferences.notifTts != Utility.readPref(
                         context,

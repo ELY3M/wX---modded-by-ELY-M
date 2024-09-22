@@ -4,3 +4,4 @@ del versionname
 git add .  
 git commit -m %versionname%
 git push 
+pause
