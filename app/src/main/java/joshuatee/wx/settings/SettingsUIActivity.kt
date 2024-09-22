@@ -100,7 +100,9 @@ class SettingsUIActivity : BaseActivity() {
                 Switch(this, "Fahrenheit in current conditions/7day", "UNITS_F", R.string.units_f_label),
                 Switch(this, "Fullscreen mode", "FULLSCREEN_MODE", R.string.fullscreen_mode_label),
                 Switch(this, "Hide top toolbar (restarts app)", "HIDE_TOP_TOOLBAR", R.string.hide_top_toolbar_label),
-                Switch(this, "Millibars in current conditions", "UNITS_M", R.string.units_m_label),
+		//elys mod - I hate fab buttons!!!
+                Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.main_screen_radar_button),
+		Switch(this, "Millibars in current conditions", "UNITS_M", R.string.units_m_label),
                 Switch(this, "Navigation Drawer on main screen", "NAV_DRAWER_MAIN_SCREEN", R.string.nav_drawer_main_screen_label),
                 Switch(this, "Navigation Drawer is on right side", "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", R.string.nav_drawer_main_screen_on_right_label),
                 Switch(this, "Record screen for sharing", "RECORD_SCREEN_SHARE", R.string.record_screen_share_label),

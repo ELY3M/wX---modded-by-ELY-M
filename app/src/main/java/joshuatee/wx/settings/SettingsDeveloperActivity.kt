@@ -53,6 +53,8 @@ class SettingsDeveloperActivity : BaseActivity() {
                 "NWS_TEXT_REMOVELINEBREAKS",
                 R.string.nws_text_remove_linebreak_label
             ),
+	    //elys mod - I hate fab buttons!!!  
+	    Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.main_screen_radar_button),
             Switch(this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label),
             Switch(this, "Lock toolbars", "LOCK_TOOLBARS", R.string.lock_toolbars_label),
             Switch(this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label),
