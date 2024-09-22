@@ -1,5 +1,11 @@
-Privacy Policy for Android “wX” app and iOS “wXL23” app by joshua.tee@gmail.com:
-
+//modded by ELY M.  
+Title: Privacy Policy
+For: Android “wX” app and iOS “wXL23” app
+Privacy Policy for Android “wX” app and iOS “wXL23” app
+Comments/questions: https://github.com/ELY3M/wX---modded-by-ELY-M
+ID: elys.joshuatee.wx
+Last Update: 2024-09-22
+---------------------------------
 These apps do not collect any data from the user or the user’s device only during normal usage and not crashing.  
 
 I am using Acra Logger from http://www.acra.ch/
@@ -10,3 +16,4 @@ I have Spotter Network Auto Report your current GPS location.
 if you add your application key and enable auto report your location.  
 you will be submitting your GPS location automatically to Spotter Network for your beacon to show up on any maps or radar with Spotter Network.       
 Please review Spotter Network's Privacy Policy at https://www.spotternetwork.org/pages/privacy 
+------------------------------------

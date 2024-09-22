@@ -2,9 +2,14 @@
 
 # Developer ChangeLog
 
-## 55913 2024_09_20
+## 55914 2024_09_22
 
 * [ADD]
+
+## 55913 2024_09_22
+
+* [ADD] link to Privacy Policy in Settings About which appears to be now required by Google
+
 
 ## 55912 2024_09_20
 
