@@ -129,8 +129,13 @@ class WX : CommonActionBarFragment() {
         //
         // radar floating action button unless disabled
         //
-        Fab(this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
-        objectToolbarBottom.hideRadar()
+	//elys mod - I fucking hate fab buttons!!!  I wanted fab stay gone!!!  
+        val fab = Fab(this, R.id.fab, GlobalVariables.ICON_RADAR_WHITE) { openNexradRadar(this) }
+        if (UIPreferences.mainScreenRadarFab || UIPreferences.navDrawerMainScreen) {
+            objectToolbarBottom.hideRadar()
+        } else {
+            fab.visibility = View.GONE
+        }
     }
 
     private fun setupTabs() {
