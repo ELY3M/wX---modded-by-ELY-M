@@ -47,6 +47,7 @@ import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 class WX : CommonActionBarFragment() {
 
