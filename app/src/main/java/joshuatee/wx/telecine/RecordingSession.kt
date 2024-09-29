@@ -9,7 +9,6 @@ joshua.tee@gmail.com
 package joshuatee.wx.telecine
 
 import android.app.Activity
-import android.os.Build
 import android.view.Gravity
 import android.view.WindowManager
 import android.content.Context.WINDOW_SERVICE

@@ -219,7 +219,7 @@ object DownloadText {
 
             prod.contains("USHZD37") -> {
                 text =
-                        "product discontinued via SCN23-101: Termination of the Weather Prediction Center Day 3-7 Hazards Outlook Discussion Effective November 15, 2023"
+                    "product discontinued via SCN23-101: Termination of the Weather Prediction Center Day 3-7 Hazards Outlook Discussion Effective November 15, 2023"
             }
 
             prod.contains("PMD30D") -> {

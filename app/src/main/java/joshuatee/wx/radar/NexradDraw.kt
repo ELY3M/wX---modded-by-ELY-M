@@ -87,10 +87,9 @@ internal object NexradDraw {
         if (forceReset || (oldRadarSites[index] != wxglRenders[index].state.rid)) {
             wxglRenders[index].setChunkCount(0)
             wxglRenders[index].construct.setChunkCountSti(0)
-            //elys mod
             wxglRenders[index].construct.setHiInit(false)
-            //elys mod	    
             wxglRenders[index].construct.setTvsInit(false)
+	    //elys mod
             wxglRenders[index].construct.setUserPointsInit(false)
             RadarGeometry.orderedTypes.forEach {
                 Thread {

@@ -37,7 +37,6 @@ import joshuatee.wx.ui.NavDrawer
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.util.UtilityShortcut
 
 class RtmaActivity : VideoRecordActivity() {
 

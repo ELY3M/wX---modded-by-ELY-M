@@ -33,6 +33,7 @@ class SunRiseCard(context: Context, latLon: LatLon, scrollView: ScrollView) : Wi
 
     init {
         with(sunriseCard) {
+	    ///elys mod
             ///center()
             connect { scrollView.smoothScrollTo(0, 0) }
             text = UtilityTimeSunMoon.getForHomeScreen(context, latLon)

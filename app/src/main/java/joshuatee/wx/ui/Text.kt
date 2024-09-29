@@ -96,7 +96,11 @@ class Text(val context: Context) : Widget {
         refreshTextSize(size)
     }
 
-    constructor(view: View, resourceId: Int, color: Int, size: TextSize) : this(view, resourceId, size) {
+    constructor(view: View, resourceId: Int, color: Int, size: TextSize) : this(
+        view,
+        resourceId,
+        size
+    ) {
         this.color = color
     }
 
@@ -106,9 +110,20 @@ class Text(val context: Context) : Widget {
 
     fun refreshTextSize(size: TextSize) {
         when (size) {
-            TextSize.SMALL -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
-            TextSize.MEDIUM -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-            TextSize.LARGE -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
+            TextSize.SMALL -> tv.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                UIPreferences.textSizeSmall
+            )
+
+            TextSize.MEDIUM -> tv.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                UIPreferences.textSizeNormal
+            )
+
+            TextSize.LARGE -> tv.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                UIPreferences.textSizeLarge
+            )
         }
     }
 
@@ -122,6 +137,10 @@ class Text(val context: Context) : Widget {
 
     fun setSizeHourly() {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(14, context))
+    }
+
+    fun setMonoSpaced() {
+        tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
     }
 
     var color
@@ -147,7 +166,11 @@ class Text(val context: Context) : Widget {
     }
 
     fun wrap() {
-        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        tv.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            1.0f
+        )
     }
 
     fun connect(fn: View.OnClickListener) {

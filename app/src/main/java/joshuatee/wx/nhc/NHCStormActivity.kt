@@ -67,26 +67,30 @@ class NhcStormActivity : BaseActivity() {
     private var imagesPerRow = 2
     private val boxRows = mutableListOf<HBox>()
     private val imageUrls = listOf(
-            "_5day_cone_with_line_and_wind_sm2.png",
-            "_key_messages.png",
-            "WPCQPF_sm2.gif",
-            "WPCERO_sm2.gif",
-            "_earliest_reasonable_toa_34_sm2.png",
-            "_most_likely_toa_34_sm2.png",
-            "_wind_probs_34_F120_sm2.png",
-            "_wind_probs_50_F120_sm2.png",
-            "_wind_probs_64_F120_sm2.png"
+        "_5day_cone_with_line_and_wind_sm2.png",
+        "_key_messages.png",
+        "WPCQPF_sm2.gif",
+        "WPCERO_sm2.gif",
+        "_earliest_reasonable_toa_34_sm2.png",
+        "_most_likely_toa_34_sm2.png",
+        "_wind_probs_34_F120_sm2.png",
+        "_wind_probs_50_F120_sm2.png",
+        "_wind_probs_64_F120_sm2.png",
+        "_peak_surge.png",
+        "_wind_history.png"
     )
     private val imageTitles = listOf(
-            "Coastal Watches/Warnings and Forecast Cone for Storm Center",
-            "Key Messages",
-            "WPCQPF_sm2.gif",
-            "WPCERO_sm2.gif",
-            "Earliest Reasonable Arrival Time of Tropical-Storm-Force Winds",
-            "Most Likely Arrival Time of Tropical-Storm-Force Winds",
-            "Tropical-Storm-Force Wind Speed Probabilities",
-            "50-knot (58 mph) Wind Speed Probabilities",
-            "Hurricane-Force Wind Speed Probabilities"
+        "Coastal Watches/Warnings and Forecast Cone for Storm Center",
+        "Key Messages",
+        "WPCQPF_sm2.gif",
+        "WPCERO_sm2.gif",
+        "Earliest Reasonable Arrival Time of Tropical-Storm-Force Winds",
+        "Most Likely Arrival Time of Tropical-Storm-Force Winds",
+        "Tropical-Storm-Force Wind Speed Probabilities",
+        "50-knot (58 mph) Wind Speed Probabilities",
+        "Hurricane-Force Wind Speed Probabilities",
+        "Peak Storm Surge Forecast",
+        "Cumulative Wind History"
     )
     private var textProductUrl = ""
     private var office = "MIA"
@@ -137,7 +141,8 @@ class NhcStormActivity : BaseActivity() {
             var url = stormData.baseUrl
             if (it == "WPCQPF_sm2.gif" || it == "WPCERO_sm2.gif") {
                 // url = url.dropLast(2)
-                url = url.replace(ObjectDateTime.getYearString(), ObjectDateTime.getYearShortString())
+                url =
+                    url.replace(ObjectDateTime.getYearString(), ObjectDateTime.getYearShortString())
             }
             bitmapsAttr.add(BitmapAttr((url + it).getImage()))
         }
@@ -148,7 +153,8 @@ class NhcStormActivity : BaseActivity() {
         bitmapsAttr.forEachIndexed { index, b ->
             var url = stormData.baseUrl
             if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") {
-                url = url.replace(ObjectDateTime.getYearString(), ObjectDateTime.getYearShortString())
+                url =
+                    url.replace(ObjectDateTime.getYearString(), ObjectDateTime.getYearShortString())
             }
             b.url = url + imageUrls[index]
             b.title = imageTitles[index]
@@ -180,12 +186,22 @@ class NhcStormActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_cloud -> Route.visNhc(this, stormData.goesUrl)
-            R.id.action_share -> UtilityShare.textWithBitmapAttr(this, stormData.name + " " + stormData.forTopHeader(), cardText.text, bitmapsAttr)
+            R.id.action_share -> UtilityShare.textWithBitmapAttr(
+                this,
+                stormData.name + " " + stormData.forTopHeader(),
+                cardText.text,
+                bitmapsAttr
+            )
+
             R.id.action_MIATCPEP2 -> Route.wpcText(this, "${office}TCP${stormData.binNumber}")
             R.id.action_MIATCMEP2 -> Route.wpcText(this, "${office}TCM${stormData.binNumber}")
             R.id.action_MIATCDEP2 -> Route.wpcText(this, "${office}TCD${stormData.binNumber}")
             R.id.action_MIAPWSEP2 -> Route.wpcText(this, "${office}PWS${stormData.binNumber}")
-            R.id.action_mute_notification -> NotificationNhc.muteNotification(this, stormData.stormId)
+            R.id.action_mute_notification -> NotificationNhc.muteNotification(
+                this,
+                stormData.stormId
+            )
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

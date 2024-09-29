@@ -22,6 +22,7 @@
 package joshuatee.wx.misc
 
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.ljust
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.To
@@ -29,6 +30,36 @@ import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityString
 
 object UtilityHourlyOldApi {
+
+    internal fun getStringForActivity(html: String): Hourly {
+        var timeData = "Time" + GlobalVariables.newline
+        var tempData = "Temp" + GlobalVariables.newline
+        var windSpeedData = "Dew" + GlobalVariables.newline
+        var windDirData = "Precip%" + GlobalVariables.newline
+        var conditionData = "Cloud%" + GlobalVariables.newline
+        val lines = mutableListOf<String>()
+        val header =
+            "Time".ljust(9) + " " + "Temp".ljust(6) + "Dew".ljust(5) + "Precip%".ljust(7) + "Cloud%".ljust(
+                6
+            )
+        lines.add(header)
+        html.split(GlobalVariables.newline).drop(2).forEach {
+            val items = it.split("\\s+".toRegex())
+            if (items.size > 5) {
+                timeData += items[0] + " " + " " + items[1] + GlobalVariables.newline
+                tempData += items[2] + GlobalVariables.newline
+                windSpeedData += items[3] + GlobalVariables.newline
+                windDirData += items[4] + GlobalVariables.newline
+                conditionData += items[5] + GlobalVariables.newline
+                lines.add(
+                    items[0] + "  " + items[1].ljust(4) + " " + items[2].ljust(5) + " " + items[3].ljust(
+                        4
+                    ) + " " + items[4].ljust(6) + " " + items[5].ljust(5)
+                )
+            }
+        }
+        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData, lines)
+    }
 
     fun getHourlyString(locNumber: Int): String {
         val latLon = Location.getLatLon(locNumber)
@@ -79,10 +110,10 @@ object UtilityHourlyOldApi {
     }
 
     private val regexpList = listOf(
-            "<temperature type=.hourly.*?>(.*?)</temperature>",
-            "<temperature type=.dew point.*?>(.*?)</temperature>",
-            "<time-layout.*?>(.*?)</time-layout>",
-            "<probability-of-precipitation.*?>(.*?)</probability-of-precipitation>",
-            "<cloud-amount type=.total.*?>(.*?)</cloud-amount>"
+        "<temperature type=.hourly.*?>(.*?)</temperature>",
+        "<temperature type=.dew point.*?>(.*?)</temperature>",
+        "<time-layout.*?>(.*?)</time-layout>",
+        "<probability-of-precipitation.*?>(.*?)</probability-of-precipitation>",
+        "<cloud-amount type=.total.*?>(.*?)</cloud-amount>"
     )
 }

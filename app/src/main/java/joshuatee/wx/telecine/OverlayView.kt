@@ -12,7 +12,6 @@ package joshuatee.wx.telecine
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -30,8 +29,8 @@ import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 
 @SuppressLint("ViewConstructor")
 internal class OverlayView private constructor(
-        context: Context,
-        private val listener: Listener,
+    context: Context,
+    private val listener: Listener,
 ) : FrameLayout(context), View.OnClickListener {
 
     private val distanceToolView: View

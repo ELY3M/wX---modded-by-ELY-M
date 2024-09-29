@@ -33,6 +33,7 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.CardVerticalText
+import joshuatee.wx.ui.CardVerticalText2
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.externalGraphView.series.DataPoint
 import joshuatee.wx.externalGraphView.series.LineGraphSeries
@@ -61,6 +62,8 @@ class HourlyActivity : BaseActivity() {
     private var htmlShare = listOf<String>()
     private lateinit var card: Card
     private lateinit var cardVerticalText: CardVerticalText
+
+    //    private lateinit var cardVerticalText: CardVerticalText2
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
     private lateinit var graphCard: Card
@@ -96,6 +99,7 @@ class HourlyActivity : BaseActivity() {
         graph = findViewById(R.id.graph)
         graphCard.visibility = View.GONE
         cardVerticalText = CardVerticalText(this, 5, toolbar)
+//        cardVerticalText = CardVerticalText2(this, toolbar)
         box.addWidget(cardVerticalText)
         cardVerticalText.connect { scrollView.scrollTo(0, 0) }
         val padding = 100
@@ -116,7 +120,7 @@ class HourlyActivity : BaseActivity() {
         hourly = if (UIPreferences.useNwsApiForHourly) {
             UtilityHourly.getStringForActivity(htmlShare[1])
         } else {
-            UtilityHourly.getStringForActivityFromOldApi(htmlShare[1])
+            UtilityHourlyOldApi.getStringForActivity(htmlShare[1])
         }
         cardVerticalText.set(
             listOf(
@@ -127,6 +131,7 @@ class HourlyActivity : BaseActivity() {
                 hourly.conditions
             )
         )
+//        cardVerticalText.set(hourly.data)
         plotData()
         if (UIPreferences.hourlyShowGraph) {
             graphCard.visibility = View.VISIBLE

@@ -42,7 +42,6 @@ import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityHomeScreen
-import joshuatee.wx.util.HttpUnsafe
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.acra.BuildConfig
@@ -149,7 +148,7 @@ class MyApplication : Application() {
             .addInterceptor(okHttp3Interceptor)
             .build()
 
-        val httpClientUnsafe = HttpUnsafe.getUnsafeOkHttpClient()
+//        val httpClientUnsafe = HttpUnsafe.getUnsafeOkHttpClient()
 
         lateinit var preferences: SharedPreferences
         private lateinit var preferencesTelecine: SharedPreferences

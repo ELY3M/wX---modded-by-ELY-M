@@ -25,6 +25,7 @@ import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import java.util.regex.Pattern
 import joshuatee.wx.ui.TouchImage
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImgAnim
@@ -40,13 +41,13 @@ fun String.condenseSpace() = this.replace("\\s+".toRegex(), " ")
 fun String.removeHtml() = this.replace(Regex("\\<[^>]*>"), "")
 
 fun String.removeLineBreaks() = this.replace("\n", "ABC123")
-        .replace("ABC123ABC123", "\n")
-        .replace("ABC123", " ")
-        .replace("  ", " ")
+    .replace("ABC123ABC123", "\n")
+    .replace("ABC123", " ")
+    .replace("  ", " ")
 
 fun String.removeLineBreaksCap() = this.replace("\\n\\n", "ABC123")
-        .replace("\\n", " ")
-        .replace("ABC123", "\n\n")
+    .replace("\\n", " ")
+    .replace("ABC123", "\n\n")
 
 fun String.insert(index: Int, string: String) = StringBuilder(this).insert(index, string).toString()
 
@@ -66,6 +67,8 @@ fun String.parseColumn(pattern: Pattern) = UtilityString.parseColumn(this, patte
 
 fun String.parseColumnAcrossLines(match: String) = UtilityString.parseColumnAcrossLines(this, match)
 
+fun String.ljust(amount: Int) = To.stringPadLeft(this, amount)
+
 fun String.getImage() = UtilityNetworkIO.getBitmapFromUrl(this)
 
 fun String.getHtml() = UtilityNetworkIO.getStringFromUrl(this)
@@ -80,9 +83,11 @@ fun String.parseLastMatch(pattern: Pattern) = UtilityString.parseLastMatch(this,
 
 fun String.parseLastMatch(match: String) = UtilityString.parseLastMatch(this, match)
 
-fun String.parseMultiple(match: String, count: Int) = UtilityString.parseMultiple(this, match, count)
+fun String.parseMultiple(match: String, count: Int) =
+    UtilityString.parseMultiple(this, match, count)
 
-fun String.parseMultiple(match: Pattern, count: Int) = UtilityString.parseMultiple(this, match, count)
+fun String.parseMultiple(match: Pattern, count: Int) =
+    UtilityString.parseMultiple(this, match, count)
 
 fun String.getInputStream() = UtilityNetworkIO.getInputStreamFromUrl(this)
 

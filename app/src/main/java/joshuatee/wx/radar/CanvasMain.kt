@@ -171,6 +171,7 @@ object CanvasMain {
         if (PolygonType.MPD.pref) {
             CanvasDraw.mcd(projectionType, bitmapCanvas, projectionNumbers, PolygonType.MPD)
         }
+	//elys mod
         if (PolygonType.TST.pref) {
             CanvasDraw.warnings(projectionType, bitmapCanvas, projectionNumbers)
         }
@@ -178,7 +179,6 @@ object CanvasMain {
             CanvasDraw.cities(projectionType, bitmapCanvas, projectionNumbers, citySize)
         }
     }
-
 
     private fun getLocalGeometryData(context: Context): GeometryData {
         val canadaResId = R.raw.ca

@@ -23,6 +23,7 @@ package joshuatee.wx.misc
 
 import joshuatee.wx.parseColumn
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.ljust
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.Location
@@ -43,6 +44,12 @@ object UtilityHourly {
         var windSpeedData = "WindSpd" + GlobalVariables.newline
         var windDirData = "WindDir" + GlobalVariables.newline
         var conditionData = "Condition" + GlobalVariables.newline
+        val lines = mutableListOf<String>()
+        val header =
+            "Time".ljust(8) + "T".ljust(3) + "Wind".ljust(7) + "Dir".ljust(
+                5
+            )
+        lines.add(header)
         startTimes.indices.forEach {
             val time = ObjectDateTime.translateTimeForHourly(startTimes[it])
             val temperature = Utility.safeGet(temperatures, it).replace("\"", "")
@@ -54,41 +61,30 @@ object UtilityHourly {
             windSpeedData += windSpeed + GlobalVariables.newline
             windDirData += windDirection + GlobalVariables.newline
             conditionData += shortenConditions(shortForecast) + GlobalVariables.newline
+            lines.add(
+                time.ljust(7) + " " + temperature.ljust(2) + " " + windSpeed.ljust(
+                    6
+                ) + " " + windDirection.ljust(3) + " " + shortenConditions(
+                    shortForecast
+                ).ljust(18)
+            )
         }
-        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData)
-    }
-
-    internal fun getStringForActivityFromOldApi(html: String): Hourly {
-        var timeData = "Time" + GlobalVariables.newline
-        var tempData = "Temp" + GlobalVariables.newline
-        var windSpeedData = "Dew" + GlobalVariables.newline
-        var windDirData = "Precip%" + GlobalVariables.newline
-        var conditionData = "Cloud%" + GlobalVariables.newline
-        html.split(GlobalVariables.newline).drop(2).forEach {
-            val items = it.split("\\s+".toRegex())
-            if (items.size > 5) {
-                timeData += items[0] + " " + " " + items[1] + GlobalVariables.newline
-                tempData += items[2] + GlobalVariables.newline
-                windSpeedData += items[3] + GlobalVariables.newline
-                windDirData += items[4] + GlobalVariables.newline
-                conditionData += items[5] + GlobalVariables.newline
-            }
-        }
-        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData)
+        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData, lines)
     }
 
     private fun shortenConditions(s: String) =
-            s.replace("Showers And Thunderstorms", "Sh/Tst")
-                    .replace("Chance", "Chc")
-                    .replace("Slight", "Slt")
-                    .replace("Light", "Lgt")
-                    .replace("Scattered", "Sct")
-                    .replace("Rain", "Rn")
-                    .replace("Showers", "Shwr")
-                    .replace("Snow", "Sn")
-                    .replace("Rn And Sn", "Rn/Sn")
-                    .replace("Freezing", "Frz")
-                    .replace("T-storms", "Tst")
+        s.replace("Showers And Thunderstorms", "Sh/Tst")
+            .replace("Chance", "Chc")
+            .replace("Slight", "Slt")
+            .replace("Light", "Lgt")
+            .replace("Scattered", "Sct")
+            .replace("Rain", "Rn")
+            .replace("Showers", "Shwr")
+            .replace("Snow", "Sn")
+            .replace("Rn And Sn", "Rn/Sn")
+            .replace("Freezing", "Frz")
+            .replace("T-storms", "Tst")
+            .replace("Isolated", "Iso")
 
     fun get(locationNumber: Int): List<String> = if (UIPreferences.useNwsApiForHourly) {
         getString(locationNumber)
@@ -119,12 +115,21 @@ object UtilityHourly {
         val shortForecast = html.parseColumn("\"shortForecast\": \"(.*?)\"")
         var content = ""
         startTime.indices.forEach {
-            val time = ObjectDateTime.translateTimeForHourly(startTime[it]) //.replace(Regex("-0[0-9]:00"), ""))
+            val time =
+                ObjectDateTime.translateTimeForHourly(startTime[it]) //.replace(Regex("-0[0-9]:00"), ""))
             content += To.stringPadLeft(time, 8)
-            if (temperature.size > it) content += To.stringPadLeft(temperature[it].replace("\"", ""), 5)
+            if (temperature.size > it) content += To.stringPadLeft(
+                temperature[it].replace(
+                    "\"",
+                    ""
+                ), 5
+            )
             if (windSpeed.size > it) content += To.stringPadLeft(windSpeed[it], 9)
             if (windDirection.size > it) content += To.stringPadLeft(windDirection[it], 7)
-            if (shortForecast.size > it) content += To.stringPadLeft(shortenConditions(shortForecast[it]), 12)
+            if (shortForecast.size > it) content += To.stringPadLeft(
+                shortenConditions(shortForecast[it]),
+                12
+            )
             content += GlobalVariables.newline
         }
         return content

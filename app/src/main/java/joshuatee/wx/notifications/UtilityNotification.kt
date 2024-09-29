@@ -31,7 +31,6 @@ import androidx.core.app.NotificationCompat
 import joshuatee.wx.audio.UtilityTts
 import android.app.NotificationChannel
 import android.graphics.Color
-import android.os.Build
 import android.media.AudioAttributes
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences

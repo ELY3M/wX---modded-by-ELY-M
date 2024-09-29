@@ -2,14 +2,35 @@
 
 # Developer ChangeLog
 
-## 55914 2024_09_22
+## 55915 2024_09_28
 
-* [ADD]
+* [ADD] code changes to support changing how hourly is displayed to work better with larger fonts
+* [ADD] In Hourly, abbreviate "Isolated" as "Iso"
+
+## 55914 2024_09_28
+
+* [ADD] NHC Storm: add additional graphics "Peak Storm Surge Forecast" and "Cumulative Wind History"
+* [ADD] monochrome icon for themed icon support
+
+```
+<monochrome android:drawable="@mipmap/ic_launcher_foreground"/>
+in
+app/src/main/res/mipmap-anydpi/ic_launcher_new.xml
+```
+
+* [REF] remove unused images due to API min upgrade
+
+```
+	deleted:    mipmap-hdpi/ic_launcher_new.png
+	deleted:    mipmap-mdpi/ic_launcher_new.png
+	deleted:    mipmap-xhdpi/ic_launcher_new.png
+	deleted:    mipmap-xxhdpi/ic_launcher_new.png
+	deleted:    mipmap-xxxhdpi/ic_launcher_new.png
+```
 
 ## 55913 2024_09_22
 
 * [ADD] link to Privacy Policy in Settings About which appears to be now required by Google
-
 
 ## 55912 2024_09_20
 

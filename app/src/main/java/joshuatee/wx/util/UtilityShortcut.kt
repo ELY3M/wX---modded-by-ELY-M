@@ -28,8 +28,6 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.net.Uri
-import androidx.appcompat.widget.Toolbar
-import android.view.Menu
 import joshuatee.wx.R
 import joshuatee.wx.misc.WfoTextActivity
 import joshuatee.wx.misc.SevereDashboardActivity
