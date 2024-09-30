@@ -50,7 +50,12 @@ class SpcCompmapActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer,
+            R.menu.shared_multigraphics,
+            false
+        )
         setupUI()
         setupLayerString()
         getContent()
@@ -78,6 +83,7 @@ class SpcCompmapActivity : BaseActivity() {
 
     private fun setupLayerString() {
         layerString = Utility.readPref(this, "SPCCOMPMAP_LAYERSTR", "a7:a19:") // mslp, hpc fronts
+        layerString = layerString.replace("a3:", "")
         val items = layerString.split(":").dropLastWhile { it.isEmpty() }
         items.forEach {
             selectItemNoGet(To.int(it.replace("a", "")))

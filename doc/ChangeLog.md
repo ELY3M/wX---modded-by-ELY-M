@@ -2,10 +2,12 @@
 
 # Developer ChangeLog
 
-## 55915 2024_09_28
+## 55915 2024_09_30
 
 * [ADD] code changes to support changing how hourly is displayed to work better with larger fonts
 * [ADD] In Hourly, abbreviate "Isolated" as "Iso"
+* [FIX] SPC Compmap - remove product which is no longer available via the website: **3-hr surface pressure change**
+* [FIX] SPC Compmap - change references from **HPC** to **WPC**
 
 ## 55914 2024_09_28
 
