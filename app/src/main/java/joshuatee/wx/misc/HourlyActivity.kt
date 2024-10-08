@@ -61,9 +61,9 @@ class HourlyActivity : BaseActivity() {
 
     private var htmlShare = listOf<String>()
     private lateinit var card: Card
-    private lateinit var cardVerticalText: CardVerticalText
+//    private lateinit var cardVerticalText: CardVerticalText
 
-    //    private lateinit var cardVerticalText: CardVerticalText2
+    private lateinit var cardVerticalText: CardVerticalText2
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
     private lateinit var graphCard: Card
@@ -98,8 +98,8 @@ class HourlyActivity : BaseActivity() {
         graphCard.setCardBackgroundColor(Color.BLACK)
         graph = findViewById(R.id.graph)
         graphCard.visibility = View.GONE
-        cardVerticalText = CardVerticalText(this, 5, toolbar)
-//        cardVerticalText = CardVerticalText2(this, toolbar)
+//        cardVerticalText = CardVerticalText(this, 5, toolbar)
+        cardVerticalText = CardVerticalText2(this, toolbar)
         box.addWidget(cardVerticalText)
         cardVerticalText.connect { scrollView.scrollTo(0, 0) }
         val padding = 100
@@ -122,16 +122,16 @@ class HourlyActivity : BaseActivity() {
         } else {
             UtilityHourlyOldApi.getStringForActivity(htmlShare[1])
         }
-        cardVerticalText.set(
-            listOf(
-                hourly.time,
-                hourly.temp,
-                hourly.windSpeed,
-                hourly.windDir,
-                hourly.conditions
-            )
-        )
-//        cardVerticalText.set(hourly.data)
+//        cardVerticalText.set(
+//            listOf(
+//                hourly.time,
+//                hourly.temp,
+//                hourly.windSpeed,
+//                hourly.windDir,
+//                hourly.conditions
+//            )
+//        )
+        cardVerticalText.set(hourly.data)
         plotData()
         if (UIPreferences.hourlyShowGraph) {
             graphCard.visibility = View.VISIBLE

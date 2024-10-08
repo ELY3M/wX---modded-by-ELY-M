@@ -27,6 +27,7 @@ import android.view.View
 import joshuatee.wx.objects.Route
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.getHtml
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.parseColumn
 import joshuatee.wx.parseFirst
 import joshuatee.wx.ui.CardText
@@ -42,7 +43,8 @@ import joshuatee.wx.util.UtilityString
 class Nhc(val context: Context, box: VBox) {
 
     private var notificationCard: CardText? = null
-    private val cardNotificationHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
+    private val cardNotificationHeaderText =
+        "Currently blocked storm notifications, tap this text to clear all blocks "
     private var numberOfImages = 0
     private var imagesPerRow = 2
     private val boxRows = mutableListOf<HBox>()
@@ -65,9 +67,10 @@ class Nhc(val context: Context, box: VBox) {
             regionMap[it] = NhcRegionSummary(it)
         }
         listOf(
-                NhcRegionSummary(NhcOceanEnum.ATL),
-                NhcRegionSummary(NhcOceanEnum.EPAC),
-                NhcRegionSummary(NhcOceanEnum.CPAC)).forEach {
+            NhcRegionSummary(NhcOceanEnum.ATL),
+            NhcRegionSummary(NhcOceanEnum.EPAC),
+            NhcRegionSummary(NhcOceanEnum.CPAC)
+        ).forEach {
             urls.addAll(it.urls)
             imageTitles.addAll(it.titles)
         }
@@ -80,8 +83,10 @@ class Nhc(val context: Context, box: VBox) {
 
     companion object {
 
-        const val WIDGET_IMAGE_URL_TOP = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_0d0.png"
-        const val WIDGET_IMAGE_URL_BOTTOM = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_0d0.png"
+        const val WIDGET_IMAGE_URL_TOP =
+            "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_0d0.png"
+        const val WIDGET_IMAGE_URL_BOTTOM =
+            "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_0d0.png"
 
         fun getTextData(context: Context): List<NhcStormDetails> {
             val nhcStormDetailsList = mutableListOf<NhcStormDetails>()
@@ -109,10 +114,14 @@ class Nhc(val context: Context, box: VBox) {
             val movementDirs = html.parseColumn("\"movementDir\": (.*?),")
             val movementSpeeds = html.parseColumn("\"movementSpeed\": (.*?),")
             val lastUpdates = html.parseColumn("\"lastUpdate\": \"(.*?)\"")
-            val publicAdvisoriesChunk = UtilityString.parseColumn(html, "\"publicAdvisory\": \\{(.*?)\\}")
-            val forecastAdvisoriesChunk = UtilityString.parseColumn(html, "\"forecastAdvisory\": \\{(.*?)\\}")
-            val forecastDiscussionsChunk = UtilityString.parseColumn(html, "\"forecastDiscussion\": \\{(.*?)\\}")
-            val windSpeedProbabilitiesChunk = UtilityString.parseColumn(html, "\"windSpeedProbabilities\": \\{(.*?)\\}")
+            val publicAdvisoriesChunk =
+                UtilityString.parseColumn(html, "\"publicAdvisory\": \\{(.*?)\\}")
+            val forecastAdvisoriesChunk =
+                UtilityString.parseColumn(html, "\"forecastAdvisory\": \\{(.*?)\\}")
+            val forecastDiscussionsChunk =
+                UtilityString.parseColumn(html, "\"forecastDiscussion\": \\{(.*?)\\}")
+            val windSpeedProbabilitiesChunk =
+                UtilityString.parseColumn(html, "\"windSpeedProbabilities\": \\{(.*?)\\}")
             for (chunk in publicAdvisoriesChunk) {
                 val token = UtilityString.parse(chunk, "\"url\": \"(.*?)\"")
                 publicAdvisories.add(token)
@@ -134,28 +143,30 @@ class Nhc(val context: Context, box: VBox) {
             for (adv in publicAdvisories) {
                 val productToken = adv.split("/").last().replace(".shtml", "")
                 val text = DownloadText.byProduct(context, productToken)
-                val status = text.replace("\n", " ").parseFirst("(\\.\\.\\..*?\\.\\.\\.)")
+//                val status = text.replace("\n", " ").parseFirst("(\\.\\.\\..*?\\.\\.\\.)")
+                val status = text.replace("\n", " ")
+                    .parseFirst("BULLETIN.*?" + ObjectDateTime.getYearString() + " (.*?)SUMMARY OF ")
                 statusList.add(status)
             }
 
             if (ids.isNotEmpty()) {
                 ids.indices.forEach { index ->
                     val objectNhc = NhcStormDetails(
-                            names[index],
-                            movementDirs[index],
-                            movementSpeeds[index],
-                            pressures[index],
-                            binNumbers[index],
-                            ids[index],
-                            lastUpdates[index],
-                            classifications[index],
-                            latitudes[index],
-                            longitudes[index],
-                            intensities[index],
-                            Utility.safeGet(statusList, index),
+                        names[index],
+                        movementDirs[index],
+                        movementSpeeds[index],
+                        pressures[index],
+                        binNumbers[index],
+                        ids[index],
+                        lastUpdates[index],
+                        classifications[index],
+                        latitudes[index],
+                        longitudes[index],
+                        intensities[index],
+                        Utility.safeGet(statusList, index),
 //                            statusList[index],
-                            Utility.safeGet(publicAdvisories, index),
-                            Utility.safeGet(publicAdvisoriesNumbers, index),
+                        Utility.safeGet(publicAdvisories, index),
+                        Utility.safeGet(publicAdvisoriesNumbers, index),
 //                            Utility.safeGet(forecastAdvisories, index),
 //                            Utility.safeGet(forecastDiscussions, index),
 //                            Utility.safeGet(windSpeedProbabilities, index),

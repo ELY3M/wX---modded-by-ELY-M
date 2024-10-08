@@ -2,12 +2,26 @@
 
 # Developer ChangeLog
 
-## 55915 2024_09_30
+## 55916 2024_10_08
+
+* [ADD] NHC storm summary in NHC activity - show more headlines
+
+## 55915 2024_10_06
 
 * [ADD] code changes to support changing how hourly is displayed to work better with larger fonts
 * [ADD] In Hourly, abbreviate "Isolated" as "Iso"
-* [FIX] SPC Compmap - remove product which is no longer available via the website: **3-hr surface pressure change**
+* [FIX] SPC Compmap - remove product which is no longer available via the website: **3-hr surface
+  pressure change**
 * [FIX] SPC Compmap - change references from **HPC** to **WPC**
+* [ADD] Tool update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.6.1'
++        classpath 'com.android.tools.build:gradle:8.7.0'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.7-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.9-all.zip
+```
 
 ## 55914 2024_09_28
 
