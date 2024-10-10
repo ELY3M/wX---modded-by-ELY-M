@@ -28,20 +28,20 @@ import joshuatee.wx.util.UtilityMath
 import java.util.Locale
 
 class NhcStormDetails(
-        var name: String,
-        movementDir: String,
-        movementSpeed: String,
-        var pressure: String,
-        var binNumber: String,
-        var stormId: String,
-        lastUpdate: String,
-        var classification: String,
-        var lat: String,
-        var lon: String,
-        var intensity: String,
-        var status: String,
-        advisoryUrl: String,
-        val advisoryIssuanceNumber: String,
+    var name: String,
+    movementDir: String,
+    movementSpeed: String,
+    var pressure: String,
+    var binNumber: String,
+    var stormId: String,
+    lastUpdate: String,
+    var classification: String,
+    var lat: String,
+    var lon: String,
+    var intensity: String,
+    var status: String,
+    advisoryUrl: String,
+    val advisoryIssuanceNumber: String,
 //        var forecastAdvisoryUrl: String,
 //        var forecastDiscussionUrl: String,
 //        var windSpeedProbabilitiesUrl: String
@@ -49,21 +49,30 @@ class NhcStormDetails(
 
     var center = "$lat $lon"
     var dateTime = lastUpdate
-    var movement = UtilityMath.convertWindDir(To.double(movementDir)) + " at " + movementSpeed + " mph"
+    var movement =
+        UtilityMath.convertWindDir(To.double(movementDir)) + " at " + movementSpeed + " mph"
     var baseUrl: String
     var goesUrl: String
     var advisoryNumber = advisoryUrl.split("/").last().replace(".shtml", "")
 
     init {
         val modBinNumber = stormId.substring(0, 4).uppercase()
-        baseUrl = "https://www.nhc.noaa.gov/storm_graphics/" + modBinNumber.replace("AL", "AT") + "/" + stormId.uppercase(Locale.US)
-        goesUrl = "https://cdn.star.nesdis.noaa.gov/FLOATER/data/" + stormId.uppercase(Locale.US) + "/GEOCOLOR/latest.jpg"
+        baseUrl = "https://www.nhc.noaa.gov/storm_graphics/" + modBinNumber.replace(
+            "AL",
+            "AT"
+        ) + "/" + stormId.uppercase(Locale.US)
+        goesUrl =
+            "https://cdn.star.nesdis.noaa.gov/FLOATER/data/" + stormId.uppercase(Locale.US) + "/GEOCOLOR/latest.jpg"
     }
 
-    fun forTopHeader(): String = "$movement, $pressure mb, $intensity mph"
+    fun forTopHeader(): String =
+        "$movement, $pressure mb, " + UtilityMath.knotsToMph(intensity) + " mph"
 
-    fun summaryForNotification(): String = name + " " + classification + GlobalVariables.newline + center + GlobalVariables.newline +
-            movement + GlobalVariables.newline + pressure + " mb" + GlobalVariables.newline + UtilityMath.knotsToMph(intensity) + " mph"
+    fun summaryForNotification(): String =
+        name + " " + classification + GlobalVariables.newline + center + GlobalVariables.newline +
+                movement + GlobalVariables.newline + pressure + " mb" + GlobalVariables.newline + UtilityMath.knotsToMph(
+            intensity
+        ) + " mph"
 }
 
 /*

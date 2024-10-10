@@ -2,9 +2,10 @@
 
 # Developer ChangeLog
 
-## 55916 2024_10_08
+## 55916 2024_10_09
 
 * [ADD] NHC storm summary in NHC activity - show more headlines
+* [ADD] NHC Storm activity title was not showing wind speed in mph
 
 ## 55915 2024_10_06
 
