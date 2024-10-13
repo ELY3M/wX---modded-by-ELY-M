@@ -32,7 +32,6 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.Card
-import joshuatee.wx.ui.CardVerticalText
 import joshuatee.wx.ui.CardVerticalText2
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.externalGraphView.series.DataPoint
@@ -61,8 +60,6 @@ class HourlyActivity : BaseActivity() {
 
     private var htmlShare = listOf<String>()
     private lateinit var card: Card
-//    private lateinit var cardVerticalText: CardVerticalText
-
     private lateinit var cardVerticalText: CardVerticalText2
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox

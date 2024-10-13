@@ -8,6 +8,29 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55916 2024_10_12 (BETA)
+
+* [ADD] NHC storm summary in NHC activity - show more headlines
+* [ADD] NHC Storm activity title was not showing wind speed in mph
+* [ADD] change how hourly is displayed to work better with larger fonts (it was unusable with large fonts)
+* [ADD] In Hourly, abbreviate "Isolated" as "Iso"
+* [FIX] SPC Compmap - remove product which is no longer available via the website: **3-hr surface
+  pressure change**
+* [FIX] SPC Compmap - change references from **HPC** to **WPC**
+* [ADD] NHC Storm: add additional graphics "Peak Storm Surge Forecast" and "Cumulative Wind History"
+* [ADD] monochrome icon for themed icon support
+* [ADD] per upcoming changes, Android 8.1 (API 27) will no longer be supported
+* [ADD] deprecate these options as mentioned
+  in [upcoming changes document](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
+
+- (added 2023-09-10) wX Android setting "Radar with transparent toolbars" will be retired after
+  2024-09-10
+- (added 2023-09-10) wX Android setting "Radar with transparent status bar" will be retired after
+  2024-09-10
+- (added 2023-09-10) wX Android setting "Radar: immersive mode" will be retired after 2024-09-10
+- (added 2023-09-10) wX Android setting "Main screen radar button (requires restart)" will be
+  retired after 2024-09-10
+
 ## 55907 2024_09_18 (BETA)
 
 * [FIX] GOES "Full Disk" (Misc Tab) images location and product names have changed, animations are
