@@ -2,9 +2,19 @@
 
 # Developer ChangeLog
 
-## 55917 2024_10_12
+## 55918 2024_10_14
 
 * [ADD]
+
+## 55917 2024_10_14
+
+* [ADD] reinstate wX Android setting "Main screen radar button (requires restart)"
+* [REF] tool update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.7.0'
++        classpath 'com.android.tools.build:gradle:8.7.1'
+```
 
 ## 55916 2024_10_12
 

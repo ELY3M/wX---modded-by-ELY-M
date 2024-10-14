@@ -64,10 +64,6 @@
     <string name="widget_prevent_tap">
 Prevent tapping on a widget from opening the app. Please note that after changing this setting you must then delete and re-add any widget that you want this to take effect for.
 </string>
-<!-- elys mod - I hate fab buttons!!! -->
-    <string name="main_screen_radar_button">
-Show a floating action button on the main screen for access to radar.
-</string>
 
     <string name="hide_top_toolbar_label">
 Hide the top toolbar on the main screen.
@@ -393,6 +389,10 @@ Interval to use for checking all notifications. This also impacts widgets and th
 Notifications will not be persistent and will only display once for the life of the event</string>
     <string name="alert_autocancel_label">
 If a notification is clicked on it will cancel the notification.</string>
+
+    <string name="main_screen_radar_button">
+Show a floating action button on the main screen for access to radar.
+</string>
 
     <string name="alert_blackout_label">
 Disable sound ( if used ) between certain hours as specified.</string>

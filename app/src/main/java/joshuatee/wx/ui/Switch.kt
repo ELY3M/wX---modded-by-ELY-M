@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.  
 
 package joshuatee.wx.ui
 
@@ -68,7 +67,7 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
             "NWS_TEXT_REMOVELINEBREAKS",
             "RECORD_SCREEN_SHARE",
             "COD_LOCDOT_DEFAULT",
-            ///"UI_MAIN_SCREEN_RADAR_FAB", //elys mod - I hate fab buttons
+            "UI_MAIN_SCREEN_RADAR_FAB",
             "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
             "USE_NWS_API_SEVEN_DAY",
             "USE_NWS_API_HOURLY",
@@ -128,13 +127,17 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
                     Utility.restart()
                 }
             }
-	    //elys mod - I hate fab buttons!!!
             if (pref == "UI_MAIN_SCREEN_RADAR_FAB") {
-                if (UIPreferences.mainScreenRadarFab != Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t")) {
+                if (UIPreferences.mainScreenRadarFab != Utility.readPref(
+                        context,
+                        "UI_MAIN_SCREEN_RADAR_FAB",
+                        "false"
+                    ).startsWith("t")
+                ) {
                     Utility.commitPref(context)
                     Utility.restart()
                 }
-            }	    
+            }
             if (pref == "NOTIF_TTS") {
                 if (NotificationPreferences.notifTts != Utility.readPref(
                         context,
