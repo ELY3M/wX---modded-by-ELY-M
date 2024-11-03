@@ -21,6 +21,8 @@
 
 package joshuatee.wx.objects
 
+import joshuatee.wx.util.UtilityLog
+
 class Sites(
     private val nameDict: Map<String, String>,
     private val latDict: Map<String, String>,
@@ -54,10 +56,16 @@ class Sites(
         val k2 = latDict.keys
         val k3 = lonDict.keys
         if (k1 != k2) {
-            println("mismatch between names and lat " + (k2 - k1).toString() + " " + (k1 - k2).toString())
+            UtilityLog.d(
+                "wX",
+                "mismatch between names and lat " + (k2 - k1).toString() + " " + (k1 - k2).toString()
+            )
         }
         if (k1 != k3) {
-            println("mismatch between names and lon" + (k3 - k1).toString() + " " + (k1 - k3).toString())
+            UtilityLog.d(
+                "wX",
+                "mismatch between names and lon" + (k3 - k1).toString() + " " + (k1 - k3).toString()
+            )
         }
     }
 

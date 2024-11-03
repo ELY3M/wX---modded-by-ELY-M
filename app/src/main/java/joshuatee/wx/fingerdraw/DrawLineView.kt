@@ -63,13 +63,13 @@ class DrawLineView : View {
     private var oneDegreeScaleFactor = 0.0f
 
     constructor(
-            context: Context,
-            radarSite: String,
-            mScaleFactor: Float,
-            mPositionX: Float,
-            mPositionY: Float,
-            ortInt: Float,
-            oneDegreeScaleFactor: Float
+        context: Context,
+        radarSite: String,
+        mScaleFactor: Float,
+        mPositionX: Float,
+        mPositionY: Float,
+        ortInt: Float,
+        oneDegreeScaleFactor: Float
     ) : super(context) {
         this.mScaleFactor = mScaleFactor
         this.mPositionX = mPositionX
@@ -137,11 +137,11 @@ class DrawLineView : View {
         test2 = (180.0f / PI * log(tan(PI / 4 + centerX * (PI / 180.0f) / 2.0f), E)).toFloat()
         var newY2 = (test2 + (-mPositionY / mScaleFactor + diffY) / ppd)
         newY2 = (180.0f / PI * (2.0f * atan(exp(newY2 * PI / 180.0f)) - PI / 2.0f)).toFloat()
-        return LatLon.distance(LatLon(newY, newX * -1.0f), LatLon(newY2, newX2 * -1.0f), DistanceUnit.MILE).toFloat()
+        return LatLon.distance(LatLon(newY, newX * -1.0f), LatLon(newY2, newX2 * -1.0f)).toFloat()
     }
 
     private fun distanceBetweenTwoPoints(x1: Float, y1: Float, x2: Float, y2: Float): Float =
-            sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+        sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 
     private inner class DrawListener : OnTouchListener {
         override fun onTouch(view: View, event: MotionEvent): Boolean {

@@ -47,7 +47,6 @@ import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.ShortcutType
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.NavDrawer
 import joshuatee.wx.ui.ObjectDialogue
@@ -59,6 +58,7 @@ import joshuatee.wx.util.UtilityShortcut
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImageMap
+import joshuatee.wx.util.WfoSites
 
 class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -149,7 +149,8 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             arguments[1]
         }
         if (product.startsWith("RTP") && product.length == 5) {
-            val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
+//            val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
+            val state = WfoSites.getState(wfo)
             product = "RTP$state"
         }
     }
@@ -158,7 +159,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         invalidateOptionsMenu()
         when (navDrawer.token) {
             "RTPZZ" -> {
-                val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
+                val state = WfoSites.getState(wfo)
                 getProduct(navDrawer.token.replace("ZZ", state))
             }
 
@@ -373,7 +374,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                             wfo = locationList[it].split(" ").getOrNull(0) ?: ""
                             originalWfo = wfo
                             if (product.startsWith("RTP") && product.length == 5) {
-                                val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
+                                val state = WfoSites.getState(wfo)
                                 product = "RTP$state"
                             }
                         }

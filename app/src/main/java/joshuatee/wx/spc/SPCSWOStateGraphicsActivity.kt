@@ -34,11 +34,11 @@ import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ImageSummary
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.WfoSites
 
 class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
@@ -72,9 +72,14 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, bottomToolbar = false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_spcswostate,
+            R.menu.spcswostate_top,
+            bottomToolbar = false
+        )
         day = intent.getStringArrayExtra(NO)!![0]
-        state = UtilityLocation.getWfoSiteName(Location.wfo).split(",")[0]
+        state = WfoSites.getState(Location.wfo)
         box = VBox.fromResource(this)
         getContent()
     }
@@ -110,7 +115,12 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
                 state = statesLower48[it].split(":")[0]
             }
 
-            R.id.action_share -> UtilityShare.text(this, "$state SWO D$day", "", bitmaps) // UtilityShare.bitmap(this, "$state SWO D$day", touchImage)
+            R.id.action_share -> UtilityShare.text(
+                this,
+                "$state SWO D$day",
+                "",
+                bitmaps
+            ) // UtilityShare.bitmap(this, "$state SWO D$day", touchImage)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -40,7 +40,6 @@ import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.UtilityLocation
@@ -94,7 +93,11 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer_bottom_toolbar, R.menu.spc_stormreports)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_show_navdrawer_bottom_toolbar,
+            R.menu.spc_stormreports
+        )
         val arguments = intent.getStringArrayExtra(DAY)!!
         dayArgument = arguments[0]
         setTitle("() Storm Reports -", dayArgument + helpTitle)
@@ -185,7 +188,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         stormReports = UtilitySpcStormReports.process(linesOfData)
         var stormCount = 0
         stormReports.forEachIndexed { k, stormReport ->
-            val isHeader = stormReport.damageHeader == "Tornado Reports" || stormReport.damageHeader == "Wind Reports" || stormReport.damageHeader == "Hail Reports"
+            val isHeader =
+                stormReport.damageHeader == "Tornado Reports" || stormReport.damageHeader == "Wind Reports" || stormReport.damageHeader == "Hail Reports"
             if (filter == "All" || stormReport.state == filter || isHeader) {
                 if (stormReport.state != "") {
                     if (mapState.contains(stormReport.state)) {
@@ -201,7 +205,11 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     stormCount += 1
                 }
                 cardStormReportItem.connect {
-                    Route.webView(this, UtilityMap.getUrl(stormReport.lat, stormReport.lon, "10"), "${stormReport.lat},${stormReport.lon}")
+                    Route.webView(
+                        this,
+                        UtilityMap.getUrl(stormReport.lat, stormReport.lon, "10"),
+                        "${stormReport.lat},${stormReport.lon}"
+                    )
                 }
                 if (!(stormReport.damageReport.contains("(") && stormReport.damageReport.contains(")"))) {
                     cardStormReportItem.setTextHeader(stormReport)
@@ -262,7 +270,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val index = v.id
         val x = stormReports[index].lat
         val y = stormReports[index].lon
-        val radarSite = UtilityLocation.getNearestOffice(OfficeTypeEnum.RADAR, LatLon(x, y))
+        val radarSite = UtilityLocation.getNearestRadarSiteCode(LatLon(x, y))
         menu.add(0, v.id, 0, "Show L2REF from $radarSite")
         menu.add(0, v.id, 0, "Show L2VEL from $radarSite")
     }
@@ -280,7 +288,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var x = stormReports[id].lat
         var y = stormReports[id].lon
         var time = stormReports[id].time
-        var radarSite = UtilityLocation.getNearestOffice(OfficeTypeEnum.RADAR, LatLon(x, y))
+        var radarSite = UtilityLocation.getNearestRadarSiteCode(LatLon(x, y))
         time = time.take(3)
         if (prod == "TR0" || prod == "TV0") {
             radarSite = NexradUtil.getTdwrFromRid(radarSite)
@@ -297,7 +305,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             y = "0.0"
         }
         if (prod == "L2REF" || prod == "L2VEL") {
-            Route.radar(this, arrayOf(radarSite, "", prod, "", patternL2, x, y))
+            Route.radar(this, arrayOf(radarSite, "STATE NOT USED", prod, "", patternL2, x, y))
         }
     }
 
@@ -309,9 +317,25 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", image, textForShare.toString())
-            R.id.action_share_text -> UtilityShare.text(this, "Storm Reports - $dayArgument", textForShare.toString())
-            R.id.action_share_image -> UtilityShare.bitmap(this, "Storm Reports - $dayArgument", image)
+            R.id.action_share_all -> UtilityShare.bitmap(
+                this,
+                "Storm Reports - $dayArgument",
+                image,
+                textForShare.toString()
+            )
+
+            R.id.action_share_text -> UtilityShare.text(
+                this,
+                "Storm Reports - $dayArgument",
+                textForShare.toString()
+            )
+
+            R.id.action_share_image -> UtilityShare.bitmap(
+                this,
+                "Storm Reports - $dayArgument",
+                image
+            )
+
             R.id.action_lsrbywfo -> Route.lsrByWfo(this)
             else -> return super.onOptionsItemSelected(item)
         }

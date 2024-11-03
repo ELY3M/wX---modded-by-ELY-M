@@ -32,7 +32,6 @@ import android.widget.TextView
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
-import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.radar.UtilitySpotter
@@ -88,9 +87,19 @@ class SpottersActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab_spotters, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_recyclerview_toolbar_with_onefab_spotters,
+            null,
+            false
+        )
         setTitle(titleString, "Tap on name for actions.")
-        FabExtended(this, R.id.fab, R.drawable.ic_info_outline_24dp_white, "Spotter Reports") { goToSpotterReports() }
+        FabExtended(
+            this,
+            R.id.fab,
+            R.drawable.ic_info_outline_24dp_white,
+            "Spotter Reports"
+        ) { goToSpotterReports() }
         recyclerView = RecyclerViewGeneric(this, R.id.card_list)
         UtilityLog.d("spotter", UIPreferences.spotterFav)
         getContent()
@@ -141,7 +150,8 @@ class SpottersActivity : BaseActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun checkFavorite(position: Int) {
         if (UIPreferences.spotterFav.contains(spotterList[position].unique + ":")) {
-            UIPreferences.spotterFav = UIPreferences.spotterFav.replace(spotterList[position].unique + ":", "")
+            UIPreferences.spotterFav =
+                UIPreferences.spotterFav.replace(spotterList[position].unique + ":", "")
             spotterList[position].lastName = spotterList[position].lastName.replace("0FAV ", "")
         } else {
             UIPreferences.spotterFav = UIPreferences.spotterFav + spotterList[position].unique + ":"
@@ -153,7 +163,11 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun markFavorites() {
-        spotterList.filter { UIPreferences.spotterFav.contains(it.unique + ":") && !it.lastName.contains("0FAV ") }.forEach {
+        spotterList.filter {
+            UIPreferences.spotterFav.contains(it.unique + ":") && !it.lastName.contains(
+                "0FAV "
+            )
+        }.forEach {
             it.lastName = "0FAV " + it.lastName
         }
         sortSpotters()
@@ -169,7 +183,8 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun itemClicked(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment(this, position, adapter.getItem(position).toString(), false)
+        val bottomSheetFragment =
+            BottomSheetFragment(this, position, adapter.getItem(position).toString(), false)
         with(bottomSheetFragment) {
             functions = listOf(::showItemOnRadar, ::showItemOnMap, ::toggleFavorite)
             labelList = listOf("Show on radar", "Show on map", "Toggle favorite")
@@ -178,13 +193,15 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun showItemOnMap(position: Int) {
-        Route.webView(this,
-                UtilityMap.getUrl(spotterList[position].latLon, "9"),
-                spotterList[position].lastName + ", " + spotterList[position].firstName)
+        Route.webView(
+            this,
+            UtilityMap.getUrl(spotterList[position].latLon, "9"),
+            spotterList[position].lastName + ", " + spotterList[position].firstName
+        )
     }
 
     private fun showItemOnRadar(position: Int) {
-        val radarSite = UtilityLocation.getNearestOffice(OfficeTypeEnum.RADAR, spotterList[position].latLon)
+        val radarSite = UtilityLocation.getNearestRadarSiteCode(spotterList[position].latLon)
         Route.radarWithOneSpotter(this, radarSite, spotterList[position].unique)
     }
 

@@ -27,7 +27,6 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.UtilitySpotter
 import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.RecyclerViewGeneric
@@ -47,7 +46,8 @@ class SpotterReportsActivity : BaseActivity() {
         val adapterSpotterReports = AdapterSpotterReports(UtilitySpotter.reports)
         recyclerViewGeneric.adapter = adapterSpotterReports
         updateTitles()
-        adapterSpotterReports.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {
+        adapterSpotterReports.setOnItemClickListener(object :
+            AdapterSpotterReports.MyClickListener {
             override fun onItemClick(position: Int) {
                 itemClicked(position)
             }
@@ -62,11 +62,15 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     private fun updateTitles() {
-        setTitle(UtilitySpotter.reports.size.toString() + " Spotter reports", ObjectDateTime.gmtTime("HH:mm") + " UTC")
+        setTitle(
+            UtilitySpotter.reports.size.toString() + " Spotter reports",
+            ObjectDateTime.gmtTime("HH:mm") + " UTC"
+        )
     }
 
     private fun itemClicked(position: Int) {
-        val radarSite = UtilityLocation.getNearestOffice(OfficeTypeEnum.RADAR, UtilitySpotter.reports[position].latLon)
+        val radarSite =
+            UtilityLocation.getNearestRadarSiteCode(UtilitySpotter.reports[position].latLon)
         Route.radarWithOneSpotter(this, radarSite, UtilitySpotter.reports[position].uniq)
     }
 }

@@ -32,6 +32,7 @@ import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.WfoSites
 import joshuatee.wx.wpc.UtilityWpcText
 
 class FavRemoveActivity : BaseActivity() {
@@ -157,7 +158,7 @@ class FavRemoveActivity : BaseActivity() {
     private fun getFullString(shortCode: String) = when (type) {
 //        FavoriteType.SND -> UtilityLocation.getSoundingSiteName(shortCode)
         FavoriteType.SND -> SoundingSites.sites.byCode[shortCode]!!.fullName
-        FavoriteType.WFO -> shortCode + ": " + UtilityLocation.getWfoSiteName(shortCode)
+        FavoriteType.WFO -> shortCode + ": " + WfoSites.getFullName(shortCode)
         FavoriteType.RID -> shortCode + ": " + UtilityLocation.getRadarSiteName(shortCode)
         FavoriteType.NWS_TEXT -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
         FavoriteType.SREF -> shortCode

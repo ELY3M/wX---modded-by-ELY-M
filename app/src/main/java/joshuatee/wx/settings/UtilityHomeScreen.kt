@@ -84,10 +84,6 @@ internal object UtilityHomeScreen {
 //                            args[z] = UtilityLocation.getNearestSoundingSite(LatLon(Location.x, Location.y))
                         if (args[z] == "WFO_FOR_GOES")
                             args[z] = Location.wfo.lowercase(Locale.US)
-                        if (args[z] == "STATE_LOWER")
-                            args[z] = Location.state.lowercase(Locale.US)
-                        if (args[z] == "STATE_UPPER")
-                            args[z] = Location.state
                         if (args[z] == "RID_FOR_CA")
                             args[z] = Location.rid
                     }
@@ -172,7 +168,7 @@ internal object UtilityHomeScreen {
         classId["SND"] = SpcSoundingsActivity.URL
 
         classes["OBS"] = SpcSoundingsActivity::class.java
-        classArgs["OBS"] = arrayOf("STATE_LOWER", "")
+        classArgs["OBS"] = arrayOf("", "")
         classId["OBS"] = SpcSoundingsActivity.URL
 
         classes["RTMA_DEW"] = RtmaActivity::class.java

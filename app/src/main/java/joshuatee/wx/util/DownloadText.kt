@@ -260,8 +260,9 @@ object DownloadText {
             prod.startsWith("RWR") -> {
                 val product = prod.substring(0, 3)
                 val location = prod.substring(3).replace("%", "")
-                val locationName = UtilityLocation.getWfoSiteName(location)
-                val state = locationName.split(",")[0]
+//                val locationName = UtilityLocation.getWfoSiteName(location)
+//                val state = locationName.split(",")[0]
+                val state = WfoSites.getState(location)
                 val url =
                     "https://forecast.weather.gov/product.php?site=$location&issuedby=$state&product=$product"
                 // https://forecast.weather.gov/product.php?site=ILX&issuedby=IL&product=RWR

@@ -270,18 +270,17 @@ class Route() {
             if (!UIPreferences.dualpaneRadarIcon) {
                 radar(context, arrayOf(Location.rid, ""))
             } else {
-                radarMultiPane(context, arrayOf(Location.rid, "", "2"))
+                radarMultiPane(context, arrayOf(Location.rid, "STATE NOT USED", "2"))
             }
         }
 
         fun radarBySite(context: Context, radarSite: String) {
             val radarLabel = UtilityLocation.getRadarSiteName(radarSite)
-            val state = radarLabel.split(",")[0]
-            radar(context, arrayOf(radarSite, state, "N0Q", ""))
+            radar(context, arrayOf(radarSite, "STATE NOT USED", "N0Q", ""))
         }
 
         fun radarWithOneSpotter(context: Context, radarSite: String, spotter: String) {
-            radar(context, arrayOf(radarSite, "", "N0Q", "", spotter))
+            radar(context, arrayOf(radarSite, "STATE NOT USED", "N0Q", "", spotter))
         }
 
         fun radarMultiPane(context: Context, array: Array<String>) {
@@ -294,11 +293,11 @@ class Route() {
         }
 
         fun radarMultiPane2(context: Context) {
-            radarMultiPane(context, arrayOf(Location.rid, "", "2"))
+            radarMultiPane(context, arrayOf(Location.rid, "STATE NOT USED", "2"))
         }
 
         fun radarMultiPane4(context: Context) {
-            radarMultiPane(context, arrayOf(Location.rid, "", "4"))
+            radarMultiPane(context, arrayOf(Location.rid, "STATE NOT USED", "4"))
         }
 
         fun radarMosaic(context: Context) {

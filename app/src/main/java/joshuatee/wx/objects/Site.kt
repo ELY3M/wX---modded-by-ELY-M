@@ -39,4 +39,12 @@ class Site(
         }
         latLon = LatLon(lat, lon)
     }
+
+    companion object {
+        fun fromLatLon(codeName: String, fullName: String, latLon: LatLon, distance: Double): Site {
+            val site = Site(codeName, fullName, latLon.latString, latLon.lonString, false)
+            site.distance = distance.toInt()
+            return site
+        }
+    }
 }

@@ -2,9 +2,10 @@
 
 # Developer ChangeLog
 
-## 55919 2024_11_02
+## 55919 2024_11_03
 
-* [ADD]
+* [ADD] remove unnecessary entries in WfoSites.kt and add sites
+* [REF] remove ObjectLocation.state
 
 ## 55918 2024_11_02
 

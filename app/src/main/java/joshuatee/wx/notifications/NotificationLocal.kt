@@ -44,11 +44,9 @@ import joshuatee.wx.misc.HourlyActivity
 import joshuatee.wx.misc.ForecastActivity
 import joshuatee.wx.misc.AlertsDetailActivity
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.NotificationPreferences
-import joshuatee.wx.settings.UtilityLocation
 
 object NotificationLocal {
 
@@ -79,22 +77,36 @@ object NotificationLocal {
             // if an alert is present and user wants a notification with a mini radar image
             // Canada is no longer supported
             //
-            if (alertPresent && Location.locations[locationIndex].notificationRadar && Location.isUS(locationIndex)) {
-                val nwsLocation = UtilityLocation.getWfoSiteName(Location.locations[locationIndex].wfo)
-                val nwsLocationArr = RegExp.comma.split(nwsLocation)
-                val nws1StateCurrent = nwsLocationArr[0]
+            if (alertPresent && Location.locations[locationIndex].notificationRadar && Location.isUS(
+                    locationIndex
+                )
+            ) {
                 val url2 = Location.getRid(locationIndex) + "US"
                 val bitmap = UtilityImg.getNexradRefBitmap(context, Location.getRid(locationIndex))
-                val title = "(" + Location.getName(locationIndex) + ") " + Location.getRid(locationIndex) + " Radar"
-                val notifier2 = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val title =
+                    "(" + Location.getName(locationIndex) + ") " + Location.getRid(locationIndex) + " Radar"
+                val notifier2 =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val resultIntent2 = Intent(context, WXGLRadarActivity::class.java)
-                resultIntent2.putExtra(WXGLRadarActivity.RID, arrayOf(Location.getRid(locationIndex), nws1StateCurrent))
+                resultIntent2.putExtra(
+                    WXGLRadarActivity.RID,
+                    arrayOf(Location.getRid(locationIndex), "STATE NOT USED")
+                )
                 val stackBuilder2 = TaskStackBuilder.create(context)
                 stackBuilder2.addParentStack(WX::class.java)
                 stackBuilder2.addNextIntent(resultIntent2)
-                val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                val resultPendingIntent2 = stackBuilder2.getPendingIntent(
+                    y,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
                 if (!(NotificationPreferences.alertOnlyOnce && oldNotifStr.contains(url2 + "radar"))) {
-                    val noti2 = UtilityNotification.createNotificationBigPicture(context, title, resultPendingIntent2, GlobalVariables.ICON_RADAR_WHITE, bitmap)
+                    val noti2 = UtilityNotification.createNotificationBigPicture(
+                        context,
+                        title,
+                        resultPendingIntent2,
+                        GlobalVariables.ICON_RADAR_WHITE,
+                        bitmap
+                    )
                     if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
                         notifier2.notify(url2 + "radar", 1, noti2)
                     }
@@ -119,7 +131,8 @@ object NotificationLocal {
             // https://api.weather.gov/gridpoints/DTX/x,y/forecast
             // problem is if network is down it will be a non deterministic value so we need something different
             val currentUpdateTime = ObjectDateTime.currentTimeMillis()
-            val lastUpdateTime = Utility.readPrefLong(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
+            val lastUpdateTime =
+                Utility.readPrefLong(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
             if (Location.locations[locationIndex].ccNotification) {
                 notificationUrls += url + "CC" + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
             }
@@ -127,7 +140,11 @@ object NotificationLocal {
                 notificationUrls += url + "7day" + NotificationPreferences.NOTIFICATION_STRING_SEPARATOR
             }
             if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
-                Utility.writePrefLong(context, "CC" + locNum + "_LAST_UPDATE", ObjectDateTime.currentTimeMillis())
+                Utility.writePrefLong(
+                    context,
+                    "CC" + locNum + "_LAST_UPDATE",
+                    ObjectDateTime.currentTimeMillis()
+                )
                 sendCurrentConditions(context, locationIndex, locNum, url, x)
                 send7Day(context, locationIndex, url)
             } // end if current time
@@ -135,14 +152,21 @@ object NotificationLocal {
         return notificationUrls
     }
 
-    private fun sendCurrentConditions(context: Context, locationIndex: Int, locNum: String, url: String, x: Int) {
+    private fun sendCurrentConditions(
+        context: Context,
+        locationIndex: Int,
+        locNum: String,
+        url: String,
+        x: Int
+    ) {
         if (Location.locations[locationIndex].ccNotification) {
             val locLabel = " current conditions"
             val label = "(" + Location.getName(locationIndex) + ")" + locLabel
             val currentConditions = CurrentConditions(context, locationIndex)
             currentConditions.timeCheck(context)
             val text = currentConditions.data + GlobalVariables.newline + currentConditions.status
-            val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notifier =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val resultIntent: Intent
             if (Location.isUS(locationIndex)) {
                 resultIntent = Intent(context, HourlyActivity::class.java)
@@ -156,11 +180,15 @@ object NotificationLocal {
             else
                 stackBuilder.addParentStack(HourlyActivity::class.java)
             stackBuilder.addNextIntent(resultIntent)
-            val resultPendingIntent = stackBuilder.getPendingIntent(x, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            val resultPendingIntent = stackBuilder.getPendingIntent(
+                x,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
             //
             // determine temp icon to show
             //
-            val tmpArr = text.split(GlobalVariables.DEGREE_SYMBOL.toRegex()).dropLastWhile { it.isEmpty() }
+            val tmpArr =
+                text.split(GlobalVariables.DEGREE_SYMBOL.toRegex()).dropLastWhile { it.isEmpty() }
             var smallIconResource = R.drawable.temp_0
             if (tmpArr.isNotEmpty()) {
                 smallIconResource = if (Location.isUS(locationIndex)) {
@@ -179,15 +207,15 @@ object NotificationLocal {
                 UtilityForecastIcon.getIcon(context, "ra")
             }
             val notification = UtilityNotification.createNotificationBigTextBigIcon(
-                    context,
-                    false,
-                    label,
-                    text,
-                    resultPendingIntent,
-                    smallIconResource,
-                    bitmap,
-                    text,
-                    NotificationCompat.PRIORITY_HIGH
+                context,
+                false,
+                label,
+                text,
+                resultPendingIntent,
+                smallIconResource,
+                bitmap,
+                text,
+                NotificationCompat.PRIORITY_HIGH
             )
             notifier.notify(url + "CC", 1, notification)
         }
@@ -198,22 +226,22 @@ object NotificationLocal {
             val label = "(" + Location.getName(locationIndex) + ")" + " 7 day"
             val objSevenDay = SevenDay(locationIndex)
             val objectPendingIntents = ObjectPendingIntents(
-                    context,
-                    ForecastActivity::class.java,
-                    ForecastActivity.URL,
-                    arrayOf(Location.locations[locationIndex].x, Location.locations[locationIndex].y),
-                    arrayOf(Location.locations[locationIndex].x, Location.locations[locationIndex].y)
+                context,
+                ForecastActivity::class.java,
+                ForecastActivity.URL,
+                arrayOf(Location.locations[locationIndex].x, Location.locations[locationIndex].y),
+                arrayOf(Location.locations[locationIndex].x, Location.locations[locationIndex].y)
             )
             val objectNotification = ObjectNotification(
-                    context,
-                    false,
-                    label,
-                    objSevenDay.sevenDayShort,
-                    objectPendingIntents,
-                    GlobalVariables.ICON_FORECAST,
-                    GlobalVariables.ICON_ACTION,
-                    "7 Day Forecast",
-                    NotificationCompat.PRIORITY_MIN // 2022-09-03 was Notification.PRIORITY_MIN
+                context,
+                false,
+                label,
+                objSevenDay.sevenDayShort,
+                objectPendingIntents,
+                GlobalVariables.ICON_FORECAST,
+                GlobalVariables.ICON_ACTION,
+                "7 Day Forecast",
+                NotificationCompat.PRIORITY_MIN // 2022-09-03 was Notification.PRIORITY_MIN
             )
             objectNotification.send(url + "7day")
         } // end 7 day
@@ -222,7 +250,11 @@ object NotificationLocal {
     //
     // check for local alerts and send notification if found (called by function send)
     //
-    private fun checkForNotifications(context: Context, locationIndex: Int, inBlackout: Boolean): String {
+    private fun checkForNotifications(
+        context: Context,
+        locationIndex: Int,
+        inBlackout: Boolean
+    ): String {
         val tornadoWarningString = "Tornado Warning"
         val html = Hazards.getHazardsHtml(Location.getLatLon(locationIndex))
         var notificationUrls = ""
@@ -237,24 +269,30 @@ object NotificationLocal {
                     val title = locationLabel + hazardTitle
                     val text = hazardTitle + " " + capAlert.area + " " + capAlert.summary
                     val objectPendingIntents = ObjectPendingIntents(
-                            context,
-                            AlertsDetailActivity::class.java,
-                            AlertsDetailActivity.URL,
-                            arrayOf(url, ""),
-                            arrayOf(url, "sound"))
+                        context,
+                        AlertsDetailActivity::class.java,
+                        AlertsDetailActivity.URL,
+                        arrayOf(url, ""),
+                        arrayOf(url, "sound")
+                    )
                     val tornadoWarningPresent = hazardTitle.contains(tornadoWarningString)
-                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
-                        val sound = Location.locations[locationIndex].sound && !inBlackout || Location.locations[locationIndex].sound
-                                && tornadoWarningPresent && NotificationPreferences.alertBlackoutTornado
+                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                            context,
+                            url
+                        ))
+                    ) {
+                        val sound =
+                            Location.locations[locationIndex].sound && !inBlackout || Location.locations[locationIndex].sound
+                                    && tornadoWarningPresent && NotificationPreferences.alertBlackoutTornado
                         val objectNotification = ObjectNotification(
-                                context,
-                                sound,
-                                title,
-                                text,
-                                objectPendingIntents,
-                                GlobalVariables.ICON_ALERT,
-                                GlobalVariables.ICON_ACTION,
-                                context.resources.getString(R.string.read_aloud)
+                            context,
+                            sound,
+                            title,
+                            text,
+                            objectPendingIntents,
+                            GlobalVariables.ICON_ALERT,
+                            GlobalVariables.ICON_ACTION,
+                            context.resources.getString(R.string.read_aloud)
                         )
                         objectNotification.send(url)
                     }

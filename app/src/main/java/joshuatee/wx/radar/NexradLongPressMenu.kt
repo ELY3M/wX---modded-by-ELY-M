@@ -28,7 +28,6 @@ import joshuatee.wx.insert
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarning
 import joshuatee.wx.objects.PolygonWatch
@@ -114,10 +113,10 @@ class NexradLongPressMenu(
             longPressDialogue: ObjectDialogue
         ) {
             longPressList.clear()
-            val dist = LatLon.distance(LatLon(locX, locY), latLon, DistanceUnit.MILE)
+            val dist = LatLon.distance(LatLon(locX, locY), latLon)
             val direction = LatLon.calculateDirection(latLon, LatLon(locX, locY))
-            val radarSiteLatLon = UtilityLocation.getSiteLocation(radarSite, OfficeTypeEnum.RADAR)
-            val distRid = LatLon.distance(radarSiteLatLon, latLon, DistanceUnit.MILE)
+            val radarSiteLatLon = UtilityLocation.getSiteLocation(radarSite)
+            val distRid = LatLon.distance(radarSiteLatLon, latLon)
             val distRidKm = LatLon.distance(radarSiteLatLon, latLon, DistanceUnit.KM)
             val directionFromRadarSite = LatLon.calculateDirection(latLon, radarSiteLatLon)
             val latLonTitle = latLon.prettyPrint()

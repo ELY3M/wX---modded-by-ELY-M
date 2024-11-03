@@ -26,7 +26,6 @@ package joshuatee.wx.radar
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.parse
 import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.UtilityLocation
@@ -39,7 +38,7 @@ internal object NexradLevel3TVS {
     private val pattern2: Pattern = Pattern.compile(".{9}(.{7})")
 
     fun decode(radarSite: String): List<Double> {
-        val location = UtilityLocation.getSiteLocation(radarSite, OfficeTypeEnum.RADAR)
+        val location = UtilityLocation.getSiteLocation(radarSite)
         val data = NexradLevel3TextProduct.download("TVS", radarSite)
         // P  TVS    R7   216/ 50    29    57    57/ 6.5    15.9    6.5/ 22.4    18/ 6.5    &#0;
         val tvs = data.parseColumn(pattern1)
@@ -50,7 +49,12 @@ internal object NexradLevel3TVS {
             val degree = To.int(items[0].replace(" ", ""))
             val nm = To.int(items[1].replace(" ", ""))
             val start = ExternalGlobalCoordinates(location)
-            val externalGlobalCoordinates = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree.toDouble(), nm * 1852.0)
+            val externalGlobalCoordinates =
+                ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
+                    start,
+                    degree.toDouble(),
+                    nm * 1852.0
+                )
             stormList.add(externalGlobalCoordinates.latitude)
             stormList.add(externalGlobalCoordinates.longitude * -1.0)
         }

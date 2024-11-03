@@ -34,7 +34,6 @@ object UtilityVoiceCommand {
     fun processCommand(context: Context, vrStringOriginal: String): Boolean {
         var radarSite = Location.rid
         var wfo = Location.wfo
-        val state = Location.state
         var gotHit = true
         val tokens = RegExp.space.split(vrStringOriginal)
         when {
@@ -47,7 +46,7 @@ object UtilityVoiceCommand {
                     }
                 }
                 if (validRid) {
-                    Route.radar(context, arrayOf(radarSite, state))
+                    Route.radar(context, arrayOf(radarSite, "STATE NOT USED"))
                 }
             }
 
@@ -80,15 +79,27 @@ object UtilityVoiceCommand {
             vrStringOriginal.contains("day 2") -> Route.spcSwo(context, "2", "sound")
             vrStringOriginal.contains("day 3") -> Route.spcSwo(context, "3", "sound")
             vrStringOriginal.contains("day 4") -> Route.spcSwo(context, "4-8", "sound")
-            vrStringOriginal.contains("add") -> Route.locationEdit(context, (Location.numLocations + 1).toString())
-            vrStringOriginal.contains("edit") -> Route.locationEdit(context, Location.currentLocationStr)
+            vrStringOriginal.contains("add") -> Route.locationEdit(
+                context,
+                (Location.numLocations + 1).toString()
+            )
+
+            vrStringOriginal.contains("edit") -> Route.locationEdit(
+                context,
+                Location.currentLocationStr
+            )
+
             vrStringOriginal.contains("mosaic") -> Route.radarMosaic(context)
             vrStringOriginal.contains("map") -> {
                 if (tokens.size > 1) {
                     when (tokens[1]) {
                         "pressure" -> {
                             Utility.writePref(context, "SPCMESO_LAST_USED", "pmsl")
-                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MSL Pressure/Wind")
+                            Utility.writePref(
+                                context,
+                                "SPCMESO_LAST_USED_LABEL",
+                                "MSL Pressure/Wind"
+                            )
                         }
 
                         "500" -> {
@@ -98,12 +109,20 @@ object UtilityVoiceCommand {
 
                         "cape" -> {
                             Utility.writePref(context, "SPCMESO_LAST_USED", "mucp")
-                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MUCAPE / LPL Height")
+                            Utility.writePref(
+                                context,
+                                "SPCMESO_LAST_USED_LABEL",
+                                "MUCAPE / LPL Height"
+                            )
                         }
 
                         "supercell" -> {
                             Utility.writePref(context, "SPCMESO_LAST_USED", "scp")
-                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "Supercell Composite")
+                            Utility.writePref(
+                                context,
+                                "SPCMESO_LAST_USED_LABEL",
+                                "Supercell Composite"
+                            )
                         }
 
                         "wind" -> {
@@ -113,7 +132,11 @@ object UtilityVoiceCommand {
 
                         else -> {
                             Utility.writePref(context, "SPCMESO_LAST_USED", "pmsl")
-                            Utility.writePref(context, "SPCMESO_LAST_USED_LABEL", "MSL Pressure/Wind")
+                            Utility.writePref(
+                                context,
+                                "SPCMESO_LAST_USED_LABEL",
+                                "MSL Pressure/Wind"
+                            )
                         }
                     }
                 }
@@ -122,10 +145,18 @@ object UtilityVoiceCommand {
 
             vrStringOriginal.contains("forecast") -> {
                 val forecast = Utility.readPref(context, "FCST", "")
-                Route.textPlaySound(context, forecast, "Forecast for " + Location.latLon.prettyPrint())
+                Route.textPlaySound(
+                    context,
+                    forecast,
+                    "Forecast for " + Location.latLon.prettyPrint()
+                )
             }
 
-            vrStringOriginal.contains("playlist") -> UtilityTts.synthesizeTextAndPlayPlaylist(context, 1)
+            vrStringOriginal.contains("playlist") -> UtilityTts.synthesizeTextAndPlayPlaylist(
+                context,
+                1
+            )
+
             else -> {
                 gotHit = false
             }

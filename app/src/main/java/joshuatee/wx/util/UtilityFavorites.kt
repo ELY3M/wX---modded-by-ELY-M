@@ -66,7 +66,7 @@ object UtilityFavorites {
             UtilityLog.d("wxFAV", fav)
             val name = when (type) {
                 FavoriteType.RID -> UtilityLocation.getRadarSiteName(fav)
-                FavoriteType.WFO -> UtilityLocation.getWfoSiteName(fav)
+                FavoriteType.WFO -> WfoSites.getFullName(fav)
 //                FavoriteType.SND -> UtilityLocation.getSoundingSiteName(fav)
                 FavoriteType.SND -> SoundingSites.sites.byCode[fav]?.fullName
                 FavoriteType.NWS_TEXT -> UtilityWpcText.getLabel(fav)

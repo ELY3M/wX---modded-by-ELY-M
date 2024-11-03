@@ -30,7 +30,7 @@ import joshuatee.wx.misc.UtilityCapAlert
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.TextSize
-import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.util.WfoSites
 
 class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
 
@@ -45,7 +45,15 @@ class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        vbox.addWidgets(listOf(textViewTop, textViewTitle, textViewStart, textViewEnd, textViewBottom))
+        vbox.addWidgets(
+            listOf(
+                textViewTop,
+                textViewTitle,
+                textViewStart,
+                textViewEnd,
+                textViewBottom
+            )
+        )
         val hbox = HBox(context)
         with(hbox) {
             //wrap() remove for ChromeOS optimization
@@ -59,7 +67,7 @@ class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
         val location: String
         if (capAlert.vtec.length > 15 && capAlert.event != "Special Weather Statement") {
             office = capAlert.vtec.substring(8, 11)
-            location = UtilityLocation.getWfoSiteName(office)
+            location = WfoSites.getFullName(office)
         } else {
             office = ""
             location = ""

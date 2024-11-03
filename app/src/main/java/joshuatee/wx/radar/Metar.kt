@@ -33,7 +33,6 @@ import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.OfficeTypeEnum
 import joshuatee.wx.parse
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
@@ -264,7 +263,7 @@ internal object Metar {
 //        }
         for (it in obsSites.indices) {
             obsSites[it].distance =
-                LatLon.distance(location, obsSites[it].location, DistanceUnit.MILE)
+                LatLon.distance(location, obsSites[it].location)
         }
         try {
             obsSites.sortBy { it.distance }
@@ -282,13 +281,13 @@ internal object Metar {
     //
     @Suppress("SpellCheckingInspection")
     private fun getNearbyObsSites(context: Context, radarSite: String): String {
-        val radarLocation = UtilityLocation.getSiteLocation(radarSite, OfficeTypeEnum.RADAR)
+        val radarLocation = UtilityLocation.getSiteLocation(radarSite)
         val obsListSb = StringBuilder(100)
         loadMetarData(context)
         val obsSiteRange = 200.0
         var currentDistance: Double
         metarSites.forEach {
-            currentDistance = LatLon.distance(radarLocation, it.location, DistanceUnit.MILE)
+            currentDistance = LatLon.distance(radarLocation, it.location)
             if (currentDistance < obsSiteRange) {
                 obsListSb.append(it.name)
                 obsListSb.append(",")
