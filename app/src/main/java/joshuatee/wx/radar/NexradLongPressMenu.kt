@@ -36,6 +36,8 @@ import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.util.SoundingSites
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMath
 import kotlin.math.roundToInt
@@ -113,13 +115,19 @@ class NexradLongPressMenu(
         ) {
             longPressList.clear()
             val dist = LatLon.distance(LatLon(locX, locY), latLon, DistanceUnit.MILE)
+            val direction = LatLon.calculateDirection(latLon, LatLon(locX, locY))
             val radarSiteLatLon = UtilityLocation.getSiteLocation(radarSite, OfficeTypeEnum.RADAR)
             val distRid = LatLon.distance(radarSiteLatLon, latLon, DistanceUnit.MILE)
             val distRidKm = LatLon.distance(radarSiteLatLon, latLon, DistanceUnit.KM)
+            val directionFromRadarSite = LatLon.calculateDirection(latLon, radarSiteLatLon)
             val latLonTitle = latLon.prettyPrint()
             longPressDialogue.setTitle(latLonTitle)
-            longPressList.add("${dist.toString().take(6)} miles from location")
-            longPressList.add("${distRid.toString().take(6)} miles from $radarSite")
+            longPressList.add("${dist.toString().take(6)} mi $direction to location")
+            longPressList.add(
+                "${
+                    distRid.toString().take(6)
+                } mi $directionFromRadarSite to $radarSite"
+            )
             val heightAgl =
                 UtilityMath.getRadarBeamHeight(wxglNexradLevel3.degree.toDouble(), distRidKm)
             val heightMsl = wxglNexradLevel3.radarHeight + heightAgl
@@ -131,7 +139,12 @@ class NexradLongPressMenu(
                 longPressList.add("WPC Fronts: ${getWpcFrontTimeStamp(context)}")
             }
             longPressList += closestRadarSites.map {
-                "${it.name} ${UtilityLocation.getRadarSiteName(it.name)} ${it.distance.roundToInt()} mi"
+                "${it.name} ${UtilityLocation.getRadarSiteName(it.name)} ${it.distance.roundToInt()} mi ${
+                    LatLon.calculateDirection(
+                        latLon,
+                        it.location
+                    )
+                }"
             }
             //elys mod
 	    if ((RadarPreferences.warnings || PolygonWarning.areAnyEnabled()) /*&& PolygonWarning.isCountNonZero()*/) {
@@ -149,15 +162,24 @@ class NexradLongPressMenu(
             }
             // end Thanks to Ely
             val obsSite = Metar.findClosestObservation(context, latLon)
+            val obsDirection = LatLon.calculateDirection(latLon, obsSite.location)
             with(longPressList) {
             //elys mod
                 add("Radar Mosaic")
                 add("GOES Satellite")
-                add("Observation: ${obsSite.name} ${obsSite.distance.roundToInt()} mi")
+                add("Observation: ${obsSite.name} ${obsSite.distance.roundToInt()} mi $obsDirection")
                 add("Forecast: $latLonTitle")
                 add("Meteogram: ${obsSite.name}")
                 add("Radar status message: ${closestRadarSites.first().name}")
             }
+            val nearestSoundingCode = SoundingSites.sites.getNearest(latLon)
+            val nearestSoundingLatLon = SoundingSites.sites.byCode[nearestSoundingCode]!!.latLon
+            val directionToSounding = LatLon.calculateDirection(latLon, nearestSoundingLatLon)
+            longPressList.add(
+                "Sounding: $nearestSoundingCode " + To.string(
+                    SoundingSites.sites.getNearestInMiles(latLon)
+                ) + " mi $directionToSounding"
+            )	    
             //elys mod
             if (RadarPreferences.spotters || RadarPreferences.spottersLabel) longPressList.add("Spotter Info")
 	        longPressList.add("Userpoint info: " + latLonTitle)
@@ -183,6 +205,8 @@ class NexradLongPressMenu(
             radarSite: String,
             function: (String) -> Unit
         ) {
+            val nearestSoundingCode = SoundingSites.sites.getNearest(latLon)
+
             when {
                 s.contains("miles from") -> {}
                 s.contains("Show Warning") -> NexradRenderUI.showNearestWarning(activity, latLon)
@@ -216,6 +240,7 @@ class NexradLongPressMenu(
                     radarSite
                 )
 
+                s.startsWith("Sounding") -> Route.sounding(activity, nearestSoundingCode)
                 s.startsWith("Beam") -> {}
             	//elys mod //need context....
             	s.contains("Spotter Info") -> NexradRenderUI.showSpotterInfo(activity, latLon)

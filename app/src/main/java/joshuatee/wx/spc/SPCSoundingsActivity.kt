@@ -38,12 +38,12 @@ import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.FutureBytes2
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityImg
@@ -64,6 +64,7 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     private lateinit var star: MenuItem
     private var locations = listOf<String>()
     private var upperAir = ""
+    private lateinit var arguments: Array<String>
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spcsoundings_top, menu)
@@ -77,7 +78,13 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_spcsoundings,
+            R.menu.spcsoundings,
+            true
+        )
+        arguments = intent.getStringArrayExtra(URL)!!
         setupUI()
         getContent()
     }
@@ -86,8 +93,20 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         objectToolbarBottom.connect(this)
         star = objectToolbarBottom.getFavIcon()
         touchImage = TouchImage(this, toolbar, toolbarBottom, R.id.iv)
-        office = UtilityLocation.getNearestSoundingSite(Location.latLon)
-        imageMap = ObjectImageMap(this, R.id.map, objectToolbar, objectToolbarBottom, listOf<View>(touchImage.get()))
+//        office = UtilityLocation.getNearestSoundingSite(Location.latLon)
+
+        office = if (arguments.size > 1 && arguments[1] != "") {
+            arguments[1]
+        } else {
+            SoundingSites.sites.getNearest(Location.latLon)
+        }
+        imageMap = ObjectImageMap(
+            this,
+            R.id.map,
+            objectToolbar,
+            objectToolbarBottom,
+            listOf<View>(touchImage.get())
+        )
         imageMap.connect(::mapSwitch, UtilityImageMap::mapToSnd)
     }
 
@@ -140,7 +159,12 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
             R.id.action_sfc -> setPlotAndGet("sfc")
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_fav -> toggleFavorite()
-            R.id.action_spc_help -> Route.webView(this, "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/help/begin.html", office)
+            R.id.action_spc_help -> Route.webView(
+                this,
+                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/help/begin.html",
+                office
+            )
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

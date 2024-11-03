@@ -30,6 +30,7 @@ import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
+import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.wpc.UtilityWpcText
@@ -64,7 +65,8 @@ class FavAddActivity : BaseActivity() {
     private fun setupVars() {
         when (type) {
             FavoriteType.SND -> {
-                data = GlobalArrays.soundingSites.map { "$it " + UtilityLocation.getSoundingSiteName(it) }
+//                data = GlobalArrays.soundingSites.map { "$it " + UtilityLocation.getSoundingSiteName(it) }
+                data = SoundingSites.sites.nameList
                 verboseTitle = "sounding site"
             }
 
@@ -98,10 +100,14 @@ class FavAddActivity : BaseActivity() {
 
     private fun itemClicked(position: Int) {
         val item = data[position]
-        var favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.INITIAL_VALUE)
+        var favoriteString = Utility.readPref(
+            this,
+            UtilityFavorites.getPrefToken(type),
+            UtilityFavorites.INITIAL_VALUE
+        )
         val sourceString = when (type) {
             FavoriteType.SPCMESO -> dataTokens[position]
-            FavoriteType.SND -> GlobalArrays.soundingSites[position]
+            FavoriteType.SND -> SoundingSites.sites.nameList[position]
             else -> data[position]
         }
         val tokens = if (sourceString.contains(":")) {

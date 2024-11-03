@@ -14,6 +14,8 @@
 
 ## Features
 
+* [ADD] text for Soundings
+* [ADD] migrate Nexrad/Wfo sites to  Sites/Site framework
 * [ADD] edge-to-edge
     - https://developer.android.com/about/versions/15/behavior-changes-15#ux
     - https://developer.android.com/develop/ui/compose/layouts/insets

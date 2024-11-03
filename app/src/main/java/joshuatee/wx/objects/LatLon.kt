@@ -25,6 +25,7 @@ import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.util.UtilityString
 import kotlin.math.acos
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import joshuatee.wx.isEven
@@ -123,6 +124,10 @@ class LatLon() {
             lonNum = To.double(newValue)
         }
 
+    private fun latInRadians() = UtilityMath.deg2rad(lat)
+
+    private fun lonInRadians() = UtilityMath.deg2rad(lon)
+
     val latForNws: String
         get() {
             return latNum.toBigDecimal().setScale(4, RoundingMode.UP).toDouble().toString()
@@ -149,7 +154,11 @@ class LatLon() {
 
         // 1.1515 is the number of statute miles in a nautical mile
         // 1.609344 is the number of kilometres in a mile
-        fun distance(location1: LatLon, location2: LatLon, unit: DistanceUnit): Double {
+        fun distance(
+            location1: LatLon,
+            location2: LatLon,
+            unit: DistanceUnit = DistanceUnit.MILE
+        ): Double {
             val theta = location1.lon - location2.lon
             var dist =
                 sin(UtilityMath.deg2rad(location1.lat)) * sin(UtilityMath.deg2rad(location2.lat)) + cos(
@@ -164,6 +173,27 @@ class LatLon() {
                 DistanceUnit.NAUTICAL_MILE -> dist * 0.8684
                 else -> dist
             }
+        }
+
+        private fun calculateBearing(start: LatLon, end: LatLon): Int {
+            val deltaLon = end.lonInRadians() - start.lonInRadians()
+            val x = cos(end.latInRadians()) * sin(deltaLon)
+            val y =
+                cos(start.latInRadians()) * sin(end.latInRadians()) - sin(start.latInRadians()) * cos(
+                    end.latInRadians()
+                ) * cos(
+                    deltaLon
+                )
+            val b = atan2(x, y)
+            var bearing = UtilityMath.rad2deg(b).toInt() % 360
+            if (bearing < 0) {
+                bearing += 360
+            }
+            return bearing
+        }
+
+        fun calculateDirection(start: LatLon, end: LatLon): String {
+            return UtilityMath.bearingToDirection(calculateBearing(start, end))
         }
 
         // take a space separated list of numbers and return a list of LatLon, list is of the format

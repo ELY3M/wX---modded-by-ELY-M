@@ -50,7 +50,7 @@ class NhcStormDetails(
     var center = "$lat $lon"
     var dateTime = lastUpdate
     var movement =
-        UtilityMath.convertWindDir(To.double(movementDir)) + " at " + movementSpeed + " mph"
+        UtilityMath.bearingToDirection(To.int(movementDir)) + "(${movementDir}) at " + movementSpeed + " mph"
     var baseUrl: String
     var goesUrl: String
     var advisoryNumber = advisoryUrl.split("/").last().replace(".shtml", "")

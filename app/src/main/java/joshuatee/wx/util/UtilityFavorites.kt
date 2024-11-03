@@ -40,7 +40,8 @@ object UtilityFavorites {
             savePref(context, newFav, type)
         }
         if (!UIPreferences.favorites[type]!!.contains(GlobalVariables.PREFERENCE_SEPARATOR)) {
-            val newFav = GlobalVariables.PREFERENCE_SEPARATOR + UIPreferences.favorites[type]!!.trimStart()
+            val newFav =
+                GlobalVariables.PREFERENCE_SEPARATOR + UIPreferences.favorites[type]!!.trimStart()
             savePref(context, newFav, type)
         }
     }
@@ -52,7 +53,8 @@ object UtilityFavorites {
 
     fun setupMenu(context: Context, value: String, type: FavoriteType): List<String> {
         checkAndCorrect(context, type)
-        var favorites = UIPreferences.favorites[type]!!.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
+        var favorites = UIPreferences.favorites[type]!!.split(":").dropLastWhile { it.isEmpty() }
+            .toMutableList()
         if (favorites.size < 3) {
             favorites = MutableList(3) { "" }
         }
@@ -61,10 +63,12 @@ object UtilityFavorites {
         favorites[2] = "Modify..."
         val returnList = MutableList(favorites.size) { "" }
         favorites.forEachIndexed { k, fav ->
+            UtilityLog.d("wxFAV", fav)
             val name = when (type) {
                 FavoriteType.RID -> UtilityLocation.getRadarSiteName(fav)
                 FavoriteType.WFO -> UtilityLocation.getWfoSiteName(fav)
-                FavoriteType.SND -> UtilityLocation.getSoundingSiteName(fav)
+//                FavoriteType.SND -> UtilityLocation.getSoundingSiteName(fav)
+                FavoriteType.SND -> SoundingSites.sites.byCode[fav]?.fullName
                 FavoriteType.NWS_TEXT -> UtilityWpcText.getLabel(fav)
                 FavoriteType.SPCMESO -> UtilitySpcMeso.getLabelFromParam(fav)
                 FavoriteType.SREF -> ""

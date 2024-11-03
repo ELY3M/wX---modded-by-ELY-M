@@ -24,7 +24,6 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.objects.TextSize
 

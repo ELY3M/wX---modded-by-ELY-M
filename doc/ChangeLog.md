@@ -2,9 +2,33 @@
 
 # Developer ChangeLog
 
-## 55918 2024_10_14
+## 55919 2024_11_02
 
 * [ADD]
+
+## 55918 2024_11_02
+
+* [ADD] additional Soundings sites (especially AK/HI), remove some that were obsolete
+* [ADD] Sites/Site framework to be used by Sounding sites and wfo/radar in the future
+* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom (
+  includes direction)
+* [ADD] Nexrad "Long press" now shows direction in addition to distance for closest radars and
+  observation point
+* [ADD] Nexrad "Long press" more concise verbiage: miles to mi (in 2 spots)
+* [ADD] Nexrad "Long press" miles to location/radar site enhanced to show direction to
+* [ADD] NHC Storm card - show bearing after direction
+* [ADD] tool/lib updates
+
+```
+-        classpath 'com.android.tools.build:gradle:8.7.1'
++        classpath 'com.android.tools.build:gradle:8.7.2'
+
+-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6'
++    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
+
+-    implementation 'androidx.core:core-ktx:1.13.1'
++    implementation 'androidx.core:core-ktx:1.15.0'
+```
 
 ## 55917 2024_10_14
 

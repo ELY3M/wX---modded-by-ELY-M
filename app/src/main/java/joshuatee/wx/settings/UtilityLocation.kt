@@ -72,8 +72,15 @@ object UtilityLocation {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val providers = locationManager.getProviders(true)
         var location: Location? = null
-        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             for (i in providers.indices.reversed()) {
                 location = locationManager.getLastKnownLocation(providers[i])
                 if (location != null)
@@ -100,7 +107,17 @@ object UtilityLocation {
         val sites = mutableListOf<RID>()
         officeArray.forEach {
             val labelArr = it.split(":")
-            sites.add(RID(labelArr[0], getSiteLocation(labelArr[0], prefToken), LatLon.distance(location, getSiteLocation(labelArr[0], prefToken), DistanceUnit.KM)))
+            sites.add(
+                RID(
+                    labelArr[0],
+                    getSiteLocation(labelArr[0], prefToken),
+                    LatLon.distance(
+                        location,
+                        getSiteLocation(labelArr[0], prefToken),
+                        DistanceUnit.KM
+                    )
+                )
+            )
         }
         sites.sortBy { it.distance }
         return sites[0].name
@@ -110,28 +127,48 @@ object UtilityLocation {
         val radarSites = mutableListOf<RID>()
         GlobalArrays.radars.forEach {
             val labels = it.split(":")
-            radarSites.add(RID(labels[0], getSiteLocation(labels[0], OfficeTypeEnum.RADAR), LatLon.distance(location, getSiteLocation(labels[0], OfficeTypeEnum.RADAR), DistanceUnit.MILE)))
+            radarSites.add(
+                RID(
+                    labels[0],
+                    getSiteLocation(labels[0], OfficeTypeEnum.RADAR),
+                    LatLon.distance(
+                        location,
+                        getSiteLocation(labels[0], OfficeTypeEnum.RADAR),
+                        DistanceUnit.MILE
+                    )
+                )
+            )
         }
         if (includeTdwr) {
             GlobalArrays.tdwrRadars.forEach {
                 val labels = it.split(":")
-                radarSites.add(RID(labels[0], getSiteLocation(labels[0], OfficeTypeEnum.RADAR), LatLon.distance(location, getSiteLocation(labels[0], OfficeTypeEnum.RADAR), DistanceUnit.MILE)))
+                radarSites.add(
+                    RID(
+                        labels[0],
+                        getSiteLocation(labels[0], OfficeTypeEnum.RADAR),
+                        LatLon.distance(
+                            location,
+                            getSiteLocation(labels[0], OfficeTypeEnum.RADAR),
+                            DistanceUnit.MILE
+                        )
+                    )
+                )
             }
         }
         radarSites.sortBy { it.distance }
         return radarSites.subList(0, count)
     }
 
-    fun getNearestSoundingSite(location: LatLon): String {
-        val sites = GlobalArrays.soundingSites.map {
-            RID(it, getSiteLocation(it, OfficeTypeEnum.SOUNDING), LatLon.distance(location, getSiteLocation(it, OfficeTypeEnum.SOUNDING), DistanceUnit.KM))
-        }.toMutableList()
-        sites.forEach {
-            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM)
-        }
-        sites.sortBy { it.distance }
-        return sites[0].name
-    }
+//    fun getNearestSoundingSite(location: LatLon): String {
+//        val sites = GlobalArrays.soundingSites.map {
+//            RID(it, getSiteLocation(it, OfficeTypeEnum.SOUNDING), LatLon.distance(location, getSiteLocation(it, OfficeTypeEnum.SOUNDING), DistanceUnit.KM))
+//        }.toMutableList()
+//        sites.forEach {
+//            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM)
+//        }
+//        sites.sortBy { it.distance }
+//        return sites[0].name
+//    }
 
     fun getSiteLocation(site: String, officeType: OfficeTypeEnum): LatLon {
         // SND, NWS, or RID
@@ -154,8 +191,11 @@ object UtilityLocation {
             }
 
             OfficeTypeEnum.SOUNDING -> {
-                x = getSoundingSiteX(site.uppercase(Locale.US))
-                y = addChar + getSoundingSiteY(site.uppercase(Locale.US))
+//                x = getSoundingSiteX(site.uppercase(Locale.US))
+//                y = addChar + getSoundingSiteY(site.uppercase(Locale.US))
+                val latLon = SoundingSites.sites.byCode[site.uppercase(Locale.US)]!!
+                x = latLon.lat
+                y = latLon.lon
             }
         }
         return LatLon(x, y)
@@ -173,17 +213,17 @@ object UtilityLocation {
 
     fun getWfoSiteName(wfo: String): String = WfoSites.name[wfo] ?: ""
 
-    private fun getSoundingSiteX(site: String): String = SoundingSites.lat[site] ?: ""
-
-    private fun getSoundingSiteY(site: String): String = SoundingSites.lon[site] ?: ""
-
-    fun getSoundingSiteName(wfo: String): String {
-        var site = WfoSites.name[wfo] ?: ""
-        if (site == "") {
-            site = SoundingSites.name[wfo] ?: ""
-        }
-        return site
-    }
+//    private fun getSoundingSiteX(site: String): String = SoundingSites.lat[site] ?: ""
+//
+//    private fun getSoundingSiteY(site: String): String = SoundingSites.lon[site] ?: ""
+//
+//    fun getSoundingSiteName(wfo: String): String {
+//        var site = WfoSites.name[wfo] ?: ""
+//        if (site == "") {
+//            site = SoundingSites.name[wfo] ?: ""
+//        }
+//        return site
+//    }
 
     fun getNearest(latLon: LatLon, sectorToLatLon: Map<String, LatLon>): String {
         val sites = mutableListOf<RID>()
@@ -194,11 +234,12 @@ object UtilityLocation {
         return sites[0].name
     }
 
-    fun hasAlerts(locNum: Int): Boolean = joshuatee.wx.settings.Location.locations[locNum].notification
-            || joshuatee.wx.settings.Location.locations[locNum].notificationMcd
-            || joshuatee.wx.settings.Location.locations[locNum].ccNotification
-            || joshuatee.wx.settings.Location.locations[locNum].sevenDayNotification
-            || joshuatee.wx.settings.Location.locations[locNum].notificationSpcFw
-            || joshuatee.wx.settings.Location.locations[locNum].notificationSwo
-            || joshuatee.wx.settings.Location.locations[locNum].notificationWpcMpd
+    fun hasAlerts(locNum: Int): Boolean =
+        joshuatee.wx.settings.Location.locations[locNum].notification
+                || joshuatee.wx.settings.Location.locations[locNum].notificationMcd
+                || joshuatee.wx.settings.Location.locations[locNum].ccNotification
+                || joshuatee.wx.settings.Location.locations[locNum].sevenDayNotification
+                || joshuatee.wx.settings.Location.locations[locNum].notificationSpcFw
+                || joshuatee.wx.settings.Location.locations[locNum].notificationSwo
+                || joshuatee.wx.settings.Location.locations[locNum].notificationWpcMpd
 }

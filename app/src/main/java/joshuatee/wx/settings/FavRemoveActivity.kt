@@ -30,6 +30,7 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
+import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.UtilityWpcText
 
@@ -86,12 +87,17 @@ class FavRemoveActivity : BaseActivity() {
             FavoriteType.SREF -> verboseTitle = "parameters"
             FavoriteType.SPCMESO -> verboseTitle = "parameters"
         }
-        favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), UtilityFavorites.INITIAL_VALUE)
+        favoriteString = Utility.readPref(
+            this,
+            UtilityFavorites.getPrefToken(type),
+            UtilityFavorites.INITIAL_VALUE
+        )
     }
 
     private fun updateList() {
         // strip leading " " due to add/modify labels and trailing empty
-        favorites = favoriteString.split(":").dropWhile { it == " " }.dropLastWhile { it.isEmpty() }.toMutableList()
+        favorites = favoriteString.split(":").dropWhile { it == " " }.dropLastWhile { it.isEmpty() }
+            .toMutableList()
         labels.clear()
         favorites.forEach {
             when (type) {
@@ -134,7 +140,8 @@ class FavRemoveActivity : BaseActivity() {
 
     private fun initData() {
         favoriteString = Utility.readPref(this, UtilityFavorites.getPrefToken(type), "")
-        favorites = favoriteString.split(":").dropWhile { it == " " }.dropLastWhile { it.isEmpty() }.toMutableList()
+        favorites = favoriteString.split(":").dropWhile { it == " " }.dropLastWhile { it.isEmpty() }
+            .toMutableList()
     }
 
     private fun writeData() {
@@ -148,7 +155,8 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun getFullString(shortCode: String) = when (type) {
-        FavoriteType.SND -> UtilityLocation.getSoundingSiteName(shortCode)
+//        FavoriteType.SND -> UtilityLocation.getSoundingSiteName(shortCode)
+        FavoriteType.SND -> SoundingSites.sites.byCode[shortCode]!!.fullName
         FavoriteType.WFO -> shortCode + ": " + UtilityLocation.getWfoSiteName(shortCode)
         FavoriteType.RID -> shortCode + ": " + UtilityLocation.getRadarSiteName(shortCode)
         FavoriteType.NWS_TEXT -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
@@ -170,7 +178,8 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun itemClicked(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment(this, position, objectRecyclerView.getItem(position), false)
+        val bottomSheetFragment =
+            BottomSheetFragment(this, position, objectRecyclerView.getItem(position), false)
         bottomSheetFragment.functions = listOf(::deleteItem, ::moveUp, ::moveDown)
         bottomSheetFragment.labelList = listOf("Delete Item", "Move Up", "Move Down")
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)

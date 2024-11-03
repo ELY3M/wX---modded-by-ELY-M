@@ -26,7 +26,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.misc.UtilityRtma
 import joshuatee.wx.getImage
 import joshuatee.wx.objects.FavoriteType
@@ -44,7 +43,11 @@ object DownloadImage {
 
     fun radarMosaic(context: Context): Bitmap = try {
         val prefTokenSector = "REMEMBER_NWSMOSAIC_SECTOR"
-        val sector = Utility.readPref(context, prefTokenSector, UtilityNwsRadarMosaic.getNearest(Location.latLon))
+        val sector = Utility.readPref(
+            context,
+            prefTokenSector,
+            UtilityNwsRadarMosaic.getNearest(Location.latLon)
+        )
         UtilityNwsRadarMosaic.get(sector).getImage()
     } catch (e: Exception) {
         UtilityLog.handleException(e)
@@ -59,7 +62,10 @@ object DownloadImage {
             "GOES16" -> {
                 needsBitmap = false
                 val index = Utility.readPrefInt(context, "GOES16_IMG_FAV_IDX", 0)
-                bitmap = UtilityGoes.getImage(UtilityGoes.codes[index], Utility.readPref(context, "GOES16_SECTOR", "cgl")).getImage()
+                bitmap = UtilityGoes.getImage(
+                    UtilityGoes.codes[index],
+                    Utility.readPref(context, "GOES16_SECTOR", "cgl")
+                ).getImage()
             }
 
             "VIS_1KM", "VIS_MAIN" -> needsBitmap = false
@@ -87,11 +93,21 @@ object DownloadImage {
             "FMAP24" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/basicwx/94fwbg.gif"
             "FMAP36" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/basicwx/96fwbg.gif"
             "FMAP48" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/basicwx/98fwbg.gif"
-            "FMAP72" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf072.gif"
-            "FMAP96" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf096.gif"
-            "FMAP120" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf120.gif"
-            "FMAP144" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf144.gif"
-            "FMAP168" -> url = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf168.gif"
+            "FMAP72" -> url =
+                GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf072.gif"
+
+            "FMAP96" -> url =
+                GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf096.gif"
+
+            "FMAP120" -> url =
+                GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf120.gif"
+
+            "FMAP144" -> url =
+                GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf144.gif"
+
+            "FMAP168" -> url =
+                GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/medr/display/wpcwx+frontsf168.gif"
+
             "FMAP3D" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/medr/9jhwbg_conus.gif"
             "FMAP4D" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/medr/9khwbg_conus.gif"
             "FMAP5D" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/medr/9lhwbg_conus.gif"
@@ -105,7 +121,9 @@ object DownloadImage {
             "QPF6-7" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/97ep48iwbg_fill.gif"
             "QPF1-5" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/p120i.gif"
             "QPF1-7" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/qpf/p168i.gif"
-            "WPC_ANALYSIS" -> url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/images/wwd/radnat/NATRAD_24.gif"
+            "WPC_ANALYSIS" -> url =
+                "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/images/wwd/radnat/NATRAD_24.gif"
+
             "NHC2ATL" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_2d0.png"
             "NHC5ATL" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_7d0.png"
             "NHC2EPAC" -> url = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_2d0.png"
@@ -125,12 +143,14 @@ object DownloadImage {
 
             "WEATHERSTORY" -> {
                 needsBitmap = false
-                bitmap = ("https://www.weather.gov/images/" + Location.wfo.lowercase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
+                bitmap =
+                    ("https://www.weather.gov/images/" + Location.wfo.lowercase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
             }
 
             "WFOWARNINGS" -> {
                 needsBitmap = false
-                bitmap = ("https://www.weather.gov/wwamap/png/" + Location.wfo.lowercase(Locale.US) + ".png").getImage()
+                bitmap =
+                    ("https://www.weather.gov/wwamap/png/" + Location.wfo.lowercase(Locale.US) + ".png").getImage()
             }
 
             "SWOD2" -> {
@@ -150,16 +170,21 @@ object DownloadImage {
 
             "SPCMESO1" -> {
                 var param = "500mb"
-                val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":").dropLastWhile { it.isEmpty() }
+                val items = UIPreferences.favorites[FavoriteType.SPCMESO]!!.split(":")
+                    .dropLastWhile { it.isEmpty() }
                 if (items.size > 3) {
                     param = items[3]
                 }
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
+                    context,
+                    param,
+                    Utility.readPref(
                         context,
-                        param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
-                        UtilitySpcMesoInputOutput.getLayers(context)
+                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                        UtilitySpcMeso.DEFAULT_SECTOR
+                    ),
+                    UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
 
@@ -171,10 +196,14 @@ object DownloadImage {
                 }
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
+                    context,
+                    param,
+                    Utility.readPref(
                         context,
-                        param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
-                        UtilitySpcMesoInputOutput.getLayers(context)
+                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                        UtilitySpcMeso.DEFAULT_SECTOR
+                    ),
+                    UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
 
@@ -186,10 +215,14 @@ object DownloadImage {
                 }
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
+                    context,
+                    param,
+                    Utility.readPref(
                         context,
-                        param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
-                        UtilitySpcMesoInputOutput.getLayers(context)
+                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                        UtilitySpcMeso.DEFAULT_SECTOR
+                    ),
+                    UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
 
@@ -201,10 +234,14 @@ object DownloadImage {
                 }
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
+                    context,
+                    param,
+                    Utility.readPref(
                         context,
-                        param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
-                        UtilitySpcMesoInputOutput.getLayers(context)
+                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                        UtilitySpcMeso.DEFAULT_SECTOR
+                    ),
+                    UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
 
@@ -216,10 +253,14 @@ object DownloadImage {
                 }
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
+                    context,
+                    param,
+                    Utility.readPref(
                         context,
-                        param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
-                        UtilitySpcMesoInputOutput.getLayers(context)
+                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                        UtilitySpcMeso.DEFAULT_SECTOR
+                    ),
+                    UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
 
@@ -231,10 +272,14 @@ object DownloadImage {
                 }
                 needsBitmap = false
                 bitmap = UtilitySpcMesoInputOutput.getImage(
+                    context,
+                    param,
+                    Utility.readPref(
                         context,
-                        param,
-                        Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySpcMeso.DEFAULT_SECTOR),
-                        UtilitySpcMesoInputOutput.getLayers(context)
+                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                        UtilitySpcMeso.DEFAULT_SECTOR
+                    ),
+                    UtilitySpcMesoInputOutput.getLayers(context)
                 )
             }
 
@@ -250,7 +295,11 @@ object DownloadImage {
 
             "SND" -> {
                 needsBitmap = false
-                bitmap = UtilitySpcSoundings.getImage(context, UtilityLocation.getNearestSoundingSite(Location.latLon))
+//                bitmap = UtilitySpcSoundings.getImage(context, UtilityLocation.getNearestSoundingSite(Location.latLon))
+                bitmap = UtilitySpcSoundings.getImage(
+                    context,
+                    SoundingSites.sites.getNearest(Location.latLon)
+                )
             }
 
             "STRPT" -> url = UtilitySpc.getStormReportsTodayUrl()

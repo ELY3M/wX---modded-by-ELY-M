@@ -8,11 +8,16 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55917 2024_10_15 (BETA)
+
+* [ADD] reinstate wX Android setting "Main screen radar button (requires restart)"
+
 ## 55916 2024_10_12 (BETA)
 
 * [ADD] NHC storm summary in NHC activity - show more headlines
 * [ADD] NHC Storm activity title was not showing wind speed in mph
-* [ADD] change how hourly is displayed to work better with larger fonts (it was unusable with large fonts)
+* [ADD] change how hourly is displayed to work better with larger fonts (it was unusable with large
+  fonts)
 * [ADD] In Hourly, abbreviate "Isolated" as "Iso"
 * [FIX] SPC Compmap - remove product which is no longer available via the website: **3-hr surface
   pressure change**

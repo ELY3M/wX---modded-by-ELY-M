@@ -67,7 +67,12 @@ import joshuatee.wx.wpc.NationalTextActivity
 
 class Route() {
 
-    constructor(context: Context, clazz: Class<*>, url: String, stringArray: Array<String>) : this() {
+    constructor(
+        context: Context,
+        clazz: Class<*>,
+        url: String,
+        stringArray: Array<String>
+    ) : this() {
         val intent = Intent(context, clazz)
         intent.putExtra(url, stringArray)
         context.startActivity(intent)
@@ -95,15 +100,23 @@ class Route() {
 
         fun alerts(context: Context) {
             Route(
-                    context,
-                    USAlertsActivity::class.java,
-                    USAlertsActivity.URL,
-                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
+                context,
+                USAlertsActivity::class.java,
+                USAlertsActivity.URL,
+                arrayOf(
+                    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
+                    "us"
+                )
             )
         }
 
         fun colorPicker(context: Context, pref: String, label: String) {
-            Route(context, SettingsColorPickerActivity::class.java, SettingsColorPickerActivity.INFO, arrayOf(pref, label))
+            Route(
+                context,
+                SettingsColorPickerActivity::class.java,
+                SettingsColorPickerActivity.INFO,
+                arrayOf(pref, label)
+            )
         }
 
         fun favoriteAdd(context: Context, type: FavoriteType) {
@@ -111,15 +124,30 @@ class Route() {
         }
 
         fun favoriteRemove(context: Context, type: FavoriteType) {
-            Route(context, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf(type.name))
+            Route(
+                context,
+                FavRemoveActivity::class.java,
+                FavRemoveActivity.TYPE,
+                arrayOf(type.name)
+            )
         }
 
         fun forecast(context: Context, latLon: LatLon) {
-            Route(context, ForecastActivity::class.java, ForecastActivity.URL, arrayOf(latLon.latString, latLon.lonString))
+            Route(
+                context,
+                ForecastActivity::class.java,
+                ForecastActivity.URL,
+                arrayOf(latLon.latString, latLon.lonString)
+            )
         }
 
         fun goesFd(context: Context) {
-            Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("GOESFD"))
+            Route(
+                context,
+                ImageCollectionActivity::class.java,
+                ImageCollectionActivity.TYPE,
+                arrayOf("GOESFD")
+            )
         }
 
         fun hazard(context: Context, url: String) {
@@ -128,12 +156,22 @@ class Route() {
 
         fun hourly(context: Context) {
             if (Location.isUS) {
-                Route(context, HourlyActivity::class.java, HourlyActivity.LOC_NUM, Location.currentLocationStr)
+                Route(
+                    context,
+                    HourlyActivity::class.java,
+                    HourlyActivity.LOC_NUM,
+                    Location.currentLocationStr
+                )
             }
         }
 
         fun image(context: Context, url: String, title: String) {
-            Route(context, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(url, title))
+            Route(
+                context,
+                ImageShowActivity::class.java,
+                ImageShowActivity.URL,
+                arrayOf(url, title)
+            )
         }
 
         fun lightning(context: Context) {
@@ -141,19 +179,39 @@ class Route() {
         }
 
         fun locationEdit(context: Context, locationNumber: String) {
-            Route(context, SettingsLocationGenericActivity::class.java, SettingsLocationGenericActivity.LOC_NUM, arrayOf(locationNumber))
+            Route(
+                context,
+                SettingsLocationGenericActivity::class.java,
+                SettingsLocationGenericActivity.LOC_NUM,
+                arrayOf(locationNumber)
+            )
         }
 
         fun lsrByWfo(context: Context) {
-            Route(context, LsrByWfoActivity::class.java, LsrByWfoActivity.URL, arrayOf(Location.wfo, "LSR"))
+            Route(
+                context,
+                LsrByWfoActivity::class.java,
+                LsrByWfoActivity.URL,
+                arrayOf(Location.wfo, "LSR")
+            )
         }
 
         fun mcd(context: Context, number: String, type: String) {
-            Route(context, SpcMcdWatchShowActivity::class.java, SpcMcdWatchShowActivity.NUMBER, arrayOf(number, type))
+            Route(
+                context,
+                SpcMcdWatchShowActivity::class.java,
+                SpcMcdWatchShowActivity.NUMBER,
+                arrayOf(number, type)
+            )
         }
 
         fun model(context: Context, numberPanes: String, prefToken: String, title: String) {
-            Route(context, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf(numberPanes, prefToken, title))
+            Route(
+                context,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf(numberPanes, prefToken, title)
+            )
         }
 
         fun modelEsrl(context: Context) {
@@ -179,7 +237,12 @@ class Route() {
         }
 
         fun observations(context: Context) {
-            Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OBSERVATIONS"))
+            Route(
+                context,
+                ImageCollectionActivity::class.java,
+                ImageCollectionActivity.TYPE,
+                arrayOf("OBSERVATIONS")
+            )
         }
 
         fun obsSites(context: Context) {
@@ -187,7 +250,12 @@ class Route() {
         }
 
         fun opc(context: Context) {
-            Route(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OPC"))
+            Route(
+                context,
+                ImageCollectionActivity::class.java,
+                ImageCollectionActivity.TYPE,
+                arrayOf("OPC")
+            )
         }
 
         fun playlist(context: Context) {
@@ -217,7 +285,12 @@ class Route() {
         }
 
         fun radarMultiPane(context: Context, array: Array<String>) {
-            Route(context, WXGLRadarActivityMultiPane::class.java, WXGLRadarActivityMultiPane.RID, array)
+            Route(
+                context,
+                WXGLRadarActivityMultiPane::class.java,
+                WXGLRadarActivityMultiPane.RID,
+                array
+            )
         }
 
         fun radarMultiPane2(context: Context) {
@@ -229,7 +302,12 @@ class Route() {
         }
 
         fun radarMosaic(context: Context) {
-            Route(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf(""))
+            Route(
+                context,
+                RadarMosaicNwsActivity::class.java,
+                RadarMosaicNwsActivity.URL,
+                arrayOf("")
+            )
         }
 
         fun rtma(context: Context) {
@@ -248,8 +326,14 @@ class Route() {
             Route(context, SevereDashboardActivity::class.java)
         }
 
-        fun sounding(context: Context) {
-            Route(context, SpcSoundingsActivity::class.java, SpcSoundingsActivity.URL, arrayOf(Location.wfo, ""))
+        // TODO FIXME 1st arg seems unused, changed 2nd arg from "" to site
+        fun sounding(context: Context, site: String = "") {
+            Route(
+                context,
+                SpcSoundingsActivity::class.java,
+                SpcSoundingsActivity.URL,
+                arrayOf(Location.wfo, site)
+            )
         }
 
         fun spcCompmap(context: Context) {
@@ -261,15 +345,30 @@ class Route() {
         }
 
         fun spcFireOutlookByDay(context: Context, index: Int) {
-            Route(context, SpcFireOutlookActivity::class.java, SpcFireOutlookActivity.NUMBER, arrayOf(index.toString()))
+            Route(
+                context,
+                SpcFireOutlookActivity::class.java,
+                SpcFireOutlookActivity.NUMBER,
+                arrayOf(index.toString())
+            )
         }
 
         fun spcHref(context: Context) {
-            Route(context, ModelsSpcHrefActivity::class.java, "", arrayOf("1", "SPCHREF", "SPC HREF"))
+            Route(
+                context,
+                ModelsSpcHrefActivity::class.java,
+                "",
+                arrayOf("1", "SPCHREF", "SPC HREF")
+            )
         }
 
         fun spcHrefDualPane(context: Context) {
-            Route(context, ModelsSpcHrefActivity::class.java, "", arrayOf("2", "SPCHREF", "SPC HREF"))
+            Route(
+                context,
+                ModelsSpcHrefActivity::class.java,
+                "",
+                arrayOf("2", "SPCHREF", "SPC HREF")
+            )
         }
 
         fun spcHrrr(context: Context) {
@@ -277,23 +376,48 @@ class Route() {
         }
 
         fun spcMeso(context: Context) {
-            Route(context, SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "1", "SPCMESO"))
+            Route(
+                context,
+                SpcMesoActivity::class.java,
+                SpcMesoActivity.INFO,
+                arrayOf("", "1", "SPCMESO")
+            )
         }
 
         fun spcMesoDualPane(context: Context) {
-            Route(context, SpcMesoActivity::class.java, SpcMesoActivity.INFO, arrayOf("", "2", "SPCMESO"))
+            Route(
+                context,
+                SpcMesoActivity::class.java,
+                SpcMesoActivity.INFO,
+                arrayOf("", "2", "SPCMESO")
+            )
         }
 
         fun spcSref(context: Context) {
-            Route(context, ModelsSpcHrefActivity::class.java, ModelsSpcHrefActivity.INFO, arrayOf("1", "SPCSREF", "SPCSREF"))
+            Route(
+                context,
+                ModelsSpcHrefActivity::class.java,
+                ModelsSpcHrefActivity.INFO,
+                arrayOf("1", "SPCSREF", "SPCSREF")
+            )
         }
 
         fun spcSrefDualPane(context: Context) {
-            Route(context, ModelsSpcHrefActivity::class.java, ModelsSpcHrefActivity.INFO, arrayOf("2", "SPCSREF", "SPCSREF"))
+            Route(
+                context,
+                ModelsSpcHrefActivity::class.java,
+                ModelsSpcHrefActivity.INFO,
+                arrayOf("2", "SPCSREF", "SPCSREF")
+            )
         }
 
         fun spcStormReports(context: Context) {
-            Route(context, SpcStormReportsActivity::class.java, SpcStormReportsActivity.DAY, arrayOf("today"))
+            Route(
+                context,
+                SpcStormReportsActivity::class.java,
+                SpcStormReportsActivity.DAY,
+                arrayOf("today")
+            )
         }
 
         fun spcSwo(context: Context, day: String, sound: String = "") {
@@ -330,17 +454,32 @@ class Route() {
 
         // url could be a chunk of text
         fun text(context: Context, url: String, title: String) {
-            Route(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(url, title))
+            Route(
+                context,
+                TextScreenActivity::class.java,
+                TextScreenActivity.URL,
+                arrayOf(url, title)
+            )
         }
 
         // url could be a chunk of text
         fun textPlaySound(context: Context, url: String, title: String) {
-            Route(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(url, title, "sound"))
+            Route(
+                context,
+                TextScreenActivity::class.java,
+                TextScreenActivity.URL,
+                arrayOf(url, title, "sound")
+            )
         }
 
         fun wfoText(context: Context) {
             if (Location.isUS) {
-                Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, arrayOf(Location.wfo, ""))
+                Route(
+                    context,
+                    WfoTextActivity::class.java,
+                    WfoTextActivity.URL,
+                    arrayOf(Location.wfo, "")
+                )
             }
         }
 
@@ -386,26 +525,44 @@ class Route() {
         }
 
         fun wpcRainfallByDay(context: Context, dayIndex: String) {
-            Route(context, RainfallOutlookActivity::class.java, RainfallOutlookActivity.NUMBER, arrayOf(dayIndex))
+            Route(
+                context,
+                RainfallOutlookActivity::class.java,
+                RainfallOutlookActivity.NUMBER,
+                arrayOf(dayIndex)
+            )
         }
 
         fun wpcText(context: Context) {
-            Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"))
+            Route(
+                context,
+                NationalTextActivity::class.java,
+                NationalTextActivity.URL,
+                arrayOf("pmdspd", "Short Range Forecast Discussion")
+            )
         }
 
         fun wpcText(context: Context, product: String) {
-            Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf(product))
+            Route(
+                context,
+                NationalTextActivity::class.java,
+                NationalTextActivity.URL,
+                arrayOf(product)
+            )
         }
 
         fun wpcTextWithSound(context: Context, product: String, label: String) {
-            Route(context, NationalTextActivity::class.java, NationalTextActivity.URL, arrayOf(product, label, "sound"))
+            Route(
+                context,
+                NationalTextActivity::class.java,
+                NationalTextActivity.URL,
+                arrayOf(product, label, "sound")
+            )
         }
-		
         //elys mod - keeping twitter
         fun webViewTwitterStates(context: Context) {
             Route(context, WebViewTwitter::class.java)
         }
-
         fun webViewTwitterTornado(context: Context) {
             webView(context, "https://mobile.twitter.com/hashtag/tornado", "#tornado")
         }	
