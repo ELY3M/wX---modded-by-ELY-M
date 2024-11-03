@@ -81,7 +81,7 @@ class WebViewTwitter : BaseActivity() {
         webView = findViewById(R.id.webView)
         title = "Twitter"
         sectorList = GlobalArrays.states + canadianSectors
-        sector = Utility.readPref(this, prefToken, Location.state)
+        sector = Utility.readPref(this, prefToken, "STATE NOT USED")
         val webSettings = webView.settings
         with (webSettings) {
             javaScriptEnabled = true
