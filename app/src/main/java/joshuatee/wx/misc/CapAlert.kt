@@ -28,8 +28,8 @@ import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.parse
 import joshuatee.wx.parseFirst
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.removeLineBreaksCap
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityString
 
 @Suppress("SpellCheckingInspection")
@@ -74,12 +74,7 @@ class CapAlert {
         val lonTmp = points[0]
         val list2 = lonTmp.split(",")
         val lon = list2[1]
-        val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, false)
-        if (radarSites.isEmpty()) {
-            ""
-        } else {
-            radarSites[0].name
-        }
+        RadarSites.getNearestRadarSiteCode(LatLon(lat, lon))
     } else {
         ""
     }
@@ -92,7 +87,8 @@ class CapAlert {
             capAlert.url = eventText.parse("<id>(.*?)</id>")
             capAlert.title = eventText.parse("<title>(.*?)</title>")
             capAlert.summary = eventText.parse("<summary>(.*?)</summary>")
-            capAlert.instructions = eventText.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
+            capAlert.instructions =
+                eventText.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
             capAlert.area = eventText.parse("<cap:areaDesc>(.*?)</cap:areaDesc>")
             capAlert.area = capAlert.area.replace("&apos;", "'")
             capAlert.effective = eventText.parse("<cap:effective>(.*?)</cap:effective>")
@@ -129,13 +125,20 @@ class CapAlert {
             capAlert.vtec = UtilityString.parse(html, RegExp.warningVtecPattern)
             capAlert.instructions = capAlert.instructions.replace("\\n", " ")
 
-            capAlert.windThreat = UtilityString.parse(html, "\"windThreat\": \\[.*?\"(.*?)\".*?\\],")
-            capAlert.maxWindGust = UtilityString.parse(html, "\"maxWindGust\": \\[.*?\"(.*?)\".*?\\],")
-            capAlert.hailThreat = UtilityString.parse(html, "\"hailThreat\": \\[.*?\"(.*?)\".*?\\],")
-            capAlert.maxHailSize = UtilityString.parse(html, "\"maxHailSize\": \\[\\s*(.*?)\\s*\\],")
-            capAlert.tornadoThreat = UtilityString.parse(html, "\"tornadoDetection\": \\[.*?\"(.*?)\".*?\\],")
-            capAlert.nwsHeadLine = UtilityString.parse(html, "\"NWSheadline\": \\[.*?\"(.*?)\".*?\\],")
-            capAlert.motion = UtilityString.parse(html, "\"eventMotionDescription\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.windThreat =
+                UtilityString.parse(html, "\"windThreat\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.maxWindGust =
+                UtilityString.parse(html, "\"maxWindGust\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.hailThreat =
+                UtilityString.parse(html, "\"hailThreat\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.maxHailSize =
+                UtilityString.parse(html, "\"maxHailSize\": \\[\\s*(.*?)\\s*\\],")
+            capAlert.tornadoThreat =
+                UtilityString.parse(html, "\"tornadoDetection\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.nwsHeadLine =
+                UtilityString.parse(html, "\"NWSheadline\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.motion =
+                UtilityString.parse(html, "\"eventMotionDescription\": \\[.*?\"(.*?)\".*?\\],")
 
             capAlert.text = ""
             capAlert.text += capAlert.title
@@ -145,7 +148,8 @@ class CapAlert {
             capAlert.text += GlobalVariables.newline
 
             if (capAlert.nwsHeadLine != "") {
-                capAlert.summary = "..." + capAlert.nwsHeadLine + "..." + GlobalVariables.newline + GlobalVariables.newline + capAlert.summary
+                capAlert.summary =
+                    "..." + capAlert.nwsHeadLine + "..." + GlobalVariables.newline + GlobalVariables.newline + capAlert.summary
             }
 
             capAlert.text += capAlert.summary
@@ -184,10 +188,10 @@ class CapAlert {
         private fun getWarningsFromJson(html: String): List<String> {
             val data = html.replace("\n", "").replace(" ", "")
             val points = data.parseFirst(RegExp.warningLatLonPattern)
-                    .replace("[", "")
-                    .replace("]", "")
-                    .replace(",", " ")
-                    .replace("-", "")
+                .replace("[", "")
+                .replace("]", "")
+                .replace(",", " ")
+                .replace("-", "")
             return points.split(" ")
         }
     }

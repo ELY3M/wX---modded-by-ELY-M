@@ -34,7 +34,7 @@ import android.view.View
 import android.widget.TextView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.LatLon
-import joshuatee.wx.objects.Route
+import joshuatee.wx.objects.Route //elys mod
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
@@ -237,7 +237,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         newY = test2 + (-1.0 * wxglRender.state.y / mScaleFactor + diffY) / ppd
         newY = (180.0 / PI * (2.0 * atan(exp(newY * PI / 180.0)) - PI / 2.0))
         wxglRender.state.closestRadarSites =
-            UtilityLocation.getNearestRadarSites(LatLon(newY, newX * -1.0), 5)
+            RadarSites.getNearestRadarSites(LatLon(newY, newX * -1.0), 5)
         listener?.onProgressChanged(index, index, idxInt)
     }
 

@@ -38,7 +38,6 @@ import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.NotificationTextProduct
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.settings.Location
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
@@ -317,7 +316,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun wfoByState() {
         val state = locationList[0].split(" ")[1]
         wfoListPerState.clear()
-        GlobalArrays.wfos.filter { it.contains(state) }.forEach {
+        WfoSites.sites.nameList.filter { it.contains(state) }.forEach {
             wfoListPerState.add(RegExp.space.split(it)[0].replace(":", ""))
         }
         wfoListPerState.sort()

@@ -29,7 +29,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.PolygonWatch
-import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.util.DownloadText
 import joshuatee.wx.util.UtilityImg
 
@@ -116,12 +116,7 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         return if (latLons.size > 2) {
             val latLonList = LatLon.parseStringToLatLons(stringOfLatLon, -1.0, isWarning = false)
             val center = getCenterOfPolygon(latLonList)
-            val radarSites = UtilityLocation.getNearestRadarSites(center, 1, includeTdwr = false)
-            if (radarSites.isEmpty()) {
-                ""
-            } else {
-                radarSites[0].name
-            }
+            RadarSites.getNearestRadarSiteCode(center)
         } else {
             ""
         }

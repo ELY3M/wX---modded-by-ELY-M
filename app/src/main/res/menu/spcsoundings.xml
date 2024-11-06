@@ -36,6 +36,10 @@
         android:title="@string/label_share"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_show_text"
+        android:title="@string/label_show_text"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_250mb"
         android:title="@string/label_250mb"
         app:showAsAction="never" />

@@ -33,6 +33,7 @@ import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.Site
 import joshuatee.wx.parse
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
@@ -48,7 +49,7 @@ internal object Metar {
     // A data structure (map) consisting of a Lat/Lon string array for each Obs site
     private val obsLatLon = mutableMapOf<String, LatLon>()
     val timer = DownloadTimer("METAR")
-    private val metarSites = mutableListOf<RID>()
+    private val metarSites = mutableListOf<Site>()
     private val pattern1: Pattern = Pattern.compile(".*? (M?../M?..) .*?")
     private val pattern2: Pattern = Pattern.compile(".*? A([0-9]{4})")
     private val pattern3: Pattern = Pattern.compile("AUTO ([0-9].*?KT) .*?")
@@ -226,7 +227,7 @@ internal object Metar {
     //
     fun findClosestMetar(context: Context, location: LatLon): String {
         val localMetarSite = findClosestObservation(context, location)
-        return (GlobalVariables.TGFTP_WEBSITE_PREFIX + "/data/observations/metar/decoded/" + localMetarSite.name + ".TXT").getHtmlWithNewLine()
+        return (GlobalVariables.TGFTP_WEBSITE_PREFIX + "/data/observations/metar/decoded/" + localMetarSite.codeName + ".TXT").getHtmlWithNewLine()
     }
 
     //
@@ -247,7 +248,7 @@ internal object Metar {
                 UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.us_metar3)
             metarDataAsList.forEach {
                 val tokens = it.split(" ")
-                metarSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2]), 0.0))
+                metarSites.add(Site.fromLatLon(tokens[0], LatLon(tokens[1], tokens[2])))
             }
         }
     }
@@ -255,7 +256,7 @@ internal object Metar {
     // causing crash reports in the current condition notification for
     // Exception java.lang.IllegalArgumentException: Comparison method violates its general contract!
     // possibly reverting to older code below
-    fun findClosestObservation(context: Context, location: LatLon, index: Int = 0): RID {
+    fun findClosestObservation(context: Context, location: LatLon, index: Int = 0): Site {
         loadMetarData(context)
         val obsSites = metarSites.toMutableList()
 //        obsSites.forEach {
@@ -263,7 +264,7 @@ internal object Metar {
 //        }
         for (it in obsSites.indices) {
             obsSites[it].distance =
-                LatLon.distance(location, obsSites[it].location)
+                LatLon.distance(location, obsSites[it].latLon).toInt()
         }
         try {
             obsSites.sortBy { it.distance }
@@ -287,9 +288,9 @@ internal object Metar {
         val obsSiteRange = 200.0
         var currentDistance: Double
         metarSites.forEach {
-            currentDistance = LatLon.distance(radarLocation, it.location)
+            currentDistance = LatLon.distance(radarLocation, it.latLon)
             if (currentDistance < obsSiteRange) {
-                obsListSb.append(it.name)
+                obsListSb.append(it.codeName)
                 obsListSb.append(",")
             }
         }

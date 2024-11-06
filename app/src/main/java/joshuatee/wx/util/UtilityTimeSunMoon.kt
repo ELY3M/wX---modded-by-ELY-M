@@ -29,7 +29,7 @@ import joshuatee.wx.common.RegExp
 import joshuatee.wx.externalSolarized.Solarized
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.radar.RID
+import joshuatee.wx.objects.Site
 import joshuatee.wx.settings.Location
 import org.shredzone.commons.suncalc.MoonIllumination
 import org.shredzone.commons.suncalc.MoonTimes
@@ -183,8 +183,8 @@ object UtilityTimeSunMoon {
 
     }
     // used in ObjectMetar
-    fun getSunriseSunsetFromObs(obs: RID): List<ObjectDateTime> {
-        val solarized = Solarized(obs.location.lat, obs.location.lon, ObjectDateTime().now)
+    fun getSunriseSunsetFromObs(obs: Site): List<ObjectDateTime> {
+        val solarized = Solarized(obs.latLon.lat, obs.latLon.lon, ObjectDateTime().now)
         val sunrise = ObjectDateTime(solarized.sunrise?.date ?: ObjectDateTime().now)
         val sunset = ObjectDateTime(solarized.sunset?.date ?: ObjectDateTime().now)
         return listOf(sunrise, sunset)

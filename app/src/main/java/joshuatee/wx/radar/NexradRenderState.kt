@@ -24,6 +24,7 @@ package joshuatee.wx.radar
 
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ProjectionType
+import joshuatee.wx.objects.Site
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.ProjectionNumbers
@@ -107,7 +108,7 @@ class NexradRenderState(
     var timeStampId = ""
 
     // list of radar sites when long press occurs
-    var closestRadarSites = listOf<RID>()
+    var closestRadarSites = listOf<Site>()
 
     // is the user pressing and holding on the screen
     var displayHold = false

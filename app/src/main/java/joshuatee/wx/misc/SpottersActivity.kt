@@ -33,10 +33,10 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.Route
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.radar.UtilitySpotter
 import joshuatee.wx.settings.BottomSheetFragment
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.RecyclerViewGeneric
@@ -201,7 +201,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun showItemOnRadar(position: Int) {
-        val radarSite = UtilityLocation.getNearestRadarSiteCode(spotterList[position].latLon)
+        val radarSite = RadarSites.getNearestRadarSiteCode(spotterList[position].latLon)
         Route.radarWithOneSpotter(this, radarSite, spotterList[position].unique)
     }
 

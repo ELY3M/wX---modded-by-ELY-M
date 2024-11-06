@@ -27,7 +27,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import java.util.Locale
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.Route
 import joshuatee.wx.settings.BottomSheetFragment
@@ -42,6 +41,7 @@ import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.ui.RecyclerViewGeneric
 import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.WfoSites
 
 class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
@@ -60,7 +60,12 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_recyclerview_playlist,
+            R.menu.settings_playlist,
+            true
+        )
         setTitle("PlayList", "Tap item to play, view, delete or move.")
         playListString = Utility.readPref(this, prefToken, "")
         updateList()
@@ -78,7 +83,12 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun setupFab() {
         FabExtended(this, R.id.fab, GlobalVariables.ICON_PLAYLIST, "Play All") { playAll() }
-        fabPause = FabExtended(this, R.id.fab3, GlobalVariables.ICON_PAUSE_PRESSED, "Play/Pause") { playItemFab() }
+        fabPause = FabExtended(
+            this,
+            R.id.fab3,
+            GlobalVariables.ICON_PAUSE_PRESSED,
+            "Play/Pause"
+        ) { playItemFab() }
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             GlobalVariables.ICON_PAUSE_PRESSED
         } else {
@@ -88,7 +98,8 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun setupDialogue() {
-        diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
+        diaAfd =
+            ObjectDialogue(this, "Select fixed location AFD products:", WfoSites.sites.nameList)
         diaAfd.connect2 { dialog, item -> addProductToPlayList(dialog, item, "AFD") }
 
         diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labelsWithCodes)
@@ -128,7 +139,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     @SuppressLint("NotifyDataSetChanged")
     private fun getContent() {
         FutureVoid(
-                { UtilityPlayList.downloadAll(this) })
+            { UtilityPlayList.downloadAll(this) })
         { updateListNoInit(); adapter.notifyDataSetChanged() }
     }
 
@@ -161,11 +172,11 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getLongString(code: String): String =
-            "$code;" + Utility.readPref(
-                    this,
-                    "PLAYLIST_" + code + "_TIME",
-                    "unknown"
-            ) + "  (size: " + Utility.readPref(this, "PLAYLIST_$code", "").length + ")"
+        "$code;" + Utility.readPref(
+            this,
+            "PLAYLIST_" + code + "_TIME",
+            "unknown"
+        ) + "  (size: " + Utility.readPref(this, "PLAYLIST_$code", "").length + ")"
 
     private fun playItemFab() {
         if (UtilityTts.mediaPlayer != null) {
@@ -185,17 +196,25 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun itemSelected(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment(this, position, playListItems[position], false)
-        bottomSheetFragment.functions = listOf(::playItem, ::viewItem, ::deleteItem, ::moveUpItem, ::moveDownItem)
-        bottomSheetFragment.labelList = listOf("Play Item", "View Item", "Delete Item", "Move Up", "Move Down")
+        val bottomSheetFragment =
+            BottomSheetFragment(this, position, playListItems[position], false)
+        bottomSheetFragment.functions =
+            listOf(::playItem, ::viewItem, ::deleteItem, ::moveUpItem, ::moveDownItem)
+        bottomSheetFragment.labelList =
+            listOf("Play Item", "View Item", "Delete Item", "Move Up", "Move Down")
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 
     private fun deleteItem(position: Int) {
         playListString = Utility.readPref(this, prefToken, "")
-        playListString = playListString.replace(":" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0], "")
+        playListString = playListString.replace(
+            ":" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0], ""
+        )
         Utility.writePref(this, prefToken, playListString)
-        Utility.removePref(this, "PLAYLIST_" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0])
+        Utility.removePref(
+            this,
+            "PLAYLIST_" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0]
+        )
         adapter.deleteItem(position)
         UIPreferences.playlistStr = playListString
     }

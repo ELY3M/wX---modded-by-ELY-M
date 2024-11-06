@@ -42,8 +42,8 @@ import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.Route
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.radar.NexradUtil
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.ui.CardStormReportItem
 import joshuatee.wx.ui.CardText
 import joshuatee.wx.ui.DatePicker
@@ -270,7 +270,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val index = v.id
         val x = stormReports[index].lat
         val y = stormReports[index].lon
-        val radarSite = UtilityLocation.getNearestRadarSiteCode(LatLon(x, y))
+        val radarSite = RadarSites.getNearestRadarSiteCode(LatLon(x, y))
         menu.add(0, v.id, 0, "Show L2REF from $radarSite")
         menu.add(0, v.id, 0, "Show L2VEL from $radarSite")
     }
@@ -288,7 +288,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var x = stormReports[id].lat
         var y = stormReports[id].lon
         var time = stormReports[id].time
-        var radarSite = UtilityLocation.getNearestRadarSiteCode(LatLon(x, y))
+        var radarSite = RadarSites.getNearestRadarSiteCode(LatLon(x, y))
         time = time.take(3)
         if (prod == "TR0" || prod == "TV0") {
             radarSite = NexradUtil.getTdwrFromRid(radarSite)

@@ -32,6 +32,7 @@ import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarning
 import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.Route
+import joshuatee.wx.objects.Site
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
@@ -39,6 +40,8 @@ import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMath
+import joshuatee.wx.util.WfoSites
+import joshuatee.wx.vis.UtilityGoes
 import kotlin.math.roundToInt
 //elys mod
 import joshuatee.wx.MyApplication //elys mod //need context...
@@ -62,7 +65,7 @@ class NexradLongPressMenu(
                 activity,
                 radarLongPressItems[itemIndex],
                 nexradState.surface.latLon,
-                nexradState.render.state.closestRadarSites.first().name,
+                nexradState.render.state.closestRadarSites.first().codeName,
                 longPressFunction
             )
             dialog.dismiss()
@@ -109,7 +112,7 @@ class NexradLongPressMenu(
             latLon: LatLon,
             wxglNexradLevel3: NexradLevel3,
             radarSite: String,
-            closestRadarSites: List<RID>,
+            closestRadarSites: List<Site>,
             longPressDialogue: ObjectDialogue
         ) {
             longPressList.clear()
@@ -138,10 +141,10 @@ class NexradLongPressMenu(
                 longPressList.add("WPC Fronts: ${getWpcFrontTimeStamp(context)}")
             }
             longPressList += closestRadarSites.map {
-                "${it.name} ${UtilityLocation.getRadarSiteName(it.name)} ${it.distance.roundToInt()} mi ${
+                "${it.codeName} ${UtilityLocation.getRadarSiteName(it.codeName)} ${it.distance} mi ${
                     LatLon.calculateDirection(
                         latLon,
-                        it.location
+                        it.latLon
                     )
                 }"
             }
@@ -161,15 +164,15 @@ class NexradLongPressMenu(
             }
             // end Thanks to Ely
             val obsSite = Metar.findClosestObservation(context, latLon)
-            val obsDirection = LatLon.calculateDirection(latLon, obsSite.location)
+            val obsDirection = LatLon.calculateDirection(latLon, obsSite.latLon)
             with(longPressList) {
             //elys mod
                 add("Radar Mosaic")
                 add("GOES Satellite")
-                add("Observation: ${obsSite.name} ${obsSite.distance.roundToInt()} mi $obsDirection")
+                add("Observation: ${obsSite.codeName} ${obsSite.distance} mi $obsDirection")
                 add("Forecast: $latLonTitle")
-                add("Meteogram: ${obsSite.name}")
-                add("Radar status message: ${closestRadarSites.first().name}")
+                add("Meteogram: ${obsSite.codeName}")
+                add("Radar status message: ${closestRadarSites.first().codeName}")
             }
             val nearestSoundingCode = SoundingSites.sites.getNearest(latLon)
             val nearestSoundingLatLon = SoundingSites.sites.byCode[nearestSoundingCode]!!.latLon
@@ -178,7 +181,16 @@ class NexradLongPressMenu(
                 "Sounding: $nearestSoundingCode " + To.string(
                     SoundingSites.sites.getNearestInMiles(latLon)
                 ) + " mi $directionToSounding"
-            )	    
+            )
+
+            val nearestVisCode = UtilityGoes.getNearest(latLon)
+            longPressList.add("Vis Sat: $nearestVisCode")
+
+            val nearestWfo = WfoSites.sites.getNearest(latLon)
+            val nearestWfoLatLon = WfoSites.sites.byCode[nearestWfo]!!.latLon
+            val bearingToWfo = LatLon.calculateDirection(latLon, nearestWfoLatLon)
+            longPressList.add("AFD: $nearestWfo ${WfoSites.sites.getNearestInMiles(latLon)} mi $bearingToWfo")
+
             //elys mod
             if (RadarPreferences.spotters || RadarPreferences.spottersLabel) longPressList.add("Spotter Info")
 	        longPressList.add("Userpoint info: " + latLonTitle)
@@ -205,6 +217,8 @@ class NexradLongPressMenu(
             function: (String) -> Unit
         ) {
             val nearestSoundingCode = SoundingSites.sites.getNearest(latLon)
+            val nearestWfo = WfoSites.sites.getNearest(latLon)
+            val nearestVisCode = UtilityGoes.getNearest(latLon)
 
             when {
                 s.contains("miles from") -> {}
@@ -240,6 +254,8 @@ class NexradLongPressMenu(
                 )
 
                 s.startsWith("Sounding") -> Route.sounding(activity, nearestSoundingCode)
+                s.startsWith("Vis Sat:") -> Route.visBySector(activity, nearestVisCode)
+                s.startsWith("AFD:") -> Route.wfoTextBySector(activity, nearestWfo)
                 s.startsWith("Beam") -> {}
             	//elys mod //need context....
             	s.contains("Spotter Info") -> NexradRenderUI.showSpotterInfo(activity, latLon)

@@ -23,6 +23,7 @@ package joshuatee.wx.misc
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
@@ -33,6 +34,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.getHtml
 import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.VBox
 
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
@@ -58,7 +60,11 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.shared_tts
+        )
         arguments = intent.getStringArrayExtra(URL)!!
         url = arguments[0]
         title = arguments[1]
@@ -81,7 +87,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objectToolbarBottom.hide(R.id.action_playlist)
         objectToolbarBottom.connect(this)
         cardText = CardText(this, toolbar, toolbarBottom)
-        if (title.contains("VAD Wind Profile")) {
+        if (title.contains("VAD Wind Profile") || title.contains("Sounding for ")) {
             cardText.typefaceMono()
         }
         box.addWidget(cardText)
@@ -104,6 +110,11 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     fun update() {
         cardText.setTextAndTranslate(Utility.fromHtml(html))
+        // TODO FIXME need better way to handle this
+        if (title.contains("Sounding for ")) {
+            cardText.setText1(html)
+            cardText.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+        }
         UtilityTts.conditionalPlay(arguments, 2, applicationContext, html, "textscreen")
     }
 

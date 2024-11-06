@@ -43,14 +43,19 @@ internal object NexradRenderUI {
     private const val LAST_RADAR_TIME_PREF = "NEXRADDOWNLOAD_TIME_LAST_RAN"
 
     fun updateLastRadarTime(context: Context) {
-        Utility.writePref(context, LAST_RADAR_TIME_PREF, ObjectDateTime.getCurrentLocalTimeAsString())
+        Utility.writePref(
+            context,
+            LAST_RADAR_TIME_PREF,
+            ObjectDateTime.getCurrentLocalTimeAsString()
+        )
     }
 
-    fun getLastRadarTime(context: Context): String = Utility.readPref(context, LAST_RADAR_TIME_PREF, "")
+    fun getLastRadarTime(context: Context): String =
+        Utility.readPref(context, LAST_RADAR_TIME_PREF, "")
 
     fun showRadarStatus(activity: Activity, radarSite: String) {
         FutureText2(
-                { DownloadText.radarStatusMessage(activity, radarSite) })
+            { DownloadText.radarStatusMessage(activity, radarSite) })
         { s ->
             var radarStatus = s
             if (radarStatus == "") {
@@ -62,18 +67,19 @@ internal object NexradRenderUI {
 
     fun showMetar(context: Context, latLon: LatLon) {
         FutureText2(
-                { Metar.findClosestMetar(context, latLon) })
+            { Metar.findClosestMetar(context, latLon) })
         { s -> ObjectDialogue(context, s) }
     }
 
     fun showNearestMeteogram(context: Context, latLon: LatLon) {
         // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
         // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
-        val obsSite = Metar.findClosestObservation(context, latLon).name
+        val obsSite = Metar.findClosestObservation(context, latLon).codeName
         Route.image(context, getMeteogramUrl(obsSite), "$obsSite Meteogram")
     }
 
-    private fun getMeteogramUrl(obsSite: String): String = "https://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
+    private fun getMeteogramUrl(obsSite: String): String =
+        "https://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
 
     fun showNearestWarning(context: Context, latLon: LatLon) {
         val url = Warnings.show(latLon)
@@ -89,28 +95,37 @@ internal object NexradRenderUI {
         }
     }
 
-    fun showImageForShare(activity: Activity, indexString: String, radarSite: String, product: String) {
+    fun showImageForShare(
+        activity: Activity,
+        indexString: String,
+        radarSite: String,
+        product: String
+    ) {
         FutureBytes2({
-            CanvasCreate.layeredImageFromFile(activity,
-                    radarSite,
-                    product,
-                    indexString)
+            CanvasCreate.layeredImageFromFile(
+                activity,
+                radarSite,
+                product,
+                indexString
+            )
         }) { bitmapForShare ->
-            UtilityShare.bitmap(activity,
-                    radarSite + " (" + UtilityLocation.getRadarSiteName(radarSite) + ") " + product,
-                    bitmapForShare
+            UtilityShare.bitmap(
+                activity,
+                radarSite + " (" + UtilityLocation.getRadarSiteName(radarSite) + ") " + product,
+                bitmapForShare
             )
         }
     }
 
     fun showHelp(activity: Activity) {
-        ObjectDialogue(activity,
-                activity.resources.getString(R.string.help_radar)
-                        + GlobalVariables.newline + GlobalVariables.newline
-                        + activity.resources.getString(R.string.help_radar_drawing_tools)
-                        + GlobalVariables.newline + GlobalVariables.newline
-                        + activity.resources.getString(R.string.help_radar_recording)
-                        + GlobalVariables.newline + GlobalVariables.newline
+        ObjectDialogue(
+            activity,
+            activity.resources.getString(R.string.help_radar)
+                    + GlobalVariables.newline + GlobalVariables.newline
+                    + activity.resources.getString(R.string.help_radar_drawing_tools)
+                    + GlobalVariables.newline + GlobalVariables.newline
+                    + activity.resources.getString(R.string.help_radar_recording)
+                    + GlobalVariables.newline + GlobalVariables.newline
         )
     }
     

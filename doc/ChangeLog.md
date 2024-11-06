@@ -2,10 +2,17 @@
 
 # Developer ChangeLog
 
-## 55919 2024_11_03
+## 55920 2024_11_06
+
+* [ADD]
+
+## 55919 2024_11_06
 
 * [ADD] remove unnecessary entries in WfoSites.kt and add sites
 * [REF] remove ObjectLocation.state
+* [REF] remove RID, migrate to Site
+* [ADD] Nexrad "Long press" - add show nearest vis satellite image at bottom
+* [ADD] Nexrad "Long press" - add show nearest AFD (area forecast discussion text product)
 
 ## 55918 2024_11_02
 

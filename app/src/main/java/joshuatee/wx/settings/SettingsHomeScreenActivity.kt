@@ -36,6 +36,7 @@ import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.ui.PopupMessage
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.WfoSites
 import joshuatee.wx.wpc.UtilityWpcText
 import java.util.Locale
 
@@ -53,10 +54,25 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_homescreen, R.menu.settings_homescreen, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_recyclerview_homescreen,
+            R.menu.settings_homescreen,
+            true
+        )
         setTitle("Manage Home Screen", "Tap item to delete or move.")
-        FabExtended(this, R.id.fab_image, GlobalVariables.ICON_MAP, "Add Image") { dialogueImages.show() }
-        FabExtended(this, R.id.fab_text, GlobalVariables.ICON_ADD, "Add Text Products") { dialogueMain.show() }
+        FabExtended(
+            this,
+            R.id.fab_image,
+            GlobalVariables.ICON_MAP,
+            "Add Image"
+        ) { dialogueImages.show() }
+        FabExtended(
+            this,
+            R.id.fab_text,
+            GlobalVariables.ICON_ADD,
+            "Add Text Products"
+        ) { dialogueMain.show() }
         objectToolbarBottom.connect(this)
         homeScreenFavOrig = UIPreferences.homescreenFav
         recyclerView = ObjectRecyclerView(this, R.id.card_list, labels, ::prodClicked)
@@ -65,20 +81,52 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun setupUI() {
-        dialogueMain = ObjectDialogue(this, "Select text products:", UtilityHomeScreen.localChoicesText + UtilityWpcText.labelsWithCodes)
+        dialogueMain = ObjectDialogue(
+            this,
+            "Select text products:",
+            UtilityHomeScreen.localChoicesText + UtilityWpcText.labelsWithCodes
+        )
         dialogueMain.connect { dialog, index -> dialogClicked(dialogueMain, "TXT-", index, dialog) }
 
-        dialogueImages = ObjectDialogue(this, "Select image products:", UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts)
+        dialogueImages = ObjectDialogue(
+            this,
+            "Select image products:",
+            UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts
+        )
         dialogueImages.connect { dialog, index -> dialogClicked(dialogueImages, "", index, dialog) }
 
-        dialogueAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        dialogueAfd.connect { dialog, index -> dialogClicked(dialogueAfd, "TXT-" + "AFD", index, dialog) }
+        dialogueAfd =
+            ObjectDialogue(this, "Select fixed location AFD products:", WfoSites.sites.nameList)
+        dialogueAfd.connect { dialog, index ->
+            dialogClicked(
+                dialogueAfd,
+                "TXT-" + "AFD",
+                index,
+                dialog
+            )
+        }
 
-        dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars + GlobalArrays.tdwrRadars)
-        dialogueRadar.connect { dialog, index -> dialogClicked(dialogueRadar, "NXRD-", index, dialog) }
+        dialogueRadar = ObjectDialogue(
+            this,
+            "Select fixed location Nexrad products:",
+            GlobalArrays.radars + GlobalArrays.tdwrRadars
+        )
+        dialogueRadar.connect { dialog, index ->
+            dialogClicked(
+                dialogueRadar,
+                "NXRD-",
+                index,
+                dialog
+            )
+        }
     }
 
-    private fun dialogClicked(dialogue: ObjectDialogue, token: String, index: Int, dialog: DialogInterface) {
+    private fun dialogClicked(
+        dialogue: ObjectDialogue,
+        token: String,
+        index: Int,
+        dialog: DialogInterface
+    ) {
         val s = dialogue.getItem(index)
         var textProduct = token + s.split(":")[0].uppercase(Locale.US)
         if (token == "") {
@@ -103,7 +151,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace("^:".toRegex(), "")
         saveHomescreenList()
         if (UIPreferences.homescreenFav != "") {
-            favoriteList = UIPreferences.homescreenFav.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
+            favoriteList = UIPreferences.homescreenFav.split(":").dropLastWhile { it.isEmpty() }
+                .toMutableList()
             labels = MutableList(favoriteList.size) { "" }
             recyclerView.refreshList(labels)
             favoriteList.forEachIndexed { k, fav ->
@@ -127,7 +176,11 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         when (item.itemId) {
             R.id.action_afd -> dialogueAfd.show()
             R.id.action_radar -> dialogueRadar.show()
-            R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.homescreen_help_label))
+            R.id.action_help -> ObjectDialogue(
+                this,
+                resources.getString(R.string.homescreen_help_label)
+            )
+
             R.id.action_reset -> {
                 UIPreferences.homescreenFav = UIPreferences.HOMESCREEN_FAVORITE_DEFAULT
                 updateList()
@@ -159,7 +212,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun initData() {
-        favoriteList = UIPreferences.homescreenFav.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
+        favoriteList =
+            UIPreferences.homescreenFav.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
     }
 
     private fun writeData() {
@@ -181,10 +235,10 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionText(key: String) = UtilityWpcText.labelsWithCodes
-            .firstOrNull { it.startsWith(key.lowercase(Locale.US).replace("txt-", "")) } ?: ""
+        .firstOrNull { it.startsWith(key.lowercase(Locale.US).replace("txt-", "")) } ?: ""
 
     private fun findPositionImage(key: String) = GlobalArrays.nwsImageProducts
-            .firstOrNull { it.startsWith(key.replace("IMG-", "")) } ?: ""
+        .firstOrNull { it.startsWith(key.replace("IMG-", "")) } ?: ""
 
     private fun findPositionImage2(key: String): String {
         UtilityHomeScreen.localChoicesImg.forEach {
@@ -199,10 +253,10 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionTextLocal(key: String) = UtilityHomeScreen.localChoicesText
-            .firstOrNull { it.startsWith(key.replace("TXT-", "")) } ?: ""
+        .firstOrNull { it.startsWith(key.replace("TXT-", "")) } ?: ""
 
     private fun findPositionAfd(key: String): String {
-        GlobalArrays.wfos.forEach {
+        WfoSites.sites.nameList.forEach {
             if (it.startsWith(key.replace("TXT-AFD", ""))) {
                 return "AFD $it"
             }
@@ -214,12 +268,12 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionRadarNexrad(key: String) = GlobalArrays.radars
-            .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
-            ?.let { "$it (NEXRAD)" } ?: ""
+        .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
+        ?.let { "$it (NEXRAD)" } ?: ""
 
     private fun findPositionRadarTdwr(key: String) = GlobalArrays.tdwrRadars
-            .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
-            ?.let { "$it (TDWR)" } ?: ""
+        .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
+        ?.let { "$it (TDWR)" } ?: ""
 
     override fun onStop() {
         if (UIPreferences.homescreenFav != homeScreenFavOrig) {
@@ -245,7 +299,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun prodClicked(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment(this, position, recyclerView.getItem(position), false)
+        val bottomSheetFragment =
+            BottomSheetFragment(this, position, recyclerView.getItem(position), false)
         with(bottomSheetFragment) {
             functions = listOf(::deleteItem, ::moveUp, ::moveDown)
             labelList = listOf("Delete Item", "Move Up", "Move Down")

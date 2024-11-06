@@ -41,8 +41,8 @@ class Site(
     }
 
     companion object {
-        fun fromLatLon(codeName: String, fullName: String, latLon: LatLon, distance: Double): Site {
-            val site = Site(codeName, fullName, latLon.latString, latLon.lonString, false)
+        fun fromLatLon(codeName: String, latLon: LatLon, distance: Double = 0.0): Site {
+            val site = Site(codeName, "", latLon.latString, latLon.lonString, false)
             site.distance = distance.toInt()
             return site
         }

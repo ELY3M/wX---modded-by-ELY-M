@@ -57,15 +57,29 @@ class NwsObsSitesActivity : BaseActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.action_lastused).title = "Last Used: " + Utility.readPref(this, prefToken, Metar.findClosestObservation(this, Location.latLon).name)
+        menu.findItem(R.id.action_lastused).title = "Last Used: " + Utility.readPref(
+            this,
+            prefToken,
+            Metar.findClosestObservation(this, Location.latLon).codeName
+        )
         return super.onPrepareOptionsMenu(menu)
     }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, R.menu.nwsobssites, bottomToolbar = false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_recyclerview_toolbar,
+            R.menu.nwsobssites,
+            bottomToolbar = false
+        )
         title = titleString
-        objectRecyclerView = ObjectRecyclerView(this, R.id.card_list, GlobalArrays.states.toMutableList(), ::itemClicked)
+        objectRecyclerView = ObjectRecyclerView(
+            this,
+            R.id.card_list,
+            GlobalArrays.states.toMutableList(),
+            ::itemClicked
+        )
     }
 
     private fun itemClicked(position: Int) {
@@ -105,7 +119,8 @@ class NwsObsSitesActivity : BaseActivity() {
         }
         listCity.add("..Back to state list")
         listIds.add("..Back to state list")
-        val listSort = lines.filter { it.startsWith(stateSelected.uppercase(Locale.US)) }.toMutableList()
+        val listSort =
+            lines.filter { it.startsWith(stateSelected.uppercase(Locale.US)) }.toMutableList()
         listSort.sort()
         listSort.forEach {
             val items = it.split(",")
@@ -119,11 +134,18 @@ class NwsObsSitesActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_lastused -> showObsSite(
-                    Utility.readPref(this, prefToken, Metar.findClosestObservation(this, Location.latLon).name))
+                Utility.readPref(
+                    this,
+                    prefToken,
+                    Metar.findClosestObservation(this, Location.latLon).codeName
+                )
+            )
 
-            R.id.action_map -> Route.webView(this,
-                    "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
-                    "Observations near " + Location.wfo)
+            R.id.action_map -> Route.webView(
+                this,
+                "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
+                "Observations near " + Location.wfo
+            )
 
             else -> return super.onOptionsItemSelected(item)
         }

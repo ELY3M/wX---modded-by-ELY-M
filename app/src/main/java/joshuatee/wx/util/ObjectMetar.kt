@@ -23,13 +23,13 @@ package joshuatee.wx.util
 
 import android.content.Context
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.objects.Site
 import joshuatee.wx.radar.Metar
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.parse
-import joshuatee.wx.radar.RID
 import kotlin.math.roundToInt
 
 internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
@@ -55,16 +55,18 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
     private var rawMetar = ""
     private var metarSkyCondition = ""
     private var metarWeatherCondition = ""
-    val obsClosest: RID = Metar.findClosestObservation(context, location, index)
+    val obsClosest: Site = Metar.findClosestObservation(context, location, index)
 
     init {
-        val urlMetar = "${GlobalVariables.TGFTP_WEBSITE_PREFIX}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
+        val urlMetar =
+            "${GlobalVariables.TGFTP_WEBSITE_PREFIX}/data/observations/metar/decoded/" + obsClosest.codeName + ".TXT"
         val metarData = urlMetar.getHtmlWithNewLine()
         temperature = metarData.parse("Temperature: (.*?) F")
         dewPoint = metarData.parse("Dew Point: (.*?) F")
         windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")
         windSpeed = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at (.*?) MPH ")
-        windGust = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
+        windGust =
+            metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
         seaLevelPressure = metarData.parse("Pressure \\(altimeter\\): .*? in. Hg \\((.*?) hPa\\)")
         visibility = metarData.parse("Visibility: (.*?) mile")
         relativeHumidity = metarData.parse("Relative Humidity: (.*?)%")
@@ -75,11 +77,12 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         metarWeatherCondition = metarData.parse("Weather: (.*?)" + GlobalVariables.newline)
         metarSkyCondition = capitalizeString(metarSkyCondition)
         metarWeatherCondition = capitalizeString(metarWeatherCondition)
-        condition = if (metarWeatherCondition == "" || metarWeatherCondition.contains("Inches Of Snow On Ground")) {
-            metarSkyCondition
-        } else {
-            metarWeatherCondition
-        }
+        condition =
+            if (metarWeatherCondition == "" || metarWeatherCondition.contains("Inches Of Snow On Ground")) {
+                metarSkyCondition
+            } else {
+                metarWeatherCondition
+            }
         condition = condition.replace("; Lightning Observed", "")
         if (condition == "Mist") condition = "Fog/Mist"
         icon = decodeIconFromMetar(condition, obsClosest)
@@ -88,7 +91,8 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         if (metarDataList.size > 2) {
             val localStatus = metarDataList[1].split("/")
             if (localStatus.size > 1) {
-                conditionsTimeStr = ObjectDateTime.convertFromUtcForMetar(localStatus[1].replace(" UTC", ""))
+                conditionsTimeStr =
+                    ObjectDateTime.convertFromUtcForMetar(localStatus[1].replace(" UTC", ""))
                 timeStringUtc = localStatus[1].trim()
             }
         }
@@ -132,7 +136,7 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
         "$value mb"
     }
 
-    private fun decodeIconFromMetar(condition: String, obs: RID): String {
+    private fun decodeIconFromMetar(condition: String, obs: Site): String {
         // https://api.weather.gov/icons/land/day/ovc?size=medium
         val timeOfDay = if (ObjectDateTime.isDaytime(obs)) {
             "day"

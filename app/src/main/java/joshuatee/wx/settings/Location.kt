@@ -28,6 +28,7 @@ import java.util.Locale
 import joshuatee.wx.common.GlobalDictionaries
 import joshuatee.wx.getNwsHtml
 import joshuatee.wx.parse
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.util.WfoSites
@@ -183,8 +184,7 @@ object Location {
                 wfo = WfoSites.sites.getNearest(LatLon(xStr, yStr))
             }
             if (radarSite == "" || radarSite == "LIX") {
-                radarSite =
-                    UtilityLocation.getNearestRadarSiteCode(LatLon(xStr, yStr))
+                radarSite = RadarSites.getNearestRadarSiteCode(LatLon(xStr, yStr))
             }
             // CT shows mosaic not nexrad so the old way is needed
             if (radarSite == "") {

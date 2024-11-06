@@ -134,6 +134,7 @@
     <string name="title_activity_spc_meso">SPC Meso</string>
     <string name="label_playlist">Add to PlayList</string>
     <string name="label_share">Share</string>
+    <string name="label_show_text">Show Text</string>
     <string name="label_share_and_tools">Share/Drawing Tools</string>
     <string name="label_tdwr_sites">TDWR Sites</string>
     <string name="title_activity_settings_playlist">PlayList</string>

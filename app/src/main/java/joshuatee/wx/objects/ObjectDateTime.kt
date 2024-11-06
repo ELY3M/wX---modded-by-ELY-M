@@ -22,7 +22,6 @@
 package joshuatee.wx.objects
 
 import joshuatee.wx.parse
-import joshuatee.wx.radar.RID
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityTimeSunMoon
@@ -86,15 +85,16 @@ class ObjectDateTime() {
 
         private fun nowUtc(): ObjectDateTime = ObjectDateTime(getCurrentTimeInUTC())
 
-        fun from(year: Int, month: Int, day: Int): ObjectDateTime = ObjectDateTime(LocalDateTime.of(year, month, day, 0, 0))
+        fun from(year: Int, month: Int, day: Int): ObjectDateTime =
+            ObjectDateTime(LocalDateTime.of(year, month, day, 0, 0))
 
         fun fromObs(time: String): ObjectDateTime {
             // time comes in as follows 2018.02.11 2353 UTC
             // https://en.wikipedia.org/wiki/ISO_8601
             val returnTime = time.trim()
-                    .replace(" UTC", "")
-                    .replace(".", "")
-                    .replace(" ", " ") + "00"
+                .replace(" UTC", "")
+                .replace(".", "")
+                .replace(" ", " ") + "00"
             // time should now be as "20220225T095300.000Z"
             // text has a timezone "Z" so 2nd arg is null
             // time converted to the following to parse 20220226 115300
@@ -111,7 +111,8 @@ class ObjectDateTime() {
         fun getCurrentTimeInUTC(): LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
 
         // is t1 greater then t2 by m minutes
-        fun timeDifference(t1: LocalDateTime, t2: LocalDateTime, m: Int): Boolean = Duration.between(t1, t2).toMinutes() > m * -1
+        fun timeDifference(t1: LocalDateTime, t2: LocalDateTime, m: Int): Boolean =
+            Duration.between(t1, t2).toMinutes() > m * -1
 
 //        fun offsetFromUtcInSeconds() = ZonedDateTime.now().offset.totalSeconds
 
@@ -175,7 +176,12 @@ class ObjectDateTime() {
         fun radarTime(volumeScanDate: Short, volumeScanTime: Int): String {
             val sec = ((volumeScanDate - 1) * 60 * 60 * 24 + volumeScanTime).toLong()
             val milli = sec * 1000
-            val nowFromMilli = ObjectDateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(milli), ZoneId.systemDefault()))
+            val nowFromMilli = ObjectDateTime(
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(milli),
+                    ZoneId.systemDefault()
+                )
+            )
             return nowFromMilli.format("E MMM dd HH:mm:ss YYYY") // + ZoneId.systemDefault().toString()
         }
 
@@ -184,7 +190,12 @@ class ObjectDateTime() {
         // return a time string based on Level 2 radar data
         fun radarTimeL2(days: Short, milliSeconds: Int): String {
             val sec = (days - 1).toLong() * 24 * 3600 * 1000 + milliSeconds
-            val nowFromMilli = ObjectDateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(sec), ZoneId.systemDefault()))
+            val nowFromMilli = ObjectDateTime(
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(sec),
+                    ZoneId.systemDefault()
+                )
+            )
             return nowFromMilli.format("E MMM dd HH:mm:ss YYYY") // + ZoneId.systemDefault().toString()
         }
 
@@ -225,7 +236,8 @@ class ObjectDateTime() {
         }
 
         private fun decodeVtecTime(timeRange: String): ObjectDateTime = try {
-            val dateTime = LocalDateTime.parse(timeRange, DateTimeFormatter.ofPattern("yyMMdd'T'HHmm"))
+            val dateTime =
+                LocalDateTime.parse(timeRange, DateTimeFormatter.ofPattern("yyMMdd'T'HHmm"))
             ObjectDateTime(dateTime)
         } catch (e: Exception) {
             val objectDateTime = nowUtc()
@@ -246,7 +258,13 @@ class ObjectDateTime() {
         // Models
         //
         // used by SPC HREF, ESRL, and NSSL WRF
-        fun generateModelRuns(time: String, hours: Int, fromPattern: String, toPattern: String, totalNumber: Int): List<String> {
+        fun generateModelRuns(
+            time: String,
+            hours: Int,
+            fromPattern: String,
+            toPattern: String,
+            totalNumber: Int
+        ): List<String> {
             val listRun = mutableListOf<String>()
             val currentTime = parse(time, fromPattern)
             listRun.add(currentTime.format(toPattern))
@@ -258,7 +276,7 @@ class ObjectDateTime() {
         }
 
         // used in ObjectMetar for CC icon
-        fun isDaytime(location: RID): Boolean {
+        fun isDaytime(location: Site): Boolean {
             val sunTimes = UtilityTimeSunMoon.getSunriseSunsetFromObs(location)
             val sunRiseDate = sunTimes[0]
             val sunSetDate = sunTimes[1]
@@ -266,7 +284,8 @@ class ObjectDateTime() {
             val fallsBetween = currentTime.isAfter(sunRiseDate) && currentTime.isBefore(sunSetDate)
             val currentTimeTomorrow = ObjectDateTime()
             currentTimeTomorrow.addHours(24)
-            val fallsBetweenTomorrow = currentTimeTomorrow.isAfter(sunRiseDate) && currentTimeTomorrow.isBefore(sunSetDate)
+            val fallsBetweenTomorrow =
+                currentTimeTomorrow.isAfter(sunRiseDate) && currentTimeTomorrow.isBefore(sunSetDate)
             return fallsBetween || fallsBetweenTomorrow
         }
     }

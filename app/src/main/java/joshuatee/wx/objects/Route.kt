@@ -275,7 +275,7 @@ class Route() {
         }
 
         fun radarBySite(context: Context, radarSite: String) {
-            val radarLabel = UtilityLocation.getRadarSiteName(radarSite)
+//            val radarLabel = UtilityLocation.getRadarSiteName(radarSite)
             radar(context, arrayOf(radarSite, "STATE NOT USED", "N0Q", ""))
         }
 
@@ -482,6 +482,17 @@ class Route() {
             }
         }
 
+        fun wfoTextBySector(context: Context, sector: String) {
+            if (Location.isUS) {
+                Route(
+                    context,
+                    WfoTextActivity::class.java,
+                    WfoTextActivity.URL,
+                    arrayOf(sector, "")
+                )
+            }
+        }
+
         // used by voice recognition for sound on activity invocation
         fun wfoText(context: Context, array: Array<String>) {
             Route(context, WfoTextActivity::class.java, WfoTextActivity.URL, array)
@@ -497,6 +508,10 @@ class Route() {
 
         fun visWv(context: Context) {
             Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
+        }
+
+        fun visBySector(context: Context, sector: String) {
+            Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf(sector, "GEOCOLOR"))
         }
 
         fun web(context: Context, url: String) {

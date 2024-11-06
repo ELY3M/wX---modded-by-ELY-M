@@ -74,7 +74,7 @@ class CurrentConditions {
         status = UtilityUS.getStatusViaMetar(
             context,
             objectMetar.conditionsTimeStr,
-            objectMetar.obsClosest.name
+            objectMetar.obsClosest.codeName
         )
         timeStringUtc = objectMetar.timeStringUtc
     }

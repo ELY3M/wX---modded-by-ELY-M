@@ -22,7 +22,7 @@
 package joshuatee.wx.objects
 
 import joshuatee.wx.common.RegExp
-import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityString
 
@@ -41,16 +41,16 @@ class ObjectWarning() {
     var isCurrent = true
 
     constructor(
-            url: String,
-            title: String,
-            area: String,
-            effective: String,
-            expires: String,
-            event: String,
-            sender: String,
-            polygon: String,
-            vtec: String,
-            geometry: String
+        url: String,
+        title: String,
+        area: String,
+        effective: String,
+        expires: String,
+        event: String,
+        sender: String,
+        polygon: String,
+        vtec: String,
+        geometry: String
     ) : this() {
         this.url = url
         // detailed desc
@@ -78,19 +78,19 @@ class ObjectWarning() {
 
     fun getClosestRadar(): String {
         val data = polygon
-                .replace("[", "")
-                .replace("]", "")
-                .replace(",", " ")
-                .replace("-", "")
+            .replace("[", "")
+            .replace("]", "")
+            .replace(",", " ")
+            .replace("-", "")
         val points = data.split(" ")
         return getClosestRadarCompute(points)
     }
 
     fun getPolygonAsLatLons(multiplier: Int): List<LatLon> {
         val polygonTmp = polygon
-                .replace("[", "")
-                .replace("]", "")
-                .replace(",", " ")
+            .replace("[", "")
+            .replace("]", "")
+            .replace(",", " ")
         return LatLon.parseStringToLatLons(polygonTmp, multiplier.toDouble(), true)
     }
 
@@ -100,20 +100,19 @@ class ObjectWarning() {
             val lat = points[1]
             val lon = "-" + points[0]
             val latLon = LatLon(lat, lon)
-            val radarSites = UtilityLocation.getNearestRadarSites(latLon, 1, false)
-            if (radarSites.isEmpty()) {
-                ""
-            } else {
-                radarSites[0].name
-            }
+            RadarSites.getNearestRadarSiteCode(latLon)
         } else {
             ""
         }
 
         fun parseJson(htmlF: String): List<ObjectWarning> {
-            val html = htmlF.replace("\"geometry\": null,", "\"geometry\": null, \"coordinates\":[[]]}")
+            val html =
+                htmlF.replace("\"geometry\": null,", "\"geometry\": null, \"coordinates\":[[]]}")
             val warnings = mutableListOf<ObjectWarning>()
-            val urlList = UtilityString.parseColumn(html, "\"id\": \"(https://api.weather.gov/alerts/urn.*?)\"")
+            val urlList = UtilityString.parseColumn(
+                html,
+                "\"id\": \"(https://api.weather.gov/alerts/urn.*?)\""
+            )
             val titleList = UtilityString.parseColumn(html, "\"description\": \"(.*?)\"")
             val areaDescList = UtilityString.parseColumn(html, "\"areaDesc\": \"(.*?)\"")
             val effectiveList = UtilityString.parseColumn(html, "\"effective\": \"(.*?)\"")
@@ -121,13 +120,14 @@ class ObjectWarning() {
             val eventList = UtilityString.parseColumn(html, "\"event\": \"(.*?)\"")
             val senderNameList = UtilityString.parseColumn(html, "\"senderName\": \"(.*?)\"")
             val data = html
-                    .replace("\n", "")
-                    .replace(" ", "")
+                .replace("\n", "")
+                .replace(" ", "")
             val listOfPolygonRaw = UtilityString.parseColumn(data, RegExp.warningLatLonPattern)
             val vtecs = UtilityString.parseColumn(html, RegExp.warningVtecPattern)
             val geometryList = UtilityString.parseColumn(html, "\"geometry\": (.*?),")
             urlList.indices.forEach { index ->
-                warnings.add(ObjectWarning(
+                warnings.add(
+                    ObjectWarning(
                         Utility.safeGet(urlList, index),
                         Utility.safeGet(titleList, index),
                         Utility.safeGet(areaDescList, index),
@@ -137,7 +137,9 @@ class ObjectWarning() {
                         Utility.safeGet(senderNameList, index),
                         Utility.safeGet(listOfPolygonRaw, index),
                         Utility.safeGet(vtecs, index),
-                        Utility.safeGet(geometryList, index)))
+                        Utility.safeGet(geometryList, index)
+                    )
+                )
             }
             return warnings
         }

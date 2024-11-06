@@ -27,7 +27,7 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.UtilitySpotter
 import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.RecyclerViewGeneric
 
@@ -69,8 +69,7 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     private fun itemClicked(position: Int) {
-        val radarSite =
-            UtilityLocation.getNearestRadarSiteCode(UtilitySpotter.reports[position].latLon)
+        val radarSite = RadarSites.getNearestRadarSiteCode(UtilitySpotter.reports[position].latLon)
         Route.radarWithOneSpotter(this, radarSite, UtilitySpotter.reports[position].uniq)
     }
 }

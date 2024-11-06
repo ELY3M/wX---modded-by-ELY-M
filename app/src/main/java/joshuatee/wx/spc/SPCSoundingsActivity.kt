@@ -150,6 +150,12 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.bitmap(this, "$office sounding", touchImage)
+            R.id.action_show_text -> Route.text(
+                this,
+                "https://www.spc.noaa.gov/exper/soundings/LATEST/$office.txt",
+                "Sounding for $office"
+            )
+
             R.id.action_250mb -> setPlotAndGet("250")
             R.id.action_300mb -> setPlotAndGet("300")
             R.id.action_500mb -> setPlotAndGet("500")

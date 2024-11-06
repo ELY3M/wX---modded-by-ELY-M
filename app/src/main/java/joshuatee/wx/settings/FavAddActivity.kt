@@ -33,6 +33,7 @@ import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFavorites
+import joshuatee.wx.util.WfoSites
 import joshuatee.wx.wpc.UtilityWpcText
 
 class FavAddActivity : BaseActivity() {
@@ -71,7 +72,7 @@ class FavAddActivity : BaseActivity() {
             }
 
             FavoriteType.WFO -> {
-                data = GlobalArrays.wfos
+                data = WfoSites.sites.nameList
                 verboseTitle = "NWS office"
             }
 
