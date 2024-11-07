@@ -48,7 +48,6 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.settings.UtilityHomeScreen
 import joshuatee.wx.ui.CanadaLegal
 import joshuatee.wx.ui.Card
@@ -136,10 +135,12 @@ class LocationFragment : Fragment() {
                         radarForLocationIndex = radarLocationChangedList.size
                     }
                     cards.add(Card(activityReference))
-                    cards.last().addWidget(nexradState.relativeLayouts[radarLocationChangedList.size])
+                    cards.last()
+                        .addWidget(nexradState.relativeLayouts[radarLocationChangedList.size])
                     cards.last().layoutParams = RelativeLayout.LayoutParams(
-                            MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt(),
-                            MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt())
+                        MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt(),
+                        MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()
+                    )
                     box.addWidget(cards.last())
                     radarLocationChangedList.add(false)
                 }
@@ -166,15 +167,26 @@ class LocationFragment : Fragment() {
         nexradArguments = NexradArguments()
         nexradArguments.locXCurrent = Location.latLon.lat
         nexradArguments.locYCurrent = Location.latLon.lon
-        nexradState = NexradStateMainScreen(MyApplication.appContext, numberOfRadars, homeScreenTokens)
-        nexradLongPressMenu = NexradLongPressMenu(activityReference, nexradState, nexradArguments, ::longPressRadarSiteSwitch)
+        nexradState =
+            NexradStateMainScreen(MyApplication.appContext, numberOfRadars, homeScreenTokens)
+        nexradLongPressMenu = NexradLongPressMenu(
+            activityReference,
+            nexradState,
+            nexradArguments,
+            ::longPressRadarSiteSwitch
+        )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val view = inflater.inflate(R.layout.fragment_location, container, false)
         if (UIPreferences.homescreenFav.contains("TXT-CC") ||
-                UIPreferences.homescreenFav.contains("TXT-HAZ") ||
-                UIPreferences.homescreenFav.contains("TXT-7DAY")) {
+            UIPreferences.homescreenFav.contains("TXT-HAZ") ||
+            UIPreferences.homescreenFav.contains("TXT-7DAY")
+        ) {
             needForecastData = true
         }
         box = VBox.fromViewResource(view)
@@ -219,7 +231,11 @@ class LocationFragment : Fragment() {
     private fun setupForecastUI() {
         if (UIPreferences.homescreenFav.contains("TXT-CC2")) {
             cardCurrentConditions = CardCurrentConditions(activityReference, 2)
-            cardCurrentConditions!!.connect(locationStatusDialogue, locationStatusDialogueList, ::radarTimestamps)
+            cardCurrentConditions!!.connect(
+                locationStatusDialogue,
+                locationStatusDialogueList,
+                ::radarTimestamps
+            )
         } else {
             cardCurrentConditions = CardCurrentConditions(activityReference, 1)
         }
@@ -236,8 +252,13 @@ class LocationFragment : Fragment() {
             Location.setCurrentLocationStr(activityReference, (position + 1).toString())
             if (UIPreferences.isNexradOnMainScreen && radarForLocationIndex != -1) {
                 radarLocationChangedList[radarForLocationIndex] = false
-                nexradState.wxglSurfaceViews[radarForLocationIndex].scaleFactor = RadarPreferences.wxoglSize / 10.0f
-                nexradState.wxglRenders[radarForLocationIndex].setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
+                nexradState.wxglSurfaceViews[radarForLocationIndex].scaleFactor =
+                    RadarPreferences.wxoglSize / 10.0f
+                nexradState.wxglRenders[radarForLocationIndex].setViewInitial(
+                    RadarPreferences.wxoglSize / 10.0f,
+                    0.0f,
+                    0.0f
+                )
             }
             imageCards.forEach {
                 it.resetZoom()
@@ -261,8 +282,9 @@ class LocationFragment : Fragment() {
         }
         imageCards.forEach {
             FutureBytes2(
-                    { DownloadImage.byProduct(MyApplication.appContext, it.product) },
-                    it::set)
+                { DownloadImage.byProduct(MyApplication.appContext, it.product) },
+                it::set
+            )
         }
         if (UIPreferences.isNexradOnMainScreen) {
             getAllRadars()
@@ -282,7 +304,11 @@ class LocationFragment : Fragment() {
         if (UIPreferences.isNexradOnMainScreen) {
             if (!glviewInitialized) {
                 nexradState.wxglSurfaceViews.indices.forEach {
-                    NexradDraw.initGlviewMainScreen(it, nexradState, nexradLongPressMenu.changeListener)
+                    NexradDraw.initGlviewMainScreen(
+                        it,
+                        nexradState,
+                        nexradLongPressMenu.changeListener
+                    )
                     glviewInitialized = true
                 }
             }
@@ -317,22 +343,24 @@ class LocationFragment : Fragment() {
         }
         nexradState.adjustForTdwr(idx)
         NexradDraw.initGeom(
-                idx,
-                nexradState.oldRadarSites,
-                nexradState.wxglRenders,
-                nexradState.wxglTextObjects,
-                null,
-                nexradState.wxglSurfaceViews,
-                ::getGPSFromDouble,
-                ::getLatLon,
-                archived = false, forceReset = false)
+            idx,
+            nexradState.oldRadarSites,
+            nexradState.wxglRenders,
+            nexradState.wxglTextObjects,
+            null,
+            nexradState.wxglSurfaceViews,
+            ::getGPSFromDouble,
+            ::getLatLon,
+            archived = false, forceReset = false
+        )
         FutureVoid({
             if (Location.isUS && mActivity != null) {
                 NexradDraw.plotRadar(
-                        nexradState.wxglRenders[idx],
-                        ::getGPSFromDouble,
-                        ::getLatLon,
-                        false)
+                    nexradState.wxglRenders[idx],
+                    ::getGPSFromDouble,
+                    ::getLatLon,
+                    false
+                )
             }
         }) {
             //if (idx == oglrIdx) {
@@ -362,7 +390,8 @@ class LocationFragment : Fragment() {
 
             nexradState.wxglSurfaceViews[idx].requestRender()
             if (idx == radarForLocationIndex) {
-                radarTime = getRadarTimeStampForHomescreen(nexradState.wxglRenders[radarForLocationIndex].state.rid)
+                radarTime =
+                    getRadarTimeStampForHomescreen(nexradState.wxglRenders[radarForLocationIndex].state.rid)
                 cardCurrentConditions?.setStatus(currentConditionsTime + radarTime)
             }
             if (RadarPreferences.wxoglCenterOnLocation) {
@@ -370,12 +399,13 @@ class LocationFragment : Fragment() {
             }
         }
         NexradLayerDownload.download(
-                MyApplication.appContext,
-                nexradState.wxglRenders[idx],
-                nexradState.wxglSurfaceViews[idx],
-                nexradState.wxglTextObjects,
-                {},
-                false)
+            MyApplication.appContext,
+            nexradState.wxglRenders[idx],
+            nexradState.wxglSurfaceViews[idx],
+            nexradState.wxglTextObjects,
+            {},
+            false
+        )
     }
 
     private fun getRadarTimeStampForHomescreen(radarSite: String): String {
@@ -399,7 +429,9 @@ class LocationFragment : Fragment() {
         } else {
             ""
         }
-        return nexradState.wxglRenders[j].state.rid + ": " + timestamp + " (" + UtilityLocation.getRadarSiteName(nexradState.wxglRenders[j].state.rid) + ")"
+        return nexradState.wxglRenders[j].state.rid + ": " + timestamp + " (" + RadarSites.getRadarSiteName(
+            nexradState.wxglRenders[j].state.rid
+        ) + ")"
     }
 
     @Suppress("EmptyMethod")
@@ -428,7 +460,12 @@ class LocationFragment : Fragment() {
     }
 
     private fun radarTimestamps(): List<String> =
-            (0 until nexradState.wxglSurfaceViews.size).map { getRadarTimeStamp(nexradState.wxglRenders[it].wxglNexradLevel3.timestamp, it) }
+        (0 until nexradState.wxglSurfaceViews.size).map {
+            getRadarTimeStamp(
+                nexradState.wxglRenders[it].wxglNexradLevel3.timestamp,
+                it
+            )
+        }
 
     private fun setupLocationStatusDialogue() {
         locationStatusDialogue = ObjectDialogue(activityReference, locationStatusDialogueList)
@@ -440,12 +477,13 @@ class LocationFragment : Fragment() {
                 null
             }
             UtilityLocationFragment.handleIconTap(
-                    item,
-                    renderOrNull,
-                    activityReference,
-                    ::getContent,
-                    nexradState::resetAllGlview,
-                    ::getAllRadars)
+                item,
+                renderOrNull,
+                activityReference,
+                ::getContent,
+                nexradState::resetAllGlview,
+                ::getAllRadars
+            )
             dialog.dismiss()
         }
     }
@@ -456,7 +494,10 @@ class LocationFragment : Fragment() {
         nexradState.adjustPaneTo(nexradState.curRadar, newRadarSite)
         // if user changes any non-location based nexrad this change will be permanent via homescreen string change
         if (nexradState.curRadar != radarForLocationIndex) {
-            UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace("NXRD-$oldRadarSite", "NXRD-" + nexradState.radarSite)
+            UIPreferences.homescreenFav = UIPreferences.homescreenFav.replace(
+                "NXRD-$oldRadarSite",
+                "NXRD-" + nexradState.radarSite
+            )
             Utility.writePref(activityReference, "HOMESCREEN_FAV", UIPreferences.homescreenFav)
         }
         radarLocationChangedList[nexradState.curRadar] = true

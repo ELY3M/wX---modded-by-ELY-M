@@ -2,9 +2,20 @@
 
 # Developer ChangeLog
 
-## 55920 2024_11_06
+## 55921 2024_11_07
+
+* [REF] evacuate radar lists from GlobalArrays and use functions in RadarSites
+
+## 55920 2024_11_07
 
 * [FIX] Nexrad "Long press" - meteogram URL had changed
+* [ADD] Nexrad "Long press" - add show nearest SPC Meso sector
+* [ADD] tool/lib update
+
+```
+-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.2'
++    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.3'
+```
 
 ## 55919 2024_11_06
 

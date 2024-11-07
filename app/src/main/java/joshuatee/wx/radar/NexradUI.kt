@@ -32,7 +32,6 @@ import android.os.*
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import joshuatee.wx.R
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.objects.ObjectDateTime
@@ -48,13 +47,12 @@ import joshuatee.wx.util.UtilityImageMap
 import joshuatee.wx.util.UtilityFileManagement
 
 class NexradUI(
-        val activity: VideoRecordActivity,
-        private val nexradState: NexradStatePane,
-        private val nexradSubmenu: NexradSubmenu,
-        val nexradArguments: NexradArguments,
-        val getContent: () -> Unit
+    val activity: VideoRecordActivity,
+    private val nexradState: NexradStatePane,
+    private val nexradSubmenu: NexradSubmenu,
+    val nexradArguments: NexradArguments,
+    val getContent: () -> Unit
 ) {
-
     //elys mod - location bug
     companion object {
         var bearingCurrent = 0.0f
@@ -116,12 +114,12 @@ class NexradUI(
     }
 
     fun showTdwrDialog() {
-        val objectDialogue = ObjectDialogue(activity, GlobalArrays.tdwrRadars)
+        val objectDialogue = ObjectDialogue(activity, RadarSites.tdwrRadars())
         objectDialogue.connectCancel { dialog, _ ->
             dialog.dismiss()
         }
         objectDialogue.connect { dialog, itemIndex ->
-            val s = GlobalArrays.tdwrRadars[itemIndex]
+            val s = RadarSites.tdwrRadars()[itemIndex]
             nexradState.radarSite = s.split(":")[0]
             mapSwitch(nexradState.radarSite)
             dialog.dismiss()

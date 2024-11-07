@@ -35,6 +35,7 @@ import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.Site
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.util.To
@@ -141,7 +142,7 @@ class NexradLongPressMenu(
                 longPressList.add("WPC Fronts: ${getWpcFrontTimeStamp(context)}")
             }
             longPressList += closestRadarSites.map {
-                "${it.codeName} ${UtilityLocation.getRadarSiteName(it.codeName)} ${it.distance} mi ${
+                "${it.codeName} ${RadarSites.getRadarSiteName(it.codeName)} ${it.distance} mi ${
                     LatLon.calculateDirection(
                         latLon,
                         it.latLon
@@ -190,7 +191,8 @@ class NexradLongPressMenu(
             val nearestWfoLatLon = WfoSites.sites.byCode[nearestWfo]!!.latLon
             val bearingToWfo = LatLon.calculateDirection(latLon, nearestWfoLatLon)
             longPressList.add("AFD: $nearestWfo ${WfoSites.sites.getNearestInMiles(latLon)} mi $bearingToWfo")
-
+            val nearestSpcMeso = UtilitySpcMeso.getNearest(latLon)
+            longPressList.add("Spc Meso: ${UtilitySpcMeso.sectorMap[nearestSpcMeso]}")
             //elys mod
             if (RadarPreferences.spotters || RadarPreferences.spottersLabel) longPressList.add("Spotter Info")
 	        longPressList.add("Userpoint info: " + latLonTitle)
@@ -219,6 +221,7 @@ class NexradLongPressMenu(
             val nearestSoundingCode = SoundingSites.sites.getNearest(latLon)
             val nearestWfo = WfoSites.sites.getNearest(latLon)
             val nearestVisCode = UtilityGoes.getNearest(latLon)
+            val nearestSpcMeso = UtilitySpcMeso.getNearest(latLon)
 
             when {
                 s.contains("miles from") -> {}
@@ -256,6 +259,7 @@ class NexradLongPressMenu(
                 s.startsWith("Sounding") -> Route.sounding(activity, nearestSoundingCode)
                 s.startsWith("Vis Sat:") -> Route.visBySector(activity, nearestVisCode)
                 s.startsWith("AFD:") -> Route.wfoTextBySector(activity, nearestWfo)
+                s.startsWith("Spc Meso:") -> Route.spcMesoBySector(activity, nearestSpcMeso)
                 s.startsWith("Beam") -> {}
             	//elys mod //need context....
             	s.contains("Spotter Info") -> NexradRenderUI.showSpotterInfo(activity, latLon)

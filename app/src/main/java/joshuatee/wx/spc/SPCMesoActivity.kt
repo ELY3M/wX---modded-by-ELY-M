@@ -63,6 +63,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     // arg1 - usually "", but used by spc meso images on homescreen and possibly widget intent
     // arg2 - number of panes, 1 or 2
     // arg3 - pref model token and hash lookup
+    // arg4 (optional) sector
     //
 
     companion object {
@@ -81,6 +82,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private lateinit var navDrawerCombo: NavDrawerCombo
     private lateinit var displayData: DisplayData
     private var layers = mapOf<SpcMesoLayerType, SpcMesoLayer>()
+    private var savePref = true
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spcmeso_top, menu)
@@ -102,9 +104,19 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         numPanes = To.int(arguments[1])
         if (numPanes == 1) {
-            super.onCreate(savedInstanceState, R.layout.activity_spcmeso, R.menu.spcmesomultipane, bottomToolbar = true)
+            super.onCreate(
+                savedInstanceState,
+                R.layout.activity_spcmeso,
+                R.menu.spcmesomultipane,
+                bottomToolbar = true
+            )
         } else {
-            super.onCreate(savedInstanceState, R.layout.activity_spcmeso_multipane, R.menu.spcmesomultipane, bottomToolbar = true)
+            super.onCreate(
+                savedInstanceState,
+                R.layout.activity_spcmeso_multipane,
+                R.menu.spcmesomultipane,
+                bottomToolbar = true
+            )
             val box = VBox.fromResource(this)
             if (UtilityUI.isLandScape(this)) {
                 box.makeHorizontal()
@@ -137,11 +149,21 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             displayData.paramLabel[0] = UtilitySpcMeso.getLabelFromParam(tmpArrFav)
         } else {
             (0 until numPanes).forEach {
-                displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[it])
-                displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[it])
+                displayData.param[it] =
+                    Utility.readPref(this, prefParam + it.toString(), displayData.param[it])
+                displayData.paramLabel[it] = Utility.readPref(
+                    this,
+                    prefParamLabel + it.toString(),
+                    displayData.paramLabel[it]
+                )
             }
         }
-        sector = Utility.readPref(this, prefSector, sector)
+        if (arguments.size > 3) {
+            sector = arguments[3]
+            savePref = false
+        } else {
+            sector = Utility.readPref(this, prefSector, sector)
+        }
     }
 
     private fun setupMenu() {
@@ -177,7 +199,13 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun setupNavigationDrawer() {
-        navDrawerCombo = NavDrawerCombo(this, UtilitySpcMeso.groups, UtilitySpcMeso.longCodes, UtilitySpcMeso.shortCodes, "")
+        navDrawerCombo = NavDrawerCombo(
+            this,
+            UtilitySpcMeso.groups,
+            UtilitySpcMeso.longCodes,
+            UtilitySpcMeso.shortCodes,
+            ""
+        )
         navDrawerCombo.connect { changeProduct(navDrawerCombo.getUrl()) }
     }
 
@@ -192,7 +220,8 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         displayData.objectAnimates.forEach {
             it.stop()
         }
-        favListParm = UtilityFavorites.setupMenu(this, displayData.param[curImg], FavoriteType.SPCMESO)
+        favListParm =
+            UtilityFavorites.setupMenu(this, displayData.param[curImg], FavoriteType.SPCMESO)
         invalidateOptionsMenu()
         if (UIPreferences.favorites[FavoriteType.SPCMESO]!!.contains(":" + displayData.param[curImg] + ":")) {
             star.setIcon(GlobalVariables.STAR_ICON)
@@ -200,15 +229,24 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
         FutureVoid(
-                {
-                    (0 until numPanes).forEach {
-                        displayData.bitmaps[it] = UtilitySpcMesoInputOutput.getImage(this, displayData.param[it], sector, layers)
-                    }
+            {
+                (0 until numPanes).forEach {
+                    displayData.bitmaps[it] = UtilitySpcMesoInputOutput.getImage(
+                        this,
+                        displayData.param[it],
+                        sector,
+                        layers
+                    )
                 }
+            }
         ) {
             (0 until numPanes).forEach {
                 if (numPanes > 1) {
-                    UtilityImg.resizeViewAndSetImage(this, displayData.bitmaps[it], displayData.image[it].get() as ImageView)
+                    UtilityImg.resizeViewAndSetImage(
+                        this,
+                        displayData.bitmaps[it],
+                        displayData.image[it].get() as ImageView
+                    )
                     displayData.image[it].imageLoaded = true
                 } else {
                     displayData.image[it].set(displayData.bitmaps[it])
@@ -228,9 +266,10 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         displayData.objectAnimates.forEachIndexed { index, objectAnimate ->
             objectAnimate.animateClicked({}) {
                 UtilitySpcMesoInputOutput.getAnimation(
-                        displayData.param[index],
-                        sector,
-                        frames)
+                    displayData.param[index],
+                    sector,
+                    frames
+                )
             }
         }
     }
@@ -303,8 +342,10 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun setTitle() {
         if (numPanes > 1) {
-            UtilityModels.setSubtitleRestoreZoom(displayData.image, toolbar, "(" +
-                    (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
+            UtilityModels.setSubtitleRestoreZoom(
+                displayData.image, toolbar, "(" +
+                        (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1]
+            )
         } else {
             toolbar.subtitle = displayData.paramLabel[0]
         }
@@ -322,7 +363,8 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (navDrawerCombo.onOptionsItemSelected(item)) {
             return true
         }
-        favListParm = UtilityFavorites.setupMenu(this, displayData.param[curImg], FavoriteType.SPCMESO)
+        favListParm =
+            UtilityFavorites.setupMenu(this, displayData.param[curImg], FavoriteType.SPCMESO)
         when (item.itemId) {
             R.id.action_product -> ObjectDialogue.generic(this, favListParm, {}) {
                 when (it) {
@@ -353,7 +395,8 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     val title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[0]
                     UtilityShare.bitmap(this, title, displayData.bitmaps[0])
                 } else {
-                    val title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
+                    val title =
+                        UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
                     UtilityShare.bitmap(this, title, displayData.bitmaps[curImg])
                 }
             }
@@ -375,14 +418,14 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun getHelp() {
         FutureText2(
-                { ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() },
-                { s ->
-                    var helpText = s
-                    if (helpText.contains("Page Not Found")) {
-                        helpText = "Help is not available for this parameter."
-                    }
-                    ObjectDialogue(this, helpText.removeHtml())
+            { ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() },
+            { s ->
+                var helpText = s
+                if (helpText.contains("Page Not Found")) {
+                    helpText = "Help is not available for this parameter."
                 }
+                ObjectDialogue(this, helpText.removeHtml())
+            }
         )
     }
 
@@ -399,7 +442,9 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
             it.resetZoom()
         }
         this.sector = sector
-        Utility.writePref(this, prefSector, sector)
+        if (savePref) {
+            Utility.writePref(this, prefSector, sector)
+        }
         getContent()
     }
 

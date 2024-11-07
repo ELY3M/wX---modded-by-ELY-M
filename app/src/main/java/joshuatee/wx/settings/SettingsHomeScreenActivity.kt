@@ -30,6 +30,7 @@ import joshuatee.wx.swap
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.common.GlobalVariables
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.FabExtended
 import joshuatee.wx.ui.ObjectDialogue
@@ -109,7 +110,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         dialogueRadar = ObjectDialogue(
             this,
             "Select fixed location Nexrad products:",
-            GlobalArrays.radars + GlobalArrays.tdwrRadars
+            RadarSites.nexradRadars() + RadarSites.tdwrRadars()
         )
         dialogueRadar.connect { dialog, index ->
             dialogClicked(
@@ -267,11 +268,11 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         return ""
     }
 
-    private fun findPositionRadarNexrad(key: String) = GlobalArrays.radars
+    private fun findPositionRadarNexrad(key: String) = RadarSites.nexradRadars()
         .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
         ?.let { "$it (NEXRAD)" } ?: ""
 
-    private fun findPositionRadarTdwr(key: String) = GlobalArrays.tdwrRadars
+    private fun findPositionRadarTdwr(key: String) = RadarSites.tdwrRadars()
         .firstOrNull { it.startsWith(key.replace("NXRD-", "")) }
         ?.let { "$it (TDWR)" } ?: ""
 

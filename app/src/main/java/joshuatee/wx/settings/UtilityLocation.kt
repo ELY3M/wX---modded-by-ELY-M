@@ -92,97 +92,12 @@ object UtilityLocation {
         return gps
     }
 
-//    fun getNearestRadarSiteCodeOld(location: LatLon): String {
-//        val officeArray = GlobalArrays.radars
-////        val prefToken = OfficeTypeEnum.RADAR
-////        if (officeType == OfficeTypeEnum.WFO) {
-////            officeArray = GlobalArrays.wfos
-////            prefToken = OfficeTypeEnum.WFO
-////        }
-//        val sites = mutableListOf<RID>()
-//        officeArray.forEach {
-//            val labelArr = it.split(":")
-//            sites.add(
-//                RID(
-//                    labelArr[0],
-//                    getSiteLocation(labelArr[0]),
-//                    LatLon.distance(
-//                        location,
-//                        getSiteLocation(labelArr[0]),
-//                    )
-//                )
-//            )
-//        }
-//        sites.sortBy { it.distance }
-//        return sites[0].name
-//    }
-
-//    fun getNearestSoundingSite(location: LatLon): String {
-//        val sites = GlobalArrays.soundingSites.map {
-//            RID(it, getSiteLocation(it, OfficeTypeEnum.SOUNDING), LatLon.distance(location, getSiteLocation(it, OfficeTypeEnum.SOUNDING), DistanceUnit.KM))
-//        }.toMutableList()
-//        sites.forEach {
-//            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM)
-//        }
-//        sites.sortBy { it.distance }
-//        return sites[0].name
-//    }
-
     fun getSiteLocation(site: String): LatLon {
-        // SND, NWS, or RID
-//        val addChar = if (officeType == OfficeTypeEnum.WFO) {
-//            ""
-//        } else {
-//            "-"
-//        }
         val addChar = "-"
-        val x = getRadarSiteX(site.uppercase(Locale.US))
-        val y = addChar + getRadarSiteY(site.uppercase(Locale.US))
-//        when (officeType) {
-//            OfficeTypeEnum.RADAR -> {
-//                x = getRadarSiteX(site.uppercase(Locale.US))
-//                y = addChar + getRadarSiteY(site.uppercase(Locale.US))
-//            }
-//
-//            OfficeTypeEnum.WFO -> {
-//                x = getWfoSiteX(site.uppercase(Locale.US))
-//                y = addChar + getWfoSiteY(site.uppercase(Locale.US))
-//            }
-//
-//            OfficeTypeEnum.SOUNDING -> {
-////                x = getSoundingSiteX(site.uppercase(Locale.US))
-////                y = addChar + getSoundingSiteY(site.uppercase(Locale.US))
-//                val latLon = SoundingSites.sites.byCode[site.uppercase(Locale.US)]!!
-//                x = latLon.lat
-//                y = latLon.lon
-//            }
-//        }
+        val x = RadarSites.getRadarSiteX(site.uppercase(Locale.US))
+        val y = addChar + RadarSites.getRadarSiteY(site.uppercase(Locale.US))
         return LatLon(x, y)
     }
-
-    fun getRadarSiteName(radarSite: String): String = RadarSites.name[radarSite] ?: ""
-
-    fun getRadarSiteX(radarSite: String): String = RadarSites.lat[radarSite] ?: ""
-
-    fun getRadarSiteY(radarSite: String): String = RadarSites.lon[radarSite] ?: ""
-
-//    private fun getWfoSiteX(site: String): String = WfoSites.lat[site] ?: ""
-//
-//    private fun getWfoSiteY(site: String): String = WfoSites.lon[site] ?: ""
-
-//    fun getWfoSiteName(wfo: String): String = WfoSites.names[wfo] ?: ""
-
-//    private fun getSoundingSiteX(site: String): String = SoundingSites.lat[site] ?: ""
-//
-//    private fun getSoundingSiteY(site: String): String = SoundingSites.lon[site] ?: ""
-//
-//    fun getSoundingSiteName(wfo: String): String {
-//        var site = WfoSites.name[wfo] ?: ""
-//        if (site == "") {
-//            site = SoundingSites.name[wfo] ?: ""
-//        }
-//        return site
-//    }
 
     fun getNearest(latLon: LatLon, sectorToLatLon: Map<String, LatLon>): String {
         val sites = mutableListOf<Site>()

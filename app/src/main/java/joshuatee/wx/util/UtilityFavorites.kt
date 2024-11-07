@@ -26,7 +26,7 @@ import android.view.MenuItem
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.FavoriteType
-import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.wpc.UtilityWpcText
 
@@ -65,7 +65,7 @@ object UtilityFavorites {
         favorites.forEachIndexed { k, fav ->
             UtilityLog.d("wxFAV", fav)
             val name = when (type) {
-                FavoriteType.RID -> UtilityLocation.getRadarSiteName(fav)
+                FavoriteType.RID -> RadarSites.getRadarSiteName(fav)
                 FavoriteType.WFO -> WfoSites.getFullName(fav)
 //                FavoriteType.SND -> UtilityLocation.getSoundingSiteName(fav)
                 FavoriteType.SND -> SoundingSites.sites.byCode[fav]?.fullName

@@ -392,6 +392,15 @@ class Route() {
             )
         }
 
+        fun spcMesoBySector(context: Context, sector: String) {
+            Route(
+                context,
+                SpcMesoActivity::class.java,
+                SpcMesoActivity.INFO,
+                arrayOf("", "1", "SPCMESO", sector)
+            )
+        }
+
         fun spcSref(context: Context) {
             Route(
                 context,

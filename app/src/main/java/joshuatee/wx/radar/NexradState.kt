@@ -22,7 +22,6 @@
 package joshuatee.wx.radar
 
 import android.widget.RelativeLayout
-import joshuatee.wx.common.GlobalArrays
 
 open class NexradState(val numberOfPanes: Int) {
 
@@ -54,5 +53,6 @@ open class NexradState(val numberOfPanes: Int) {
     val isTdwr: Boolean
         get() = isRidTdwr(radarSite)
 
-    protected fun isRidTdwr(rid: String): Boolean = GlobalArrays.tdwrRadars.any { rid == it.split(":")[0] }
+    protected fun isRidTdwr(rid: String): Boolean =
+        RadarSites.tdwrRadars().any { rid == it.split(":")[0] }
 }

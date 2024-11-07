@@ -21,9 +21,9 @@
 
 package joshuatee.wx.radar
 
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Site
+import joshuatee.wx.objects.Sites
 import joshuatee.wx.settings.UtilityLocation
 
 @Suppress("SpellCheckingInspection")
@@ -31,13 +31,39 @@ object RadarSites {
 
     // grep NWS_LOC UtilityPref.dart |sed "s/Utility.writePref(.NWS_LOCATION_/\"/" | sed 's/",/" to/' | sed "s/);/,/"
 
+    fun getRadarSiteName(radarSite: String): String = names[radarSite] ?: ""
+
+    fun getRadarSiteX(radarSite: String): String = lat[radarSite] ?: ""
+
+    fun getRadarSiteY(radarSite: String): String = lon[radarSite] ?: ""
+
+    fun nexradRadars(): List<String> {
+        val radars = mutableListOf<String>()
+        for (radar in sites.nameList) {
+            if (!radar.startsWith("T") && radar[4] != ':') {
+                radars.add(radar)
+            }
+        }
+        return radars
+    }
+
+    fun tdwrRadars(): List<String> {
+        val radars = mutableListOf<String>()
+        for (radar in sites.nameList) {
+            if (radar.startsWith("T") && radar[4] == ':') {
+                radars.add(radar)
+            }
+        }
+        return radars
+    }
+
     fun getNearestRadarSites(
         location: LatLon,
         count: Int,
         includeTdwr: Boolean = true
     ): List<Site> {
         val radarSites = mutableListOf<Site>()
-        GlobalArrays.radars.forEach {
+        nexradRadars().forEach {
             val labels = it.split(":")
             radarSites.add(
                 Site.fromLatLon(
@@ -51,7 +77,7 @@ object RadarSites {
             )
         }
         if (includeTdwr) {
-            GlobalArrays.tdwrRadars.forEach {
+            tdwrRadars().forEach {
                 val labels = it.split(":")
                 radarSites.add(
                     Site.fromLatLon(
@@ -76,7 +102,7 @@ object RadarSites {
         return getNearestRadarSites(location, 5, includeTdwr)[0].codeName
     }
 
-    val name = mapOf(
+    private val names = mapOf(
         "JUA" to "PR, San Juan",
         "CBW" to "ME, Loring AFB",
         "GYX" to "ME, Portland",
@@ -151,7 +177,7 @@ object RadarSites {
         "POE" to "LA, Fort Polk",
         "HDC" to "LA, Hammond",
         "LCH" to "LA, Lake Charles",
-        "LIX" to "LA, New Orleans (deprecated)",
+//        "LIX" to "LA, New Orleans (deprecated)",
         "SHV" to "LA, Shreveport",
         "AMA" to "TX, Amarillo",
         "EWX" to "TX, Austin/San Antonio",
@@ -234,10 +260,10 @@ object RadarSites {
         "AEC" to "AK, Nome",
         "ACG" to "AK, Sitka/Biorka Island",
         "GUA" to "GU, Andersen AFB",
-        "PLA" to "NA, Lajes Field, Azores",
-        "KJK" to "NA, Kunsan Air Base, South Korea",
-        "KSG" to "NA, Camp Humphreys, South Korea",
-        "ODN" to "NA, Kadena Air Base, Japan",
+//        "PLA" to "NA, Lajes Field, Azores", // TODO FIXME
+//        "KJK" to "NA, Kunsan Air Base, South Korea",
+//        "KSG" to "NA, Camp Humphreys, South Korea",
+//        "ODN" to "NA, Kadena Air Base, Japan",
 
         "TLVE" to "OH, Cleveland",
         "TADW" to "MD, Andrews Air Force Base",
@@ -247,7 +273,6 @@ object RadarSites {
         "TCLT" to "NC, Charlotte",
         "TMDW" to "IL, Chicago Midway",
         "TORD" to "IL, Chicago O'Hare",
-        "TCLE" to "OH, Cleveland",
         "TCMH" to "OH, Columbus",
         "TCVG" to "OH, Covington",
         "TDAL" to "TX, Dallas Love Field",
@@ -287,7 +312,7 @@ object RadarSites {
         "TICH" to "KS, Wichita"
     )
 
-    val lat = mapOf(
+    private val lat = mapOf(
         "TYX" to "43.756",
         "ABR" to "45.456",
         "ENX" to "42.586",
@@ -391,7 +416,7 @@ object RadarSites {
         "MHX" to "34.776",
         "OHX" to "36.247",
 //            "LIX" to "30.337",
-        "LIX" to "0.0",
+//        "LIX" to "0.0",
         "OKX" to "40.865",
         "AEC" to "64.512",
         "AKQ" to "36.984",
@@ -493,21 +518,21 @@ object RadarSites {
         "TTPA" to "27.85867", // Tampa Bay (TPA), FL TTPA TBW 93
         "TTUL" to "36.070184", // Tulsa (TUL), OK TTUL TSA 823
 
-        "latest" to "36.105", // nws conus
-        "centgrtlakes" to "42.127",
-        "uppermissvly" to "42.75",
-        "northrockies" to "42.75",
-        "northeast" to "42.425",
-        "pacnorthwest" to "42.425",
-        "pacsouthwest" to "35.15",
-        "southrockies" to "32.5",
-        "southplains" to "31.6",
-        "southmissvly" to "31.6",
-        "southeast" to "29.86",
-        "hawaii" to "19.91"
+//        "latest" to "36.105", // nws conus
+//        "centgrtlakes" to "42.127",
+//        "uppermissvly" to "42.75",
+//        "northrockies" to "42.75",
+//        "northeast" to "42.425",
+//        "pacnorthwest" to "42.425",
+//        "pacsouthwest" to "35.15",
+//        "southrockies" to "32.5",
+//        "southplains" to "31.6",
+//        "southmissvly" to "31.6",
+//        "southeast" to "29.86",
+//        "hawaii" to "19.91"
     )
 
-    val lon = mapOf(
+    private val lon = mapOf(
         "TYX" to "75.68",
         "ABR" to "98.413",
         "ENX" to "74.064",
@@ -611,7 +636,7 @@ object RadarSites {
         "MHX" to "76.876",
         "OHX" to "86.563",
 //            "LIX" to "89.825",
-        "LIX" to "0.0",
+//        "LIX" to "0.0",
         "OKX" to "72.864",
         "AEC" to "165.293",
         "AKQ" to "77.008",
@@ -714,17 +739,19 @@ object RadarSites {
         "TTPA" to "82.51755",
         "TTUL" to "95.826313",
 
-        "latest" to "97.141",
-        "centgrtlakes" to "84.544",
-        "uppermissvly" to "97.10",
-        "northrockies" to "108.60",
-        "northeast" to "74.10",
-        "pacnorthwest" to "120.10",
-        "pacsouthwest" to "120.15",
-        "southrockies" to "110.50",
-        "southplains" to "100.00",
-        "southmissvly" to "90.00",
-        "southeast" to "82.658",
-        "hawaii" to "157.55"
+//        "latest" to "97.141",
+//        "centgrtlakes" to "84.544",
+//        "uppermissvly" to "97.10",
+//        "northrockies" to "108.60",
+//        "northeast" to "74.10",
+//        "pacnorthwest" to "120.10",
+//        "pacsouthwest" to "120.15",
+//        "southrockies" to "110.50",
+//        "southplains" to "100.00",
+//        "southmissvly" to "90.00",
+//        "southeast" to "82.658",
+//        "hawaii" to "157.55"
     )
+
+    val sites: Sites = Sites(names, lat, lon, false)
 }

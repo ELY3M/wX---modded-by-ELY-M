@@ -23,7 +23,7 @@ package joshuatee.wx.util
 
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.radar.RadarSites
 
 class ProjectionNumbers {
 
@@ -39,7 +39,13 @@ class ProjectionNumbers {
 
     constructor()
 
-    constructor(scale: Double, lat: String, lon: String, xImageCenterPixels: Double, yImageCenterPixels: Double) {
+    constructor(
+        scale: Double,
+        lat: String,
+        lon: String,
+        xImageCenterPixels: Double,
+        yImageCenterPixels: Double
+    ) {
         this.scale = scale
         scaleFloat = scale.toFloat()
         x = lat
@@ -73,8 +79,8 @@ class ProjectionNumbers {
                 polygonWidth = 1.0
             }
         }
-        x = UtilityLocation.getRadarSiteX(radarSite)
-        y = UtilityLocation.getRadarSiteY(radarSite)
+        x = RadarSites.getRadarSiteX(radarSite)
+        y = RadarSites.getRadarSiteY(radarSite)
         oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scale)
         scaleFloat = scale.toFloat()
     }

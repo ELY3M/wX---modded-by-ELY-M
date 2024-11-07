@@ -26,6 +26,7 @@ import android.os.Bundle
 import joshuatee.wx.swap
 import joshuatee.wx.R
 import joshuatee.wx.objects.FavoriteType
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.spc.UtilitySpcMeso
@@ -159,7 +160,7 @@ class FavRemoveActivity : BaseActivity() {
 //        FavoriteType.SND -> UtilityLocation.getSoundingSiteName(shortCode)
         FavoriteType.SND -> SoundingSites.sites.byCode[shortCode]!!.fullName
         FavoriteType.WFO -> shortCode + ": " + WfoSites.getFullName(shortCode)
-        FavoriteType.RID -> shortCode + ": " + UtilityLocation.getRadarSiteName(shortCode)
+        FavoriteType.RID -> shortCode + ": " + RadarSites.getRadarSiteName(shortCode)
         FavoriteType.NWS_TEXT -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
         FavoriteType.SREF -> shortCode
         FavoriteType.SPCMESO -> findSpcMesoLabel(shortCode)

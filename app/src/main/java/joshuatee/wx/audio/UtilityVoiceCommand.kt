@@ -26,6 +26,7 @@ import android.content.Context
 import joshuatee.wx.settings.Location
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.Route
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.Utility
 
@@ -41,7 +42,7 @@ object UtilityVoiceCommand {
                 var validRid = true
                 if (tokens.size > 1) {
                     radarSite = tokens[1].uppercase(Locale.US)
-                    if (UtilityLocation.getRadarSiteName(radarSite) == "") {
+                    if (RadarSites.getRadarSiteName(radarSite) == "") {
                         validRid = false
                     }
                 }

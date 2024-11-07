@@ -37,7 +37,6 @@ import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Route //elys mod
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.To
 import kotlin.math.*
 
@@ -227,8 +226,8 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         yMiddle = height / 2.0f
         val diffX = density * (xMiddle - xPos) / mScaleFactor
         val diffY = density * (yMiddle - yPos) / mScaleFactor
-        val xStr = UtilityLocation.getRadarSiteX(wxglRender.state.rid)
-        val yStr = UtilityLocation.getRadarSiteY(wxglRender.state.rid)
+        val xStr = RadarSites.getRadarSiteX(wxglRender.state.rid)
+        val yStr = RadarSites.getRadarSiteY(wxglRender.state.rid)
         centerX = To.float(xStr)
         centerY = To.float(yStr)
         val ppd = wxglRender.state.projectionNumbers.oneDegreeScaleFactor

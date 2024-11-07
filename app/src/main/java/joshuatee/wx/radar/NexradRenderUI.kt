@@ -36,7 +36,6 @@ import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.Route
-import joshuatee.wx.settings.UtilityLocation
 
 internal object NexradRenderUI {
 
@@ -110,7 +109,7 @@ internal object NexradRenderUI {
         }) { bitmapForShare ->
             UtilityShare.bitmap(
                 activity,
-                radarSite + " (" + UtilityLocation.getRadarSiteName(radarSite) + ") " + product,
+                radarSite + " (" + RadarSites.getRadarSiteName(radarSite) + ") " + product,
                 bitmapForShare
             )
         }

@@ -24,9 +24,9 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.os.Bundle
 import joshuatee.wx.R
-import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.models.UtilityModelSpcSrefInterface
 import joshuatee.wx.objects.FavoriteType
+import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
@@ -77,7 +77,7 @@ class FavAddActivity : BaseActivity() {
             }
 
             FavoriteType.RID -> {
-                data = GlobalArrays.radars + GlobalArrays.tdwrRadars
+                data = RadarSites.nexradRadars() + RadarSites.tdwrRadars()
                 verboseTitle = "radar site"
             }
 
