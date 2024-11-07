@@ -72,14 +72,13 @@ internal object NexradRenderUI {
     }
 
     fun showNearestMeteogram(context: Context, latLon: LatLon) {
-        // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
-        // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
+        // https://lamp.mdl.nws.noaa.gov/lamp/meteoform.php
         val obsSite = Metar.findClosestObservation(context, latLon).codeName
         Route.image(context, getMeteogramUrl(obsSite), "$obsSite Meteogram")
     }
 
     private fun getMeteogramUrl(obsSite: String): String =
-        "https://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
+        "https://lamp.mdl.nws.noaa.gov/lamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
 
     fun showNearestWarning(context: Context, latLon: LatLon) {
         val url = Warnings.show(latLon)

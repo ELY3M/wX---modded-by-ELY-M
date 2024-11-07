@@ -4,7 +4,7 @@
 
 ## 55920 2024_11_06
 
-* [ADD]
+* [FIX] Nexrad "Long press" - meteogram URL had changed
 
 ## 55919 2024_11_06
 
