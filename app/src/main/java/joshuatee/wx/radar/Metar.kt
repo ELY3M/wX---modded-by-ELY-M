@@ -282,14 +282,11 @@ internal object Metar {
     //
     @Suppress("SpellCheckingInspection")
     private fun getNearbyObsSites(context: Context, radarSite: String): String {
-        val radarLocation = UtilityLocation.getSiteLocation(radarSite)
+        val radarLocation = RadarSites.getLatLon(radarSite)
         val obsListSb = StringBuilder(100)
         loadMetarData(context)
-        val obsSiteRange = 200.0
-        var currentDistance: Double
         metarSites.forEach {
-            currentDistance = LatLon.distance(radarLocation, it.latLon)
-            if (currentDistance < obsSiteRange) {
+            if (LatLon.distance(radarLocation, it.latLon) < 200.0) {
                 obsListSb.append(it.codeName)
                 obsListSb.append(",")
             }

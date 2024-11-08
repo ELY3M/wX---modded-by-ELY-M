@@ -429,7 +429,7 @@ class LocationFragment : Fragment() {
         } else {
             ""
         }
-        return nexradState.wxglRenders[j].state.rid + ": " + timestamp + " (" + RadarSites.getRadarSiteName(
+        return nexradState.wxglRenders[j].state.rid + ": " + timestamp + " (" + RadarSites.getName(
             nexradState.wxglRenders[j].state.rid
         ) + ")"
     }

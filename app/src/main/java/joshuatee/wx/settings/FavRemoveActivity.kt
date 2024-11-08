@@ -160,7 +160,7 @@ class FavRemoveActivity : BaseActivity() {
 //        FavoriteType.SND -> UtilityLocation.getSoundingSiteName(shortCode)
         FavoriteType.SND -> SoundingSites.sites.byCode[shortCode]!!.fullName
         FavoriteType.WFO -> shortCode + ": " + WfoSites.getFullName(shortCode)
-        FavoriteType.RID -> shortCode + ": " + RadarSites.getRadarSiteName(shortCode)
+        FavoriteType.RID -> shortCode + ": " + RadarSites.getName(shortCode)
         FavoriteType.NWS_TEXT -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
         FavoriteType.SREF -> shortCode
         FavoriteType.SPCMESO -> findSpcMesoLabel(shortCode)

@@ -44,7 +44,7 @@ internal object NexradLevel3HailIndex {
     	var hailSizeText = "Unknown"
     	var hailSizeIcon = "hailunknown.png"
         val stormList = mutableListOf<Double>()
-        val location = UtilityLocation.getSiteLocation(radarSite)
+        val location = RadarSites.getLatLon(radarSite)
         //make sure we clear the list or we get duplicate texts and icons
         hailList.clear()
         //File("/sdcard/wX/hailtest").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true)

@@ -138,6 +138,8 @@ class LatLon() {
             return lonNum.toBigDecimal().setScale(4, RoundingMode.UP).toDouble().toString()
         }
 
+    fun reverse(): LatLon = LatLon(lat, -1.0 * lon)
+
     fun asList(): List<Double> = listOf(lat, lon)
 
     fun asPoint(): ExternalPoint = ExternalPoint(this)

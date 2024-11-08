@@ -92,12 +92,12 @@ object UtilityLocation {
         return gps
     }
 
-    fun getSiteLocation(site: String): LatLon {
-        val addChar = "-"
-        val x = RadarSites.getRadarSiteX(site.uppercase(Locale.US))
-        val y = addChar + RadarSites.getRadarSiteY(site.uppercase(Locale.US))
-        return LatLon(x, y)
-    }
+//    fun getSiteLocation(site: String): LatLon {
+//        val addChar = "-"
+//        val x = RadarSites.getRadarSiteX(site.uppercase(Locale.US))
+//        val y = addChar + RadarSites.getRadarSiteY(site.uppercase(Locale.US))
+//        return LatLon(x, y)
+//    }
 
     fun getNearest(latLon: LatLon, sectorToLatLon: Map<String, LatLon>): String {
         val sites = mutableListOf<Site>()

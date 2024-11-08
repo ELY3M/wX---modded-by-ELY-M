@@ -27,7 +27,6 @@ import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.parseColumn
 import joshuatee.wx.parseColumnAll
-import joshuatee.wx.settings.UtilityLocation
 import java.util.Locale
 import java.util.regex.Pattern
 
@@ -38,7 +37,7 @@ internal object NexradLevel3StormInfo {
     private val pattern3: Pattern = Pattern.compile("\\d+")
 
     fun decode(projectionNumbers: ProjectionNumbers): List<Double> {
-        val location = UtilityLocation.getSiteLocation(projectionNumbers.radarSite)
+        val location = RadarSites.getLatLon(projectionNumbers.radarSite)
         val data = NexradLevel3TextProduct.download(
             "STI",
             projectionNumbers.radarSite.lowercase(Locale.US)

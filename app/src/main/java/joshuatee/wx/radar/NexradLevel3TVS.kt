@@ -28,7 +28,6 @@ import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.parse
 import joshuatee.wx.parseColumn
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.To
 import java.util.regex.Pattern
 
@@ -38,7 +37,7 @@ internal object NexradLevel3TVS {
     private val pattern2: Pattern = Pattern.compile(".{9}(.{7})")
 
     fun decode(radarSite: String): List<Double> {
-        val location = UtilityLocation.getSiteLocation(radarSite)
+        val location = RadarSites.getLatLon(radarSite)
         val data = NexradLevel3TextProduct.download("TVS", radarSite)
         // P  TVS    R7   216/ 50    29    57    57/ 6.5    15.9    6.5/ 22.4    18/ 6.5    &#0;
         val tvs = data.parseColumn(pattern1)

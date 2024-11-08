@@ -77,10 +77,13 @@ class DrawLineView : View {
         this.mPositionY = mPositionY
         this.ortInt = ortInt
         this.oneDegreeScaleFactor = oneDegreeScaleFactor
-        val xStr = RadarSites.getRadarSiteX(radarSite)
-        val yStr = RadarSites.getRadarSiteY(radarSite)
-        centerX = To.float(xStr)
-        centerY = To.float(yStr)
+//        val xStr = RadarSites.getX(radarSite)
+//        val yStr = RadarSites.getY(radarSite)
+//        centerX = To.float(xStr)
+//        centerY = To.float(yStr)
+        val latLon = RadarSites.getLatLon(radarSite).reverse()
+        centerX = latLon.lat.toFloat()
+        centerY = latLon.lon.toFloat()
         xMiddle = width / 2.0f
         yMiddle = height / 2.0f
         setup()

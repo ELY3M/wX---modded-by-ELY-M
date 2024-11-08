@@ -38,7 +38,6 @@ import joshuatee.wx.objects.LatLon
 import joshuatee.wx.parseColumn
 import joshuatee.wx.parseColumnAll
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.settings.UtilityLocation
 import java.util.Locale
 import java.util.regex.Pattern
 
@@ -61,7 +60,7 @@ object CanvasStormInfo {
         paint.textSize = textSize.toFloat()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         val stormList = mutableListOf<Double>()
-        val location = UtilityLocation.getSiteLocation(radarSite)
+        val location = RadarSites.getLatLon(radarSite)
         val data = NexradLevel3TextProduct.download("STI", radarSite.lowercase(Locale.US))
         val posn = data.parseColumn(pattern1)
         val motion = data.parseColumn(pattern2)

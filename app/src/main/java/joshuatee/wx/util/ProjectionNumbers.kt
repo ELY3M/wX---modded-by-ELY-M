@@ -79,8 +79,11 @@ class ProjectionNumbers {
                 polygonWidth = 1.0
             }
         }
-        x = RadarSites.getRadarSiteX(radarSite)
-        y = RadarSites.getRadarSiteY(radarSite)
+        val latLon = RadarSites.getLatLon(radarSite).reverse()
+        x = latLon.latString
+        y = latLon.lonString
+//        x = RadarSites.getX(radarSite)
+//        y = RadarSites.getY(radarSite)
         oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scale)
         scaleFloat = scale.toFloat()
     }

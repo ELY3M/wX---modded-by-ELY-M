@@ -109,7 +109,7 @@ internal object NexradRenderUI {
         }) { bitmapForShare ->
             UtilityShare.bitmap(
                 activity,
-                radarSite + " (" + RadarSites.getRadarSiteName(radarSite) + ") " + product,
+                radarSite + " (" + RadarSites.getName(radarSite) + ") " + product,
                 bitmapForShare
             )
         }

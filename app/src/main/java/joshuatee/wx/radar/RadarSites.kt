@@ -31,11 +31,17 @@ object RadarSites {
 
     // grep NWS_LOC UtilityPref.dart |sed "s/Utility.writePref(.NWS_LOCATION_/\"/" | sed 's/",/" to/' | sed "s/);/,/"
 
-    fun getRadarSiteName(radarSite: String): String = names[radarSite] ?: ""
+    fun getName(radarSite: String): String = names[radarSite] ?: ""
 
-    fun getRadarSiteX(radarSite: String): String = lat[radarSite] ?: ""
+    fun getLatLon(radarSite: String): LatLon {
+        val lat = lat[radarSite] ?: ""
+        val lon = "-" + (RadarSites.lon[radarSite] ?: "")
+        return LatLon(lat, lon)
+    }
 
-    fun getRadarSiteY(radarSite: String): String = lon[radarSite] ?: ""
+//    private fun getX(radarSite: String): String = lat[radarSite] ?: ""
+//
+//    private fun getY(radarSite: String): String = lon[radarSite] ?: ""
 
     fun nexradRadars(): List<String> {
         val radars = mutableListOf<String>()
@@ -68,10 +74,10 @@ object RadarSites {
             radarSites.add(
                 Site.fromLatLon(
                     labels[0],
-                    UtilityLocation.getSiteLocation(labels[0]),
+                    getLatLon(labels[0]),
                     LatLon.distance(
                         location,
-                        UtilityLocation.getSiteLocation(labels[0]),
+                        getLatLon(labels[0]),
                     )
                 )
             )
@@ -82,10 +88,10 @@ object RadarSites {
                 radarSites.add(
                     Site.fromLatLon(
                         labels[0],
-                        UtilityLocation.getSiteLocation(labels[0]),
+                        getLatLon(labels[0]),
                         LatLon.distance(
                             location,
-                            UtilityLocation.getSiteLocation(labels[0]),
+                            getLatLon(labels[0]),
                         )
                     )
                 )

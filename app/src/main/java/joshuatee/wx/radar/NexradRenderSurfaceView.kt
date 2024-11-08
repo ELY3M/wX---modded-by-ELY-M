@@ -226,10 +226,13 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         yMiddle = height / 2.0f
         val diffX = density * (xMiddle - xPos) / mScaleFactor
         val diffY = density * (yMiddle - yPos) / mScaleFactor
-        val xStr = RadarSites.getRadarSiteX(wxglRender.state.rid)
-        val yStr = RadarSites.getRadarSiteY(wxglRender.state.rid)
-        centerX = To.float(xStr)
-        centerY = To.float(yStr)
+//        val xStr = RadarSites.getX(wxglRender.state.rid)
+//        val yStr = RadarSites.getRadarSiteY(wxglRender.state.rid)
+        val latLon = RadarSites.getLatLon(wxglRender.state.rid).reverse()
+//        centerX = To.float(xStr)
+//        centerY = To.float(yStr)
+        centerX = latLon.lat.toFloat()
+        centerY = latLon.lon.toFloat()
         val ppd = wxglRender.state.projectionNumbers.oneDegreeScaleFactor
         newX = centerY + (wxglRender.state.x / mScaleFactor + diffX) / ppd
         val test2 = 180.0 / PI * log(tan(PI / 4.0 + centerX * (PI / 180.0) / 2.0), E)

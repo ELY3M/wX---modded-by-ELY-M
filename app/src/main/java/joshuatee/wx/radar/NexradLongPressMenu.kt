@@ -34,7 +34,6 @@ import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.Site
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.util.SoundingSites
@@ -119,7 +118,7 @@ class NexradLongPressMenu(
             longPressList.clear()
             val dist = LatLon.distance(LatLon(locX, locY), latLon)
             val direction = LatLon.calculateDirection(latLon, LatLon(locX, locY))
-            val radarSiteLatLon = UtilityLocation.getSiteLocation(radarSite)
+            val radarSiteLatLon = RadarSites.getLatLon(radarSite)
             val distRid = LatLon.distance(radarSiteLatLon, latLon)
             val distRidKm = LatLon.distance(radarSiteLatLon, latLon, DistanceUnit.KM)
             val directionFromRadarSite = LatLon.calculateDirection(latLon, radarSiteLatLon)
@@ -142,7 +141,7 @@ class NexradLongPressMenu(
                 longPressList.add("WPC Fronts: ${getWpcFrontTimeStamp(context)}")
             }
             longPressList += closestRadarSites.map {
-                "${it.codeName} ${RadarSites.getRadarSiteName(it.codeName)} ${it.distance} mi ${
+                "${it.codeName} ${RadarSites.getName(it.codeName)} ${it.distance} mi ${
                     LatLon.calculateDirection(
                         latLon,
                         it.latLon
