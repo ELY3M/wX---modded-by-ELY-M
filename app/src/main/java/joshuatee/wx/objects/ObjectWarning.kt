@@ -100,7 +100,7 @@ class ObjectWarning() {
             val lat = points[1]
             val lon = "-" + points[0]
             val latLon = LatLon(lat, lon)
-            RadarSites.getNearestRadarSiteCode(latLon)
+            RadarSites.getNearestCode(latLon)
         } else {
             ""
         }

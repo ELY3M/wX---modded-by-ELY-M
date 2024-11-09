@@ -74,7 +74,7 @@ class CapAlert {
         val lonTmp = points[0]
         val list2 = lonTmp.split(",")
         val lon = list2[1]
-        RadarSites.getNearestRadarSiteCode(LatLon(lat, lon))
+        RadarSites.getNearestCode(LatLon(lat, lon))
     } else {
         ""
     }

@@ -69,7 +69,7 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     private fun itemClicked(position: Int) {
-        val radarSite = RadarSites.getNearestRadarSiteCode(UtilitySpotter.reports[position].latLon)
+        val radarSite = RadarSites.getNearestCode(UtilitySpotter.reports[position].latLon)
         Route.radarWithOneSpotter(this, radarSite, UtilitySpotter.reports[position].uniq)
     }
 }

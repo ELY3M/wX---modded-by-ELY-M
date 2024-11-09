@@ -116,7 +116,7 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         return if (latLons.size > 2) {
             val latLonList = LatLon.parseStringToLatLons(stringOfLatLon, -1.0, isWarning = false)
             val center = getCenterOfPolygon(latLonList)
-            RadarSites.getNearestRadarSiteCode(center)
+            RadarSites.getNearestCode(center)
         } else {
             ""
         }

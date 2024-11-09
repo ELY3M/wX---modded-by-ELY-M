@@ -28,10 +28,8 @@ import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Site
-import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
-import java.util.Locale
 
 object UtilityLocation {
 
@@ -91,13 +89,6 @@ object UtilityLocation {
         }
         return gps
     }
-
-//    fun getSiteLocation(site: String): LatLon {
-//        val addChar = "-"
-//        val x = RadarSites.getRadarSiteX(site.uppercase(Locale.US))
-//        val y = addChar + RadarSites.getRadarSiteY(site.uppercase(Locale.US))
-//        return LatLon(x, y)
-//    }
 
     fun getNearest(latLon: LatLon, sectorToLatLon: Map<String, LatLon>): String {
         val sites = mutableListOf<Site>()

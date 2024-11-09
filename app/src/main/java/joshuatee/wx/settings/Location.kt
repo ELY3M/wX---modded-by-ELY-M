@@ -184,7 +184,7 @@ object Location {
                 wfo = WfoSites.sites.getNearest(LatLon(xStr, yStr))
             }
             if (radarSite == "" || radarSite == "LIX") {
-                radarSite = RadarSites.getNearestRadarSiteCode(LatLon(xStr, yStr))
+                radarSite = RadarSites.getNearestCode(LatLon(xStr, yStr))
             }
             // CT shows mosaic not nexrad so the old way is needed
             if (radarSite == "") {

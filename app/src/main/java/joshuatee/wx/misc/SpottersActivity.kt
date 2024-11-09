@@ -201,7 +201,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun showItemOnRadar(position: Int) {
-        val radarSite = RadarSites.getNearestRadarSiteCode(spotterList[position].latLon)
+        val radarSite = RadarSites.getNearestCode(spotterList[position].latLon)
         Route.radarWithOneSpotter(this, radarSite, spotterList[position].unique)
     }
 

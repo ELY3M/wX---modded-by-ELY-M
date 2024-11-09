@@ -37,7 +37,6 @@ import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Route //elys mod
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.util.To
 import kotlin.math.*
 
 class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
@@ -226,11 +225,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         yMiddle = height / 2.0f
         val diffX = density * (xMiddle - xPos) / mScaleFactor
         val diffY = density * (yMiddle - yPos) / mScaleFactor
-//        val xStr = RadarSites.getX(wxglRender.state.rid)
-//        val yStr = RadarSites.getRadarSiteY(wxglRender.state.rid)
         val latLon = RadarSites.getLatLon(wxglRender.state.rid).reverse()
-//        centerX = To.float(xStr)
-//        centerY = To.float(yStr)
         centerX = latLon.lat.toFloat()
         centerY = latLon.lon.toFloat()
         val ppd = wxglRender.state.projectionNumbers.oneDegreeScaleFactor
@@ -239,7 +234,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         newY = test2 + (-1.0 * wxglRender.state.y / mScaleFactor + diffY) / ppd
         newY = (180.0 / PI * (2.0 * atan(exp(newY * PI / 180.0)) - PI / 2.0))
         wxglRender.state.closestRadarSites =
-            RadarSites.getNearestRadarSites(LatLon(newY, newX * -1.0), 5)
+            RadarSites.getNearest(LatLon(newY, newX * -1.0), 5)
         listener?.onProgressChanged(index, index, idxInt)
     }
 

@@ -21,85 +21,63 @@
 
 package joshuatee.wx.util
 
+import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.radar.RadarSites
 
 class ProjectionNumbers {
 
-    var scale = 0.0
     var scaleFloat = 0.0f
     var oneDegreeScaleFactor = 0.0
-    var x = "0.0"
-    var y = "0.0"
     var xCenter = 0.0
     var yCenter = 0.0
     var polygonWidth = 2.0
     var radarSite = ""
+    private var latLon = LatLon()
 
     constructor()
-
-    constructor(
-        scale: Double,
-        lat: String,
-        lon: String,
-        xImageCenterPixels: Double,
-        yImageCenterPixels: Double
-    ) {
-        this.scale = scale
-        scaleFloat = scale.toFloat()
-        x = lat
-        y = lon
-        xCenter = xImageCenterPixels
-        yCenter = yImageCenterPixels
-        oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scale)
-    }
 
     constructor(radarSite: String, projectionType: ProjectionType) {
         this.radarSite = radarSite
         when (projectionType) {
             ProjectionType.WX_RENDER -> {
-                scale = 38.00 * UIPreferences.widgetNexradSize
+                scaleFloat = 38.00f * UIPreferences.widgetNexradSize
                 xCenter = 500.0
                 yCenter = 500.0
                 polygonWidth = 2.0
             }
 
             ProjectionType.WX_RENDER_48 -> {
-                scale = 450.00
+                scaleFloat = 450.00f
                 xCenter = 500.0
                 yCenter = 500.0
                 polygonWidth = 1.0
             }
 
             ProjectionType.WX_OGL -> {
-                scale = 190.00
+                scaleFloat = 190.00f
                 xCenter = 0.0
                 yCenter = 0.0
                 polygonWidth = 1.0
             }
         }
-        val latLon = RadarSites.getLatLon(radarSite).reverse()
-        x = latLon.latString
-        y = latLon.lonString
-//        x = RadarSites.getX(radarSite)
-//        y = RadarSites.getY(radarSite)
-        oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scale)
-        scaleFloat = scale.toFloat()
+        latLon = RadarSites.getLatLon(radarSite).reverse()
+        oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scaleFloat.toDouble())
     }
 
     val oneDegreeScaleFactorFloat
         get() = oneDegreeScaleFactor.toFloat()
 
     val xDbl
-        get() = To.double(x)
+        get() = latLon.lat
 
     val xFloat
-        get() = To.float(x)
+        get() = xDbl.toFloat()
 
     val yDbl
-        get() = To.double(y)
+        get() = latLon.lon
 
     val yFloat
-        get() = To.float(y)
+        get() = yDbl.toFloat()
 }

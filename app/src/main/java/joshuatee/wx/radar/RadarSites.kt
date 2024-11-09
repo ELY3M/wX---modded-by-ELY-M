@@ -24,24 +24,37 @@ package joshuatee.wx.radar
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Site
 import joshuatee.wx.objects.Sites
-import joshuatee.wx.settings.UtilityLocation
 
 @Suppress("SpellCheckingInspection")
 object RadarSites {
-
-    // grep NWS_LOC UtilityPref.dart |sed "s/Utility.writePref(.NWS_LOCATION_/\"/" | sed 's/",/" to/' | sed "s/);/,/"
 
     fun getName(radarSite: String): String = names[radarSite] ?: ""
 
     fun getLatLon(radarSite: String): LatLon {
         val lat = lat[radarSite] ?: ""
-        val lon = "-" + (RadarSites.lon[radarSite] ?: "")
+        val lon = "-" + (lon[radarSite] ?: "")
         return LatLon(lat, lon)
     }
 
-//    private fun getX(radarSite: String): String = lat[radarSite] ?: ""
-//
-//    private fun getY(radarSite: String): String = lon[radarSite] ?: ""
+    private fun nexradRadarCodes(): List<String> {
+        val radars = mutableListOf<String>()
+        for (radar in sites.codeList) {
+            if (!radar.startsWith("T")) {
+                radars.add(radar)
+            }
+        }
+        return radars
+    }
+
+    private fun tdwrRadarCodes(): List<String> {
+        val radars = mutableListOf<String>()
+        for (radar in sites.codeList) {
+            if (radar.startsWith("T")) {
+                radars.add(radar)
+            }
+        }
+        return radars
+    }
 
     fun nexradRadars(): List<String> {
         val radars = mutableListOf<String>()
@@ -63,50 +76,34 @@ object RadarSites {
         return radars
     }
 
-    fun getNearestRadarSites(
+    fun getNearest(
         location: LatLon,
         count: Int,
         includeTdwr: Boolean = true
     ): List<Site> {
         val radarSites = mutableListOf<Site>()
-        nexradRadars().forEach {
-            val labels = it.split(":")
+        val allRadars = nexradRadarCodes().toMutableList()
+        if (includeTdwr) {
+            allRadars += tdwrRadarCodes()
+        }
+        allRadars.forEach {
+            val latLon = getLatLon(it)
             radarSites.add(
                 Site.fromLatLon(
-                    labels[0],
-                    getLatLon(labels[0]),
-                    LatLon.distance(
-                        location,
-                        getLatLon(labels[0]),
-                    )
+                    it,
+                    latLon,
+                    LatLon.distance(location, latLon)
                 )
             )
         }
-        if (includeTdwr) {
-            tdwrRadars().forEach {
-                val labels = it.split(":")
-                radarSites.add(
-                    Site.fromLatLon(
-                        labels[0],
-                        getLatLon(labels[0]),
-                        LatLon.distance(
-                            location,
-                            getLatLon(labels[0]),
-                        )
-                    )
-                )
-            }
-        }
         radarSites.sortBy { it.distance }
-        return radarSites.subList(0, count)
+        return radarSites.slice(0 until count)
     }
 
-    fun getNearestRadarSiteCode(
+    fun getNearestCode(
         location: LatLon,
         includeTdwr: Boolean = false
-    ): String {
-        return getNearestRadarSites(location, 5, includeTdwr)[0].codeName
-    }
+    ): String = getNearest(location, 5, includeTdwr)[0].codeName
 
     private val names = mapOf(
         "JUA" to "PR, San Juan",
