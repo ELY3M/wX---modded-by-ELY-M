@@ -38,7 +38,7 @@ import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 
-class RadarMosaicNwsActivity : VideoRecordActivity() {
+class RadarMosaicActivity : VideoRecordActivity() {
 
     //
     // Provides native interface to NWS radar mosaics along with animations
@@ -57,7 +57,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     private lateinit var navDrawer: NavDrawer
     private val prefImagePosition = "RADARMOSAICNWS"
     private val prefTokenSector = "REMEMBER_NWSMOSAIC_SECTOR"
-    private var sector = UtilityNwsRadarMosaic.getNearest(Location.latLon)
+    private var sector = UtilityRadarMosaic.getNearest(Location.latLon)
     private var saveLocation = false
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -72,19 +72,25 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.radarnwsmosaic, bottomToolbar = false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer,
+            R.menu.radarnwsmosaic,
+            bottomToolbar = false
+        )
         val arguments = intent.getStringArrayExtra(URL)!!
         setupUI()
         if (arguments.isNotEmpty() && arguments[0] != "") {
             sector = Utility.readPref(this, prefTokenSector, sector)
             saveLocation = true
         }
-        navDrawer.index = UtilityNwsRadarMosaic.sectors.indexOf(sector)
+        navDrawer.index = UtilityRadarMosaic.sectors.indexOf(sector)
         getContent()
     }
 
     private fun setupUI() {
-        navDrawer = NavDrawer(this, UtilityNwsRadarMosaic.labels, UtilityNwsRadarMosaic.sectors) { getContent() }
+        navDrawer =
+            NavDrawer(this, UtilityRadarMosaic.labels, UtilityRadarMosaic.sectors) { getContent() }
         touchImage = TouchImage(this, toolbar, R.id.iv, navDrawer, "")
         objectAnimate = ObjectAnimate(this, touchImage)
         objectToolbar.connectClick { navDrawer.open() }
@@ -100,7 +106,7 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
     private fun getContent() {
         objectAnimate.stop()
         title = navDrawer.url
-        FutureBytes(UtilityNwsRadarMosaic.get(navDrawer.url), ::showImage)
+        FutureBytes(UtilityRadarMosaic.get(navDrawer.url), ::showImage)
     }
 
     private fun showImage(bitmap: Bitmap) {
@@ -126,7 +132,12 @@ class RadarMosaicNwsActivity : VideoRecordActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_animate -> objectAnimate.animateClicked(::getContent) { UtilityNwsRadarMosaic.getAnimation(navDrawer.url) }
+            R.id.action_animate -> objectAnimate.animateClicked(::getContent) {
+                UtilityRadarMosaic.getAnimation(
+                    navDrawer.url
+                )
+            }
+
             R.id.action_stop -> objectAnimate.stop()
             R.id.action_pause -> objectAnimate.pause()
             R.id.action_share -> if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {

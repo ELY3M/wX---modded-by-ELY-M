@@ -25,7 +25,7 @@ import android.content.Context
 import android.widget.RemoteViews
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.radar.RadarMosaicNwsActivity
+import joshuatee.wx.radar.RadarMosaicActivity
 
 class ObjectWidgetMosaicRadar(context: Context) {
 
@@ -34,7 +34,15 @@ class ObjectWidgetMosaicRadar(context: Context) {
     init {
         UtilityWidget.setImage(context, remoteViews, WidgetFile.MOSAIC_RADAR.fileName)
         if (!UIPreferences.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, RadarMosaicNwsActivity::class.java, R.id.iv, RadarMosaicNwsActivity.URL, arrayOf(""), WidgetFile.MOSAIC_RADAR.action)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                RadarMosaicActivity::class.java,
+                R.id.iv,
+                RadarMosaicActivity.URL,
+                arrayOf(""),
+                WidgetFile.MOSAIC_RADAR.action
+            )
         }
     }
 

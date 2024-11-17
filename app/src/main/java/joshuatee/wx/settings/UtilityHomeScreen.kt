@@ -29,7 +29,7 @@ import joshuatee.wx.misc.USAlertsActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.objects.Route
-import joshuatee.wx.radar.RadarMosaicNwsActivity
+import joshuatee.wx.radar.RadarMosaicActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.spc.SpcSwoActivity
 import joshuatee.wx.spc.SpcStormReportsActivity
@@ -183,9 +183,9 @@ internal object UtilityHomeScreen {
         classArgs["RTMA_WIND"] = arrayOf("10m_wnd")
         classId["RTMA_WIND"] = RtmaActivity.RID
 
-        classes["RAD_2KM"] = RadarMosaicNwsActivity::class.java
+        classes["RAD_2KM"] = RadarMosaicActivity::class.java
         classArgs["RAD_2KM"] = arrayOf("")
-        classId["RAD_2KM"] = RadarMosaicNwsActivity.URL
+        classId["RAD_2KM"] = RadarMosaicActivity.URL
 
         listOf(
             "FMAP",

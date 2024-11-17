@@ -2,9 +2,19 @@
 
 # Developer ChangeLog
 
-## 55921 2024_11_07
+## 55922 2024_11_17
+
+* [ADD]
+
+## 55921 2024_11_17
 
 * [REF] evacuate radar lists from GlobalArrays and use functions in RadarSites
+* [REF] radar mosaic cleanup
+
+```
+	renamed:    app/src/main/java/joshuatee/wx/radar/RadarMosaicNwsActivity.kt -> app/src/main/java/joshuatee/wx/radar/RadarMosaicActivity.kt
+	renamed:    app/src/main/java/joshuatee/wx/radar/UtilityNwsRadarMosaic.kt -> app/src/main/java/joshuatee/wx/radar/UtilityRadarMosaic.kt
+```
 
 ## 55920 2024_11_07
 

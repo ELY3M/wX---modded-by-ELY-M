@@ -33,7 +33,7 @@ import joshuatee.wx.models.ModelsSpcHrefActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.nhc.NhcStormActivity
 import joshuatee.wx.nhc.NhcStormDetails
-import joshuatee.wx.radar.RadarMosaicNwsActivity
+import joshuatee.wx.radar.RadarMosaicActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.settings.FavAddActivity
@@ -303,8 +303,8 @@ class Route() {
         fun radarMosaic(context: Context) {
             Route(
                 context,
-                RadarMosaicNwsActivity::class.java,
-                RadarMosaicNwsActivity.URL,
+                RadarMosaicActivity::class.java,
+                RadarMosaicActivity.URL,
                 arrayOf("")
             )
         }

@@ -37,7 +37,7 @@ import joshuatee.wx.misc.WebView
 import joshuatee.wx.misc.WebViewTwitter
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
-import joshuatee.wx.radar.RadarMosaicNwsActivity
+import joshuatee.wx.radar.RadarMosaicActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.radar.WXGLRadarActivity
@@ -51,7 +51,11 @@ class MiscFragment : Fragment() {
 
     private val hm = mutableMapOf<String, TileObject>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_recyclerview, container, false)
         TabScreen(requireActivity(), view, "FRAGMENT_MISC_ORDER", tileObjects)
         return view
@@ -60,68 +64,71 @@ class MiscFragment : Fragment() {
     private val tileObjects: MutableList<TileObject>
         get() {
             hm["model_ncep"] = TileObject(
-                    R.drawable.ncep,
-                    ModelsGenericActivity::class.java,
-                    ModelsGenericActivity.INFO,
-                    arrayOf("1", "NCEP", "NCEP"),
-                    "model_ncep", "NCEP"
+                R.drawable.ncep,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "NCEP", "NCEP"),
+                "model_ncep", "NCEP"
             )
             hm["model_hrrr"] = TileObject(
-                    R.drawable.hrrrviewer,
-                    ModelsGenericActivity::class.java,
-                    ModelsGenericActivity.INFO,
-                    arrayOf("1", "ESRL", "ESRL"),
-                    "model_hrrr", "HRRR"
+                R.drawable.hrrrviewer,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "ESRL", "ESRL"),
+                "model_hrrr", "HRRR"
             )
 
             hm["uswarn"] = TileObject(
-                    R.drawable.uswarn,
-                    USAlertsActivity::class.java,
-                    USAlertsActivity.URL,
-                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us"),
-                    "uswarn", "US Warnings"
+                R.drawable.uswarn,
+                USAlertsActivity::class.java,
+                USAlertsActivity.URL,
+                arrayOf(
+                    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
+                    "us"
+                ),
+                "uswarn", "US Warnings"
             )
             hm["wpctext"] = TileObject(
-                    R.drawable.srfd,
-                    NationalTextActivity::class.java,
-                    NationalTextActivity.URL,
-                    arrayOf("pmdspd", "Short Range Forecast Discussion"),
-                    "wpctext", "National text products"
+                R.drawable.srfd,
+                NationalTextActivity::class.java,
+                NationalTextActivity.URL,
+                arrayOf("pmdspd", "Short Range Forecast Discussion"),
+                "wpctext", "National text products"
             )
             hm["nhc"] = TileObject(
-                    R.drawable.nhc,
-                    NhcActivity::class.java,
-                    "",
-                    arrayOf(),
-                    "nhc", "NHC"
+                R.drawable.nhc,
+                NhcActivity::class.java,
+                "",
+                arrayOf(),
+                "nhc", "NHC"
             )
             hm["nwsmosaic"] = TileObject(
-                    R.drawable.nws_sector,
-                    RadarMosaicNwsActivity::class.java,
-                    RadarMosaicNwsActivity.URL,
-                    arrayOf("sector"),
-                    "nwsmosaic", "NWS Radar Mosaics"
+                R.drawable.nws_sector,
+                RadarMosaicActivity::class.java,
+                RadarMosaicActivity.URL,
+                arrayOf("sector"),
+                "nwsmosaic", "NWS Radar Mosaics"
             )
             hm["goes"] = TileObject(
-                    R.drawable.goes,
-                    GoesActivity::class.java,
-                    GoesActivity.RID,
-                    arrayOf("CONUS", "9"),
-                    "goes", "GOES"
+                R.drawable.goes,
+                GoesActivity::class.java,
+                GoesActivity.RID,
+                arrayOf("CONUS", "9"),
+                "goes", "GOES"
             )
             hm["lightning"] = TileObject(
-                    R.drawable.lightning,
-                    GoesActivity::class.java,
-                    GoesActivity.RID,
-                    arrayOf("CONUS", "23"),
-                    "lightning", "lightning"
+                R.drawable.lightning,
+                GoesActivity::class.java,
+                GoesActivity.RID,
+                arrayOf("CONUS", "23"),
+                "lightning", "lightning"
             )
             hm["wpcimages"] = TileObject(
-                    R.drawable.fmap,
-                    NationalImagesActivity::class.java,
-                    "",
-                    arrayOf(),
-                    "wpcimages", "National Images"
+                R.drawable.fmap,
+                NationalImagesActivity::class.java,
+                "",
+                arrayOf(),
+                "wpcimages", "National Images"
             )
 	    //elys mod - keeping twitter
             hm["twitter_state"] = TileObject(
@@ -137,78 +144,78 @@ class MiscFragment : Fragment() {
                      "twitter_tornado", "Twitter tornado"
             )
             hm["opc"] = TileObject(
-                    R.drawable.opc,
-                    ImageCollectionActivity::class.java,
-                    ImageCollectionActivity.TYPE,
-                    arrayOf("OPC"),
-                    "opc", "OPC"
+                R.drawable.opc,
+                ImageCollectionActivity::class.java,
+                ImageCollectionActivity.TYPE,
+                arrayOf("OPC"),
+                "opc", "OPC"
             )
             hm["goesfulldisk"] = TileObject(
-                    R.drawable.goesfulldisk,
-                    ImageCollectionActivity::class.java,
-                    ImageCollectionActivity.TYPE,
-                    arrayOf("GOESFD"),
-                    "goesfulldisk", "GOES Full Disk"
+                R.drawable.goesfulldisk,
+                ImageCollectionActivity::class.java,
+                ImageCollectionActivity.TYPE,
+                arrayOf("GOESFD"),
+                "goesfulldisk", "GOES Full Disk"
             )
             hm["nwsobs"] = TileObject(
-                    R.drawable.nwsobssites,
-                    NwsObsSitesActivity::class.java,
-                    "",
-                    arrayOf(),
-                    "nwsobs", "Observation sites"
+                R.drawable.nwsobssites,
+                NwsObsSitesActivity::class.java,
+                "",
+                arrayOf(),
+                "nwsobs", "Observation sites"
             )
             if (!UIPreferences.dualpaneRadarIcon) {
                 hm["wxogl"] = TileObject(
-                        R.drawable.wxogldualpane,
-                        WXGLRadarActivityMultiPane::class.java,
-                        WXGLRadarActivityMultiPane.RID,
-                        arrayOf(Location.rid, "", "2"),
-                        "wxogl", "Dual pane nexrad radar"
+                    R.drawable.wxogldualpane,
+                    WXGLRadarActivityMultiPane::class.java,
+                    WXGLRadarActivityMultiPane.RID,
+                    arrayOf(Location.rid, "", "2"),
+                    "wxogl", "Dual pane nexrad radar"
                 )
             } else {
                 hm["wxogl"] = TileObject(
-                        R.drawable.wxoglsinglepane,
-                        WXGLRadarActivity::class.java,
-                        WXGLRadarActivity.RID,
-                        arrayOf(Location.rid, ""),
-                        "wxogl", "Single pane nexrad radar"
+                    R.drawable.wxoglsinglepane,
+                    WXGLRadarActivity::class.java,
+                    WXGLRadarActivity.RID,
+                    arrayOf(Location.rid, ""),
+                    "wxogl", "Single pane nexrad radar"
                 )
             }
             Location.checkCurrentLocationValidity()
             hm["wxoglquad"] = TileObject(
-                    R.drawable.wxoglquadpane,
-                    WXGLRadarActivityMultiPane::class.java,
-                    WXGLRadarActivityMultiPane.RID,
-                    arrayOf(Location.rid, "", "4"),
-                    "wxoglquad", "Dual pane nexrad radar"
+                R.drawable.wxoglquadpane,
+                WXGLRadarActivityMultiPane::class.java,
+                WXGLRadarActivityMultiPane.RID,
+                arrayOf(Location.rid, "", "4"),
+                "wxoglquad", "Dual pane nexrad radar"
             )
             hm["model_nssl_wrf"] = TileObject(
-                    R.drawable.nsslwrf,
-                    ModelsGenericActivity::class.java,
-                    ModelsGenericActivity.INFO,
-                    arrayOf("1", "NSSL", "NSSL"),
-                    "model_nssl_wrf", "WRF"
+                R.drawable.nsslwrf,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "NSSL", "NSSL"),
+                "model_nssl_wrf", "WRF"
             )
             hm["goes16"] = TileObject(
-                    R.drawable.goes16,
-                    GoesActivity::class.java,
-                    GoesActivity.RID,
-                    arrayOf(""),
-                    "goes16", "GOES"
+                R.drawable.goes16,
+                GoesActivity::class.java,
+                GoesActivity.RID,
+                arrayOf(""),
+                "goes16", "GOES"
             )
             hm["wpcgefs"] = TileObject(
-                    R.drawable.wpcgefs,
-                    ModelsGenericActivity::class.java,
-                    ModelsGenericActivity.INFO,
-                    arrayOf("1", "WPCGEFS", "WPC"),
-                    "wpcgefs", "WPC GEFS"
+                R.drawable.wpcgefs,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "WPCGEFS", "WPC"),
+                "wpcgefs", "WPC GEFS"
             )
             hm["wpc_rainfall"] = TileObject(
-                    R.drawable.wpc_rainfall,
-                    RainfallOutlookSummaryActivity::class.java,
-                    "",
-                    arrayOf(),
-                    "wpc_rainfall", "WPC RAINFALL"
+                R.drawable.wpc_rainfall,
+                RainfallOutlookSummaryActivity::class.java,
+                "",
+                arrayOf(),
+                "wpc_rainfall", "WPC RAINFALL"
             )
 	    //elys mod
             hm["aurora"] = TileObject(

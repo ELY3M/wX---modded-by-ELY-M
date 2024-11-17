@@ -30,7 +30,7 @@ import joshuatee.wx.misc.UtilityRtma
 import joshuatee.wx.getImage
 import joshuatee.wx.objects.FavoriteType
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.radar.UtilityNwsRadarMosaic
+import joshuatee.wx.radar.UtilityRadarMosaic
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.spc.UtilitySpcMesoInputOutput
@@ -46,9 +46,9 @@ object DownloadImage {
         val sector = Utility.readPref(
             context,
             prefTokenSector,
-            UtilityNwsRadarMosaic.getNearest(Location.latLon)
+            UtilityRadarMosaic.getNearest(Location.latLon)
         )
-        UtilityNwsRadarMosaic.get(sector).getImage()
+        UtilityRadarMosaic.get(sector).getImage()
     } catch (e: Exception) {
         UtilityLog.handleException(e)
         UtilityImg.getBlankBitmap()

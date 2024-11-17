@@ -26,7 +26,7 @@ import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.To
 
 @Suppress("SpellCheckingInspection")
-object UtilityNwsRadarMosaic {
+object UtilityRadarMosaic {
 
     private const val BASE_URL = "https://radar.weather.gov/ridge/standard/"
 
@@ -50,55 +50,55 @@ object UtilityNwsRadarMosaic {
     }
 
     val sectors = listOf(
-            "CONUS",
-            "ALASKA",
-            "CARIB",
-            "CENTGRLAKES",
-            "GUAM",
-            "HAWAII",
-            "NORTHEAST",
-            "NORTHROCKIES",
-            "PACNORTHWEST",
-            "PACSOUTHWEST",
-            "SOUTHEAST",
-            "SOUTHMISSVLY",
-            "SOUTHPLAINS",
-            "SOUTHROCKIES",
-            "UPPERMISSVLY",
+        "CONUS",
+        "ALASKA",
+        "CARIB",
+        "CENTGRLAKES",
+        "GUAM",
+        "HAWAII",
+        "NORTHEAST",
+        "NORTHROCKIES",
+        "PACNORTHWEST",
+        "PACSOUTHWEST",
+        "SOUTHEAST",
+        "SOUTHMISSVLY",
+        "SOUTHPLAINS",
+        "SOUTHROCKIES",
+        "UPPERMISSVLY",
     )
 
     val labels = listOf(
-            "CONUS",
-            "ALASKA",
-            "CARIB",
-            "CENTGRLAKES",
-            "GUAM",
-            "HAWAII",
-            "NORTHEAST",
-            "NORTHROCKIES",
-            "PACNORTHWEST",
-            "PACSOUTHWEST",
-            "SOUTHEAST",
-            "SOUTHMISSVLY",
-            "SOUTHPLAINS",
-            "SOUTHROCKIES",
-            "UPPERMISSVLY",
+        "CONUS",
+        "ALASKA",
+        "CARIB",
+        "CENTGRLAKES",
+        "GUAM",
+        "HAWAII",
+        "NORTHEAST",
+        "NORTHROCKIES",
+        "PACNORTHWEST",
+        "PACSOUTHWEST",
+        "SOUTHEAST",
+        "SOUTHMISSVLY",
+        "SOUTHPLAINS",
+        "SOUTHROCKIES",
+        "UPPERMISSVLY",
     )
 
     private val cityToLatLon = mapOf(
-            "ALASKA" to LatLon(63.8683, -149.3669),
-            "CARIB" to LatLon(18.356, -69.592),
-            "CENTGRLAKES" to LatLon(42.4396, -84.7305),
-            "GUAM" to LatLon(13.4208, 144.7540),
-            "HAWAII" to LatLon(19.5910, -155.4343),
-            "NORTHEAST" to LatLon(42.7544, -73.4800),
-            "NORTHROCKIES" to LatLon(44.0813, -108.1309),
-            "PACNORTHWEST" to LatLon(43.1995, -118.9174),
-            "PACSOUTHWEST" to LatLon(35.8313, -119.2245),
-            "SOUTHEAST" to LatLon(30.2196, -82.1522),
-            "SOUTHMISSVLY" to LatLon(33.2541, -89.8034),
-            "SOUTHPLAINS" to LatLon(32.4484, -99.7781),
-            "SOUTHROCKIES" to LatLon(33.2210, -110.3162),
-            "UPPERMISSVLY" to LatLon(42.9304, -95.7488)
+        "ALASKA" to LatLon(63.8683, -149.3669),
+        "CARIB" to LatLon(18.356, -69.592),
+        "CENTGRLAKES" to LatLon(42.4396, -84.7305),
+        "GUAM" to LatLon(13.4208, 144.7540),
+        "HAWAII" to LatLon(19.5910, -155.4343),
+        "NORTHEAST" to LatLon(42.7544, -73.4800),
+        "NORTHROCKIES" to LatLon(44.0813, -108.1309),
+        "PACNORTHWEST" to LatLon(43.1995, -118.9174),
+        "PACSOUTHWEST" to LatLon(35.8313, -119.2245),
+        "SOUTHEAST" to LatLon(30.2196, -82.1522),
+        "SOUTHMISSVLY" to LatLon(33.2541, -89.8034),
+        "SOUTHPLAINS" to LatLon(32.4484, -99.7781),
+        "SOUTHROCKIES" to LatLon(33.2210, -110.3162),
+        "UPPERMISSVLY" to LatLon(42.9304, -95.7488)
     )
 }
