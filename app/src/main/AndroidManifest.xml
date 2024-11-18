@@ -155,7 +155,7 @@
             android:label="NWS Observation Sites"
             android:parentActivityName="WX" />
         <activity
-            android:name=".radar.RadarMosaicNwsActivity"
+            android:name=".radar.RadarMosaicActivity"
             android:label=""
             android:parentActivityName="WX" />
         <activity
