@@ -595,7 +595,7 @@ class Route() {
         }
         //elys mod - for longpress in radar
         fun radarMosaicConus(context: Context) {
-                Route(context, RadarMosaicNwsActivity::class.java, RadarMosaicNwsActivity.URL, arrayOf("CONUS"))
+                Route(context, RadarMosaicActivity::class.java, RadarMosaicActivity.URL, arrayOf("CONUS"))
         }		
     }
 }
