@@ -123,6 +123,7 @@ enum class PolygonType(
         RadarPreferences.wpcFronts,
         RadarPreferences.wpcFrontLineSize.toFloat()
     ),
+    USERPOINTS(0, "USERPOINTS", RadarPreferences.userPoints, 0.0f),
     NONE(0, "", false, 0.0f);
 
     override fun toString() = typeAsString
