@@ -25,29 +25,104 @@ package joshuatee.wx.objects
 import android.graphics.Color
 import joshuatee.wx.settings.RadarPreferences
 
-enum class PolygonType(var color: Int, private val typeAsString: String, var pref: Boolean, var size: Float) {
+enum class PolygonType(
+    var color: Int,
+    private val typeAsString: String,
+    var pref: Boolean,
+    var size: Float
+) {
 
-    MCD(RadarPreferences.colorMcd, "MCD", RadarPreferences.watMcd, RadarPreferences.watchMcdLineSize),
+    MCD(
+        RadarPreferences.colorMcd,
+        "MCD",
+        RadarPreferences.watMcd,
+        RadarPreferences.watchMcdLineSize
+    ),
     MPD(RadarPreferences.colorMpd, "MPD", RadarPreferences.mpd, RadarPreferences.watchMcdLineSize),
-    WATCH(RadarPreferences.colorTstormWatch, "WATCH", RadarPreferences.watMcd, RadarPreferences.watchMcdLineSize),
-    WATCH_TORNADO(RadarPreferences.colorTorWatch, "WATCH_TORNADO", RadarPreferences.watMcd, RadarPreferences.watchMcdLineSize),
-    TST(RadarPreferences.colorTstorm, "TST", RadarPreferences.warnings, RadarPreferences.warnLineSize),
+    WATCH(
+        RadarPreferences.colorTstormWatch,
+        "WATCH",
+        RadarPreferences.watMcd,
+        RadarPreferences.watchMcdLineSize
+    ),
+    WATCH_TORNADO(
+        RadarPreferences.colorTorWatch,
+        "WATCH_TORNADO",
+        RadarPreferences.watMcd,
+        RadarPreferences.watchMcdLineSize
+    ),
+    TST(
+        RadarPreferences.colorTstorm,
+        "TST",
+        RadarPreferences.warnings,
+        RadarPreferences.warnLineSize
+    ),
     TOR(RadarPreferences.colorTor, "TOR", RadarPreferences.warnings, RadarPreferences.warnLineSize),
     FFW(RadarPreferences.colorFfw, "FFW", RadarPreferences.warnings, RadarPreferences.warnLineSize),
-    SPOTTER(RadarPreferences.colorSpotter, "SPOTTER", RadarPreferences.spotters, RadarPreferences.spotterSize.toFloat()),
-    SPOTTER_LABELS(RadarPreferences.colorSpotter, "SPOTTER_LABELS", RadarPreferences.spottersLabel, 0.0f),
-    WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", RadarPreferences.obsWindbarbs, RadarPreferences.wbLineSize.toFloat()),
-    WIND_BARB(RadarPreferences.colorObsWindbarbs, "WIND_BARB", RadarPreferences.obsWindbarbs, RadarPreferences.wbLineSize.toFloat()),
-    WIND_BARB_CIRCLE(RadarPreferences.colorObsWindbarbs, "WIND_BARB_CIRCLE", RadarPreferences.obsWindbarbs, RadarPreferences.aviationSize.toFloat()),
-    LOCDOT(RadarPreferences.colorLocdot, "LOCDOT", RadarPreferences.locDot, RadarPreferences.locdotSize.toFloat()),
-    STI(RadarPreferences.colorSti, "STI", RadarPreferences.sti, RadarPreferences.stiLineSize.toFloat()),
+    SPOTTER(
+        RadarPreferences.colorSpotter,
+        "SPOTTER",
+        RadarPreferences.spotters,
+        RadarPreferences.spotterSize.toFloat()
+    ),
+    SPOTTER_LABELS(
+        RadarPreferences.colorSpotter,
+        "SPOTTER_LABELS",
+        RadarPreferences.spottersLabel,
+        0.0f
+    ),
+    WIND_BARB_GUSTS(
+        Color.RED,
+        "WIND_BARB_GUSTS",
+        RadarPreferences.obsWindbarbs,
+        RadarPreferences.wbLineSize.toFloat()
+    ),
+    WIND_BARB(
+        RadarPreferences.colorObsWindbarbs,
+        "WIND_BARB",
+        RadarPreferences.obsWindbarbs,
+        RadarPreferences.wbLineSize.toFloat()
+    ),
+    WIND_BARB_CIRCLE(
+        RadarPreferences.colorObsWindbarbs,
+        "WIND_BARB_CIRCLE",
+        RadarPreferences.obsWindbarbs,
+        RadarPreferences.aviationSize.toFloat()
+    ),
+    LOCDOT(
+        RadarPreferences.colorLocdot,
+        "LOCDOT",
+        RadarPreferences.locDot,
+        RadarPreferences.locdotSize.toFloat()
+    ),
+    STI(
+        RadarPreferences.colorSti,
+        "STI",
+        RadarPreferences.sti,
+        RadarPreferences.stiLineSize.toFloat()
+    ),
     TVS(RadarPreferences.colorTor, "TVS", RadarPreferences.tvs, RadarPreferences.tvsSize.toFloat()),
-    HI(RadarPreferences.colorHi, "HI", RadarPreferences.hi, RadarPreferences.hiSize.toFloat()),
+    HI(
+        RadarPreferences.colorHi,
+        "HI",
+        RadarPreferences.hailIndex,
+        RadarPreferences.hiSize.toFloat()
+    ),
+    //elys mod
     HAIL_LABELS(RadarPreferences.colorHiText, "HAILSIZE_LABELS", RadarPreferences.hailSizeLabel, RadarPreferences.hiTextSize),
     OBS(RadarPreferences.colorObs, "OBS", RadarPreferences.obs, 0.0f),
-    SWO(RadarPreferences.colorHi, "SWO", RadarPreferences.swo, RadarPreferences.swoLineSize.toFloat()),
-    WPC_FRONTS(RadarPreferences.colorHi, "WPC_FRONTS", RadarPreferences.wpcFronts, RadarPreferences.wpcFrontLineSize.toFloat()),
-    USERPOINTS(0, "USERPOINTS", RadarPreferences.userPoints, 0.0f),
+    SWO(
+        RadarPreferences.colorHi,
+        "SWO",
+        RadarPreferences.swo,
+        RadarPreferences.swoLineSize.toFloat()
+    ),
+    WPC_FRONTS(
+        RadarPreferences.colorHi,
+        "WPC_FRONTS",
+        RadarPreferences.wpcFronts,
+        RadarPreferences.wpcFrontLineSize.toFloat()
+    ),
     NONE(0, "", false, 0.0f);
 
     override fun toString() = typeAsString
@@ -72,7 +147,7 @@ enum class PolygonType(var color: Int, private val typeAsString: String, var pre
             LOCDOT.pref = RadarPreferences.locDot
             STI.pref = RadarPreferences.sti
             TVS.pref = RadarPreferences.tvs
-            HI.pref = RadarPreferences.hi
+            HI.pref = RadarPreferences.hailIndex
 	        HAIL_LABELS.pref = RadarPreferences.hailSizeLabel
             OBS.pref = RadarPreferences.obs
             SWO.pref = RadarPreferences.swo

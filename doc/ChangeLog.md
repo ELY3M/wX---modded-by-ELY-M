@@ -2,9 +2,30 @@
 
 # Developer ChangeLog
 
-## 55922 2024_11_17
+## 55924 2024_12_03
 
 * [ADD]
+
+## 55923 2024_12_03
+
+* [ADD] In the adhoc forecast page accessible via "long press" in Nexrad radar, include nearest city
+  in subtitle and if location is saved, a better name will be used.
+
+## 55922 2024_12_02
+
+* [ADD] In the main submenu under **Observations** add access to new images
+  from [Unified Surface Analysis](https://ocean.weather.gov/unified_analysis.php), images jointly
+  produced by NCEP, WPC, OPC, NHC, and HFO
+* [ADD] to Settings -> About -> "View data provider: NWS" (information on where data used in this
+  application is sourced from)
+* [FIX] force 7 day forecast to use older NWS API due to expected outage per **PNS24-66: Potential
+  API Gridded Forecast Data Outage from December 22, 2024 through January 1, 2025**
+* [REF] Tool update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.7.2'
++        classpath 'com.android.tools.build:gradle:8.7.3'
+```
 
 ## 55921 2024_11_17
 

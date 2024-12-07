@@ -34,6 +34,7 @@ import joshuatee.wx.util.Hazards
 import joshuatee.wx.util.SevenDay
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.CardCurrentConditions
 import joshuatee.wx.ui.CardHazards
@@ -63,6 +64,7 @@ class ForecastActivity : BaseActivity() {
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
     private lateinit var sevenDayCollection: SevenDayCollection
+    private var locationName = ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.adhoc_forecast, menu)
@@ -75,7 +77,8 @@ class ForecastActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         val arguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(arguments[0], arguments[1])
-        setTitle("Forecast for", latLon.prettyPrint())
+        locationName = latLon.prettyPrint() + " - " + UtilityLocation.getNearestCity(this, latLon)
+        setTitle("Forecast for", locationName)
         setupUI()
         getContent()
     }
@@ -145,7 +148,7 @@ class ForecastActivity : BaseActivity() {
     }
 
     private fun saveLocation() {
-        val message = Location.save(this, latLon)
+        val message = Location.save(this, latLon, locationName)
         PopupMessage(box.get(), message)
     }
 }

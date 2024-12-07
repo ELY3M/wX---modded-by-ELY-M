@@ -142,13 +142,13 @@ object Location {
         return listOf(wfo, radarStation)
     }
 
-    fun save(context: Context, latLon: LatLon): String =
+    fun save(context: Context, latLon: LatLon, name: String = latLon.toString()): String =
         save(
             context,
             (numLocations + 1).toString(),
             latLon.latString,
             latLon.lonString,
-            latLon.toString()
+            name
         )
 
     fun save(

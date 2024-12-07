@@ -62,7 +62,7 @@ object RadarPreferences {
     var watMcd = false
     var mpd = false
     var sti = false
-    var hi = false
+    var hailIndex = false
     var tvs = false
     var hideRadar = false
     var showLegend = true
@@ -160,7 +160,7 @@ object RadarPreferences {
         watMcd = getInitialPreference("RADAR_SHOW_WATCH", "false")
         mpd = getInitialPreference("RADAR_SHOW_MPD", "false")
         sti = getInitialPreference("RADAR_SHOW_STI", "false")
-        hi = getInitialPreference("RADAR_SHOW_HI", "false")
+        hailIndex = getInitialPreference("RADAR_SHOW_HI", "false")
         tvs = getInitialPreference("RADAR_SHOW_TVS", "false")
         countyLabels = getInitialPreference("RADAR_COUNTY_LABELS", "false")
         countyHires = getInitialPreference("RADAR_COUNTY_HIRES", "false")

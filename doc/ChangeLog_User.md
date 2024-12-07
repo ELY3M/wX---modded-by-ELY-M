@@ -8,6 +8,33 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55923 2024_12_05 (BETA)
+
+* [ADD] In the main submenu under **Observations** add access to new images
+  from [Unified Surface Analysis](https://ocean.weather.gov/unified_analysis.php), images jointly
+  produced by NCEP, WPC, OPC, NHC, and HFO
+* [ADD] to Settings -> About -> "View data provider: NWS" (information on where data used in this
+  application is sourced from)
+* [FIX] force 7 day forecast to use older NWS API due to expected outage per **PNS24-66: Potential
+  API Gridded Forecast Data Outage from December 22, 2024 through January 1, 2025**
+* [ADD] In the adhoc forecast page accessible via "long press" in Nexrad radar, include nearest city
+    in subtitle and if location is saved, a better name will be used.
+
+## 55921 2024_11_19 (BETA)
+
+* [ADD] Nexrad "Long press" - add show nearest SPC Meso sector
+* [ADD] Nexrad "Long press" - add show nearest vis satellite image at bottom
+* [ADD] Nexrad "Long press" - add show nearest AFD (area forecast discussion text product)
+* [ADD] additional Soundings sites (especially AK/HI), remove some that were obsolete
+* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom (
+  includes direction)
+* [ADD] Nexrad "Long press" now shows direction in addition to distance for closest radars and
+  observation point
+* [ADD] Nexrad "Long press" more concise verbiage: miles to mi (in 2 spots)
+* [ADD] Nexrad "Long press" miles to location/radar site enhanced to show direction to
+* [ADD] NHC Storm card - show bearing after direction
+* [FIX] Nexrad "Long press" - meteogram URL had changed
+
 ## 55917 2024_10_15 (BETA)
 
 * [ADD] reinstate wX Android setting "Main screen radar button (requires restart)"

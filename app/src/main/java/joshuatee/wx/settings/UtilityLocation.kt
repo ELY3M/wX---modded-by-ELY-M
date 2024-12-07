@@ -26,10 +26,14 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
+import joshuatee.wx.R
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Site
 import joshuatee.wx.util.To
+import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
+import kotlin.math.roundToInt
 
 object UtilityLocation {
 
@@ -97,6 +101,31 @@ object UtilityLocation {
         }
         sites.sortBy { it.distance }
         return sites[0].codeName
+    }
+
+    fun getNearestCity(context: Context, latLon: LatLon): String {
+        val cityData =
+            UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.cityall)
+        val cityToLatlon = mutableMapOf<String, LatLon>()
+        for (line in cityData) {
+            val items = line.split(",")
+            if (items.size > 4) {
+                if (cityToLatlon.contains(items[0])) {
+                    //std::cout << "UtilityLocation::getNearestCity duplicate: " << items[0] << std::endl;
+                }
+                if (To.int(items[4]) > 1000) {
+                    cityToLatlon[items[1]] = LatLon(items[2], items[3])
+                }
+            }
+        }
+        val sites = mutableListOf<Site>()
+        for (m in cityToLatlon) {
+            sites.add(Site.fromLatLon(m.key, m.value, LatLon.distance(latLon, m.value)))
+        }
+        sites.sortBy { it.distance }
+        val bearingToCity = LatLon.calculateDirection(latLon, cityToLatlon[sites[0].codeName]!!)
+        val distanceToCIty = LatLon.distance(latLon, cityToLatlon[sites[0].codeName]!!).roundToInt()
+        return sites[0].codeName + " is " + To.string(distanceToCIty) + " miles to the " + bearingToCity
     }
 
     fun hasAlerts(locNum: Int): Boolean =
