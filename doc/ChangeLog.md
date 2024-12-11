@@ -2,9 +2,11 @@
 
 # Developer ChangeLog
 
-## 55924 2024_12_03
+## 55924 2024_12_09
 
-* [ADD]
+* [ADD] per **PNS24-66 Updated** NWS will implement a fix in advance of Dec 22 for the NWS API, thus
+  7 day forecast is now configurable again and defaults to using the new NWS API
+* [REF] refactor parts of color palette generators to match other ports
 
 ## 55923 2024_12_03
 

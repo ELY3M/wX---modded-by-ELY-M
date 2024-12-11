@@ -48,4 +48,10 @@ class ColorPaletteLine {
     }
 
     val asInt get() = Color.rgb(red, green, blue)
+
+    companion object {
+        fun fourBit(items: List<String>): ColorPaletteLine {
+            return ColorPaletteLine(0, items[0], items[1], items[2])
+        }
+    }
 }

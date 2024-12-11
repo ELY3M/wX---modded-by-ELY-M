@@ -89,10 +89,7 @@ object UIPreferences {
     var normalTextSize = 16
     var navDrawerMainScreen = false
     var navDrawerMainScreenOnRight = true
-    var useNwsApi =
-        false // dec 2024 hardcode to use old API until next month, comment out below in pref set
-
-    //    var useNwsApi = true
+    var useNwsApi = true
     var useNwsApiForHourly = true
     var tabHeaders = arrayOf("", "", "")
     var widgetPreventTap = false
@@ -136,8 +133,7 @@ object UIPreferences {
     const val HOMESCREEN_FAVORITE_DEFAULT = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
 
     fun initPreferences(context: Context) {
-        // dec 2024 hardcode to use old API until next month
-//        useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "true").startsWith("t")
+        useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "true").startsWith("t")
         useNwsApiForHourly = Utility.readPref(context, "USE_NWS_API_HOURLY", "true").startsWith("t")
         navDrawerMainScreen =
             Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")

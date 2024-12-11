@@ -76,12 +76,6 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
         }
     }
 
-    // comma separated r,g,b (4bit)
-    fun putLine(line: String) {
-        val colors = line.split(",")
-        putBytes(colors[0].toInt(), colors[1].toInt(), colors[2].toInt())
-    }
-
     fun putLine(colorPaletteLine: ColorPaletteLine) {
         putBytes(colorPaletteLine.red, colorPaletteLine.green, colorPaletteLine.blue)
     }
@@ -129,7 +123,8 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
             }
             UtilityIO.readTextFileFromRaw(context.resources, fileId).split("\n").forEach { line ->
                 if (line.contains(",")) {
-                    colorMap[product]!!.putLine(line)
+                    val objectColorPaletteLines = ColorPaletteLine.fourBit(line.split(","))
+                    colorMap[product]!!.putLine(objectColorPaletteLines)
                 }
             }
         }
@@ -139,7 +134,8 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
             val objectColorPalette = colorMap[radarColorPaletteCode]!!
             objectColorPalette.position(0)
             val colorPaletteLines = mutableListOf<ColorPaletteLine>()
-            val text = UtilityColorPalette.getColorMapStringFromDisk(context, radarColorPaletteCode, code)
+            val text =
+                UtilityColorPalette.getColorMapStringFromDisk(context, radarColorPaletteCode, code)
             val lines = text.split("\n").dropLastWhile { it.isEmpty() }
             lines.forEach { line ->
                 if (line.contains("olor") && !line.contains("#")) {
@@ -230,30 +226,52 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
             var g = "0"
             var b = "0"
             var priorLineHas6 = false
-            UtilityColorPalette.getColorMapStringFromDisk(context, colorMapProductCode, code).split("\n").forEach { line ->
-                if (line.contains("olor") && !line.contains("#")) {
-                    val items = if (line.contains(",")) {
-                        line.split(",")
-                    } else {
-                        line.split(" ")
-                    }
-                    if (items.size > 4) {
-                        if (priorLineHas6) {
-                            colorPaletteLines.add(ColorPaletteLine((To.double(items[1]) * prodScale + prodOffset - 1).toInt(), r, g, b))
-                            colorPaletteLines.add(ColorPaletteLine((To.double(items[1]) * prodScale + prodOffset).toInt(), items[2], items[3], items[4]))
-                            priorLineHas6 = false
+            UtilityColorPalette.getColorMapStringFromDisk(context, colorMapProductCode, code)
+                .split("\n").forEach { line ->
+                    if (line.contains("olor") && !line.contains("#")) {
+                        val items = if (line.contains(",")) {
+                            line.split(",")
                         } else {
-                            colorPaletteLines.add(ColorPaletteLine((To.double(items[1]) * prodScale + prodOffset).toInt(), items[2], items[3], items[4]))
+                            line.split(" ")
                         }
-                        if (items.size > 7) {
-                            priorLineHas6 = true
-                            r = items[5]
-                            g = items[6]
-                            b = items[7]
+                        if (items.size > 4) {
+                            if (priorLineHas6) {
+                                colorPaletteLines.add(
+                                    ColorPaletteLine(
+                                        (To.double(items[1]) * prodScale + prodOffset - 1).toInt(),
+                                        r,
+                                        g,
+                                        b
+                                    )
+                                )
+                                colorPaletteLines.add(
+                                    ColorPaletteLine(
+                                        (To.double(items[1]) * prodScale + prodOffset).toInt(),
+                                        items[2],
+                                        items[3],
+                                        items[4]
+                                    )
+                                )
+                                priorLineHas6 = false
+                            } else {
+                                colorPaletteLines.add(
+                                    ColorPaletteLine(
+                                        (To.double(items[1]) * prodScale + prodOffset).toInt(),
+                                        items[2],
+                                        items[3],
+                                        items[4]
+                                    )
+                                )
+                            }
+                            if (items.size > 7) {
+                                priorLineHas6 = true
+                                r = items[5]
+                                g = items[6]
+                                b = items[7]
+                            }
                         }
                     }
                 }
-            }
             if (colorMapProductCode == 161) {
                 // pad first 16, think this is needed
                 repeat(10) {
@@ -291,11 +309,23 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
                     (1 until diff).forEach { j ->
                         @Suppress("KotlinConstantConditions")
                         if (scale == 1) {
-                            val colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, j.toFloat() / (diff * scale).toFloat())
+                            val colorInt = UtilityNexradColors.interpolateColor(
+                                lowColor,
+                                highColor,
+                                j.toFloat() / (diff * scale).toFloat()
+                            )
                             objectColorPalette.putInt(colorInt)
                         } else if (scale == 2) {
-                            val colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, (j * scale - 1).toFloat() / (diff * scale).toFloat())
-                            val colorInt2 = UtilityNexradColors.interpolateColor(lowColor, highColor, (j * scale).toFloat() / (diff * scale).toFloat())
+                            val colorInt = UtilityNexradColors.interpolateColor(
+                                lowColor,
+                                highColor,
+                                (j * scale - 1).toFloat() / (diff * scale).toFloat()
+                            )
+                            val colorInt2 = UtilityNexradColors.interpolateColor(
+                                lowColor,
+                                highColor,
+                                (j * scale).toFloat() / (diff * scale).toFloat()
+                            )
                             objectColorPalette.putInt(colorInt)
                             objectColorPalette.putInt(colorInt2)
                         }
