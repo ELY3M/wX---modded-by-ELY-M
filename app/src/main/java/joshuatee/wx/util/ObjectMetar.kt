@@ -27,7 +27,7 @@ import joshuatee.wx.objects.Site
 import joshuatee.wx.radar.Metar
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.getHtmlWithNewLine
+import joshuatee.wx.getHtmlWithNewLineWithRetry
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.parse
 import kotlin.math.roundToInt
@@ -60,7 +60,7 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
     init {
         val urlMetar =
             "${GlobalVariables.TGFTP_WEBSITE_PREFIX}/data/observations/metar/decoded/" + obsClosest.codeName + ".TXT"
-        val metarData = urlMetar.getHtmlWithNewLine()
+        val metarData = urlMetar.getHtmlWithNewLineWithRetry(200)
         temperature = metarData.parse("Temperature: (.*?) F")
         dewPoint = metarData.parse("Dew Point: (.*?) F")
         windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")

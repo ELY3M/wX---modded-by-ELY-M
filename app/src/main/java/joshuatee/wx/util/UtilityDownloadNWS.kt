@@ -31,6 +31,7 @@ import okhttp3.Request
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.getNwsHtml
+import joshuatee.wx.getNwsHtmlWithRetry
 import joshuatee.wx.parse
 
 // https://www.weather.gov/documentation/services-web-api
@@ -38,8 +39,10 @@ import joshuatee.wx.parse
 
 object UtilityDownloadNws {
 
-    private const val USER_AGENT = "Android ${GlobalVariables.PACKAGE_NAME} ${GlobalVariables.EMAIL}"
-    private const val ACCEPT_HEADER = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
+    private const val USER_AGENT =
+        "Android ${GlobalVariables.PACKAGE_NAME} ${GlobalVariables.EMAIL}"
+    private const val ACCEPT_HEADER =
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
 
     fun getHazardData(url: String): String = url.getNwsHtml()
 
@@ -47,7 +50,11 @@ object UtilityDownloadNws {
     fun getCap(sector: String): String = if (sector == "us") {
         getStringFromUrlXml(GlobalVariables.NWS_API_URL + "/alerts/active?region_type=land")
     } else {
-        getStringFromUrlXml(GlobalVariables.NWS_API_URL + "/alerts/active/area/" + sector.uppercase(Locale.US))
+        getStringFromUrlXml(
+            GlobalVariables.NWS_API_URL + "/alerts/active/area/" + sector.uppercase(
+                Locale.US
+            )
+        )
     }
 
     // used for CapAlert (XML)
@@ -56,10 +63,10 @@ object UtilityDownloadNws {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", USER_AGENT)
-                    .addHeader("Accept", "application/atom+xml")
-                    .build()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .addHeader("Accept", "application/atom+xml")
+                .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -81,9 +88,9 @@ object UtilityDownloadNws {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", USER_AGENT)
-                    .build()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -106,10 +113,10 @@ object UtilityDownloadNws {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", USER_AGENT)
-                    .addHeader("Accept", ACCEPT_HEADER)
-                    .build()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .addHeader("Accept", ACCEPT_HEADER)
+                .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -132,10 +139,13 @@ object UtilityDownloadNws {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", USER_AGENT)
-                    .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1") // TODO FIXME, not valid defaulting to application/geo+json
-                    .build()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .addHeader(
+                    "Accept",
+                    "application/vnd.noaa.dwml+xml;version=1"
+                ) // TODO FIXME, not valid defaulting to application/geo+json
+                .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -155,30 +165,25 @@ object UtilityDownloadNws {
     fun getHourlyData(latLon: LatLon): String {
         val pointsData = getLocationPointData(latLon)
         val hourlyUrl = pointsData.parse("\"forecastHourly\": \"(.*?)\"")
-        return hourlyUrl.getNwsHtml()
+        return hourlyUrl.getNwsHtmlWithRetry(1000)
     }
 
     fun getHourlyOldData(latLon: LatLon): String {
         return UtilityIO.getHtml(
-                "https://forecast.weather.gov/MapClick.php?lat=" +
-                        latLon.latForNws + "&lon=" +
-                        latLon.lonForNws + "&FcstType=digitalDWML"
+            "https://forecast.weather.gov/MapClick.php?lat=" +
+                    latLon.latForNws + "&lon=" +
+                    latLon.lonForNws + "&FcstType=digitalDWML"
         )
     }
 
     fun get7DayData(latLon: LatLon): String = if (UIPreferences.useNwsApi) {
         val pointsData = getLocationPointData(latLon)
         val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
-        var html = forecastUrl.getNwsHtml()
-        if (html.length < 3000) {
-            Thread.sleep(1000)
-            html = forecastUrl.getNwsHtml()
-        }
-        html
+        forecastUrl.getNwsHtmlWithRetry(3000)
     } else {
         UtilityUS.getLocationHtml(latLon)
     }
 
     private fun getLocationPointData(latLon: LatLon): String =
-            (GlobalVariables.NWS_API_URL + "/points/" + latLon.latString + "," + latLon.lonString).getNwsHtml()
+        (GlobalVariables.NWS_API_URL + "/points/" + latLon.latString + "," + latLon.lonString).getNwsHtml()
 }

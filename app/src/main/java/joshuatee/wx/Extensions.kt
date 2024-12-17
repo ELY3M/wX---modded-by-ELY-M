@@ -75,7 +75,25 @@ fun String.getHtml() = UtilityNetworkIO.getStringFromUrl(this)
 
 fun String.getHtmlWithNewLine() = UtilityNetworkIO.getStringFromUrlWithNewLine(this)
 
+fun String.getHtmlWithNewLineWithRetry(expectedMinSize: Long): String {
+    var html = this.getHtmlWithNewLine()
+    if (html.length < expectedMinSize) {
+        Thread.sleep(expectedMinSize)
+        html = this.getHtmlWithNewLine()
+    }
+    return html
+}
+
 fun String.getNwsHtml() = UtilityDownloadNws.getStringFromUrlBaseNoAcceptHeader1(this)
+
+fun String.getNwsHtmlWithRetry(expectedMinSize: Long): String {
+    var html = this.getNwsHtml()
+    if (html.length < expectedMinSize) {
+        Thread.sleep(expectedMinSize)
+        html = this.getNwsHtml()
+    }
+    return html
+}
 
 fun String.parseColumnAll(pattern: Pattern) = UtilityString.parseColumnAll(this, pattern)
 
