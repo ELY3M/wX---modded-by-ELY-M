@@ -2,7 +2,21 @@
 
 # Developer ChangeLog
 
-## 55924 2024_12_09
+## 55926 2024_12_26
+
+* [ADD]
+
+## 55925 2024_12_26
+
+* [ADD] In hourly, abbreviate "Drizzle" to "Dz"
+* [ADD] updated lib
+
+```
+-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.3'
++    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+```
+
+## 55924 2024_12_18
 
 * [ADD] per **PNS24-66 Updated** NWS will implement a fix in advance of Dec 22 for the NWS API, thus
   7 day forecast is now configurable again and defaults to using the new NWS API
@@ -11,6 +25,13 @@
   and Hourly
 * [ADD] ObjectMetar - for getting current conditions for main screen do manual retry if needed (like
   7-day/hourly)
+* [FIX] in report to the following crash report use a safeGet in one line of code
+
+```
+Exception java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+  at joshuatee.wx.ui.SevenDayCollection.update (SevenDayCollection.kt:34)
+
+```
 
 ## 55923 2024_12_03
 

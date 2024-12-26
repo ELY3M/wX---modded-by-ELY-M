@@ -24,14 +24,20 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.widget.ScrollView
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.safeGet
 import joshuatee.wx.util.SevenDay
 
-class SevenDayCollection(val context: Context, private val boxForecast: VBox, val scrollView: ScrollView) {
+class SevenDayCollection(
+    val context: Context,
+    private val boxForecast: VBox,
+    val scrollView: ScrollView
+) {
 
     fun update(sevenDay: SevenDay, latLon: LatLon, showSunriseCard: Boolean) {
         boxForecast.removeChildren()
         sevenDay.icons.forEachIndexed { index, iconUrl ->
-            val cardSevenDay = CardSevenDay(context, iconUrl, true, sevenDay.forecastList[index])
+            val cardSevenDay =
+                CardSevenDay(context, iconUrl, true, sevenDay.forecastList.safeGet(index))
             cardSevenDay.connect { scrollView.smoothScrollTo(0, 0) }
             boxForecast.addWidget(cardSevenDay)
         }

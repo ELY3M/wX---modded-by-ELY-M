@@ -85,6 +85,7 @@ object UtilityHourly {
             .replace("Freezing", "Frz")
             .replace("T-storms", "Tst")
             .replace("Isolated", "Iso")
+            .replace("Drizzle", "Dz")
 
     fun get(locationNumber: Int): List<String> = if (UIPreferences.useNwsApiForHourly) {
         getString(locationNumber)
