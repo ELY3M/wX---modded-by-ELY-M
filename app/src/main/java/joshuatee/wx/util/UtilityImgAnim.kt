@@ -30,7 +30,11 @@ import joshuatee.wx.ui.TouchImage
 
 object UtilityImgAnim {
 
-    fun getAnimationDrawableFromUrlList(context: Context, urls: List<String>, delayOriginal: Int): AnimationDrawable {
+    fun getAnimationDrawableFromUrlList(
+        context: Context,
+        urls: List<String>,
+        delayOriginal: Int
+    ): AnimationDrawable {
         var delay = delayOriginal
         val animationDrawable = AnimationDrawable()
         val bitmaps = urls.map { it.getImage() }
@@ -45,7 +49,10 @@ object UtilityImgAnim {
         return animationDrawable
     }
 
-    fun getAnimationDrawableFromBitmapList(context: Context, bitmaps: List<Bitmap>): AnimationDrawable {
+    fun getAnimationDrawableFromBitmapList(
+        context: Context,
+        bitmaps: List<Bitmap>
+    ): AnimationDrawable {
         val animationDrawable = AnimationDrawable()
         var delay = UtilityImg.animInterval(context) * 2
         bitmaps.forEachIndexed { index, bitmap ->

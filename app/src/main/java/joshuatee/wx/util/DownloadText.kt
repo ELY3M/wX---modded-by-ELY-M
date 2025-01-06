@@ -36,7 +36,6 @@ import joshuatee.wx.parse
 import joshuatee.wx.parseAcrossLines
 import joshuatee.wx.removeHtml
 import joshuatee.wx.removeLineBreaks
-import joshuatee.wx.removeLineBreaksCap
 import joshuatee.wx.settings.Location.latLon
 import joshuatee.wx.settings.UtilityLocation
 

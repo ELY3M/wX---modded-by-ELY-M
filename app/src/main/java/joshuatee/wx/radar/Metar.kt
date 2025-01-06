@@ -75,7 +75,7 @@ internal object Metar {
             metars.forEach { z ->
                 var validWind = false
                 var validWindGust = false
-                if ((z.startsWith("K") || z.startsWith("P")) && !z.contains("NIL")) {
+                if ((z.startsWith("K") || z.startsWith("P") || z.startsWith("T")) && !z.contains("NIL")) {
                     val tmpArr2 = RegExp.space.split(z)
                     val tmpBlob = z.parse(pattern1)
                     val tdArr = RegExp.slash.split(tmpBlob)

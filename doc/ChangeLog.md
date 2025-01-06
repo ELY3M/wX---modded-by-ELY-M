@@ -2,9 +2,126 @@
 
 # Developer ChangeLog
 
-## 55926 2024_12_26
+## 55931 2025_01_05
 
-* [ADD]
+* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI) (
+  required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
+  work for Guam/CNMI due to insufficient LAT/LON adjustment, it's a WIP
+* [ADD] 2 observations points in Guam/CNMI but they are not yet usable within the program, it's a
+  WIP
+
+## 55930 2025_01_05
+
+* [ADD] geographic boundaries for US Virgin Islands and American Samoa
+* [ADD] long press in nexrad will now show best vis sat image for Hawaii and areas around Puerto
+  Rico
+
+## 55929 2025_01_04
+
+* [FIX] true root cause was fixed in UtilityNetworkIO.getBitmapFromUrl, should not have `!!` in such
+  critical functions
+
+missed one
+
+```
++++ b/app/src/main/java/joshuatee/wx/util/UtilityNetworkIO.kt
+@@ -86,6 +86,7 @@ object UtilityNetworkIO {
+             ) ?: UtilityImg.getBlankBitmap()
+         } else {
+             BitmapFactory.decodeStream(BufferedInputStream(response.body.byteStream()))
++                ?: UtilityImg.getBlankBitmap()
+```
+
+## 55928 2025_01_04
+
+* [FIX] true root cause was fixed in UtilityNetworkIO.getBitmapFromUrl, should not have `!!` in such
+  critical functions
+
+```
++++ b/app/src/main/java/joshuatee/wx/util/UtilityNetworkIO.kt
+@@ -83,7 +83,7 @@ object UtilityNetworkIO {
+                 BufferedInputStream(response.body.byteStream()),
+                 null,
+                 options
+-            )!!
++            ) ?: UtilityImg.getBlankBitmap()
+```
+
+## 55927 2025_01_04
+
+* [FIX] Pre-launch report for wX version 55926 captured multiple issues likely due to the newer
+  kotlin version in use, replicated on physical as well. Crashes are in two areas but caused by the
+  same thing. Not able to identify true root cause yet
+  but the implication seems to be that UtilityNetworkIO.getBitmapFromUrl (called in extension
+  function String.getImage()) which should return only
+  Bitmap is in some cases returning null.
+  Workaround for now is that in two functions which accepted Bitmap are not taking Bitmap? and then
+  doing null check.
+  Both crashes were seen in model activities in which the image was not present on the server (
+  common with incomplete runs, etc or improper start times)
+
+```
+Process: joshuatee.wx, PID: 20099
+      java.lang.NullPointerException: Parameter specified as non-null is null: method joshuatee.wx.util.UtilityImg.eraseBackground, parameter src
+          at joshuatee.wx.util.UtilityImg.eraseBackground(Unknown Source:4)
+          at joshuatee.wx.models.UtilityModelSpcHrrrInputOutput.getImage(UtilityModelSpcHrrrInputOutput.kt:69)
+          at joshuatee.wx.models.ObjectModelGet.image(ObjectModelGet.kt:38)
+          at joshuatee.wx.models.UtilityModels.getContent$lambda$1(UtilityModels.kt:56)
+          at joshuatee.wx.models.UtilityModels.$r8$lambda$Jwn-Ydz84lI7xqKUTj5nF61jriw(Unknown Source:0)
+          at joshuatee.wx.models.UtilityModels$$ExternalSyntheticLambda2.invoke(D8$$SyntheticClass:0)
+          at joshuatee.wx.objects.FutureVoid$getContent$1$1.invokeSuspend(FutureVoid.kt:33)
+          at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+          at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+          at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+          at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+          at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+          at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:820)
+          at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+          at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+          Suppressed: kotlinx.coroutines.internal.DiagnosticCoroutineContextException: [StandaloneCoroutine{Cancelling}@dab4ae4, Dispatchers.Main]
+```
+
+```
+@@ -88,13 +103,15 @@ class TouchImage {
+     val scrollPosition: PointF?
+         get() = img.scrollPosition
+ 
+-    fun set(bitmap: Bitmap) {
+-        img.setImageBitmap(bitmap)
+-        imageLoaded = true
+-        if (prefTokenIdx != "" && drw != null) {
+-            Utility.writePrefInt(context, prefTokenIdx, drw!!.index)
++    fun set(bitmap: Bitmap?) {
++        if (bitmap != null) {
++            img.setImageBitmap(bitmap)
++            imageLoaded = true
++            if (prefTokenIdx != "" && drw != null) {
++                Utility.writePrefInt(context, prefTokenIdx, drw!!.index)
++            }
++            this.bitmap = bitmap
+```
+
+```
++++ b/app/src/main/java/joshuatee/wx/util/UtilityImg.kt
+-    fun eraseBackground(src: Bitmap, color: Int): Bitmap {
++    fun eraseBackground(src: Bitmap?, color: Int): Bitmap {
+
+```
+
+## 55926 2025_01_04
+
+* [ADD] add Metars for Puerto Rico and US Virgin Islands
+* [ADD] Tool/lib update
+
+```
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1'
+
+-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.23"
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
+```
 
 ## 55925 2024_12_26
 

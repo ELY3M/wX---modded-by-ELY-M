@@ -51,11 +51,19 @@ class TouchImage {
         this.context = activity
     }
 
-    constructor(activity: Activity, toolbar: Toolbar, resourceId: Int) : this(activity, resourceId) {
+    constructor(activity: Activity, toolbar: Toolbar, resourceId: Int) : this(
+        activity,
+        resourceId
+    ) {
         connectClick { UtilityToolbar.showHide(toolbar) }
     }
 
-    constructor(activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int) : this(activity, resourceId) {
+    constructor(
+        activity: Activity,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar,
+        resourceId: Int
+    ) : this(activity, resourceId) {
         connectClick { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
@@ -66,12 +74,19 @@ class TouchImage {
         this.prefTokenIdx = prefTokenIdx
     }
 
-    constructor(activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int, drw: NavDrawer, prefTokenIdx: String
+    constructor(
+        activity: Activity,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar,
+        resourceId: Int,
+        drw: NavDrawer,
+        prefTokenIdx: String
     ) : this(activity, resourceId, drw, prefTokenIdx) {
         connectClick { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
-    constructor(activity: Activity, toolbar: Toolbar, resourceId: Int, drw: NavDrawer, prefTokenIdx: String
+    constructor(
+        activity: Activity, toolbar: Toolbar, resourceId: Int, drw: NavDrawer, prefTokenIdx: String
     ) : this(activity, resourceId, drw, prefTokenIdx) {
         connectClick { UtilityToolbar.showHide(toolbar) }
     }
@@ -88,13 +103,15 @@ class TouchImage {
     val scrollPosition: PointF?
         get() = img.scrollPosition
 
-    fun set(bitmap: Bitmap) {
-        img.setImageBitmap(bitmap)
-        imageLoaded = true
-        if (prefTokenIdx != "" && drw != null) {
-            Utility.writePrefInt(context, prefTokenIdx, drw!!.index)
+    fun set(bitmap: Bitmap?) {
+        if (bitmap != null) {
+            img.setImageBitmap(bitmap)
+            imageLoaded = true
+            if (prefTokenIdx != "" && drw != null) {
+                Utility.writePrefInt(context, prefTokenIdx, drw!!.index)
+            }
+            this.bitmap = bitmap
         }
-        this.bitmap = bitmap
     }
 
     fun connectClick(listener: View.OnClickListener) {
@@ -190,9 +207,9 @@ class TouchImage {
 
     fun imgRestorePosnZoom(prefStr: String) {
         setZoom(
-                Utility.readPrefFloat(context, prefStr + "_ZOOM", 1.0f),
-                Utility.readPrefFloat(context, prefStr + "_X", 0.5f),
-                Utility.readPrefFloat(context, prefStr + "_Y", 0.5f)
+            Utility.readPrefFloat(context, prefStr + "_ZOOM", 1.0f),
+            Utility.readPrefFloat(context, prefStr + "_X", 0.5f),
+            Utility.readPrefFloat(context, prefStr + "_Y", 0.5f)
         )
     }
 

@@ -8,6 +8,75 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55925 2025_01_04
+
+* [ADD] In hourly, abbreviate "Drizzle" to "Dz"
+* [ADD] for getting current conditions for main screen do manual retry if needed (like
+  7-day/hourly)
+* [ADD] In the main submenu under **Observations** add access to new images
+  from [Unified Surface Analysis](https://ocean.weather.gov/unified_analysis.php), images jointly
+  produced by NCEP, WPC, OPC, NHC, and HFO
+* [ADD] to Settings -> About -> "View data provider: NWS" (information on where data used in this
+  application is sourced from)
+* [ADD] In the adhoc forecast page accessible via "long press" in Nexrad radar, include nearest city
+  in subtitle and if location is saved, a better name will be used.
+* [ADD] Nexrad "Long press" - add show nearest SPC Meso sector
+* [ADD] Nexrad "Long press" - add show nearest vis satellite image at bottom
+* [ADD] Nexrad "Long press" - add show nearest AFD (area forecast discussion text product)
+* [ADD] additional Soundings sites (especially AK/HI), remove some that were obsolete
+* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom (
+  includes direction)
+* [ADD] Nexrad "Long press" now shows direction in addition to distance for closest radars and
+  observation point
+* [ADD] Nexrad "Long press" more concise verbiage: miles to mi (in 2 spots)
+* [ADD] Nexrad "Long press" miles to location/radar site enhanced to show direction to
+* [ADD] NHC Storm card - show bearing after direction
+* [FIX] Nexrad "Long press" - meteogram URL had changed
+* [ADD] NHC storm summary in NHC activity - show more headlines
+* [ADD] NHC Storm activity title was not showing wind speed in mph
+* [ADD] change how hourly is displayed to work better with larger fonts (it was unusable with large
+  fonts)
+* [ADD] In Hourly, abbreviate "Isolated" as "Iso"
+* [FIX] SPC Compmap - remove product which is no longer available via the website: **3-hr surface
+  pressure change**
+* [FIX] SPC Compmap - change references from **HPC** to **WPC**
+* [ADD] NHC Storm: add additional graphics "Peak Storm Surge Forecast" and "Cumulative Wind History"
+* [ADD] monochrome icon for themed icon support
+* [ADD] per upcoming changes, Android 8.1 (API 27) will no longer be supported
+* [ADD] deprecate these options as mentioned
+  in [upcoming changes document](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
+
+- (added 2023-09-10) wX Android setting "Radar with transparent toolbars" will be retired after
+  2024-09-10
+- (added 2023-09-10) wX Android setting "Radar with transparent status bar" will be retired after
+  2024-09-10
+- (added 2023-09-10) wX Android setting "Radar: immersive mode" will be retired after 2024-09-10
+
+* [FIX] GOES "Full Disk" (Misc Tab) images location and product names have changed, animations are
+  now available for all products. They have been
+  moved here (there are many more Himawari images that have been added which are not yet
+  incorporated):
+    - [https://www.ospo.noaa.gov/products/imagery/meteosat.html](https://www.ospo.noaa.gov/products/imagery/meteosat.html)
+    - [https://www.ospo.noaa.gov/products/imagery/meteosatio.html](https://www.ospo.noaa.gov/products/imagery/meteosatio.html)
+    - [https://www.ospo.noaa.gov/products/imagery/fulldisk.html](https://www.ospo.noaa.gov/products/imagery/fulldisk.html)
+* [ADD] NCEP MAG [v5.1](https://mag.ncep.noaa.gov/version_updates.php):
+    - Added the following new domains to NAEFS and GEFS-MEAN-SPRD:
+        - Continental United States (CONUS)
+        - Alaska
+    - Added the following new products to RTMA:
+        - Ceiling (ceiling -- not included for Guam)
+        - Visibility (vis)
+* [FIX] per SCN24-66: Termination of the Day 3-7 Hemispheric Charts: Effective July 24, 2024, remove
+  5 images in National Images -> Forecast Maps
+
+## 55925 2024_12_29 (BETA)
+
+* [ADD] In hourly, abbreviate "Drizzle" to "Dz"
+* [ADD] per **PNS24-66 Updated** NWS did implement a fix in advance of Dec 22 for the NWS API, thus
+  7 day forecast is now configurable again and defaults to using the new NWS API
+* [ADD] for getting current conditions for main screen do manual retry if needed (like
+  7-day/hourly)
+
 ## 55923 2024_12_05 (BETA)
 
 * [ADD] In the main submenu under **Observations** add access to new images
@@ -18,7 +87,7 @@ impacting all or some users.
 * [FIX] force 7 day forecast to use older NWS API due to expected outage per **PNS24-66: Potential
   API Gridded Forecast Data Outage from December 22, 2024 through January 1, 2025**
 * [ADD] In the adhoc forecast page accessible via "long press" in Nexrad radar, include nearest city
-    in subtitle and if location is saved, a better name will be used.
+  in subtitle and if location is saved, a better name will be used.
 
 ## 55921 2024_11_19 (BETA)
 
@@ -105,9 +174,11 @@ impacting all or some users.
 * [ADD] per user request add the following to notification filters
 
 ```
+
 "Coastal Flood Warning",
 "Coastal Flood Watch",
 "Coastal Flood Advisory"
+
 ```
 
 * [ADD] In support of **SCN24-02: New Forecast Product “Offshore Waters Forecast for SW N Atlantic
@@ -155,9 +226,11 @@ impacting all or some users.
 * [ADD] per user request add the following to notification filters
 
 ```
+
 "Coastal Flood Warning",
 "Coastal Flood Watch",
 "Coastal Flood Advisory"
+
 ```
 
 * [ADD] In support of **SCN24-02: New Forecast Product “Offshore Waters Forecast for SW N Atlantic
@@ -182,40 +255,42 @@ impacting all or some users.
 * [ADD] NCEP MAG updates [MAG 5.0 - March 2024](https://mag.ncep.noaa.gov/version_updates.php)
 
 ```
-Added the following new domain to Global Forecast System (GFS):
-  Pacific (PAC-REGION)
-Renamed the following products to HREF:
-  pmm_refd_1km → pmm_refd_1km_emsl
-  pmm_refd_max → pmm_refd_max_emsl
 
- Added the following products to HREF:
-    Ensemble Agreement Scale probability of 0.01” rain in 1 hour (eas_prob_1h_rain_0.01in)
-    Ensemble Agreement Scale probability of 0.25” rain in 1 hour (eas_prob_1h_rain_0.25in)
-    Ensemble Agreement Scale probability of 0.50” rain in 1 hour (eas_prob_1h_rain_0.50in)
-    Ensemble Agreement Scale probability of 0.01” rain in 3 hours (eas_prob_3h_rain_0.01in)
-    Ensemble Agreement Scale probability of 0.25” rain in 3 hours (eas_prob_3h_rain_0.25in)
-    Ensemble Agreement Scale probability of 0.50” rain in 3 hours (eas_prob_3h_rain_0.50in)
-    Ensemble Agreement Scale probability of 0.1” snow in 1 hour (eas_prob_1h_snow_0.1in)
-    Ensemble Agreement Scale probability of 0.3” snow in 1 hour (eas_prob_1h_snow_0.3in)
-    Ensemble Agreement Scale probability of 0.1” snow in 3 hours (eas_prob_3h_snow_0.1in)
-    Ensemble Agreement Scale probability of 0.3” snow in 3 hours (eas_prob_1h_snow_0.1in)
-    Localized probability matched mean mean precip 1 hour plot (lpmm_mean_precip_p01)
-    Localized probability matched mean mean precip 3 hour plot (lpmm_mean_precip_p03)
-    Localized probability matched mean mean precip total hour plot (lpmm_mean_precip_ptot)
-    prob_lowIFR_IFR
-    pmm_refd_1km
-    pmm_refd_max
+Added the following new domain to Global Forecast System (GFS):
+Pacific (PAC-REGION)
+Renamed the following products to HREF:
+pmm_refd_1km → pmm_refd_1km_emsl
+pmm_refd_max → pmm_refd_max_emsl
+
+Added the following products to HREF:
+Ensemble Agreement Scale probability of 0.01” rain in 1 hour (eas_prob_1h_rain_0.01in)
+Ensemble Agreement Scale probability of 0.25” rain in 1 hour (eas_prob_1h_rain_0.25in)
+Ensemble Agreement Scale probability of 0.50” rain in 1 hour (eas_prob_1h_rain_0.50in)
+Ensemble Agreement Scale probability of 0.01” rain in 3 hours (eas_prob_3h_rain_0.01in)
+Ensemble Agreement Scale probability of 0.25” rain in 3 hours (eas_prob_3h_rain_0.25in)
+Ensemble Agreement Scale probability of 0.50” rain in 3 hours (eas_prob_3h_rain_0.50in)
+Ensemble Agreement Scale probability of 0.1” snow in 1 hour (eas_prob_1h_snow_0.1in)
+Ensemble Agreement Scale probability of 0.3” snow in 1 hour (eas_prob_1h_snow_0.3in)
+Ensemble Agreement Scale probability of 0.1” snow in 3 hours (eas_prob_3h_snow_0.1in)
+Ensemble Agreement Scale probability of 0.3” snow in 3 hours (eas_prob_1h_snow_0.1in)
+Localized probability matched mean mean precip 1 hour plot (lpmm_mean_precip_p01)
+Localized probability matched mean mean precip 3 hour plot (lpmm_mean_precip_p03)
+Localized probability matched mean mean precip total hour plot (lpmm_mean_precip_ptot)
+prob_lowIFR_IFR
+pmm_refd_1km
+pmm_refd_max
 
 Added the following products to NAEFS:
-    10th_percentile_10m_wnd
-    50th_percentile_10m_wnd
-    90th_percentile_10m_wnd
-    extreme_index_10m_wnd
-    10th_percentile_2m_temp
-    50th_percentile_2m_temp
-    90th_percentile_2m_temp
-    extreme_index_2m_temp
-    extreme_index_mslp
+10th_percentile_10m_wnd
+50th_percentile_10m_wnd
+90th_percentile_10m_wnd
+extreme_index_10m_wnd
+10th_percentile_2m_temp
+50th_percentile_2m_temp
+90th_percentile_2m_temp
+extreme_index_2m_temp
+extreme_index_mslp
+
 ```
 
 ## 55873 2024_03_20
@@ -288,15 +363,18 @@ Added the following products to NAEFS:
 * Add the following in the national image viewer (MISC Tab, 3nd Row, Right)
 
 ```
-   "WPC Day 4 Excessive Rainfall Outlook" (Under QPF)
-   "WPC Day 5 Excessive Rainfall Outlook" (Under QPF)
-   "Space Weather Overview" (Under Space Weather)
+
+"WPC Day 4 Excessive Rainfall Outlook" (Under QPF)
+"WPC Day 5 Excessive Rainfall Outlook" (Under QPF)
+"Space Weather Overview" (Under Space Weather)
+
 ```
 
 * Remove the following text products as they are no longer available in the national text product
   viewer (MISC Tab, 2nd Row, Left)
 
 ```
+
     "offn11: Navtex Marine fcst for Kodiak, AK (SE)",
     "offn12: Navtex Marine fcst for Kodiak, AK (N Gulf)",
     "offn13: Navtex Marine fcst for Kodiak, AK (West)",
@@ -305,6 +383,7 @@ Added the following products to NAEFS:
     "fxcn01_d4-7_west: Days 4 to 7 Significant Weather Discussion - West",
     "fxcn01_d1-3_east: Days 1 to 3 Significant Weather Discussion - East",
     "fxcn01_d4-7_east: Days 4 to 7 Significant Weather Discussion - East",
+
 ```
 
 * [ADD] All model activities (ie SPC SREF/HREF/HRRR, ESRL, NCEP, etc) - use floating buttons (
@@ -803,8 +882,10 @@ outline [here](https://developer.android.com/guide/navigation/predictive-back-ge
   reported it has not updated since Jan 26
 
 ```
-IL,ROMEOVILLE/CHI  ,KLOT
+
+IL,ROMEOVILLE/CHI ,KLOT
 KLOT 41.6 -88.1
+
 ```
 
 ### version **55584** - released on 2022/02/10

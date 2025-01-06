@@ -83,9 +83,10 @@ object UtilityNetworkIO {
                 BufferedInputStream(response.body.byteStream()),
                 null,
                 options
-            )!!
+            ) ?: UtilityImg.getBlankBitmap()
         } else {
             BitmapFactory.decodeStream(BufferedInputStream(response.body.byteStream()))
+                ?: UtilityImg.getBlankBitmap()
         }
     } catch (e: Exception) {
         UtilityImg.getBlankBitmap()

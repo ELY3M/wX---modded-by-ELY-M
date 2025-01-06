@@ -25,7 +25,6 @@ package joshuatee.wx.radar
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.core.app.NavUtils
-import androidx.core.app.TaskStackBuilder
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.KeyEvent
 import android.view.Menu
@@ -348,11 +347,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             }
 
             android.R.id.home -> {
-                if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
-                    NavUtils.navigateUpFromSameTask(this)
-                } else {
-                    navigateUp()
-                }
+                NavUtils.navigateUpFromSameTask(this)
+//                if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
+//                    NavUtils.navigateUpFromSameTask(this)
+//                } else {
+//                    navigateUp()
+//                }
             }
 
             else -> super.onOptionsItemSelected(item)
@@ -360,14 +360,14 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun navigateUp() {
-        val upIntent = NavUtils.getParentActivityIntent(this)
-        if (NavUtils.shouldUpRecreateTask(this, upIntent!!) || isTaskRoot) {
-            TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities()
-        } else {
-            NavUtils.navigateUpTo(this, upIntent)
-        }
-    }
+//    private fun navigateUp() {
+//        val upIntent = NavUtils.getParentActivityIntent(this)
+//        if (NavUtils.shouldUpRecreateTask(this, upIntent!!) || isTaskRoot) {
+//            TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities()
+//        } else {
+//            NavUtils.navigateUpTo(this, upIntent)
+//        }
+//    }
 
 /* orinigal 
     private fun getContentVwp() {

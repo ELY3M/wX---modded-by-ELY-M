@@ -94,15 +94,16 @@ object CanvasMain {
     }
 
     fun addCanvasItems(
-            context: Context,
-            bitmapCanvas: Bitmap,
-            projectionType: ProjectionType,
-            radarSite: String,
-            citySize: Int,
+        context: Context,
+        bitmapCanvas: Bitmap,
+        projectionType: ProjectionType,
+        radarSite: String,
+        citySize: Int,
     ) {
         // FIXME use this instead of radarSite and projectionType
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
-        val countyProvider = projectionType === ProjectionType.WX_RENDER_48 || projectionType === ProjectionType.WX_RENDER
+        val countyProvider =
+            projectionType === ProjectionType.WX_RENDER_48 || projectionType === ProjectionType.WX_RENDER
         val cityProvider = true
         val windBarbProvider = projectionType.isMercator
         val stormMotionProvider = projectionType.isMercator
@@ -112,45 +113,49 @@ object CanvasMain {
         }
         if (RadarGeometry.dataByType[RadarGeometryTypeEnum.HwLines]!!.isEnabled) {
             CanvasDraw.geometry(
-                    projectionType,
-                    bitmapCanvas,
-                    radarSite,
-                    RadarGeometryTypeEnum.HwLines,
-                    geometryData.highways
+                projectionType,
+                bitmapCanvas,
+                radarSite,
+                RadarGeometryTypeEnum.HwLines,
+                geometryData.highways
             )
         }
         if (RadarPreferences.cities && cityProvider) {
             CanvasDraw.cities(projectionType, bitmapCanvas, projectionNumbers, citySize)
         }
         CanvasDraw.geometry(
-                projectionType,
-                bitmapCanvas,
-                radarSite,
-                RadarGeometryTypeEnum.StateLines,
-                geometryData.stateLines
+            projectionType,
+            bitmapCanvas,
+            radarSite,
+            RadarGeometryTypeEnum.StateLines,
+            geometryData.stateLines
         )
         if (RadarGeometry.dataByType[RadarGeometryTypeEnum.LakeLines]!!.isEnabled) {
             CanvasDraw.geometry(
-                    projectionType,
-                    bitmapCanvas,
-                    radarSite,
-                    RadarGeometryTypeEnum.LakeLines,
-                    geometryData.lakes
+                projectionType,
+                bitmapCanvas,
+                radarSite,
+                RadarGeometryTypeEnum.LakeLines,
+                geometryData.lakes
             )
         }
         if (countyProvider) {
             if (RadarGeometry.dataByType[RadarGeometryTypeEnum.CountyLines]!!.isEnabled) {
                 CanvasDraw.geometry(
-                        projectionType,
-                        bitmapCanvas,
-                        radarSite,
-                        RadarGeometryTypeEnum.CountyLines,
-                        geometryData.counties
+                    projectionType,
+                    bitmapCanvas,
+                    radarSite,
+                    RadarGeometryTypeEnum.CountyLines,
+                    geometryData.counties
                 )
             }
         }
         if (PolygonType.LOCDOT.pref) {
-            CanvasDraw.locationDotForCurrentLocation(projectionType, bitmapCanvas, projectionNumbers)
+            CanvasDraw.locationDotForCurrentLocation(
+                projectionType,
+                bitmapCanvas,
+                projectionNumbers
+            )
         }
         if (PolygonType.WIND_BARB.pref && windBarbProvider) {
             CanvasWindbarbs.draw(context, projectionType, bitmapCanvas, radarSite, true, 5)
@@ -187,7 +192,9 @@ object CanvasMain {
         val mxCnt = 151552
         val stateLinesFileResId = R.raw.statev2
         var stateRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-        val countState = 200000 // v3 205748
+//        val countState = 200000 // v3 205748
+        val countState =
+            234828 // 2025_01_05 in support of USVI/AS, not sure why old value was 200000 and not 205748
         var hwRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         val countHw = 862208 // on disk size 3448832 yields  862208
         val countHwExt = 770048 // on disk 3080192 yields 770048
@@ -200,28 +207,36 @@ object CanvasMain {
         val lakesFileResId = R.raw.lakesv3
         val countyFileResId = R.raw.county
         val fileIds = listOf(
-                lakesFileResId,
-                hwFileResId,
-                countyFileResId,
-                stateLinesFileResId,
-                canadaResId,
-                mexicoResId,
-                hwExtFileResId
+            lakesFileResId,
+            hwFileResId,
+            countyFileResId,
+            stateLinesFileResId,
+            canadaResId,
+            mexicoResId,
+            hwExtFileResId
         )
-        val countArr = listOf(countLakes, countHw, countCounty, countState, caCnt, mxCnt, countHwExt)
+        val countArr =
+            listOf(countLakes, countHw, countCounty, countState, caCnt, mxCnt, countHwExt)
         try {
             for (type in listOf(
-                    RadarGeometryTypeEnum.HwLines,
-                    RadarGeometryTypeEnum.CountyLines,
-                    RadarGeometryTypeEnum.StateLines,
-                    RadarGeometryTypeEnum.LakeLines
+                RadarGeometryTypeEnum.HwLines,
+                RadarGeometryTypeEnum.CountyLines,
+                RadarGeometryTypeEnum.StateLines,
+                RadarGeometryTypeEnum.LakeLines
             )) {
                 when (type) {
                     RadarGeometryTypeEnum.StateLines -> {
                         stateRelativeBuffer = ByteBuffer.allocateDirect(4 * countState)
                         stateRelativeBuffer.order(ByteOrder.nativeOrder())
                         stateRelativeBuffer.position(0)
-                        listOf(3).forEach { loadBuffer(context.resources, fileIds[it], stateRelativeBuffer, countArr[it]) }
+                        listOf(3).forEach {
+                            loadBuffer(
+                                context.resources,
+                                fileIds[it],
+                                stateRelativeBuffer,
+                                countArr[it]
+                            )
+                        }
                     }
 
                     RadarGeometryTypeEnum.HwLines -> {
@@ -255,7 +270,12 @@ object CanvasMain {
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
         }
-        return GeometryData(hwRelativeBuffer, countyRelativeBuffer, stateRelativeBuffer, lakesRelativeBuffer)
+        return GeometryData(
+            hwRelativeBuffer,
+            countyRelativeBuffer,
+            stateRelativeBuffer,
+            lakesRelativeBuffer
+        )
     }
 
     private fun loadBuffer(resources: Resources, fileId: Int, byteBuffer: ByteBuffer, count: Int) {

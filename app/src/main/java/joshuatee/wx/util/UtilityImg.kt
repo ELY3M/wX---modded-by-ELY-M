@@ -48,15 +48,30 @@ import joshuatee.wx.ui.UtilityUI
 object UtilityImg {
 
     fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap): Bitmap =
-            layerDrawableToBitmap(listOf(BitmapDrawable(context.resources, imageA), BitmapDrawable(context.resources, imageB)))
+        layerDrawableToBitmap(
+            listOf(
+                BitmapDrawable(context.resources, imageA),
+                BitmapDrawable(context.resources, imageB)
+            )
+        )
 
     fun addColorBackground(context: Context, bitmap: Bitmap, color: Int): Bitmap =
-            layerDrawableToBitmap(listOf(ColorDrawable(color), BitmapDrawable(context.resources, bitmap)))
+        layerDrawableToBitmap(
+            listOf(
+                ColorDrawable(color),
+                BitmapDrawable(context.resources, bitmap)
+            )
+        )
 
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
 
     fun getBitmapAddWhiteBackground(context: Context, imgUrl: String): Bitmap =
-            layerDrawableToBitmap(listOf(ColorDrawable(Color.WHITE), BitmapDrawable(context.resources, imgUrl.getImage())))
+        layerDrawableToBitmap(
+            listOf(
+                ColorDrawable(Color.WHITE),
+                BitmapDrawable(context.resources, imgUrl.getImage())
+            )
+        )
 
     fun loadBitmap(context: Context, resourceId: Int, resize: Boolean): Bitmap {
         val inputStream = context.resources.openRawResource(resourceId)
@@ -84,10 +99,10 @@ object UtilityImg {
     }
 
     fun animInterval(context: Context): Int =
-            50 * Utility.readPrefInt(context, "ANIM_INTERVAL", UIPreferences.ANIMATION_INTERVAL_DEFAULT)
+        50 * Utility.readPrefInt(context, "ANIM_INTERVAL", UIPreferences.ANIMATION_INTERVAL_DEFAULT)
 
     fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable =
-            LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
+        LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 
     fun layerDrawableToBitmap(layers: List<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
@@ -109,29 +124,35 @@ object UtilityImg {
         return bitmap
     }
 
-    fun eraseBackground(src: Bitmap, color: Int): Bitmap {
-        val width = src.width
-        val height = src.height
-        return try {
-            val b = src.copy(Config.ARGB_8888, true)
-            b.setHasAlpha(true)
-            val size = width * height
-            val pixels = IntArray(size)
-            src.getPixels(pixels, 0, width, 0, 0, width, height)
-            (0 until size).filter { pixels[it] == color }.forEach {
-                pixels[it] = 0
+    fun eraseBackground(src: Bitmap?, color: Int): Bitmap {
+        if (src != null) {
+            val width = src.width
+            val height = src.height
+            return try {
+                val b = src.copy(Config.ARGB_8888, true)
+                b.setHasAlpha(true)
+                val size = width * height
+                val pixels = IntArray(size)
+                src.getPixels(pixels, 0, width, 0, 0, width, height)
+                (0 until size).filter { pixels[it] == color }.forEach {
+                    pixels[it] = 0
+                }
+                b.setPixels(pixels, 0, width, 0, 0, width, height)
+                b
+            } catch (e: OutOfMemoryError) {
+                getBlankBitmap()
             }
-            b.setPixels(pixels, 0, width, 0, 0, width, height)
-            b
-        } catch (e: OutOfMemoryError) {
-            getBlankBitmap()
+        } else {
+            return getBlankBitmap()
         }
     }
 
     fun resizeViewSetImgInCard(bitmap: Bitmap, imageView: ImageView, numberAcross: Int = 1) {
         val layoutParams = imageView.layoutParams
-        layoutParams.width = (MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) / numberAcross
-        layoutParams.height = ((MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) * bitmap.height / bitmap.width) / numberAcross
+        layoutParams.width =
+            (MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) / numberAcross
+        layoutParams.height =
+            ((MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) * bitmap.height / bitmap.width) / numberAcross
         imageView.layoutParams = layoutParams
         imageView.setImageBitmap(bitmap)
     }
@@ -164,28 +185,32 @@ object UtilityImg {
         val output = Bitmap.createBitmap(wantedWidth, wantedHeight, Config.ARGB_8888)
         val canvas = Canvas(output)
         val matrix = Matrix()
-        matrix.setScale(wantedWidth.toFloat() / bitmap.width, wantedHeight.toFloat() / bitmap.height)
+        matrix.setScale(
+            wantedWidth.toFloat() / bitmap.width,
+            wantedHeight.toFloat() / bitmap.height
+        )
         canvas.drawBitmap(bitmap, matrix, Paint())
         return output
     }
 
-    fun drawTextToBitmap(context: Context, bitmap: Bitmap, text: String, textColor: Int): Bitmap = try {
-        val scale = context.resources.displayMetrics.density
-        val canvas = Canvas(bitmap)
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        paint.color = textColor
-        paint.textSize = 12 * scale
-        paint.setShadowLayer(1.0f, 0.0f, 1.0f, Color.DKGRAY)
-        val bounds = Rect()
-        paint.getTextBounds(text, 0, text.length, bounds)
-        val x = (bitmap.width - bounds.width()) / 6
-        val y = 15
-        canvas.drawText(text, x * scale, y * scale, paint)
-        bitmap
-    } catch (e: Exception) {
-        UtilityLog.handleException(e)
-        Bitmap.createBitmap(10, 10, Config.ARGB_8888)
-    }
+    fun drawTextToBitmap(context: Context, bitmap: Bitmap, text: String, textColor: Int): Bitmap =
+        try {
+            val scale = context.resources.displayMetrics.density
+            val canvas = Canvas(bitmap)
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            paint.color = textColor
+            paint.textSize = 12 * scale
+            paint.setShadowLayer(1.0f, 0.0f, 1.0f, Color.DKGRAY)
+            val bounds = Rect()
+            paint.getTextBounds(text, 0, text.length, bounds)
+            val x = (bitmap.width - bounds.width()) / 6
+            val y = 15
+            canvas.drawText(text, x * scale, y * scale, paint)
+            bitmap
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
+            Bitmap.createBitmap(10, 10, Config.ARGB_8888)
+        }
 
     // used in UtilityUSImgWX for nexrad
     fun drawText(context: Context, bitmap: Bitmap): Bitmap = try {
@@ -210,7 +235,8 @@ object UtilityImg {
     fun vectorDrawableToBitmap(context: Context, resourceDrawable: Int, color: Int): Bitmap {
         val drawable = ContextCompat.getDrawable(context, resourceDrawable)!!
         DrawableCompat.setTint(drawable, color)
-        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Config.ARGB_8888)
+        val bitmap =
+            Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
@@ -265,5 +291,5 @@ object UtilityImg {
 
     // FIXME TODO move elsewhere
     fun getNexradRefBitmap(context: Context, radarSite: String): Bitmap =
-            CanvasCreate.layeredImage(context, radarSite, "N0Q")
+        CanvasCreate.layeredImage(context, radarSite, "N0Q")
 }

@@ -95,7 +95,6 @@ class HourlyActivity : BaseActivity() {
         graphCard.setCardBackgroundColor(Color.BLACK)
         graph = findViewById(R.id.graph)
         graphCard.visibility = View.GONE
-//        cardVerticalText = CardVerticalText(this, 5, toolbar)
         cardVerticalText = CardVerticalText2(this, toolbar)
         box.addWidget(cardVerticalText)
         cardVerticalText.connect { scrollView.scrollTo(0, 0) }
@@ -119,15 +118,6 @@ class HourlyActivity : BaseActivity() {
         } else {
             UtilityHourlyOldApi.getStringForActivity(htmlShare[1])
         }
-//        cardVerticalText.set(
-//            listOf(
-//                hourly.time,
-//                hourly.temp,
-//                hourly.windSpeed,
-//                hourly.windDir,
-//                hourly.conditions
-//            )
-//        )
         cardVerticalText.set(hourly.data)
         plotData()
         if (UIPreferences.hourlyShowGraph) {

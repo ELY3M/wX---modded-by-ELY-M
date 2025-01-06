@@ -246,15 +246,18 @@ object UtilityGoes {
     )
 
     private val sectorToLatLon = mapOf(
-        "cgl" to LatLon(39.123405, -82.532938),  // cgl wellston, Oh
+        "cgl" to LatLon(39.123405, -82.532938),  // wellston, Oh
         "ne" to LatLon(39.360611, -74.431877),   // Atlantic City, NJ
-        "umv" to LatLon(40.622777, -93.934116),  // umv  Lamoni, IA
-        "pnw" to LatLon(41.589703, -119.858865), // pnw Vya, NV
-        "psw" to LatLon(38.524448, -118.623611), // psw Hawthorne, NV
-        "nr" to LatLon(41.139980, -104.820244),  // nr   Cheyenne, Wy
-        "sr" to LatLon(34.653376, -108.677852),  // sr Fence Lake, NM
-        "sp" to LatLon(31.463787, -96.058022),   // sp Buffalo, TX
-        "smv" to LatLon(31.326460, -89.289658),  // smv Hattiesburg, MS
-        "se" to LatLon(30.332184, -81.655647),   // se Jacksonville, FL
+        "umv" to LatLon(40.622777, -93.934116),  // Lamoni, IA
+        "pnw" to LatLon(41.589703, -119.858865), // Vya, NV
+        "psw" to LatLon(38.524448, -118.623611), // Hawthorne, NV
+        "nr" to LatLon(41.139980, -104.820244),  // Cheyenne, Wy
+        "sr" to LatLon(34.653376, -108.677852),  // Fence Lake, NM
+        "sp" to LatLon(31.463787, -96.058022),   // Buffalo, TX
+        "smv" to LatLon(31.326460, -89.289658),  // Hattiesburg, MS
+        "se" to LatLon(30.332184, -81.655647),   // Jacksonville, FL
+        "pr" to LatLon(18.22919, -66.03470),     // Caguas, PR
+        "hi" to LatLon(20.764, -155.333),        // Hawaii
+        "tpw" to LatLon(7.074, -129.370),        // Tropical Pacific (best for American Samoa)
     )
 }

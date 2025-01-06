@@ -27,7 +27,6 @@ import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import joshuatee.wx.R
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Site
 import joshuatee.wx.util.To
