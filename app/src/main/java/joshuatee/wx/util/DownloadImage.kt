@@ -143,8 +143,9 @@ object DownloadImage {
 
             "WEATHERSTORY" -> {
                 needsBitmap = false
-                bitmap =
-                    ("https://www.weather.gov/images/" + Location.wfo.lowercase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
+                bitmap = WeatherStory.getUrl().getImage()
+//                bitmap =
+//                    ("https://www.weather.gov/images/" + Location.wfo.lowercase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
             }
 
             "WFOWARNINGS" -> {

@@ -2,13 +2,28 @@
 
 # Developer ChangeLog
 
-## 55931 2025_01_05
+## 55932 2025_01_10
 
+* [ADD]
+
+## 55931 2025_01_10
+
+* [ADD] Better "Weather Story" handling for image in homescreen (if configured and if your WFO
+  offers it)
 * [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI) (
   required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
   work for Guam/CNMI due to insufficient LAT/LON adjustment, it's a WIP
 * [ADD] 2 observations points in Guam/CNMI but they are not yet usable within the program, it's a
   WIP
+* [ADD] tooling update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.7.3'
++        classpath 'com.android.tools.build:gradle:8.8.0'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.9-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.10.2-all.zip
+```
 
 ## 55930 2025_01_05
 

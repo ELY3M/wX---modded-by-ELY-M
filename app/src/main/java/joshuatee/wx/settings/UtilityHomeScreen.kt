@@ -24,6 +24,7 @@ package joshuatee.wx.settings
 import android.content.Context
 import android.content.Intent
 import joshuatee.wx.MyApplication
+import joshuatee.wx.misc.ImageShowActivity
 import joshuatee.wx.misc.RtmaActivity
 import joshuatee.wx.misc.USAlertsActivity
 import joshuatee.wx.models.ModelsGenericActivity
@@ -37,6 +38,7 @@ import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.spc.SpcThunderStormOutlookActivity
 import joshuatee.wx.ui.CardHSImage
+import joshuatee.wx.util.DownloadImage
 import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.wpc.NationalImagesActivity
@@ -186,6 +188,10 @@ internal object UtilityHomeScreen {
         classes["RAD_2KM"] = RadarMosaicActivity::class.java
         classArgs["RAD_2KM"] = arrayOf("")
         classId["RAD_2KM"] = RadarMosaicActivity.URL
+
+//        classes["WEATHERSTORY"] = ImageShowActivity::class.java
+//        classArgs["WEATHERSTORY"] = arrayOf(DownloadImage.byProduct(context, "WEATHERSTORY"), "Weather Story")
+//        classId["WEATHERSTORY"] = ImageShowActivity.URL
 
         listOf(
             "FMAP",
