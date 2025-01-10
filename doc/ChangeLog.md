@@ -4,7 +4,7 @@
 
 ## 55932 2025_01_10
 
-* [ADD]
+* [ADD] On homescreen if "Weather Story" is configured and you tap on it image is opened up in dedicated image viewer allowing you to share the image or zoom in with the full screen.
 
 ## 55931 2025_01_10
 

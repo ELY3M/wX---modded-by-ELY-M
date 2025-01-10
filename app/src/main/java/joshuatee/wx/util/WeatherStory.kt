@@ -32,7 +32,7 @@ object WeatherStory {
         val html = UtilityIO.getHtml(url)
         var scrapeUrl = UtilityString.parse(
             html,
-            "src=.(https://www.weather.gov//images/.../wxstory/Tab.FileL.png). "
+            "src=.(https://www.weather.gov/?/images/.../wxstory/Tab.FileL.png). "
         )
         if (scrapeUrl.isNotEmpty()) {
             productUrl = scrapeUrl

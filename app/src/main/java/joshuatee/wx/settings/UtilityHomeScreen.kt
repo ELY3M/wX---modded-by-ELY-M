@@ -189,9 +189,9 @@ internal object UtilityHomeScreen {
         classArgs["RAD_2KM"] = arrayOf("")
         classId["RAD_2KM"] = RadarMosaicActivity.URL
 
-//        classes["WEATHERSTORY"] = ImageShowActivity::class.java
-//        classArgs["WEATHERSTORY"] = arrayOf(DownloadImage.byProduct(context, "WEATHERSTORY"), "Weather Story")
-//        classId["WEATHERSTORY"] = ImageShowActivity.URL
+        classes["WEATHERSTORY"] = ImageShowActivity::class.java
+        classArgs["WEATHERSTORY"] = arrayOf("WEATHER_STORY::", "Weather Story")
+        classId["WEATHERSTORY"] = ImageShowActivity.URL
 
         listOf(
             "FMAP",

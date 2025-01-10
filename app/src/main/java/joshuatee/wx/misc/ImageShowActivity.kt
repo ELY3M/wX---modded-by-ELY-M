@@ -29,11 +29,13 @@ import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.R
 import joshuatee.wx.objects.FutureBytes
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.WeatherStory
 
 class ImageShowActivity : BaseActivity() {
 
@@ -52,6 +54,7 @@ class ImageShowActivity : BaseActivity() {
 
     private var url = ""
     private var urls = listOf<String>()
+    private var weatherStoryUrl = ""
     private var shareTitle = ""
     private var needsWhiteBackground = false
     private lateinit var touchImage: TouchImage
@@ -63,7 +66,12 @@ class ImageShowActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show, R.menu.image_show_activity, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show,
+            R.menu.image_show_activity,
+            false
+        )
         val arguments = intent.getStringArrayExtra(URL)!!
         url = arguments[0]
         shareTitle = arguments[1]
@@ -84,6 +92,10 @@ class ImageShowActivity : BaseActivity() {
                 loadRawBitmap()
             }
 
+            url.contains("WEATHER_STORY:") -> {
+                loadWeatherStory()
+            }
+
             else -> getContent()
         }
     }
@@ -91,6 +103,14 @@ class ImageShowActivity : BaseActivity() {
     private fun loadRawBitmap() {
         val bitmap = UtilityImg.loadBitmap(this, R.drawable.radar_legend, false)
         touchImage.set(bitmap)
+    }
+
+    private fun loadWeatherStory() {
+        FutureVoid({ weatherStoryUrl = WeatherStory.getUrl() }, ::loadWeatherStoryUrl)
+    }
+
+    private fun loadWeatherStoryUrl() {
+        FutureBytes(weatherStoryUrl, ::showImage)
     }
 
     override fun onRestart() {
