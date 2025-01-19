@@ -55,18 +55,27 @@ internal object UtilityWidgetDownload {
             val locNum = it.toString()
             val locNumInt = To.int(locNum) - 1
             val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-            val widgetsEnabled = Utility.readPref(context, "WIDGETS_ENABLED", "false").startsWith("t")
+            val widgetsEnabled =
+                Utility.readPref(context, "WIDGETS_ENABLED", "false").startsWith("t")
             val ccUpdateInterval = Utility.readPrefInt(context, "CC_NOTIFICATION_INTERVAL", 30)
             if (Location.locations.size > locNumInt && widgetLocNum == locNum && widgetsEnabled) {
                 val currentUpdateTime = ObjectDateTime.currentTimeMillis()
-                val lastUpdateTime = Utility.readPrefLong(context, "WIDGET_DOWNLOAD" + locNum + "_LAST_UPDATE", 0.toLong())
+                val lastUpdateTime = Utility.readPrefLong(
+                    context,
+                    "WIDGET_DOWNLOAD" + locNum + "_LAST_UPDATE",
+                    0.toLong()
+                )
                 if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
-                    val currentConditions = CurrentConditions(context, locNumInt)
+                    val currentConditions = CurrentConditions(locNumInt)
                     currentConditions.timeCheck(context)
                     val hazards = Hazards(locNumInt)
                     val sevenDay = SevenDay(locNumInt)
                     val updateTime = ObjectDateTime.currentTimeMillis()
-                    Utility.writePrefLong(context, "WIDGET_DOWNLOAD" + locNum + "_LAST_UPDATE", updateTime)
+                    Utility.writePrefLong(
+                        context,
+                        "WIDGET_DOWNLOAD" + locNum + "_LAST_UPDATE",
+                        updateTime
+                    )
                     UtilityWidget.widgetDownloadData(context, currentConditions, sevenDay, hazards)
                 }
             }
@@ -114,7 +123,7 @@ internal object UtilityWidgetDownload {
         // Wind barbs and observations
         //
         if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) {
-            Metar.get(context, rid, 5)
+            Metar.get(rid, 5)
         }
         try {
             val bitmap = if (Location.isUS(widgetLocationNumber)) {
@@ -171,7 +180,7 @@ internal object UtilityWidgetDownload {
             wfo = Utility.readPref(context, "WFO_LAST_USED", wfo).uppercase(Locale.US)
         }
         val hwoText = DownloadText.byProduct(context, "HWO$wfo")
-                .replaceFirst("<BR>[A-Z][A-Z]Z.*?[0-9]{4}<BR>".toRegex(), "")
+            .replaceFirst("<BR>[A-Z][A-Z]Z.*?[0-9]{4}<BR>".toRegex(), "")
         Utility.writePref(context, "HWO_WIDGET", hwoText)
         Utility.commitPref(context)
     }
@@ -210,7 +219,10 @@ internal object UtilityWidgetDownload {
             if (dir.exists() && dir.isDirectory) {
                 UtilityLog.d("WXRADAR", "getFileOutputStream: shared exists and is dir")
             } else if (!dir.mkdirs()) {
-                UtilityLog.d("WXRADAR", "getFileOutputStream: failed to mkdir: " + context.filesDir + "/shared")
+                UtilityLog.d(
+                    "WXRADAR",
+                    "getFileOutputStream: failed to mkdir: " + context.filesDir + "/shared"
+                )
             }
             val file = File(dir, fileName)
             fileOutputStream = FileOutputStream(file)

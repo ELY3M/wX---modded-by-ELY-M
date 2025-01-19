@@ -33,15 +33,19 @@ class NexradRenderData(val context: Context) {
     val zoomToHideMiscFeatures = 0.5f
     val radarBuffers = OglRadarBuffers(RadarPreferences.nexradBackgroundColor)
     val geographicBuffers = mapOf(
-            RadarGeometryTypeEnum.StateLines to OglBuffers(RadarGeometryTypeEnum.StateLines, 0.0f),
-            RadarGeometryTypeEnum.CaLines to OglBuffers(RadarGeometryTypeEnum.CaLines, 0.0f),
-            RadarGeometryTypeEnum.MxLines to OglBuffers(RadarGeometryTypeEnum.MxLines, 0.0f),
-            RadarGeometryTypeEnum.CountyLines to OglBuffers(RadarGeometryTypeEnum.CountyLines, 0.75f),
-            RadarGeometryTypeEnum.HwLines to OglBuffers(RadarGeometryTypeEnum.HwLines, 0.45f),
-            RadarGeometryTypeEnum.HwExtLines to OglBuffers(RadarGeometryTypeEnum.HwExtLines, 3.0f),
-            RadarGeometryTypeEnum.LakeLines to OglBuffers(RadarGeometryTypeEnum.LakeLines, zoomToHideMiscFeatures)
+        RadarGeometryTypeEnum.StateLines to OglBuffers(RadarGeometryTypeEnum.StateLines, 0.0f),
+        RadarGeometryTypeEnum.CaLines to OglBuffers(RadarGeometryTypeEnum.CaLines, 0.0f),
+        RadarGeometryTypeEnum.MxLines to OglBuffers(RadarGeometryTypeEnum.MxLines, 0.0f),
+        RadarGeometryTypeEnum.CountyLines to OglBuffers(RadarGeometryTypeEnum.CountyLines, 0.75f),
+        RadarGeometryTypeEnum.HwLines to OglBuffers(RadarGeometryTypeEnum.HwLines, 0.45f),
+        RadarGeometryTypeEnum.HwExtLines to OglBuffers(RadarGeometryTypeEnum.HwExtLines, 3.0f),
+        RadarGeometryTypeEnum.LakeLines to OglBuffers(
+            RadarGeometryTypeEnum.LakeLines,
+            zoomToHideMiscFeatures
+        )
     )
     val swoBuffers = OglBuffers(PolygonType.SWO)
+    val fireBuffers = OglBuffers(PolygonType.FIRE)
     var wpcFrontBuffersList = mutableListOf<OglBuffers>()
     var wpcFrontPaints = mutableListOf<Int>()
     val locationDotBuffers = OglBuffers(PolygonType.LOCDOT)

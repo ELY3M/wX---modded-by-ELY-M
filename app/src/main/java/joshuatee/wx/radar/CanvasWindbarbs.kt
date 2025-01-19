@@ -21,7 +21,6 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -37,9 +36,15 @@ import joshuatee.wx.util.To
 
 object CanvasWindbarbs {
 
-    fun draw(context: Context, projectionType: ProjectionType, bitmap: Bitmap, radarSite: String, isGust: Boolean, index: Int) {
+    fun draw(
+        projectionType: ProjectionType,
+        bitmap: Bitmap,
+        radarSite: String,
+        isGust: Boolean,
+        index: Int
+    ) {
         val paintTextSize = 22
-        Metar.get(context, radarSite, index)
+        Metar.get(radarSite, index)
         val wbCircleXArr = Metar.data[index].x
         val wbCircleYArr = Metar.data[index].y
         val canvas = Canvas(bitmap)
@@ -79,12 +84,28 @@ object CanvasWindbarbs {
                     val degree2 = angle.toDouble()
                     val startLength = 0.0
                     var start = ExternalGlobalCoordinates(locXDbl, locYDbl)
-                    var ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, 0.0, startLength)
-                    stormList += Projection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, projectionNumbers).toList()
+                    var ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
+                        start,
+                        0.0,
+                        startLength
+                    )
+                    stormList += Projection.computeMercatorNumbers(
+                        ec.latitude,
+                        ec.longitude * -1,
+                        projectionNumbers
+                    ).toList()
                     start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                    ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(start, degree2 + degreeShift, barbLength * nmScaleFactor * barbLengthScaleFactor)
+                    ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
+                        start,
+                        degree2 + degreeShift,
+                        barbLength * nmScaleFactor * barbLengthScaleFactor
+                    )
                     val end = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                    stormList += Projection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, projectionNumbers).toList()
+                    stormList += Projection.computeMercatorNumbers(
+                        ec.latitude,
+                        ec.longitude * -1,
+                        projectionNumbers
+                    ).toList()
                     val barbCount = length / 10
                     var halfBarb = false
                     var oneHalfBarb = false
@@ -95,17 +116,31 @@ object CanvasWindbarbs {
                         oneHalfBarb = true
                     }
                     (0 until barbCount).forEach { j ->
-                        ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(end, degree2, barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)
-                        stormList += NexradLevel3Common.drawLine(ec, projectionNumbers, degree2 - arrowBend * 2.0, startLength + arrowLength * nmScaleFactor)
+                        ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
+                            end,
+                            degree2,
+                            barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
+                        )
+                        stormList += NexradLevel3Common.drawLine(
+                            ec,
+                            projectionNumbers,
+                            degree2 - arrowBend * 2.0,
+                            startLength + arrowLength * nmScaleFactor
+                        )
                     }
                     val halfBarbOffsetFudge = if (oneHalfBarb) nmScaleFactor * 1.0 else 0.0
                     if (halfBarb) {
                         ec = ExternalGeodeticCalculator.calculateEndingGlobalCoordinates(
-                                end,
-                                degree2,
-                                barbOffset + halfBarbOffsetFudge + startLength + (barbCount - 1).toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
+                            end,
+                            degree2,
+                            barbOffset + halfBarbOffsetFudge + startLength + (barbCount - 1).toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                         )
-                        stormList += NexradLevel3Common.drawLine(ec, projectionNumbers, degree2 - arrowBend * 2.0, startLength + arrowLength / 2.0 * nmScaleFactor)
+                        stormList += NexradLevel3Common.drawLine(
+                            ec,
+                            projectionNumbers,
+                            degree2 - arrowBend * 2.0,
+                            startLength + arrowLength / 2.0 * nmScaleFactor
+                        )
                     }
                 } // if length greater then 4
             } // loop over wind barbs
@@ -118,7 +153,11 @@ object CanvasWindbarbs {
         wbCircleXArr.indices.forEach { k ->
             if (Metar.data[index].obsArrAviationColor.size > k) {
                 paint.color = Metar.data[index].obsArrAviationColor[k]
-                val list = Projection.computeMercatorNumbers(wbCircleXArr[k].toFloat(), wbCircleYArr[k].toFloat(), projectionNumbers)
+                val list = Projection.computeMercatorNumbers(
+                    wbCircleXArr[k].toFloat(),
+                    wbCircleYArr[k].toFloat(),
+                    projectionNumbers
+                )
                 val pixXInit = list[0]
                 val pixYInit = list[1]
                 canvas.drawCircle(pixXInit, pixYInit, 5.0f, paint)

@@ -112,7 +112,11 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         lineIndexBuffer.position(0)
         if (!RadarPreferences.useJni) {
             NexradRenderUtilities.generateIndex(triangleIndexBuffer, breakSize15, breakSize15)
-            NexradRenderUtilities.generateIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
+            NexradRenderUtilities.generateIndexLine(
+                lineIndexBuffer,
+                breakSizeLine * 4,
+                breakSizeLine * 2
+            )
         } else {
             Jni.genIndex(triangleIndexBuffer, breakSize15, breakSize15)
             Jni.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
@@ -132,7 +136,8 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
             }
         }
         state.projectionNumbers = ProjectionNumbers(state.rid, state.projectionType)
-        NexradRenderState.oneDegreeScaleFactorGlobal = state.projectionNumbers.oneDegreeScaleFactorFloat
+        NexradRenderState.oneDegreeScaleFactorGlobal =
+            state.projectionNumbers.oneDegreeScaleFactorFloat
     }
 
     // download/decode radar file
@@ -142,8 +147,21 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
     fun constructPolygons(fileName: String, performDecomp: Boolean, urlStr: String = "") {
         totalBins = 0
         NexradRenderRadar.downloadRadarFile(context, data, state, fileName, urlStr)
-        NexradRenderRadar.decodeRadarHeader(context, data, state, wxglNexradLevel2, wxglNexradLevel3, performDecomp)
-        totalBins = NexradRenderRadar.createRadials(context, data, state, wxglNexradLevel2, wxglNexradLevel3)
+        NexradRenderRadar.decodeRadarHeader(
+            context,
+            data,
+            state,
+            wxglNexradLevel2,
+            wxglNexradLevel3,
+            performDecomp
+        )
+        totalBins = NexradRenderRadar.createRadials(
+            context,
+            data,
+            state,
+            wxglNexradLevel2,
+            wxglNexradLevel3
+        )
         breakSize15 = 15000
         chunkCount = 1
         if (totalBins < breakSize15) {
@@ -163,12 +181,24 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         data.radarBuffers.bgColor = RadarPreferences.nexradBackgroundColor
         GLES20.glClearColor(state.bgColorFRed, state.bgColorFGreen, state.bgColorFBlue, 1.0f)
         OpenGLShader.sp_SolidColor = GLES20.glCreateProgram()
-        GLES20.glAttachShader(OpenGLShader.sp_SolidColor, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.VS_SOLID_COLOR))
-        GLES20.glAttachShader(OpenGLShader.sp_SolidColor, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.FS_SOLID_COLOR))
+        GLES20.glAttachShader(
+            OpenGLShader.sp_SolidColor,
+            OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.VS_SOLID_COLOR)
+        )
+        GLES20.glAttachShader(
+            OpenGLShader.sp_SolidColor,
+            OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.FS_SOLID_COLOR)
+        )
         GLES20.glLinkProgram(OpenGLShader.sp_SolidColor)
         GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-        val vertexShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShaderUniform.VS_SOLID_COLOR_UNIFORM)
-        val fragmentShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShaderUniform.FS_SOLID_COLOR_UNIFORM)
+        val vertexShaderUniform = OpenGLShaderUniform.loadShader(
+            GLES20.GL_VERTEX_SHADER,
+            OpenGLShaderUniform.VS_SOLID_COLOR_UNIFORM
+        )
+        val fragmentShaderUniform = OpenGLShaderUniform.loadShader(
+            GLES20.GL_FRAGMENT_SHADER,
+            OpenGLShaderUniform.FS_SOLID_COLOR_UNIFORM
+        )
         OpenGLShaderUniform.sp_SolidColorUniform = GLES20.glCreateProgram()
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, vertexShaderUniform)
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, fragmentShaderUniform)
@@ -197,10 +227,21 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         if (!RadarPreferences.wxoglCenterOnLocation) {
             Matrix.translateM(matrixProjectionAndView, 0, state.x, state.y, 0.0f)
         } else {
-            Matrix.translateM(matrixProjectionAndView, 0, state.gpsLatLonTransformed[0] * state.zoom, state.gpsLatLonTransformed[1] * state.zoom, 0.0f)
+            Matrix.translateM(
+                matrixProjectionAndView,
+                0,
+                state.gpsLatLonTransformed[0] * state.zoom,
+                state.gpsLatLonTransformed[1] * state.zoom,
+                0.0f
+            )
         }
         Matrix.scaleM(matrixProjectionAndView, 0, state.zoom, state.zoom, 1.0f)
-        GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_SolidColor, "uMVPMatrix"), 1, false, matrixProjectionAndView, 0)
+        GLES20.glUniformMatrix4fv(
+            GLES20.glGetUniformLocation(
+                OpenGLShader.sp_SolidColor,
+                "uMVPMatrix"
+            ), 1, false, matrixProjectionAndView, 0
+        )
         //
         // Draw Nexrad radar
         //
@@ -220,11 +261,30 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
                 }
                 try {
                     data.radarBuffers.floatBuffer.position(it * breakSizeRadar * 32)
-                    GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, data.radarBuffers.floatBuffer.slice().asFloatBuffer())
+                    GLES20.glVertexAttribPointer(
+                        positionHandle,
+                        2,
+                        GLES20.GL_FLOAT,
+                        false,
+                        0,
+                        data.radarBuffers.floatBuffer.slice().asFloatBuffer()
+                    )
                     data.radarBuffers.colorBuffer.position(it * breakSizeRadar * 12)
-                    GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, data.radarBuffers.colorBuffer.slice())
+                    GLES20.glVertexAttribPointer(
+                        colorHandle,
+                        3,
+                        GLES20.GL_UNSIGNED_BYTE,
+                        true,
+                        0,
+                        data.radarBuffers.colorBuffer.slice()
+                    )
                     triangleIndexBuffer.position(0)
-                    GLES20.glDrawElements(GLES20.GL_TRIANGLES, radarChunkCnt, GLES20.GL_UNSIGNED_SHORT, triangleIndexBuffer.slice().asShortBuffer())
+                    GLES20.glDrawElements(
+                        GLES20.GL_TRIANGLES,
+                        radarChunkCnt,
+                        GLES20.GL_UNSIGNED_SHORT,
+                        triangleIndexBuffer.slice().asShortBuffer()
+                    )
                 } catch (e: Exception) {
                     UtilityLog.handleException(e)
                 }
@@ -348,6 +408,13 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         if (PolygonType.SWO.pref) {
             GLES20.glLineWidth(PolygonType.SWO.size)
             drawPolygons(data.swoBuffers, 8)
+        }
+        //
+        // SPC Fire Weather Outlook
+        //
+        if (PolygonType.FIRE.pref) {
+            GLES20.glLineWidth(PolygonType.FIRE.size)
+            drawPolygons(data.fireBuffers, 8)
         }
         //
         // WPC Fronts
@@ -515,9 +582,28 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
             (0 until buffers.chunkCount).forEach { _ ->
                 lineIndexBuffer.position(0)
                 buffers.setToPositionZero()
-                GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-                GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer)
-                GLES20.glDrawElements(GLES20.GL_LINES, buffers.floatBuffer.capacity() / countDivisor, GLES20.GL_UNSIGNED_SHORT, lineIndexBuffer.slice().asShortBuffer())
+                GLES20.glVertexAttribPointer(
+                    positionHandle,
+                    2,
+                    GLES20.GL_FLOAT,
+                    false,
+                    0,
+                    buffers.floatBuffer.slice().asFloatBuffer()
+                )
+                GLES20.glVertexAttribPointer(
+                    colorHandle,
+                    3,
+                    GLES20.GL_UNSIGNED_BYTE,
+                    true,
+                    0,
+                    buffers.colorBuffer
+                )
+                GLES20.glDrawElements(
+                    GLES20.GL_LINES,
+                    buffers.floatBuffer.capacity() / countDivisor,
+                    GLES20.GL_UNSIGNED_SHORT,
+                    lineIndexBuffer.slice().asShortBuffer()
+                )
             }
         }
     }
@@ -535,9 +621,28 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
                     buffers.floatBuffer.position(it * 480000)
                     buffers.colorBuffer.position(0)
                     lineIndexBuffer.position(0)
-                    GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-                    GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice())
-                    GLES20.glDrawElements(GLES20.GL_LINES, lineCnt, GLES20.GL_UNSIGNED_SHORT, lineIndexBuffer.slice().asShortBuffer())
+                    GLES20.glVertexAttribPointer(
+                        positionHandle,
+                        2,
+                        GLES20.GL_FLOAT,
+                        false,
+                        0,
+                        buffers.floatBuffer.slice().asFloatBuffer()
+                    )
+                    GLES20.glVertexAttribPointer(
+                        colorHandle,
+                        3,
+                        GLES20.GL_UNSIGNED_BYTE,
+                        true,
+                        0,
+                        buffers.colorBuffer.slice()
+                    )
+                    GLES20.glDrawElements(
+                        GLES20.GL_LINES,
+                        lineCnt,
+                        GLES20.GL_UNSIGNED_SHORT,
+                        lineIndexBuffer.slice().asShortBuffer()
+                    )
                 } catch (e: Exception) {
                 }
             }
@@ -551,15 +656,29 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
             matrixView[it] = 0.0f
             matrixProjectionAndView[it] = 0.0f
         }
-        Matrix.orthoM(matrixProjection, 0, (-1.0f * state.ortInt), state.ortInt.toFloat(), -1.0f * state.ortInt * (1.0f / surfaceRatio),
-                state.ortInt * (1.0f / surfaceRatio), 1.0f, -1.0f)
+        Matrix.orthoM(
+            matrixProjection,
+            0,
+            (-1.0f * state.ortInt),
+            state.ortInt.toFloat(),
+            -1.0f * state.ortInt * (1.0f / surfaceRatio),
+            state.ortInt * (1.0f / surfaceRatio),
+            1.0f,
+            -1.0f
+        )
         Matrix.setLookAtM(matrixView, 0, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
         Matrix.multiplyMM(matrixProjectionAndView, 0, matrixProjection, 0, matrixView, 0)
         Matrix.multiplyMM(matrixProjectionAndViewOrig, 0, matrixProjection, 0, matrixView, 0)
         if (!RadarPreferences.wxoglCenterOnLocation) {
             Matrix.translateM(matrixProjectionAndView, 0, state.x, state.y, 0.0f)
         } else {
-            Matrix.translateM(matrixProjectionAndView, 0, state.gpsLatLonTransformed[0] * state.zoom, state.gpsLatLonTransformed[1] * state.zoom, 0.0f)
+            Matrix.translateM(
+                matrixProjectionAndView,
+                0,
+                state.gpsLatLonTransformed[0] * state.zoom,
+                state.gpsLatLonTransformed[1] * state.zoom,
+                0.0f
+            )
         }
         Matrix.scaleM(matrixProjectionAndView, 0, state.zoom, state.zoom, 1.0f)
     }

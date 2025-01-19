@@ -53,6 +53,7 @@ object RadarPreferences {
     var obs = false
     var obsWindbarbs = false
     var swo = false
+    var fire = false    
     var userPoints = false
     var cities = false
     var locDot = false
@@ -154,6 +155,7 @@ object RadarPreferences {
         obs = getInitialPreference("WXOGL_OBS", "false")
         obsWindbarbs = getInitialPreference("WXOGL_OBS_WINDBARBS", "false")
         swo = getInitialPreference("RADAR_SHOW_SWO", "false")
+        fire = getInitialPreference("RADAR_SHOW_FIRE", "false")	
         userPoints = getInitialPreference("RADAR_USERPOINTS", "false")
         cities = getInitialPreference("COD_CITIES_DEFAULT", "")
         locDot = getInitialPreference("COD_LOCDOT_DEFAULT", "true")
@@ -255,14 +257,14 @@ object RadarPreferences {
     }
 
     private fun getInitialPreference(pref: String, initValue: Int): Int =
-            MyApplication.preferences.getInt(pref, initValue)
+        MyApplication.preferences.getInt(pref, initValue)
 
     private fun getInitialPreference(pref: String, initValue: Float): Float =
-            MyApplication.preferences.getFloat(pref, initValue)
+        MyApplication.preferences.getFloat(pref, initValue)
 
     private fun getInitialPreference(pref: String, initValue: String): Boolean =
-            (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
+        (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
 
     private fun getInitialPreferenceString(pref: String, initValue: String): String =
-            MyApplication.preferences.getString(pref, initValue) ?: initValue
+        MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

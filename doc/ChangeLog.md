@@ -2,14 +2,43 @@
 
 # Developer ChangeLog
 
-## 55932 2025_01_10
+## 55934 2025_01_18
 
-* [ADD] On homescreen if "Weather Story" is configured and you tap on it image is opened up in dedicated image viewer allowing you to share the image or zoom in with the full screen.
+* [ADD] lib update
+
+```
+-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
++    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+```
+
+## 55933 2025_01_15
+
+* [ADD] In Nexrad "long press" (press and hold), add Observation(Metar) site name next to the
+  station code
+* [REF] Add Metar.sites using the "Site/Sites" framework and modify most functions in this file,
+  impacts
+    - NwsObsSitesActivity
+    - CanvasWindbarbs
+    - NexradLayerDownload
+    - NexradLongPressMenu
+    - NexradRenderUI
+    - ObjectMetar
+    - CurrentConditions
+    - UtilityUS
+    - UtilityWidgetDownload
+
+## 55932 2025_01_11
+
+* [ADD] On homescreen if "Weather Story" is configured and you tap on it image is opened up in
+  dedicated image viewer allowing you to share the image or zoom in with the full screen.
+* [ADD] Similar to SPC Convective Outlook outlines as a preference in Nexrad Radar, make SPC Fire
+  Weather Outlook outlines available as well (BETA - no dry thunderstorm support yet)
+* [ADD] update from android-ndk-r27b to android-ndk-r27c
 
 ## 55931 2025_01_10
 
 * [ADD] Better "Weather Story" handling for image in homescreen (if configured and if your WFO
-  offers it)
+  offers it or something similar)
 * [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI) (
   required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
   work for Guam/CNMI due to insufficient LAT/LON adjustment, it's a WIP

@@ -42,22 +42,22 @@ class CurrentConditions {
 
     constructor()
 
-    constructor(context: Context, locationNumber: Int) {
+    constructor(locationNumber: Int) {
         if (Location.isUS(locationNumber)) {
             latLon = Location.getLatLon(locationNumber)
-            process(context, Location.getLatLon(locationNumber))
+            process(Location.getLatLon(locationNumber))
         } else {
             isUS = false
         }
     }
 
-    constructor(context: Context, latLon: LatLon) {
+    constructor(latLon: LatLon) {
         this.latLon = latLon
-        process(context, latLon)
+        process(latLon)
     }
 
-    private fun process(context: Context, latLon: LatLon, index: Int = 0) {
-        val objectMetar = ObjectMetar(context, latLon, index)
+    private fun process(latLon: LatLon, index: Int = 0) {
+        val objectMetar = ObjectMetar(latLon, index)
         data = objectMetar.temperature + GlobalVariables.DEGREE_SYMBOL
         if (objectMetar.windChill != "NA") {
             data += "(${objectMetar.windChill}${GlobalVariables.DEGREE_SYMBOL})"
@@ -72,7 +72,6 @@ class CurrentConditions {
         data += "${objectMetar.windGust} mph - ${objectMetar.visibility} mi - ${objectMetar.condition}"
         iconUrl = objectMetar.icon
         status = UtilityUS.getStatusViaMetar(
-            context,
             objectMetar.conditionsTimeStr,
             objectMetar.obsClosest.codeName
         )
@@ -97,7 +96,7 @@ class CurrentConditions {
             val currentTime = ObjectDateTime.getCurrentTimeInUTC()
             val isTimeCurrent = ObjectDateTime.timeDifference(currentTime, obsTime.dateTime, 120)
             if (!isTimeCurrent) {
-                process(context, latLon, 1)
+                process(latLon, 1)
             }
         }
     }

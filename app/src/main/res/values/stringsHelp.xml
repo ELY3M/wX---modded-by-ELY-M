@@ -100,6 +100,10 @@ If enabled and displaying base velocity tapping on the velocity icon again will 
 Show SPC Day 1 Convective Outlook outlines.
 </string>
 
+    <string name="show_fire_label">
+Show SPC Day 1 Fire Weather Outlook outlines.
+</string>
+
     <string name="widget_nexrad_size_label">
 Controls the size of the nexrad widget. Default is 10. Setting to 5 will zoom out by 2x.
 </string>

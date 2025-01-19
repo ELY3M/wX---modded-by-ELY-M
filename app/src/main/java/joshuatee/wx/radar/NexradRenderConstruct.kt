@@ -33,7 +33,12 @@ import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityLog
 
-class NexradRenderConstruct(val context: Context, val state: NexradRenderState, val data: NexradRenderData, val scaleLength: (Float) -> Float) {
+class NexradRenderConstruct(
+    val context: Context,
+    val state: NexradRenderState,
+    val data: NexradRenderData,
+    val scaleLength: (Float) -> Float
+) {
 
     //
     // for types RadarGeometryTypeEnum
@@ -45,12 +50,21 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         if (!buffers.isInitialized) {
             buffers.count = RadarGeometry.dataByType[buffers.geotype]!!.count
             buffers.breakSize = 30000
-            buffers.initialize(4 * buffers.count, 0, 3 * buffers.breakSize * 2, RadarGeometry.dataByType[buffers.geotype]!!.colorInt)
+            buffers.initialize(
+                4 * buffers.count,
+                0,
+                3 * buffers.breakSize * 2,
+                RadarGeometry.dataByType[buffers.geotype]!!.colorInt
+            )
             // TODO FIXME should be?  3 * buffers.breakSize * 2
             if (RadarPreferences.useJni) {
                 Jni.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             } else {
-                NexradRenderUtilities.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
+                NexradRenderUtilities.colorGen(
+                    buffers.colorBuffer,
+                    buffers.breakSize * 2,
+                    buffers.colorArray
+                )
             }
             buffers.isInitialized = true
         } else if (forceColorReset) {
@@ -58,23 +72,36 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             buffers.setToPositionZero()
             buffers.breakSize = 30000
             if (RadarPreferences.useJni) {
-                NexradRenderUtilities.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
+                NexradRenderUtilities.colorGen(
+                    buffers.colorBuffer,
+                    buffers.breakSize * 2,
+                    buffers.colorArray
+                )
             } else {
-                NexradRenderUtilities.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
+                NexradRenderUtilities.colorGen(
+                    buffers.colorBuffer,
+                    buffers.breakSize * 2,
+                    buffers.colorArray
+                )
             }
         }
         if (!RadarPreferences.useJni) {
-            NexradRenderUtilities.genMercator(RadarGeometry.dataByType[buffers.geotype]!!.lineData, buffers.floatBuffer, state.projectionNumbers, buffers.count)
+            NexradRenderUtilities.genMercator(
+                RadarGeometry.dataByType[buffers.geotype]!!.lineData,
+                buffers.floatBuffer,
+                state.projectionNumbers,
+                buffers.count
+            )
         } else {
             Jni.genMercator(
-                    RadarGeometry.dataByType[buffers.geotype]!!.lineData,
-                    buffers.floatBuffer,
-                    state.projectionNumbers.xFloat,
-                    state.projectionNumbers.yFloat,
-                    state.projectionNumbers.xCenter.toFloat(),
-                    state.projectionNumbers.yCenter.toFloat(),
-                    state.projectionNumbers.oneDegreeScaleFactorFloat,
-                    buffers.count
+                RadarGeometry.dataByType[buffers.geotype]!!.lineData,
+                buffers.floatBuffer,
+                state.projectionNumbers.xFloat,
+                state.projectionNumbers.yFloat,
+                state.projectionNumbers.xCenter.toFloat(),
+                state.projectionNumbers.yCenter.toFloat(),
+                state.projectionNumbers.oneDegreeScaleFactorFloat,
+                buffers.count
             )
         }
         buffers.setToPositionZero()
@@ -91,8 +118,12 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         buffers.isInitialized = false
         var points = listOf<Double>()
         when (buffers.type) {
-            PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH, PolygonType.WATCH_TORNADO -> points = Watch.add(state.projectionNumbers, buffers.type).toList()
-            PolygonType.STI -> points = NexradLevel3StormInfo.decode(state.projectionNumbers).toList()
+            PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH, PolygonType.WATCH_TORNADO -> points =
+                Watch.add(state.projectionNumbers, buffers.type).toList()
+
+            PolygonType.STI -> points =
+                NexradLevel3StormInfo.decode(state.projectionNumbers).toList()
+
             else -> if (buffers.warningType != null) {
                 points = Warnings.add(state.projectionNumbers, buffers.warningType!!).toList()
             }
@@ -112,14 +143,28 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         }
         // FIXME need a better solution then this hack
         if (buffers.warningType == null) {
-            buffers.initialize(4 * 4 * totalBinsGeneric, 0, 3 * 4 * totalBinsGeneric, buffers.type.color)
+            buffers.initialize(
+                4 * 4 * totalBinsGeneric,
+                0,
+                3 * 4 * totalBinsGeneric,
+                buffers.type.color
+            )
         } else {
-            buffers.initialize(4 * 4 * totalBinsGeneric, 0, 3 * 4 * totalBinsGeneric, buffers.warningType!!.color)
+            buffers.initialize(
+                4 * 4 * totalBinsGeneric,
+                0,
+                3 * 4 * totalBinsGeneric,
+                buffers.warningType!!.color
+            )
         }
         if (RadarPreferences.useJni) {
             Jni.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
         } else {
-            NexradRenderUtilities.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
+            NexradRenderUtilities.colorGen(
+                buffers.colorBuffer,
+                4 * totalBinsGeneric,
+                buffers.colorArray
+            )
         }
         var vList = 0
         (0 until buffers.chunkCount).forEach {
@@ -146,7 +191,11 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             if (RadarPreferences.useJni) {
                 Jni.colorGen(buffers.colorBuffer, 4 * list.size, buffers.colorArray)
             } else {
-                NexradRenderUtilities.colorGen(buffers.colorBuffer, 4 * list.size, buffers.colorArray)
+                NexradRenderUtilities.colorGen(
+                    buffers.colorBuffer,
+                    4 * list.size,
+                    buffers.colorArray
+                )
             }
         } catch (e: java.lang.Exception) {
             UtilityLog.handleException(e)
@@ -182,8 +231,19 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         buffers.count = buffers.xList.size
         val count = buffers.count * buffers.triangleCount
         when (buffers.type) {
-            PolygonType.LOCDOT, PolygonType.SPOTTER -> buffers.initialize(24 * count, 12 * count, 9 * count, buffers.type.color)
-            else -> buffers.initialize(4 * 6 * buffers.count, 4 * 3 * buffers.count, 9 * buffers.count, buffers.type.color)
+            PolygonType.LOCDOT, PolygonType.SPOTTER -> buffers.initialize(
+                24 * count,
+                12 * count,
+                9 * count,
+                buffers.type.color
+            )
+
+            else -> buffers.initialize(
+                4 * 6 * buffers.count,
+                4 * 3 * buffers.count,
+                9 * buffers.count,
+                buffers.type.color
+            )
         }
         buffers.lenInit = scaleLength(buffers.lenInit)
         buffers.draw(state.projectionNumbers)
@@ -210,12 +270,15 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             buffers.isInitialized = true
         }
     }
+    //elys mod end  
+    
     @Synchronized
     fun swoLines() {
         data.swoBuffers.isInitialized = false
         val hashSwo = SwoDayOne.polygonBy.toMap()
         var coordinates: DoubleArray
-        val fSize = (0..4).filter { hashSwo[it] != null }.sumOf { hashSwo.getOrElse(it) { listOf() }.size }
+        val fSize =
+            (0..4).filter { hashSwo[it] != null }.sumOf { hashSwo.getOrElse(it) { listOf() }.size }
         data.swoBuffers.breakSize = 15000
         data.swoBuffers.chunkCount = 1
         val totalBinsSwo = fSize / 4
@@ -235,16 +298,70 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
                     data.swoBuffers.putColor(Color.red(SwoDayOne.colors[it]).toByte())
                     data.swoBuffers.putColor(Color.green(SwoDayOne.colors[it]).toByte())
                     data.swoBuffers.putColor(Color.blue(SwoDayOne.colors[it]).toByte())
-                    coordinates = Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j], (hashSwo.getOrElse(it) { listOf() }[j + 1] * -1.0f), state.projectionNumbers)
+                    coordinates =
+                        Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j],
+                            (hashSwo.getOrElse(it) { listOf() }[j + 1] * -1.0f),
+                            state.projectionNumbers
+                        )
                     data.swoBuffers.putFloat(coordinates[0].toFloat())
                     data.swoBuffers.putFloat(coordinates[1].toFloat() * -1.0f)
-                    coordinates = Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j + 2], (hashSwo.getOrElse(it) { listOf() }[j + 3] * -1.0f), state.projectionNumbers)
+                    coordinates =
+                        Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j + 2],
+                            (hashSwo.getOrElse(it) { listOf() }[j + 3] * -1.0f),
+                            state.projectionNumbers
+                        )
                     data.swoBuffers.putFloat(coordinates[0].toFloat())
                     data.swoBuffers.putFloat(coordinates[1].toFloat() * -1.0f)
                 }
             }
         }
         data.swoBuffers.isInitialized = true
+    }
+
+    @Synchronized
+    fun fireLines() {
+        data.fireBuffers.isInitialized = false
+        val hashSwo = FireDayOne.polygonBy.toMap()
+        var coordinates: DoubleArray
+        val fSize =
+            (0..4).filter { hashSwo[it] != null }.sumOf { hashSwo.getOrElse(it) { listOf() }.size }
+        data.fireBuffers.breakSize = 15000
+        data.fireBuffers.chunkCount = 1
+        val totalBinsSwo = fSize / 4
+        data.fireBuffers.initialize(4 * 4 * totalBinsSwo, 0, 3 * 2 * totalBinsSwo)
+        if (totalBinsSwo < data.fireBuffers.breakSize) {
+            data.fireBuffers.breakSize = totalBinsSwo
+        } else {
+            data.fireBuffers.chunkCount = totalBinsSwo / data.fireBuffers.breakSize
+            data.fireBuffers.chunkCount += 1
+        }
+        (0..4).forEach {
+            if (hashSwo[it] != null) {
+                for (j in hashSwo.getOrElse(it) { listOf() }.indices step 4) {
+                    data.fireBuffers.putColor(Color.red(FireDayOne.colors[it]).toByte())
+                    data.fireBuffers.putColor(Color.green(FireDayOne.colors[it]).toByte())
+                    data.fireBuffers.putColor(Color.blue(FireDayOne.colors[it]).toByte())
+                    data.fireBuffers.putColor(Color.red(FireDayOne.colors[it]).toByte())
+                    data.fireBuffers.putColor(Color.green(FireDayOne.colors[it]).toByte())
+                    data.fireBuffers.putColor(Color.blue(FireDayOne.colors[it]).toByte())
+                    coordinates =
+                        Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j],
+                            (hashSwo.getOrElse(it) { listOf() }[j + 1] * -1.0f),
+                            state.projectionNumbers
+                        )
+                    data.fireBuffers.putFloat(coordinates[0].toFloat())
+                    data.fireBuffers.putFloat(coordinates[1].toFloat() * -1.0f)
+                    coordinates =
+                        Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j + 2],
+                            (hashSwo.getOrElse(it) { listOf() }[j + 3] * -1.0f),
+                            state.projectionNumbers
+                        )
+                    data.fireBuffers.putFloat(coordinates[0].toFloat())
+                    data.fireBuffers.putFloat(coordinates[1].toFloat() * -1.0f)
+                }
+            }
+        }
+        data.fireBuffers.isInitialized = true
     }
 
     @Synchronized
@@ -262,7 +379,11 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
         fronts.indices.forEach { z ->
             val front = fronts[z]
             data.wpcFrontBuffersList[z].count = front.coordinates.size * 2
-            data.wpcFrontBuffersList[z].initialize(4 * data.wpcFrontBuffersList[z].count, 0, 3 * data.wpcFrontBuffersList[z].count)
+            data.wpcFrontBuffersList[z].initialize(
+                4 * data.wpcFrontBuffersList[z].count,
+                0,
+                3 * data.wpcFrontBuffersList[z].count
+            )
             data.wpcFrontBuffersList[z].isInitialized = true
             when (front.type) {
                 FrontTypeEnum.COLD -> data.wpcFrontPaints.add(Color.rgb(0, 127, 255))
@@ -274,18 +395,34 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             }
             for (j in 0 until front.coordinates.size step 2) {
                 if (j < front.coordinates.size - 1) {
-                    coordinates = Projection.computeMercatorNumbers(front.coordinates[j].lat, front.coordinates[j].lon, state.projectionNumbers)
+                    coordinates = Projection.computeMercatorNumbers(
+                        front.coordinates[j].lat,
+                        front.coordinates[j].lon,
+                        state.projectionNumbers
+                    )
                     data.wpcFrontBuffersList[z].putFloat(coordinates[0].toFloat())
                     data.wpcFrontBuffersList[z].putFloat((coordinates[1] * -1.0f).toFloat())
                     data.wpcFrontBuffersList[z].putColor(Color.red(data.wpcFrontPaints[z]).toByte())
-                    data.wpcFrontBuffersList[z].putColor(Color.green(data.wpcFrontPaints[z]).toByte())
-                    data.wpcFrontBuffersList[z].putColor(Color.blue(data.wpcFrontPaints[z]).toByte())
-                    coordinates = Projection.computeMercatorNumbers(front.coordinates[j + 1].lat, front.coordinates[j + 1].lon, state.projectionNumbers)
+                    data.wpcFrontBuffersList[z].putColor(
+                        Color.green(data.wpcFrontPaints[z]).toByte()
+                    )
+                    data.wpcFrontBuffersList[z].putColor(
+                        Color.blue(data.wpcFrontPaints[z]).toByte()
+                    )
+                    coordinates = Projection.computeMercatorNumbers(
+                        front.coordinates[j + 1].lat,
+                        front.coordinates[j + 1].lon,
+                        state.projectionNumbers
+                    )
                     data.wpcFrontBuffersList[z].putFloat(coordinates[0].toFloat())
                     data.wpcFrontBuffersList[z].putFloat((coordinates[1] * -1.0f).toFloat())
                     data.wpcFrontBuffersList[z].putColor(Color.red(data.wpcFrontPaints[z]).toByte())
-                    data.wpcFrontBuffersList[z].putColor(Color.green(data.wpcFrontPaints[z]).toByte())
-                    data.wpcFrontBuffersList[z].putColor(Color.blue(data.wpcFrontPaints[z]).toByte())
+                    data.wpcFrontBuffersList[z].putColor(
+                        Color.green(data.wpcFrontPaints[z]).toByte()
+                    )
+                    data.wpcFrontBuffersList[z].putColor(
+                        Color.blue(data.wpcFrontPaints[z]).toByte()
+                    )
                 }
             }
         }
@@ -309,8 +446,12 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
             state.gpsLatLon.lat = locXCurrent
             state.gpsLatLon.lon = locYCurrent * -1.0
         }
-        data.locationDotBuffers.xList = locationMarkers.filterIndexed { index: Int, _: Double -> index.isEven() }.toDoubleArray()
-        data.locationDotBuffers.yList = locationMarkers.filterIndexed { index: Int, _: Double -> !index.isEven() }.toDoubleArray()
+        data.locationDotBuffers.xList =
+            locationMarkers.filterIndexed { index: Int, _: Double -> index.isEven() }
+                .toDoubleArray()
+        data.locationDotBuffers.yList =
+            locationMarkers.filterIndexed { index: Int, _: Double -> !index.isEven() }
+                .toDoubleArray()
         data.locationDotBuffers.triangleCount = 12
         triangles(data.locationDotBuffers)
 
@@ -483,8 +624,24 @@ class NexradRenderConstruct(val context: Context, val state: NexradRenderState, 
     }
 
     fun windBarbs() {
-        linesShort(data.wbBuffers, NexradLevel3WindBarbs.decodeAndPlot(state.rid, state.projectionType, false, state.paneNumber))
-        linesShort(data.wbGustsBuffers, NexradLevel3WindBarbs.decodeAndPlot(state.rid, state.projectionType, true, state.paneNumber))
+        linesShort(
+            data.wbBuffers,
+            NexradLevel3WindBarbs.decodeAndPlot(
+                state.rid,
+                state.projectionType,
+                false,
+                state.paneNumber
+            )
+        )
+        linesShort(
+            data.wbGustsBuffers,
+            NexradLevel3WindBarbs.decodeAndPlot(
+                state.rid,
+                state.projectionType,
+                true,
+                state.paneNumber
+            )
+        )
         wBCircle(state.paneNumber)
     }
     

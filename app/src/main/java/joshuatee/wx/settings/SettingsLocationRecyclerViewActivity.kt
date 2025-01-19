@@ -48,7 +48,12 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_settings_location_recyclerview,
+            null,
+            false
+        )
         FabExtended(this, R.id.fab_add, GlobalVariables.ICON_ADD, "Add Location") { addLocation() }
         updateList()
         setupUI()
@@ -70,7 +75,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     private fun download() {
         Location.locations.indices.forEach { index ->
-            currentConditionsList.add(CurrentConditions(this, index))
+            currentConditionsList.add(CurrentConditions(index))
             currentConditionsList.last().format()
         }
     }
@@ -103,13 +108,18 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun updateTitle() {
-        setTitle("Locations (" + To.string(Location.numLocations) + ")", "Tap location to edit, delete, or move.")
+        setTitle(
+            "Locations (" + To.string(Location.numLocations) + ")",
+            "Tap location to edit, delete, or move."
+        )
     }
 
     private fun itemSelected(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment(this, position, Location.getName(position), true)
+        val bottomSheetFragment =
+            BottomSheetFragment(this, position, Location.getName(position), true)
         bottomSheetFragment.functions = listOf(::edit, ::delete, ::moveUp, ::moveDown)
-        bottomSheetFragment.labelList = listOf("Edit Location", "Delete Location", "Move Up", "Move Down")
+        bottomSheetFragment.labelList =
+            listOf("Edit Location", "Delete Location", "Move Up", "Move Down")
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 

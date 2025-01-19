@@ -33,12 +33,12 @@ import joshuatee.wx.objects.PolygonType
 object NexradLayerDownload {
 
     fun download(
-            context: Context,
-            wxglRender: NexradRender,
-            wxglSurfaceView: NexradRenderSurfaceView,
-            wxglTextObjects: List<NexradRenderTextObject>,
-            radarUpdateFn: () -> Unit,
-            showWpcFronts: Boolean = true
+        context: Context,
+        wxglRender: NexradRender,
+        wxglSurfaceView: NexradRenderSurfaceView,
+        wxglTextObjects: List<NexradRenderTextObject>,
+        radarUpdateFn: () -> Unit,
+        showWpcFronts: Boolean = true
     ) {
         //
         // Warnings
@@ -82,10 +82,19 @@ object NexradLayerDownload {
             }
         }
         //
+        // SPC Fire Weather Outlook
+        //
+        if (PolygonType.FIRE.pref) {
+            FutureVoid({ FireDayOne.get() }) {
+                wxglRender.construct.fireLines()
+                wxglSurfaceView.requestRender()
+            }
+        }
+        //
         // Wind barbs and observations
         //
         if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) {
-            FutureVoid({ Metar.get(context, wxglRender.state.rid, wxglRender.paneNumber) }) {
+            FutureVoid({ Metar.get(wxglRender.state.rid, wxglRender.paneNumber) }) {
                 if (PolygonType.WIND_BARB.pref) {
                     wxglRender.construct.windBarbs()
                 }

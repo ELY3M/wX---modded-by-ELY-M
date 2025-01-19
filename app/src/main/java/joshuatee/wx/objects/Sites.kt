@@ -77,6 +77,14 @@ class Sites(
         return sites[0].codeName
     }
 
+    fun getNearestSite(latLon: LatLon, order: Int = 0): Site {
+        for (site in sites) {
+            site.distance = LatLon.distance(latLon, site.latLon).toInt()
+        }
+        sites.sortBy { it.distance }
+        return sites[order]
+    }
+
     // FIXME TODO
 //    fun getNearestList(latLon: LatLon, count: Int = 5): List<String> {
 //        for (site in sites) {

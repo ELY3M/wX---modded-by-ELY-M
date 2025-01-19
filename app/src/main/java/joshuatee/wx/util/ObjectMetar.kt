@@ -21,7 +21,6 @@
 
 package joshuatee.wx.util
 
-import android.content.Context
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Site
 import joshuatee.wx.radar.Metar
@@ -32,7 +31,7 @@ import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.parse
 import kotlin.math.roundToInt
 
-internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
+internal class ObjectMetar(location: LatLon, index: Int = 0) {
 
     //
     // This is used to show the current conditions on the main screen of the app
@@ -55,7 +54,7 @@ internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
     private var rawMetar = ""
     private var metarSkyCondition = ""
     private var metarWeatherCondition = ""
-    val obsClosest: Site = Metar.findClosestObservation(context, location, index)
+    val obsClosest: Site = Metar.findClosestObservation(location, index)
 
     init {
         val urlMetar =

@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.radar.Metar
 import joshuatee.wx.radar.RadarGeometry
 import joshuatee.wx.radar.NexradUtil
 import joshuatee.wx.radarcolorpalettes.ColorPalettes
@@ -124,6 +125,7 @@ class MyApplication : Application() {
                 TypedValue.complexToDimensionPixelSize(tv.data, res.displayMetrics)
         }
         initPreferences(this)
+        Metar.initialize(this)
         Location.refreshLocationData(this)
         UtilityTts.loadTts(applicationContext)
         loadGeomAndColorBuffers(this)
@@ -200,6 +202,6 @@ class MyApplication : Application() {
         }
 
         private fun getInitialPreferenceString(pref: String, initValue: String): String =
-                preferences.getString(pref, initValue) ?: initValue
+            preferences.getString(pref, initValue) ?: initValue
     }
 }

@@ -163,13 +163,13 @@ class NexradLongPressMenu(
                 longPressList.add("Show MPD")
             }
             // end Thanks to Ely
-            val obsSite = Metar.findClosestObservation(context, latLon)
+            val obsSite = Metar.findClosestObservation(latLon)
             val obsDirection = LatLon.calculateDirection(latLon, obsSite.latLon)
             with(longPressList) {
             //elys mod
                 add("Radar Mosaic")
                 add("GOES Satellite")
-                add("Observation: ${obsSite.codeName} ${obsSite.distance} mi $obsDirection")
+                add("Observation: ${obsSite.codeName} ${obsSite.fullName} ${obsSite.distance} mi $obsDirection")
                 add("Forecast: $latLonTitle")
                 add("Meteogram: ${obsSite.codeName}")
                 add("Radar status message: ${closestRadarSites.first().codeName}")

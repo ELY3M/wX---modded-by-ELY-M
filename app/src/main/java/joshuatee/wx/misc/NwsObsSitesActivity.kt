@@ -28,7 +28,6 @@ import android.view.MenuItem
 import java.util.Locale
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.common.GlobalArrays
 import joshuatee.wx.objects.Route
 import joshuatee.wx.radar.Metar
@@ -60,7 +59,7 @@ class NwsObsSitesActivity : BaseActivity() {
         menu.findItem(R.id.action_lastused).title = "Last Used: " + Utility.readPref(
             this,
             prefToken,
-            Metar.findClosestObservation(this, Location.latLon).codeName
+            Metar.findClosestObservation(Location.latLon).codeName
         )
         return super.onPrepareOptionsMenu(menu)
     }
@@ -111,8 +110,6 @@ class NwsObsSitesActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        val text = UtilityIO.readTextFileFromRaw(resources, R.raw.stations_us4)
-        val lines = text.split("\n")
         val listCity = mutableListOf<String>()
         listOf(listIds).forEach {
             it.clear()
@@ -120,12 +117,12 @@ class NwsObsSitesActivity : BaseActivity() {
         listCity.add("..Back to state list")
         listIds.add("..Back to state list")
         val listSort =
-            lines.filter { it.startsWith(stateSelected.uppercase(Locale.US)) }.toMutableList()
-        listSort.sort()
+            Metar.sites.sites.filter { it.fullName.startsWith(stateSelected.uppercase(Locale.US)) }
+                .toMutableList()
+        listSort.sortBy { it.fullName }
         listSort.forEach {
-            val items = it.split(",")
-            listCity.add(items[2] + ": " + items[1])
-            listIds.add(items[2])
+            listCity.add(it.codeAndName)
+            listIds.add(it.codeName)
         }
         objectRecyclerView.refreshList(listCity)
         siteDisplay = true
@@ -137,7 +134,7 @@ class NwsObsSitesActivity : BaseActivity() {
                 Utility.readPref(
                     this,
                     prefToken,
-                    Metar.findClosestObservation(this, Location.latLon).codeName
+                    Metar.findClosestObservation(Location.latLon).codeName
                 )
             )
 

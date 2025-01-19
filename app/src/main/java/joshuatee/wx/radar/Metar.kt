@@ -32,9 +32,9 @@ import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.Site
+import joshuatee.wx.objects.Sites
 import joshuatee.wx.parse
 import joshuatee.wx.util.To
-import joshuatee.wx.util.UtilityLog
 import java.util.regex.Pattern
 
 internal object Metar {
@@ -44,18 +44,34 @@ internal object Metar {
     // 5 is for canvas
     val data = List(6) { MetarData() }
 
-    // A data structure (map) consisting of a Lat/Lon string array for each Obs site
-    private val obsLatLon = mutableMapOf<String, LatLon>()
     val timer = DownloadTimer("METAR")
-    private val sites = mutableListOf<Site>()
     private val pattern1: Pattern = Pattern.compile(".*? (M?../M?..) .*?")
     private val pattern2: Pattern = Pattern.compile(".*? A([0-9]{4})")
     private val pattern3: Pattern = Pattern.compile("AUTO ([0-9].*?KT) .*?")
     private val pattern4: Pattern = Pattern.compile("Z ([0-9].*?KT) .*?")
     private val pattern5: Pattern = Pattern.compile("SM (.*?) M?[0-9]{2}/")
+    lateinit var sites: Sites
+
+    fun initialize(context: Context) {
+        val name = mutableMapOf<String, String>()
+        val lat = mutableMapOf<String, String>()
+        val lon = mutableMapOf<String, String>()
+        val lines =
+            UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.obs_all)
+        for (line in lines) {
+            val items = line.trimEnd().split(",")
+            println(items)
+            if (items.size > 2) {
+                name[items[0]] = items[1] + ", " + items[2]
+                lat[items[0]] = items[3]
+                lon[items[0]] = items[4]
+            }
+        }
+        sites = Sites(name, lat, lon, false)
+    }
 
     @Synchronized
-    fun get(context: Context, rid: String, paneNumber: Int) {
+    fun get(rid: String, paneNumber: Int) {
         if (timer.isRefreshNeeded() || rid != data[paneNumber].obsStateOld) {
             val obsAl = mutableListOf<String>()
             val obsAlExt = mutableListOf<String>()
@@ -65,13 +81,11 @@ internal object Metar {
             val obsAlY = mutableListOf<Double>()
             val obsAlAviationColor = mutableListOf<Int>()
             data[paneNumber].obsStateOld = rid
-            val obsList = getNearbyObsSites(context, rid)
-
+            val obsList = getNearbyObsSites(rid)
             val html =
                 "https://www.aviationweather.gov/cgi-bin/data/metar.php?ids=$obsList".getHtmlWithNewLine()
             val metarsTmp = html.split(GlobalVariables.newline)
             val metars = condense(metarsTmp)
-            initObsMap(context)
             metars.forEach { z ->
                 var validWind = false
                 var validWindGust = false
@@ -169,7 +183,8 @@ internal object Metar {
                         temperature = UtilityMath.celsiusToFahrenheit(temperature.replace("M", "-"))
                         dewPoint = UtilityMath.celsiusToFahrenheit(dewPoint.replace("M", "-"))
                         val obsSite = tmpArr2[0]
-                        val latLon = obsLatLon[obsSite] ?: LatLon("0.0", "0.0")
+//                        val latLon = obsLatLon[obsSite] ?: LatLon("0.0", "0.0")
+                        val latLon = sites.byCode[obsSite]?.latLon ?: LatLon(0.0, 0.0)
                         if (latLon.latString != "0.0") {
                             obsAl.add("$latLon:$temperature/$dewPoint")
                             obsAlExt.add(
@@ -208,68 +223,31 @@ internal object Metar {
         }
     }
 
-    @Synchronized
-    private fun initObsMap(context: Context) {
-        if (obsLatLon.isEmpty()) {
-            val lines =
-                UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.us_metar3)
-            lines.forEach { line ->
-                val tokens = line.split(" ")
-                obsLatLon[tokens[0]] = LatLon(tokens[1], tokens[2])
-            }
-        }
-    }
-
     //
     // Long press in nexrad radar uses this to find closest observation and return obs data
     //
-    fun findClosestMetar(context: Context, location: LatLon): String {
-        val localMetarSite = findClosestObservation(context, location)
+    fun findClosestMetar(location: LatLon): String {
+        val localMetarSite = findClosestObservation(location)
         return (GlobalVariables.TGFTP_WEBSITE_PREFIX + "/data/observations/metar/decoded/" + localMetarSite.codeName + ".TXT").getHtmlWithNewLine()
-    }
-
-    //
-    // long press in nexrad radar uses this for nearest meteogram and to show obs name in long press itself
-    // it returns a RID object for the closest observation
-    //
-    // This is also used on the main screen of the app to find the closest observation site
-    //
-    // Input file is like this
-    // name Lat Lon
-    // K1BM 47.2833333333 -110.366666667
-    // K1BW 41.5166666667 -104.0
-    //
-    @Synchronized
-    private fun loadMetarData(context: Context) {
-        if (sites.isEmpty()) {
-            val metarDataAsList =
-                UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.us_metar3)
-            metarDataAsList.forEach {
-                val tokens = it.split(" ")
-                sites.add(Site.fromLatLon(tokens[0], LatLon(tokens[1], tokens[2])))
-            }
-        }
     }
 
     // causing crash reports in the current condition notification for
     // Exception java.lang.IllegalArgumentException: Comparison method violates its general contract!
     // possibly reverting to older code below
-    fun findClosestObservation(context: Context, location: LatLon, index: Int = 0): Site {
-        loadMetarData(context)
-        val obsSites = sites.toMutableList()
-//        obsSites.forEach {
-//            it.distance = LatLon.distance(location, it.location, DistanceUnit.MILE).toInt()
+    fun findClosestObservation(latLon: LatLon, order: Int = 0): Site {
+        return sites.getNearestSite(latLon, order)
+//        loadMetarData(context)
+//        val obsSites = sites1.toMutableList()
+//        for (it in obsSites.indices) {
+//            obsSites[it].distance =
+//                LatLon.distance(location, obsSites[it].latLon).toInt()
 //        }
-        for (it in obsSites.indices) {
-            obsSites[it].distance =
-                LatLon.distance(location, obsSites[it].latLon).toInt()
-        }
-        try {
-            obsSites.sortBy { it.distance }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return obsSites[index]
+//        try {
+//            obsSites.sortBy { it.distance }
+//        } catch (e: Exception) {
+//            UtilityLog.handleException(e)
+//        }
+//        return obsSites[index]
     }
 
     //
@@ -278,11 +256,10 @@ internal object Metar {
     // Used only within this class in one spot
     // Used for nexrad radar when obs site is turn on
     //
-    private fun getNearbyObsSites(context: Context, radarSite: String): String {
+    private fun getNearbyObsSites(radarSite: String): String {
         val radarLocation = RadarSites.getLatLon(radarSite)
         val obsListSb = StringBuilder(1000)
-        loadMetarData(context)
-        sites.forEach {
+        sites.sites.forEach {
             if (LatLon.distance(radarLocation, it.latLon) < 200.0) {
                 obsListSb.append(it.codeName)
                 obsListSb.append(",")

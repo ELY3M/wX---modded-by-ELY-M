@@ -117,6 +117,12 @@ enum class PolygonType(
         RadarPreferences.swo,
         RadarPreferences.swoLineSize.toFloat()
     ),
+    FIRE(
+        RadarPreferences.colorHi,
+        "FIRE",
+        RadarPreferences.fire,
+        RadarPreferences.swoLineSize.toFloat()
+    ),
     WPC_FRONTS(
         RadarPreferences.colorHi,
         "WPC_FRONTS",
@@ -149,9 +155,10 @@ enum class PolygonType(
             STI.pref = RadarPreferences.sti
             TVS.pref = RadarPreferences.tvs
             HI.pref = RadarPreferences.hailIndex
-	        HAIL_LABELS.pref = RadarPreferences.hailSizeLabel
+	    HAIL_LABELS.pref = RadarPreferences.hailSizeLabel
             OBS.pref = RadarPreferences.obs
             SWO.pref = RadarPreferences.swo
+	    FIRE.pref = RadarPreferences.fire
             USERPOINTS.pref = RadarPreferences.userPoints
             MCD.color = RadarPreferences.colorMcd
             MPD.color = RadarPreferences.colorMpd

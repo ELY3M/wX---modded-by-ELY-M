@@ -66,13 +66,13 @@ internal object NexradRenderUI {
 
     fun showMetar(context: Context, latLon: LatLon) {
         FutureText2(
-            { Metar.findClosestMetar(context, latLon) })
+            { Metar.findClosestMetar(latLon) })
         { s -> ObjectDialogue(context, s) }
     }
 
     fun showNearestMeteogram(context: Context, latLon: LatLon) {
         // https://lamp.mdl.nws.noaa.gov/lamp/meteoform.php
-        val obsSite = Metar.findClosestObservation(context, latLon).codeName
+        val obsSite = Metar.findClosestObservation(latLon).codeName
         Route.image(context, getMeteogramUrl(obsSite), "$obsSite Meteogram")
     }
 

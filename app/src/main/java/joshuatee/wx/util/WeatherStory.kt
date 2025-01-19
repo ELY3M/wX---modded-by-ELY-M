@@ -42,30 +42,58 @@ object WeatherStory {
             if (scrapeUrl.isNotEmpty()) {
                 productUrl = "https://www.weather.gov/$scrapeUrl"
             } else {
-                url = "https://weather.gov/$site"
-                val html = UtilityIO.getHtml(url)
-                //                             <div class="image"><img       src="http://www.weather.gov/images//mob/graphicast/image8.png" style="max-width: 100%;"></div>
-                //                             <div class="image"><img       src="http://www.weather.gov/images/abq/graphicast/image1.gif" style="max-width: 100%;"></div>
-                var scrapeUrls = UtilityString.parseColumn(
-                    html,
-                    "src=.(https?://www.weather.gov/images/?/.../graphicast/\\S*?[0-9].png). "
-                )
-                if (scrapeUrls.isNotEmpty()) {
-                    productUrl = scrapeUrls[0]
-                } else {
-                    scrapeUrls = UtilityString.parseColumn(
+                scrapeUrl =
+                    UtilityString.parse(
                         html,
-                        "src=.(https?://www.weather.gov/images/?/.../graphicast/\\S*?[0-9].gif). "
+                        "[=o].(/images/\\w{3}/[wW]eather[Ss]tory.(gif|jpg|png))."
                     )
-                    if (scrapeUrls.isNotEmpty()) {
-                        productUrl = scrapeUrls[0]
-                    } else {
-                        scrapeUrls = UtilityString.parseColumn(
+                if (scrapeUrl.isNotEmpty()) {
+                    productUrl = "https://www.weather.gov/$scrapeUrl"
+                } else {
+                    scrapeUrl =
+                        UtilityString.parse(
                             html,
-                            "src=.(https?://www.weather.gov/?/images/?/.../WxStory/\\S*?[0-9].png). "
+                            "img src=.(https://www.weather.gov/?/images/\\w{3}/WxStory/WeatherStory[1-9].png)."
                         )
-                        if (scrapeUrls.isNotEmpty()) {
-                            productUrl = scrapeUrls[0]
+                    if (scrapeUrl.isNotEmpty()) {
+                        productUrl = scrapeUrl
+                    } else {
+                        scrapeUrl =
+                            UtilityString.parse(
+                                html,
+                                "[= o].(/images/\\w{3}/[Ww]eather[Ss]tory/weatherstory.(png|gif))."
+                            )
+                        if (scrapeUrl.isNotEmpty()) {
+                            productUrl = "https://www.weather.gov/$scrapeUrl"
+                        } else {
+                            url = "https://weather.gov/$site"
+                            val html = UtilityIO.getHtml(url)
+                            //                             <div class="image"><img       src="http://www.weather.gov/images//mob/graphicast/image8.png" style="max-width: 100%;"></div>
+                            //                             <div class="image"><img       src="http://www.weather.gov/images/abq/graphicast/image1.gif" style="max-width: 100%;"></div>
+                            val scrapeUrls1 = UtilityString.parseColumn(
+                                html,
+                                "src=.(https?://www.weather.gov/images/?/.../graphicast/\\S*?[0-9]{0,1}.png). "
+                            )
+                            val scrapeUrls2 = UtilityString.parseColumn(
+                                html,
+                                "src=.(https?://www.weather.gov/images/?/.../graphicast/\\S*?[0-9]{0,1}.jpg). "
+                            )
+                            val scrapeUrls3 = UtilityString.parseColumn(
+                                html,
+                                "src=.(https?://www.weather.gov/images/?/.../graphicast/\\S*?[0-9]{0,1}.gif). "
+                            )
+                            val scrapeUrlsAll = scrapeUrls1 + scrapeUrls2 + scrapeUrls3
+                            if (scrapeUrlsAll.isNotEmpty()) {
+                                productUrl = scrapeUrlsAll[0]
+                            } else {
+                                val scrapeUrls = UtilityString.parseColumn(
+                                    html,
+                                    "src=.(https?://www.weather.gov/?/images/?/.../WxStory/\\S*?[0-9].png). "
+                                )
+                                if (scrapeUrls.isNotEmpty()) {
+                                    productUrl = scrapeUrls[0]
+                                }
+                            }
                         }
                     }
                 }

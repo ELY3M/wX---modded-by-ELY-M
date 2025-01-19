@@ -158,8 +158,8 @@ object CanvasMain {
             )
         }
         if (PolygonType.WIND_BARB.pref && windBarbProvider) {
-            CanvasWindbarbs.draw(context, projectionType, bitmapCanvas, radarSite, true, 5)
-            CanvasWindbarbs.draw(context, projectionType, bitmapCanvas, radarSite, false, 5)
+            CanvasWindbarbs.draw(projectionType, bitmapCanvas, radarSite, true, 5)
+            CanvasWindbarbs.draw(projectionType, bitmapCanvas, radarSite, false, 5)
         }
         if (PolygonType.STI.pref && stormMotionProvider) {
             try {

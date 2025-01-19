@@ -162,7 +162,7 @@ object NotificationLocal {
         if (Location.locations[locationIndex].ccNotification) {
             val locLabel = " current conditions"
             val label = "(" + Location.getName(locationIndex) + ")" + locLabel
-            val currentConditions = CurrentConditions(context, locationIndex)
+            val currentConditions = CurrentConditions(locationIndex)
             currentConditions.timeCheck(context)
             val text = currentConditions.data + GlobalVariables.newline + currentConditions.status
             val notifier =
