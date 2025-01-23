@@ -30,7 +30,7 @@ import joshuatee.wx.ui.MenuTitle
 internal object UtilityWpcImages {
 
     private val titles = listOf(
-        MenuTitle("Surface Analysis", 9),
+        MenuTitle("Surface Analysis", 8),
         MenuTitle("Forecast Maps", 17),
         MenuTitle("QPF", 29),
         MenuTitle("Snow / Ice", 17),
@@ -48,8 +48,9 @@ internal object UtilityWpcImages {
         "Analysis with Satellite (NHEM)",
         "Analysis with Satellite (NHEM+PAC)",
         "High resolution surface analysis",
-        "Significant Surface Low Tracks",
-        "Low Tracks and Clusters",
+        "Automated Low Clusters",
+//        "Significant Surface Low Tracks",
+//        "Low Tracks and Clusters",
 
         "National Forecast Chart Day 1",
         "National Forecast Chart Day 2",
@@ -141,8 +142,8 @@ internal object UtilityWpcImages {
         "8-14 Day Heat Index Outlook",
         "6-10 Day Lowest Wind Chill Outlook",
         "8-14 Day Lowest Wind Chill Outlook",
-        "Week 3-4 Outlooks - Temperature ( Experimental )",
-        "Week 3-4 Outlooks - Precipitation ( Experimental )",
+        "Week 3-4 Outlooks - Temperature",
+        "Week 3-4 Outlooks - Precipitation",
         "One Month Outlook - Temperature",
         "One Month Outlook - Precipitation",
         "Three Month Outlook - Temperature",
@@ -188,8 +189,9 @@ internal object UtilityWpcImages {
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/satsfcnps.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/satsfc.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/lrgnamsfc09wbg.gif",
-        "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/wwd/lowtrack_circles.gif",
-        "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/lowtracks/lowtrack_ensembles.gif",
+        "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/lowclusters/lowclusters_latest.png",
+//        "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/wwd/lowtrack_circles.gif",
+//        "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/lowtracks/lowtrack_ensembles.gif",
 
         GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/NationalForecastChart/staticmaps/noaad1.png",
         GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/NationalForecastChart/staticmaps/noaad2.png",

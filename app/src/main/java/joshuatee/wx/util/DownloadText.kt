@@ -222,6 +222,13 @@ object DownloadText {
                     "product discontinued via SCN23-101: Termination of the Weather Prediction Center Day 3-7 Hazards Outlook Discussion Effective November 15, 2023"
             }
 
+            prod.contains("WEEK34") -> {
+                val textUrl =
+                    "https://www.cpc.ncep.noaa.gov/products/predictions/WK34/texts/week34fcst.txt"
+                text = textUrl.getHtmlWithNewLine()
+                text = text.removeHtml()
+            }
+
             prod.contains("PMD30D") -> {
                 val textUrl =
                     GlobalVariables.TGFTP_WEBSITE_PREFIX + "/data/raw/fx/fxus07.kwbc.pmd.30d.txt"

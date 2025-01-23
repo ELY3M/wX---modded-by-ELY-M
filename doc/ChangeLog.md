@@ -2,7 +2,26 @@
 
 # Developer ChangeLog
 
-## 55934 2025_01_18
+## 55934 2025_01_22
+
+* [ADD] In National Images remove "experimental" from the label for "Week 3-4 Outlooks -
+  Temperature" and "Week 3-4 Outlooks - Precipitation" per *SCN24-104: The Experimental Weeks 3-4
+  Precipitation Outlooks Will Become Operational on or about January 17, 2025*
+* [ADD] "Prognostic Discussion for Week 3-4 Temperature and Precipitation Outlooks" in National Text
+  Product Screen under **General Forecast Discussions**
+* [ADD] NWS has discontinued the following per SCN24-108: Termination of the 72-Hour Low Tracks
+  Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
+  Forecast Tool: Effective January 20, 2025 , remove from National Images
+
+```
+"Significant Surface Low Tracks",
+"Low Tracks and Clusters",
+```
+
+* [ADD] "Automated Low Clusters" in National Images per SCN24-108: Termination of the 72-Hour Low
+  Tracks
+  Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
+  Forecast Tool: Effective January 20, 2025
 
 * [ADD] lib update
 

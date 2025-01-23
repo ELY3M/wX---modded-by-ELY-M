@@ -48,7 +48,7 @@ internal object UtilityWpcText {
     }
 
     private val titles = listOf(
-        MenuTitle("General Forecast Discussions", 9),
+        MenuTitle("General Forecast Discussions", 10),
         MenuTitle("Precipitation Discussions", 2),
         MenuTitle("Hazards", 7),
         MenuTitle("Ocean Weather", 34),
@@ -68,6 +68,7 @@ internal object UtilityWpcText {
         "pmdak: Alaska Extended Forecast Discussion",
         "pmdca: Tropical Discussion",
         "pmdmrd: Prognostic disc for 6-10 and 8-14 Day Outlooks",
+        "week34: Prognostic Discussion for Week 3-4 Temperature and Precipitation Outlooks",
         "pmd30d: Prognostic disc for Monthly Outlook",
         "pmd90d: Prognostic disc for long-lead Seasonal Outlooks",
         "pmdhco: Prognostic disc for long-lead Hawaiian Outlooks",
