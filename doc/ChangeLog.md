@@ -2,7 +2,7 @@
 
 # Developer ChangeLog
 
-## 55934 2025_01_22
+## 55934 2025_01_24
 
 * [ADD] In National Images remove "experimental" from the label for "Week 3-4 Outlooks -
   Temperature" and "Week 3-4 Outlooks - Precipitation" per *SCN24-104: The Experimental Weeks 3-4
@@ -12,6 +12,7 @@
 * [ADD] NWS has discontinued the following per SCN24-108: Termination of the 72-Hour Low Tracks
   Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
   Forecast Tool: Effective January 20, 2025 , remove from National Images
+* [FIX] In National Graphics the URL for **GLSEA Ice Analysis** had changed
 
 ```
 "Significant Surface Low Tracks",

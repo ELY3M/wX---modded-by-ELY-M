@@ -258,7 +258,8 @@ internal object UtilityWpcImages {
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}//wwd/pwpf_d47/gif/prbww_sn25_DAY5_conus.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}//wwd/pwpf_d47/gif/prbww_sn25_DAY6_conus.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}//wwd/pwpf_d47/gif/prbww_sn25_DAY7_conus.gif",
-        "https://coastwatch.glerl.noaa.gov/glsea/cur/glsea_cur.png",
+//        "https://coastwatch.glerl.noaa.gov/glsea/cur/glsea_cur.png",
+        "https://apps.glerl.noaa.gov/coastwatch/webdata/glsea/cur/glsea_cur.png", // https://coastwatch.glerl.noaa.gov/satellite-data-products/great-lakes-surface-environmental-analysis-glsea/
 
         "${GlobalVariables.NWS_GRAPHICAL_WEBSITE_PREFIX}/images/conus/MaxT",
         "${GlobalVariables.NWS_GRAPHICAL_WEBSITE_PREFIX}/images/conus/MinT",
