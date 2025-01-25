@@ -37,30 +37,19 @@ internal object NexradDecodeEightBit {
         try {
             val dataInputStream = UtilityIO.uncompress(context, radarBuffers.fileName)
             dataInputStream.skipBytes(30)
-            var numberOfRleHalfWords: Int
             radarBuffers.colormap.redValues.put(0, Color.red(radarBuffers.bgColor).toByte())
             radarBuffers.colormap.greenValues.put(0, Color.green(radarBuffers.bgColor).toByte())
             radarBuffers.colormap.blueValues.put(0, Color.blue(radarBuffers.bgColor).toByte())
             radarBuffers.floatBuffer.position(0)
             radarBuffers.colorBuffer.position(0)
-            var angle: Float
-            var angleV: Float
-            var level: Byte
-            var levelCount: Int
-            var binStart: Float
             var colorIndex = 0
             var radialIndex = 0
-            var curLevel: Byte
-            var angleSin: Float
-            var angleCos: Float
-            var angleVSin: Float
-            var angleVCos: Float
             var angleNext = 0.0f
             var angle0 = 0.0f
             val numberOfRadials = radarBuffers.numberOfRadials
             for (radialNumber in 0 until numberOfRadials) {
-                numberOfRleHalfWords = dataInputStream.readUnsignedShort()
-                angle = 450.0f - dataInputStream.readUnsignedShort() / 10.0f
+                val numberOfRleHalfWords = dataInputStream.readUnsignedShort()
+                val angle = 450.0f - dataInputStream.readUnsignedShort() / 10.0f
                 dataInputStream.skipBytes(2)
                 if (radialNumber < numberOfRadials - 1) {
                     dataInputStream.mark(100000)
@@ -68,23 +57,23 @@ internal object NexradDecodeEightBit {
                     angleNext = 450.0f - dataInputStream.readUnsignedShort() / 10.0f
                     dataInputStream.reset()
                 }
-                level = 0.toByte()
-                levelCount = 0
-                binStart = radarBuffers.binSize
+                var level = 0.toByte()
+                var levelCount = 0
+                var binStart = radarBuffers.binSize
                 if (radialNumber == 0) {
                     angle0 = angle
                 }
-                angleV = if (radialNumber < numberOfRadials - 1) {
+                val angleV = if (radialNumber < numberOfRadials - 1) {
                     angleNext
                 } else {
                     angle0
                 }
-                angleVCos = cos(angleV / M_180_DIV_PI)
-                angleVSin = sin(angleV / M_180_DIV_PI)
-                angleCos = cos(angle / M_180_DIV_PI)
-                angleSin = sin(angle / M_180_DIV_PI)
+                val angleVCos = cos(angleV / M_180_DIV_PI)
+                val angleVSin = sin(angleV / M_180_DIV_PI)
+                val angleCos = cos(angle / M_180_DIV_PI)
+                val angleSin = sin(angle / M_180_DIV_PI)
                 for (bin in 0 until numberOfRleHalfWords) {
-                    curLevel = (dataInputStream.readUnsignedByte() and 0xFF).toByte()
+                    val curLevel = (dataInputStream.readUnsignedByte() and 0xFF).toByte()
                     if (bin == 0) {
                         level = curLevel
                     }
@@ -93,17 +82,38 @@ internal object NexradDecodeEightBit {
                     } else {
                         radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVCos)
                         radarBuffers.floatBuffer.putFloat(radialIndex + 4, binStart * angleVSin)
-                        radarBuffers.floatBuffer.putFloat(radialIndex + 8, (binStart + radarBuffers.binSize * levelCount) * angleVCos)
-                        radarBuffers.floatBuffer.putFloat(radialIndex + 12, (binStart + radarBuffers.binSize * levelCount) * angleVSin)
-                        radarBuffers.floatBuffer.putFloat(radialIndex + 16, (binStart + radarBuffers.binSize * levelCount) * angleCos)
-                        radarBuffers.floatBuffer.putFloat(radialIndex + 20, (binStart + radarBuffers.binSize * levelCount) * angleSin)
+                        radarBuffers.floatBuffer.putFloat(
+                            radialIndex + 8,
+                            (binStart + radarBuffers.binSize * levelCount) * angleVCos
+                        )
+                        radarBuffers.floatBuffer.putFloat(
+                            radialIndex + 12,
+                            (binStart + radarBuffers.binSize * levelCount) * angleVSin
+                        )
+                        radarBuffers.floatBuffer.putFloat(
+                            radialIndex + 16,
+                            (binStart + radarBuffers.binSize * levelCount) * angleCos
+                        )
+                        radarBuffers.floatBuffer.putFloat(
+                            radialIndex + 20,
+                            (binStart + radarBuffers.binSize * levelCount) * angleSin
+                        )
                         radarBuffers.floatBuffer.putFloat(radialIndex + 24, binStart * angleCos)
                         radarBuffers.floatBuffer.putFloat(radialIndex + 28, binStart * angleSin)
                         radialIndex += 32
                         for (unused in 0..3) {
-                            radarBuffers.colorBuffer.put(colorIndex, radarBuffers.colormap.redValues.get(level.toInt() and 0xFF))
-                            radarBuffers.colorBuffer.put(colorIndex + 1, radarBuffers.colormap.greenValues.get(level.toInt() and 0xFF))
-                            radarBuffers.colorBuffer.put(colorIndex + 2, radarBuffers.colormap.blueValues.get(level.toInt() and 0xFF))
+                            radarBuffers.colorBuffer.put(
+                                colorIndex,
+                                radarBuffers.colormap.redValues.get(level.toInt() and 0xFF)
+                            )
+                            radarBuffers.colorBuffer.put(
+                                colorIndex + 1,
+                                radarBuffers.colormap.greenValues.get(level.toInt() and 0xFF)
+                            )
+                            radarBuffers.colorBuffer.put(
+                                colorIndex + 2,
+                                radarBuffers.colormap.blueValues.get(level.toInt() and 0xFF)
+                            )
                             colorIndex += 3
                         }
                         totalBins += 1
@@ -123,24 +133,18 @@ internal object NexradDecodeEightBit {
     }
 
     // level2
-    fun createRadials(radarBuffers: OglRadarBuffers, binBuff: ByteBuffer, radialStart: ByteBuffer): Int {
+    fun createRadials(
+        radarBuffers: OglRadarBuffers,
+        binBuff: ByteBuffer,
+        radialStart: ByteBuffer
+    ): Int {
         radarBuffers.colormap.redValues.put(0, Color.red(radarBuffers.bgColor).toByte())
         radarBuffers.colormap.greenValues.put(0, Color.green(radarBuffers.bgColor).toByte())
         radarBuffers.colormap.blueValues.put(0, Color.blue(radarBuffers.bgColor).toByte())
         var totalBins = 0
-        var angle: Float
-        var angleV: Float
-        var level: Int
-        var levelCount: Int
-        var binStart: Float
         var binIndex = 0
         var colorIndex = 0
         var radialIndex = 0
-        var curLevel: Int
-        var angleSin: Float
-        var angleCos: Float
-        var angleVSin: Float
-        var angleVCos: Float
         val radarBlackHole: Float
         val radarBlackHoleAdd: Float
         when (radarBuffers.productCode.toInt()) {
@@ -155,38 +159,59 @@ internal object NexradDecodeEightBit {
             }
         }
         for (radialNumber in 0 until radarBuffers.numberOfRadials) {
-            angle = radialStart.getFloat(radialNumber * 4)
-            level = binBuff.get(binIndex).toInt()
-            levelCount = 0
-            binStart = radarBlackHole
-            angleV = if (radialNumber < radarBuffers.numberOfRadials - 1) {
+            val angle = radialStart.getFloat(radialNumber * 4)
+            var level = binBuff.get(binIndex).toInt()
+            var levelCount = 0
+            var binStart = radarBlackHole
+            val angleV = if (radialNumber < radarBuffers.numberOfRadials - 1) {
                 radialStart.getFloat(radialNumber * 4 + 4)
             } else {
                 radialStart.getFloat(0)
             }
-            angleVCos = cos(angleV / M_180_DIV_PI)
-            angleVSin = sin(angleV / M_180_DIV_PI)
-            angleCos = cos(angle / M_180_DIV_PI)
-            angleSin = sin(angle / M_180_DIV_PI)
+            val angleVCos = cos(angleV / M_180_DIV_PI)
+            val angleVSin = sin(angleV / M_180_DIV_PI)
+            val angleCos = cos(angle / M_180_DIV_PI)
+            val angleSin = sin(angle / M_180_DIV_PI)
             for (bin in 0 until radarBuffers.numRangeBins) {
-                curLevel = binBuff.get(binIndex).toInt()
+                val curLevel = binBuff.get(binIndex).toInt()
                 binIndex += 1
                 if (curLevel == level) {
                     levelCount += 1
                 } else {
                     radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVCos)
                     radarBuffers.floatBuffer.putFloat(radialIndex + 4, binStart * angleVSin)
-                    radarBuffers.floatBuffer.putFloat(radialIndex + 8, (binStart + radarBuffers.binSize * levelCount) * angleVCos)
-                    radarBuffers.floatBuffer.putFloat(radialIndex + 12, (binStart + radarBuffers.binSize * levelCount) * angleVSin)
-                    radarBuffers.floatBuffer.putFloat(radialIndex + 16, (binStart + radarBuffers.binSize * levelCount) * angleCos)
-                    radarBuffers.floatBuffer.putFloat(radialIndex + 20, (binStart + radarBuffers.binSize * levelCount) * angleSin)
+                    radarBuffers.floatBuffer.putFloat(
+                        radialIndex + 8,
+                        (binStart + radarBuffers.binSize * levelCount) * angleVCos
+                    )
+                    radarBuffers.floatBuffer.putFloat(
+                        radialIndex + 12,
+                        (binStart + radarBuffers.binSize * levelCount) * angleVSin
+                    )
+                    radarBuffers.floatBuffer.putFloat(
+                        radialIndex + 16,
+                        (binStart + radarBuffers.binSize * levelCount) * angleCos
+                    )
+                    radarBuffers.floatBuffer.putFloat(
+                        radialIndex + 20,
+                        (binStart + radarBuffers.binSize * levelCount) * angleSin
+                    )
                     radarBuffers.floatBuffer.putFloat(radialIndex + 24, binStart * angleCos)
                     radarBuffers.floatBuffer.putFloat(radialIndex + 28, binStart * angleSin)
                     radialIndex += 32
                     for (unused in 0..3) {
-                        radarBuffers.colorBuffer.put(colorIndex, radarBuffers.colormap.redValues.get(level and 0xFF))
-                        radarBuffers.colorBuffer.put(colorIndex + 1, radarBuffers.colormap.greenValues.get(level and 0xFF))
-                        radarBuffers.colorBuffer.put(colorIndex + 2, radarBuffers.colormap.blueValues.get(level and 0xFF))
+                        radarBuffers.colorBuffer.put(
+                            colorIndex,
+                            radarBuffers.colormap.redValues.get(level and 0xFF)
+                        )
+                        radarBuffers.colorBuffer.put(
+                            colorIndex + 1,
+                            radarBuffers.colormap.greenValues.get(level and 0xFF)
+                        )
+                        radarBuffers.colorBuffer.put(
+                            colorIndex + 2,
+                            radarBuffers.colormap.blueValues.get(level and 0xFF)
+                        )
                         colorIndex += 3
                     }
                     totalBins += 1
@@ -202,7 +227,12 @@ internal object NexradDecodeEightBit {
     //
     // canvas based widget
     //
-    fun forCanvas(context: Context, src: String, radialStartAngle: ByteBuffer, binWord: ByteBuffer): Short {
+    fun forCanvas(
+        context: Context,
+        src: String,
+        radialStartAngle: ByteBuffer,
+        binWord: ByteBuffer
+    ): Short {
         var numberOfRangeBins = 0
         try {
             val dataInputStream = UtilityIO.uncompress(context, src)
@@ -246,7 +276,16 @@ internal object NexradDecodeEightBit {
     //
     // canvas based widget
     //
-    fun rect8bit(rBuff: ByteBuffer, binStart: Float, binSize: Float, levelCount: Int, angle: Float, angleV: Float, centerX: Int, centerY: Int) {
+    fun rect8bit(
+        rBuff: ByteBuffer,
+        binStart: Float,
+        binSize: Float,
+        levelCount: Int,
+        angle: Float,
+        angleV: Float,
+        centerX: Int,
+        centerY: Int
+    ) {
         rBuff.position(0)
         rBuff.putFloat(binStart * cos(angle / M_180_DIV_PI) + centerX)
         rBuff.putFloat((binStart * sin(angle / M_180_DIV_PI) - centerY) * -1.0f)

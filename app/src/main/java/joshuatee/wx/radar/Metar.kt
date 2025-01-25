@@ -60,7 +60,6 @@ internal object Metar {
             UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.obs_all)
         for (line in lines) {
             val items = line.trimEnd().split(",")
-            println(items)
             if (items.size > 2) {
                 name[items[0]] = items[1] + ", " + items[2]
                 lat[items[0]] = items[3]
