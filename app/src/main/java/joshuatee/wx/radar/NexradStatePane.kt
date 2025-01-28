@@ -29,11 +29,11 @@ import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.Utility
 
 class NexradStatePane(
-        val activity: VideoRecordActivity,
-        numberOfPanes: Int,
-        relativeLayoutResIdList: List<Int>,
-        widthDivider: Int,
-        heightDivider: Int
+    val activity: VideoRecordActivity,
+    numberOfPanes: Int,
+    relativeLayoutResIdList: List<Int>,
+    widthDivider: Int,
+    heightDivider: Int
 ) : NexradState(numberOfPanes) {
 
     var oldRadarSites = Array(numberOfPanes) { "" }
@@ -78,12 +78,16 @@ class NexradStatePane(
 //            }
         }
         wxglSurfaceViews.indices.forEach {
-            wxglTextObjects.add(NexradRenderTextObject(activity,
+            wxglTextObjects.add(
+                NexradRenderTextObject(
+                    activity,
                     relativeLayouts[it],
                     wxglSurfaceViews[it],
                     wxglRenders[it].state,
                     numberOfPanes,
-                    it))
+                    it
+                )
+            )
             wxglSurfaceViews[it].textObjects = wxglTextObjects
             wxglTextObjects.last().initializeLabels(activity)
         }
@@ -135,7 +139,11 @@ class NexradStatePane(
                 radarSite = RadarPreferences.wxoglRid
             }
             product = RadarPreferences.wxoglProd
-            render.setViewInitial(RadarPreferences.wxoglZoom, RadarPreferences.wxoglX, RadarPreferences.wxoglY)
+            render.setViewInitial(
+                RadarPreferences.wxoglZoom,
+                RadarPreferences.wxoglX,
+                RadarPreferences.wxoglY
+            )
         } else {
             surface.scaleFactor = RadarPreferences.wxoglSize / 10.0f
             render.setViewInitial(RadarPreferences.wxoglSize / 10.0f, 0.0f, 0.0f)
@@ -152,9 +160,14 @@ class NexradStatePane(
                 initialRadarSite = joshuatee.wx.settings.Location.rid
             }
             if (!nexradArguments.useSinglePanePref) {
-                wxglRender.state.rid = Utility.readPref(context, prefPrefix + "_RID" + (index + 1).toString(), initialRadarSite)
+                wxglRender.state.rid = Utility.readPref(
+                    context,
+                    prefPrefix + "_RID" + (index + 1).toString(),
+                    initialRadarSite
+                )
             } else {
-                wxglRender.state.rid = Utility.readPref(context, prefPrefix + "_RID", initialRadarSite)
+                wxglRender.state.rid =
+                    Utility.readPref(context, prefPrefix + "_RID", initialRadarSite)
             }
             // jump from single pane which is from an alert
             if (nexradArguments.doNotSavePref && !nexradArguments.useSinglePanePref) {
@@ -172,7 +185,11 @@ class NexradStatePane(
         val defaultProducts = listOf("N0Q", "N0U", "N0C", "DVL")
         wxglRenders.indices.forEach {
             oldRadarSites[it] = ""
-            wxglRenders[it].state.product = Utility.readPref(context, prefPrefix + "_PROD" + (it + 1).toString(), defaultProducts[it])
+            wxglRenders[it].state.product = Utility.readPref(
+                context,
+                prefPrefix + "_PROD" + (it + 1).toString(),
+                defaultProducts[it]
+            )
         }
         // jump from single pane which is from an alert
         if (nexradArguments.doNotSavePref && !nexradArguments.useSinglePanePref) {
@@ -191,27 +208,47 @@ class NexradStatePane(
             xPref = "_X"
             yPref = "_Y"
         }
-        wxglSurfaceViews[0].scaleFactor = Utility.readPrefFloat(context, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f)
+        wxglSurfaceViews[0].scaleFactor = Utility.readPrefFloat(
+            context,
+            prefPrefix + zoomPref,
+            RadarPreferences.wxoglSize.toFloat() / 10.0f
+        )
         wxglRenders[0].setViewInitial(
-                Utility.readPrefFloat(context, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
-                Utility.readPrefFloat(context, prefPrefix + xPref, 0.0f),
-                Utility.readPrefFloat(context, prefPrefix + yPref, 0.0f)
+            Utility.readPrefFloat(
+                context,
+                prefPrefix + zoomPref,
+                RadarPreferences.wxoglSize.toFloat() / 10.0f
+            ),
+            Utility.readPrefFloat(context, prefPrefix + xPref, 0.0f),
+            Utility.readPrefFloat(context, prefPrefix + yPref, 0.0f)
         )
         if (RadarPreferences.dualpaneshareposn) {
             (1 until numberOfPanes).forEach {
                 wxglSurfaceViews[it].scaleFactor = wxglSurfaceViews[0].scaleFactor
                 wxglRenders[it].setViewInitial(
-                        Utility.readPrefFloat(context, prefPrefix + zoomPref, RadarPreferences.wxoglSize.toFloat() / 10.0f),
-                        wxglRenders[0].state.x, wxglRenders[0].state.y
+                    Utility.readPrefFloat(
+                        context,
+                        prefPrefix + zoomPref,
+                        RadarPreferences.wxoglSize.toFloat() / 10.0f
+                    ),
+                    wxglRenders[0].state.x, wxglRenders[0].state.y
                 )
             }
         } else {
             (1 until numberOfPanes).forEach {
-                wxglSurfaceViews[it].scaleFactor = Utility.readPrefFloat(context, prefPrefix + "_ZOOM" + (it + 1).toString(), RadarPreferences.wxoglSize.toFloat() / 10.0f)
+                wxglSurfaceViews[it].scaleFactor = Utility.readPrefFloat(
+                    context,
+                    prefPrefix + "_ZOOM" + (it + 1).toString(),
+                    RadarPreferences.wxoglSize.toFloat() / 10.0f
+                )
                 wxglRenders[it].setViewInitial(
-                        Utility.readPrefFloat(context, prefPrefix + "_ZOOM" + (it + 1).toString(), RadarPreferences.wxoglSize.toFloat() / 10.0f),
-                        Utility.readPrefFloat(context, prefPrefix + "_X" + (it + 1).toString(), 0.0f),
-                        Utility.readPrefFloat(context, prefPrefix + "_Y" + (it + 1).toString(), 0.0f)
+                    Utility.readPrefFloat(
+                        context,
+                        prefPrefix + "_ZOOM" + (it + 1).toString(),
+                        RadarPreferences.wxoglSize.toFloat() / 10.0f
+                    ),
+                    Utility.readPrefFloat(context, prefPrefix + "_X" + (it + 1).toString(), 0.0f),
+                    Utility.readPrefFloat(context, prefPrefix + "_Y" + (it + 1).toString(), 0.0f)
                 )
             }
         }
@@ -258,7 +295,12 @@ class NexradStatePane(
         RadarPreferences.wxoglY = state.y
     }
 
-    private fun savePrefs(context: Context, prefPrefix: String, idx: Int, state: NexradRenderState) {
+    private fun savePrefs(
+        context: Context,
+        prefPrefix: String,
+        idx: Int,
+        state: NexradRenderState
+    ) {
         Utility.writePref(context, prefPrefix + "_RID" + idx.toString(), state.rid)
         Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), state.product)
         Utility.writePrefFloat(context, prefPrefix + "_ZOOM" + idx.toString(), state.zoom)
@@ -266,7 +308,12 @@ class NexradStatePane(
         Utility.writePrefFloat(context, prefPrefix + "_Y" + idx.toString(), state.y)
     }
 
-    private fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, state: NexradRenderState) {
+    private fun saveProductPrefs(
+        context: Context,
+        prefPrefix: String,
+        idx: Int,
+        state: NexradRenderState
+    ) {
         Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), state.product)
     }
 
@@ -322,9 +369,9 @@ class NexradStatePane(
     fun updateLocationDots(nexradArguments: NexradArguments) {
         wxglRenders.indices.forEach {
             wxglRenders[it].construct.locationDot(
-                    latD,
-                    lonD,
-                    nexradArguments.archiveMode
+                latD,
+                lonD,
+                nexradArguments.archiveMode
             )
             draw(it)
             if (RadarPreferences.wxoglCenterOnLocation) {
@@ -405,13 +452,19 @@ class NexradStatePane(
 
     fun adjustForTdwrMultiPane(z: Int) {
         with(wxglRenders[z]) {
-            if ((state.product.matches(Regex("N[0-3]Q")) || state.product == "L2REF") && isRidTdwr(state.rid)) {
+            if ((state.product.matches(Regex("N[0-3]Q")) || state.product == "L2REF") && isRidTdwr(
+                    state.rid
+                )
+            ) {
                 state.product = "TZL"
             }
             if (state.product == "TZL" && !isRidTdwr(state.rid)) {
                 state.product = "N0Q"
             }
-            if ((state.product.matches(Regex("N[0-3]U")) || state.product == "L2VEL") && isRidTdwr(state.rid)) {
+            if ((state.product.matches(Regex("N[0-3]U")) || state.product == "L2VEL") && isRidTdwr(
+                    state.rid
+                )
+            ) {
                 state.product = "TV0"
             }
             if (state.product == "TV0" && !isRidTdwr(state.rid)) {

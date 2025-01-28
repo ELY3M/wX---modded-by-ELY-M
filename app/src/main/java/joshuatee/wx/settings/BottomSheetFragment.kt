@@ -37,10 +37,10 @@ import joshuatee.wx.ui.Text
 import joshuatee.wx.ui.UtilityUI
 
 class BottomSheetFragment(
-        private val actContext: Context,
-        val position: Int,
-        private val topLabel: String,
-        private val usedForLocation: Boolean
+    private val actContext: Context,
+    val position: Int,
+    private val topLabel: String,
+    private val usedForLocation: Boolean
 ) : BottomSheetDialogFragment() {
 
     private lateinit var box: LinearLayout
@@ -50,7 +50,11 @@ class BottomSheetFragment(
     private var textViewList = mutableListOf<Text>()
     private var fragmentView: View? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         fragmentView = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
         label = fragmentView!!.findViewById(R.id.label)
         when {

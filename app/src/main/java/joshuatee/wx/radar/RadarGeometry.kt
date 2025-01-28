@@ -30,13 +30,13 @@ object RadarGeometry {
     val dataByType = mutableMapOf<RadarGeometryTypeEnum, RadarGeomInfo>()
 
     val orderedTypes = listOf(
-            RadarGeometryTypeEnum.CountyLines,
-            RadarGeometryTypeEnum.StateLines,
-            RadarGeometryTypeEnum.CaLines,
-            RadarGeometryTypeEnum.MxLines,
-            RadarGeometryTypeEnum.HwLines,
-            RadarGeometryTypeEnum.HwExtLines,
-            RadarGeometryTypeEnum.LakeLines,
+        RadarGeometryTypeEnum.CountyLines,
+        RadarGeometryTypeEnum.StateLines,
+        RadarGeometryTypeEnum.CaLines,
+        RadarGeometryTypeEnum.MxLines,
+        RadarGeometryTypeEnum.HwLines,
+        RadarGeometryTypeEnum.HwExtLines,
+        RadarGeometryTypeEnum.LakeLines,
     )
 
     fun initialize(context: Context) {

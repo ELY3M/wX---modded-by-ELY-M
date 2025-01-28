@@ -36,14 +36,14 @@ class NhcRegionSummary(region: NhcOceanEnum) {
         when (region) {
             NhcOceanEnum.ATL -> {
                 titles = listOf(
-                        "Atlantic Tropical Cyclones and Disturbances ",
-                        "ATL: Two-Day Graphical Tropical Weather Outlook",
-                        "ATL: Seven-Day Graphical Tropical Weather Outlook"
+                    "Atlantic Tropical Cyclones and Disturbances ",
+                    "ATL: Two-Day Graphical Tropical Weather Outlook",
+                    "ATL: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_0d0.png",
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_2d0.png",
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_7d0.png"
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_0d0.png",
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_2d0.png",
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_7d0.png"
                 )
                 replaceString = "NHC Atlantic Wallet"
                 baseUrl = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/nhc_at"
@@ -51,14 +51,14 @@ class NhcRegionSummary(region: NhcOceanEnum) {
 
             NhcOceanEnum.EPAC -> {
                 titles = listOf(
-                        "EPAC Tropical Cyclones and Disturbances ",
-                        "EPAC: Two-Day Graphical Tropical Weather Outlook",
-                        "EPAC: Seven-Day Graphical Tropical Weather Outlook"
+                    "EPAC Tropical Cyclones and Disturbances ",
+                    "EPAC: Two-Day Graphical Tropical Weather Outlook",
+                    "EPAC: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_0d0.png",
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_2d0.png",
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_7d0.png"
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_0d0.png",
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_2d0.png",
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_7d0.png"
                 )
                 replaceString = "NHC Eastern Pacific Wallet"
                 baseUrl = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/nhc_ep"
@@ -66,24 +66,18 @@ class NhcRegionSummary(region: NhcOceanEnum) {
 
             NhcOceanEnum.CPAC -> {
                 titles = listOf(
-                        "CPAC Tropical Cyclones and Disturbances ",
-                        "CPAC: Two-Day Graphical Tropical Weather Outlook",
-                        "CPAC: Seven-Day Graphical Tropical Weather Outlook"
+                    "CPAC Tropical Cyclones and Disturbances ",
+                    "CPAC: Two-Day Graphical Tropical Weather Outlook",
+                    "CPAC: Seven-Day Graphical Tropical Weather Outlook"
                 )
                 urls = listOf(
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_0d0.png",
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_2d0.png",
-                        "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_7d0.png"
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_0d0.png",
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_2d0.png",
+                    "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_7d0.png"
                 )
                 replaceString = ""
                 baseUrl = ""
             }
         }
     }
-
-//    fun getImages() {
-//        bitmaps = urls.map { it.getImage() }
-//    }
-//
-//    fun getTitle(index: Int) = arrayOf(urls[index], titles[index])
 }

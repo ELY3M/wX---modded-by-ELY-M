@@ -30,9 +30,9 @@ import kotlinx.coroutines.*
 import java.io.File
 
 class NexradAnimation(
-        val activity: VideoRecordActivity,
-        private val nexradState: NexradStatePane,
-        private val nexradUI: NexradUI
+    val activity: VideoRecordActivity,
+    private val nexradState: NexradStatePane,
+    private val nexradUI: NexradUI
 ) {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
@@ -40,7 +40,12 @@ class NexradAnimation(
     private fun downloadFiles(frameCount: Int): List<List<String>> {
         val listOfUrls = List(nexradState.numberOfPanes) { List(frameCount) { "" } }.toMutableList()
         nexradState.wxglRenders.forEachIndexed { paneIndex, wxglRender ->
-            listOfUrls[paneIndex] = NexradDownload.getRadarFilesForAnimation(activity, frameCount, wxglRender.state.rid, wxglRender.state.product)
+            listOfUrls[paneIndex] = NexradDownload.getRadarFilesForAnimation(
+                activity,
+                frameCount,
+                wxglRender.state.rid,
+                wxglRender.state.product
+            )
             try {
                 listOfUrls[paneIndex].indices.forEach { frameIndex ->
                     val file = File(activity.filesDir, listOfUrls[paneIndex][frameIndex])
@@ -58,7 +63,7 @@ class NexradAnimation(
     }
 
     private fun getFilename(paneIndex: Int, frameIndex: Int, state: NexradRenderState): String =
-            (paneIndex + 1).toString() + state.product + "nexrad_anim" + frameIndex.toString()
+        (paneIndex + 1).toString() + state.product + "nexrad_anim" + frameIndex.toString()
 
     private fun updateMultiPane(vararg values: String) {
         if (To.int(values[1]) > 1) {
@@ -104,18 +109,36 @@ class NexradAnimation(
                     }
                     if (loopCnt > 0) {
                         nexradState.wxglRenders.forEachIndexed { paneIndex, wxglRender ->
-                            wxglRender.constructPolygons(getFilename(paneIndex, frameIndex, wxglRender.state), false)
+                            wxglRender.constructPolygons(
+                                getFilename(
+                                    paneIndex,
+                                    frameIndex,
+                                    wxglRender.state
+                                ), false
+                            )
                         }
                     } else {
                         nexradState.wxglRenders.forEachIndexed { paneIndex, wxglRender ->
-                            wxglRender.constructPolygons(getFilename(paneIndex, frameIndex, wxglRender.state), true)
+                            wxglRender.constructPolygons(
+                                getFilename(
+                                    paneIndex,
+                                    frameIndex,
+                                    wxglRender.state
+                                ), true
+                            )
                         }
                     }
                     launch(uiDispatcher) {
                         if (nexradState.numberOfPanes > 1) {
-                            updateMultiPane((frameIndex + 1).toString(), listOfUrls[0].size.toString())
+                            updateMultiPane(
+                                (frameIndex + 1).toString(),
+                                listOfUrls[0].size.toString()
+                            )
                         } else {
-                            updateSinglePane((frameIndex + 1).toString(), listOfUrls[0].size.toString())
+                            updateSinglePane(
+                                (frameIndex + 1).toString(),
+                                listOfUrls[0].size.toString()
+                            )
                         }
                     }
                     nexradState.drawAll()

@@ -28,100 +28,102 @@ import joshuatee.wx.util.Utility
 object NexradUtil {
 
     fun isProductTdwr(product: String): Boolean =
-            !product.startsWith("TVS") && (product.startsWith("TV") || product == "TZL" || product.startsWith("TZ"))
+        !product.startsWith("TVS") && (product.startsWith("TV") || product == "TZL" || product.startsWith(
+            "TZ"
+        ))
 
     // next 3 maps are for color palette editor : Map<String, String>
     val productCodeStringToName = mapOf(
-            94 to "Reflectivity",
-            99 to "Velocity",
-            134 to "Digital Vertical Integrated Liquid",
-            135 to "Enhanced Echo Tops",
-            159 to "Differential Reflectivity",
-            161 to "Correlation Coefficient",
-            163 to "Specific Differential Phase",
-            172 to "Digital Storm Total Precipitation"
+        94 to "Reflectivity",
+        99 to "Velocity",
+        134 to "Digital Vertical Integrated Liquid",
+        135 to "Enhanced Echo Tops",
+        159 to "Differential Reflectivity",
+        161 to "Correlation Coefficient",
+        163 to "Specific Differential Phase",
+        172 to "Digital Storm Total Precipitation"
     )
 
     val productCodeStringToCode = mapOf(
-            94 to "N0Q",
-            99 to "N0U",
-            134 to "DVL",
-            135 to "EET",
-            159 to "N0X",
-            161 to "N0C",
-            163 to "N0K",
-            172 to "DSP"
+        94 to "N0Q",
+        99 to "N0U",
+        134 to "DVL",
+        135 to "EET",
+        159 to "N0X",
+        161 to "N0C",
+        163 to "N0K",
+        172 to "DSP"
     )
 
     val productCodeStringToResourceFile = mapOf(
-            94 to R.raw.dvn94,
-            99 to R.raw.dvn99,
-            134 to R.raw.gsp134,
-            135 to R.raw.vax135,
-            159 to R.raw.vax159,
-            161 to R.raw.vax161,
-            163 to R.raw.vax163,
-            172 to R.raw.vax172
+        94 to R.raw.dvn94,
+        99 to R.raw.dvn99,
+        134 to R.raw.gsp134,
+        135 to R.raw.vax135,
+        159 to R.raw.vax159,
+        161 to R.raw.vax161,
+        163 to R.raw.vax163,
+        172 to R.raw.vax172
     )
 
     val colorPaletteProducts = listOf(
-            94,
-            99,
-            134,
-            135,
-            159,
-            161,
-            163,
-            165,
-            172
+        94,
+        99,
+        134,
+        135,
+        159,
+        161,
+        163,
+        165,
+        172
     )
 
     private val closestTdwrToNexrad = mapOf(
-            "DTX" to "DTW",
-            "LOT" to "ORD",
-            "MKX" to "MKE",
-            "MPX" to "MSP",
-            "FTG" to "DEN",
-            "BOX" to "BOS",
-            "CLE" to "LVE",
-            "EAX" to "MCI",
-            "FFC" to "ATL",
-            "FWS" to "DFW",
-            "GSP" to "CLT",
-            "HGX" to "HOU",
-            "IND" to "IDS",
-            "LIX" to "MSY",
-            "LVX" to "SDF",
-            "LSX" to "STL",
-            "NQA" to "MEM",
-            "AMX" to "MIA",
-            "OHX" to "BNA",
-            "OKX" to "JFK",
-            "TLX" to "OKC",
-            "PBZ" to "PIT",
-            "DIX" to "PHL",
-            "IWA" to "PHX",
-            "RAX" to "RDU",
-            "MTX" to "SLC",
-            "TBW" to "TPA",
-            "INX" to "TUL",
-            "ESX" to "LAS",
-            "TBW" to "TPA",
-            "JUA" to "SJU",
-            "LWX" to "DCA",
-            "ILN" to "CMH",
-            "MLB" to "MCO",
-            "ICT" to "ICT",
-            "CMH" to "CMH",
-            "CVG" to "CVG",
-            "DAL" to "DAL",
-            "DAY" to "DAY",
-            "EWR" to "EWR",
-            "FLL" to "FLL",
-            "IAD" to "IAD",
-            "IAH" to "IAH",
-            "MDW" to "MDW",
-            "PBI" to "PBI"
+        "DTX" to "DTW",
+        "LOT" to "ORD",
+        "MKX" to "MKE",
+        "MPX" to "MSP",
+        "FTG" to "DEN",
+        "BOX" to "BOS",
+        "CLE" to "LVE",
+        "EAX" to "MCI",
+        "FFC" to "ATL",
+        "FWS" to "DFW",
+        "GSP" to "CLT",
+        "HGX" to "HOU",
+        "IND" to "IDS",
+        "LIX" to "MSY",
+        "LVX" to "SDF",
+        "LSX" to "STL",
+        "NQA" to "MEM",
+        "AMX" to "MIA",
+        "OHX" to "BNA",
+        "OKX" to "JFK",
+        "TLX" to "OKC",
+        "PBZ" to "PIT",
+        "DIX" to "PHL",
+        "IWA" to "PHX",
+        "RAX" to "RDU",
+        "MTX" to "SLC",
+        "TBW" to "TPA",
+        "INX" to "TUL",
+        "ESX" to "LAS",
+        "TBW" to "TPA",
+        "JUA" to "SJU",
+        "LWX" to "DCA",
+        "ILN" to "CMH",
+        "MLB" to "MCO",
+        "ICT" to "ICT",
+        "CMH" to "CMH",
+        "CVG" to "CVG",
+        "DAL" to "DAL",
+        "DAY" to "DAY",
+        "EWR" to "EWR",
+        "FLL" to "FLL",
+        "IAD" to "IAD",
+        "IAH" to "IAH",
+        "MDW" to "MDW",
+        "PBI" to "PBI"
     )
 
     // 19    .54   124 16
@@ -172,7 +174,7 @@ object NexradUtil {
     fun getTdwrFromRid(rid: String): String = closestTdwrToNexrad[rid] ?: ""
 
     fun getRadarInfo(context: Context, pane: String): String =
-            Utility.readPref(context, "WX_RADAR_CURRENT_INFO$pane", "")
+        Utility.readPref(context, "WX_RADAR_CURRENT_INFO$pane", "")
 
     fun writeRadarInfo(context: Context, pane: String, info: String) {
         Utility.writePref(context, "WX_RADAR_CURRENT_INFO$pane", info)
@@ -183,5 +185,5 @@ object NexradUtil {
     }
 
     fun readRadarTimeForWidget(context: Context): String =
-            Utility.readPref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", "")
+        Utility.readPref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", "")
 }

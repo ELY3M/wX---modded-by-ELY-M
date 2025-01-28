@@ -61,12 +61,32 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
 
     private fun addSwitch() {
         val configs = listOf(
-                Switch(this, "Do not show 7day in CC widget", "WIDGET_CC_DONOTSHOW_7_DAY", R.string.cc_widget_show_seven_day),
-                Switch(this, "Download AFD", WidgetFile.AFD.prefString, R.string.loc1_txt_label),
-                Switch(this, "Download HWO", WidgetFile.HWO.prefString, R.string.loc1_txt_hwo_label),
-                Switch(this, "Download mosaics", WidgetFile.VIS.prefString, R.string.loc1_mosaics_label),
-                Switch(this, "Download nexrad radar", WidgetFile.NEXRAD_RADAR.prefString, R.string.loc1_radar_label),
-                Switch(this, "Download radar mosaic", WidgetFile.MOSAIC_RADAR.prefString, R.string.loc1_mosaics_rad_label),
+            Switch(
+                this,
+                "Do not show 7day in CC widget",
+                "WIDGET_CC_DONOTSHOW_7_DAY",
+                R.string.cc_widget_show_seven_day
+            ),
+            Switch(this, "Download AFD", WidgetFile.AFD.prefString, R.string.loc1_txt_label),
+            Switch(this, "Download HWO", WidgetFile.HWO.prefString, R.string.loc1_txt_hwo_label),
+            Switch(
+                this,
+                "Download mosaics",
+                WidgetFile.VIS.prefString,
+                R.string.loc1_mosaics_label
+            ),
+            Switch(
+                this,
+                "Download nexrad radar",
+                WidgetFile.NEXRAD_RADAR.prefString,
+                R.string.loc1_radar_label
+            ),
+            Switch(
+                this,
+                "Download radar mosaic",
+                WidgetFile.MOSAIC_RADAR.prefString,
+                R.string.loc1_mosaics_rad_label
+            ),
         )
         configs.forEach {
             box.addWidget(it)
@@ -80,9 +100,30 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         }
         val nexradCenterList = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")
         val spinners = listOf(
-                ObjectSpinner(this, "Radar mosaic level", "WIDGET_RADAR_LEVEL", "1km", R.string.widget_nexrad_size_label, sectors),
-                ObjectSpinner(this, "Location", "WIDGET_LOCATION", "", R.string.spinner_location_label, locations),
-                ObjectSpinner(this, "Nexrad centered at:", "WIDGET_NEXRAD_CENTER", "", R.string.nexrad_center_label, nexradCenterList),
+            ObjectSpinner(
+                this,
+                "Radar mosaic level",
+                "WIDGET_RADAR_LEVEL",
+                "1km",
+                R.string.widget_nexrad_size_label,
+                sectors
+            ),
+            ObjectSpinner(
+                this,
+                "Location",
+                "WIDGET_LOCATION",
+                "",
+                R.string.spinner_location_label,
+                locations
+            ),
+            ObjectSpinner(
+                this,
+                "Nexrad centered at:",
+                "WIDGET_NEXRAD_CENTER",
+                "",
+                R.string.nexrad_center_label,
+                nexradCenterList
+            ),
         )
         spinners.forEach {
             box.addWidget(it)
@@ -91,8 +132,24 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
 
     private fun addNumberPicker() {
         val numberPickers = listOf(
-                NumberPicker(this, "Widget check interval in minutes", "CC_NOTIFICATION_INTERVAL", R.string.cc_interval_np_label, 30, 1, 120),
-                NumberPicker(this, "Widget nexrad size", "WIDGET_NEXRAD_SIZE", R.string.widget_nexrad_size_label, 10, 1, 15)
+            NumberPicker(
+                this,
+                "Widget check interval in minutes",
+                "CC_NOTIFICATION_INTERVAL",
+                R.string.cc_interval_np_label,
+                30,
+                1,
+                120
+            ),
+            NumberPicker(
+                this,
+                "Widget nexrad size",
+                "WIDGET_NEXRAD_SIZE",
+                R.string.widget_nexrad_size_label,
+                10,
+                1,
+                15
+            )
         )
         numberPickers.forEach {
             box.addWidget(it)

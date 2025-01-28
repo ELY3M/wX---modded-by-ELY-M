@@ -38,7 +38,6 @@ import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.spc.SpcThunderStormOutlookActivity
 import joshuatee.wx.ui.CardHSImage
-import joshuatee.wx.util.DownloadImage
 import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.wpc.NationalImagesActivity

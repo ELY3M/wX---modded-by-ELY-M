@@ -27,21 +27,22 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 class ObjectNotification(
-        val context: Context,
-        val sound: Boolean,
-        val title: String,
-        val text: String,
-        val objectPendingIntents: ObjectPendingIntents,
-        val iconAlert: Int,
-        val iconAction: Int,
-        val buttonStr: String,
-        val priority: Int = NotificationCompat.PRIORITY_HIGH
+    val context: Context,
+    val sound: Boolean,
+    val title: String,
+    val text: String,
+    val objectPendingIntents: ObjectPendingIntents,
+    val iconAlert: Int,
+    val iconAction: Int,
+    val buttonStr: String,
+    val priority: Int = NotificationCompat.PRIORITY_HIGH
 ) {
 
     fun send(cancelString: String) {
         val notification = UtilityNotification.createNotificationBigTextWithAction(this)
         if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-            val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notifier =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             // cancelString / 1 must be unique - since cancelString is always unique we can get away with id being 1
             notifier.notify(cancelString, 1, notification)
         }

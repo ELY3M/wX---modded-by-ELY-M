@@ -37,7 +37,6 @@ import joshuatee.wx.util.UtilityFavorites
 object UIPreferences {
 
     // These are set in myapp still
-//    const val TELECINE_SWITCH_SHOW_TOUCHES = false
     var telecineVideoSizePercentage = 0
     var telecineSwitchShowCountdown = false
     var telecineSwitchRecordingNotification = false
@@ -63,19 +62,19 @@ object UIPreferences {
     var themeStr = ""
     var themeInt = 11 //elys mod
     val themes = listOf(
-            "blue",
-            "mixedBlue",
-            "darkBlue",
-            "black",
-            "allBlack",
-            "green",
-            "gray",
-            "white",
-            "whiteNew",
-            "allWhite",
-            "orange",
-	    "BlackAqua",
-	    "BlackNeonGreen"	    
+        "blue",
+        "mixedBlue",
+        "darkBlue",
+        "black",
+        "allBlack",
+        "green",
+        "gray",
+        "white",
+        "whiteNew",
+        "allWhite",
+        "orange",
+	"BlackAqua",
+	"BlackNeonGreen"	    
     )
     var textHighlightColor = 0
     var textSmallThemeColor = 0

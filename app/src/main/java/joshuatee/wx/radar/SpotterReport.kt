@@ -24,15 +24,15 @@ package joshuatee.wx.radar
 import joshuatee.wx.objects.LatLon
 
 class SpotterReport internal constructor(
-        val firstName: String,
-        lastName: String,
-        lat: String,
-        lon: String,
-        val narrative: String,
-        val uniq: String,
-        val type: String,
-        val time: String,
-        val city: String
+    val firstName: String,
+    lastName: String,
+    lat: String,
+    lon: String,
+    val narrative: String,
+    val uniq: String,
+    val type: String,
+    val time: String,
+    val city: String
 ) {
 
     val lastName = lastName.replace("^ ".toRegex(), "")

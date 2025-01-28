@@ -2,6 +2,8 @@
 
 ## Bugs
 
+* [FIX] back button handling in WebView for API
+  36 [https://developer.android.com/guide/navigation/navigation-custom-back](https://developer.android.com/guide/navigation/navigation-custom-back)
 * [FIX] during recent AS updates
 
 ```

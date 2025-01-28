@@ -25,58 +25,58 @@ package joshuatee.wx.models
 internal object UtilityModelSpcHrrrInterface {
 
     val models = listOf(
-            "HRRR"
+        "HRRR"
     )
 
     val sectors = listOf(
-            "National",
-            "Northwest US",
-            "Southwest US",
-            "Northern Plains",
-            "Central Plains",
-            "Southern Plains",
-            "Northeast US",
-            "Mid Atlantic",
-            "Southeast US",
-            "Midwest"
+        "National",
+        "Northwest US",
+        "Southwest US",
+        "Northern Plains",
+        "Central Plains",
+        "Southern Plains",
+        "Northeast US",
+        "Mid Atlantic",
+        "Southeast US",
+        "Midwest"
     )
 
     val sectorCodes = listOf(
-            "S19",
-            "S11",
-            "S12",
-            "S13",
-            "S14",
-            "S15",
-            "S16",
-            "S17",
-            "S18",
-            "S20"
+        "S19",
+        "S11",
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "S20"
     )
 
     val params = listOf(
-            "refc",
-            "pmsl",
-            "srh3",
-            "cape",
-            "proxy",
-            "wmax",
-            "scp",
-            "uh",
-            "ptype",
-            "ttd"
+        "refc",
+        "pmsl",
+        "srh3",
+        "cape",
+        "proxy",
+        "wmax",
+        "scp",
+        "uh",
+        "ptype",
+        "ttd"
     )
 
     val labels = listOf(
-            "Composite Reflectivity",
-            "MSL Pressure & Wind",
-            "Shear Parameters",
-            "Thermo Parameters",
-            "Proxy Indicators",
-            "Max Surface Wind",
-            "SCP / STP",
-            "Updraft Helicity",
-            "Winter Parameters",
-            "Temp/Dwpt"
+        "Composite Reflectivity",
+        "MSL Pressure & Wind",
+        "Shear Parameters",
+        "Thermo Parameters",
+        "Proxy Indicators",
+        "Max Surface Wind",
+        "SCP / STP",
+        "Updraft Helicity",
+        "Winter Parameters",
+        "Temp/Dwpt"
     )
 }

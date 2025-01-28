@@ -36,11 +36,12 @@ internal object SwoDayOne {
     val timer = DownloadTimer("SWO")
     val polygonBy = mutableMapOf<Int, List<Double>>()
     val colors = intArrayOf(
-            Color.MAGENTA,
-            Color.RED,
-            Color.rgb(255, 140, 0),
-            Color.YELLOW,
-            Color.rgb(0, 100, 0))
+        Color.MAGENTA,
+        Color.RED,
+        Color.rgb(255, 140, 0),
+        Color.YELLOW,
+        Color.rgb(0, 100, 0)
+    )
 
     fun get() {
         if (timer.isRefreshNeeded()) {
@@ -63,13 +64,15 @@ internal object SwoDayOne {
             val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
             val day = 1
 //            val html = ("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlSep()
-            val html = ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlWithNewLine()
+            val html =
+                ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlWithNewLine()
 
             val htmlChunk = html.parseAcrossLines("... CATEGORICAL ...(.*?&)&")
             threatList.indices.forEach { threatIndex ->
                 var data = ""
                 val threatLevelCode = threatList[threatIndex]
-                val htmlList = htmlChunk.parseColumnAcrossLines(threatLevelCode.substring(1) + "(.*?)[A-Z&]")
+                val htmlList =
+                    htmlChunk.parseColumnAcrossLines(threatLevelCode.substring(1) + "(.*?)[A-Z&]")
                 val warningList = mutableListOf<Double>()
                 htmlList.forEach { polygon ->
                     val coordinates = polygon.parseColumnAcrossLines("([0-9]{8}).*?")
@@ -83,8 +86,10 @@ internal object SwoDayOne {
                 if (polygons.isNotEmpty()) {
                     polygons.forEach { polygon ->
                         val numbers = RegExp.space.split(polygon)
-                        val x = numbers.filterIndexed { index: Int, _: String -> index and 1 == 0 }.map { To.double(it) }
-                        val y = numbers.filterIndexed { index: Int, _: String -> index and 1 != 0 }.map { To.double(it) * -1.0 }
+                        val x = numbers.filterIndexed { index: Int, _: String -> index and 1 == 0 }
+                            .map { To.double(it) }
+                        val y = numbers.filterIndexed { index: Int, _: String -> index and 1 != 0 }
+                            .map { To.double(it) * -1.0 }
                         if (x.isNotEmpty() && y.isNotEmpty()) {
                             warningList.add(x[0])
                             warningList.add(y[0])

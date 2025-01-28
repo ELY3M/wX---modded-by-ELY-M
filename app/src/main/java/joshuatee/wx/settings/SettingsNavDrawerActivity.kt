@@ -47,11 +47,12 @@ class SettingsNavDrawerActivity : BaseActivity() {
     private fun addCards() {
         UtilityNavDrawer.labels.forEach {
             box.addWidget(
-                    Switch(
-                            this,
-                            it,
-                            UtilityNavDrawer.getPrefVar(UtilityNavDrawer.labelToTokenMap[it] ?: ""),
-                            R.string.nav_drawer_main_screen_toggle)
+                Switch(
+                    this,
+                    it,
+                    UtilityNavDrawer.getPrefVar(UtilityNavDrawer.labelToTokenMap[it] ?: ""),
+                    R.string.nav_drawer_main_screen_toggle
+                )
             )
         }
     }

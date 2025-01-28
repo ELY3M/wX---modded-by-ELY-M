@@ -109,9 +109,8 @@ object UtilityLocation {
         for (line in cityData) {
             val items = line.split(",")
             if (items.size > 4) {
-                if (cityToLatlon.contains(items[0])) {
-                    //std::cout << "UtilityLocation::getNearestCity duplicate: " << items[0] << std::endl;
-                }
+//                if (cityToLatlon.contains(items[0])) {
+//                }
                 if (To.int(items[4]) > 1000) {
                     cityToLatlon[items[1]] = LatLon(items[2], items[3])
                 }

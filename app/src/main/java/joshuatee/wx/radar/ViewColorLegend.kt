@@ -39,26 +39,27 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
 
     private val myPaint = Paint()
     private val paintText = Paint(Paint.ANTI_ALIAS_FLAG)
+    //elys mod
     private val width = RadarPreferences.showLegendWidth.toFloat() //was 50f
     private val textFromLegend = 10.0f
     private val startHeight = UIPreferences.actionBarHeight.toFloat()
     private val h0CLabels = listOf(
-            "ND",
-            "BI",
-            "GC",
-            "IC",
-            "DS",
-            "WS",
-            "RA",
-            "HR",
-            "BD",
-            "GR",
-            "HA",
-            "",
-            "",
-            "",
-            "UK",
-            "RF"
+        "ND",
+        "BI",
+        "GC",
+        "IC",
+        "DS",
+        "WS",
+        "RA",
+        "HR",
+        "BD",
+        "GR",
+        "HA",
+        "",
+        "",
+        "",
+        "UK",
+        "RF"
     )
 
     init {
@@ -69,9 +70,9 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     private fun setColorWithBuffers(prodId: Int, index: Int) {
         try {
             myPaint.color = Color.rgb(
-                    ColorPalette.colorMap[prodId]!!.redValues.get(index).toInt() and 0xFF,
-                    ColorPalette.colorMap[prodId]!!.greenValues.get(index).toInt() and 0xFF,
-                    ColorPalette.colorMap[prodId]!!.blueValues.get(index).toInt() and 0xFF
+                ColorPalette.colorMap[prodId]!!.redValues.get(index).toInt() and 0xFF,
+                ColorPalette.colorMap[prodId]!!.greenValues.get(index).toInt() and 0xFF,
+                ColorPalette.colorMap[prodId]!!.blueValues.get(index).toInt() and 0xFF
             )
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -80,24 +81,28 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     }
 
     private fun drawRect(canvas: Canvas, index: Int, scaledHeight: Float) {
-        canvas.drawRect(0.0f,
-                index * scaledHeight + startHeight,
-                width,
-                index * scaledHeight + scaledHeight + startHeight, myPaint)
+        canvas.drawRect(
+            0.0f,
+            index * scaledHeight + startHeight,
+            width,
+            index * scaledHeight + scaledHeight + startHeight, myPaint
+        )
     }
 
     private fun drawText(canvas: Canvas, label: String, y: Float) {
         canvas.drawText(
-                label,
-                width + textFromLegend,
-                y + startHeight,
-                paintText)
+            label,
+            width + textFromLegend,
+            y + startHeight,
+            paintText
+        )
     }
 
     public override fun onDraw(canvas: Canvas) {
         with(paintText) {
             style = Paint.Style.FILL
             strokeWidth = 1.0f
+	    //elys mod
             textSize = RadarPreferences.showLegendTextSize.toFloat() //was 30f
             color = RadarPreferences.showLegendTextColor
         }
@@ -115,7 +120,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 var units = " dBZ"
                 (95 downTo 1).forEach {
                     if (it % 10 == 0) {
-                        drawText(canvas, it.toString() + units, scaledHeightText * (95 - it) + heightFudge)
+                        drawText(
+                            canvas,
+                            it.toString() + units,
+                            scaledHeightText * (95 - it) + heightFudge
+                        )
                         units = ""
                     }
                 }
@@ -129,7 +138,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 var units = " KT"
                 (122 downTo -129).forEach {
                     if (it % 10 == 0) {
-                        drawText(canvas, it.toString() + units, scaledHeightVel * (122 - it) + heightFudge)
+                        drawText(
+                            canvas,
+                            it.toString() + units,
+                            scaledHeightVel * (122 - it) + heightFudge
+                        )
                         units = ""
                     }
                 }
@@ -143,7 +156,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 var units = " kg/m2"
                 (70 downTo 1).forEach {
                     if (it % 5 == 0) {
-                        drawText(canvas, it.toString() + units, 3.64f * scaledHeightVel * (70 - it) + heightFudge)
+                        drawText(
+                            canvas,
+                            it.toString() + units,
+                            3.64f * scaledHeightVel * (70 - it) + heightFudge
+                        )
                         units = ""
                     }
                 }
@@ -158,7 +175,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 var units = " K FT"
                 (70 downTo 1).forEach {
                     if (it % 5 == 0) {
-                        drawText(canvas, it.toString() + units, 3.64f * scaledHeightVel * (70 - it) + heightFudge)
+                        drawText(
+                            canvas,
+                            it.toString() + units,
+                            3.64f * scaledHeightVel * (70 - it) + heightFudge
+                        )
                         units = ""
                     }
                 }
@@ -171,7 +192,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 }
                 var units = " dB"
                 (8 downTo -8 + 1).forEach {
-                    drawText(canvas, it.toString() + units, 16.0f * scaledHeightVel * (8 - it) + heightFudge)
+                    drawText(
+                        canvas,
+                        it.toString() + units,
+                        16.0f * scaledHeightVel * (8 - it) + heightFudge
+                    )
                     units = ""
                 }
             }
@@ -184,7 +209,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 var units = " CC"
                 (100 downTo -1 step 1).forEach {
                     if (it % 5 == 0) {
-                        drawText(canvas, (it / 100.0).toString().take(4) + units, 3.0f * scaledHeightVel * (100 - it) + heightFudge)
+                        drawText(
+                            canvas,
+                            (it / 100.0).toString().take(4) + units,
+                            3.0f * scaledHeightVel * (100 - it) + heightFudge
+                        )
                         units = ""
                     }
                 }
@@ -197,7 +226,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 }
                 var units = " PHAS"
                 (10 downTo -3 + 1).forEach {
-                    drawText(canvas, it.toString() + units, 20.0f * scaledHeightVel * (10 - it) + heightFudge)
+                    drawText(
+                        canvas,
+                        it.toString() + units,
+                        20.0f * scaledHeightVel * (10 - it) + heightFudge
+                    )
                     units = ""
                 }
             }
@@ -223,8 +256,10 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 var units = " IN"
                 var j = WXGLRadarActivity.dspLegendMax
                 while (j > 0) {
-                    drawText(canvas, j.toString().take(4) + units,
-                            255.0f / WXGLRadarActivity.dspLegendMax * scaledHeightVel * (WXGLRadarActivity.dspLegendMax - j) + heightFudge)
+                    drawText(
+                        canvas, j.toString().take(4) + units,
+                        255.0f / WXGLRadarActivity.dspLegendMax * scaledHeightVel * (WXGLRadarActivity.dspLegendMax - j) + heightFudge
+                    )
                     units = ""
                     j -= WXGLRadarActivity.dspLegendMax / 16.0f
                 }

@@ -29,12 +29,9 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
-import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.settings.RadarPreferences
-import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.util.To
 import kotlin.math.*
 
 // this class implements the radial distance tool available in single pane radar

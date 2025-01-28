@@ -35,15 +35,19 @@ import joshuatee.wx.util.UtilityLog
 internal object NexradDraw {
 
     fun initGlviewMainScreen(
-            index: Int,
-            nexradState: NexradStateMainScreen,
-            changeListener: NexradRenderSurfaceView.OnProgressChangeListener
+        index: Int,
+        nexradState: NexradStateMainScreen,
+        changeListener: NexradRenderSurfaceView.OnProgressChangeListener
     ) {
         with(nexradState) {
             wxglSurfaceViews[index].setEGLContextClientVersion(2)
             wxglRenders[index].state.indexString = index.toString()
             wxglSurfaceViews[index].setRenderer(nexradState.wxglRenders[index])
-            wxglSurfaceViews[index].setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews)
+            wxglSurfaceViews[index].setRenderVar(
+                nexradState.wxglRenders[index],
+                nexradState.wxglRenders,
+                nexradState.wxglSurfaceViews
+            )
             wxglSurfaceViews[index].renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
             wxglSurfaceViews[index].setOnProgressChangeListener(changeListener)
             wxglRenders[index].state.zoom = RadarPreferences.wxoglSize / 10.0f
@@ -52,16 +56,21 @@ internal object NexradDraw {
     }
 
     fun initGlView(
-            index: Int,
-            nexradState: NexradState,
-            activity: VideoRecordActivity,
-            changeListener: NexradRenderSurfaceView.OnProgressChangeListener,
-            archived: Boolean = false
+        index: Int,
+        nexradState: NexradState,
+        activity: VideoRecordActivity,
+        changeListener: NexradRenderSurfaceView.OnProgressChangeListener,
+        archived: Boolean = false
     ) {
         with(nexradState.wxglSurfaceViews[index]) {
             setEGLContextClientVersion(2)
             setRenderer(nexradState.wxglRenders[index])
-            setRenderVar(nexradState.wxglRenders[index], nexradState.wxglRenders, nexradState.wxglSurfaceViews, activity)
+            setRenderVar(
+                nexradState.wxglRenders[index],
+                nexradState.wxglRenders,
+                nexradState.wxglSurfaceViews,
+                activity
+            )
             fullScreen = true
             setOnProgressChangeListener(changeListener)
             renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
@@ -72,16 +81,16 @@ internal object NexradDraw {
     }
 
     fun initGeom(
-            index: Int,
-            oldRadarSites: Array<String>,
-            wxglRenders: List<NexradRender>,
-            wxglTextObjects: List<NexradRenderTextObject>,
-            imageMap: ObjectImageMap?,
-            wxglSurfaceViews: List<NexradRenderSurfaceView>,
-            fnGps: () -> Unit,
-            fnGetLatLon: () -> LatLon,
-            archived: Boolean,
-            forceReset: Boolean
+        index: Int,
+        oldRadarSites: Array<String>,
+        wxglRenders: List<NexradRender>,
+        wxglTextObjects: List<NexradRenderTextObject>,
+        imageMap: ObjectImageMap?,
+        wxglSurfaceViews: List<NexradRenderSurfaceView>,
+        fnGps: () -> Unit,
+        fnGetLatLon: () -> LatLon,
+        archived: Boolean,
+        forceReset: Boolean
     ) {
         wxglRenders[index].initializeGeometry()
         if (forceReset || (oldRadarSites[index] != wxglRenders[index].state.rid)) {
@@ -94,7 +103,10 @@ internal object NexradDraw {
             RadarGeometry.orderedTypes.forEach {
                 Thread {
                     if (RadarGeometry.dataByType[it]!!.isEnabled) {
-                        wxglRenders[index].construct.geographic(wxglRenders[index].data.geographicBuffers[it]!!, forceReset)
+                        wxglRenders[index].construct.geographic(
+                            wxglRenders[index].data.geographicBuffers[it]!!,
+                            forceReset
+                        )
                         try {
                             wxglSurfaceViews[index].requestRender()
                         } catch (e: Exception) {
@@ -140,14 +152,22 @@ internal object NexradDraw {
         }
     }
 
-    fun plotWarningPolygon(polygonWarningType: PolygonWarningType, wxglSurfaceView: NexradRenderSurfaceView, wxglRender: NexradRender) {
+    fun plotWarningPolygon(
+        polygonWarningType: PolygonWarningType,
+        wxglSurfaceView: NexradRenderSurfaceView,
+        wxglRender: NexradRender
+    ) {
         Thread {
             wxglRender.construct.warningLines(polygonWarningType)
             wxglSurfaceView.requestRender()
         }.start()
     }
 
-    fun plotPolygons(polygonType: PolygonType, wxglSurfaceView: NexradRenderSurfaceView, wxglRender: NexradRender) {
+    fun plotPolygons(
+        polygonType: PolygonType,
+        wxglSurfaceView: NexradRenderSurfaceView,
+        wxglRender: NexradRender
+    ) {
         Thread {
             if (polygonType.pref) {
                 wxglRender.construct.lines(wxglRender.data.polygonBuffers[polygonType]!!)
@@ -175,7 +195,13 @@ internal object NexradDraw {
         }.start()
     }
 
-    fun plotRadar(wxglRender: NexradRender, fnGps: () -> Unit, fnGetLatLon: () -> LatLon, archived: Boolean, url: String = "") {
+    fun plotRadar(
+        wxglRender: NexradRender,
+        fnGps: () -> Unit,
+        fnGetLatLon: () -> LatLon,
+        archived: Boolean,
+        url: String = ""
+    ) {
         wxglRender.constructPolygons("", true, url)
         // work-around for a bug in which raster doesn't show on first launch
         if (wxglRender.state.product == "NCR" || wxglRender.state.product == "NCZ") {
