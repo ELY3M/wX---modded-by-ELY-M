@@ -110,7 +110,7 @@ class ForecastActivity : BaseActivity() {
 
     private fun downloadCc() {
         currentConditions = CurrentConditions(latLon)
-        currentConditions.timeCheck(this)
+        currentConditions.timeCheck()
     }
 
     private fun updateCc() {

@@ -163,7 +163,7 @@ object NotificationLocal {
             val locLabel = " current conditions"
             val label = "(" + Location.getName(locationIndex) + ")" + locLabel
             val currentConditions = CurrentConditions(locationIndex)
-            currentConditions.timeCheck(context)
+            currentConditions.timeCheck()
             val text = currentConditions.data + GlobalVariables.newline + currentConditions.status
             val notifier =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

@@ -25,29 +25,9 @@ import joshuatee.wx.getHtmlWithNewLine
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.parse
-import joshuatee.wx.radar.Metar
 import java.util.regex.Matcher
 
 object UtilityUS {
-
-//    private val obsCodeToLocation = mutableMapOf<String, String>()
-
-    internal fun getStatusViaMetar(
-        conditionsTimeStr: String,
-        obsSite: String
-    ): String {
-//        var locationName: String? = obsCodeToLocation[obsSite]
-//        if (locationName == null) {
-//            locationName = findObsName(context, obsSite)
-//            if (locationName != "" && obsSite != "") {
-//                obsCodeToLocation[obsSite] = locationName
-//            }
-//        }
-
-        val locationName = Metar.sites.byCode[obsSite]!!.fullName
-        return "$conditionsTimeStr " + UtilityString.capitalizeString(locationName)
-            .trim { it <= ' ' } + " (" + obsSite + ") "
-    }
 
     //
     // Legacy forecast support

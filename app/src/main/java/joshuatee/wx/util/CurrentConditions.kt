@@ -21,11 +21,11 @@
 
 package joshuatee.wx.util
 
-import android.content.Context
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
 import joshuatee.wx.objects.LatLon
+import joshuatee.wx.radar.Metar
 
 class CurrentConditions {
 
@@ -71,11 +71,15 @@ class CurrentConditions {
         }
         data += "${objectMetar.windGust} mph - ${objectMetar.visibility} mi - ${objectMetar.condition}"
         iconUrl = objectMetar.icon
-        status = UtilityUS.getStatusViaMetar(
-            objectMetar.conditionsTimeStr,
-            objectMetar.obsClosest.codeName
-        )
+        status =
+            objectMetar.conditionsTimeStr + " " + getObsFullName(objectMetar.obsClosest.codeName)
         timeStringUtc = objectMetar.timeStringUtc
+    }
+
+    private fun getObsFullName(obsSite: String): String {
+        val locationName = Metar.sites.byCode[obsSite]!!.fullName
+        return UtilityString.capitalizeString(locationName)
+            .trim { it <= ' ' } + " (" + obsSite + ") "
     }
 
     fun format() {
@@ -90,7 +94,7 @@ class CurrentConditions {
 
     // compare the timestamp in the metar to the current time
     // if older then a certain amount, download the 2nd closest site and process
-    fun timeCheck(context: Context) {
+    fun timeCheck() {
         if (isUS) {
             val obsTime = ObjectDateTime.fromObs(timeStringUtc)
             val currentTime = ObjectDateTime.getCurrentTimeInUTC()

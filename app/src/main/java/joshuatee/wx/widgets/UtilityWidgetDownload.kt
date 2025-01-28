@@ -67,7 +67,7 @@ internal object UtilityWidgetDownload {
                 )
                 if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
                     val currentConditions = CurrentConditions(locNumInt)
-                    currentConditions.timeCheck(context)
+                    currentConditions.timeCheck()
                     val hazards = Hazards(locNumInt)
                     val sevenDay = SevenDay(locNumInt)
                     val updateTime = ObjectDateTime.currentTimeMillis()

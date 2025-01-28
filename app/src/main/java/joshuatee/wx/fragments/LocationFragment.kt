@@ -518,7 +518,7 @@ class LocationFragment : Fragment() {
 
     private fun getCc() {
         currentConditions = CurrentConditions(Location.currentLocation)
-        currentConditions.timeCheck(MyApplication.appContext)
+        currentConditions.timeCheck()
     }
 
     private fun updateCc() {
