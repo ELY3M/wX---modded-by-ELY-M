@@ -299,14 +299,16 @@ class NexradRenderConstruct(
                     data.swoBuffers.putColor(Color.green(SwoDayOne.colors[it]).toByte())
                     data.swoBuffers.putColor(Color.blue(SwoDayOne.colors[it]).toByte())
                     coordinates =
-                        Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j],
+                        Projection.computeMercatorNumbers(
+                            hashSwo.getOrElse(it) { listOf() }[j],
                             (hashSwo.getOrElse(it) { listOf() }[j + 1] * -1.0f),
                             state.projectionNumbers
                         )
                     data.swoBuffers.putFloat(coordinates[0].toFloat())
                     data.swoBuffers.putFloat(coordinates[1].toFloat() * -1.0f)
                     coordinates =
-                        Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j + 2],
+                        Projection.computeMercatorNumbers(
+                            hashSwo.getOrElse(it) { listOf() }[j + 2],
                             (hashSwo.getOrElse(it) { listOf() }[j + 3] * -1.0f),
                             state.projectionNumbers
                         )
@@ -345,14 +347,16 @@ class NexradRenderConstruct(
                     data.fireBuffers.putColor(Color.green(FireDayOne.colors[it]).toByte())
                     data.fireBuffers.putColor(Color.blue(FireDayOne.colors[it]).toByte())
                     coordinates =
-                        Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j],
+                        Projection.computeMercatorNumbers(
+                            hashSwo.getOrElse(it) { listOf() }[j],
                             (hashSwo.getOrElse(it) { listOf() }[j + 1] * -1.0f),
                             state.projectionNumbers
                         )
                     data.fireBuffers.putFloat(coordinates[0].toFloat())
                     data.fireBuffers.putFloat(coordinates[1].toFloat() * -1.0f)
                     coordinates =
-                        Projection.computeMercatorNumbers(hashSwo.getOrElse(it) { listOf() }[j + 2],
+                        Projection.computeMercatorNumbers(
+                            hashSwo.getOrElse(it) { listOf() }[j + 2],
                             (hashSwo.getOrElse(it) { listOf() }[j + 3] * -1.0f),
                             state.projectionNumbers
                         )

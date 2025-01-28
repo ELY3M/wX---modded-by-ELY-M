@@ -43,9 +43,9 @@ import java.util.Random
  * Our data observer just notifies an update for all weather widgets when it detects a change.
  */
 class WeatherDataProviderObserver(
-        private val mAppWidgetManager: AppWidgetManager,
-        private val mComponentName: ComponentName,
-        handler: Handler
+    private val mAppWidgetManager: AppWidgetManager,
+    private val mComponentName: ComponentName,
+    handler: Handler
 ) : ContentObserver(handler) {
 
     override fun onChange(selfChange: Boolean) {
@@ -53,7 +53,7 @@ class WeatherDataProviderObserver(
         // In response, the factory's onDataSetChanged() will be called which will re-query the
         // cursor for the new data.
         mAppWidgetManager.notifyAppWidgetViewDataChanged(
-                mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.weather_list
+            mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.weather_list
         )
     }
 }
@@ -81,8 +81,13 @@ class WeatherWidgetProvider : AppWidgetProvider() {
         if (weatherDataProviderObserver == null) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
-            weatherDataProviderObserver = WeatherDataProviderObserver(appWidgetManager, componentName, workerQueue!!)
-            contentResolver.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, weatherDataProviderObserver!!)
+            weatherDataProviderObserver =
+                WeatherDataProviderObserver(appWidgetManager, componentName, workerQueue!!)
+            contentResolver.registerContentObserver(
+                WeatherDataProvider.CONTENT_URI,
+                true,
+                weatherDataProviderObserver!!
+            )
         }
     }
 
@@ -97,19 +102,35 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             workerQueue!!.removeMessages(0)
             workerQueue!!.post {
                 val contentResolver = context.contentResolver
-                contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)?.use { cursor ->
-                    val count = cursor.count
-                    (0 until count).forEach {
-                        val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
-                        val values = ContentValues()
-                        values.put(WeatherDataProvider.Columns.TEMPERATURE, Random().nextInt(MAX_DEGREES))
-                        contentResolver.update(uri, values, null, null)
+                contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
+                    ?.use { cursor ->
+                        val count = cursor.count
+                        (0 until count).forEach {
+                            val uri = ContentUris.withAppendedId(
+                                WeatherDataProvider.CONTENT_URI,
+                                it.toLong()
+                            )
+                            val values = ContentValues()
+                            values.put(
+                                WeatherDataProvider.Columns.TEMPERATURE,
+                                Random().nextInt(MAX_DEGREES)
+                            )
+                            contentResolver.update(uri, values, null, null)
+                        }
+                        contentResolver.registerContentObserver(
+                            WeatherDataProvider.CONTENT_URI,
+                            true,
+                            weatherDataProviderObserver!!
+                        )
+                        val appWidgetManager = AppWidgetManager.getInstance(context)
+                        val componentName =
+                            ComponentName(context, WeatherWidgetProvider::class.java)
+                        appWidgetManager.notifyAppWidgetViewDataChanged(
+                            appWidgetManager.getAppWidgetIds(
+                                componentName
+                            ), R.id.weather_list
+                        )
                     }
-                    contentResolver.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, weatherDataProviderObserver!!)
-                    val appWidgetManager = AppWidgetManager.getInstance(context)
-                    val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
-                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.weather_list)
-                }
 
 //                val contentResolver = context.contentResolver
 //                val cursor = contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
@@ -133,13 +154,22 @@ class WeatherWidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
     }
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         // Update each of the widgets with the remote adapter
         UtilityWidget.updateSevenDay(context)
         super.onUpdate(context, appWidgetManager, appWidgetIds)
     }
 
-    override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle) {
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle
+    ) {
         val minHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
         isLargeLayout = minHeight >= 100
         val layout: RemoteViews = buildLayout(context, appWidgetId, isLargeLayout)
@@ -171,15 +201,27 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                 val requestId = ObjectDateTime.currentTimeMillis().toInt()
                 val intentWx = Intent(context, WX::class.java)
                 intentWx.action = "WX"
-                val pendingIntentWx = PendingIntent.getActivity(context, requestId, intentWx, PendingIntent.FLAG_IMMUTABLE) // was 0
+                val pendingIntentWx = PendingIntent.getActivity(
+                    context,
+                    requestId,
+                    intentWx,
+                    PendingIntent.FLAG_IMMUTABLE
+                ) // was 0
                 remoteViews.setPendingIntentTemplate(R.id.weather_list, pendingIntentWx)
                 remoteViews.setTextViewText(R.id.city_name, Location.getName(widgetLocNumInt))
             } else {
                 remoteViews = RemoteViews(context.packageName, R.layout.widget_layout_small)
                 // Update the header to reflect the weather for "today"
-                val cursor = context.contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
+                val cursor = context.contentResolver.query(
+                    WeatherDataProvider.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+                )
                 if (cursor!!.moveToPosition(0)) {
-                    val tempColIndex = cursor.getColumnIndex(WeatherDataProvider.Columns.TEMPERATURE)
+                    val tempColIndex =
+                        cursor.getColumnIndex(WeatherDataProvider.Columns.TEMPERATURE)
                     val temp = cursor.getInt(tempColIndex)
                     val formatStr = context.resources.getString(R.string.header_format_string)
                     val header = String.format(formatStr, temp, Location.getName(widgetLocNumInt))

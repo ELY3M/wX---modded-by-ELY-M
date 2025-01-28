@@ -26,7 +26,8 @@ import android.widget.RelativeLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.RadarPreferences
 
-class NexradStateMainScreen(context: Context, numberOfPanes: Int, homeScreenTokens: List<String>) : NexradState(numberOfPanes) {
+class NexradStateMainScreen(context: Context, numberOfPanes: Int, homeScreenTokens: List<String>) :
+    NexradState(numberOfPanes) {
 
     var oldRadarSites = Array(numberOfPanes) { "" }
 
@@ -45,11 +46,15 @@ class NexradStateMainScreen(context: Context, numberOfPanes: Int, homeScreenToke
                 }
                 oldRadarSites[index] = ""
                 relativeLayouts.add(RelativeLayout(context))
-                wxglTextObjects.add(NexradRenderTextObject(context,
+                wxglTextObjects.add(
+                    NexradRenderTextObject(
+                        context,
                         relativeLayouts[index],
                         wxglSurfaceViews[index],
                         wxglRenders[index].state,
-                        1, 4))
+                        1, 4
+                    )
+                )
                 wxglSurfaceViews[index].textObjects = wxglTextObjects
                 wxglSurfaceViews[index].locationFragment = true
                 wxglTextObjects[index].initializeLabels(context)

@@ -24,7 +24,6 @@
 
 //package dev.zotov.phototime.solarized
 //modded by ELY M.
-
 package joshuatee.wx.externalSolarized
 
 //import androidx.annotation.FloatRange
@@ -42,97 +41,97 @@ import java.util.TimeZone
 class Solarized(
 //    @FloatRange(from = -90.0, to = 90.0) val latitude: Double,
 //    @FloatRange(from = -180.0, to = 180.0) val longitude: Double,
-        val latitude: Double,
-        val longitude: Double,
-        val date: LocalDateTime,
-        val timeZone: TimeZone = TimeZone.getDefault()
+    val latitude: Double,
+    val longitude: Double,
+    val date: LocalDateTime,
+    val timeZone: TimeZone = TimeZone.getDefault()
 ) {
 
     val list: SunPhaseList?
         get() {
             val blueHourMorningStartDate = algorithm(
-                    time = DateTime.Morning,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(-7.9),
-                    timeZone = timeZone,
+                time = DateTime.Morning,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(-7.9),
+                timeZone = timeZone,
             ) ?: return null
 
             val blueHourMorningEndDate = algorithm(
-                    // and goldenHourMorningStartDate too
-                    time = DateTime.Morning,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(-4.0),
-                    timeZone = timeZone,
+                // and goldenHourMorningStartDate too
+                time = DateTime.Morning,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(-4.0),
+                timeZone = timeZone,
             ) ?: return null
 
             val goldenHourMorningEndDate = algorithm(
-                    // and dayStartDate too
-                    time = DateTime.Morning,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(6.0),
-                    timeZone = timeZone,
+                // and dayStartDate too
+                time = DateTime.Morning,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(6.0),
+                timeZone = timeZone,
             ) ?: return null
 
             val goldenHourEveningStartDate = algorithm(
-                    // and dayEndDate too
-                    time = DateTime.Evening,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(6.0),
-                    timeZone = timeZone,
+                // and dayEndDate too
+                time = DateTime.Evening,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(6.0),
+                timeZone = timeZone,
             ) ?: return null
 
             val goldenHourEveningEndDate = algorithm(
-                    // and blueHourEveningStartDate too
-                    time = DateTime.Evening,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(-4.0),
-                    timeZone = timeZone,
+                // and blueHourEveningStartDate too
+                time = DateTime.Evening,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(-4.0),
+                timeZone = timeZone,
             ) ?: return null
 
             val blueHourEveningEndDate = algorithm(
-                    time = DateTime.Evening,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(-7.9),
-                    timeZone = timeZone,
+                time = DateTime.Evening,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(-7.9),
+                timeZone = timeZone,
             ) ?: return null
 
             return SunPhaseList(
-                    firstLight = firstLight,
-                    morningBlueHour = SunPhase.BlueHour(
-                            start = blueHourMorningStartDate,
-                            end = blueHourMorningEndDate
-                    ),
-                    sunrise = sunrise ?: return null,
-                    morningGoldenHour = SunPhase.GoldenHour(
-                            start = blueHourMorningEndDate,
-                            end = goldenHourMorningEndDate
-                    ),
-                    day = SunPhase.Day(
-                            start = goldenHourMorningEndDate,
-                            end = goldenHourEveningStartDate,
-                    ),
-                    eveningGoldenHour = SunPhase.GoldenHour(
-                            start = goldenHourEveningStartDate,
-                            end = goldenHourEveningEndDate,
-                    ),
-                    sunset = sunset ?: return null,
-                    eveningBlueHour = SunPhase.BlueHour(
-                            start = goldenHourEveningEndDate,
-                            end = blueHourEveningEndDate,
-                    ),
-                    lastLight = lastLight,
+                firstLight = firstLight,
+                morningBlueHour = SunPhase.BlueHour(
+                    start = blueHourMorningStartDate,
+                    end = blueHourMorningEndDate
+                ),
+                sunrise = sunrise ?: return null,
+                morningGoldenHour = SunPhase.GoldenHour(
+                    start = blueHourMorningEndDate,
+                    end = goldenHourMorningEndDate
+                ),
+                day = SunPhase.Day(
+                    start = goldenHourMorningEndDate,
+                    end = goldenHourEveningStartDate,
+                ),
+                eveningGoldenHour = SunPhase.GoldenHour(
+                    start = goldenHourEveningStartDate,
+                    end = goldenHourEveningEndDate,
+                ),
+                sunset = sunset ?: return null,
+                eveningBlueHour = SunPhase.BlueHour(
+                    start = goldenHourEveningEndDate,
+                    end = blueHourEveningEndDate,
+                ),
+                lastLight = lastLight,
             )
         }
 
@@ -141,20 +140,20 @@ class Solarized(
     val goldenHour = object : TwiceADaySunPhases<SunPhase.GoldenHour> {
         private fun base(time: DateTime): SunPhase.GoldenHour? {
             val goldenHourStartDate = algorithm(
-                    time = time,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(6.0),
-                    timeZone = timeZone,
+                time = time,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(6.0),
+                timeZone = timeZone,
             ) ?: return null
             val goldenHourEndDate = algorithm(
-                    time = time,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(-4.0),
-                    timeZone = timeZone,
+                time = time,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(-4.0),
+                timeZone = timeZone,
             ) ?: return null
 
             return if (time == DateTime.Evening)
@@ -177,20 +176,20 @@ class Solarized(
     val blueHour = object : TwiceADaySunPhases<SunPhase.BlueHour> {
         private fun base(time: DateTime): SunPhase.BlueHour? {
             val blueHourStartDate = algorithm(
-                    time = time,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(-4.0),
-                    timeZone = timeZone,
+                time = time,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(-4.0),
+                timeZone = timeZone,
             ) ?: return null
             val blueHourEndDate = algorithm(
-                    time = time,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(-7.9),
-                    timeZone = timeZone,
+                time = time,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(-7.9),
+                timeZone = timeZone,
             ) ?: return null
 
             return if (time == DateTime.Evening)
@@ -213,12 +212,12 @@ class Solarized(
     val firstLight: SunPhase.FirstLight?
         get() {
             val firstLightDate = algorithm(
-                    time = DateTime.Morning,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Civil, // joshua.tee@gmail.com was Twilight.Astronomical
-                    timeZone = timeZone,
+                time = DateTime.Morning,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Civil, // joshua.tee@gmail.com was Twilight.Astronomical
+                timeZone = timeZone,
             ) ?: return null
             return SunPhase.FirstLight(firstLightDate)
         }
@@ -227,12 +226,12 @@ class Solarized(
     val sunrise: SunPhase.Sunrise?
         get() {
             val sunriseDate = algorithm(
-                    time = DateTime.Morning,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(-0.83),
-                    timeZone = timeZone,
+                time = DateTime.Morning,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(-0.83),
+                timeZone = timeZone,
             ) ?: return null
             return SunPhase.Sunrise(sunriseDate)
         }
@@ -242,20 +241,20 @@ class Solarized(
     val day: SunPhase.Day?
         get() {
             val dayStartDate = algorithm(
-                    time = DateTime.Morning,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(6.0),
-                    timeZone = timeZone,
+                time = DateTime.Morning,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(6.0),
+                timeZone = timeZone,
             ) ?: return null
             val dayEndDate = algorithm(
-                    time = DateTime.Evening,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Custom(6.0),
-                    timeZone = timeZone,
+                time = DateTime.Evening,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Custom(6.0),
+                timeZone = timeZone,
             ) ?: return null
             return SunPhase.Day(dayStartDate, dayEndDate)
         }
@@ -264,12 +263,12 @@ class Solarized(
     val sunset: SunPhase.Sunset?
         get() {
             val sunsetDate = algorithm(
-                    time = DateTime.Evening,
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Official,
-                    timeZone = timeZone,
+                time = DateTime.Evening,
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Official,
+                timeZone = timeZone,
             ) ?: return null
             return SunPhase.Sunset(sunsetDate)
         }
@@ -278,19 +277,22 @@ class Solarized(
     val lastLight: SunPhase.LastLight?
         get() {
             val sunsetDate = algorithm(
-                    time = DateTime.Evening, // joshua.tee@gmail.com was DateTime.Morning
-                    date = date,
-                    latitude = latitude,
-                    longitude = longitude,
-                    twilight = Twilight.Civil, // joshua.tee@gmail.com was Twilight.Astronomical
-                    timeZone = timeZone,
+                time = DateTime.Evening, // joshua.tee@gmail.com was DateTime.Morning
+                date = date,
+                latitude = latitude,
+                longitude = longitude,
+                twilight = Twilight.Civil, // joshua.tee@gmail.com was Twilight.Astronomical
+                timeZone = timeZone,
             ) ?: return null
             return SunPhase.LastLight(sunsetDate)
         }
+}
 
-
+interface TwiceADaySunPhases<T : SunPhase> {
+    val morning: T?
+    val evening: T?
+}
 //elys mod
-
     //sunrise
     val AstronomicalRise: SunPhase.Sunrise?
         get() {
@@ -340,7 +342,6 @@ class Solarized(
             ) ?: return null
             return SunPhase.Sunrise(Date)
         }
-
     //sunset
     val AstronomicalSet: SunPhase.Sunset?
         get() {
@@ -391,15 +392,3 @@ class Solarized(
             return SunPhase.Sunset(Date)
         }
 /////////////end of elys mod
-
-
-
-
-
-
-}
-
-interface TwiceADaySunPhases<T : SunPhase> {
-    val morning: T?
-    val evening: T?
-}

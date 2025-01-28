@@ -42,7 +42,12 @@ class AlertDetail(val context: Context, box: VBox) {
             box.addWidget(textViews.last())
         }
         textViews[0].setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
-        textViews[1].setPadding(UIPreferences.padding, 0, UIPreferences.padding, UIPreferences.padding)
+        textViews[1].setPadding(
+            UIPreferences.padding,
+            0,
+            UIPreferences.padding,
+            UIPreferences.padding
+        )
         (2..5).forEach {
             textViews[it].setPadding(UIPreferences.padding)
         }

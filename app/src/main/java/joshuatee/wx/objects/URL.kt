@@ -34,11 +34,11 @@ class URL(val url: String) {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", GlobalVariables.HTTP_USER_AGENT)
-                    //.addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1")
-                    .addHeader("Accept", "application/atom+xml")
-                    .build()
+                .url(url)
+                .header("User-Agent", GlobalVariables.HTTP_USER_AGENT)
+                //.addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1")
+                .addHeader("Accept", "application/atom+xml")
+                .build()
             val response = MyApplication.httpClient.newCall(request).execute()
             return response.body.string()
         } catch (e: Exception) {

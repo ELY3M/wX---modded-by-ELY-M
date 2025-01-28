@@ -66,7 +66,13 @@ object UtilityTts {
                     ttobjGlobal?.language = Locale.US
                 }
                 ttsInit = true
-                ttobjGlobal?.setSpeechRate(Utility.readPrefInt(context, "TTS_SPEED_PREF", 10) / 10.0f)
+                ttobjGlobal?.setSpeechRate(
+                    Utility.readPrefInt(
+                        context,
+                        "TTS_SPEED_PREF",
+                        10
+                    ) / 10.0f
+                )
             }
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -119,7 +125,11 @@ object UtilityTts {
         if (!mpInit) {
             initMediaPlayer(context)
         }
-        synthesizeText(context, Utility.readPref(context, "PLAYLIST_" + playlistArr[index], ""), prodg)
+        synthesizeText(
+            context,
+            Utility.readPref(context, "PLAYLIST_" + playlistArr[index], ""),
+            prodg
+        )
         ttobjGlobal?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onDone(utteranceId: String) {
                 if (currentFile == 0 && utteranceId.contains(prodg)) {
@@ -129,9 +139,9 @@ object UtilityTts {
             }
 
             @Deprecated(
-                    message = "This method was deprecated in API level 21.",
-                    replaceWith = ReplaceWith("nothing"),
-                    level = DeprecationLevel.WARNING
+                message = "This method was deprecated in API level 21.",
+                replaceWith = ReplaceWith("nothing"),
+                level = DeprecationLevel.WARNING
             )
             override fun onError(utteranceId: String) {
             }
@@ -162,9 +172,9 @@ object UtilityTts {
             }
 
             @Deprecated(
-                    message = "This method was deprecated in API level 21.",
-                    replaceWith = ReplaceWith("nothing"),
-                    level = DeprecationLevel.WARNING
+                message = "This method was deprecated in API level 21.",
+                replaceWith = ReplaceWith("nothing"),
+                level = DeprecationLevel.WARNING
             )
             override fun onError(utteranceId: String) {
             }
@@ -213,7 +223,13 @@ object UtilityTts {
         }
     }
 
-    fun conditionalPlay(arguments: Array<String>, index: Int, context: Context, html: String, label: String) {
+    fun conditionalPlay(
+        arguments: Array<String>,
+        index: Int,
+        context: Context,
+        html: String,
+        label: String
+    ) {
         if (arguments.size > index && arguments[index] == "sound") {
             synthesizeTextAndPlay(context, html, label)
         }

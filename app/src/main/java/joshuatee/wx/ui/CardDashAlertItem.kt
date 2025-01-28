@@ -66,11 +66,11 @@ class CardDashAlertItem(val context: Context, private val warning: ObjectWarning
         textTop.text = warning.sender
         textTitle.text = warning.event
         textStart.text = warning.effective.replace("T", " ")
-                .replace(Regex(":00-0[0-9]:00"), "")
-                .replace(Regex(":00-10:00"), "")
+            .replace(Regex(":00-0[0-9]:00"), "")
+            .replace(Regex(":00-10:00"), "")
         textEnd.text = warning.expires.replace("T", " ")
-                .replace(Regex(":00-0[0-9]:00"), "")
-                .replace(Regex(":00-10:00"), "")
+            .replace(Regex(":00-0[0-9]:00"), "")
+            .replace(Regex(":00-10:00"), "")
         textBottom.text = warning.area
     }
 

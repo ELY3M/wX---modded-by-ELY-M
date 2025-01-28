@@ -39,10 +39,46 @@ class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
         UtilityWidget.setImage(context, remoteViews, type.fileName)
         if (!UIPreferences.widgetPreventTap) {
             when (type) {
-                WPCIMG -> UtilityWidget.setupIntent(context, remoteViews, NationalImagesActivity::class.java, R.id.iv, NationalImagesActivity.URL, arrayOf(""), type.action)
-                SPCMESO -> UtilityWidget.setupIntent(context, remoteViews, SpcMesoActivity::class.java, R.id.iv, SpcMesoActivity.INFO, arrayOf("SPCMESO1", "1", "SPCMESO"), type.action)
-                CONUSWV -> UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.iv, GoesActivity.RID, arrayOf("CONUS", "09"), type.action)
-                STRPT -> UtilityWidget.setupIntent(context, remoteViews, SpcStormReportsActivity::class.java, R.id.iv, SpcStormReportsActivity.DAY, arrayOf("today"), type.action)
+                WPCIMG -> UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    NationalImagesActivity::class.java,
+                    R.id.iv,
+                    NationalImagesActivity.URL,
+                    arrayOf(""),
+                    type.action
+                )
+
+                SPCMESO -> UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    SpcMesoActivity::class.java,
+                    R.id.iv,
+                    SpcMesoActivity.INFO,
+                    arrayOf("SPCMESO1", "1", "SPCMESO"),
+                    type.action
+                )
+
+                CONUSWV -> UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    GoesActivity::class.java,
+                    R.id.iv,
+                    GoesActivity.RID,
+                    arrayOf("CONUS", "09"),
+                    type.action
+                )
+
+                STRPT -> UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    SpcStormReportsActivity::class.java,
+                    R.id.iv,
+                    SpcStormReportsActivity.DAY,
+                    arrayOf("today"),
+                    type.action
+                )
+
                 else -> {}
             }
         }

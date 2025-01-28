@@ -9,13 +9,15 @@ import joshuatee.wx.objects.TextSize
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.Text
 
-internal class SettingsLocationAdapterList(private val dataSet: MutableList<String>) : RecyclerView.Adapter<SettingsLocationAdapterList.DataObjectHolder>() {
+internal class SettingsLocationAdapterList(private val dataSet: MutableList<String>) :
+    RecyclerView.Adapter<SettingsLocationAdapterList.DataObjectHolder>() {
 
     companion object {
         private var myClickListener: MyClickListener? = null
     }
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val text1 = Text(itemView, R.id.text1, TextSize.MEDIUM)
         val currentConditions = Text(itemView, R.id.currentConditions, TextSize.SMALL)
@@ -40,7 +42,8 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_settingslocation, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.cardview_settingslocation, parent, false)
         return DataObjectHolder(view)
     }
 
@@ -66,9 +69,15 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
             text1.color = UIPreferences.textHighlightColor
             currentConditions.text = Location.getObservation(position)
             if (nonUs) {
-                text2.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${lat.take(6)} , ${lon.take(6)})"
+                text2.text =
+                    "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${
+                        lat.take(6)
+                    } , ${lon.take(6)})"
             } else {
-                text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${Location.getX(position).take(8)} , ${Location.getY(position).take(9)})"
+                text2.text =
+                    "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${
+                        Location.getX(position).take(8)
+                    } , ${Location.getY(position).take(9)})"
             }
         }
     }

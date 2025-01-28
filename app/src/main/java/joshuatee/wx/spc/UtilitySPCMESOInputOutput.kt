@@ -36,7 +36,11 @@ import joshuatee.wx.ui.ObjectToolbar
 
 object UtilitySpcMesoInputOutput {
 
-    fun getLayers(context: Context, objectToolbar: ObjectToolbar? = null, getFunction: () -> Unit = {}): Map<SpcMesoLayerType, SpcMesoLayer> {
+    fun getLayers(
+        context: Context,
+        objectToolbar: ObjectToolbar? = null,
+        getFunction: () -> Unit = {}
+    ): Map<SpcMesoLayerType, SpcMesoLayer> {
         val layers = mutableMapOf<SpcMesoLayerType, SpcMesoLayer>()
         SpcMesoLayerType.entries.forEach {
             layers[it] = SpcMesoLayer(context, it, objectToolbar, getFunction)
@@ -44,25 +48,32 @@ object UtilitySpcMesoInputOutput {
         return layers
     }
 
-    fun getImage(context: Context, param: String, sector: String, layers: Map<SpcMesoLayerType, SpcMesoLayer>): Bitmap {
+    fun getImage(
+        context: Context,
+        param: String,
+        sector: String,
+        layers: Map<SpcMesoLayerType, SpcMesoLayer>
+    ): Bitmap {
         val drawables = mutableListOf<Drawable>()
-        val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !layers[SpcMesoLayerType.Radar]!!.isEnabled) {
-            "_sf.gif"
-        } else {
-            ".gif"
-        }
-        val imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
+        val gifUrl =
+            if (UtilitySpcMeso.imgSf.contains(param) && !layers[SpcMesoLayerType.Radar]!!.isEnabled) {
+                "_sf.gif"
+            } else {
+                ".gif"
+            }
+        val imgUrl =
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
         val bitmap = imgUrl.getImage()
         drawables.add(ColorDrawable(Color.WHITE))
         if (param == "hodo" || param.startsWith("skewt")) {
             layers[SpcMesoLayerType.Radar]!!.isEnabled = true
         }
         listOf(
-                SpcMesoLayerType.Population,
-                SpcMesoLayerType.Topography,
-                SpcMesoLayerType.County,
-                SpcMesoLayerType.Radar,
-                SpcMesoLayerType.Observations,
+            SpcMesoLayerType.Population,
+            SpcMesoLayerType.Topography,
+            SpcMesoLayerType.County,
+            SpcMesoLayerType.Radar,
+            SpcMesoLayerType.Observations,
         ).forEach {
             if (layers[it]!!.isEnabled) {
                 drawables.add(getDrawable(context, layers[it]!!.getUrl(sector)))
@@ -78,10 +89,12 @@ object UtilitySpcMesoInputOutput {
     }
 
     private fun getDrawable(context: Context, url: String): BitmapDrawable =
-            BitmapDrawable(context.resources, UtilityImg.eraseBackground(url.getImage(), -1))
+        BitmapDrawable(context.resources, UtilityImg.eraseBackground(url.getImage(), -1))
 
     fun getAnimation(product: String, sector: String, frameCount: Int): List<String> {
-        val timeList = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
+        val timeList =
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml()
+                .parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
         return if (timeList.size > frameCount) {
             (frameCount - 1 downTo 0).map {
                 "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s" + sector + "/" + product + "/" + product + "_" + timeList[it] + ".gif"

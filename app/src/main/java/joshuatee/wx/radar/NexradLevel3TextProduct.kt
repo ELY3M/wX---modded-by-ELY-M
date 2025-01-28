@@ -31,7 +31,7 @@ import java.io.DataInputStream
 object NexradLevel3TextProduct {
 
     fun download(product: String, radarSite: String): String =
-            NexradDownload.getRadarFileUrl(radarSite, product).getHtml()
+        NexradDownload.getRadarFileUrl(radarSite, product).getHtml()
 
     fun getVwp(radarSite: String): String {
         // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.48vwp/SI.kccx/
@@ -63,7 +63,10 @@ object NexradLevel3TextProduct {
                             vSpotted = true
                         }
                         if (Character.isAlphabetic(byte.toInt()) || Character.isWhitespace(byte.toInt())
-                                || Character.isDigit(byte.toInt()) || Character.isISOControl(byte.toInt()) || Character.isDefined(byte.toInt())) {
+                            || Character.isDigit(byte.toInt()) || Character.isISOControl(byte.toInt()) || Character.isDefined(
+                                byte.toInt()
+                            )
+                        ) {
                             if (vSpotted) {
                                 output += if (byte == 0.toByte()) {
                                     "<br>"

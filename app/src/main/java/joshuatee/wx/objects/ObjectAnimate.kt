@@ -89,16 +89,19 @@ class ObjectAnimate(val context: Context, val image: TouchImage) {
         } else {
             setIconToRun()
             FutureVoid(
-                    {
-                        urls = getFn()
-                        download()
-                    })
+                {
+                    urls = getFn()
+                    download()
+                })
             { start() }
         }
     }
 
     companion object {
-        fun getAnimationDrawableFromUrlList(context: Context, urls: List<String>): AnimationDrawable {
+        fun getAnimationDrawableFromUrlList(
+            context: Context,
+            urls: List<String>
+        ): AnimationDrawable {
             val bitmaps = urls.map { it.getImage() }
             val animationDrawable = AnimationDrawable()
             var delay = UtilityImg.animInterval(context) * 2

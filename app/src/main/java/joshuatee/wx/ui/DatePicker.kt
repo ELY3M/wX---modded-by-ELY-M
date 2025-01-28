@@ -29,15 +29,21 @@ import joshuatee.wx.objects.ObjectDateTime
 // Used in SpcStormReportsActivity
 //
 
-class DatePicker(context: Context, var year: Int, var month: Int, var day: Int, private val updateFunc: () -> Unit) {
+class DatePicker(
+    context: Context,
+    var year: Int,
+    var month: Int,
+    var day: Int,
+    private val updateFunc: () -> Unit
+) {
 
     private val pDateSetListener =
-            DatePickerDialog.OnDateSetListener { _, yearInDate, monthOfYear, dayOfMonth ->
-                year = yearInDate
-                month = monthOfYear
-                day = dayOfMonth
-                updateFunc()
-            }
+        DatePickerDialog.OnDateSetListener { _, yearInDate, monthOfYear, dayOfMonth ->
+            year = yearInDate
+            month = monthOfYear
+            day = dayOfMonth
+            updateFunc()
+        }
 
     init {
         val datePickerDialog = DatePickerDialog(context, pDateSetListener, year, month, day)

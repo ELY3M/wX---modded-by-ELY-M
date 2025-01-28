@@ -33,9 +33,11 @@ import joshuatee.wx.radar.SpotterReport
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.Text
 
-internal class AdapterSpotterReports(private val dataSet: List<SpotterReport>) : RecyclerView.Adapter<AdapterSpotterReports.DataObjectHolder>() {
+internal class AdapterSpotterReports(private val dataSet: List<SpotterReport>) :
+    RecyclerView.Adapter<AdapterSpotterReports.DataObjectHolder>() {
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val type = Text(itemView, R.id.type, UIPreferences.textHighlightColor, TextSize.MEDIUM)
         val city = Text(itemView, R.id.city, backgroundText = true)
@@ -66,7 +68,8 @@ internal class AdapterSpotterReports(private val dataSet: List<SpotterReport>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_spotter_reports, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.cardview_spotter_reports, parent, false)
         return DataObjectHolder(view)
     }
 

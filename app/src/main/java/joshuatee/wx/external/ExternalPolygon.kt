@@ -29,7 +29,10 @@ import joshuatee.wx.objects.LatLon
  *
  * @author Roman Kushnarenko (sromku@gmail.com)
  */
-class ExternalPolygon private constructor(private val sides: List<ExternalLine>, private val boundingBox: BoundingBox) {
+class ExternalPolygon private constructor(
+    private val sides: List<ExternalLine>,
+    private val boundingBox: BoundingBox
+) {
 
     /**
      * Builder of the polygon
@@ -205,7 +208,8 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
      * @param point
      * @return `True` if the point in bounding box, otherwise return `False`
      */
-    private fun inBoundingBox(point: ExternalPoint) = !(point.x < boundingBox.xMin || point.x > boundingBox.xMax || point.y < boundingBox.yMin || point.y > boundingBox.yMax)
+    private fun inBoundingBox(point: ExternalPoint) =
+        !(point.x < boundingBox.xMin || point.x > boundingBox.xMax || point.y < boundingBox.yMin || point.y > boundingBox.yMax)
 
     private class BoundingBox {
         var xMax = Float.NEGATIVE_INFINITY

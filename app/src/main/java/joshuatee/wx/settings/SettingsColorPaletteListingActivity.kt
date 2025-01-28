@@ -46,10 +46,17 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
     private fun setupUI() {
         NexradUtil.colorPaletteProducts.filter { it != 165 }.forEach { product ->
             val card = CardText(
+                this,
+                NexradUtil.productCodeStringToName[product] + ": " + ColorPalette.radarColorPalette[product],
+                UIPreferences.textSizeNormal,
+            ) {
+                Route(
                     this,
-                    NexradUtil.productCodeStringToName[product] + ": " + ColorPalette.radarColorPalette[product],
-                    UIPreferences.textSizeNormal,
-            ) { Route(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString())) }
+                    SettingsColorPaletteActivity::class.java,
+                    SettingsColorPaletteActivity.TYPE,
+                    arrayOf(product.toString())
+                )
+            }
             box.addWidget(card)
             cardColorPalettes.add(card)
         }
@@ -58,8 +65,9 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
     override fun onRestart() {
         cardColorPalettes.indices.forEach {
             val product = NexradUtil.productCodeStringToName[NexradUtil.colorPaletteProducts[it]]
-                    ?: "Reflectivity"
-            val label = product + ": " + ColorPalette.radarColorPalette[NexradUtil.colorPaletteProducts[it]]
+                ?: "Reflectivity"
+            val label =
+                product + ": " + ColorPalette.radarColorPalette[NexradUtil.colorPaletteProducts[it]]
             cardColorPalettes[it].text = label
         }
         super.onRestart()

@@ -51,42 +51,46 @@ object UtilityModels {
         }
         writePrefs(context, om)
         FutureVoid(
-                {
-                    (0 until om.numPanes).forEach {
-                        om.displayData.bitmaps[it] = ObjectModelGet.image(om, it, overlayImg)
-                    }
-                },
-                {
-                    (0 until om.numPanes).forEach {
-                        if (om.numPanes > 1) {
-                            UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmaps[it], om.displayData.image[it].get())
-                        } else {
-                            om.displayData.image[it].set(om.displayData.bitmaps[it])
-                        }
-                    }
-                    om.animRan = false
-                    if (!om.firstRun) {
-                        (0 until om.numPanes).forEach {
-                            om.displayData.image[it].imgRestorePosnZoom(om.modelProvider + om.numPanes.toString() + it.toString())
-                        }
-                        if (om.numPanes < 2) {
-                            om.fab1?.visibility = View.VISIBLE
-                            om.fab2?.visibility = View.VISIBLE
-                        }
-                        om.firstRun = true
-                    }
-                    updateToolbarLabels(om)
-                    om.imageLoaded = true
+            {
+                (0 until om.numPanes).forEach {
+                    om.displayData.bitmaps[it] = ObjectModelGet.image(om, it, overlayImg)
                 }
+            },
+            {
+                (0 until om.numPanes).forEach {
+                    if (om.numPanes > 1) {
+                        UtilityImg.resizeViewAndSetImage(
+                            context,
+                            om.displayData.bitmaps[it],
+                            om.displayData.image[it].get()
+                        )
+                    } else {
+                        om.displayData.image[it].set(om.displayData.bitmaps[it])
+                    }
+                }
+                om.animRan = false
+                if (!om.firstRun) {
+                    (0 until om.numPanes).forEach {
+                        om.displayData.image[it].imgRestorePosnZoom(om.modelProvider + om.numPanes.toString() + it.toString())
+                    }
+                    if (om.numPanes < 2) {
+                        om.fab1?.visibility = View.VISIBLE
+                        om.fab2?.visibility = View.VISIBLE
+                    }
+                    om.firstRun = true
+                }
+                updateToolbarLabels(om)
+                om.imageLoaded = true
+            }
         )
     }
 
     private fun updateToolbarLabels(om: ObjectModel) {
         if (om.numPanes > 1) {
             setSubtitleRestoreZoom(
-                    om.displayData.image,
-                    om.toolbar,
-                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                om.displayData.image,
+                om.toolbar,
+                "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
             )
             om.miStatusParam1.title = om.displayData.paramLabel[0]
             om.miStatusParam2.title = om.displayData.paramLabel[1]
@@ -98,17 +102,17 @@ object UtilityModels {
 
     fun getAnimate(om: ObjectModel, overlayImg: List<String>) {
         FutureVoid(
-                {
-                    (0 until om.numPanes).forEach {
-                        om.displayData.animDrawable[it] = ObjectModelGet.animate(om, it, overlayImg)
-                    }
-                },
-                {
-                    (0 until om.numPanes).forEach {
-                        om.displayData.animDrawable[it].startAnimation(om.displayData.image[it])
-                    }
-                    om.animRan = true
+            {
+                (0 until om.numPanes).forEach {
+                    om.displayData.animDrawable[it] = ObjectModelGet.animate(om, it, overlayImg)
                 }
+            },
+            {
+                (0 until om.numPanes).forEach {
+                    om.displayData.animDrawable[it].startAnimation(om.displayData.image[it])
+                }
+                om.animRan = true
+            }
         )
     }
 
@@ -116,15 +120,27 @@ object UtilityModels {
         Utility.writePref(context, om.prefSector, om.sector)
         (0 until om.numPanes).forEach {
             Utility.writePref(context, om.prefParam + it.toString(), om.displayData.param[it])
-            Utility.writePref(context, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
+            Utility.writePref(
+                context,
+                om.prefParamLabel + it.toString(),
+                om.displayData.paramLabel[it]
+            )
         }
     }
 
     fun legacyShare(activity: Activity, om: ObjectModel) {
-        UtilityShare.bitmap(activity, om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(), om.displayData.bitmaps[0])
+        UtilityShare.bitmap(
+            activity,
+            om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
+            om.displayData.bitmaps[0]
+        )
     }
 
-    fun convertTimeRunToTimeString(runStrOriginal: String, timeStringOriginal: String, showDate: Boolean): String {
+    fun convertTimeRunToTimeString(
+        runStrOriginal: String,
+        timeStringOriginal: String,
+        showDate: Boolean
+    ): String {
         val runStr = runStrOriginal.takeLast(2)
         var timeStr = timeStringOriginal
         // in response to timeStr coming in as the following on rare occasions we need to truncate
@@ -162,7 +178,10 @@ object UtilityModels {
         val hourOfDayLocal = calendar.get(Calendar.HOUR_OF_DAY)
         val calendar2 = Calendar.getInstance()
         calendar2.set(Calendar.HOUR_OF_DAY, runInt)
-        calendar2.add(Calendar.HOUR_OF_DAY, timeInt + offsetFromUtc / 60 / 60) // was 2*offsetFromUtc/60/60
+        calendar2.add(
+            Calendar.HOUR_OF_DAY,
+            timeInt + offsetFromUtc / 60 / 60
+        ) // was 2*offsetFromUtc/60/60
         val dayOfMonth = calendar2.get(Calendar.DAY_OF_MONTH)
         val month = 1 + calendar2.get(Calendar.MONTH)
         if (runInt >= 0 && runInt < -offsetFromUtc / 60 / 60 && hourOfDayLocal - offsetFromUtc / 60 / 60 >= 24) {
@@ -226,7 +245,13 @@ object UtilityModels {
 //        }
 //    }
 
-    fun updateTime(runOriginal: String, modelCurrentTimeF: String, listTime: MutableList<String>, prefix: String, showDate: Boolean) {
+    fun updateTime(
+        runOriginal: String,
+        modelCurrentTimeF: String,
+        listTime: MutableList<String>,
+        prefix: String,
+        showDate: Boolean
+    ) {
         var run = runOriginal.replace("Z", "").replace("z", "")
         val modelCurrentTime = modelCurrentTimeF.replace("Z", "").replace("z", "")
         // run is the current run , ie 12Z
@@ -242,7 +267,8 @@ object UtilityModels {
             }
             listTime.indices.forEach {
                 val tmpStr = RegExp.space.split(listTime[it])[0].replace(prefix, "")
-                listTime[it] = prefix + tmpStr + " " + convertTimeRunToTimeString(run, tmpStr, showDate)
+                listTime[it] =
+                    prefix + tmpStr + " " + convertTimeRunToTimeString(run, tmpStr, showDate)
             }
         }
     }
@@ -270,13 +296,19 @@ object UtilityModels {
         }
     }
 
-    fun getAnimation(context: Context, om: ObjectModel, getImage: (Context, ObjectModel, String) -> Bitmap): AnimationDrawable = if (om.spinnerTimeValue == -1) {
+    fun getAnimation(
+        context: Context,
+        om: ObjectModel,
+        getImage: (Context, ObjectModel, String) -> Bitmap
+    ): AnimationDrawable = if (om.spinnerTimeValue == -1) {
         AnimationDrawable()
     } else {
         val bitmaps = (om.timeIndex until om.times.size).map {
             if (it < om.times.size) {
-                getImage(context, om, om.times[it].split(" ").getOrNull(0)
-                        ?: "")
+                getImage(
+                    context, om, om.times[it].split(" ").getOrNull(0)
+                        ?: ""
+                )
             } else {
                 UtilityImg.getBlankBitmap()
             }

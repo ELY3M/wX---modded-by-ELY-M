@@ -9,22 +9,24 @@ class ViewPagerAdapter(activity: FragmentActivity?) : FragmentStateAdapter(activ
 
     val tabTitles = arrayOf("LOCAL", "SPC", "MISC")
 
-    override fun getItemCount(): Int = if (UIPreferences.simpleMode || UIPreferences.navDrawerMainScreen) {
-        1
-    } else {
-        tabTitles.size
-    }
-
-    override fun createFragment(position: Int): Fragment = if (UIPreferences.simpleMode || UIPreferences.navDrawerMainScreen) {
-        LocationFragment()
-    } else {
-        when (position) {
-            0 -> LocationFragment()
-            1 -> SpcFragment()
-            2 -> MiscFragment()
-            else -> LocationFragment()
+    override fun getItemCount(): Int =
+        if (UIPreferences.simpleMode || UIPreferences.navDrawerMainScreen) {
+            1
+        } else {
+            tabTitles.size
         }
-    }
+
+    override fun createFragment(position: Int): Fragment =
+        if (UIPreferences.simpleMode || UIPreferences.navDrawerMainScreen) {
+            LocationFragment()
+        } else {
+            when (position) {
+                0 -> LocationFragment()
+                1 -> SpcFragment()
+                2 -> MiscFragment()
+                else -> LocationFragment()
+            }
+        }
 
     fun setTabTitles(index: Int, title: String) {
         tabTitles[index] = title

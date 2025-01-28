@@ -43,7 +43,11 @@ class SpcFragment : Fragment() {
 
     private val hm = mutableMapOf<String, TileObject>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_recyclerview, container, false)
         TabScreen(requireActivity(), view, "FRAGMENT_SPC_ORDER", tileObjects)
         return view
@@ -52,94 +56,95 @@ class SpcFragment : Fragment() {
     private val tileObjects: MutableList<TileObject>
         get() {
             hm["spcsref"] = TileObject(
-                    R.drawable.spcsref,
-                    ModelsSpcHrefActivity::class.java,
-                    ModelsSpcHrefActivity.INFO,
-                    arrayOf("1", "SPCSREF", "SPCSREF"),
-                    "spcsref", "SREF"
+                R.drawable.spcsref,
+                ModelsSpcHrefActivity::class.java,
+                ModelsSpcHrefActivity.INFO,
+                arrayOf("1", "SPCSREF", "SPCSREF"),
+                "spcsref", "SREF"
             )
             hm["spcsummary"] = TileObject(
-                    R.drawable.spc_sum, SpcSwoSummaryActivity::class.java, "",
-                    arrayOf(), "spcsummary", "Convective Summary by Image"
+                R.drawable.spc_sum, SpcSwoSummaryActivity::class.java, "",
+                arrayOf(), "spcsummary", "Convective Summary by Image"
             )
             hm["spcswod1"] = TileObject(
-                    R.drawable.day1, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
-                    arrayOf("1", ""), "spcswod1", "Day 1"
+                R.drawable.day1, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
+                arrayOf("1", ""), "spcswod1", "Day 1"
             )
             hm["spcswod2"] = TileObject(
-                    R.drawable.day2, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
-                    arrayOf("2", ""), "spcswod2", "Day 2"
+                R.drawable.day2, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
+                arrayOf("2", ""), "spcswod2", "Day 2"
             )
             hm["spcswod3"] = TileObject(
-                    R.drawable.day3, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
-                    arrayOf("3", ""), "spcswod3", "Day 3"
+                R.drawable.day3, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
+                arrayOf("3", ""), "spcswod3", "Day 3"
             )
             hm["spcswod48"] = TileObject(
-                    R.drawable.day48, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
-                    arrayOf("4-8", ""), "spcswod48", "Day 4 through 8"
+                R.drawable.day48, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
+                arrayOf("4-8", ""), "spcswod48", "Day 4 through 8"
             )
             hm["spcstormrpt1"] = TileObject(
-                    R.drawable.report_today,
-                    SpcStormReportsActivity::class.java,
-                    SpcStormReportsActivity.DAY,
-                    arrayOf("today"),
-                    "spcstormrpt1", "Storm reports today"
+                R.drawable.report_today,
+                SpcStormReportsActivity::class.java,
+                SpcStormReportsActivity.DAY,
+                arrayOf("today"),
+                "spcstormrpt1", "Storm reports today"
             )
             hm["spcstormrpt2"] = TileObject(
-                    R.drawable.report_yesterday,
-                    SpcStormReportsActivity::class.java,
-                    SpcStormReportsActivity.DAY,
-                    arrayOf("yesterday"),
-                    "spcstormrpt2", "Storm reports yesterday"
+                R.drawable.report_yesterday,
+                SpcStormReportsActivity::class.java,
+                SpcStormReportsActivity.DAY,
+                arrayOf("yesterday"),
+                "spcstormrpt2", "Storm reports yesterday"
             )
             hm["spcmcd"] = TileObject(
-                    R.drawable.mcd_tile,
-                    SpcMcdWatchShowSummaryActivity::class.java,
-                    SpcMcdWatchShowSummaryActivity.NO,
-                    arrayOf("mcd"),
-                    "spcmcd", "MCD"
+                R.drawable.mcd_tile,
+                SpcMcdWatchShowSummaryActivity::class.java,
+                SpcMcdWatchShowSummaryActivity.NO,
+                arrayOf("mcd"),
+                "spcmcd", "MCD"
             )
             hm["spcwat"] = TileObject(
-                    R.drawable.wat,
-                    SpcMcdWatchShowSummaryActivity::class.java,
-                    SpcMcdWatchShowSummaryActivity.NO,
-                    arrayOf("wat"),
-                    "spcwat", "Watches"
+                R.drawable.wat,
+                SpcMcdWatchShowSummaryActivity::class.java,
+                SpcMcdWatchShowSummaryActivity.NO,
+                arrayOf("wat"),
+                "spcwat", "Watches"
             )
             hm["spcmeso"] = TileObject(
-                    R.drawable.meso,
-                    SpcMesoActivity::class.java,
-                    SpcMesoActivity.INFO,
-                    arrayOf("", "1", "SPCMESO"),
-                    "spcmeso", "Mesoanalysis"
+                R.drawable.meso,
+                SpcMesoActivity::class.java,
+                SpcMesoActivity.INFO,
+                arrayOf("", "1", "SPCMESO"),
+                "spcmeso", "Mesoanalysis"
             )
             hm["spcfire"] = TileObject(
-                    R.drawable.fire_outlook, SpcFireOutlookSummaryActivity::class.java, "",
-                    arrayOf(""), "spcfire", "Fire outlooks"
+                R.drawable.fire_outlook, SpcFireOutlookSummaryActivity::class.java, "",
+                arrayOf(""), "spcfire", "Fire outlooks"
             )
             hm["spctstorm"] = TileObject(
-                    R.drawable.tstorm, SpcThunderStormOutlookActivity::class.java, "",
-                    arrayOf(), "spctstorm", "Thunderstorm outlooks"
+                R.drawable.tstorm, SpcThunderStormOutlookActivity::class.java, "",
+                arrayOf(), "spctstorm", "Thunderstorm outlooks"
             )
             hm["spccompmap"] = TileObject(
-                    R.drawable.spccompmap, SpcCompmapActivity::class.java, "",
-                    arrayOf(), "spccompmap", "Compmap"
+                R.drawable.spccompmap, SpcCompmapActivity::class.java, "",
+                arrayOf(), "spccompmap", "Compmap"
             )
             hm["spchrrr"] = TileObject(
-                    R.drawable.spchrrr,
-                    ModelsGenericActivity::class.java,
-                    ModelsGenericActivity.INFO,
-                    arrayOf("1", "SPCHRRR", "SPC HRRR"),
-                    "spchrrr", "HRRR"
+                R.drawable.spchrrr,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "SPCHRRR", "SPC HRRR"),
+                "spchrrr", "HRRR"
             )
             hm["spchref"] = TileObject(
-                    R.drawable.spchref,
-                    ModelsSpcHrefActivity::class.java,
-                    "",
-                    arrayOf("1", "SPCHREF", "SPC HREF"),
-                    "spchref", "HREF"
+                R.drawable.spchref,
+                ModelsSpcHrefActivity::class.java,
+                "",
+                arrayOf("1", "SPCHREF", "SPC HREF"),
+                "spchref", "HREF"
             )
-            val tileOrder = "spcsref:spcsummary:spcswod1:spcswod2:spcswod3:spcswod48:spcstormrpt1:spcstormrpt2:spcmcd:spcwat:spcmeso:spcfire:spctstorm:spccompmap:"
+            val tileOrder =
+                "spcsref:spcsummary:spcswod1:spcswod2:spcswod3:spcswod48:spcstormrpt1:spcstormrpt2:spcmcd:spcwat:spcmeso:spcfire:spctstorm:spccompmap:"
             var spcPref = Utility.readPref("FRAGMENT_SPC_ORDER", tileOrder)
             if (!spcPref.contains("spchrrr")) {
                 spcPref += "spchrrr:"
@@ -155,7 +160,7 @@ class SpcFragment : Fragment() {
             }
             val tiles = spcPref.split(":").dropLastWhile { it.isEmpty() }
             return tiles
-                    .filterNot { it.contains("modeltt") }.filterNot { it.contains("spcsseo") }
-                    .map { hm[it]!! }.toMutableList()
+                .filterNot { it.contains("modeltt") }.filterNot { it.contains("spcsseo") }
+                .map { hm[it]!! }.toMutableList()
         }
 }

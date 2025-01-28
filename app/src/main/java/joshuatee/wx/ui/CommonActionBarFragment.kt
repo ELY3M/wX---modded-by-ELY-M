@@ -70,7 +70,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     "Local forecast"
                 )
             )	    
-	    R.id.action_alert -> Route.alerts(this)
+            R.id.action_alert -> Route.alerts(this)
             R.id.action_observations -> Route.observations(this)
             R.id.action_playlist -> Route.playlist(this)
             R.id.action_soundings -> Route.sounding(this)
@@ -93,7 +93,11 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 try {
                     startForResult.launch(intent)
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Error initializing speech to text engine.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
             //elys mod - not removing about - ELY M.
@@ -103,15 +107,16 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         return true
     }
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            val spokenCommand = thingsYouSaid!![0]
-            PopupMessage(view, spokenCommand, PopupMessage.SHORT)
-            UtilityVoiceCommand.processCommand(this, spokenCommand)
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                val spokenCommand = thingsYouSaid!![0]
+                PopupMessage(view, spokenCommand, PopupMessage.SHORT)
+                UtilityVoiceCommand.processCommand(this, spokenCommand)
+            }
         }
-    }
 
     fun openNexradRadar(context: Context) {
         Route.radarMainScreen(context)
@@ -154,9 +159,11 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     }
 
     fun openActivity(context: Context, activityName: String) {
-        Route(context,
-                UtilityHomeScreen.classes[activityName]!!,
-                UtilityHomeScreen.classId[activityName]!!,
-                UtilityHomeScreen.classArgs[activityName]!!)
+        Route(
+            context,
+            UtilityHomeScreen.classes[activityName]!!,
+            UtilityHomeScreen.classId[activityName]!!,
+            UtilityHomeScreen.classArgs[activityName]!!
+        )
     }
 }

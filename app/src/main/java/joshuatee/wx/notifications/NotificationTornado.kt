@@ -44,7 +44,10 @@ internal object NotificationTornado {
                 PolygonWarning.byType[PolygonWarningType.TornadoWarning]!!.download()
                 PolygonWarning.byType[PolygonWarningType.ThunderstormWarning]!!.download()
                 if (NotificationPreferences.alertTornadoNotification) {
-                    notificationUrls += checkAndSend(context, PolygonWarning.byType[PolygonWarningType.TornadoWarning]!!.getData())
+                    notificationUrls += checkAndSend(
+                        context,
+                        PolygonWarning.byType[PolygonWarningType.TornadoWarning]!!.getData()
+                    )
                 }
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
@@ -74,27 +77,36 @@ internal object NotificationTornado {
                 val url = idAl[i]
                 val capAlert = CapAlert.createFromUrl(url)
                 val isAlertCurrent = ObjectDateTime.isVtecCurrent(capAlert.vtec)
-                if (isAlertCurrent && UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) {
+                if (isAlertCurrent && UtilityNotificationTools.nwsLocalAlertNotFiltered(
+                        context,
+                        title
+                    )
+                ) {
                     val label = locationLabel + title
                     val text = title + ": " + capAlert.area + " " + capAlert.summary
                     val objectPendingIntents = ObjectPendingIntents(
-                            context,
-                            AlertsDetailActivity::class.java,
-                            AlertsDetailActivity.URL,
-                            arrayOf(url, ""),
-                            arrayOf(url, "sound")
+                        context,
+                        AlertsDetailActivity::class.java,
+                        AlertsDetailActivity.URL,
+                        arrayOf(url, ""),
+                        arrayOf(url, "sound")
                     )
-                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
-                        val sound = NotificationPreferences.alertNotificationSoundTornadoCurrent && !inBlackout
+                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                            context,
+                            url
+                        ))
+                    ) {
+                        val sound =
+                            NotificationPreferences.alertNotificationSoundTornadoCurrent && !inBlackout
                         val objectNotification = ObjectNotification(
-                                context,
-                                sound,
-                                label,
-                                text,
-                                objectPendingIntents,
-                                GlobalVariables.ICON_TORNADO,
-                                GlobalVariables.ICON_ACTION,
-                                context.resources.getString(R.string.read_aloud)
+                            context,
+                            sound,
+                            label,
+                            text,
+                            objectPendingIntents,
+                            GlobalVariables.ICON_TORNADO,
+                            GlobalVariables.ICON_ACTION,
+                            context.resources.getString(R.string.read_aloud)
                         )
                         objectNotification.send(url)
                     }

@@ -60,7 +60,11 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spc_fire_weather_forecast)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.spc_fire_weather_forecast
+        )
         val arguments = intent.getStringArrayExtra(NUMBER)!!
         val dayIndex = To.int(arguments[0])
         product = UtilitySpcFireOutlook.textProducts[dayIndex]

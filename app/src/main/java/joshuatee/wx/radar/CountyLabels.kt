@@ -35,7 +35,10 @@ internal object CountyLabels {
     fun create(context: Context) {
         if (labels.isEmpty()) {
             var tokens: Array<String>
-            val lines = UtilityIO.rawFileToStringArrayFromResource(context.resources, R.raw.gaz_counties_national)
+            val lines = UtilityIO.rawFileToStringArrayFromResource(
+                context.resources,
+                R.raw.gaz_counties_national
+            )
             labels = Array(lines.size) { "" }
             lat = DoubleArray(lines.size)
             lon = DoubleArray(lines.size)

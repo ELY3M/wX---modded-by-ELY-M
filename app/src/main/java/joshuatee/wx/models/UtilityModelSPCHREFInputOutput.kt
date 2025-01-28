@@ -41,11 +41,20 @@ internal object UtilityModelSpcHrefInputOutput {
         get() {
             val runData = RunTimeData()
             val htmlRunStatus = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/".getHtml()
-            val html = htmlRunStatus.parse("\\{model: \"href\",product: \"500mb_mean\",sector: \"conus\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",\\})")
+            val html =
+                htmlRunStatus.parse("\\{model: \"href\",product: \"500mb_mean\",sector: \"conus\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",\\})")
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
-            runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRun, 12, "yyyyMMddHH", "yyyyMMddHH", 4))
+            runData.listRunAddAll(
+                ObjectDateTime.generateModelRuns(
+                    mostRecentRun,
+                    12,
+                    "yyyyMMddHH",
+                    "yyyyMMddHH",
+                    4
+                )
+            )
             runData.mostRecentRun = mostRecentRun
             return runData
         }
@@ -88,10 +97,11 @@ internal object UtilityModelSpcHrefInputOutput {
             }
             if (it.contains("cref_members")) {
                 val paramArr = it.split(" ")
-                val infoUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/graphics/models/href/" + year +
-                        "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" +
-                        paramArr[0] + "." + sector.lowercase(Locale.US) + ".f0" + time +
-                        "00.png"
+                val infoUrl =
+                    "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/href/graphics/models/href/" + year +
+                            "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" +
+                            paramArr[0] + "." + sector.lowercase(Locale.US) + ".f0" + time +
+                            "00.png"
                 urls.add(infoUrl)
             }
             urls.add(url)

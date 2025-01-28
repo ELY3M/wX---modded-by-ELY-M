@@ -1,4 +1,3 @@
-
 // NOTE: added license stanza as project website indicates APL 2.0
 // year of modification of file was 2010 and the only show email is listed below for android-gif view project
 

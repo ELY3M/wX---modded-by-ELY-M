@@ -78,7 +78,12 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdsummary, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.spcmcdsummary,
+            false
+        )
         box = VBox.fromResource(this)
         number = intent.getStringArrayExtra(NO)!![0]
         if (number.contains("wat")) {
@@ -91,7 +96,8 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
             polygonType = PolygonType.WATCH
         } else {
             url = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/"
-            patternStr = "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
+            patternStr =
+                "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
             nothingPresentStr = "No active MCDs"
             activityLabel = "MCDs"
             product = "SPCMCD$number"
@@ -117,7 +123,8 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
         mcdList.forEach {
             if (number.contains("at")) {
                 val mcdNumber = To.stringPadLeftZeros(To.int(it), 4)
-                val imgUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww" + mcdNumber + "_radar.gif"
+                val imgUrl =
+                    "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/ww" + mcdNumber + "_radar.gif"
                 mcdNumbers.add(mcdNumber)
                 bitmaps.add(imgUrl.getImage())
             } else {
@@ -135,7 +142,8 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
             box.addWidget(image)
             image.connect { Route.mcd(this, mcdNumbers[index], polygonType.toString()) }
         }
-        titleString = "$activityLabel " + mcdNumbers.toString().replace("[{}]".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", "")
+        titleString = "$activityLabel " + mcdNumbers.toString().replace("[{}]".toRegex(), "")
+            .replace("\\[|\\]".toRegex(), "").replace("w", "")
         title = titleString
         if (mcdList.isEmpty()) {
             val nothingCard = CardText(this, nothingPresentStr, TextSize.MEDIUM)

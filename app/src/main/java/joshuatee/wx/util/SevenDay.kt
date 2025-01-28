@@ -85,7 +85,14 @@ class SevenDay {
         val shortForecasts = html.parseColumn("\"shortForecast\": \"(.*?)\",")
         val detailedForecasts = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
         if ((names.size == temperatures.size) && (temperatures.size == shortForecasts.size) && (shortForecasts.size == detailedForecasts.size)) {
-            val objectForecasts = names.indices.map { Forecast(names[it], temperatures[it], shortForecasts[it], detailedForecasts[it]) }
+            val objectForecasts = names.indices.map {
+                Forecast(
+                    names[it],
+                    temperatures[it],
+                    shortForecasts[it],
+                    detailedForecasts[it]
+                )
+            }
             var forecasts = GlobalVariables.newline + GlobalVariables.newline
             objectForecasts.forEach {
                 forecasts += it.name + "(" + it.temperature + "): " + it.shortForecast
@@ -116,7 +123,14 @@ class SevenDay {
         val detailedForecastsLocal = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
         var forecast = GlobalVariables.newline + GlobalVariables.newline
         if (names.size == temperatures.size && temperatures.size == shortForecasts.size && shortForecasts.size == detailedForecastsLocal.size) {
-            val forecasts = names.indices.map { Forecast(names[it], temperatures[it], shortForecasts[it], detailedForecastsLocal[it]) }
+            val forecasts = names.indices.map {
+                Forecast(
+                    names[it],
+                    temperatures[it],
+                    shortForecasts[it],
+                    detailedForecastsLocal[it]
+                )
+            }
             forecasts.forEach {
                 forecast += it.name + ": " + it.detailedForecast
                 forecast += GlobalVariables.newline + GlobalVariables.newline

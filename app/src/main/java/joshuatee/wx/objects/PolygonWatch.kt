@@ -120,8 +120,9 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
 
     private fun getListOfNumbersWatch(context: Context): List<String> {
         val listOriginal = UtilityString.parseColumn(
-                byType[type]!!.storage.value,
-                regex[type]!!)
+            byType[type]!!.storage.value,
+            regex[type]!!
+        )
 //        val listOfNumbers = listOriginal.map { String.format("%4s", it).replace(' ', '0') }
         val listOfNumbers = listOriginal.map { To.stringPadLeftZeros(To.int(it), 4) }
         var numbersAsString = ""
@@ -172,10 +173,10 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
     companion object {
 
         private val polygonList = listOf(
-                PolygonType.WATCH,
-                PolygonType.WATCH_TORNADO,
-                PolygonType.MCD,
-                PolygonType.MPD
+            PolygonType.WATCH,
+            PolygonType.WATCH_TORNADO,
+            PolygonType.MCD,
+            PolygonType.MPD
         )
         val byType = mutableMapOf<PolygonType, PolygonWatch>()
 
@@ -195,16 +196,16 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
 //        )
 
         val textPrefix = mapOf(
-                PolygonType.MCD to "SPCMCD",
-                PolygonType.MPD to "WPCMPD",
+            PolygonType.MCD to "SPCMCD",
+            PolygonType.MPD to "WPCMPD",
 //            PolygonType.WATCH to "RADAR_COLOR_TSTORM_WATCH",
 //            PolygonType.WatchTornado to "RADAR_COLOR_TOR_WATCH",
         )
 
         val regex = mapOf(
-                PolygonType.MCD to RegExp.mcdPatternAlerts,
-                PolygonType.MPD to RegExp.mpdPattern,
-                PolygonType.WATCH to RegExp.watchPattern,
+            PolygonType.MCD to RegExp.mcdPatternAlerts,
+            PolygonType.MPD to RegExp.mpdPattern,
+            PolygonType.WATCH to RegExp.watchPattern,
 //            PolygonType.WatchTornado to "RADAR_COLOR_TOR_WATCH",
         )
 
@@ -220,7 +221,10 @@ class PolygonWatch(val context: Context, val type: PolygonType) {
         }
 
         fun getLatLonWatch(number: String): String =
-                UtilityString.getHtmlAndParseLastMatch("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/wou$number.html", RegExp.pre2Pattern)
+            UtilityString.getHtmlAndParseLastMatch(
+                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/watch/wou$number.html",
+                RegExp.pre2Pattern
+            )
 
     }
 }

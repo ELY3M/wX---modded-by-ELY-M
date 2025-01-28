@@ -35,7 +35,8 @@ class PopupMessage(view: View, message: String, duration: Int = INDEFINITE) {
         snack.setActionTextColor(Color.YELLOW)
         snack.setAction("DISMISS") { snack.dismiss() }
         val viewSnack = snack.view
-        val textView: TextView = viewSnack.findViewById(com.google.android.material.R.id.snackbar_text)
+        val textView: TextView =
+            viewSnack.findViewById(com.google.android.material.R.id.snackbar_text)
         val fgColor = Color.WHITE
         textView.setTextColor(fgColor)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)

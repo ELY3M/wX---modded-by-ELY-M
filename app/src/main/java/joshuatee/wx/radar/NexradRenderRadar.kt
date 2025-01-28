@@ -31,7 +31,13 @@ import joshuatee.wx.util.UtilityLog
 
 object NexradRenderRadar {
 
-    fun downloadRadarFile(context: Context, data: NexradRenderData, state: NexradRenderState, fileName: String, urlStr: String) {
+    fun downloadRadarFile(
+        context: Context,
+        data: NexradRenderData,
+        state: NexradRenderState,
+        fileName: String,
+        urlStr: String
+    ) {
         data.radarBuffers.fileName = fileName
         // added to allow animations to skip a frame and continue
         // comment2 - the comment above does not apply to the following 7 lines, not sure why this is here
@@ -48,7 +54,13 @@ object NexradRenderRadar {
         // if not empty, its part of an animation sequence
         //
         if (data.radarBuffers.fileName == "") {
-            NexradDownload.getRadarFile(context, urlStr, state.rid, state.product, state.indexString)
+            NexradDownload.getRadarFile(
+                context,
+                urlStr,
+                state.rid,
+                state.product,
+                state.indexString
+            )
             data.radarBuffers.fileName = if (!state.product.contains("L2")) {
                 "nids${state.indexString}"
             } else {
@@ -57,12 +69,13 @@ object NexradRenderRadar {
         }
     }
 
-    fun decodeRadarHeader(context: Context,
-                          data: NexradRenderData,
-                          state: NexradRenderState,
-                          wxglNexradLevel2: NexradLevel2,
-                          wxglNexradLevel3: NexradLevel3,
-                          performDecomp: Boolean
+    fun decodeRadarHeader(
+        context: Context,
+        data: NexradRenderData,
+        state: NexradRenderState,
+        wxglNexradLevel2: NexradLevel2,
+        wxglNexradLevel3: NexradLevel3,
+        performDecomp: Boolean
     ) {
         //
         // extract information from the header
@@ -72,17 +85,36 @@ object NexradRenderRadar {
             when {
                 // Level 2
                 state.product.contains("L2") -> {
-                    wxglNexradLevel2.decodeAndPlot(context, data.radarBuffers.fileName, state.product, state.timeStampId, state.indexString, performDecomp)
+                    wxglNexradLevel2.decodeAndPlot(
+                        context,
+                        data.radarBuffers.fileName,
+                        state.product,
+                        state.timeStampId,
+                        state.indexString,
+                        performDecomp
+                    )
                     data.radarBuffers.extractL2Data(wxglNexradLevel2)
                 }
                 // 4bit products spectrum width, comp ref, storm relative mean velocity
-                state.product.contains("NSW") || state.product.startsWith("NC") || state.product.matches(Regex("N[0-3]S")) -> {
-                    wxglNexradLevel3.decodeAndPlotFourBit(context, data.radarBuffers.fileName, state.rid, state.timeStampId)
+                state.product.contains("NSW") || state.product.startsWith("NC") || state.product.matches(
+                    Regex("N[0-3]S")
+                ) -> {
+                    wxglNexradLevel3.decodeAndPlotFourBit(
+                        context,
+                        data.radarBuffers.fileName,
+                        state.rid,
+                        state.timeStampId
+                    )
                     data.radarBuffers.extractL3Data(wxglNexradLevel3)
                 }
                 // Level 3 8bit
                 else -> {
-                    wxglNexradLevel3.decodeAndPlot(context, data.radarBuffers.fileName, state.rid, state.timeStampId)
+                    wxglNexradLevel3.decodeAndPlot(
+                        context,
+                        data.radarBuffers.fileName,
+                        state.rid,
+                        state.timeStampId
+                    )
                     data.radarBuffers.extractL3Data(wxglNexradLevel3)
                 }
             }
@@ -98,22 +130,22 @@ object NexradRenderRadar {
     }
 
     fun createRadials(
-            context: Context,
-            data: NexradRenderData,
-            state: NexradRenderState,
-            wxglNexradLevel2: NexradLevel2,
-            wxglNexradLevel3: NexradLevel3,
+        context: Context,
+        data: NexradRenderData,
+        state: NexradRenderState,
+        wxglNexradLevel2: NexradLevel2,
+        wxglNexradLevel3: NexradLevel3,
     ): Int {
         //
         // decode the radar file after setting up the color map
         //
         var totalBins = 0
         val colorPalette =
-                if (ColorPalette.colorMap.containsKey(data.radarBuffers.productCode.toInt())) {
-                    ColorPalette.colorMap[data.radarBuffers.productCode.toInt()]!!
-                } else {
-                    ColorPalette.colorMap[94]!!
-                }
+            if (ColorPalette.colorMap.containsKey(data.radarBuffers.productCode.toInt())) {
+                ColorPalette.colorMap[data.radarBuffers.productCode.toInt()]!!
+            } else {
+                ColorPalette.colorMap[94]!!
+            }
         try {
             val fourBitProducts = listOf<Short>(56, 30, 181, 78, 80, 37, 38, 41, 57)
             if (state.product.startsWith("NC") || data.radarBuffers.productCode.toInt() == 41 || data.radarBuffers.productCode.toInt() == 57) {
@@ -124,29 +156,37 @@ object NexradRenderRadar {
                         NexradDecodeEightBit.andCreateRadials(context, data.radarBuffers)
                     else {
                         Jni.decode8BitAndGenRadials(
-                                UtilityIO.getFilePath(context, data.radarBuffers.fileName),
-                                wxglNexradLevel3.seekStart,
-                                wxglNexradLevel3.compressedFileSize,
-                                wxglNexradLevel3.iBuff,
-                                wxglNexradLevel3.oBuff,
-                                data.radarBuffers.floatBuffer,
-                                data.radarBuffers.colorBuffer,
-                                data.radarBuffers.binSize,
-                                Color.red(data.radarBuffers.bgColor).toByte(),
-                                Color.green(data.radarBuffers.bgColor).toByte(),
-                                Color.blue(data.radarBuffers.bgColor).toByte(),
-                                colorPalette.redValues,
-                                colorPalette.greenValues,
-                                colorPalette.blueValues,
-                                data.radarBuffers.productCode.toInt()
+                            UtilityIO.getFilePath(context, data.radarBuffers.fileName),
+                            wxglNexradLevel3.seekStart,
+                            wxglNexradLevel3.compressedFileSize,
+                            wxglNexradLevel3.iBuff,
+                            wxglNexradLevel3.oBuff,
+                            data.radarBuffers.floatBuffer,
+                            data.radarBuffers.colorBuffer,
+                            data.radarBuffers.binSize,
+                            Color.red(data.radarBuffers.bgColor).toByte(),
+                            Color.green(data.radarBuffers.bgColor).toByte(),
+                            Color.blue(data.radarBuffers.bgColor).toByte(),
+                            colorPalette.redValues,
+                            colorPalette.greenValues,
+                            colorPalette.blueValues,
+                            data.radarBuffers.productCode.toInt()
                         )
                     }
                 } else {
-                    NexradDecodeEightBit.createRadials(data.radarBuffers, wxglNexradLevel3.binWord, wxglNexradLevel3.radialStart)
+                    NexradDecodeEightBit.createRadials(
+                        data.radarBuffers,
+                        wxglNexradLevel3.binWord,
+                        wxglNexradLevel3.radialStart
+                    )
                 }
             } else {
                 wxglNexradLevel2.binWord.position(0)
-                totalBins = NexradDecodeEightBit.createRadials(data.radarBuffers, wxglNexradLevel2.binWord, wxglNexradLevel2.radialStartAngle)
+                totalBins = NexradDecodeEightBit.createRadials(
+                    data.radarBuffers,
+                    wxglNexradLevel2.binWord,
+                    wxglNexradLevel2.radialStartAngle
+                )
             } // level 2 , level 3 check
         } catch (e: Exception) {
             UtilityLog.handleException(e)

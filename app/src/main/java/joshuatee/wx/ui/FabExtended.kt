@@ -30,7 +30,13 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 
-class FabExtended(activity: Activity, resId: Int, iconID: Int, text: String, fn: View.OnClickListener) {
+class FabExtended(
+    activity: Activity,
+    resId: Int,
+    iconID: Int,
+    text: String,
+    fn: View.OnClickListener
+) {
 
     private val fab: ExtendedFloatingActionButton = activity.findViewById(resId)
     private val context: Context = activity
@@ -66,9 +72,11 @@ class FabExtended(activity: Activity, resId: Int, iconID: Int, text: String, fn:
 
     private fun setupFab(icon: Int, text: String) {
         if (UIPreferences.themeIsWhite) {
-            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+            fab.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         } else {
-            fab.backgroundTintList = ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
+            fab.backgroundTintList =
+                ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
         }
         set(icon)
         fab.text = text

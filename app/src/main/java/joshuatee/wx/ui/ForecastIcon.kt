@@ -77,7 +77,13 @@ class ForecastIcon {
     fun drawLeftText(leftNumber: String) {
         val xTextLeft = 2.0f
         if (leftNumber != "" && leftNumber != "0") {
-            canvas.drawRect(0.0f, DIMENSIONS - NUM_HEIGHT, HALF_WIDTH, DIMENSIONS, paintStripe.get())
+            canvas.drawRect(
+                0.0f,
+                DIMENSIONS - NUM_HEIGHT,
+                HALF_WIDTH,
+                DIMENSIONS,
+                paintStripe.get()
+            )
             canvas.drawText("$leftNumber%", xTextLeft, Y_TEXT, paint.get())
         }
     }
@@ -89,7 +95,13 @@ class ForecastIcon {
             58.0f
         }
         if (rightNumber != "" && rightNumber != "0") {
-            canvas.drawRect(MIDDLE_POINT, DIMENSIONS - NUM_HEIGHT, DIMENSIONS, DIMENSIONS, paintStripe.get())
+            canvas.drawRect(
+                MIDDLE_POINT,
+                DIMENSIONS - NUM_HEIGHT,
+                DIMENSIONS,
+                DIMENSIONS,
+                paintStripe.get()
+            )
             canvas.drawText("$rightNumber%", xText, Y_TEXT, paint.get())
         }
     }
@@ -102,7 +114,13 @@ class ForecastIcon {
             58.0f
         }
         if (number != "" && number != "0") {
-            canvas.drawRect(0.0f, DIMENSIONS - NUM_HEIGHT, DIMENSIONS, DIMENSIONS, paintStripe.get())
+            canvas.drawRect(
+                0.0f,
+                DIMENSIONS - NUM_HEIGHT,
+                DIMENSIONS,
+                DIMENSIONS,
+                paintStripe.get()
+            )
             canvas.drawText("$number%", xText, yText, paint.get())
         }
     }

@@ -58,10 +58,19 @@ internal object Level2 {
     private var first: Level2Record? = null
     private var vcp = 0
 
-    fun decode(context: Context, fileName: String, binWord: ByteBuffer, radialStartAngle: ByteBuffer, prod: Int, days: ByteBuffer, milliSeconds: ByteBuffer) {
+    fun decode(
+        context: Context,
+        fileName: String,
+        binWord: ByteBuffer,
+        radialStartAngle: ByteBuffer,
+        prod: Int,
+        days: ByteBuffer,
+        milliSeconds: ByteBuffer
+    ) {
         val velocityProd = prod == 154
         try {
-            val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName), "r", 1024 * 256 * 10)
+            val ucarRandomAccessFile =
+                UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName), "r", 1024 * 256 * 10)
             ucarRandomAccessFile.bigEndian = true
             ucarRandomAccessFile.let {
                 it.setBufferSize(2621440) // 1024*256*10
@@ -74,7 +83,7 @@ internal object Level2 {
             var recordNumber = 0
             while (true) {
                 val r = Level2Record.factory(ucarRandomAccessFile, recordNumber, messageOffset31)
-                        ?: break
+                    ?: break
                 recordNumber += 1
                 if (r.messageType.toInt() == 31) {
                     messageOffset31 += (r.messageSize * 2 + 12 - 2432)
@@ -106,7 +115,11 @@ internal object Level2 {
                 for (r in 0 until numberOfRadials) {
                     if (highReflectivity[r].elevationNum.toInt() == 1) {
                         radialStartAngle.putFloat(450.0f - highReflectivity[r].azimuth)
-                        highReflectivity[r].readData(ucarRandomAccessFile, REFLECTIVITY_HIGH, binWord)
+                        highReflectivity[r].readData(
+                            ucarRandomAccessFile,
+                            REFLECTIVITY_HIGH,
+                            binWord
+                        )
                     }
                 }
             } else {

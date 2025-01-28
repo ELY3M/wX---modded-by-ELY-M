@@ -42,9 +42,14 @@ import joshuatee.wx.util.UCARRandomAccessFile
 
 @Suppress("SpellCheckingInspection")
 internal class Level2Record @Throws(IOException::class)
-private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, messageOffset31: Long) {
+private constructor(
+    ucarRandomAccessFile: UCARRandomAccessFile,
+    record: Int,
+    messageOffset31: Long
+) {
 
-    private val messageOffset: Long = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + messageOffset31 // offset of start of message
+    private val messageOffset: Long =
+        (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + messageOffset31 // offset of start of message
     var hasHighResREFData = false
     var hasHighResVELData = false
 
@@ -75,7 +80,8 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
         ucarRandomAccessFile.skipBytes(12)
         if (messageType.toInt() == 1) {
             // data header
-            dataMsecs = ucarRandomAccessFile.readInt()   // collection time for this radial, msecs since midnight
+            dataMsecs =
+                ucarRandomAccessFile.readInt()   // collection time for this radial, msecs since midnight
             dataJulianDate = ucarRandomAccessFile.readShort() // prob "collection time"
             ucarRandomAccessFile.skipBytes(10)
             elevationNum = ucarRandomAccessFile.readShort() // RDA elevation number
@@ -85,7 +91,8 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
         } else if (messageType.toInt() == 31) {
             // data header
             ucarRandomAccessFile.skipBytes(4)
-            dataMsecs = ucarRandomAccessFile.readInt()   // collection time for this radial, msecs since midnight
+            dataMsecs =
+                ucarRandomAccessFile.readInt()   // collection time for this radial, msecs since midnight
             dataJulianDate = ucarRandomAccessFile.readShort() // prob "collection time"
             ucarRandomAccessFile.skipBytes(2)
             azimuth = ucarRandomAccessFile.readFloat() // LOOK why unsigned ??
@@ -180,7 +187,11 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
 
     @Suppress("SameParameterValue")
     @Throws(IOException::class)
-    private fun getDataBlockValue(ucarRandomAccessFile: UCARRandomAccessFile, offset: Short, skip: Int): Short {
+    private fun getDataBlockValue(
+        ucarRandomAccessFile: UCARRandomAccessFile,
+        offset: Short,
+        skip: Int
+    ): Short {
         val off = offset.toLong() + messageOffset + MESSAGE_HEADER_SIZE.toLong()
         ucarRandomAccessFile.seek(off)
         ucarRandomAccessFile.skipBytes(skip)
@@ -189,7 +200,12 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
 
     @Suppress("SameParameterValue")
     @Throws(IOException::class)
-    private fun getDataBlockStringValue(ucarRandomAccessFile: UCARRandomAccessFile, offset: Short, skip: Int, size: Int): String {
+    private fun getDataBlockStringValue(
+        ucarRandomAccessFile: UCARRandomAccessFile,
+        offset: Short,
+        skip: Int,
+        size: Int
+    ): String {
         val off = offset.toLong() + messageOffset + MESSAGE_HEADER_SIZE.toLong()
         ucarRandomAccessFile.seek(off)
         ucarRandomAccessFile.skipBytes(skip)
@@ -241,7 +257,8 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
 
         @Throws(IOException::class)
         fun factory(din: UCARRandomAccessFile, record: Int, messageOffset31: Long): Level2Record? {
-            val offset = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + messageOffset31
+            val offset =
+                (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + messageOffset31
             return if (offset >= din.length()) {
                 null
             } else {

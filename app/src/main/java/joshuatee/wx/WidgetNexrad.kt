@@ -45,14 +45,18 @@ class WidgetNexrad : AppWidgetProvider() {
         super.onEnabled(context)
     }
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         UtilityLog.d("WXRADAR", "nexrad onUpdate called")
         UtilityWidget.update(context, type)
     }
 
     private fun getContent(context: Context) {
         FutureVoid(
-                { UtilityWidgetDownload.download(context, type) })
+            { UtilityWidgetDownload.download(context, type) })
         { UtilityWidget.update(context, type) }
     }
 }

@@ -25,7 +25,12 @@ class ExternalEllipsoid
  * @param flattening
  * @param inverseFlattening
  */
-private constructor(val semiMajorAxis: Double, val semiMinorAxis: Double, val flattening: Double, private val inverseFlattening: Double) : Serializable {
+private constructor(
+    val semiMajorAxis: Double,
+    val semiMinorAxis: Double,
+    val flattening: Double,
+    private val inverseFlattening: Double
+) : Serializable {
     companion object {
 
         /** The WGS84 ellipsoid.  */
@@ -38,7 +43,10 @@ private constructor(val semiMajorAxis: Double, val semiMinorAxis: Double, val fl
          * @return
          */
         @Suppress("SameParameterValue")
-        private fun fromAAndInverseF(semiMajor: Double, inverseFlattening: Double): ExternalEllipsoid {
+        private fun fromAAndInverseF(
+            semiMajor: Double,
+            inverseFlattening: Double
+        ): ExternalEllipsoid {
             val f = 1.0 / inverseFlattening
             val b = (1.0 - f) * semiMajor
             return ExternalEllipsoid(semiMajor, b, f, inverseFlattening)

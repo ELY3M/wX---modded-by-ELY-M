@@ -36,7 +36,8 @@ import joshuatee.wx.radar.Warnings
 
 object UtilitySpc {
 
-    fun getStormReportsTodayUrl() = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/climo/reports/" + "today" + ".gif"
+    fun getStormReportsTodayUrl() =
+        "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/climo/reports/" + "today" + ".gif"
 
     internal val thunderStormOutlookImages: List<Bitmap>
         get() {
@@ -77,10 +78,10 @@ object UtilitySpc {
             returnStr = "high"
         }
         html = html.replace("ACUS[0-9]{2} KWNS [0-9]{6}".toRegex(), "")
-                .replace("SWOD[Y4][1-3]".toRegex(), "")
-                .replace("SPC AC [0-9]{6}".toRegex(), "")
-                .replace("NWS STORM PREDICTION CENTER NORMAN OK", "")
-                .replace("CONVECTIVE OUTLOOK", "")
+            .replace("SWOD[Y4][1-3]".toRegex(), "")
+            .replace("SPC AC [0-9]{6}".toRegex(), "")
+            .replace("NWS STORM PREDICTION CENTER NORMAN OK", "")
+            .replace("CONVECTIVE OUTLOOK", "")
         return listOf(returnStr, html)
     }
 
@@ -100,7 +101,8 @@ object UtilitySpc {
         if (UIPreferences.checkspc) {
             if (!PolygonWatch.byType[PolygonType.MCD]!!.storage.value.contains(mcdNothingString)) {
                 mdPresent = true
-                val items = PolygonWatch.byType[PolygonType.MCD]!!.storage.value.parseColumn(RegExp.mcdPatternUtilSpc)
+                val items =
+                    PolygonWatch.byType[PolygonType.MCD]!!.storage.value.parseColumn(RegExp.mcdPatternUtilSpc)
                 mdCount = items.size
                 items.forEach {
                     dashboardStrMcd += ":$it"
@@ -108,7 +110,8 @@ object UtilitySpc {
             }
             if (!PolygonWatch.byType[PolygonType.WATCH]!!.storage.value.contains(watchNothingString)) {
                 watchPresent = true
-                val items = PolygonWatch.byType[PolygonType.WATCH]!!.storage.value.parseColumn(RegExp.watchPattern)
+                val items =
+                    PolygonWatch.byType[PolygonType.WATCH]!!.storage.value.parseColumn(RegExp.watchPattern)
                 watchCount = items.size
                 items.forEach {
                     dashboardStrWat += ":$it"
@@ -118,7 +121,8 @@ object UtilitySpc {
         if (UIPreferences.checkwpc) {
             if (!PolygonWatch.byType[PolygonType.MPD]!!.storage.value.contains(mpdNothingString)) {
                 mpdPresent = true
-                val items = PolygonWatch.byType[PolygonType.MPD]!!.storage.value.parseColumn(RegExp.mpdPattern)
+                val items =
+                    PolygonWatch.byType[PolygonType.MPD]!!.storage.value.parseColumn(RegExp.mpdPattern)
                 mpdCount = items.size
                 items.forEach {
                     dashboardStrMpd += ":$it"

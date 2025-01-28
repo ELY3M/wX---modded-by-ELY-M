@@ -41,7 +41,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityNavDrawer
 
 class Drawer(
-        val activity: Activity,
+    val activity: Activity,
 ) {
 
     private val headerItems = mutableListOf<DrawerHeaderItem>()
@@ -58,7 +58,13 @@ class Drawer(
 
     init {
         navigationView.itemIconTintList = null
-        navigationView.setItemIconSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40.0f, MyApplication.dm).toInt())
+        navigationView.setItemIconSize(
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                40.0f,
+                MyApplication.dm
+            ).toInt()
+        )
         if (!UIPreferences.themeIsWhite) {
             navigationView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
         }
@@ -87,12 +93,26 @@ class Drawer(
     }
 
     private fun addItem(buttonId: Int, textId: Int, fn: () -> Unit) {
-        headerItems.add(DrawerHeaderItem(drawerLayout, headerLayout, buttonId, textId, tint, gravityForDrawer, fn))
+        headerItems.add(
+            DrawerHeaderItem(
+                drawerLayout,
+                headerLayout,
+                buttonId,
+                textId,
+                tint,
+                gravityForDrawer,
+                fn
+            )
+        )
     }
 
     fun setHeaderHeight(headerSize: Float) {
         val layoutParams = headerLayout.layoutParams
-        layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, headerSize, activity.resources.displayMetrics).toInt()
+        layoutParams.height = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            headerSize,
+            activity.resources.displayMetrics
+        ).toInt()
         headerLayout.layoutParams = layoutParams
     }
 
@@ -128,7 +148,11 @@ class Drawer(
     }
 
     private fun addHeaderItems() {
-        addItem(R.id.severeDashboardButton, R.id.severeDashboardText) { Route.severeDashboard(activity) }
+        addItem(R.id.severeDashboardButton, R.id.severeDashboardText) {
+            Route.severeDashboard(
+                activity
+            )
+        }
         addItem(R.id.visibleSatelliteButton, R.id.visibleSatelliteText) { Route.vis(activity) }
         addItem(R.id.wfoButton, R.id.wfoText) { Route.wfoText(activity) }
         addItem(R.id.hourlyButton, R.id.hourlyText) { Route.hourly(activity) }

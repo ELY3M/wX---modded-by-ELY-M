@@ -49,7 +49,11 @@ object NotificationNhc {
             storms.forEach {
                 if (it.stormId.startsWith("ep")) {
                     if (!muteStr.contains(it.stormId)) {
-                        notificationUrls += sendNotification(context, NotificationPreferences.alertNotificationSoundNhcAtl, it)
+                        notificationUrls += sendNotification(
+                            context,
+                            NotificationPreferences.alertNotificationSoundNhcAtl,
+                            it
+                        )
                     } else {
                         UtilityLog.d("wx", "blocking " + it.stormId)
                     }
@@ -60,7 +64,11 @@ object NotificationNhc {
             storms.forEach {
                 if (it.stormId.startsWith("al")) {
                     if (!muteStr.contains(it.stormId)) {
-                        notificationUrls += sendNotification(context, NotificationPreferences.alertNotificationSoundNhcAtl, it)
+                        notificationUrls += sendNotification(
+                            context,
+                            NotificationPreferences.alertNotificationSoundNhcAtl,
+                            it
+                        )
                     } else {
                         UtilityLog.d("wx", "blocking " + it.stormId)
                     }
@@ -70,21 +78,34 @@ object NotificationNhc {
         return notificationUrls
     }
 
-    private fun sendNotification(context: Context, soundPref: Boolean, stormData: NhcStormDetails): String {
+    private fun sendNotification(
+        context: Context,
+        soundPref: Boolean,
+        stormData: NhcStormDetails
+    ): String {
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
-        val objectPendingIntents = ObjectPendingIntents(context, NhcStormActivity::class.java, NhcStormActivity.URL, stormData)
+        val objectPendingIntents = ObjectPendingIntents(
+            context,
+            NhcStormActivity::class.java,
+            NhcStormActivity.URL,
+            stormData
+        )
         val cancelString = stormData.stormId + stormData.advisoryIssuanceNumber
-        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
+        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelString
+            ))
+        ) {
             val sound = soundPref && !inBlackout
             val objectNotification = ObjectNotification(
-                    context,
-                    sound,
-                    stormData.stormId,
-                    stormData.summaryForNotification(),
-                    objectPendingIntents,
-                    GlobalVariables.ICON_NHC_1,
-                    GlobalVariables.ICON_ACTION,
-                    context.resources.getString(R.string.read_aloud)
+                context,
+                sound,
+                stormData.stormId,
+                stormData.summaryForNotification(),
+                objectPendingIntents,
+                GlobalVariables.ICON_NHC_1,
+                GlobalVariables.ICON_ACTION,
+                context.resources.getString(R.string.read_aloud)
             )
             objectNotification.send(cancelString)
         }

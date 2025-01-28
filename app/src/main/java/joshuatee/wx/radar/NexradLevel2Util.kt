@@ -37,7 +37,14 @@ internal object NexradLevel2Util {
      */
     private const val FILE_HEADER_SIZE = 24
 
-    fun writeDecodedFile(context: Context, fileName: String, radialStart: ByteBuffer, binWord: ByteBuffer, days: ByteBuffer, milliSeconds: ByteBuffer) {
+    fun writeDecodedFile(
+        context: Context,
+        fileName: String,
+        radialStart: ByteBuffer,
+        binWord: ByteBuffer,
+        days: ByteBuffer,
+        milliSeconds: ByteBuffer
+    ) {
         radialStart.position(0)
         binWord.position(0)
         days.position(0)
@@ -64,7 +71,14 @@ internal object NexradLevel2Util {
         }
     }
 
-    fun readDecodedFile(context: Context, fileName: String, radialStart: ByteBuffer, binWord: ByteBuffer, days: ByteBuffer, milliSeconds: ByteBuffer) {
+    fun readDecodedFile(
+        context: Context,
+        fileName: String,
+        radialStart: ByteBuffer,
+        binWord: ByteBuffer,
+        days: ByteBuffer,
+        milliSeconds: ByteBuffer
+    ) {
         radialStart.position(0)
         binWord.position(0)
         days.position(0)
@@ -116,7 +130,12 @@ internal object NexradLevel2Util {
      * @throws IOException on read error
      */
     @Throws(IOException::class)
-    private fun uncompress(context: Context, inputRaf: UCARRandomAccessFile, ufilename: String, productCode: Int): UCARRandomAccessFile {
+    private fun uncompress(
+        context: Context,
+        inputRaf: UCARRandomAccessFile,
+        ufilename: String,
+        productCode: Int
+    ): UCARRandomAccessFile {
         val outputRaf = UCARRandomAccessFile(File(context.filesDir, ufilename).absolutePath, "rw")
         outputRaf.bigEndian = true
         val loopCntBreak = if (productCode == 153) {

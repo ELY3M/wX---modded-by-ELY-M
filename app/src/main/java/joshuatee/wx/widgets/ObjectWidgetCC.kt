@@ -53,17 +53,22 @@ class ObjectWidgetCC(context: Context) {
             bitmap = UtilityForecastIcon.getIcon(context, iconUrl)
         }
         val stringSeparator = " - "
-        val currentConditionsList = currentConditionsString.split(stringSeparator).dropLastWhile { it.isEmpty() }
+        val currentConditionsList =
+            currentConditionsString.split(stringSeparator).dropLastWhile { it.isEmpty() }
         var currentConditionsTime = ""
         if (Location.isUS(widgetLocationNumberAsInteger)) {
             remoteViews.setTextViewText(
-                    R.id.location,
-                    Location.getName(widgetLocationNumberAsInteger) + " " + UtilityTimeSunMoon.getSunriseSunset(
-                            context, Location.getLatLon(widgetLocationNumberAsInteger), true)
+                R.id.location,
+                Location.getName(widgetLocationNumberAsInteger) + " " + UtilityTimeSunMoon.getSunriseSunset(
+                    context, Location.getLatLon(widgetLocationNumberAsInteger), true
+                )
             )
             remoteViews.setTextColor(R.id.location, UIPreferences.widgetTextColor)
         }
-        if (currentConditionsList.size > 4 && !currentConditionsList[0].contains("NA") && Location.isUS(widgetLocationNumberAsInteger)) {
+        if (currentConditionsList.size > 4 && !currentConditionsList[0].contains("NA") && Location.isUS(
+                widgetLocationNumberAsInteger
+            )
+        ) {
             val temperatureList = currentConditionsList[0].split("/").dropLastWhile { it.isEmpty() }
             remoteViews.setTextViewText(R.id.wind, currentConditionsList[2])
             val ccArr = updateTime.split(" ")
@@ -79,14 +84,21 @@ class ObjectWidgetCC(context: Context) {
             remoteViews.setTextViewText(R.id.updatetime, currentConditionsTime)
             remoteViews.setTextColor(R.id.updatetime, UIPreferences.widgetTextColor)
             remoteViews.setTextViewText(R.id.big_temp, temperatureList[0])
-            remoteViews.setTextViewText(R.id.big_dew_point, temperatureList[1].replace("^ ".toRegex(), ""))
+            remoteViews.setTextViewText(
+                R.id.big_dew_point,
+                temperatureList[1].replace("^ ".toRegex(), "")
+            )
             remoteViews.setTextColor(R.id.big_temp, UIPreferences.widgetHighlightTextColor)
         }
         if (!UIPreferences.widgetCCShow7Day) {
             remoteViews.setTextViewText(R.id.text4, sevenDay)
             remoteViews.setTextColor(R.id.text4, UIPreferences.widgetTextColor)
         }
-        val wbIcon = UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_navigation_white_24dp, UIPreferences.widgetHighlightTextColor)
+        val wbIcon = UtilityImg.vectorDrawableToBitmap(
+            context,
+            R.drawable.ic_navigation_white_24dp,
+            UIPreferences.widgetHighlightTextColor
+        )
         var windBardRotate = 0.0f
         if (currentConditionsList.size > 2) {
             val tmpWindArr = RegExp.space.split(currentConditionsList[2])
@@ -110,7 +122,12 @@ class ObjectWidgetCC(context: Context) {
         val matrix = Matrix()
         matrix.postRotate(windBardRotate, 100f, 100f)
         var rotatedWb = Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
-        rotatedWb = Bitmap.createScaledBitmap(rotatedWb, (wbIcon.width * scaleFactor).toInt(), (wbIcon.height * scaleFactor).toInt(), false)
+        rotatedWb = Bitmap.createScaledBitmap(
+            rotatedWb,
+            (wbIcon.width * scaleFactor).toInt(),
+            (wbIcon.height * scaleFactor).toInt(),
+            false
+        )
         remoteViews.setImageViewUri(R.id.wind_barb, Uri.parse(""))
         if (windBardRotate < 500) {
             remoteViews.setImageViewBitmap(R.id.wind_barb, rotatedWb)

@@ -36,20 +36,27 @@ import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 
 internal class NumberPicker(
-        context: Context,
-        val label: String,
-        pref: String,
-        strId: Int,
-        private val defValue: Int,
-        private val lowValue: Int,
-        highValue: Int
+    context: Context,
+    val label: String,
+    pref: String,
+    strId: Int,
+    private val defValue: Int,
+    private val lowValue: Int,
+    highValue: Int
 ) : Widget {
 
     private val card = Card(context)
     private val initValue = when (pref) {
         "RADAR_TEXT_SIZE" -> (Utility.readPrefFloat(context, pref, defValue.toFloat()) * 10).toInt()
         "RADAR_HI_TEXT_SIZE" -> (Utility.readPrefFloat(context, pref, defValue.toFloat()) * 10).toInt()
-        "UI_ANIM_ICON_FRAMES" -> To.int(Utility.readPref(context, pref, RadarPreferences.uiAnimIconFrames))
+        "UI_ANIM_ICON_FRAMES" -> To.int(
+            Utility.readPref(
+                context,
+                pref,
+                RadarPreferences.uiAnimIconFrames
+            )
+        )
+
         "CARD_CORNER_RADIUS" -> Utility.readPrefInt(context, pref, 0)
         else -> Utility.readPrefInt(context, pref, defValue)
     }
@@ -69,7 +76,10 @@ internal class NumberPicker(
         seekBar.max = highValue - lowValue
         seekBar.progress = convert(initValue)
         val padding = 30
-        val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         layoutParams.setMargins(padding, padding, padding, padding)
         seekBar.layoutParams = layoutParams
         vbox.addWidget(seekBar)
@@ -78,7 +88,10 @@ internal class NumberPicker(
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (pref == "TEXTVIEW_FONT_SIZE") {
-                    text.setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(convertForSave(seekBar.progress), context))
+                    text.setTextSize(
+                        TypedValue.COMPLEX_UNIT_PX,
+                        UtilityUI.spToPx(convertForSave(seekBar.progress), context)
+                    )
                 }
                 updateLabel()
             }
@@ -105,7 +118,8 @@ internal class NumberPicker(
     private fun convertForSave(value: Int): Int = value + lowValue
 
     fun updateLabel() {
-        text.text = label + " (default is " + defValue.toString() + "): " + convertForSave(seekBar.progress).toString()
+        text.text =
+            label + " (default is " + defValue.toString() + "): " + convertForSave(seekBar.progress).toString()
     }
 
     override fun getView() = card.getView()

@@ -107,9 +107,19 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         title = titleString
         objectModelLayout = ObjectModelLayout(prefModelToken)
         if (To.int(numberOfPanes) == 1) {
-            super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, bottomToolbar = true)
+            super.onCreate(
+                savedInstanceState,
+                objectModelLayout.layoutSinglePane,
+                objectModelLayout.menuResId,
+                bottomToolbar = true
+            )
         } else {
-            super.onCreate(savedInstanceState, objectModelLayout.layoutMultiPane, objectModelLayout.menuResId, bottomToolbar = true)
+            super.onCreate(
+                savedInstanceState,
+                objectModelLayout.layoutMultiPane,
+                objectModelLayout.menuResId,
+                bottomToolbar = true
+            )
             val box = VBox.fromResource(this)
             if (UtilityUI.isLandScape(this)) {
                 box.makeHorizontal()
@@ -123,7 +133,14 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private fun setupUI() {
         objectToolbarBottom.connect(this)
         if (om.modelType == ModelType.SPCHRRR) {
-            overlayImg.addAll(listOf(*TextUtils.split(Utility.readPref(this, "SPCHRRR_OVERLAY", ""), ":")))
+            overlayImg.addAll(
+                listOf(
+                    *TextUtils.split(
+                        Utility.readPref(this, "SPCHRRR_OVERLAY", ""),
+                        ":"
+                    )
+                )
+            )
         }
         with(objectToolbarBottom) {
             timeMenuItem = find(R.id.action_time)
@@ -163,9 +180,17 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             with(om.displayData) {
                 (0 until om.numPanes).forEach {
                     param[it] = om.params[0]
-                    param[it] = Utility.readPref(this@ModelsGenericActivity, om.prefParam + it.toString(), param[it])
+                    param[it] = Utility.readPref(
+                        this@ModelsGenericActivity,
+                        om.prefParam + it.toString(),
+                        param[it]
+                    )
                     paramLabel[it] = om.labels[0]
-                    paramLabel[it] = Utility.readPref(this@ModelsGenericActivity, om.prefParamLabel + it.toString(), paramLabel[it])
+                    paramLabel[it] = Utility.readPref(
+                        this@ModelsGenericActivity,
+                        om.prefParamLabel + it.toString(),
+                        paramLabel[it]
+                    )
                     if (!om.params.contains(param[it])) {
                         param[it] = om.params[0]
                         paramLabel[it] = om.labels[0]
@@ -179,9 +204,17 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             with(om.displayData) {
                 (0 until om.numPanes).forEach {
                     param[it] = om.params[0]
-                    param[it] = Utility.readPref(this@ModelsGenericActivity, om.prefParam + it.toString(), param[0])
+                    param[it] = Utility.readPref(
+                        this@ModelsGenericActivity,
+                        om.prefParam + it.toString(),
+                        param[0]
+                    )
                     paramLabel[it] = om.params[0]
-                    paramLabel[it] = Utility.readPref(this@ModelsGenericActivity, om.prefParamLabel + it.toString(), paramLabel[0])
+                    paramLabel[it] = Utility.readPref(
+                        this@ModelsGenericActivity,
+                        om.prefParamLabel + it.toString(),
+                        paramLabel[0]
+                    )
                 }
                 if (!om.params.contains(param[0])) {
                     param[0] = om.params[0]
@@ -264,7 +297,11 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun runStatusDownload() {
         if (om.modelType == ModelType.NCEP) {
-            om.rtd = UtilityModelNcepInputOutput.getRunTime(om.model, om.displayData.param[0], om.sectors[0])
+            om.rtd = UtilityModelNcepInputOutput.getRunTime(
+                om.model,
+                om.displayData.param[0],
+                om.sectors[0]
+            )
         } else {
             om.rtd = ObjectModelGet.runTime(om)
         }
@@ -278,7 +315,13 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             (om.startStep until om.endStep).forEach {
                 om.times.add(To.stringPadLeftZeros(it, 2))
             }
-            UtilityModels.updateTime(UtilityString.getLastXChars(om.run, 2), om.rtd.mostRecentRun, om.times, "", false)
+            UtilityModels.updateTime(
+                UtilityString.getLastXChars(om.run, 2),
+                om.rtd.mostRecentRun,
+                om.times,
+                "",
+                false
+            )
             om.setTimeIdx(Utility.readPrefInt(this, om.prefRunPosn, 1))
             getContent()
         } else {
@@ -288,7 +331,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
                 (0 until om.times.size).forEach {
                     val items = RegExp.space.split(om.times[it])[0]
-                    om.times[it] = "$items " + UtilityModels.convertTimeRunToTimeString(om.rtd.mostRecentRun.replace("Z", ""), items, true)
+                    om.times[it] = "$items " + UtilityModels.convertTimeRunToTimeString(
+                        om.rtd.mostRecentRun.replace(
+                            "Z",
+                            ""
+                        ), items, true
+                    )
                 }
             } else {
                 om.run = om.rtd.mostRecentRun
@@ -296,9 +344,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
                 (0 until om.times.size).forEach {
                     om.times[it] = om.times[it] + " " + UtilityModels.convertTimeRunToTimeString(
-                            om.rtd.mostRecentRun.replace("Z", ""),
-                            om.times[it],
-                            false
+                        om.rtd.mostRecentRun.replace("Z", ""),
+                        om.times[it],
+                        false
                     )
                 }
             }
@@ -332,8 +380,16 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 UtilityModels.getContent(this, om, overlayImg)
             }
             // SPCHRRR END
-            R.id.action_time -> ObjectDialogue.generic(this, om.times, ::getContent) { om.setTimeIdx(it) }
-            R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) { om.run = om.rtd.listRun[it] }
+            R.id.action_time -> ObjectDialogue.generic(
+                this,
+                om.times,
+                ::getContent
+            ) { om.setTimeIdx(it) }
+
+            R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) {
+                om.run = om.rtd.listRun[it]
+            }
+
             R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""))
             R.id.action_img1 -> {
                 om.curImg = 0

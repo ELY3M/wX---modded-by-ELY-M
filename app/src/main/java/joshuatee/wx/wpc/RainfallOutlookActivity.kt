@@ -60,7 +60,11 @@ class RainfallOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.wpc_rainfall_forecast)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.wpc_rainfall_forecast
+        )
         val arguments = intent.getStringArrayExtra(NUMBER)!!
         val dayIndex = To.int(arguments[0])
         product = UtilityWpcRainfallForecast.productCode[dayIndex]

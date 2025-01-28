@@ -53,12 +53,23 @@ class NexradLevel2 {
     }
 
     // last argument is true/false on whether or not the DECOMP stage needs to happen
-    fun decodeAndPlot(context: Context, fileName: String, prod: String, radarStatusStr: String, idxStr: String, performDecompression: Boolean) {
+    fun decodeAndPlot(
+        context: Context,
+        fileName: String,
+        prod: String,
+        radarStatusStr: String,
+        idxStr: String,
+        performDecompression: Boolean
+    ) {
         val decompFileName = "$fileName.decomp$idxStr"
         val productCode: Short = if (prod == "L2VEL") 154 else 153
         if (performDecompression) {
             try {
-                val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName), "r", 1024 * 256 * 10)
+                val dis = UCARRandomAccessFile(
+                    UtilityIO.getFilePath(context, fileName),
+                    "r",
+                    1024 * 256 * 10
+                )
                 dis.bigEndian = true
                 dis.close()
                 NexradLevel2Util.decompress(context, fileName, decompFileName, productCode.toInt())
@@ -79,32 +90,32 @@ class NexradLevel2 {
         try {
             if (performDecompression) {
                 Level2.decode(
-                        context,
-                        decompFileName,
-                        binWord,
-                        radialStartAngle,
-                        productCode.toInt(),
-                        days,
-                        msecs
+                    context,
+                    decompFileName,
+                    binWord,
+                    radialStartAngle,
+                    productCode.toInt(),
+                    days,
+                    msecs
                 )
                 if (!decompFileName.contains("l2")) {
                     NexradLevel2Util.writeDecodedFile(
-                            context,
-                            decompFileName + "bb",
-                            binWord,
-                            radialStartAngle,
-                            days,
-                            msecs
-                    )
-                }
-            } else {
-                NexradLevel2Util.readDecodedFile(
                         context,
                         decompFileName + "bb",
                         binWord,
                         radialStartAngle,
                         days,
                         msecs
+                    )
+                }
+            } else {
+                NexradLevel2Util.readDecodedFile(
+                    context,
+                    decompFileName + "bb",
+                    binWord,
+                    radialStartAngle,
+                    days,
+                    msecs
                 )
             }
             msecs.position(0)
@@ -112,7 +123,8 @@ class NexradLevel2 {
             val days2 = days.short
             val milliSeconds = msecs.int
             val timeString = ObjectDateTime.radarTimeL2(days2, milliSeconds)
-            val radarInfo = timeString + GlobalVariables.newline + "Product Code: " + productCode.toString()
+            val radarInfo =
+                timeString + GlobalVariables.newline + "Product Code: " + productCode.toString()
             NexradUtil.writeRadarInfo(context, radarStatusStr, radarInfo)
             binSize = NexradUtil.getBinSize(productCode.toInt())
         } catch (e: Exception) {

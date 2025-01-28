@@ -46,11 +46,13 @@ class NexradDownload {
 
         // in response to 56+ hr maint on 2022-04-19 to nomads, change URL to backup
         // https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf
-        private const val NWS_RADAR_LEVEL2_PUB = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+        private const val NWS_RADAR_LEVEL2_PUB =
+            "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
 
         // private const val nwsRadarLevel2Pub = "https://ftpprd.ncep.noaa.gov/data/nccf/radar/nexrad_level2/"
         private val pattern1: Pattern = Pattern.compile(">(sn.[0-9]{4})</a>")
-        private val pattern2: Pattern = Pattern.compile(".*?([0-9]{2}-[A-Za-z]{3}-[0-9]{4} [0-9]{2}:[0-9]{2}).*?")
+        private val pattern2: Pattern =
+            Pattern.compile(".*?([0-9]{2}-[A-Za-z]{3}-[0-9]{4} [0-9]{2}:[0-9]{2}).*?")
 
         private fun getRidPrefix(radarSite: String, product: String): String {
             val ridPrefix = when (radarSite) {
@@ -65,18 +67,35 @@ class NexradDownload {
             }
         }
 
-        fun getRadarFile(context: Context, urlStr: String, radarSite: String, product: String, indexString: String) {
+        fun getRadarFile(
+            context: Context,
+            urlStr: String,
+            radarSite: String,
+            product: String,
+            indexString: String
+        ) {
             if (!product.contains("L2")) {
                 val inputStream = getRadarFileUrl(radarSite, product).getInputStream()
                 val l3BaseFn = "nids"
-                inputStream?.let { UtilityIO.saveInputStream(context, inputStream, l3BaseFn + indexString + "_d") }
-                UtilityFileManagement.moveFile(context, l3BaseFn + indexString + "_d", l3BaseFn + indexString)
+                inputStream?.let {
+                    UtilityIO.saveInputStream(
+                        context,
+                        inputStream,
+                        l3BaseFn + indexString + "_d"
+                    )
+                }
+                UtilityFileManagement.moveFile(
+                    context,
+                    l3BaseFn + indexString + "_d",
+                    l3BaseFn + indexString
+                )
             } else {
                 if (urlStr == "") {
                     val inputStream = getInputStreamFromUrlL2(getLevel2Url(radarSite), product)
                     inputStream?.let { UtilityIO.saveInputStream(context, it, "l2_d$indexString") }
                 } else {
-                    val inputStream = getInputStreamFromUrlL2(iowaMesoL2Archive(radarSite, urlStr), product)
+                    val inputStream =
+                        getInputStreamFromUrlL2(iowaMesoL2Archive(radarSite, urlStr), product)
                     inputStream?.let { UtilityIO.saveInputStream(context, it, "l2_d$indexString") }
                 }
                 UtilityFileManagement.moveFile(context, "l2_d$indexString", "l2$indexString", 1024)
@@ -85,17 +104,40 @@ class NexradDownload {
 
         // Download a list of files and return the list as a list of Strings
         // Determines of Level 2 or Level 3 and calls appropriate method
-        fun getRadarFilesForAnimation(context: Context, frameCount: Int, radarSite: String, product: String): List<String> {
+        fun getRadarFilesForAnimation(
+            context: Context,
+            frameCount: Int,
+            radarSite: String,
+            product: String
+        ): List<String> {
             val ridPrefix = getRidPrefix(radarSite, product)
             return if (!product.contains("L2")) {
-                getLevel3FilesForAnimation(context, frameCount, product, ridPrefix, radarSite.lowercase(Locale.US))
+                getLevel3FilesForAnimation(
+                    context,
+                    frameCount,
+                    product,
+                    ridPrefix,
+                    radarSite.lowercase(Locale.US)
+                )
             } else {
-                getLevel2FilesForAnimation(context, NWS_RADAR_LEVEL2_PUB + ridPrefix.uppercase(Locale.US) + radarSite.uppercase(Locale.US) + "/", frameCount)
+                getLevel2FilesForAnimation(
+                    context,
+                    NWS_RADAR_LEVEL2_PUB + ridPrefix.uppercase(Locale.US) + radarSite.uppercase(
+                        Locale.US
+                    ) + "/",
+                    frameCount
+                )
             }
         }
 
         // Download a list of files and return the list as a list of Strings
-        private fun getLevel3FilesForAnimation(context: Context, frameCount: Int, product: String, ridPrefix: String, radarSite: String): List<String> {
+        private fun getLevel3FilesForAnimation(
+            context: Context,
+            frameCount: Int,
+            product: String,
+            ridPrefix: String,
+            radarSite: String
+        ): List<String> {
             val fileList = mutableListOf<String>()
             var htmlOut = getRadarDirectoryUrl(radarSite, product, ridPrefix).getHtml()
             var snFiles = htmlOut.parseColumn(pattern1)
@@ -142,9 +184,15 @@ class NexradDownload {
         }
 
         // Level 2: Download a list of files and return the list as a list of Strings
-        private fun getLevel2FilesForAnimation(context: Context, baseUrl: String, frameCount: Int): List<String> {
+        private fun getLevel2FilesForAnimation(
+            context: Context,
+            baseUrl: String,
+            frameCount: Int
+        ): List<String> {
             val fileList = mutableListOf<String>()
-            val list = (baseUrl + "dir.list").getHtmlWithNewLine().replace(GlobalVariables.newline, " ").split(" ").dropLastWhile { it.isEmpty() }
+            val list =
+                (baseUrl + "dir.list").getHtmlWithNewLine().replace(GlobalVariables.newline, " ")
+                    .split(" ").dropLastWhile { it.isEmpty() }
             if (list.isEmpty()) {
                 return listOf("")
             }
@@ -169,7 +217,9 @@ class NexradDownload {
         fun getLevel2Url(radarSite: String): String {
             val ridPrefix = getRidPrefix(radarSite, "N0Q").uppercase(Locale.US)
             val baseUrl = "$NWS_RADAR_LEVEL2_PUB$ridPrefix$radarSite/"
-            val list = (baseUrl + "dir.list").getHtmlWithNewLine().replace(GlobalVariables.newline, " ").split(" ").dropLastWhile { it.isEmpty() }
+            val list =
+                (baseUrl + "dir.list").getHtmlWithNewLine().replace(GlobalVariables.newline, " ")
+                    .split(" ").dropLastWhile { it.isEmpty() }
             if (list.size < 4) {
                 return ""
             }
@@ -216,10 +266,18 @@ class NexradDownload {
 
         fun getRadarFileUrl(radarSite: String, product: String): String {
             val ridPrefix = getRidPrefix(radarSite, product)
-            return GlobalVariables.TGFTP_WEBSITE_PREFIX + "/SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/sn.last"
+            return GlobalVariables.TGFTP_WEBSITE_PREFIX + "/SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(
+                Locale.US
+            ) + "/sn.last"
         }
 
-        private fun getRadarDirectoryUrl(radarSite: String, product: String, ridPrefix: String): String =
-                GlobalVariables.TGFTP_WEBSITE_PREFIX + "/SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/"
+        private fun getRadarDirectoryUrl(
+            radarSite: String,
+            product: String,
+            ridPrefix: String
+        ): String =
+            GlobalVariables.TGFTP_WEBSITE_PREFIX + "/SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(
+                Locale.US
+            ) + "/"
     }
 }

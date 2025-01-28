@@ -38,7 +38,11 @@ class WXJobService : JobService() {
         } catch (e: RejectedExecutionException) {
             UtilityLog.handleException(e)
         }
-        Utility.writePref(this, "JOBSERVICE_TIME_LAST_RAN", ObjectDateTime.getCurrentLocalTimeAsString())
+        Utility.writePref(
+            this,
+            "JOBSERVICE_TIME_LAST_RAN",
+            ObjectDateTime.getCurrentLocalTimeAsString()
+        )
         // below was commented out till 2018-06-02 and was causing wakelock issues
         jobFinished(params, false)
         return true

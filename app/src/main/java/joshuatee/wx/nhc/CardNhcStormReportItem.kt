@@ -47,12 +47,15 @@ class CardNhcStormReportItem(context: Context, stormData: NhcStormDetails) : Wid
         vbox.addWidgets(listOf(textViewTop, textViewTime, textViewMovement))
         vbox.addWidgets(listOf(textViewPressure, textViewWindSpeed, textViewBottom))
         card.addLayout(vbox)
-        textViewTop.text = stormData.name + " (" + stormData.classification + ") " + stormData.center
+        textViewTop.text =
+            stormData.name + " (" + stormData.classification + ") " + stormData.center
         textViewTime.text = stormData.dateTime.replace("T", " ").replace(":00.000Z", "Z")
         textViewMovement.text = "Moving: " + stormData.movement
         textViewPressure.text = "Min pressure: " + stormData.pressure
-        textViewWindSpeed.text = "Max sustained: " + UtilityMath.knotsToMph(stormData.intensity) + " mph"
-        textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.stormId.uppercase(Locale.US)
+        textViewWindSpeed.text =
+            "Max sustained: " + UtilityMath.knotsToMph(stormData.intensity) + " mph"
+        textViewBottom.text =
+            stormData.status + " " + stormData.binNumber + " " + stormData.stormId.uppercase(Locale.US)
     }
 
     override fun getView() = card.getView()

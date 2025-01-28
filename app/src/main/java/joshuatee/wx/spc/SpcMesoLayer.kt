@@ -28,7 +28,12 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.util.Utility
 
-class SpcMesoLayer(val context: Context, val type: SpcMesoLayerType, objectToolbar: ObjectToolbar?, val getFunction: () -> Unit = {}) {
+class SpcMesoLayer(
+    val context: Context,
+    val type: SpcMesoLayerType,
+    objectToolbar: ObjectToolbar?,
+    val getFunction: () -> Unit = {}
+) {
 
     var isEnabled: Boolean
     private var menuItem: MenuItem? = null
@@ -57,46 +62,47 @@ class SpcMesoLayer(val context: Context, val type: SpcMesoLayerType, objectToolb
         getFunction()
     }
 
-    fun getUrl(sector: String) = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s$sector/${urlToken[type]}/${urlToken[type]}.gif"
+    fun getUrl(sector: String) =
+        "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s$sector/${urlToken[type]}/${urlToken[type]}.gif"
 
     companion object {
         val prefTokens = mapOf(
-                SpcMesoLayerType.County to "SPCMESO_SHOW_COUNTY",
-                SpcMesoLayerType.Outlook to "SPCMESO_SHOW_OUTLOOK",
-                SpcMesoLayerType.Watwarn to "SPCMESO_SHOW_WATWARN",
-                SpcMesoLayerType.Topography to "SPCMESO_SHOW_TOPO",
-                SpcMesoLayerType.Radar to "SPCMESO_SHOW_RADAR",
-                SpcMesoLayerType.Observations to "SPCMESO_SHOW_OBS",
-                SpcMesoLayerType.Population to "SPCMESO_SHOW_POPULATION"
+            SpcMesoLayerType.County to "SPCMESO_SHOW_COUNTY",
+            SpcMesoLayerType.Outlook to "SPCMESO_SHOW_OUTLOOK",
+            SpcMesoLayerType.Watwarn to "SPCMESO_SHOW_WATWARN",
+            SpcMesoLayerType.Topography to "SPCMESO_SHOW_TOPO",
+            SpcMesoLayerType.Radar to "SPCMESO_SHOW_RADAR",
+            SpcMesoLayerType.Observations to "SPCMESO_SHOW_OBS",
+            SpcMesoLayerType.Population to "SPCMESO_SHOW_POPULATION"
 
         )
         val resourceIds = mapOf(
-                SpcMesoLayerType.County to R.id.action_toggleCounty,
-                SpcMesoLayerType.Outlook to R.id.action_toggleSPCOutlook,
-                SpcMesoLayerType.Watwarn to R.id.action_toggleWatWarn,
-                SpcMesoLayerType.Topography to R.id.action_toggleTopography,
-                SpcMesoLayerType.Radar to R.id.action_toggleRadar,
-                SpcMesoLayerType.Observations to R.id.action_toggleObs,
-                SpcMesoLayerType.Population to R.id.action_togglePopulation
+            SpcMesoLayerType.County to R.id.action_toggleCounty,
+            SpcMesoLayerType.Outlook to R.id.action_toggleSPCOutlook,
+            SpcMesoLayerType.Watwarn to R.id.action_toggleWatWarn,
+            SpcMesoLayerType.Topography to R.id.action_toggleTopography,
+            SpcMesoLayerType.Radar to R.id.action_toggleRadar,
+            SpcMesoLayerType.Observations to R.id.action_toggleObs,
+            SpcMesoLayerType.Population to R.id.action_togglePopulation
         )
         val labels = mapOf(
-                SpcMesoLayerType.County to "Counties",
-                SpcMesoLayerType.Outlook to "SPC Day 1 Outlook",
-                SpcMesoLayerType.Watwarn to "Watches/Warnings",
-                SpcMesoLayerType.Topography to "Topography",
-                SpcMesoLayerType.Radar to "Radar",
-                SpcMesoLayerType.Observations to "Observations",
-                SpcMesoLayerType.Population to "Population"
+            SpcMesoLayerType.County to "Counties",
+            SpcMesoLayerType.Outlook to "SPC Day 1 Outlook",
+            SpcMesoLayerType.Watwarn to "Watches/Warnings",
+            SpcMesoLayerType.Topography to "Topography",
+            SpcMesoLayerType.Radar to "Radar",
+            SpcMesoLayerType.Observations to "Observations",
+            SpcMesoLayerType.Population to "Population"
         )
 
         val urlToken = mapOf(
-                SpcMesoLayerType.County to "cnty",
-                SpcMesoLayerType.Outlook to "otlk",
-                SpcMesoLayerType.Watwarn to "warns",
-                SpcMesoLayerType.Topography to "topo",
-                SpcMesoLayerType.Radar to "rgnlrad",
-                SpcMesoLayerType.Observations to "bigsfc",
-                SpcMesoLayerType.Population to "population"
+            SpcMesoLayerType.County to "cnty",
+            SpcMesoLayerType.Outlook to "otlk",
+            SpcMesoLayerType.Watwarn to "warns",
+            SpcMesoLayerType.Topography to "topo",
+            SpcMesoLayerType.Radar to "rgnlrad",
+            SpcMesoLayerType.Observations to "bigsfc",
+            SpcMesoLayerType.Population to "population"
         )
     }
 }

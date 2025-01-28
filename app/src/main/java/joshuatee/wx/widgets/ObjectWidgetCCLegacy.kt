@@ -96,40 +96,113 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         }
         remoteViews.setTextViewText(R.id.hazard, hazardSum)
         remoteViews.setTextViewText(R.id.forecast, sd)
-        remoteViews.setTextViewText(R.id.widget_time, "Updated: " + ObjectDateTime.getDateAsString("h:mm a")) // "%k:%M:%S"
-        UtilityWidget.setupIntent(context, remoteViews, SpcSoundingsActivity::class.java, R.id.cc, SpcSoundingsActivity.URL, arrayOf(wfo, ""), actionCc)
-        UtilityWidget.setupIntent(context, remoteViews, TextScreenActivity::class.java, R.id.forecast, TextScreenActivity.URL, arrayOf(sdExt, locLabel), actionSd)
+        remoteViews.setTextViewText(
+            R.id.widget_time,
+            "Updated: " + ObjectDateTime.getDateAsString("h:mm a")
+        ) // "%k:%M:%S"
+        UtilityWidget.setupIntent(
+            context,
+            remoteViews,
+            SpcSoundingsActivity::class.java,
+            R.id.cc,
+            SpcSoundingsActivity.URL,
+            arrayOf(wfo, ""),
+            actionCc
+        )
+        UtilityWidget.setupIntent(
+            context,
+            remoteViews,
+            TextScreenActivity::class.java,
+            R.id.forecast,
+            TextScreenActivity.URL,
+            arrayOf(sdExt, locLabel),
+            actionSd
+        )
         var hazardsExt = UtilityUS.getHazardsCCLegacy(hazardRaw)
         hazardsExt = hazardsExt.replace("<hr /><br />", "")
-        UtilityWidget.setupIntent(context, remoteViews, TextScreenActivity::class.java, R.id.hazard, TextScreenActivity.URL, arrayOf(hazardsExt, "Local Hazards"), actionHazard)
-        UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.b_radar, WXGLRadarActivity.RID, arrayOf(radarSite), actionRadar)
+        UtilityWidget.setupIntent(
+            context,
+            remoteViews,
+            TextScreenActivity::class.java,
+            R.id.hazard,
+            TextScreenActivity.URL,
+            arrayOf(hazardsExt, "Local Hazards"),
+            actionHazard
+        )
+        UtilityWidget.setupIntent(
+            context,
+            remoteViews,
+            WXGLRadarActivity::class.java,
+            R.id.b_radar,
+            WXGLRadarActivity.RID,
+            arrayOf(radarSite),
+            actionRadar
+        )
         // local alerts
         if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    USAlertsActivity::class.java,
-                    R.id.b_alert,
-                    USAlertsActivity.URL,
-                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us"),
-                    actionAlert
+                context,
+                remoteViews,
+                USAlertsActivity::class.java,
+                R.id.b_alert,
+                USAlertsActivity.URL,
+                arrayOf(
+                    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
+                    "us"
+                ),
+                actionAlert
             )
         }
         // Hourly
         if (Location.isUS(widgetLocationNumber)) {
-            UtilityWidget.setupIntent(context, remoteViews, HourlyActivity::class.java, R.id.b_hourly, HourlyActivity.LOC_NUM, widgetLocationNumber, actionHourly)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                HourlyActivity::class.java,
+                R.id.b_hourly,
+                HourlyActivity.LOC_NUM,
+                widgetLocationNumber,
+                actionHourly
+            )
         }
         // AFD
         if (Location.isUS(widgetLocationNumber)) {
-            UtilityWidget.setupIntent(context, remoteViews, WfoTextActivity::class.java, R.id.b_afd, WfoTextActivity.URL, arrayOf(wfo, ""), actionAfd)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                WfoTextActivity::class.java,
+                R.id.b_afd,
+                WfoTextActivity.URL,
+                arrayOf(wfo, ""),
+                actionAfd
+            )
         }
-        UtilityWidget.setupIntent(context, remoteViews, SevereDashboardActivity::class.java, R.id.b_dash, actionDashboard)
+        UtilityWidget.setupIntent(
+            context,
+            remoteViews,
+            SevereDashboardActivity::class.java,
+            R.id.b_dash,
+            actionDashboard
+        )
         // cloud icon - vis
-        UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.b_cloud, GoesActivity.RID, arrayOf(""), actionCloud)
+        UtilityWidget.setupIntent(
+            context,
+            remoteViews,
+            GoesActivity::class.java,
+            R.id.b_cloud,
+            GoesActivity.RID,
+            arrayOf(""),
+            actionCloud
+        )
         val updateIntent = Intent()
         updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         updateIntent.putExtra(Widget.WIDGET_IDS_KEY, allWidgetIds)
-        val pendingIntentWidgetTime = PendingIntent.getBroadcast(context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntentWidgetTime = PendingIntent.getBroadcast(
+            context,
+            0,
+            updateIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         remoteViews.setOnClickPendingIntent(R.id.widget_time, pendingIntentWidgetTime)
         val tabStr = UtilitySpc.checkSpc()
         remoteViews.setViewVisibility(R.id.tab, View.VISIBLE)

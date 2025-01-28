@@ -13,13 +13,16 @@ import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.Text
 import joshuatee.wx.util.Utility
 
-internal class PlayListAdapter(val context: Context, private val dataSet: MutableList<String>) : RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
+internal class PlayListAdapter(val context: Context, private val dataSet: MutableList<String>) :
+    RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
 
     private val maxLength = 400
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
-        val label = Text(itemView, R.id.single_text, UIPreferences.textHighlightColor, TextSize.MEDIUM)
+        val label =
+            Text(itemView, R.id.single_text, UIPreferences.textHighlightColor, TextSize.MEDIUM)
         val contentPreview = Text(itemView, R.id.text2, backgroundText = true)
         val timeAndSize = Text(itemView, R.id.time_and_size, TextSize.SMALL)
 
@@ -42,7 +45,8 @@ internal class PlayListAdapter(val context: Context, private val dataSet: Mutabl
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_playlist, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.cardview_playlist, parent, false)
         return DataObjectHolder(view)
     }
 
@@ -52,8 +56,8 @@ internal class PlayListAdapter(val context: Context, private val dataSet: Mutabl
             label.text = items[0]
             timeAndSize.text = items[1]
             contentPreview.text = Utility.readPref(context, "PLAYLIST_" + items[0], "")
-                    .replace(GlobalVariables.newline, " ")
-                    .take(maxLength)
+                .replace(GlobalVariables.newline, " ")
+                .take(maxLength)
         }
     }
 

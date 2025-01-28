@@ -31,9 +31,12 @@ object To {
 
     fun string(i: Int): String = i.toString()
 
-    fun stringPadLeft(s: String, padAmount: Int): String = String.format("%-" + padAmount.toString() + "s", s)
+    fun stringPadLeft(s: String, padAmount: Int): String =
+        String.format("%-" + padAmount.toString() + "s", s)
 
-    fun stringPadLeftZeros(s: Int, padAmount: Int): String = String.format("%0" + padAmount.toString() + "d", s)
+    fun stringPadLeftZeros(s: Int, padAmount: Int): String =
+        String.format("%0" + padAmount.toString() + "d", s)
 
-    fun stringFromFloatFixed(d: Double, precision: Int): String = String.format("%." + precision.toString() + "f", d)
+    fun stringFromFloatFixed(d: Double, precision: Int): String =
+        String.format("%." + precision.toString() + "f", d)
 }

@@ -37,7 +37,11 @@ object UtilityCanvasProjection {
 
     // fun compute4326Numbers(latLon: LatLon, projectionNumbers: ProjectionNumbers) = compute4326Numbers(latLon.lat, latLon.lon, projectionNumbers)
 
-    fun compute4326NumbersFloatToBuffer(numBuffer: ByteBuffer, tmpBuffer: ByteBuffer, projectionNumbers: ProjectionNumbers) {
+    fun compute4326NumbersFloatToBuffer(
+        numBuffer: ByteBuffer,
+        tmpBuffer: ByteBuffer,
+        projectionNumbers: ProjectionNumbers
+    ) {
         numBuffer.position(0)
         tmpBuffer.position(0)
         var x: Float
@@ -65,7 +69,11 @@ object UtilityCanvasProjection {
         }
     }
 
-    fun computeMercatorFloatToBuffer(numBuffer: ByteBuffer, tmpBuffer: ByteBuffer, projectionNumbers: ProjectionNumbers) {
+    fun computeMercatorFloatToBuffer(
+        numBuffer: ByteBuffer,
+        tmpBuffer: ByteBuffer,
+        projectionNumbers: ProjectionNumbers
+    ) {
         numBuffer.position(0)
         tmpBuffer.position(0)
         var x: Float
@@ -82,30 +90,32 @@ object UtilityCanvasProjection {
             yTmp = numBuffer.float
             x = (-((yTmp - pnYFloat) * oneDegreeScaleFactor)) + pnXCenter.toFloat()
             y = (-((180 / PI * log(
-                    tan(PI / 4 + xTmp * (PI / 180) / 2),
-                    E
+                tan(PI / 4 + xTmp * (PI / 180) / 2),
+                E
             ) - 180 / PI * log(
-                    tan(PI / 4 + pnXFloat * (PI / 180) / 2),
-                    E
+                tan(PI / 4 + pnXFloat * (PI / 180) / 2),
+                E
             )) * oneDegreeScaleFactor)).toFloat() + pnYCenter.toFloat()
             tmpBuffer.putFloat(x)
             tmpBuffer.putFloat(y)
         }
     }
 
-    fun computeMercatorNumbers(latLon: LatLon, projectionNumbers: ProjectionNumbers) = computeMercatorNumbers(latLon.lat, latLon.lon, projectionNumbers)
+    fun computeMercatorNumbers(latLon: LatLon, projectionNumbers: ProjectionNumbers) =
+        computeMercatorNumbers(latLon.lat, latLon.lon, projectionNumbers)
 
-    fun computeMercatorNumbers(ec: ExternalGlobalCoordinates, pn: ProjectionNumbers) = computeMercatorNumbers(ec.latitude, ec.longitude * -1.0, pn)
+    fun computeMercatorNumbers(ec: ExternalGlobalCoordinates, pn: ProjectionNumbers) =
+        computeMercatorNumbers(ec.latitude, ec.longitude * -1.0, pn)
 
     fun computeMercatorNumbers(x: Double, y: Double, pn: ProjectionNumbers) =
-            doubleArrayOf(
-                    (-((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat(),
-                    (-((180 / PI * log(
-                            tan(PI / 4 + x * (PI / 180) / 2),
-                            E
-                    ) - 180 / PI * log(
-                            tan(PI / 4 + pn.xDbl * (PI / 180) / 2),
-                            E
-                    )) * pn.oneDegreeScaleFactor)) + pn.yCenter
-            )
+        doubleArrayOf(
+            (-((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat(),
+            (-((180 / PI * log(
+                tan(PI / 4 + x * (PI / 180) / 2),
+                E
+            ) - 180 / PI * log(
+                tan(PI / 4 + pn.xDbl * (PI / 180) / 2),
+                E
+            )) * pn.oneDegreeScaleFactor)) + pn.yCenter
+        )
 }

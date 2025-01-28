@@ -50,7 +50,12 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     lateinit var objectToolbarBottom: ObjectToolbar
     private lateinit var telecineService: TelecineService
 
-    protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, bottomToolbar: Boolean) {
+    protected fun onCreate(
+        savedInstanceState: Bundle?,
+        layoutResId: Int,
+        menuResId: Int?,
+        bottomToolbar: Boolean
+    ) {
         setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
         setContentView(layoutResId)
@@ -98,7 +103,8 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     private fun checkDrawOverlayPermission() {
         if (!Settings.canDrawOverlays(this)) {
             UtilityLog.d("wx", "checkDrawOverlayPermission - perm check")
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+            val intent =
+                Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
 //            startActivityForResult(intent, REQUEST_CODE_PERM)
             startForResult.launch(intent)
         } else {
@@ -107,11 +113,12 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         }
     }
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _: ActivityResult ->
-        if (Settings.canDrawOverlays(this)) {
-            telecineService = TelecineService()
-            telecineService.start(this)
-        }
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _: ActivityResult ->
+            if (Settings.canDrawOverlays(this)) {
+                telecineService = TelecineService()
+                telecineService.start(this)
+            }
 
 //        if (result.resultCode == Activity.RESULT_OK) {
 //            val intent = result.data
@@ -120,10 +127,14 @@ abstract class VideoRecordActivity : AppCompatActivity() {
 //                telecineService.start(this)
 //            }
 //        }
-    }
+        }
 
     // https://developer.android.com/training/permissions/requesting.html
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             1 -> {
                 // If request is cancelled, the result arrays are empty.

@@ -40,11 +40,17 @@ object NotificationTextProduct {
     fun toggle(context: Context, view: View, prodOriginal: String) {
         val prod = prodOriginal.uppercase(Locale.US)
         if (!NotificationPreferences.notifTextProdStr.contains(prod)) {
-            Utility.writePref(context, PREF_TOKEN, NotificationPreferences.notifTextProdStr + ":" + prod)
-            NotificationPreferences.notifTextProdStr = NotificationPreferences.notifTextProdStr + ":" + prod
+            Utility.writePref(
+                context,
+                PREF_TOKEN,
+                NotificationPreferences.notifTextProdStr + ":" + prod
+            )
+            NotificationPreferences.notifTextProdStr =
+                NotificationPreferences.notifTextProdStr + ":" + prod
             PopupMessage(view, "$prod saved to notification list")
         } else {
-            NotificationPreferences.notifTextProdStr = NotificationPreferences.notifTextProdStr.replace(":$prod", "")
+            NotificationPreferences.notifTextProdStr =
+                NotificationPreferences.notifTextProdStr.replace(":$prod", "")
             Utility.writePref(context, PREF_TOKEN, NotificationPreferences.notifTextProdStr)
             PopupMessage(view, "$prod removed from notification list")
             Utility.removePref(context, PREF_TOKEN + "_" + prod)
@@ -80,22 +86,22 @@ object NotificationTextProduct {
         val text = Utility.fromHtml(textBody)
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val objectPendingIntents = ObjectPendingIntents(
-                context,
-                TextScreenActivity::class.java,
-                TextScreenActivity.URL,
-                arrayOf(textBody, label, ""),
-                arrayOf(textBody, label, "sound")
+            context,
+            TextScreenActivity::class.java,
+            TextScreenActivity.URL,
+            arrayOf(textBody, label, ""),
+            arrayOf(textBody, label, "sound")
         )
         val sound = NotificationPreferences.alertNotificationSoundTextProd && !inBlackout
         val objectNotification = ObjectNotification(
-                context,
-                sound,
-                label,
-                text,
-                objectPendingIntents,
-                GlobalVariables.ICON_CURRENT_WHITE,
-                GlobalVariables.ICON_ACTION,
-                context.resources.getString(R.string.read_aloud)
+            context,
+            sound,
+            label,
+            text,
+            objectPendingIntents,
+            GlobalVariables.ICON_CURRENT_WHITE,
+            GlobalVariables.ICON_ACTION,
+            context.resources.getString(R.string.read_aloud)
         )
         objectNotification.send(firstLine)
     }

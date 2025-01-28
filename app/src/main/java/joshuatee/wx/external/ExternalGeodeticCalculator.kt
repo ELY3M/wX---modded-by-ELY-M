@@ -42,12 +42,27 @@ object ExternalGeodeticCalculator {
      * return
      */
 
-    fun calculateEndingGlobalCoordinates(start: ExternalGlobalCoordinates, startBearing: Double, distance: Double): ExternalGlobalCoordinates {
-        return calculateEndingGlobalCoordinatesLocal(ExternalEllipsoid.WGS84, start, startBearing, distance, DoubleArray(2))
+    fun calculateEndingGlobalCoordinates(
+        start: ExternalGlobalCoordinates,
+        startBearing: Double,
+        distance: Double
+    ): ExternalGlobalCoordinates {
+        return calculateEndingGlobalCoordinatesLocal(
+            ExternalEllipsoid.WGS84,
+            start,
+            startBearing,
+            distance,
+            DoubleArray(2)
+        )
     }
 
-    private fun calculateEndingGlobalCoordinatesLocal(ellipsoid: ExternalEllipsoid, start: ExternalGlobalCoordinates, startBearing: Double, distance: Double,
-                                                      endBearing: DoubleArray?): ExternalGlobalCoordinates {
+    private fun calculateEndingGlobalCoordinatesLocal(
+        ellipsoid: ExternalEllipsoid,
+        start: ExternalGlobalCoordinates,
+        startBearing: Double,
+        distance: Double,
+        endBearing: DoubleArray?
+    ): ExternalGlobalCoordinates {
         val a = ellipsoid.semiMajorAxis
         val b = ellipsoid.semiMinorAxis
         val aSquared = a * a
@@ -68,7 +83,8 @@ object ExternalGeodeticCalculator {
         val cos2Alpha = 1 - sin2Alpha
         val uSquared = cos2Alpha * (aSquared - bSquared) / bSquared
         // eq. 3
-        val bigA = 1 + uSquared / 16384 * (4096 + uSquared * (-768 + uSquared * (320 - 175 * uSquared)))
+        val bigA =
+            1 + uSquared / 16384 * (4096 + uSquared * (-768 + uSquared * (320 - 175 * uSquared)))
         // eq. 4
         val bigB = uSquared / 1024 * (256 + uSquared * (-128 + uSquared * (74 - 47 * uSquared)))
         // iterate until there is a negligible change in sigma
@@ -104,8 +120,10 @@ object ExternalGeodeticCalculator {
         val cosSigma = cos(sigma)
         sinSigma = sin(sigma)
         // eq. 8
-        val phi2 = atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1, (1.0 - f)
-                * sqrt(sin2Alpha + (sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1).pow(2.0)))
+        val phi2 = atan2(
+            sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1, (1.0 - f)
+                    * sqrt(sin2Alpha + (sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1).pow(2.0))
+        )
         // eq. 9
         // This fixes the pole crossing defect spotted by Matt Feemster. When a
         // path passes a pole and essentially crosses a line of latitude twice -
@@ -118,7 +136,8 @@ object ExternalGeodeticCalculator {
         // eq. 10
         val bigC = f / 16 * cos2Alpha * (4 + f * (4 - 3 * cos2Alpha))
         // eq. 11
-        val bigL = lambda - (1 - bigC) * f * sinAlpha * (sigma + bigC * sinSigma * (cosSigmaM2 + bigC * cosSigma * (-1 + 2 * cos2SigmaM2)))
+        val bigL =
+            lambda - (1 - bigC) * f * sinAlpha * (sigma + bigC * sinSigma * (cosSigmaM2 + bigC * cosSigma * (-1 + 2 * cos2SigmaM2)))
         // eq. 12
         val alpha2 = atan2(sinAlpha, -sinU1 * sinSigma + cosU1 * cosSigma * cosAlpha1)
         // build result

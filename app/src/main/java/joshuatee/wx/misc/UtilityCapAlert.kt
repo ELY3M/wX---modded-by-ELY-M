@@ -32,7 +32,8 @@ object UtilityCapAlert {
         val wfo: String
         if (!capAlert.url.contains("urn:oid")) {
             if (capAlert.title.contains("until")) {
-                val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
+                val items =
+                    capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
                 title = items[0]
                 startTime = items[1]
                 endTime = items[2]
@@ -46,7 +47,10 @@ object UtilityCapAlert {
         } else {
             when {
                 capAlert.title.contains("expiring") -> {
-                    val items = capAlert.title.parseMultiple("(.*?) issued (.*?) expiring (.*?) by (.*?)$", 4)
+                    val items = capAlert.title.parseMultiple(
+                        "(.*?) issued (.*?) expiring (.*?) by (.*?)$",
+                        4
+                    )
                     title = items[0]
                     startTime = items[1]
                     endTime = items[2]
@@ -54,7 +58,8 @@ object UtilityCapAlert {
                 }
 
                 capAlert.title.contains("until") -> {
-                    val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
+                    val items =
+                        capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
                     title = items[0]
                     startTime = items[1]
                     endTime = items[2]

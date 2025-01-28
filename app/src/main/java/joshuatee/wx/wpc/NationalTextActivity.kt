@@ -87,7 +87,11 @@ class NationalTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_wpctextproducts, R.menu.wpctext_products)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_wpctextproducts,
+            R.menu.wpctext_products
+        )
         arguments = intent.getStringArrayExtra(URL)!!
         if (arguments[0] == "pmdspd") {
             product = UIPreferences.wpcTextFav
@@ -108,7 +112,13 @@ class NationalTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cardText = CardText(this, toolbar, toolbarBottom)
         box.addWidget(cardText)
         UtilityWpcText.create()
-        navDrawerCombo = NavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, "")
+        navDrawerCombo = NavDrawerCombo(
+            this,
+            UtilityWpcText.groups,
+            UtilityWpcText.longCodes,
+            UtilityWpcText.shortCodes,
+            ""
+        )
         navDrawerCombo.connect(::changeProduct)
     }
 

@@ -32,9 +32,11 @@ import joshuatee.wx.radar.Spotter
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.Text
 
-internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) : RecyclerView.Adapter<AdapterSpotter.DataObjectHolder>() {
+internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) :
+    RecyclerView.Adapter<AdapterSpotter.DataObjectHolder>() {
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val name = Text(itemView, R.id.name, UIPreferences.textHighlightColor, TextSize.MEDIUM)
         val time = Text(itemView, R.id.time, backgroundText = true)
@@ -59,7 +61,8 @@ internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) : Recyc
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_spotter, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.cardview_spotter, parent, false)
         return DataObjectHolder(view)
     }
 

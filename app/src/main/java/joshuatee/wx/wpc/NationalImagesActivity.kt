@@ -74,7 +74,12 @@ class NationalImagesActivity : VideoRecordActivity(), View.OnClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, bottomToolbar = false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_wpcimages,
+            R.menu.wpcimages,
+            bottomToolbar = false
+        )
         val arguments = intent.getStringArrayExtra(URL)!!
         arguments.let {
             if (arguments.size > 1 && arguments[0] == "HS") {
@@ -91,7 +96,13 @@ class NationalImagesActivity : VideoRecordActivity(), View.OnClickListener {
         touchImage.connectClick(this)
         touchImage.connect2(::showNextImg, ::showPrevImg)
         UtilityWpcImages.create()
-        navDrawerCombo = NavDrawerCombo(this, UtilityWpcImages.groups, UtilityWpcImages.longCodes, UtilityWpcImages.shortCodes, "WPG_IMG")
+        navDrawerCombo = NavDrawerCombo(
+            this,
+            UtilityWpcImages.groups,
+            UtilityWpcImages.longCodes,
+            UtilityWpcImages.shortCodes,
+            "WPG_IMG"
+        )
         navDrawerCombo.connect(::getContent)
         objectToolbar.connectClick { navDrawerCombo.open() }
     }
@@ -105,7 +116,9 @@ class NationalImagesActivity : VideoRecordActivity(), View.OnClickListener {
         if (!calledFromHomeScreen) {
             setTitle("Images", navDrawerCombo.getLabel())
         } else {
-            val subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
+            val subtitle =
+                GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!
+                    .split(":")[1]
             setTitle("Images", subtitle)
         }
         FutureBytes2(::download, ::update)
@@ -114,7 +127,9 @@ class NationalImagesActivity : VideoRecordActivity(), View.OnClickListener {
     private fun download(): Bitmap {
         return if (!calledFromHomeScreen) {
             val getUrl = when {
-                navDrawerCombo.getUrl().contains("https://graphical.weather.gov/images/conus/") -> navDrawerCombo.getUrl() + timePeriod + "_conus.png"
+                navDrawerCombo.getUrl()
+                    .contains("https://graphical.weather.gov/images/conus/") -> navDrawerCombo.getUrl() + timePeriod + "_conus.png"
+
                 navDrawerCombo.getUrl().contains("aviationweather") -> navDrawerCombo.getUrl()
                 else -> navDrawerCombo.getUrl()
             }

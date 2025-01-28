@@ -71,7 +71,12 @@ class AlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun setupUI() {
         box = VBox.fromResource(this)
         Card(this, R.id.cardView)
-        fab = Fab(this, R.id.fab, GlobalVariables.ICON_RADAR) { Route.radarBySite(this, capAlert.getClosestRadar()) }
+        fab = Fab(this, R.id.fab, GlobalVariables.ICON_RADAR) {
+            Route.radarBySite(
+                this,
+                capAlert.getClosestRadar()
+            )
+        }
         objectToolbarBottom.hide(R.id.action_playlist)
         objectToolbarBottom.connect(this)
         alertDetail = AlertDetail(this, box)
@@ -100,7 +105,12 @@ class AlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, capAlert.title + " " + capAlert.area, capAlert.text)
+            R.id.action_share -> UtilityShare.text(
+                this,
+                capAlert.title + " " + capAlert.area,
+                capAlert.text
+            )
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

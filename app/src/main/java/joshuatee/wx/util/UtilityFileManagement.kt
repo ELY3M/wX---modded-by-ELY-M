@@ -44,7 +44,7 @@ object UtilityFileManagement {
     }
 
     fun internalFileExist(context: Context, path: String): Boolean =
-            context.getFileStreamPath(path).exists()
+        context.getFileStreamPath(path).exists()
 
     fun moveFile(context: Context, src: String, target: String) {
         val file = File(context.filesDir, src)

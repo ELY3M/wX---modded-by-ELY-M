@@ -33,7 +33,14 @@ import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.Utility
 
-class ObjectSpinner(context: Context, label: String, pref: String, prefInit: String, strId: Int, spinnerArr: List<String>) : Widget {
+class ObjectSpinner(
+    context: Context,
+    label: String,
+    pref: String,
+    prefInit: String,
+    strId: Int,
+    spinnerArr: List<String>
+) : Widget {
 
     private val card = Card(context)
 

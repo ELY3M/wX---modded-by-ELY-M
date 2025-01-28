@@ -81,14 +81,19 @@ class SettingsColorPickerActivity : BaseActivity(), OnColorChangedListener {
         buttonDefault.setOnClickListener {
             colorPicker.oldCenterColor = color
             Utility.writePrefInt(this, prefVal, color)
-            toolbar.subtitle = "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
+            toolbar.subtitle =
+                "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
         }
         val currColorViaPref = Utility.readPrefInt(this, prefVal, color)
-        toolbar.subtitle = "(" + Color.red(currColorViaPref) + "," + Color.green(currColorViaPref) + "," + Color.blue(currColorViaPref) + ")"
+        toolbar.subtitle =
+            "(" + Color.red(currColorViaPref) + "," + Color.green(currColorViaPref) + "," + Color.blue(
+                currColorViaPref
+            ) + ")"
     }
 
     override fun onColorChanged(color: Int) {
-        toolbar.subtitle = "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
+        toolbar.subtitle =
+            "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
         colorPicker.oldCenterColor = colorPicker.color
         Utility.writePrefInt(this, prefVal, colorPicker.color)
     }

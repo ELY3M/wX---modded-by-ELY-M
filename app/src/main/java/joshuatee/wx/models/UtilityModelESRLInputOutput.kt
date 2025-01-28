@@ -34,7 +34,8 @@ import java.util.regex.Pattern
 internal object UtilityModelEsrlInputOutput {
 
     private const val BASE_URL = "https://rapidrefresh.noaa.gov"
-    private val pattern1: Pattern = Pattern.compile("<option selected>([0-9]{2} \\w{3} [0-9]{4} - [0-9]{2}Z)<.option>")
+    private val pattern1: Pattern =
+        Pattern.compile("<option selected>([0-9]{2} \\w{3} [0-9]{4} - [0-9]{2}Z)<.option>")
 
     fun getRunTime(model: String, param: String): RunTimeData {
         val runData = RunTimeData()
@@ -42,14 +43,25 @@ internal object UtilityModelEsrlInputOutput {
             // https://rapidrefresh.noaa.gov/RAP/Welcome.cgi?dsKey=rap_jet&domain=full&run_time=23+Nov+2018+-+08Z
             "RAP_NCEP" -> ("$BASE_URL/RAP/Welcome.cgi?dsKey=" + model.lowercase(Locale.US) + "_jet&domain=full").getHtml()
             "HRRR_NCEP" -> ("$BASE_URL/hrrr/HRRR/Welcome.cgi?dsKey=" + model.lowercase(Locale.US) + "_jet&domain=full").getHtml()
-            else -> ("$BASE_URL/" + model.lowercase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.lowercase(Locale.US) + "_jet&domain=full").getHtml()
+            else -> ("$BASE_URL/" + model.lowercase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.lowercase(
+                Locale.US
+            ) + "_jet&domain=full").getHtml()
         }
         val mostRecentRunString = htmlRunStatus.parse(pattern1)
-        runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRunString, 1, "d MMM yyyy' - 'HH'Z'", "yyyyMMddHH", 12))
+        runData.listRunAddAll(
+            ObjectDateTime.generateModelRuns(
+                mostRecentRunString,
+                1,
+                "d MMM yyyy' - 'HH'Z'",
+                "yyyyMMddHH",
+                12
+            )
+        )
         runData.mostRecentRun = runData.listRun.first()
         // <option selected>10 Nov 2022 - 11Z</option>
         val runOffset = if (model.contains("HRRR")) 2 else 0
-        runData.imageCompleteInt = UtilityString.parseColumn(htmlRunStatus, "(=${param}&)").size - runOffset
+        runData.imageCompleteInt =
+            UtilityString.parseColumn(htmlRunStatus, "(=${param}&)").size - runOffset
         runData.imageCompleteStr = runData.imageCompleteInt.toString()
         if (mostRecentRunString != "") {
             runData.timeStrConv = mostRecentRunString.parse("([0-9]{2})$")
@@ -57,7 +69,11 @@ internal object UtilityModelEsrlInputOutput {
         return runData
     }
 
-    fun getImage(@Suppress("UNUSED_PARAMETER") ignoredContext: Context, om: ObjectModel, time: String): Bitmap {
+    fun getImage(
+        @Suppress("UNUSED_PARAMETER") ignoredContext: Context,
+        om: ObjectModel,
+        time: String
+    ): Bitmap {
         val parentModel = when (om.model) {
             "RAP_NCEP" -> "RAP"
             "HRRR_NCEP" -> "HRRR"
@@ -66,8 +82,8 @@ internal object UtilityModelEsrlInputOutput {
         val onDemandUrl: String
         val imgUrl: String
         val sectorLocal = om.sector.replace(" ", "")
-                .replace("Full", "full")
-                .replace("CONUS", "conus")
+            .replace("Full", "full")
+            .replace("CONUS", "conus")
         val param = om.currentParam.replace("_full_", "_" + sectorLocal + "_")
         if (parentModel.contains("RAP")) {
             imgUrl = "$BASE_URL/" + parentModel + "/for_web/" + om.model.lowercase(Locale.US) +

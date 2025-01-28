@@ -92,11 +92,17 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_settings_location_generic, R.menu.settings_location_generic_bottom, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_settings_location_generic,
+            R.menu.settings_location_generic_bottom,
+            true
+        )
         locationNumber = intent.getStringArrayExtra(LOC_NUM)!![0]
         setupUI()
         initializeDataStructures()
-        settingsLocationGenericSwitches = SettingsLocationGenericSwitches(this, box, locationNumber, editTextLabel)
+        settingsLocationGenericSwitches =
+            SettingsLocationGenericSwitches(this, box, locationNumber, editTextLabel)
         updateSubTitle()
         adjustForWhiteTheme()
         hideNonUSNotifications()
@@ -110,7 +116,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         box = VBox.fromResource(this)
         relativeLayout = findViewById(R.id.rl)
         notifText = findViewById(R.id.notif_text_perm)
-        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
         objectToolbarBottom.connect(this)
         FabExtended(this, R.id.fab, GlobalVariables.ICON_DONE, "Save Location") { saveLocation() }
         Card(this, R.id.cv1)
@@ -122,7 +129,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         if (!notificationManagerCompat.areNotificationsEnabled()) {
             notifText.visibility = View.VISIBLE
             notifText.setOnClickListener {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
                     if (Build.VERSION.SDK_INT >= 33) {
                         requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
@@ -162,7 +173,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         val lon = editTextLon.text.toString()
         val label = editTextLabel.text.toString()
         FutureText2(
-                { Location.save(this, locationNumber, lat, lon, label) })
+            { Location.save(this, locationNumber, lat, lon, label) })
         { saveStatus ->
             PopupMessage(relativeLayout, saveStatus, PopupMessage.SHORT)
             updateSubTitle()
@@ -188,7 +199,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         menuInflater.inflate(R.menu.settings_location_generic, menu)
         val searchView = menu.findItem(R.id.ab_search).actionView as ArrayAdapterSearchView
         val combinedCitiesList = CitiesExtended.labels.toList()
-        val cityArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, combinedCitiesList)
+        val cityArrayAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, combinedCitiesList)
         cityArrayAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
         searchView.setAdapter(cityArrayAdapter)
         searchView.queryHint = "Enter city here"
@@ -230,7 +242,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         }
         // the SearchView's AutoCompleteTextView drop down. For some reason this wasn't working in styles.xml
 //        val autoCompleteTextView: SearchView.SearchAutoComplete = searchView.findViewById(androidx.constraintlayout.widget.R.id.search_src_text)
-        val autoCompleteTextView = searchView.findViewById<AutoCompleteTextView>(androidx.constraintlayout.widget.R.id.search_src_text)
+        val autoCompleteTextView =
+            searchView.findViewById<AutoCompleteTextView>(androidx.constraintlayout.widget.R.id.search_src_text)
         when {
             UIPreferences.themeIsWhite -> {
                 autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_white)
@@ -267,7 +280,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         when (item.itemId) {
             R.id.action_delete -> delete()
             R.id.action_map -> showMap()
-            R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.activity_settings_generic_help))
+            R.id.action_help -> ObjectDialogue(
+                this,
+                resources.getString(R.string.activity_settings_generic_help)
+            )
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -285,7 +302,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun actionGps() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             val xy = UtilityLocation.getGps(this)
             editTextLat.setText(xy[0].toString())
             editTextLon.setText(xy[1].toString())
@@ -293,15 +314,27 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         } else {
             // The ACCESS_FINE_LOCATION is denied, then I request it and manage the result in
             // onRequestPermissionsResult() using the constant myPermissionAccessFineLocation
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionAccessFineLocation)
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    myPermissionAccessFineLocation
+                )
             }
         }
     }
 
     private val myPermissionAccessFineLocation = 5001
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             myPermissionAccessFineLocation -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -344,7 +377,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         when (keyCode) {
             KeyEvent.KEYCODE_G -> if (event.isCtrlPressed) actionGps()
             KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) toolbarBottom.showOverflowMenu()
-            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showLocationEditShortCuts())
+            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(
+                this,
+                Utility.showLocationEditShortCuts()
+            )
+
             else -> super.onKeyUp(keyCode, event)
         }
         return true

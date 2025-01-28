@@ -26,8 +26,8 @@ import joshuatee.wx.objects.LatLon
 object UtilityMap {
 
     fun getUrl(latLon: LatLon, zoomLevel: String): String =
-            "http://www.openstreetmap.org/?mlat=${latLon.latString}&mlon=${latLon.lonString}&zoom=$zoomLevel&layers=M"
+        "http://www.openstreetmap.org/?mlat=${latLon.latString}&mlon=${latLon.lonString}&zoom=$zoomLevel&layers=M"
 
     fun getUrl(x: String, y: String, zoomLevel: String): String =
-            "http://www.openstreetmap.org/?mlat=${x}&mlon=${y}&zoom=$zoomLevel&layers=M"
+        "http://www.openstreetmap.org/?mlat=${x}&mlon=${y}&zoom=$zoomLevel&layers=M"
 }

@@ -73,7 +73,8 @@ internal object CanvasRadial8Bit {
             NexradUtil.writeRadarTimeForWidget(context, date)
 //            dis.skipBytes(74)
             dis.close()
-            val rangeBinAlloc = 1390 // 460 for reflect, set to max possible for velocity - was 1200 for velocity, TZL requires 1390
+            val rangeBinAlloc =
+                1390 // 460 for reflect, set to max possible for velocity - was 1200 for velocity, TZL requires 1390
             val numberOfRadials = 360
             val radialStart = ByteBuffer.allocateDirect(4 * numberOfRadials)
             radialStart.position(0)
@@ -83,8 +84,10 @@ internal object CanvasRadial8Bit {
             val rBuff = ByteBuffer.allocateDirect(32)
             rBuff.order(ByteOrder.nativeOrder())
             rBuff.position(0)
-            val numberOfRangeBins = NexradDecodeEightBit.forCanvas(context, fileName, radialStart, binWord)
-            val binSize = NexradUtil.getBinSize(productCode.toInt()) * 0.2f * UIPreferences.widgetNexradSize.toFloat()
+            val numberOfRangeBins =
+                NexradDecodeEightBit.forCanvas(context, fileName, radialStart, binWord)
+            val binSize =
+                NexradUtil.getBinSize(productCode.toInt()) * 0.2f * UIPreferences.widgetNexradSize.toFloat()
             val centerX = 500 + CanvasMain.xOffset.toInt()
             val centerY = 500 + CanvasMain.yOffset.toInt()
             val paint = Paint()
@@ -123,14 +126,14 @@ internal object CanvasRadial8Bit {
                         levelCount += 1
                     } else {
                         NexradDecodeEightBit.rect8bit(
-                                rBuff,
-                                binStart,
-                                binSize,
-                                levelCount,
-                                angle,
-                                angleV,
-                                centerX,
-                                centerY
+                            rBuff,
+                            binStart,
+                            binSize,
+                            levelCount,
+                            angle,
+                            angleV,
+                            centerX,
+                            centerY
                         )
                         if (level == 0)
                             paint.color = zeroColor

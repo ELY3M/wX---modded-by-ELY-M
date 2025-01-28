@@ -102,9 +102,19 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         title = arguments[2]
         objectModelLayout = ObjectModelLayout(arguments[1])
         if (To.int(arguments[0]) == 1) {
-            super.onCreate(savedInstanceState, objectModelLayout.layoutSinglePane, objectModelLayout.menuResId, bottomToolbar = true)
+            super.onCreate(
+                savedInstanceState,
+                objectModelLayout.layoutSinglePane,
+                objectModelLayout.menuResId,
+                bottomToolbar = true
+            )
         } else {
-            super.onCreate(savedInstanceState, objectModelLayout.layoutMultiPane, objectModelLayout.menuResId, bottomToolbar = true)
+            super.onCreate(
+                savedInstanceState,
+                objectModelLayout.layoutMultiPane,
+                objectModelLayout.menuResId,
+                bottomToolbar = true
+            )
             val box = VBox.fromResource(this)
             if (UtilityUI.isLandScape(this)) {
                 box.makeHorizontal()
@@ -139,7 +149,8 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         miStatus = objectToolbarBottom.find(R.id.action_status)
         miStatus.title = "in through"
         if (om.modelType == ModelType.SPCSREF) {
-            favList = UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
+            favList =
+                UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
         }
         om.createDataFn()
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
@@ -155,7 +166,8 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun getContent() {
         if (om.modelType == ModelType.SPCSREF) {
-            favList = UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
+            favList =
+                UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
             updateStarIcon()
         }
         UtilityModels.getContent(this, om, listOf(""))
@@ -175,8 +187,16 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         with(om.displayData) {
             (0 until om.numPanes).forEach {
-                param[it] = Utility.readPref(this@ModelsSpcHrefActivity, om.prefParam + it.toString(), defaultParam)
-                paramLabel[it] = Utility.readPref(this@ModelsSpcHrefActivity, om.prefParamLabel + it.toString(), defaultLabel)
+                param[it] = Utility.readPref(
+                    this@ModelsSpcHrefActivity,
+                    om.prefParam + it.toString(),
+                    defaultParam
+                )
+                paramLabel[it] = Utility.readPref(
+                    this@ModelsSpcHrefActivity,
+                    om.prefParamLabel + it.toString(),
+                    defaultLabel
+                )
             }
         }
         FutureVoid(::runStatusDownload, ::runStatusUpdate)
@@ -191,12 +211,15 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             (0 until om.times.size).forEach {
                 om.times[it] = om.times[it] + " " +
                         UtilityModels.convertTimeRunToTimeString(
-                                om.rtd.mostRecentRun.replace("z", ""),
-                                om.times[it].replace("f", ""),
-                                false
+                            om.rtd.mostRecentRun.replace("z", ""),
+                            om.times[it].replace("f", ""),
+                            false
                         )
             }
-            miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr.replace("</a>&nbsp in through <b>", " ")
+            miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr.replace(
+                "</a>&nbsp in through <b>",
+                " "
+            )
             om.run = om.rtd.listRun.safeGet(0)
             om.setTimeIdx(Utility.readPrefInt(this, om.prefRunPosn, 1))
             getContent()
@@ -206,7 +229,13 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             (om.startStep until om.endStep).forEach {
                 om.times.add(To.stringPadLeftZeros(it, 2))
             }
-            UtilityModels.updateTime(UtilityString.getLastXChars(om.run, 2), om.rtd.mostRecentRun, om.times, "", false)
+            UtilityModels.updateTime(
+                UtilityString.getLastXChars(om.run, 2),
+                om.rtd.mostRecentRun,
+                om.times,
+                "",
+                false
+            )
             om.setTimeIdx(Utility.readPrefInt(this, om.prefRunPosn, 1))
             getContent()
         }
@@ -235,8 +264,16 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
             R.id.action_multipane -> om.routeFn(this)
             R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""))
-            R.id.action_time -> ObjectDialogue.generic(this, om.times, ::getContent) { om.setTimeIdx(it) }
-            R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) { om.run = om.rtd.listRun[it] }
+            R.id.action_time -> ObjectDialogue.generic(
+                this,
+                om.times,
+                ::getContent
+            ) { om.setTimeIdx(it) }
+
+            R.id.action_run -> ObjectDialogue.generic(this, om.rtd.listRun, ::getContent) {
+                om.run = om.rtd.listRun[it]
+            }
+
             R.id.action_share -> if (UIPreferences.recordScreenShare && Build.VERSION.SDK_INT < 33) {
                 checkOverlayPerms()
             } else {
@@ -269,7 +306,8 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             return true
         }
         if (om.modelType == ModelType.SPCSREF) {
-            favList = UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
+            favList =
+                UtilityFavorites.setupMenu(this, om.displayData.param[om.curImg], FavoriteType.SREF)
         }
         when (item.itemId) {
             R.id.action_region -> ObjectDialogue.generic(this, om.sectorsLong, ::getContent) {

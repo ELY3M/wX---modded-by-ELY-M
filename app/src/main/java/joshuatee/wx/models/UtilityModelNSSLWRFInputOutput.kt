@@ -55,11 +55,20 @@ internal object UtilityModelNsslWrfInputOutput {
             }
         }
         val htmlRunStatus = ("$BASE_URL/?model=$modelCode").getHtml()
-        val html = htmlRunStatus.parse("\\{model: \"$modelCode\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
+        val html =
+            htmlRunStatus.parse("\\{model: \"$modelCode\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
         val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
         val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
         val mostRecentRun = day + time
-        runData.listRunAddAll(ObjectDateTime.generateModelRuns(mostRecentRun, 24, "yyyyMMddHH", "yyyyMMddHH", 4))
+        runData.listRunAddAll(
+            ObjectDateTime.generateModelRuns(
+                mostRecentRun,
+                24,
+                "yyyyMMddHH",
+                "yyyyMMddHH",
+                4
+            )
+        )
         runData.mostRecentRun = mostRecentRun
         return runData
     }
@@ -86,11 +95,16 @@ internal object UtilityModelNsslWrfInputOutput {
             val month = om.run.substring(4, 6)
             val day = om.run.substring(6, 8)
             val hour = om.run.substring(8, 10)
-            val url = BASE_URL + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" + day + "/" + hour + "00/f" +
-                    time + "00/" + om.currentParam + ".spc_" + sector.lowercase(Locale.US) + ".f" + time + "00.png"
+            val url =
+                BASE_URL + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" + day + "/" + hour + "00/f" +
+                        time + "00/" + om.currentParam + ".spc_" + sector.lowercase(Locale.US) + ".f" + time + "00.png"
             val baseLayerImage = baseLayerUrl.getImage()
             val productLayerImage = url.getImage()
-            UtilityImg.addColorBackground(context, UtilityImg.mergeImages(context, productLayerImage, baseLayerImage), Color.WHITE)
+            UtilityImg.addColorBackground(
+                context,
+                UtilityImg.mergeImages(context, productLayerImage, baseLayerImage),
+                Color.WHITE
+            )
         } else {
             UtilityImg.getBlankBitmap()
         }

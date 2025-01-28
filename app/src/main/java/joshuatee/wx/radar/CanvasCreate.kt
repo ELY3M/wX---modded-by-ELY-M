@@ -70,7 +70,10 @@ object CanvasCreate {
             var bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
             if (!product.startsWith("L2")) {
                 // TODO FIXME method to detect 4bit project?
-                if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {
+                if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith(
+                        "TV"
+                    )
+                ) {
                     CanvasRadial4Bit.decodeAndPlot(context, bitmapCanvas, "nids", product)
                 } else {
                     CanvasRadial8Bit.decodeAndPlot(context, bitmapCanvas, "nids", product)
@@ -90,7 +93,12 @@ object CanvasCreate {
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun layeredImageFromFile(context: Context, radarSiteArg: String, product: String, idxStr: String): Bitmap {
+    fun layeredImageFromFile(
+        context: Context,
+        radarSiteArg: String,
+        product: String,
+        idxStr: String
+    ): Bitmap {
         var radarSite = radarSiteArg
         var scaleType = ProjectionType.WX_RENDER
         if (NexradUtil.isProductTdwr(product)) {
@@ -102,7 +110,10 @@ object CanvasCreate {
         var bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
         if (!product.startsWith("L2")) {
             // TODO FIXME method to detect 4bit project?
-            if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith("TV")) {
+            if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith(
+                    "TV"
+                )
+            ) {
                 CanvasRadial4Bit.decodeAndPlot(context, bitmapCanvas, "nids$idxStr", product)
             } else {
                 CanvasRadial8Bit.decodeAndPlot(context, bitmapCanvas, "nids$idxStr", product)
@@ -119,8 +130,10 @@ object CanvasCreate {
 
     fun bitmapForColorPalette(context: Context, product: Int): Bitmap {
         val fileName = "nids_dvn_" + product + "_archive"
-        UtilityIO.saveRawToInternalStorage(context, NexradUtil.productCodeStringToResourceFile[product]
-                ?: R.raw.dvn94, fileName)
+        UtilityIO.saveRawToInternalStorage(
+            context, NexradUtil.productCodeStringToResourceFile[product]
+                ?: R.raw.dvn94, fileName
+        )
         val layers = mutableListOf<Drawable>()
         val colorDrawable = if (RadarPreferences.blackBg) {
             ColorDrawable(Color.BLACK)
@@ -129,8 +142,10 @@ object CanvasCreate {
         }
         try {
             val bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
-            CanvasRadial8Bit.decodeAndPlot(context, bitmapCanvas, fileName, NexradUtil.productCodeStringToCode[product]
-                    ?: "N0Q")
+            CanvasRadial8Bit.decodeAndPlot(
+                context, bitmapCanvas, fileName, NexradUtil.productCodeStringToCode[product]
+                    ?: "N0Q"
+            )
             layers.add(colorDrawable)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         } catch (e: Exception) {

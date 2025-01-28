@@ -26,14 +26,14 @@ import joshuatee.wx.common.GlobalVariables
 internal object UtilitySpcFireOutlook {
 
     val textProducts = listOf(
-            "fwddy1",
-            "fwddy2",
-            "fwddy38"
+        "fwddy1",
+        "fwddy2",
+        "fwddy38"
     )
 
     val urls = listOf(
-            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/fire_wx/day1otlk_fire.gif",
-            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/fire_wx/day2otlk_fire.gif",
-            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/exper/fire_wx/imgs/day38otlk_fire.gif"
+        "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/fire_wx/day1otlk_fire.gif",
+        "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/fire_wx/day2otlk_fire.gif",
+        "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/exper/fire_wx/imgs/day38otlk_fire.gif"
     )
 }

@@ -32,7 +32,12 @@ import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 
 @SuppressLint("SetTextI18n")
-class SettingsLocationGenericSwitches(context: Activity, box: VBox, locationNumber: String, editTextLabel: EditText) {
+class SettingsLocationGenericSwitches(
+    context: Activity,
+    box: VBox,
+    locationNumber: String,
+    editTextLabel: EditText
+) {
 
     private var alertRadar1Sw: Switch
     private var alertSoundSw: Switch
@@ -45,15 +50,24 @@ class SettingsLocationGenericSwitches(context: Activity, box: VBox, locationNumb
     private var alertWpcmpdSw: Switch
 
     init {
-        var alertNotificationCurrent = Utility.readPref(context, "ALERT" + locationNumber + "_NOTIFICATION", "false")
-        var alertNotificationRadarCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$locationNumber", "false")
-        var alertCcNotificationCurrent = Utility.readPref(context, "ALERT_CC" + locationNumber + "_NOTIFICATION", "false")
-        var alert7Day1NotificationCurrent = Utility.readPref(context, "ALERT_7DAY_" + locationNumber + "_NOTIFICATION", "false")
-        var alertNotificationSoundCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SOUND$locationNumber", "false")
-        var alertNotificationMcdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_MCD$locationNumber", "false")
-        var alertNotificationSwoCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SWO$locationNumber", "false")
-        var alertNotificationSpcfwCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$locationNumber", "false")
-        var alertNotificationWpcmpdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$locationNumber", "false")
+        var alertNotificationCurrent =
+            Utility.readPref(context, "ALERT" + locationNumber + "_NOTIFICATION", "false")
+        var alertNotificationRadarCurrent =
+            Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$locationNumber", "false")
+        var alertCcNotificationCurrent =
+            Utility.readPref(context, "ALERT_CC" + locationNumber + "_NOTIFICATION", "false")
+        var alert7Day1NotificationCurrent =
+            Utility.readPref(context, "ALERT_7DAY_" + locationNumber + "_NOTIFICATION", "false")
+        var alertNotificationSoundCurrent =
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND$locationNumber", "false")
+        var alertNotificationMcdCurrent =
+            Utility.readPref(context, "ALERT_NOTIFICATION_MCD$locationNumber", "false")
+        var alertNotificationSwoCurrent =
+            Utility.readPref(context, "ALERT_NOTIFICATION_SWO$locationNumber", "false")
+        var alertNotificationSpcfwCurrent =
+            Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$locationNumber", "false")
+        var alertNotificationWpcmpdCurrent =
+            Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$locationNumber", "false")
         // If this this is a new location
         if (To.int(locationNumber) == Location.numLocations + 1) {
             editTextLabel.setText("Location $locationNumber")
@@ -69,62 +83,79 @@ class SettingsLocationGenericSwitches(context: Activity, box: VBox, locationNumb
             alertNotificationWpcmpdCurrent = "false"
         }
         // FIXME TODO refactor this, use a map based off key
-        alertSw = Switch(context,
-                "Alert",
-                "ALERT" + locationNumber + "_NOTIFICATION",
-                R.string.alert_switch_text)
+        alertSw = Switch(
+            context,
+            "Alert",
+            "ALERT" + locationNumber + "_NOTIFICATION",
+            R.string.alert_switch_text
+        )
         alertSw.isChecked(alertNotificationCurrent == "true")
-        alertCcSw = Switch(context,
-                "Current Conditions",
-                "ALERT_CC" + locationNumber + "_NOTIFICATION",
-                R.string.alert_cc_switch_text)
+        alertCcSw = Switch(
+            context,
+            "Current Conditions",
+            "ALERT_CC" + locationNumber + "_NOTIFICATION",
+            R.string.alert_cc_switch_text
+        )
         alertCcSw.isChecked(alertCcNotificationCurrent == "true")
-        alert7Day1Sw = Switch(context,
-                "7day",
-                "ALERT_7DAY_" + locationNumber + "_NOTIFICATION",
-                R.string.alert_7day_1_switch_text)
+        alert7Day1Sw = Switch(
+            context,
+            "7day",
+            "ALERT_7DAY_" + locationNumber + "_NOTIFICATION",
+            R.string.alert_7day_1_switch_text
+        )
         alert7Day1Sw.isChecked(alert7Day1NotificationCurrent == "true")
-        alertSoundSw = Switch(context,
-                "Play sound for alert notification",
-                "ALERT_NOTIFICATION_SOUND$locationNumber",
-                R.string.alert_sound_switch_text)
+        alertSoundSw = Switch(
+            context,
+            "Play sound for alert notification",
+            "ALERT_NOTIFICATION_SOUND$locationNumber",
+            R.string.alert_sound_switch_text
+        )
         alertSoundSw.isChecked(alertNotificationSoundCurrent == "true")
-        alertRadar1Sw = Switch(context,
-                "Radar image with alert",
-                "ALERT_NOTIFICATION_RADAR$locationNumber",
-                R.string.alert_radar1_switch_text)
+        alertRadar1Sw = Switch(
+            context,
+            "Radar image with alert",
+            "ALERT_NOTIFICATION_RADAR$locationNumber",
+            R.string.alert_radar1_switch_text
+        )
         alertRadar1Sw.isChecked(alertNotificationRadarCurrent == "true")
-        alertMcdSw = Switch(context,
-                "SPC MCD",
-                "ALERT_NOTIFICATION_MCD$locationNumber",
-                R.string.alert_mcd_switch_text)
+        alertMcdSw = Switch(
+            context,
+            "SPC MCD",
+            "ALERT_NOTIFICATION_MCD$locationNumber",
+            R.string.alert_mcd_switch_text
+        )
         alertMcdSw.isChecked(alertNotificationMcdCurrent == "true")
-        alertSwoSw = Switch(context,
-                "SPC SWO",
-                "ALERT_NOTIFICATION_SWO$locationNumber",
-                R.string.alert_swo_switch_text)
+        alertSwoSw = Switch(
+            context,
+            "SPC SWO",
+            "ALERT_NOTIFICATION_SWO$locationNumber",
+            R.string.alert_swo_switch_text
+        )
         alertSwoSw.isChecked(alertNotificationSwoCurrent == "true")
-        alertSpcfwSw = Switch(context,
-                "SPC FW",
-                "ALERT_NOTIFICATION_SPCFW$locationNumber",
-                R.string.alert_spcfw_switch_text)
+        alertSpcfwSw = Switch(
+            context,
+            "SPC FW",
+            "ALERT_NOTIFICATION_SPCFW$locationNumber",
+            R.string.alert_spcfw_switch_text
+        )
         alertSpcfwSw.isChecked(alertNotificationSpcfwCurrent == "true")
-        alertWpcmpdSw = Switch(context,
-                "WPC MPD",
-                "ALERT_NOTIFICATION_WPCMPD$locationNumber",
-                R.string.alert_wpcmpd_switch_text
+        alertWpcmpdSw = Switch(
+            context,
+            "WPC MPD",
+            "ALERT_NOTIFICATION_WPCMPD$locationNumber",
+            R.string.alert_wpcmpd_switch_text
         )
         alertWpcmpdSw.isChecked(alertNotificationWpcmpdCurrent == "true")
         listOf(
-                alertSw,
-                alertSoundSw,
-                alertRadar1Sw,
-                alertCcSw,
-                alert7Day1Sw,
-                alertMcdSw,
-                alertSwoSw,
-                alertSpcfwSw,
-                alertWpcmpdSw
+            alertSw,
+            alertSoundSw,
+            alertRadar1Sw,
+            alertCcSw,
+            alert7Day1Sw,
+            alertMcdSw,
+            alertSwoSw,
+            alertSpcfwSw,
+            alertWpcmpdSw
         ).forEach {
             box.addWidget(it)
         }
@@ -136,10 +167,11 @@ class SettingsLocationGenericSwitches(context: Activity, box: VBox, locationNumb
         } else {
             View.VISIBLE
         }
-        listOf(alertMcdSw,
-                alertSwoSw,
-                alertSpcfwSw,
-                alertWpcmpdSw
+        listOf(
+            alertMcdSw,
+            alertSwoSw,
+            alertSpcfwSw,
+            alertWpcmpdSw
         ).forEach {
             it.visibility = visibility
         }

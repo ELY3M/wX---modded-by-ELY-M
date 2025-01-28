@@ -44,7 +44,8 @@ internal object UtilityModelSpcHrrrInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val htmlRunStatus = (GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/exper/hrrr/data/hrrr3/cron.log").getHtml()
+            val htmlRunStatus =
+                (GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/exper/hrrr/data/hrrr3/cron.log").getHtml()
             runData.validTime = htmlRunStatus.parse("Latest Run: ([0-9]{10})")
             runData.mostRecentRun = runData.validTime
             val runTimes = htmlRunStatus.parseColumn("Run: ([0-9]{8}/[0-9]{4})")
@@ -54,39 +55,54 @@ internal object UtilityModelSpcHrrrInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, om: ObjectModel, time: String, overlayImg: List<String>): Bitmap {
+    fun getImage(
+        context: Context,
+        om: ObjectModel,
+        time: String,
+        overlayImg: List<String>
+    ): Bitmap {
         val layerUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/"
         val bitmaps = mutableListOf<Bitmap>()
         val layers = mutableListOf<Drawable>()
         overlayImg.forEach {
-            val url = layerUrl + getSectorCode(om.sector).lowercase(Locale.US) + "/" + it + "/" + it + ".gif"
+            val url =
+                layerUrl + getSectorCode(om.sector).lowercase(Locale.US) + "/" + it + "/" + it + ".gif"
             bitmaps.add(UtilityImg.eraseBackground(url.getImage(), -1))
         }
         val backgroundUrl = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/hrrr/data/hrrr3/" +
                 getSectorCode(om.sector).lowercase(Locale.US) + "/R" +
                 om.run.replace("Z", "") + "_F" + formatTime(time) + "_V" +
-                getValidTime(om.run, time) + "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
+                getValidTime(
+                    om.run,
+                    time
+                ) + "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
         bitmaps.add(UtilityImg.eraseBackground(backgroundUrl.getImage(), -1))
         layers.add(ColorDrawable(Color.WHITE))
         layers += bitmaps.map { BitmapDrawable(context.resources, it) }
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun getAnimation(context: Context, om: ObjectModel, overlayImg: List<String>): AnimationDrawable = if (om.spinnerTimeValue == -1) {
+    fun getAnimation(
+        context: Context,
+        om: ObjectModel,
+        overlayImg: List<String>
+    ): AnimationDrawable = if (om.spinnerTimeValue == -1) {
         AnimationDrawable()
     } else {
         val bitmaps = (om.timeIndex until om.times.size).map { k ->
-            getImage(context, om, om.times[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0)
-                    ?: "", overlayImg)
+            getImage(
+                context, om, om.times[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0)
+                    ?: "", overlayImg
+            )
         }
         UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 
     private fun getSectorCode(sectorName: String): String =
-            UtilityModelSpcHrrrInterface.sectors.indices
-                    .firstOrNull { sectorName == UtilityModelSpcHrrrInterface.sectors[it] }
-                    ?.let { UtilityModelSpcHrrrInterface.sectorCodes[it] }
-                    ?: "S19"
+        UtilityModelSpcHrrrInterface.sectors.indices
+            .firstOrNull { sectorName == UtilityModelSpcHrrrInterface.sectors[it] }
+            ?.let { UtilityModelSpcHrrrInterface.sectorCodes[it] }
+            ?: "S19"
 
     private fun getValidTime(run: String, validTimeForecast: String): String {
         val timeFormatString = "yyyyMMddHH"

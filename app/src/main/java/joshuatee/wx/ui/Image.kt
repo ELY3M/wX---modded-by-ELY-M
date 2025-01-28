@@ -34,7 +34,10 @@ open class Image : Widget {
     protected val card: Card
     private val context: Context
     var img: TouchImageView2
-    internal val layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
+    internal val layoutParams = TableLayout.LayoutParams(
+        TableLayout.LayoutParams.WRAP_CONTENT,
+        TableLayout.LayoutParams.WRAP_CONTENT
+    )
     var bitmap = UtilityImg.getBlankBitmap()
 
     constructor(context: Context) {

@@ -56,7 +56,12 @@ class CardText(context: Context) : Widget {
         connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
-    constructor(context: Context, toolbar: Toolbar, toolbarBottom: Toolbar, textValue: String) : this(context) {
+    constructor(
+        context: Context,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar,
+        textValue: String
+    ) : this(context) {
         connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
         text = textValue
     }
@@ -82,7 +87,11 @@ class CardText(context: Context) : Widget {
     }
 
     // used in SettingsNotificationsActivity
-    constructor(context: Context, text: String, textSize: Float, padding: Int) : this(context, text, textSize) {
+    constructor(context: Context, text: String, textSize: Float, padding: Int) : this(
+        context,
+        text,
+        textSize
+    ) {
         this.padding = padding
         tv.setPadding(padding)
         tv.text = text
@@ -91,8 +100,8 @@ class CardText(context: Context) : Widget {
     }
 
     constructor(context: Context, text: String, fn: () -> Unit) : this(
-            context,
-            text
+        context,
+        text
     ) {
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
@@ -105,8 +114,8 @@ class CardText(context: Context) : Widget {
     }
 
     constructor(context: Context, text: String, textSize: Float, fn: () -> Unit) : this(
-            context,
-            text
+        context,
+        text
     ) {
         val padding = UIPreferences.paddingSettings
         this.padding = padding
@@ -119,8 +128,8 @@ class CardText(context: Context) : Widget {
 
     // used in settings main, radar, ui, about
     constructor(context: Context, text: String, clazz: Class<*>) : this(
-            context,
-            text
+        context,
+        text
     ) {
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
@@ -133,8 +142,8 @@ class CardText(context: Context) : Widget {
     }
 
     constructor(context: Context, text: String, textSize: Float, clazz: Class<*>) : this(
-            context,
-            text
+        context,
+        text
     ) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
@@ -148,7 +157,10 @@ class CardText(context: Context) : Widget {
     }
 
     fun setTextAndTranslate(text: String) {
-        val localText = if (UIPreferences.translateText) UtilityTtsTranslations.translateAbbreviationsForVisual(text) else text
+        val localText =
+            if (UIPreferences.translateText) UtilityTtsTranslations.translateAbbreviationsForVisual(
+                text
+            ) else text
         tv.text = localText
     }
 

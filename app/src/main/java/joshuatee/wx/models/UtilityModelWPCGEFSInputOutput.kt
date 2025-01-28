@@ -54,13 +54,18 @@ internal object UtilityModelWpcGefsInputOutput {
             return runData
         }
 
-    fun getImage(@Suppress("UNUSED_PARAMETER") ignoredContext: Context, om: ObjectModel, time: String): Bitmap {
+    fun getImage(
+        @Suppress("UNUSED_PARAMETER") ignoredContext: Context,
+        om: ObjectModel,
+        time: String
+    ): Bitmap {
         val sectorAdd = if (om.sector == "AK") {
             "_ak"
         } else {
             ""
         }
-        val url = "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
+        val url =
+            "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
         return url.getImage()
     }
 }

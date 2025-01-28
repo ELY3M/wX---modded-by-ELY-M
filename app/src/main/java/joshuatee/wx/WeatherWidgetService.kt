@@ -31,14 +31,16 @@ import joshuatee.wx.util.UtilityForecastIcon
  * This is the service that provides the factory to be bound to the collection service.
  */
 class WeatherWidgetService : RemoteViewsService() {
-    override fun onGetViewFactory(intent: Intent): RemoteViewsFactory = StackRemoteViewsFactory(this.applicationContext)
+    override fun onGetViewFactory(intent: Intent): RemoteViewsFactory =
+        StackRemoteViewsFactory(this.applicationContext)
 }
 
 /**
  * This is the factory that will provide data to the collection widget.
  */
 
-internal class StackRemoteViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
+internal class StackRemoteViewsFactory(private val context: Context) :
+    RemoteViewsService.RemoteViewsFactory {
     private var cursor: Cursor? = null
 
     override fun onCreate() {
@@ -66,7 +68,8 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
         val formatString = context.resources.getString(R.string.item_format_string)
         val itemId = R.layout.widget_item
         val remoteViews = RemoteViews(context.packageName, itemId)
-        val preferences = context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
+        val preferences =
+            context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
         if (position != 0) {
             val list = day.split(": ").dropLastWhile { it.isEmpty() }
             if (list.size > 1) {
@@ -94,7 +97,10 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
         val icons = iconString.split("!")
         if (position < icons.size) {
             remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
-            remoteViews.setImageViewBitmap(R.id.iv, UtilityForecastIcon.getIcon(context, icons[position]))
+            remoteViews.setImageViewBitmap(
+                R.id.iv,
+                UtilityForecastIcon.getIcon(context, icons[position])
+            )
         }
         val fillInIntent = Intent()
         val extras = Bundle()
@@ -116,6 +122,7 @@ internal class StackRemoteViewsFactory(private val context: Context) : RemoteVie
 
     override fun onDataSetChanged() {
         cursor?.close()
-        cursor = context.contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
+        cursor =
+            context.contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
     }
 }

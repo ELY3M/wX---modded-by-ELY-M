@@ -35,9 +35,22 @@ class ObjectWidgetSpcSwo(context: Context) {
     init {
         ivList.indices.forEach {
             val dayAsString = (it + 1).toString()
-            UtilityWidget.setImage(context, remoteViews, ivList[it], WidgetFile.SPCSWO.fileName + dayAsString)
+            UtilityWidget.setImage(
+                context,
+                remoteViews,
+                ivList[it],
+                WidgetFile.SPCSWO.fileName + dayAsString
+            )
             if (!UIPreferences.widgetPreventTap) {
-                UtilityWidget.setupIntent(context, remoteViews, SpcSwoActivity::class.java, ivList[it], SpcSwoActivity.NUMBER, arrayOf(dayAsString, ""), WidgetFile.SPCSWO.action + dayAsString)
+                UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    SpcSwoActivity::class.java,
+                    ivList[it],
+                    SpcSwoActivity.NUMBER,
+                    arrayOf(dayAsString, ""),
+                    WidgetFile.SPCSWO.action + dayAsString
+                )
             }
         }
     }

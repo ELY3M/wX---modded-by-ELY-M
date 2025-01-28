@@ -45,24 +45,29 @@ internal object NotificationWatch {
                         val text = watchData.htmlList[index].replace("<.*?>".toRegex(), " ")
                         val polygonType = PolygonType.WATCH
                         val objectPendingIntents = ObjectPendingIntents(
-                                context,
-                                SpcMcdWatchShowActivity::class.java,
-                                SpcMcdWatchShowActivity.NUMBER,
-                                arrayOf(watchNumber, polygonType.toString(), ""),
-                                arrayOf(watchNumber, polygonType.toString(), "sound")
+                            context,
+                            SpcMcdWatchShowActivity::class.java,
+                            SpcMcdWatchShowActivity.NUMBER,
+                            arrayOf(watchNumber, polygonType.toString(), ""),
+                            arrayOf(watchNumber, polygonType.toString(), "sound")
                         )
                         val cancelString = "usspcwat$watchNumber"
-                        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
-                            val sound = NotificationPreferences.alertNotificationSoundSpcwat && !inBlackout
+                        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                                context,
+                                cancelString
+                            ))
+                        ) {
+                            val sound =
+                                NotificationPreferences.alertNotificationSoundSpcwat && !inBlackout
                             val objectNotification = ObjectNotification(
-                                    context,
-                                    sound,
-                                    label,
-                                    text,
-                                    objectPendingIntents,
-                                    GlobalVariables.ICON_ALERT_2,
-                                    GlobalVariables.ICON_ACTION,
-                                    context.resources.getString(R.string.read_aloud)
+                                context,
+                                sound,
+                                label,
+                                text,
+                                objectPendingIntents,
+                                GlobalVariables.ICON_ALERT_2,
+                                GlobalVariables.ICON_ACTION,
+                                context.resources.getString(R.string.read_aloud)
                             )
                             objectNotification.send(cancelString)
                         }

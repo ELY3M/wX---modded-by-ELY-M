@@ -190,19 +190,19 @@ open class OglBuffers() {
                 NexradRenderUtilities.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
             } else {
                 Jni.genTriangle(
-                        buffers.floatBuffer,
-                        buffers.indexBuffer,
-                        projectionNumbers.xFloat,
-                        projectionNumbers.yFloat,
-                        projectionNumbers.xCenter.toFloat(),
-                        projectionNumbers.yCenter.toFloat(),
-                        projectionNumbers.oneDegreeScaleFactorFloat,
-                        buffers.xList,
-                        buffers.yList,
-                        buffers.count,
-                        buffers.lenInit,
-                        buffers.colorBuffer,
-                        buffers.colorArray
+                    buffers.floatBuffer,
+                    buffers.indexBuffer,
+                    projectionNumbers.xFloat,
+                    projectionNumbers.yFloat,
+                    projectionNumbers.xCenter.toFloat(),
+                    projectionNumbers.yCenter.toFloat(),
+                    projectionNumbers.oneDegreeScaleFactorFloat,
+                    buffers.xList,
+                    buffers.yList,
+                    buffers.count,
+                    buffers.lenInit,
+                    buffers.colorBuffer,
+                    buffers.colorArray
                 )
             }
         }
@@ -214,19 +214,19 @@ open class OglBuffers() {
                 NexradRenderUtilities.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
             } else {
                 Jni.genTriangleUp(
-                        buffers.floatBuffer,
-                        buffers.indexBuffer,
-                        projectionNumbers.xFloat,
-                        projectionNumbers.yFloat,
-                        projectionNumbers.xCenter.toFloat(),
-                        projectionNumbers.yCenter.toFloat(),
-                        projectionNumbers.oneDegreeScaleFactorFloat,
-                        buffers.xList,
-                        buffers.yList,
-                        buffers.count,
-                        buffers.lenInit,
-                        buffers.colorBuffer,
-                        buffers.colorArray
+                    buffers.floatBuffer,
+                    buffers.indexBuffer,
+                    projectionNumbers.xFloat,
+                    projectionNumbers.yFloat,
+                    projectionNumbers.xCenter.toFloat(),
+                    projectionNumbers.yCenter.toFloat(),
+                    projectionNumbers.oneDegreeScaleFactorFloat,
+                    buffers.xList,
+                    buffers.yList,
+                    buffers.count,
+                    buffers.lenInit,
+                    buffers.colorBuffer,
+                    buffers.colorArray
                 )
             }
         }
@@ -237,44 +237,47 @@ open class OglBuffers() {
                 NexradRenderUtilities.genCircle(buffers, projectionNumbers)
             } else {
                 Jni.genCircle(
-                        buffers.floatBuffer,
-                        buffers.indexBuffer,
-                        projectionNumbers.xFloat,
-                        projectionNumbers.yFloat,
-                        projectionNumbers.xCenter.toFloat(),
-                        projectionNumbers.yCenter.toFloat(),
-                        projectionNumbers.oneDegreeScaleFactorFloat,
-                        buffers.xList,
-                        buffers.yList,
-                        buffers.count,
-                        buffers.lenInit,
-                        buffers.triangleCount,
-                        buffers.colorBuffer,
-                        buffers.colorArray
+                    buffers.floatBuffer,
+                    buffers.indexBuffer,
+                    projectionNumbers.xFloat,
+                    projectionNumbers.yFloat,
+                    projectionNumbers.xCenter.toFloat(),
+                    projectionNumbers.yCenter.toFloat(),
+                    projectionNumbers.oneDegreeScaleFactorFloat,
+                    buffers.xList,
+                    buffers.yList,
+                    buffers.count,
+                    buffers.lenInit,
+                    buffers.triangleCount,
+                    buffers.colorBuffer,
+                    buffers.colorArray
                 )
             }
         }
 
         // WIND BARB CIRCLE
-        private fun redrawCircleWithColor(buffers: OglBuffers, projectionNumbers: ProjectionNumbers) {
+        private fun redrawCircleWithColor(
+            buffers: OglBuffers,
+            projectionNumbers: ProjectionNumbers
+        ) {
             if (!RadarPreferences.useJni) {
                 NexradRenderUtilities.genCircleWithColor(buffers, projectionNumbers)
             } else {
                 Jni.genCircleWithColor(
-                        buffers.floatBuffer,
-                        buffers.indexBuffer,
-                        projectionNumbers.xFloat,
-                        projectionNumbers.yFloat,
-                        projectionNumbers.xCenter.toFloat(),
-                        projectionNumbers.yCenter.toFloat(),
-                        projectionNumbers.oneDegreeScaleFactorFloat,
-                        buffers.xList,
-                        buffers.yList,
-                        buffers.count,
-                        buffers.lenInit,
-                        buffers.triangleCount,
-                        buffers.colorBuffer,
-                        buffers.colorIntArray.toIntArray()
+                    buffers.floatBuffer,
+                    buffers.indexBuffer,
+                    projectionNumbers.xFloat,
+                    projectionNumbers.yFloat,
+                    projectionNumbers.xCenter.toFloat(),
+                    projectionNumbers.yCenter.toFloat(),
+                    projectionNumbers.oneDegreeScaleFactorFloat,
+                    buffers.xList,
+                    buffers.yList,
+                    buffers.count,
+                    buffers.lenInit,
+                    buffers.triangleCount,
+                    buffers.colorBuffer,
+                    buffers.colorIntArray.toIntArray()
                 )
             }
         }

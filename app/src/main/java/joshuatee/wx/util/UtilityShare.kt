@@ -37,7 +37,7 @@ import joshuatee.wx.ui.TouchImage
 object UtilityShare {
 
     fun prepTextForShare(text: String): String =
-            text.replace(GlobalVariables.newline, GlobalVariables.newline + GlobalVariables.newline)
+        text.replace(GlobalVariables.newline, GlobalVariables.newline + GlobalVariables.newline)
 
     fun textAsAttachment(context: Context, subject: String, text: String, filename: String) {
         val dir = File(context.filesDir.toString() + "/shared")
@@ -45,7 +45,11 @@ object UtilityShare {
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         }
         val file = File(dir, filename)
-        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.PACKAGE_NAME}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(
+            context,
+            "${GlobalVariables.PACKAGE_NAME}.fileprovider",
+            file
+        )
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
@@ -92,7 +96,12 @@ object UtilityShare {
         bitmap(activity, subject, UtilityImg.mergeImagesVertically(bitmaps), text)
     }
 
-    fun textWithBitmapAttr(activity: Activity, subject: String, text: String, bitmapsAttr: List<BitmapAttr>) {
+    fun textWithBitmapAttr(
+        activity: Activity,
+        subject: String,
+        text: String,
+        bitmapsAttr: List<BitmapAttr>
+    ) {
         bitmap(activity, subject, UtilityImg.mergeImagesVerticallyBitmapAttr(bitmapsAttr), text)
     }
 
@@ -110,7 +119,11 @@ object UtilityShare {
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         }
         val file = File(dir, "img1.png")
-        val imgUri = FileProvider.getUriForFile(context, "${GlobalVariables.PACKAGE_NAME}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(
+            context,
+            "${GlobalVariables.PACKAGE_NAME}.fileprovider",
+            file
+        )
         try {
             val fos = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)

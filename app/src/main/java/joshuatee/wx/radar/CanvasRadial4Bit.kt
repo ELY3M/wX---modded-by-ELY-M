@@ -73,9 +73,12 @@ internal object CanvasRadial4Bit {
                 val date = ObjectDateTime.radarTime(volumeScanDate, volumeScanTime)
                 dis.skipBytes(6)
                 val radarInfo = date + GlobalVariables.newline +
-                        "Radar Mode: " + operationalMode.toInt().toString() + GlobalVariables.newline +
-                        "Product Code: " + productCode.toInt().toString() + GlobalVariables.newline +
-                        "Radar height: " + heightOfRadar.toInt().toString() + GlobalVariables.newline +
+                        "Radar Mode: " + operationalMode.toInt()
+                    .toString() + GlobalVariables.newline +
+                        "Product Code: " + productCode.toInt()
+                    .toString() + GlobalVariables.newline +
+                        "Radar height: " + heightOfRadar.toInt()
+                    .toString() + GlobalVariables.newline +
                         "Radar Lat: " + latitudeOfRadar.toString() + GlobalVariables.newline +
                         "Radar Lon: " + longitudeOfRadar.toString() + GlobalVariables.newline
                 NexradUtil.writeRadarInfo(context, "", radarInfo)
@@ -176,7 +179,8 @@ internal object CanvasRadial4Bit {
                         } else {
                             xy1 = UtilityMath.toRect(binStart, angle)
                             xy2 = UtilityMath.toRect(binStart + binSize * levelCount, angle)
-                            xy3 = UtilityMath.toRect(binStart + binSize * levelCount, angle - angleV)
+                            xy3 =
+                                UtilityMath.toRect(binStart + binSize * levelCount, angle - angleV)
                             xy4 = UtilityMath.toRect(binStart, angle - angleV)
                             xy1[0] += centerX.toFloat()
                             xy2[0] += centerX.toFloat()

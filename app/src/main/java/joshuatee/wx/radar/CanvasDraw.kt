@@ -45,7 +45,11 @@ import java.nio.ByteBuffer
 
 internal object CanvasDraw {
 
-    fun warnings(projectionType: ProjectionType, bitmap: Bitmap, projectionNumbers: ProjectionNumbers) {
+    fun warnings(
+        projectionType: ProjectionType,
+        bitmap: Bitmap,
+        projectionNumbers: ProjectionNumbers
+    ) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
@@ -54,7 +58,11 @@ internal object CanvasDraw {
             canvas.translate(CanvasMain.xOffset, CanvasMain.yOffset)
         }
         paint.strokeWidth = projectionNumbers.polygonWidth.toFloat()
-        listOf(PolygonWarningType.FlashFloodWarning, PolygonWarningType.TornadoWarning, PolygonWarningType.ThunderstormWarning).forEach {
+        listOf(
+            PolygonWarningType.FlashFloodWarning,
+            PolygonWarningType.TornadoWarning,
+            PolygonWarningType.ThunderstormWarning
+        ).forEach {
             paint.color = PolygonWarning.byType[it]!!.color
             val html = PolygonWarning.byType[it]!!.getData()
             val warnings = ObjectWarning.parseJson(html)
@@ -69,7 +77,12 @@ internal object CanvasDraw {
         }
     }
 
-    fun cities(projectionType: ProjectionType, bitmap: Bitmap, projectionNumbers: ProjectionNumbers, textSize: Int) {
+    fun cities(
+        projectionType: ProjectionType,
+        bitmap: Bitmap,
+        projectionNumbers: ProjectionNumbers,
+        textSize: Int
+    ) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         with(paint) {
@@ -88,10 +101,10 @@ internal object CanvasDraw {
             val coordinates = Projection.computeMercatorNumbers(it.x, it.y, projectionNumbers)
             if (textSize > 0) {
                 canvas.drawText(
-                        RegExp.comma.split(it.city)[0],
-                        coordinates[0].toFloat() + 4.0f,
-                        coordinates[1].toFloat() - 4.0f,
-                        paint
+                    RegExp.comma.split(it.city)[0],
+                    coordinates[0].toFloat() + 4.0f,
+                    coordinates[1].toFloat() - 4.0f,
+                    paint
                 )
                 canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
             } else {
@@ -100,7 +113,11 @@ internal object CanvasDraw {
         }
     }
 
-    fun locationDotForCurrentLocation(projectionType: ProjectionType, bitmap: Bitmap, projectionNumbers: ProjectionNumbers) {
+    fun locationDotForCurrentLocation(
+        projectionType: ProjectionType,
+        bitmap: Bitmap,
+        projectionNumbers: ProjectionNumbers
+    ) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         with(paint) {
@@ -123,10 +140,14 @@ internal object CanvasDraw {
             canvas.drawBitmap(locationiconresized, coordinates[0].toFloat(), coordinates[1].toFloat(), null)
         } else {
         canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
-	}
     }
 
-    fun mcd(projectionType: ProjectionType, bitmap: Bitmap, projectionNumbers: ProjectionNumbers, polygonType: PolygonType) {
+    fun mcd(
+        projectionType: ProjectionType,
+        bitmap: Bitmap,
+        projectionNumbers: ProjectionNumbers,
+        polygonType: PolygonType
+    ) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
@@ -142,7 +163,13 @@ internal object CanvasDraw {
         drawMcd(list, canvas, path, paint, projectionNumbers)
     }
 
-    private fun drawMcd(polygons: List<String>, canvas: Canvas, path: Path, paint: Paint, projectionNumbers: ProjectionNumbers) {
+    private fun drawMcd(
+        polygons: List<String>,
+        canvas: Canvas,
+        path: Path,
+        paint: Paint,
+        projectionNumbers: ProjectionNumbers
+    ) {
         val warningList = mutableListOf<Double>()
         polygons.forEach { polygon ->
             val latLons = LatLon.parseStringToLatLons(polygon, 1.0, false)
@@ -172,27 +199,38 @@ internal object CanvasDraw {
     }
 
     fun geometry(
-            projectionType: ProjectionType,
-            bitmap: Bitmap,
-            radarSite: String,
-            geographyType: RadarGeometryTypeEnum,
-            genericByteBuffer: ByteBuffer
+        projectionType: ProjectionType,
+        bitmap: Bitmap,
+        radarSite: String,
+        geographyType: RadarGeometryTypeEnum,
+        genericByteBuffer: ByteBuffer
     ) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
         paint.strokeWidth = (RadarGeometry.dataByType[geographyType]!!.lineSize / 2.0).toFloat()
         paint.color = RadarGeometry.dataByType[geographyType]!!.colorInt
-        if (projectionType.needsCanvasShift) canvas.translate(CanvasMain.xOffset, CanvasMain.yOffset)
+        if (projectionType.needsCanvasShift) canvas.translate(
+            CanvasMain.xOffset,
+            CanvasMain.yOffset
+        )
         val path = Path()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         genericByteBuffer.position(0)
         try {
             val tmpBuffer = ByteBuffer.allocateDirect(genericByteBuffer.capacity())
             if (projectionType.isMercator) {
-                UtilityCanvasProjection.computeMercatorFloatToBuffer(genericByteBuffer, tmpBuffer, projectionNumbers)
+                UtilityCanvasProjection.computeMercatorFloatToBuffer(
+                    genericByteBuffer,
+                    tmpBuffer,
+                    projectionNumbers
+                )
             } else {
-                UtilityCanvasProjection.compute4326NumbersFloatToBuffer(genericByteBuffer, tmpBuffer, projectionNumbers)
+                UtilityCanvasProjection.compute4326NumbersFloatToBuffer(
+                    genericByteBuffer,
+                    tmpBuffer,
+                    projectionNumbers
+                )
             }
             tmpBuffer.position(0)
             while (tmpBuffer.position() < tmpBuffer.capacity()) {

@@ -90,14 +90,23 @@ object WpcFronts {
             val coordinates = parseLatLon(tokens[index])
             if (index < (tokens.size - 1)) {
                 val coordinates2 = parseLatLon(tokens[index + 1])
-                val distance = UtilityMath.distanceOfLine(coordinates[0], coordinates[1], coordinates2[0], coordinates2[1])
+                val distance = UtilityMath.distanceOfLine(
+                    coordinates[0],
+                    coordinates[1],
+                    coordinates2[0],
+                    coordinates2[1]
+                )
                 val numberOfTriangles = floor(distance / length).toInt()
                 // construct two lines which will consist of adding 4 points
                 for (pointNumber in 1 until numberOfTriangles step 2) {
-                    val x1 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * pointNumber) / distance
-                    val y1 = coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * pointNumber) / distance
-                    val x3 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * (pointNumber + 1)) / distance
-                    val y3 = coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * (pointNumber + 1)) / distance
+                    val x1 =
+                        coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * pointNumber) / distance
+                    val y1 =
+                        coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * pointNumber) / distance
+                    val x3 =
+                        coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * (pointNumber + 1)) / distance
+                    val y3 =
+                        coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * (pointNumber + 1)) / distance
                     val p2 = UtilityMath.computeTipPoint(x1, y1, x3, y3, true)
                     val x2 = p2[0]
                     val y2 = p2[1]
@@ -123,16 +132,27 @@ object WpcFronts {
             val coordinates = parseLatLon(tokens[index])
             if (index < (tokens.size - 1)) {
                 val coordinates2 = parseLatLon(tokens[index + 1])
-                val distance = UtilityMath.distanceOfLine(coordinates[0], coordinates[1], coordinates2[0], coordinates2[1])
+                val distance = UtilityMath.distanceOfLine(
+                    coordinates[0],
+                    coordinates[1],
+                    coordinates2[0],
+                    coordinates2[1]
+                )
                 val numberOfTriangles = floor(distance / length).toInt()
                 // construct two lines which will consist of adding 4 points
                 for (pointNumber in 1 until numberOfTriangles step 4) {
-                    val x1 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * pointNumber) / distance
-                    val y1 = coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * pointNumber) / distance
-                    val center1 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * (pointNumber + 0.5)) / distance
-                    val center2 = coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * (pointNumber + 0.5)) / distance
-                    val x3 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * (pointNumber + 1)) / distance
-                    val y3 = coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * (pointNumber + 1)) / distance
+                    val x1 =
+                        coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * pointNumber) / distance
+                    val y1 =
+                        coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * pointNumber) / distance
+                    val center1 =
+                        coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * (pointNumber + 0.5)) / distance
+                    val center2 =
+                        coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * (pointNumber + 0.5)) / distance
+                    val x3 =
+                        coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * (pointNumber + 1)) / distance
+                    val y3 =
+                        coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * (pointNumber + 1)) / distance
                     front.coordinates.add(LatLon(x1, y1))
                     val slices = 20
                     val step = PI / slices
@@ -168,7 +188,13 @@ object WpcFronts {
             val coordinates = parseLatLon(tokens[index])
             front.coordinates.add(LatLon(coordinates[0], coordinates[1]))
             val oldCoordinates = parseLatLon(tokens[index + 1])
-            val coord = UtilityMath.computeMidPoint(coordinates[0], coordinates[1], oldCoordinates[0], oldCoordinates[1], 0.8)
+            val coord = UtilityMath.computeMidPoint(
+                coordinates[0],
+                coordinates[1],
+                oldCoordinates[0],
+                oldCoordinates[1],
+                0.8
+            )
             front.coordinates.add(LatLon(coord[0], coord[1]))
         }
     }
@@ -203,11 +229,12 @@ object WpcFronts {
             fronts.clear()
             val urlBlob = GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/basicwx/coded_srp.txt"
             var html = urlBlob.getHtmlWithNewLine()
-                    .replace(GlobalVariables.newline, GlobalVariables.SEP)
+                .replace(GlobalVariables.newline, GlobalVariables.SEP)
 
             val timestamp = html.parseFirst("SURFACE PROG VALID ([0-9]{12}Z)")
             Utility.writePref("WPC_FRONTS_TIMESTAMP", timestamp)
-            html = html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" + GlobalVariables.SEP + " " + GlobalVariables.SEP)
+            html =
+                html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" + GlobalVariables.SEP + " " + GlobalVariables.SEP)
                     .replace(GlobalVariables.SEP, GlobalVariables.newline)
             val lines = html.split(GlobalVariables.newline).toMutableList()
             lines.indices.forEach { index ->
@@ -215,21 +242,23 @@ object WpcFronts {
                     // Handle lines that wrap around, check to see if lines don't start
                     // with a known character
                     if (lines[index + 1][0] != 'H'
-                            && lines[index + 1][0] != 'L'
-                            && lines[index + 1][0] != 'C'
-                            && lines[index + 1][0] != 'S'
-                            && lines[index + 1][0] != 'O'
-                            && lines[index + 1][0] != 'T'
-                            && lines[index + 1][0] != 'W') {
+                        && lines[index + 1][0] != 'L'
+                        && lines[index + 1][0] != 'C'
+                        && lines[index + 1][0] != 'S'
+                        && lines[index + 1][0] != 'O'
+                        && lines[index + 1][0] != 'T'
+                        && lines[index + 1][0] != 'W'
+                    ) {
                         lines[index] = lines[index] + lines[index + 1]
                         if (index < lines.size - 2
-                                && lines[index + 2][0] != 'H'
-                                && lines[index + 2][0] != 'L'
-                                && lines[index + 2][0] != 'C'
-                                && lines[index + 2][0] != 'S'
-                                && lines[index + 2][0] != 'O'
-                                && lines[index + 2][0] != 'T'
-                                && lines[index + 2][0] != 'W') {
+                            && lines[index + 2][0] != 'H'
+                            && lines[index + 2][0] != 'L'
+                            && lines[index + 2][0] != 'C'
+                            && lines[index + 2][0] != 'S'
+                            && lines[index + 2][0] != 'O'
+                            && lines[index + 2][0] != 'T'
+                            && lines[index + 2][0] != 'W'
+                        ) {
                             lines[index] = lines[index] + lines[index + 2]
                         }
                     }
@@ -243,8 +272,12 @@ object WpcFronts {
                             for (typeIndex in 0 until tokens.size step 2) {
                                 if (typeIndex + 1 < tokens.size) {
                                     val coordinates = parseLatLon(tokens[typeIndex + 1])
-                                    pressureCenters.add(PressureCenter(PressureCenterTypeEnum.HIGH,
-                                            tokens[typeIndex], coordinates[0], coordinates[1]))
+                                    pressureCenters.add(
+                                        PressureCenter(
+                                            PressureCenterTypeEnum.HIGH,
+                                            tokens[typeIndex], coordinates[0], coordinates[1]
+                                        )
+                                    )
                                 }
                             }
                         }
@@ -253,8 +286,12 @@ object WpcFronts {
                             for (typeIndex in 0 until tokens.size step 2) {
                                 if (typeIndex + 1 < tokens.size) {
                                     val coordinates = parseLatLon(tokens[typeIndex + 1])
-                                    pressureCenters.add(PressureCenter(PressureCenterTypeEnum.LOW,
-                                            tokens[typeIndex], coordinates[0], coordinates[1]))
+                                    pressureCenters.add(
+                                        PressureCenter(
+                                            PressureCenterTypeEnum.LOW,
+                                            tokens[typeIndex], coordinates[0], coordinates[1]
+                                        )
+                                    )
                                 }
                             }
                         }

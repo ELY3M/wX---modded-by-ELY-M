@@ -28,9 +28,9 @@ package joshuatee.wx.objects
 //
 
 enum class ProjectionType(
-        val isMercator: Boolean,
-        internal val needsBlackPaint: Boolean,
-        internal val needsCanvasShift: Boolean,
+    val isMercator: Boolean,
+    internal val needsBlackPaint: Boolean,
+    internal val needsCanvasShift: Boolean,
 ) {
     WX_RENDER(true, false, true),
     WX_RENDER_48(true, false, true),

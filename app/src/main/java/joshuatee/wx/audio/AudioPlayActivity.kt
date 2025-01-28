@@ -96,7 +96,12 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         }
     }
 
-    protected fun audioPlayMenu(item: Int, txt: String, prod: String, playlistToken: String): Boolean {
+    protected fun audioPlayMenu(
+        item: Int,
+        txt: String,
+        prod: String,
+        playlistToken: String
+    ): Boolean {
         ttsProd = prod
         ttsTxt = txt
         when (item) {

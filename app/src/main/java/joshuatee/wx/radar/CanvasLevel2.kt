@@ -149,9 +149,9 @@ internal object CanvasLevel2 {
                         paint.color = zeroColor
                     else
                         paint.color = Color.rgb(
-                                cR.get(level).toInt() and 0xFF,
-                                cG.get(level).toInt() and 0xFF,
-                                cB.get(level).toInt() and 0xFF
+                            cR.get(level).toInt() and 0xFF,
+                            cG.get(level).toInt() and 0xFF,
+                            cB.get(level).toInt() and 0xFF
                         )
                     with(path) {
                         rewind() // only needed when reusing this path for a new build

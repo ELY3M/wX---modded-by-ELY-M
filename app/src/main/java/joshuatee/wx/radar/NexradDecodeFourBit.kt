@@ -31,7 +31,12 @@ import joshuatee.wx.util.UtilityLog
 internal object NexradDecodeFourBit {
 
     // Used for Legacy 4bit radar - only SRM or spectrum width 30 or TDWR TR0
-    fun radial(context: Context, fileName: String, radialStart: ByteBuffer, binWord: ByteBuffer): Short {
+    fun radial(
+        context: Context,
+        fileName: String,
+        radialStart: ByteBuffer,
+        binWord: ByteBuffer
+    ): Short {
         var numberOfRangeBins = 0.toShort()
         try {
             val fileInputStream = context.openFileInput(fileName)

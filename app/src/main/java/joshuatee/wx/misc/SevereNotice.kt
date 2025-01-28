@@ -63,7 +63,8 @@ internal class SevereNotice(val type: PolygonType) {
         }
         numbers.indices.forEach { count ->
             if (type == PolygonType.WATCH) {
-                numbers[count] = String.format("%4s", numbers[count]).replace(' ', '0') // TODO FIXME
+                numbers[count] =
+                    String.format("%4s", numbers[count]).replace(' ', '0') // TODO FIXME
                 // numbers[count] = To.stringPadLeftZeros(numbers[count], 4)
             }
             val url = when (type) {

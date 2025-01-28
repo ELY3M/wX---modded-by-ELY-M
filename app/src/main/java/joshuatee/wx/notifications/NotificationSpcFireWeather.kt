@@ -43,26 +43,37 @@ internal object NotificationSpcFireWeather {
         Location.locations.getOrNull(it)?.notificationSpcFw ?: false
     }
 
-    private fun sendNotification(context: Context, locNum: String, day: Int, threatLevel: String, validTime: String): String {
+    private fun sendNotification(
+        context: Context,
+        locNum: String,
+        day: Int,
+        threatLevel: String,
+        validTime: String
+    ): String {
         val locationIndex = To.int(locNum) - 1
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val locationLabel = "(" + Location.getName(locationIndex) + ") "
         val dayString = "SPC FWDY$day"
         val label = "$locationLabel$dayString $threatLevel"
         val text = threatLevel.replace("<.*?>".toRegex(), " ").replace("&nbsp".toRegex(), " ")
-        val objectPendingIntents = ObjectPendingIntents(context, SpcFireOutlookSummaryActivity::class.java)
+        val objectPendingIntents =
+            ObjectPendingIntents(context, SpcFireOutlookSummaryActivity::class.java)
         val cancelString = "spcfwloc$day$locNum$threatLevel$validTime"
-        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
+        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelString
+            ))
+        ) {
             val sound = Location.locations[locationIndex].sound && !inBlackout
             val objectNotification = ObjectNotification(
-                    context,
-                    sound,
-                    label,
-                    text,
-                    objectPendingIntents,
-                    GlobalVariables.ICON_ALERT,
-                    GlobalVariables.ICON_ACTION,
-                    context.resources.getString(R.string.read_aloud)
+                context,
+                sound,
+                label,
+                text,
+                objectPendingIntents,
+                GlobalVariables.ICON_ALERT,
+                GlobalVariables.ICON_ACTION,
+                context.resources.getString(R.string.read_aloud)
             )
             objectNotification.send(cancelString)
         }
@@ -73,8 +84,10 @@ internal object NotificationSpcFireWeather {
         var notificationUrls = ""
         val threatList = listOf("EXTR", "CRIT", "ELEV", "SDRT", "IDRT")
         (1..2).forEach { day ->
-            val urlLocal = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/fire_wx/fwdy" + day.toString() + ".html"
-            var urlBlob = urlLocal.getHtml().parse("CLICK FOR <a href=.(.*?txt).>DAY [12] FIREWX AREAL OUTLINE PRODUCT .KWNSPFWFD[12].</a>")
+            val urlLocal =
+                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/fire_wx/fwdy" + day.toString() + ".html"
+            var urlBlob = urlLocal.getHtml()
+                .parse("CLICK FOR <a href=.(.*?txt).>DAY [12] FIREWX AREAL OUTLINE PRODUCT .KWNSPFWFD[12].</a>")
             urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}$urlBlob"
             var html = urlBlob.getHtml()
             val validTime = html.parse("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
@@ -85,7 +98,10 @@ internal object NotificationSpcFireWeather {
                 val htmlList = htmlBlob.parseColumn(threat.substring(1) + "(.*?)[A-Z&]")
                 htmlList.forEach {
                     string += LatLon.storeWatchMcdLatLon(it)
-                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO separates on 8 's
+                    string = string.replace(
+                        " 99.99 99.99 ",
+                        " "
+                    ) // need for the way SPC ConvO separates on 8 's
                 } // end looping over polygons of one threat level
                 val items = RegExp.colon.split(string)
                 items.forEach {
@@ -109,7 +125,13 @@ internal object NotificationSpcFireWeather {
                                 // call secondary method to send notif if required
                                 if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {
                                     if (!notificationUrls.contains("spcfwloc$day$locNum")) {
-                                        notificationUrls += sendNotification(context, locNum, day, threat, validTime)
+                                        notificationUrls += sendNotification(
+                                            context,
+                                            locNum,
+                                            day,
+                                            threat,
+                                            validTime
+                                        )
                                     }
                                 }
                             }

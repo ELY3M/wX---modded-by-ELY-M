@@ -38,14 +38,26 @@ class ObjectWidgetAfd(context: Context) {
         val wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "")
         val afd = Utility.readPref(context, "AFD_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, afd)
-        remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+        remoteViews.setTextViewTextSize(
+            R.id.text1,
+            TypedValue.COMPLEX_UNIT_PX,
+            UIPreferences.textSizeSmall
+        )
         val product = if (Utility.readPref(context, "WFO_TEXT_FAV", "").startsWith("VFD")) {
             "VFD"
         } else {
             "AFD"
         }
         if (!UIPreferences.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, WfoTextActivity::class.java, R.id.text1, WfoTextActivity.URL, arrayOf(wfo, product), WidgetFile.AFD.action)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                WfoTextActivity::class.java,
+                R.id.text1,
+                WfoTextActivity.URL,
+                arrayOf(wfo, product),
+                WidgetFile.AFD.action
+            )
         }
     }
 

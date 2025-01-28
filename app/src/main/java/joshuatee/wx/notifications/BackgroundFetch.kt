@@ -92,7 +92,11 @@ class BackgroundFetch(val context: Context) {
         // send 7day and current conditions notifications for locations
         (1..Location.numLocations).forEach {
             val requestID = ObjectDateTime.currentTimeMillis().toInt()
-            notificationUrls += NotificationLocal.sendCurrentConditionsAnd7Day(context, it.toString(), requestID)
+            notificationUrls += NotificationLocal.sendCurrentConditionsAnd7Day(
+                context,
+                it.toString(),
+                requestID
+            )
         }
         // check for any text prod notifications
         NotificationTextProduct.notifyOnAll(context)

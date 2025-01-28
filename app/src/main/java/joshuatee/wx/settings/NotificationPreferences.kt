@@ -56,13 +56,20 @@ object NotificationPreferences {
     var notifTextProdStr = ""
 
     fun initPreferences() {
-        alertNotificationSoundTornadoCurrent = getInitialPreference("ALERT_NOTIFICATION_SOUND_TORNADO", "false")
-        alertNotificationSoundSpcmcd = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCMCD", "false")
-        alertNotificationSoundWpcmpd = getInitialPreference("ALERT_NOTIFICATION_SOUND_WPCMPD", "false")
-        alertNotificationSoundNhcAtl = getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_ATL", "false")
-        alertNotificationSoundSpcwat = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCWAT", "false")
-        alertNotificationSoundSpcswo = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCSWO", "false")
-        alertNotificationSoundTextProd = getInitialPreference("ALERT_NOTIFICATION_SOUND_TEXT_PROD", "false")
+        alertNotificationSoundTornadoCurrent =
+            getInitialPreference("ALERT_NOTIFICATION_SOUND_TORNADO", "false")
+        alertNotificationSoundSpcmcd =
+            getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCMCD", "false")
+        alertNotificationSoundWpcmpd =
+            getInitialPreference("ALERT_NOTIFICATION_SOUND_WPCMPD", "false")
+        alertNotificationSoundNhcAtl =
+            getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_ATL", "false")
+        alertNotificationSoundSpcwat =
+            getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCWAT", "false")
+        alertNotificationSoundSpcswo =
+            getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCSWO", "false")
+        alertNotificationSoundTextProd =
+            getInitialPreference("ALERT_NOTIFICATION_SOUND_TEXT_PROD", "false")
         notifSoundRepeat = getInitialPreference("NOTIF_SOUND_REPEAT", "false")
         notifTts = getInitialPreference("NOTIF_TTS", "false")
         alertBlackoutAmCurrent = getInitialPreference("ALERT_BLACKOUT_AM", 7)
@@ -71,7 +78,8 @@ object NotificationPreferences {
         alertSpcMcdNotification = getInitialPreference("ALERT_SPCMCD_NOTIFICATION", "false")
         alertSpcWatchNotification = getInitialPreference("ALERT_SPCWAT_NOTIFICATION", "false")
         alertSpcSwoNotification = getInitialPreference("ALERT_SPCSWO_NOTIFICATION", "false")
-        alertSpcSwoSlightNotification = getInitialPreference("ALERT_SPCSWO_SLIGHT_NOTIFICATION", "false")
+        alertSpcSwoSlightNotification =
+            getInitialPreference("ALERT_SPCSWO_SLIGHT_NOTIFICATION", "false")
         alertWpcMpdNotification = getInitialPreference("ALERT_WPCMPD_NOTIFICATION", "false")
         alertBlackoutTornado = getInitialPreference("ALERT_BLACKOUT_TORNADO", "true")
         alertNhcEpacNotification = getInitialPreference("ALERT_NHC_EPAC_NOTIFICATION", "false")
@@ -87,12 +95,12 @@ object NotificationPreferences {
     }
 
     private fun getInitialPreference(pref: String, initValue: Int): Int =
-            MyApplication.preferences.getInt(pref, initValue)
+        MyApplication.preferences.getInt(pref, initValue)
 
     private fun getInitialPreference(pref: String, initValue: String): Boolean =
-            (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
+        (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
 
     @Suppress("SameParameterValue")
     private fun getInitialPreferenceString(pref: String, initValue: String): String =
-            MyApplication.preferences.getString(pref, initValue) ?: initValue
+        MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

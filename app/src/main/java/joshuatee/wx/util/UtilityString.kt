@@ -64,10 +64,10 @@ object UtilityString {
     }
 
     fun getHtmlAndParseLastMatch(url: String, match: String): String =
-            url.getHtml().parseLastMatch(match)
+        url.getHtml().parseLastMatch(match)
 
     fun getHtmlAndParseLastMatch(url: String, pattern: Pattern): String =
-            url.getHtml().parseLastMatch(pattern)
+        url.getHtml().parseLastMatch(pattern)
 
     fun parseLastMatch(s: String, pattern: Pattern): String = try {
         var content = ""
@@ -218,7 +218,7 @@ object UtilityString {
     }
 
     fun addPeriodBeforeLastTwoChars(string: String): String =
-            StringBuilder(string).insert(string.length - 2, ".").toString()
+        StringBuilder(string).insert(string.length - 2, ".").toString()
 
     fun replaceAllRegexp(s: String, a: String, b: String): String = s.replace(Regex(a), b)
 
@@ -230,20 +230,20 @@ object UtilityString {
         val delim = delimF ?: ""
         if (delim == "start-valid-time") {
             payload = payload.replace("<end-valid-time>.*?</end-valid-time>".toRegex(), "")
-                    .replace("<layout-key>.*?</layout-key>".toRegex(), "")
+                .replace("<layout-key>.*?</layout-key>".toRegex(), "")
         }
         payload = payload.replace("<name>.*?</name>".toRegex(), "")
-                .replace("</" + delim + ">".toRegex(), "")
+            .replace("</" + delim + ">".toRegex(), "")
         return payload.split("<$delim>")
     }
 
     fun parseXmlValue(payloadF: String?): List<String> {
         var payload = payloadF ?: ""
         payload = payload.replace("<name>.*?</name>".toRegex(), "")
-                .replace("</value>", "")
+            .replace("</value>", "")
         return GlobalVariables.xmlValuePattern.split(payload).toList()
     }
 
     fun parseXmlExt(regexpList: List<String>, html: String): List<String> =
-            regexpList.map { parseAcrossLines(html, it) }
+        regexpList.map { parseAcrossLines(html, it) }
 }

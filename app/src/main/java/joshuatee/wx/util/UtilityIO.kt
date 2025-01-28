@@ -49,7 +49,13 @@ object UtilityIO {
             // while (dis.readUnsignedShort() != 16) {
         }
         dis.skipBytes(100)
-        val compression = Compression.getCompression(byteArrayOf('B'.code.toByte(), 'Z'.code.toByte(), 'h'.code.toByte()))
+        val compression = Compression.getCompression(
+            byteArrayOf(
+                'B'.code.toByte(),
+                'Z'.code.toByte(),
+                'h'.code.toByte()
+            )
+        )
         val compressedFileSize = dis.length() - dis.filePointer
         val buf = ByteArray(compressedFileSize.toInt())
         dis.read(buf)
@@ -74,12 +80,14 @@ object UtilityIO {
         }
     }
 
-    fun getFilePath(context: Context, fileName: String): String = context.getFileStreamPath(fileName).absolutePath
+    fun getFilePath(context: Context, fileName: String): String =
+        context.getFileStreamPath(fileName).absolutePath
 
     fun rawFileToStringArrayFromResource(resources: Resources, fileRaw: Int): List<String> =
-            readTextFileFromRaw(resources, fileRaw).split("\n").dropLastWhile { it.isEmpty() }
+        readTextFileFromRaw(resources, fileRaw).split("\n").dropLastWhile { it.isEmpty() }
 
-    fun readTextFileFromRaw(resources: Resources, fileRaw: Int): String = readTextFile(resources.openRawResource(fileRaw))
+    fun readTextFileFromRaw(resources: Resources, fileRaw: Int): String =
+        readTextFile(resources.openRawResource(fileRaw))
     //elys mod - cant be private. it is used in other file.  
     fun readTextFile(inputStream: InputStream): String {
         val byteArrayOutputStream = ByteArrayOutputStream()

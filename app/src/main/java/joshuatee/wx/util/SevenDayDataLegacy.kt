@@ -21,4 +21,8 @@
 
 package joshuatee.wx.util
 
-class SevenDayDataLegacy(val iconString: String, val sevenDayShort: String, val sevenDayExtended: String)
+class SevenDayDataLegacy(
+    val iconString: String,
+    val sevenDayShort: String,
+    val sevenDayExtended: String
+)

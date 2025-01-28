@@ -61,25 +61,31 @@ internal object NotificationSwo {
                     val dayString = "SWODY" + (it + 1).toString()
                     val label = dayString + " " + threatLevel[0]
                     val validTime = threatLevel[1].parse("Valid ([0-9]{6}Z - [0-9]{6}Z)")
-                    val text = threatLevel[1].replace("<.*?>".toRegex(), " ").replace("&nbsp".toRegex(), " ")
+                    val text = threatLevel[1].replace("<.*?>".toRegex(), " ")
+                        .replace("&nbsp".toRegex(), " ")
                     val objectPendingIntents = ObjectPendingIntents(
-                            context, SpcSwoActivity::class.java,
-                            SpcSwoActivity.NUMBER,
-                            arrayOf((it + 1).toString(), ""),
-                            arrayOf((it + 1).toString(), "sound")
+                        context, SpcSwoActivity::class.java,
+                        SpcSwoActivity.NUMBER,
+                        arrayOf((it + 1).toString(), ""),
+                        arrayOf((it + 1).toString(), "sound")
                     )
                     val cancelString = "usspcswo" + it.toString() + threatLevel[0] + validTime
-                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
-                        val sound = NotificationPreferences.alertNotificationSoundSpcswo && !inBlackout
+                    if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                            context,
+                            cancelString
+                        ))
+                    ) {
+                        val sound =
+                            NotificationPreferences.alertNotificationSoundSpcswo && !inBlackout
                         val objectNotification = ObjectNotification(
-                                context,
-                                sound,
-                                label,
-                                text,
-                                objectPendingIntents,
-                                GlobalVariables.ICON_MAP,
-                                GlobalVariables.ICON_ACTION,
-                                context.resources.getString(R.string.read_aloud)
+                            context,
+                            sound,
+                            label,
+                            text,
+                            objectPendingIntents,
+                            GlobalVariables.ICON_MAP,
+                            GlobalVariables.ICON_ACTION,
+                            context.resources.getString(R.string.read_aloud)
                         )
                         objectNotification.send(cancelString)
                     }
@@ -113,7 +119,8 @@ internal object NotificationSwo {
         var notificationUrls = ""
         val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
         (1..3).forEach { day ->
-            val urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
+            val urlBlob =
+                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
             val html = urlBlob.getHtmlWithNewLine()
             val validTime = html.parseAcrossLines("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
             val htmlBlob = html.parseAcrossLines("... CATEGORICAL ...(.*?&)&")
@@ -122,7 +129,10 @@ internal object NotificationSwo {
                 val htmlList = htmlBlob.parseColumnAcrossLines(threat.substring(1) + "(.*?)[A-Z&]")
                 htmlList.forEach {
                     string += LatLon.storeWatchMcdLatLon(it)
-                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO separates on 8 's
+                    string = string.replace(
+                        " 99.99 99.99 ",
+                        " "
+                    ) // need for the way SPC ConvO separates on 8 's
                 } // end looping over polygons of one threat level
                 val items = RegExp.colon.split(string)
                 items.forEach {
@@ -144,7 +154,13 @@ internal object NotificationSwo {
                                 // call secondary method to send notif if required
                                 if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {
                                     if (!notificationUrls.contains("spcswoloc$day$locNum")) {
-                                        notificationUrls += sendNotification(context, locNum, day, threat, validTime)
+                                        notificationUrls += sendNotification(
+                                            context,
+                                            locNum,
+                                            day,
+                                            threat,
+                                            validTime
+                                        )
                                     }
                                 }
                             }
@@ -159,7 +175,13 @@ internal object NotificationSwo {
     //
     // used by both location based d1-3 and d4-8 to send notification
     // TODO FIXME can this shared with CONUS based notification
-    private fun sendNotification(context: Context, locNum: String, day: Int, threatLevel: String, validTime: String): String {
+    private fun sendNotification(
+        context: Context,
+        locNum: String,
+        day: Int,
+        threatLevel: String,
+        validTime: String
+    ): String {
         val locationIndex = To.int(locNum) - 1
         val locationString = Utility.readPref(context, "LOC" + locNum + "_LABEL", "")
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
@@ -172,24 +194,28 @@ internal object NotificationSwo {
             dayArgument = "4-8"
         }
         val objectPendingIntents = ObjectPendingIntents(
-                context,
-                SpcSwoActivity::class.java,
-                SpcSwoActivity.NUMBER,
-                arrayOf(dayArgument, ""),
-                arrayOf(dayArgument, "sound")
+            context,
+            SpcSwoActivity::class.java,
+            SpcSwoActivity.NUMBER,
+            arrayOf(dayArgument, ""),
+            arrayOf(dayArgument, "sound")
         )
         val cancelString = "spcswoloc$day$locNum$threatLevel$validTime"
-        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
+        if (!(NotificationPreferences.alertOnlyOnce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelString
+            ))
+        ) {
             val sound = (Location.locations.getOrNull(locationIndex)?.sound ?: false) && !inBlackout
             val objectNotification = ObjectNotification(
-                    context,
-                    sound,
-                    title,
-                    text,
-                    objectPendingIntents,
-                    GlobalVariables.ICON_ALERT,
-                    GlobalVariables.ICON_ACTION,
-                    context.resources.getString(R.string.read_aloud)
+                context,
+                sound,
+                title,
+                text,
+                objectPendingIntents,
+                GlobalVariables.ICON_ALERT,
+                GlobalVariables.ICON_ACTION,
+                context.resources.getString(R.string.read_aloud)
             )
             objectNotification.send(cancelString)
         }
@@ -202,19 +228,25 @@ internal object NotificationSwo {
     fun sendD48Location(context: Context): String {
         var notificationUrls = ""
         val threatList = listOf("SPC30percent", "SPC15percent")
-        var urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/exper/day4-8/".getHtml().parse("CLICK TO GET <a href=.(.*?txt).>WUUS48 PTSD48</a>")
+        var urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/exper/day4-8/".getHtml()
+            .parse("CLICK TO GET <a href=.(.*?txt).>WUUS48 PTSD48</a>")
         urlBlob = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}$urlBlob"
         var html = urlBlob.getHtmlWithNewLine()
         val validTime = html.parseAcrossLines("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
-        html = html.replace(GlobalVariables.newline, " ").replace("0.30", "SPC30percent").replace("0.15", "SPC15percent")
+        html = html.replace(GlobalVariables.newline, " ").replace("0.30", "SPC30percent")
+            .replace("0.15", "SPC15percent")
         (4..8).forEach { day ->
-            val htmlBlob = html.parseAcrossLines("SEVERE WEATHER OUTLOOK POINTS DAY $day(.*?&)&") // was (.*?)&&
+            val htmlBlob =
+                html.parseAcrossLines("SEVERE WEATHER OUTLOOK POINTS DAY $day(.*?&)&") // was (.*?)&&
             threatList.forEach { threat ->
                 var string = ""
                 val htmlList = htmlBlob.parseColumnAcrossLines(threat.substring(1) + "(.*?)[A-Z&]")
                 htmlList.forEach {
                     string += LatLon.storeWatchMcdLatLon(it)
-                    string = string.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO separates on 8 's
+                    string = string.replace(
+                        " 99.99 99.99 ",
+                        " "
+                    ) // need for the way SPC ConvO separates on 8 's
                 } // end looping over polygons of one threat level
                 val items = string.split(":")
                 items.indices.forEach { z ->
@@ -234,7 +266,13 @@ internal object NotificationSwo {
                                 // call secondary method to send notif if required
                                 if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {
                                     if (!notificationUrls.contains("spcswoloc$day$locNum")) {
-                                        notificationUrls += sendNotification(context, locNum, day, threat, validTime)
+                                        notificationUrls += sendNotification(
+                                            context,
+                                            locNum,
+                                            day,
+                                            threat,
+                                            validTime
+                                        )
                                     }
                                 }
                             }

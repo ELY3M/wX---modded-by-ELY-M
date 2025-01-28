@@ -43,7 +43,12 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
         if (version == 2) {
             text1.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
             text2.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
-            text3.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, UIPreferences.paddingSmall)
+            text3.setPadding(
+                UIPreferences.padding,
+                0,
+                UIPreferences.paddingSmall,
+                UIPreferences.paddingSmall
+            )
             vbox.addWidgets(listOf(text1, text2, text3))
             hbox.addWidgets(listOf(photo, vbox))
         } else {
@@ -83,7 +88,11 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
         text2.text = s
     }
 
-    fun connect(objectDialogue: ObjectDialogue?, dialogueItems: MutableList<String>, radarTimestamps: () -> List<String>) {
+    fun connect(
+        objectDialogue: ObjectDialogue?,
+        dialogueItems: MutableList<String>,
+        radarTimestamps: () -> List<String>
+    ) {
         photo.connect {
             with(dialogueItems) {
                 clear()
@@ -110,14 +119,29 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
         val conditionTokens = objCc.data.split(sep).dropLastWhile { it.isEmpty() }
         if (conditionTokens.size > 4 && isUS) {
             val items = conditionTokens[0].split("/").dropLastWhile { it.isEmpty() }
-            setTopLine(conditionTokens[4].replace("^ ".toRegex(), "") + " " + items[0] + conditionTokens[2])
-            setMiddleLine(items[1].replace("^ ".toRegex(), "") + sep + conditionTokens[1] + sep + conditionTokens[3])
+            setTopLine(
+                conditionTokens[4].replace(
+                    "^ ".toRegex(),
+                    ""
+                ) + " " + items[0] + conditionTokens[2]
+            )
+            setMiddleLine(
+                items[1].replace(
+                    "^ ".toRegex(),
+                    ""
+                ) + sep + conditionTokens[1] + sep + conditionTokens[3]
+            )
             setStatus(objCc.status + radarTime)
         } else {
             if (conditionTokens.isNotEmpty()) {
                 val items = conditionTokens[0].split("/").dropLastWhile { it.isEmpty() }
                 setTopLine(conditionTokens[4] + "" + items[0] + conditionTokens[2])
-                setMiddleLine(items[1].replace("^ ".toRegex(), "") + sep + conditionTokens[1] + sep + conditionTokens[3])
+                setMiddleLine(
+                    items[1].replace(
+                        "^ ".toRegex(),
+                        ""
+                    ) + sep + conditionTokens[1] + sep + conditionTokens[3]
+                )
                 setStatus(objCc.status.replace("^ ".toRegex(), "") + radarTime)
             }
         }

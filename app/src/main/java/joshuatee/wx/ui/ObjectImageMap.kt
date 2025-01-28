@@ -29,11 +29,11 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.radar.NexradRenderTextObject
 
 class ObjectImageMap(
-        val activity: Activity,
-        resId: Int,
-        val toolbar: ObjectToolbar,
-        val toolbarBottom: ObjectToolbar,
-        private val views: List<View>
+    val activity: Activity,
+    resId: Int,
+    val toolbar: ObjectToolbar,
+    val toolbarBottom: ObjectToolbar,
+    private val views: List<View>
 ) {
 
     private val map: ImageMap = activity.findViewById(resId)
@@ -114,7 +114,10 @@ class ObjectImageMap(
 
     private fun setupImageMap(toolbar: ObjectToolbar, toolbarBottom: ObjectToolbar) {
         val layoutParams = map.layoutParams
-        layoutParams.height = MyApplication.dm.heightPixels - toolbar.height - toolbarBottom.height - UtilityUI.statusBarHeight(activity)
+        layoutParams.height =
+            MyApplication.dm.heightPixels - toolbar.height - toolbarBottom.height - UtilityUI.statusBarHeight(
+                activity
+            )
         layoutParams.width = MyApplication.dm.widthPixels
         map.layoutParams = layoutParams
     }

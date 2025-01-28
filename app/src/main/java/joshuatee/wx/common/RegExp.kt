@@ -25,10 +25,12 @@ import java.util.regex.Pattern
 
 object RegExp {
 
-    val warningVtecPattern: Pattern = Pattern.compile("([A-Z0]\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)")
+    val warningVtecPattern: Pattern =
+        Pattern.compile("([A-Z0]\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)")
     val warningLatLonPattern: Pattern = Pattern.compile("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
     val watchPattern: Pattern = Pattern.compile("[om] Watch #([0-9]*?)</a>")
-    val mcdPatternAlerts: Pattern = Pattern.compile("<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>")
+    val mcdPatternAlerts: Pattern =
+        Pattern.compile("<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>")
     val mcdPatternUtilSpc: Pattern = Pattern.compile(">Mesoscale Discussion #(.*?)</a>")
     val mpdPattern: Pattern = Pattern.compile(">MPD #(.*?)</a></strong>")
     val prePattern: Pattern = Pattern.compile("<pre.*?>(.*?)</pre>")

@@ -42,7 +42,8 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     // SPC Fire Weather Outlooks
     //
 
-    private val bitmaps = MutableList(UtilitySpcFireOutlook.urls.size) { UtilityImg.getBlankBitmap() }
+    private val bitmaps =
+        MutableList(UtilitySpcFireOutlook.urls.size) { UtilityImg.getBlankBitmap() }
     private lateinit var box: VBox
     private lateinit var imageSummary: ImageSummary
     private var downloadTimer = DownloadTimer("ACTIVITY_SPC_FIRE_SUMMARY")
@@ -54,7 +55,12 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout,
+            R.menu.shared_multigraphics,
+            false
+        )
         setTitle("Fire Weather Outlooks", "SPC")
         box = VBox.fromResource(this)
         imageSummary = ImageSummary(this, box, bitmaps)

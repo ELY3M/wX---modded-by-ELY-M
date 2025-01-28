@@ -38,9 +38,21 @@ class ObjectWidgetHwo(context: Context) {
         val wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "")
         val hwo = Utility.readPref(context, "HWO_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, hwo)
-        remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+        remoteViews.setTextViewTextSize(
+            R.id.text1,
+            TypedValue.COMPLEX_UNIT_PX,
+            UIPreferences.textSizeSmall
+        )
         if (!UIPreferences.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, WfoTextActivity::class.java, R.id.text1, WfoTextActivity.URL, arrayOf(wfo, "HWO"), WidgetFile.HWO.action)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                WfoTextActivity::class.java,
+                R.id.text1,
+                WfoTextActivity.URL,
+                arrayOf(wfo, "HWO"),
+                WidgetFile.HWO.action
+            )
         }
     }
 

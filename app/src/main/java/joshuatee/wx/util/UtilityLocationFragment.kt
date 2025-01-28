@@ -64,9 +64,9 @@ object UtilityLocationFragment {
     private val sevenDayWinddir1: Pattern = Pattern.compile("\\. (\\w+\\s?\\w*) wind ")
     private val sevenDayWinddir2: Pattern = Pattern.compile("wind becoming (.*?) [0-9]")
     private val sevenDayWinddir3: Pattern = Pattern.compile("wind becoming (\\w+\\s?\\w*) around")
-    private val sevenDayWinddir4: Pattern = Pattern.compile("Breezy, with a[n]? (.*?) wind")
-    private val sevenDayWinddir5: Pattern = Pattern.compile("Windy, with a[n]? (.*?) wind")
-    private val sevenDayWinddir6: Pattern = Pattern.compile("Blustery, with a[n]? (.*?) wind")
+    private val sevenDayWinddir4: Pattern = Pattern.compile("Breezy, with an? (.*?) wind")
+    private val sevenDayWinddir5: Pattern = Pattern.compile("Windy, with an? (.*?) wind")
+    private val sevenDayWinddir6: Pattern = Pattern.compile("Blustery, with an? (.*?) wind")
     private val sevenDayWinddir7: Pattern = Pattern.compile("Light (.*?) wind")
 
     private val windDirectionMap = mapOf(

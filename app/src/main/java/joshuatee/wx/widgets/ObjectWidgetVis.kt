@@ -37,7 +37,15 @@ class ObjectWidgetVis(context: Context) {
         intentHome.addCategory("android.intent.category.HOME")
         UtilityWidget.setImage(context, remoteViews, WidgetFile.VIS.fileName)
         if (!UIPreferences.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.iv, GoesActivity.RID, arrayOf(""), WidgetFile.VIS.action)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                GoesActivity::class.java,
+                R.id.iv,
+                GoesActivity.RID,
+                arrayOf(""),
+                WidgetFile.VIS.action
+            )
         }
     }
 

@@ -64,7 +64,11 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar_with_fab, R.menu.spcmcdshowdetail)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar_with_fab,
+            R.menu.spcmcdshowdetail
+        )
         arguments = intent.getStringArrayExtra(NUMBER)!!
         number = arguments[0]
         setupUI()
@@ -80,7 +84,12 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun setupUI() {
         box = VBox.fromResource(this)
         objectToolbarBottom.connect(this)
-        Fab(this, R.id.fab, GlobalVariables.ICON_RADAR) { Route.radarBySite(this, objectWatchProduct.getClosestRadar()) }
+        Fab(this, R.id.fab, GlobalVariables.ICON_RADAR) {
+            Route.radarBySite(
+                this,
+                objectWatchProduct.getClosestRadar()
+            )
+        }
         image = if (tabletInLandscape) {
             box.makeHorizontal()
             Image(this, UtilityImg.getBlankBitmap(), 2)
@@ -104,12 +113,18 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun updateText() {
         cardText.text = objectWatchProduct.text
-                .replace("\n\n", "ABC_123")
-                .replace("\n", "")
-                .replace("ABC_123", "\n")
-                .removeHtml()
+            .replace("\n\n", "ABC_123")
+            .replace("\n", "")
+            .replace("ABC_123", "\n")
+            .removeHtml()
         setTitle(objectWatchProduct.title, objectWatchProduct.textForSubtitle)
-        UtilityTts.conditionalPlay(arguments, 2, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
+        UtilityTts.conditionalPlay(
+            arguments,
+            2,
+            applicationContext,
+            objectWatchProduct.text,
+            objectWatchProduct.prod
+        )
     }
 
     private fun updateImage() {
@@ -126,10 +141,31 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap, objectWatchProduct.text)
-            R.id.action_share_text -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.text)
-            R.id.action_share_url -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.textUrl)
-            R.id.action_share_image -> UtilityShare.bitmap(this, objectWatchProduct.title, objectWatchProduct.bitmap)
+            R.id.action_share_all -> UtilityShare.bitmap(
+                this,
+                objectWatchProduct.title,
+                objectWatchProduct.bitmap,
+                objectWatchProduct.text
+            )
+
+            R.id.action_share_text -> UtilityShare.text(
+                this,
+                objectWatchProduct.title,
+                objectWatchProduct.text
+            )
+
+            R.id.action_share_url -> UtilityShare.text(
+                this,
+                objectWatchProduct.title,
+                objectWatchProduct.textUrl
+            )
+
+            R.id.action_share_image -> UtilityShare.bitmap(
+                this,
+                objectWatchProduct.title,
+                objectWatchProduct.bitmap
+            )
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -28,13 +28,13 @@ import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 
 class DrawerHeaderItem(
-        drawerLayout: DrawerLayout,
-        headerLayout: View,
-        buttonId: Int,
-        textId: Int,
-        tint: ColorStateList,
-        gravityForDrawer: Int,
-        fn: () -> Unit
+    drawerLayout: DrawerLayout,
+    headerLayout: View,
+    buttonId: Int,
+    textId: Int,
+    tint: ColorStateList,
+    gravityForDrawer: Int,
+    fn: () -> Unit
 ) {
 
     val button: ImageButton = headerLayout.findViewById(buttonId)

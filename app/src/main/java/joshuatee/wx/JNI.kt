@@ -43,100 +43,100 @@ object Jni {
     }
 
     external fun decode8BitAndGenRadials(
-            src: String,
-            seekStart: Long,
-            length: Int,
-            inputBuffer: ByteBuffer,
-            outputBuffer: ByteBuffer,
-            radarBuffer: ByteBuffer,
-            colorBuffer: ByteBuffer,
-            binSize: Float,
-            bgColorRed: Byte,
-            bgColorGreen: Byte,
-            bgColorBlue: Byte,
-            colorRedBuffer: ByteBuffer,
-            colorGreenBuffer: ByteBuffer,
-            colorBlueBuffer: ByteBuffer,
-            productCode: Int
+        src: String,
+        seekStart: Long,
+        length: Int,
+        inputBuffer: ByteBuffer,
+        outputBuffer: ByteBuffer,
+        radarBuffer: ByteBuffer,
+        colorBuffer: ByteBuffer,
+        binSize: Float,
+        bgColorRed: Byte,
+        bgColorGreen: Byte,
+        bgColorBlue: Byte,
+        colorRedBuffer: ByteBuffer,
+        colorGreenBuffer: ByteBuffer,
+        colorBlueBuffer: ByteBuffer,
+        productCode: Int
     ): Int
 
     external fun genIndex(indexBuffer: ByteBuffer, len: Int, breakSize: Int)
     external fun genIndexLine(indexBuffer: ByteBuffer, len: Int, breakSize: Int)
     external fun genMercator(
-            inputBuffer: ByteBuffer,
-            outputBuffer: ByteBuffer,
-            centerX: Float,
-            centerY: Float,
-            xImageCenterPixels: Float,
-            yImageCenterPixels: Float,
-            oneDegreeScaleFactor: Float,
-            count: Int
+        inputBuffer: ByteBuffer,
+        outputBuffer: ByteBuffer,
+        centerX: Float,
+        centerY: Float,
+        xImageCenterPixels: Float,
+        yImageCenterPixels: Float,
+        oneDegreeScaleFactor: Float,
+        count: Int
     )
 
     external fun genCircle(
-            locationBuffer: ByteBuffer,
-            indexBuffer: ByteBuffer,
-            centerX: Float,
-            centerY: Float,
-            xImageCenterPixels: Float,
-            yImageCenterPixels: Float,
-            oneDegreeScaleFactor: Float,
-            x: DoubleArray,
-            y: DoubleArray,
-            count: Int,
-            len: Float,
-            triangleAmount: Int,
-            c: ByteBuffer,
-            color: ByteArray
+        locationBuffer: ByteBuffer,
+        indexBuffer: ByteBuffer,
+        centerX: Float,
+        centerY: Float,
+        xImageCenterPixels: Float,
+        yImageCenterPixels: Float,
+        oneDegreeScaleFactor: Float,
+        x: DoubleArray,
+        y: DoubleArray,
+        count: Int,
+        len: Float,
+        triangleAmount: Int,
+        c: ByteBuffer,
+        color: ByteArray
     )
 
     external fun genCircleWithColor(
-            locationBuffer: ByteBuffer,
-            indexBuffer: ByteBuffer,
-            centerX: Float,
-            centerY: Float,
-            xImageCenterPixels: Float,
-            yImageCenterPixels: Float,
-            oneDegreeScaleFactor: Float,
-            x: DoubleArray,
-            y: DoubleArray,
-            count: Int,
-            len: Float,
-            triangleAmount: Int,
-            c: ByteBuffer,
-            colorIntArray: IntArray
+        locationBuffer: ByteBuffer,
+        indexBuffer: ByteBuffer,
+        centerX: Float,
+        centerY: Float,
+        xImageCenterPixels: Float,
+        yImageCenterPixels: Float,
+        oneDegreeScaleFactor: Float,
+        x: DoubleArray,
+        y: DoubleArray,
+        count: Int,
+        len: Float,
+        triangleAmount: Int,
+        c: ByteBuffer,
+        colorIntArray: IntArray
     )
 
     external fun genTriangle(
-            locationBuffer: ByteBuffer,
-            indexBuffer: ByteBuffer,
-            centerX: Float,
-            centerY: Float,
-            xImageCenterPixels: Float,
-            yImageCenterPixels: Float,
-            oneDegreeScaleFactor: Float,
-            x: DoubleArray,
-            y: DoubleArray,
-            count: Int,
-            len: Float,
-            c: ByteBuffer,
-            color: ByteArray
+        locationBuffer: ByteBuffer,
+        indexBuffer: ByteBuffer,
+        centerX: Float,
+        centerY: Float,
+        xImageCenterPixels: Float,
+        yImageCenterPixels: Float,
+        oneDegreeScaleFactor: Float,
+        x: DoubleArray,
+        y: DoubleArray,
+        count: Int,
+        len: Float,
+        c: ByteBuffer,
+        color: ByteArray
     )
 
     external fun genTriangleUp(
-            locationBuffer: ByteBuffer,
-            indexBuffer: ByteBuffer,
-            centerX: Float,
-            centerY: Float,
-            xImageCenterPixels: Float,
-            yImageCenterPixels: Float,
-            oneDegreeScaleFactor: Float,
-            x: DoubleArray,
-            y: DoubleArray,
-            count: Int,
-            len: Float,
-            c: ByteBuffer,
-            color: ByteArray
+        locationBuffer: ByteBuffer,
+        indexBuffer: ByteBuffer,
+        centerX: Float,
+        centerY: Float,
+        xImageCenterPixels: Float,
+        yImageCenterPixels: Float,
+        oneDegreeScaleFactor: Float,
+        x: DoubleArray,
+        y: DoubleArray,
+        count: Int,
+        len: Float,
+        c: ByteBuffer,
+        color: ByteArray
     )
 
     external fun colorGen(colorByteBuffer: ByteBuffer, len: Int, colorByteArray: ByteArray)

@@ -9,9 +9,11 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.UIPreferences
 
-class SingleTextAdapterList(private val dataSet: MutableList<String>) : RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
+class SingleTextAdapterList(private val dataSet: MutableList<String>) :
+    RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
 
-    class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val label = Text(itemView, R.id.single_text, TextSize.MEDIUM)
 

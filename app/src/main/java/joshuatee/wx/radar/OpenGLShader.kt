@@ -26,22 +26,22 @@ internal object OpenGLShader {
      *
      */
     const val VS_SOLID_COLOR =
-            "uniform    mat4        uMVPMatrix;" +
-                    "attribute  vec4        vPosition;" +
-                    "attribute  vec3        a_Color;" + // was attribute
+        "uniform    mat4        uMVPMatrix;" +
+                "attribute  vec4        vPosition;" +
+                "attribute  vec3        a_Color;" + // was attribute
 
-                    "varying  vec3        v_Color;" +
-                    "void main() {" +
-                    "  gl_Position = uMVPMatrix * vPosition;" +
-                    "  v_Color = a_Color;" +
-                    "}"
+                "varying  vec3        v_Color;" +
+                "void main() {" +
+                "  gl_Position = uMVPMatrix * vPosition;" +
+                "  v_Color = a_Color;" +
+                "}"
 
     const val FS_SOLID_COLOR =
-            "precision mediump float;" +
-                    "varying vec3 v_Color;" +
-                    "void main() {" +
-                    "  gl_FragColor = vec4(v_Color,1.0);" +
-                    "}"
+        "precision mediump float;" +
+                "varying vec3 v_Color;" +
+                "void main() {" +
+                "  gl_FragColor = vec4(v_Color,1.0);" +
+                "}"
 		    
     //Thanks to this for point sprite shader and codes
     //http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html

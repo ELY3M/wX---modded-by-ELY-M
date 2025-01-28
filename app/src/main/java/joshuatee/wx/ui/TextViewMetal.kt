@@ -27,7 +27,14 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import joshuatee.wx.R
 
-class TextViewMetal(context: Context, text: String, color: Int, textSize: Float, singleLine: Boolean = true, drawText: Boolean = true) : Widget {
+class TextViewMetal(
+    context: Context,
+    text: String,
+    color: Int,
+    textSize: Float,
+    singleLine: Boolean = true,
+    drawText: Boolean = true
+) : Widget {
 
     private val textView = TextView(context)
 
@@ -39,7 +46,10 @@ class TextViewMetal(context: Context, text: String, color: Int, textSize: Float,
         }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
 
-        val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        val layoutParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        )
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
         layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
         textView.layoutParams = layoutParams

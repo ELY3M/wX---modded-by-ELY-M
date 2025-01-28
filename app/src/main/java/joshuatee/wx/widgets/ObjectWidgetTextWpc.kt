@@ -36,9 +36,21 @@ class ObjectWidgetTextWpc(context: Context) {
     init {
         val text = Utility.readPref(context, "TEXTWPC_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, text)
-        remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+        remoteViews.setTextViewTextSize(
+            R.id.text1,
+            TypedValue.COMPLEX_UNIT_PX,
+            UIPreferences.textSizeSmall
+        )
         if (!UIPreferences.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, NationalTextActivity::class.java, R.id.text1, NationalTextActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"), WidgetFile.TEXT_WPC.action)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                NationalTextActivity::class.java,
+                R.id.text1,
+                NationalTextActivity.URL,
+                arrayOf("pmdspd", "Short Range Forecast Discussion"),
+                WidgetFile.TEXT_WPC.action
+            )
         }
     }
 

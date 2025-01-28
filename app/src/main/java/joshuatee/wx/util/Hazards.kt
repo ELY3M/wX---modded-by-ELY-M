@@ -57,7 +57,10 @@ class Hazards {
 
     companion object {
         fun getHazardsHtml(latLon: LatLon): String {
-            val url = "https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(latLon.latString) + "," + UtilityMath.latLonFix(latLon.lonString) + "&active=1"
+            val url =
+                "https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(latLon.latString) + "," + UtilityMath.latLonFix(
+                    latLon.lonString
+                ) + "&active=1"
             return UtilityDownloadNws.getHazardData(url)
         }
     }

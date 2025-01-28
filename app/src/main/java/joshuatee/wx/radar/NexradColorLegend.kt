@@ -25,7 +25,10 @@ import android.widget.RelativeLayout
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.Utility
 
-class NexradColorLegend(val activity: VideoRecordActivity, private val nexradState: NexradStatePane) {
+class NexradColorLegend(
+    val activity: VideoRecordActivity,
+    private val nexradState: NexradStatePane
+) {
 
     private var legendShown = false
     private var legend: ViewColorLegend? = null
@@ -39,12 +42,16 @@ class NexradColorLegend(val activity: VideoRecordActivity, private val nexradSta
     fun show() {
         if (!legendShown) {
             if (nexradState.product == "DSA" || nexradState.product == "DAA") {
-                WXGLRadarActivity.dspLegendMax = (255.0f / nexradState.render.wxglNexradLevel3.halfword3132) * 0.01f
+                WXGLRadarActivity.dspLegendMax =
+                    (255.0f / nexradState.render.wxglNexradLevel3.halfword3132) * 0.01f
             }
             WXGLRadarActivity.velMax = nexradState.render.wxglNexradLevel3.halfword48
             WXGLRadarActivity.velMin = nexradState.render.wxglNexradLevel3.halfword47
             legendShown = true
-            val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+            val layoutParams = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            )
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)
             legend = ViewColorLegend(activity, nexradState.product)
             nexradState.relativeLayouts[0].addView(legend, layoutParams)
@@ -60,7 +67,10 @@ class NexradColorLegend(val activity: VideoRecordActivity, private val nexradSta
 
     private fun update() {
         nexradState.relativeLayouts[0].removeView(legend)
-        val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        val layoutParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        )
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)
         legend = ViewColorLegend(activity, nexradState.product)
         nexradState.relativeLayouts[0].addView(legend, layoutParams)
@@ -71,7 +81,8 @@ class NexradColorLegend(val activity: VideoRecordActivity, private val nexradSta
             update()
         }
         if (legendShown && (nexradState.product == "DSA" || nexradState.product == "DAA" || nexradState.product == "N0U")) {
-            WXGLRadarActivity.dspLegendMax = (255.0f / nexradState.render.wxglNexradLevel3.halfword3132) * 0.01f
+            WXGLRadarActivity.dspLegendMax =
+                (255.0f / nexradState.render.wxglNexradLevel3.halfword3132) * 0.01f
             WXGLRadarActivity.velMax = nexradState.render.wxglNexradLevel3.halfword48
             WXGLRadarActivity.velMin = nexradState.render.wxglNexradLevel3.halfword47
             update()

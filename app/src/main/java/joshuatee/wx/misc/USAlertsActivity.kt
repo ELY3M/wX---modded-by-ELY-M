@@ -69,7 +69,12 @@ class USAlertsActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer, R.menu.uswarn, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_show_navdrawer,
+            R.menu.uswarn,
+            false
+        )
         val arguments = intent.getStringArrayExtra(URL)!!
         filter = arguments[0]
         region = arguments[1]
@@ -149,9 +154,24 @@ class USAlertsActivity : BaseActivity() {
             return true
         }
         when (item.itemId) {
-            R.id.action_warn_map -> Route.image(this, "https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
-            R.id.action_warn_map_AK -> Route.image(this, "https://forecast.weather.gov/wwamap/png/ak.png", "Alaska warning map")
-            R.id.action_warn_map_HI -> Route.image(this, "https://forecast.weather.gov/wwamap/png/hi.png", "Hawaii warning map")
+            R.id.action_warn_map -> Route.image(
+                this,
+                "https://forecast.weather.gov/wwamap/png/US.png",
+                "CONUS warning map"
+            )
+
+            R.id.action_warn_map_AK -> Route.image(
+                this,
+                "https://forecast.weather.gov/wwamap/png/ak.png",
+                "Alaska warning map"
+            )
+
+            R.id.action_warn_map_HI -> Route.image(
+                this,
+                "https://forecast.weather.gov/wwamap/png/hi.png",
+                "Hawaii warning map"
+            )
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

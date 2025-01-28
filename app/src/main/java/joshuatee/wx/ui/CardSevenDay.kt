@@ -51,12 +51,12 @@ class CardSevenDay(context: Context, iconUrl: String, isUS: Boolean, forecast: S
         if (items.size > 1) {
             if (isUS) {
                 setTopLine(
-                        items[0] + " (" + UtilityLocationFragment.extractTemperature(
-                                items[1]
-                        )
-                                + GlobalVariables.DEGREE_SYMBOL
-                                + UtilityLocationFragment.extractWindDirection(items[1].substring(1))
-                                + UtilityLocationFragment.extract7DayMetrics(items[1].substring(1)) + ")"
+                    items[0] + " (" + UtilityLocationFragment.extractTemperature(
+                        items[1]
+                    )
+                            + GlobalVariables.DEGREE_SYMBOL
+                            + UtilityLocationFragment.extractWindDirection(items[1].substring(1))
+                            + UtilityLocationFragment.extract7DayMetrics(items[1].substring(1)) + ")"
                 )
             }
             setBottomLine(items[1])

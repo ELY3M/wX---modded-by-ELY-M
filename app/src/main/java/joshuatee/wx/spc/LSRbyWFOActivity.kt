@@ -100,7 +100,13 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objectToolbarBottom.connect(this)
         star = objectToolbarBottom.getFavIcon()
         locations = UtilityFavorites.setupMenu(this, wfo, FavoriteType.WFO)
-        imageMap = ObjectImageMap(this, R.id.map, objectToolbar, objectToolbarBottom, listOf<View>(scrollView))
+        imageMap = ObjectImageMap(
+            this,
+            R.id.map,
+            objectToolbar,
+            objectToolbarBottom,
+            listOf<View>(scrollView)
+        )
         imageMap.connect(::mapSwitch, UtilityImageMap::mapToWfo)
     }
 
@@ -173,8 +179,8 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun downloadFirst() {
         numberLSR = UtilityString.getHtmlAndParseLastMatch(
-                "https://forecast.weather.gov/product.php?site=$wfo&issuedby=$wfo&product=LSR&format=txt&version=1&glossary=0",
-                "product=LSR&format=TXT&version=(.*?)&glossary"
+            "https://forecast.weather.gov/product.php?site=$wfo&issuedby=$wfo&product=LSR&format=txt&version=1&glossary=0",
+            "product=LSR&format=TXT&version=(.*?)&glossary"
         )
     }
 

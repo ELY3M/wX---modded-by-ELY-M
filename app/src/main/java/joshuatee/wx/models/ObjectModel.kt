@@ -90,7 +90,14 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
     lateinit var toolbar: Toolbar
     lateinit var getContent: () -> Unit
 
-    fun setUiElements(toolbar: Toolbar, fab1: Fab?, fab2: Fab?, miStatusParam1: MenuItem, miStatusParam2: MenuItem, getContent: () -> Unit) {
+    fun setUiElements(
+        toolbar: Toolbar,
+        fab1: Fab?,
+        fab2: Fab?,
+        miStatusParam1: MenuItem,
+        miStatusParam2: MenuItem,
+        getContent: () -> Unit
+    ) {
         this.miStatusParam1 = miStatusParam1
         this.miStatusParam2 = miStatusParam2
         this.fab1 = fab1
@@ -552,9 +559,9 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
 
     fun setSubtitleRestoreZoom() {
         UtilityModels.setSubtitleRestoreZoom(
-                displayData.image,
-                toolbar,
-                "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1]
+            displayData.image,
+            toolbar,
+            "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1]
         )
     }
 }

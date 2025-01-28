@@ -42,7 +42,8 @@ class RainfallOutlookSummaryActivity : BaseActivity() {
     // WPC Excessive Rainfall Outlooks
     //
 
-    private val bitmaps = MutableList(UtilityWpcRainfallForecast.urls.size) { UtilityImg.getBlankBitmap() }
+    private val bitmaps =
+        MutableList(UtilityWpcRainfallForecast.urls.size) { UtilityImg.getBlankBitmap() }
     private lateinit var box: VBox
     private lateinit var imageSummary: ImageSummary
     private var downloadTimer = DownloadTimer("ACTIVITY_WPC_RAINFALL_SUMMARY")
@@ -54,7 +55,12 @@ class RainfallOutlookSummaryActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout,
+            R.menu.shared_multigraphics,
+            false
+        )
         setTitle("WPC", "Excessive Rainfall Outlooks")
         box = VBox.fromResource(this)
         imageSummary = ImageSummary(this, box, bitmaps)
@@ -81,7 +87,13 @@ class RainfallOutlookSummaryActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.text(this, "WPC Excessive Rainfall Forecast", "", bitmaps)
+            R.id.action_share -> UtilityShare.text(
+                this,
+                "WPC Excessive Rainfall Forecast",
+                "",
+                bitmaps
+            )
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -39,7 +39,11 @@ object UtilityPlayList {
     fun add(context: Context, view: View, product: String, text: String) {
         val productUpperCase = product.uppercase(Locale.US)
         if (!UIPreferences.playlistStr.contains(productUpperCase)) {
-            Utility.writePref(context, "PLAYLIST", UIPreferences.playlistStr + ":" + productUpperCase)
+            Utility.writePref(
+                context,
+                "PLAYLIST",
+                UIPreferences.playlistStr + ":" + productUpperCase
+            )
             UIPreferences.playlistStr = UIPreferences.playlistStr + ":" + productUpperCase
             PopupMessage(view, productUpperCase + " saved to playlist: " + text.length)
         } else {

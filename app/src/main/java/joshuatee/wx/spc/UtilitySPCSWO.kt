@@ -32,23 +32,23 @@ internal object UtilitySpcSwo {
     // https://www.spc.noaa.gov/partners/outlooks/state/images/MS_swody1_TORN.png
     fun getSwoStateUrl(state: String, day: String): List<String> = when (day) {
         "1", "2" -> listOf(
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + ".png",
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + "_TORN.png",
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + "_HAIL.png",
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + "_WIND.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + ".png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + "_TORN.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + "_HAIL.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + "_WIND.png",
         )
 
         "3" -> listOf(
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + ".png",
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + "_PROB.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + ".png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + day + "_PROB.png",
         )
 
         "4-8" -> listOf(
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "4" + "_PROB.png",
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "5" + "_PROB.png",
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "6" + "_PROB.png",
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "7" + "_PROB.png",
-                "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "8" + "_PROB.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "4" + "_PROB.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "5" + "_PROB.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "6" + "_PROB.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "7" + "_PROB.png",
+            "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/partners/outlooks/state/images/" + state + "_swody" + "8" + "_PROB.png",
         )
 
         else -> listOf()
@@ -62,7 +62,8 @@ internal object UtilitySpcSwo {
             }
             return imgUrls.map { it.getImage() }
         } else {
-            val html = ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day" + day + "otlk.html").getHtml()
+            val html =
+                ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day" + day + "otlk.html").getHtml()
             val time = html.parse("show_tab\\(.otlk_([0-9]{4}).\\)")
             when (day) {
                 "1", "2" -> {
@@ -92,13 +93,16 @@ internal object UtilitySpcSwo {
         if (day == "4-8" || day == "48" || day == "4") {
             return (4..8).map { "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/exper/day4-8/day" + it.toString() + "prob.gif" }
         } else {
-            val html = ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day" + day + "otlk.html").getHtml()
+            val html =
+                ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day" + day + "otlk.html").getHtml()
             val time = html.parse("show_tab\\(.otlk_([0-9]{4}).\\)")
             return when (day) {
                 "1", "2" -> {
-                    val day1BaseUrl = GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + "probotlk_"
+                    val day1BaseUrl =
+                        GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + "probotlk_"
                     val day1Urls = listOf("_torn.gif", "_hail.gif", "_wind.gif")
-                    val urls = mutableListOf(GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + "otlk_" + time + ".gif")
+                    val urls =
+                        mutableListOf(GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + "otlk_" + time + ".gif")
                     urls += day1Urls.map { day1BaseUrl + time + it }
                     urls
                 }
@@ -115,5 +119,5 @@ internal object UtilitySpcSwo {
     }
 
     fun getImageUrlsDays48(day: String): String =
-            GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/exper/day4-8/day" + day + "prob.gif"
+        GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/exper/day4-8/day" + day + "prob.gif"
 }

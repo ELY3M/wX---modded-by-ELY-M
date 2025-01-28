@@ -54,7 +54,12 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout,
+            R.menu.shared_multigraphics,
+            false
+        )
         setTitle("Thunderstorm Outlooks", "SPC")
         box = VBox.fromResource(this)
         getContent()

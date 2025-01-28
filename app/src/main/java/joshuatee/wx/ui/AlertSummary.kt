@@ -31,7 +31,11 @@ import joshuatee.wx.objects.Route
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityString
 
-class AlertSummary(private val context: Context, mainBox: VBox, private val scrollView: ScrollView) {
+class AlertSummary(
+    private val context: Context,
+    mainBox: VBox,
+    private val scrollView: ScrollView
+) {
 
     //
     // Container used by USAlertsActivity that contains both
@@ -76,7 +80,13 @@ class AlertSummary(private val context: Context, mainBox: VBox, private val scro
         } else {
             image.set2(bitmap)
         }
-        image.connect { Route.image(context, "https://forecast.weather.gov/wwamap/png/US.png", "US Alerts") }
+        image.connect {
+            Route.image(
+                context,
+                "https://forecast.weather.gov/wwamap/png/US.png",
+                "US Alerts"
+            )
+        }
         val mapEvent = mutableMapOf<String, Int>()
         val mapState = mutableMapOf<String, Int>()
         val mapStateForFilter = mutableMapOf<String, Int>()
@@ -104,7 +114,10 @@ class AlertSummary(private val context: Context, mainBox: VBox, private val scro
         val mapOut = mapStateForFilter.toString().replace("[{}]".toRegex(), "")
         val filter = filterOriginal.replace("[|*?.]".toRegex(), " ")
         if (mapOut.isNotEmpty()) {
-            cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")" + GlobalVariables.newline + mapOut)
+            cardText.text = ("Filter: " + filter.replace(
+                "\\^".toRegex(),
+                ""
+            ) + " (" + i + ")" + GlobalVariables.newline + mapOut)
         } else {
             cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")")
         }
@@ -135,5 +148,6 @@ class AlertSummary(private val context: Context, mainBox: VBox, private val scro
         map[event] = prev + 1
     }
 
-    fun getTitle(title: String) = "(" + capAlerts.size + ") " + title.uppercase(Locale.US) + " Alerts"
+    fun getTitle(title: String) =
+        "(" + capAlerts.size + ") " + title.uppercase(Locale.US) + " Alerts"
 }
