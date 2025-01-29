@@ -27,6 +27,7 @@ import joshuatee.wx.radar.Warnings
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownloadNws
+import joshuatee.wx.util.UtilityNetworkIO
 
 class PolygonWarning(val context: Context, val type: PolygonWarningType) {
 
@@ -43,7 +44,7 @@ class PolygonWarning(val context: Context, val type: PolygonWarningType) {
 
     fun download() {
         if (timer.isRefreshNeeded()) {
-            val html = UtilityDownloadNws.getStringFromUrlBaseNoHeader1(getUrl())
+            val html = UtilityNetworkIO.getStringFromUrlBaseNoHeader1(getUrl())
             if (html != "") {
                 storage.valueSet(context, html)
             }

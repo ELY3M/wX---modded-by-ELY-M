@@ -29,7 +29,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
-//import androidx.activity.addCallback
+import androidx.activity.addCallback
 import joshuatee.wx.R
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.Route
@@ -86,11 +86,12 @@ class WebView : BaseActivity() {
             webView.loadData(url, "text/html", null)
         }
 
-//        onBackPressedDispatcher.addCallback(this) {
-//            if (webView.canGoBack()) {
-//                webView.goBack()
-//            }
-//        }
+        // https://developer.android.com/guide/navigation/navigation-custom-back
+        onBackPressedDispatcher.addCallback(this) {
+            if (webView.canGoBack()) {
+                webView.goBack()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -102,11 +103,11 @@ class WebView : BaseActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
-        }
-    }
+//    override fun onBackPressed() {
+//        if (webView.canGoBack()) {
+//            webView.goBack()
+//        } else {
+//            super.onBackPressed()
+//        }
+//    }
 }

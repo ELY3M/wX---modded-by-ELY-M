@@ -21,7 +21,6 @@
 
 package joshuatee.wx.misc
 
-import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.objects.ObjectWarning
@@ -30,6 +29,7 @@ import joshuatee.wx.parse
 import joshuatee.wx.parseFirst
 import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.removeLineBreaksCap
+import joshuatee.wx.util.UtilityNetworkIO
 import joshuatee.wx.util.UtilityString
 
 @Suppress("SpellCheckingInspection")
@@ -115,7 +115,7 @@ class CapAlert {
         fun createFromUrl(url: String): CapAlert {
             val capAlert = CapAlert()
             capAlert.url = url
-            val html = UtilityDownloadNws.getStringFromUrlSep(url)
+            val html = UtilityNetworkIO.getStringFromUrlSep(url)
             capAlert.points = getWarningsFromJson(html)
             capAlert.title = html.parse("\"headline\": \"(.*?)\"")
             capAlert.summary = html.parse("\"description\": \"(.*?)\"")

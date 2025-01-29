@@ -45,7 +45,6 @@ object Utility {
         var diagnostics = ""
         diagnostics += MyApplication.dm.widthPixels.toString() + " Screen width" + GlobalVariables.newline
         diagnostics += MyApplication.dm.heightPixels.toString() + " Screen height" + GlobalVariables.newline
-//        diagnostics += UtilityUI.statusBarHeight(activity).toString() + " Status bar height" + GlobalVariables.newline
         var landScape = false
         if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             landScape = true
@@ -56,13 +55,6 @@ object Utility {
         ) + GlobalVariables.newline
         return diagnostics
     }
-
-//    fun getVersion(context: Context): String = try {
-//        context.packageManager.getPackageInfo(context.packageName, 0).versionName
-//    } catch (e: Exception) {
-//        UtilityLog.handleException(e)
-//        ""
-//    }
 
     fun getVersion(context: Context): String =
         context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: ""

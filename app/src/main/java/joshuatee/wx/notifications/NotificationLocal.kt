@@ -256,7 +256,7 @@ object NotificationLocal {
         inBlackout: Boolean
     ): String {
         val tornadoWarningString = "Tornado Warning"
-        val html = Hazards.getHazardsHtml(Location.getLatLon(locationIndex))
+        val html = Hazards.getHtml(Location.getLatLon(locationIndex))
         var notificationUrls = ""
         val locationLabel = "(" + Location.getName(locationIndex) + ") "
         val ids = html.parseColumn("\"@id\": \"(.*?)\"")

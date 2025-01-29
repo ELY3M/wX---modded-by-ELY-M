@@ -2,7 +2,22 @@
 
 # Developer ChangeLog
 
-## 55936 2025_01_28
+## 55937 2025_01_29
+
+* [ADD] Start consolidation in UtilityNetworkIO.kt with requestToString
+
+## 55936 2025_01_29
+
+* [REF] move download functions out of UtilityDownloadNws.kt and into UtilityNetworkIO.kt
+* [REF] simplify Hazards.getHazardsHtml and rename Hazards.getHtml
+* [FIX] back button handling in WebView for API
+  36 [https://developer.android.com/guide/navigation/navigation-custom-back](https://developer.android.com/guide/navigation/navigation-custom-back)
+* [REF] update gradle in gradle/wrapper/gradle-wrapper.properties
+
+```
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.10.2-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.11.1-all.zip
+```
 
 * [ADD]
 

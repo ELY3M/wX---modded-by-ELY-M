@@ -199,8 +199,6 @@ object DownloadText {
 
             prod.startsWith("VFD") -> {
                 val t2 = prod.substring(3)
-//                text = (GlobalVariables.NWS_AWC_WEBSITE_PREFIX + "/fcstdisc/data?cwa=K$t2").getHtmlWithNewLine()
-//                text = text.parseAcrossLines("<!-- raw data starts -->(.*?)<!-- raw data ends -->")
                 text =
                     (GlobalVariables.NWS_AWC_WEBSITE_PREFIX + "/api/data/fcstdisc?cwa=K$t2" + "&type=afd").getHtmlWithNewLine()
                 text = text.removeLineBreaks().removeHtml()
@@ -266,8 +264,6 @@ object DownloadText {
             prod.startsWith("RWR") -> {
                 val product = prod.substring(0, 3)
                 val location = prod.substring(3).replace("%", "")
-//                val locationName = UtilityLocation.getWfoSiteName(location)
-//                val state = locationName.split(",")[0]
                 val state = WfoSites.getState(location)
                 val url =
                     "https://forecast.weather.gov/product.php?site=$location&issuedby=$state&product=$product"

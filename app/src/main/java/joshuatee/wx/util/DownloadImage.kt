@@ -144,8 +144,6 @@ object DownloadImage {
             "WEATHERSTORY" -> {
                 needsBitmap = false
                 bitmap = WeatherStory.getUrl().getImage()
-//                bitmap =
-//                    ("https://www.weather.gov/images/" + Location.wfo.lowercase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
             }
 
             "WFOWARNINGS" -> {
@@ -296,7 +294,6 @@ object DownloadImage {
 
             "SND" -> {
                 needsBitmap = false
-//                bitmap = UtilitySpcSoundings.getImage(context, UtilityLocation.getNearestSoundingSite(Location.latLon))
                 bitmap = UtilitySpcSoundings.getImage(
                     context,
                     SoundingSites.sites.getNearest(Location.latLon)

@@ -18,6 +18,7 @@ android {
 
     defaultConfig {
         compileSdk 35
+//        compileSdkPreview "Baklava"
     }
 
     defaultConfig {
@@ -25,6 +26,8 @@ android {
         // 2023-09-09 changed from 23 to 25
         minSdkVersion 27
         targetSdkVersion 35
+//        targetSdkPreview 'Baklava'
+
         // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
         // vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -118,6 +121,7 @@ android {
         checkReleaseBuilds false
         disable 'Typos'
     }
+//    compileSdkPreview 'Baklava'
 }
 
 dependencies {

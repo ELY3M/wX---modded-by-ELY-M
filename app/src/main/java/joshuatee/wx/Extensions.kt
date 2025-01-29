@@ -27,7 +27,6 @@ import java.util.regex.Pattern
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityNetworkIO
 import joshuatee.wx.util.UtilityString
@@ -84,7 +83,7 @@ fun String.getHtmlWithNewLineWithRetry(expectedMinSize: Long): String {
     return html
 }
 
-fun String.getNwsHtml() = UtilityDownloadNws.getStringFromUrlBaseNoAcceptHeader1(this)
+fun String.getNwsHtml() = UtilityNetworkIO.getStringFromUrlBaseNoAcceptHeader1(this)
 
 fun String.getNwsHtmlWithRetry(expectedMinSize: Long): String {
     var html = this.getNwsHtml()

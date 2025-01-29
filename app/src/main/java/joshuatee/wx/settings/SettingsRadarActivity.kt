@@ -139,8 +139,18 @@ class SettingsRadarActivity : BaseActivity() {
 		Switch(this, "Location Heading Bug", "LOCDOT_BUG", R.string.locdot_bug_label),
 		//elys mod end
                 Switch(this, "Black background", "NWS_RADAR_BG_BLACK", R.string.nws_black_bg_label),
-                Switch(this, "Canadian and Mexican borders", "RADAR_CAMX_BORDERS", R.string.camx_borders_label),
-                Switch(this, "Center radar on location", "RADAR_CENTER_ON_LOCATION", R.string.radar_center_on_location_default_label),
+            Switch(
+                this,
+                "Canadian and Mexican borders",
+                "RADAR_CAMX_BORDERS",
+                R.string.camx_borders_label
+            ),
+            Switch(
+                this,
+                "Center radar on location",
+                "RADAR_CENTER_ON_LOCATION",
+                R.string.radar_center_on_location_default_label
+            ),
             Switch(this, "Cities", "COD_CITIES_DEFAULT", R.string.cod_cities_default_label),
             Switch(this, "Counties", "RADAR_SHOW_COUNTY", R.string.show_county_label),
             Switch(this, "County labels", "RADAR_COUNTY_LABELS", R.string.show_county_labels_label),
@@ -186,7 +196,7 @@ class SettingsRadarActivity : BaseActivity() {
                 this,
                 "SPC Fire Weather Outlook Day One",
                 "RADAR_SHOW_FIRE",
-                R.string.show_swo_label
+                R.string.show_fire_label
             ),
             Switch(this, "Spotters", "WXOGL_SPOTTERS", R.string.spotters_label),
             Switch(this, "Spotter labels", "WXOGL_SPOTTERS_LABEL", R.string.spotters_label_label),

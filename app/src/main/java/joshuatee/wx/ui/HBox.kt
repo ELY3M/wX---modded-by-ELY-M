@@ -90,11 +90,11 @@ class HBox(val context: Context) {
             linearLayout.visibility = value
         }
 
-    var isBaselineAligned
-        get() = linearLayout.isBaselineAligned
-        set(value) {
-            linearLayout.isBaselineAligned = value
-        }
+//    var isBaselineAligned
+//        get() = linearLayout.isBaselineAligned
+//        set(value) {
+//            linearLayout.isBaselineAligned = value
+//        }
 
     var orientation
         get() = linearLayout.orientation

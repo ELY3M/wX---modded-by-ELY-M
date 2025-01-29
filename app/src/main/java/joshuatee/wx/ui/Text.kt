@@ -135,9 +135,9 @@ class Text(val context: Context) : Widget {
         tv.setTextSize(unit, size)
     }
 
-    fun setSizeHourly() {
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(14, context))
-    }
+//    fun setSizeHourly() {
+//        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(14, context))
+//    }
 
     fun setMonoSpaced() {
         tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
