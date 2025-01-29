@@ -41,31 +41,8 @@ object UtilityNetworkIO {
 
     private fun getStringFromUrlNew(url: String, withNewLine: Boolean): String {
         UtilityLog.download("getStringFromUrlNew $withNewLine: $url")
-        val out = StringBuilder(5000)
-        try {
-            val request =
-                Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT)
-                    .build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-//            val response = MyApplication.httpClientUnsafe.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body.byteStream())
-            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-            var line: String? = bufferedReader.readLine()
-            while (line != null) {
-                if (withNewLine) {
-                    out.append(line + GlobalVariables.newline)
-                } else {
-                    out.append(line)
-                }
-                line = bufferedReader.readLine()
-            }
-            bufferedReader.close()
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        } catch (e: OutOfMemoryError) {
-            UtilityLog.handleException(e)
-        }
-        return out.toString()
+        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT).build()
+        return requestToString(request, withNewLine)
     }
 
     // String.getHtml()
@@ -78,8 +55,7 @@ object UtilityNetworkIO {
     // String.getImage()
     fun getBitmapFromUrl(url: String): Bitmap = try {
         UtilityLog.download("getBitmapFromUrl: $url")
-        val request =
-            Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
+        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT).build()
         val response = MyApplication.httpClient.newCall(request).execute()
         if (url.contains("hazards_d8_14_contours.png")) {
             val options = BitmapFactory.Options()
@@ -103,10 +79,8 @@ object UtilityNetworkIO {
     // raw downloads - nexrad radar files, etc
     fun getInputStreamFromUrl(url: String): InputStream? = try {
         UtilityLog.download("getInputStreamFromUrl: $url")
-        val request =
-            Request.Builder().url(url).header("User-Agent", GlobalVariables.HTTP_USER_AGENT).build()
+        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT).build()
         val response = MyApplication.httpClient.newCall(request).execute()
-//        val response = MyApplication.httpClientUnsafe.newCall(request).execute()
         response.body.byteStream()
     } catch (e: IOException) {
         UtilityLog.handleException(e)
@@ -115,138 +89,58 @@ object UtilityNetworkIO {
 
     // used for CapAlert (XML)
     fun getStringFromUrlXml(url: String): String {
-        UtilityLog.download("getStringFromURLBase: $url")
-        val out = StringBuilder(5000)
-        try {
-            val request = Request.Builder()
-                .url(url)
-                .header("User-Agent", USER_AGENT)
-                .addHeader("Accept", "application/atom+xml")
-                .build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body.byteStream())
-            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-            var line: String? = bufferedReader.readLine()
-            while (line != null) {
-                out.append(line)
-                line = bufferedReader.readLine()
-            }
-            bufferedReader.close()
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return out.toString()
+        UtilityLog.download("getStringFromUrlXml: $url")
+        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT)
+            .addHeader("Accept", "application/atom+xml").build()
+        return requestToString(request)
     }
 
     // target for String.getNwsHtml()
     fun getStringFromUrlBaseNoAcceptHeader1(url: String): String {
         UtilityLog.download("getStringFromUrlBaseNoAcceptHeader1 getNwsHtml: $url")
-        val out = StringBuilder(5000)
-        try {
-            val request = Request.Builder()
-                .url(url)
-                .header("User-Agent", USER_AGENT)
-                .build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body.byteStream())
-            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-            var line: String? = bufferedReader.readLine()
-            while (line != null) {
-                out.append(line)
-                line = bufferedReader.readLine()
-            }
-            bufferedReader.close()
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return out.toString()
+        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT).build()
+        return requestToString(request)
     }
 
     // PolygonWarning.kt
     // FYI - this is probably not needed and could use getStringFromUrlBaseNoAcceptHeader1 instead
     fun getStringFromUrlBaseNoHeader1(url: String): String {
         UtilityLog.download("getStringFromUrlBaseNoHeader1: $url")
-        val out = StringBuilder(5000)
-        try {
-            val request = Request.Builder()
-                .url(url)
-                .header("User-Agent", USER_AGENT)
-                .addHeader("Accept", ACCEPT_HEADER)
-                .build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-            val inputStream = BufferedInputStream(response.body.byteStream())
-            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-            var line: String? = bufferedReader.readLine()
-            while (line != null) {
-                out.append(line)
-                line = bufferedReader.readLine()
-            }
-            bufferedReader.close()
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return out.toString()
+        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT)
+            .addHeader("Accept", ACCEPT_HEADER).build()
+        return requestToString(request)
     }
 
     // used by CapAlert.kt
     fun getStringFromUrlSep(url: String): String {
         UtilityLog.download("getStringFromUrlSep: $url")
-        val breakStr = "ABC123_456ZZ"
-        val out = StringBuilder(5000)
-        val request = Request.Builder()
-            .url(url)
-            .header("User-Agent", USER_AGENT)
-            .addHeader(
-                "Accept",
-                "application/vnd.noaa.dwml+xml;version=1"
-            ).build()
-        requestToString(request, breakStr, out)
-        return out.toString().replace(breakStr, "<br>")
+        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT)
+            .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1").build()
+        return requestToString(request)
     }
 
-//    fun getStringFromUrlSep(url: String): String {
-//        UtilityLog.download("getStringFromUrlSep: $url")
-//        val breakStr = "ABC123_456ZZ"
-//        val out = StringBuilder(5000)
-//        try {
-//            val request = Request.Builder()
-//                .url(url)
-//                .header("User-Agent", USER_AGENT)
-//                .addHeader(
-//                    "Accept",
-//                    "application/vnd.noaa.dwml+xml;version=1"
-//                ) // TODO FIXME, not valid defaulting to application/geo+json
-//                .build()
-//            val response = MyApplication.httpClient.newCall(request).execute()
-//            val inputStream = BufferedInputStream(response.body.byteStream())
-//            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-//            var line: String? = bufferedReader.readLine()
-//            while (line != null) {
-//                out.append(line)
-//                line = bufferedReader.readLine()
-//            }
-//            out.append(breakStr)
-//            bufferedReader.close()
-//        } catch (e: Exception) {
-//            UtilityLog.handleException(e)
-//        }
-//        return out.toString().replace(breakStr, "<br>")
-//    }
-
-    private fun requestToString(request: Request, breakString: String, output: StringBuilder) {
+    private fun requestToString(request: Request, withNewLine: Boolean = false): String {
+        val output = StringBuilder(5000)
         try {
             val response = MyApplication.httpClient.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body.byteStream())
             val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var line: String? = bufferedReader.readLine()
             while (line != null) {
-                output.append(line)
+                if (withNewLine) {
+                    output.append(line + GlobalVariables.newline)
+                } else {
+                    output.append(line)
+                }
                 line = bufferedReader.readLine()
             }
-            output.append(breakString)
+//            output.append(breakString)
             bufferedReader.close()
         } catch (e: Exception) {
             UtilityLog.handleException(e)
+        } catch (e: OutOfMemoryError) {
+            UtilityLog.handleException(e)
         }
+        return output.toString()
     }
 }

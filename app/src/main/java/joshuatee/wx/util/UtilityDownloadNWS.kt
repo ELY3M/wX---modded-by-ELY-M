@@ -68,5 +68,5 @@ object UtilityDownloadNws {
     }
 
     private fun getLocationPointData(latLon: LatLon): String =
-        (GlobalVariables.NWS_API_URL + "/points/" + latLon.latString + "," + latLon.lonString).getNwsHtml()
+        (GlobalVariables.NWS_API_URL + "/points/" + latLon.latForNws + "," + latLon.lonForNws).getNwsHtml()
 }

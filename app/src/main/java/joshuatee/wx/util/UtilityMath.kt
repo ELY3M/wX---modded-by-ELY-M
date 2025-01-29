@@ -23,7 +23,6 @@ package joshuatee.wx.util
 
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.settings.UIPreferences
-import java.util.Locale
 import kotlin.math.*
 
 object UtilityMath {
@@ -69,17 +68,17 @@ object UtilityMath {
         listOf(x0 + fraction * (x1 - x0), y0 + fraction * (y1 - y0))
 
     // 42.98888 to 42.99
-    fun latLonFix(x: String): String {
-        val dblX = To.double(x)
-        var newX = "0.0"
-        try {
-            newX = String.format(Locale.US, "%.2f", dblX).replace("00$".toRegex(), "")
-                .replace("0$".toRegex(), "").replace("\\.$".toRegex(), "")
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return newX
-    }
+//    fun latLonFix(x: String): String {
+//        val dblX = To.double(x)
+//        var newX = "0.0"
+//        try {
+//            newX = String.format(Locale.US, "%.2f", dblX).replace("00$".toRegex(), "")
+//                .replace("0$".toRegex(), "").replace("\\.$".toRegex(), "")
+//        } catch (e: Exception) {
+//            UtilityLog.handleException(e)
+//        }
+//        return newX
+//    }
 
     // convert polar cords to rect
     fun toRect(r: Float, t: Float): FloatArray =

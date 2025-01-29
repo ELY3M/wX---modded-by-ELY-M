@@ -70,18 +70,22 @@ class Sites(
     }
 
     fun getNearest(latLon: LatLon): String {
-        for (site in sites) {
-            site.distance = LatLon.distance(latLon, site.latLon).toInt()
+        synchronized(sites) {
+            for (site in sites) {
+                site.distance = LatLon.distance(latLon, site.latLon).toInt()
+            }
+            sites.sortBy { it.distance }
         }
-        sites.sortBy { it.distance }
         return sites[0].codeName
     }
 
     fun getNearestSite(latLon: LatLon, order: Int = 0): Site {
-        for (site in sites) {
-            site.distance = LatLon.distance(latLon, site.latLon).toInt()
+        synchronized(sites) {
+            for (site in sites) {
+                site.distance = LatLon.distance(latLon, site.latLon).toInt()
+            }
+            sites.sortBy { it.distance }
         }
-        sites.sortBy { it.distance }
         return sites[order]
     }
 
@@ -96,10 +100,12 @@ class Sites(
 //    }
 
     fun getNearestInMiles(latLon: LatLon): Int {
-        for (site in sites) {
-            site.distance = LatLon.distance(latLon, site.latLon).toInt()
+        synchronized(sites) {
+            for (site in sites) {
+                site.distance = LatLon.distance(latLon, site.latLon).toInt()
+            }
+            sites.sortBy { it.distance }
         }
-        sites.sortBy { it.distance }
         return sites[0].distance
     }
 }

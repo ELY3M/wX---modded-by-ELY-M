@@ -26,7 +26,6 @@ import android.graphics.Color
 import joshuatee.wx.radar.Warnings
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityNetworkIO
 
 class PolygonWarning(val context: Context, val type: PolygonWarningType) {
@@ -118,6 +117,7 @@ class PolygonWarning(val context: Context, val type: PolygonWarningType) {
             PolygonWarningType.TornadoWarning to "Tornado%20Warning",
             PolygonWarningType.ThunderstormWarning to "Severe%20Thunderstorm%20Warning",
             PolygonWarningType.FlashFloodWarning to "Flash%20Flood%20Warning",
+//            PolygonWarningType.FlashFloodWarning to "Flood%20Warning",  // use for testing when no tst/tor/ffw
         )
 
         const val BASE_URL = "https://api.weather.gov/alerts/active?event="

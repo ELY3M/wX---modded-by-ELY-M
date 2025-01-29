@@ -58,8 +58,6 @@ class Hazards {
 
     companion object {
         fun getHtml(latLon: LatLon): String =
-            ("https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(latLon.latString) + "," + UtilityMath.latLonFix(
-                latLon.lonString
-            ) + "&active=1").getNwsHtml()
+            ("https://api.weather.gov/alerts?point=" + latLon.latForNws + "," + latLon.lonForNws + "&active=1").getNwsHtml()
     }
 }

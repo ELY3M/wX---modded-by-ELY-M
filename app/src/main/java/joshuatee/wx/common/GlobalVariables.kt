@@ -30,8 +30,7 @@ object GlobalVariables {
 
     val newline: String = System.lineSeparator()
 
-    const val PACKAGE_NAME = "joshuatee.wx"
-
+    const val PACKAGE_NAME = "elys.joshuatee.wx"
     //    const val PACKAGE_NAME_FILE = "joshuatee_wx"
     const val EMAIL = "elymbmx@gmail.com"
     const val HTTP_USER_AGENT = "Android $PACKAGE_NAME $EMAIL"

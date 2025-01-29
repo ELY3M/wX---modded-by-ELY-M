@@ -2,9 +2,15 @@
 
 # Developer ChangeLog
 
+## 55938 2025_01_29
+
+* [ADD]
+
 ## 55937 2025_01_29
 
 * [ADD] Start consolidation in UtilityNetworkIO.kt with requestToString
+* [ADD] Correct Hazards to use proper lat/lon format for NWS API
+* [FIX] in Sites.kt use sync
 
 ## 55936 2025_01_29
 
