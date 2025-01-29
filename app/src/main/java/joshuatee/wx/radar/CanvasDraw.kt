@@ -140,8 +140,8 @@ internal object CanvasDraw {
             canvas.drawBitmap(locationiconresized, coordinates[0].toFloat(), coordinates[1].toFloat(), null)
         } else {
         canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
-    }
-
+	}
+    }    
     fun mcd(
         projectionType: ProjectionType,
         bitmap: Bitmap,
