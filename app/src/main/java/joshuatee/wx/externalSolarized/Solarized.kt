@@ -286,12 +286,6 @@ class Solarized(
             ) ?: return null
             return SunPhase.LastLight(sunsetDate)
         }
-}
-
-interface TwiceADaySunPhases<T : SunPhase> {
-    val morning: T?
-    val evening: T?
-}
 //elys mod
     //sunrise
     val AstronomicalRise: SunPhase.Sunrise?
@@ -392,3 +386,9 @@ interface TwiceADaySunPhases<T : SunPhase> {
             return SunPhase.Sunset(Date)
         }
 /////////////end of elys mod
+}
+
+interface TwiceADaySunPhases<T : SunPhase> {
+    val morning: T?
+    val evening: T?
+}
