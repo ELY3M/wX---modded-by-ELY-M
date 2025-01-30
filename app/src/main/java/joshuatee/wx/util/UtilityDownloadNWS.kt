@@ -25,8 +25,8 @@ import java.util.Locale
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.getNwsHtml
-import joshuatee.wx.getNwsHtmlWithRetry
+import joshuatee.wx.getHtml
+import joshuatee.wx.getHtmlWithRetry
 import joshuatee.wx.parse
 
 // https://www.weather.gov/documentation/services-web-api
@@ -48,7 +48,7 @@ object UtilityDownloadNws {
     fun getHourlyData(latLon: LatLon): String {
         val pointsData = getLocationPointData(latLon)
         val hourlyUrl = pointsData.parse("\"forecastHourly\": \"(.*?)\"")
-        return hourlyUrl.getNwsHtmlWithRetry(1000)
+        return hourlyUrl.getHtmlWithRetry(1000)
     }
 
     fun getHourlyOldData(latLon: LatLon): String {
@@ -62,11 +62,11 @@ object UtilityDownloadNws {
     fun get7DayData(latLon: LatLon): String = if (UIPreferences.useNwsApi) {
         val pointsData = getLocationPointData(latLon)
         val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
-        forecastUrl.getNwsHtmlWithRetry(3000)
+        forecastUrl.getHtmlWithRetry(3000)
     } else {
         UtilityUS.getLocationHtml(latLon)
     }
 
     private fun getLocationPointData(latLon: LatLon): String =
-        (GlobalVariables.NWS_API_URL + "/points/" + latLon.latForNws + "," + latLon.lonForNws).getNwsHtml()
+        (GlobalVariables.NWS_API_URL + "/points/" + latLon.latForNws + "," + latLon.lonForNws).getHtml()
 }

@@ -83,13 +83,11 @@ fun String.getHtmlWithNewLineWithRetry(expectedMinSize: Long): String {
     return html
 }
 
-fun String.getNwsHtml() = UtilityNetworkIO.getStringFromUrlBaseNoAcceptHeader1(this)
-
-fun String.getNwsHtmlWithRetry(expectedMinSize: Long): String {
-    var html = this.getNwsHtml()
+fun String.getHtmlWithRetry(expectedMinSize: Long): String {
+    var html = this.getHtml()
     if (html.length < expectedMinSize) {
         Thread.sleep(expectedMinSize)
-        html = this.getNwsHtml()
+        html = this.getHtml()
     }
     return html
 }

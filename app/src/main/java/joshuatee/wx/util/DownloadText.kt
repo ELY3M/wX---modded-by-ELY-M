@@ -31,7 +31,7 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.getHtml
 import joshuatee.wx.getHtmlWithNewLine
-import joshuatee.wx.getNwsHtml
+import joshuatee.wx.getHtml
 import joshuatee.wx.parse
 import joshuatee.wx.parseAcrossLines
 import joshuatee.wx.removeHtml
@@ -286,9 +286,9 @@ object DownloadText {
                 val location = prod.substring(3, 5).replace("%", "")
                 val url =
                     GlobalVariables.NWS_API_URL + "/products/types/$product/locations/$location"
-                val html = url.getNwsHtml()
+                val html = url.getHtml()
                 val urlProd = html.parse("\"id\": \"(.*?)\"")
-                val prodHtml = (GlobalVariables.NWS_API_URL + "/products/$urlProd").getNwsHtml()
+                val prodHtml = (GlobalVariables.NWS_API_URL + "/products/$urlProd").getHtml()
                 text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
                 text = text.replace("\\n\\n", "\n")
                 text = text.replace("\\n", "\n")
@@ -314,9 +314,9 @@ object DownloadText {
                 val t2 = prod.substring(3).replace("%", "")
                 if (USE_NWS_API) {
                     val url = GlobalVariables.NWS_API_URL + "/products/types/$t1/locations/$t2"
-                    val html = url.getNwsHtml()
+                    val html = url.getHtml()
                     val urlProd = html.parse("\"id\": \"(.*?)\"")
-                    val prodHtml = (GlobalVariables.NWS_API_URL + "/products/$urlProd").getNwsHtml()
+                    val prodHtml = (GlobalVariables.NWS_API_URL + "/products/$urlProd").getHtml()
                     text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
                     if (!prod.startsWith("RTP")) {
                         text = text.replace("\\n\\n", "<BR>")

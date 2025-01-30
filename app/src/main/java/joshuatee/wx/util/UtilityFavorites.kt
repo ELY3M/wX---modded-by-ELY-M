@@ -67,7 +67,6 @@ object UtilityFavorites {
             val name = when (type) {
                 FavoriteType.RID -> RadarSites.getName(fav)
                 FavoriteType.WFO -> WfoSites.getFullName(fav)
-//                FavoriteType.SND -> UtilityLocation.getSoundingSiteName(fav)
                 FavoriteType.SND -> SoundingSites.sites.byCode[fav]?.fullName
                 FavoriteType.NWS_TEXT -> UtilityWpcText.getLabel(fav)
                 FavoriteType.SPCMESO -> UtilitySpcMeso.getLabelFromParam(fav)

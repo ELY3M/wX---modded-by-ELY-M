@@ -24,7 +24,7 @@ package joshuatee.wx.util
 import joshuatee.wx.parseColumn
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
-import joshuatee.wx.getNwsHtml
+import joshuatee.wx.getHtml
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.settings.Location
 
@@ -58,6 +58,6 @@ class Hazards {
 
     companion object {
         fun getHtml(latLon: LatLon): String =
-            ("https://api.weather.gov/alerts?point=" + latLon.latForNws + "," + latLon.lonForNws + "&active=1").getNwsHtml()
+            ("https://api.weather.gov/alerts?point=" + latLon.latForNws + "," + latLon.lonForNws + "&active=1").getHtml()
     }
 }

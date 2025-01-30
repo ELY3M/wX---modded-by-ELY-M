@@ -67,19 +67,6 @@ object UtilityMath {
     ): List<Double> =
         listOf(x0 + fraction * (x1 - x0), y0 + fraction * (y1 - y0))
 
-    // 42.98888 to 42.99
-//    fun latLonFix(x: String): String {
-//        val dblX = To.double(x)
-//        var newX = "0.0"
-//        try {
-//            newX = String.format(Locale.US, "%.2f", dblX).replace("00$".toRegex(), "")
-//                .replace("0$".toRegex(), "").replace("\\.$".toRegex(), "")
-//        } catch (e: Exception) {
-//            UtilityLog.handleException(e)
-//        }
-//        return newX
-//    }
-
     // convert polar cords to rect
     fun toRect(r: Float, t: Float): FloatArray =
         floatArrayOf((r * cos(t / (180.0f / PI))).toFloat(), (r * sin(t / (180.0f / PI))).toFloat())

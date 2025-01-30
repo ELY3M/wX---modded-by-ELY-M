@@ -37,17 +37,18 @@ class Sites(
 
     init {
         checkValidityMaps()
+        synchronized(sites) {
+            nameDict.forEach { (key, value) ->
+                sites.add(Site(key, value, latDict[key]!!, lonDict[key]!!, lonReversed))
+                byCode[key] = sites.last()
+            }
 
-        nameDict.forEach { (key, value) ->
-            sites.add(Site(key, value, latDict[key]!!, lonDict[key]!!, lonReversed))
-            byCode[key] = sites.last()
-        }
+            sites.sortBy { it.fullName }
 
-        sites.sortBy { it.fullName }
-
-        sites.forEach { site ->
-            codeList.add(site.codeName)
-            nameList.add("${site.codeName}: ${site.fullName}")
+            sites.forEach { site ->
+                codeList.add(site.codeName)
+                nameList.add("${site.codeName}: ${site.fullName}")
+            }
         }
     }
 

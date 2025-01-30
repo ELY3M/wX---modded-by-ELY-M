@@ -148,8 +148,8 @@ object UtilityIO {
         }
     }
 
-    @Suppress("unused")
-    fun downloadAsByteArray(url: String): ByteArray = URL(url).getBytes()
+//    @Suppress("unused")
+//    fun downloadAsByteArray(url: String): ByteArray = URL(url).getBytes()
 
     fun getHtml(url: String): String = UtilityNetworkIO.getStringFromUrlWithNewLine(url)
         

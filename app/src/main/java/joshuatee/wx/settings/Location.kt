@@ -26,7 +26,7 @@ import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.Utility
 import java.util.Locale
 import joshuatee.wx.common.GlobalDictionaries
-import joshuatee.wx.getNwsHtml
+import joshuatee.wx.getHtml
 import joshuatee.wx.parse
 import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.util.To
@@ -133,7 +133,7 @@ object Location {
 
     private fun getWfoRadarSiteFromPoint(location: LatLon): List<String> {
         val pointData =
-            ("https://api.weather.gov/points/" + location.latString + "," + location.lonString).getNwsHtml()
+            ("https://api.weather.gov/points/" + location.latString + "," + location.lonString).getHtml()
         // "cwa": "IWX",
         // "radarStation": "KGRR"
         val wfo = pointData.parse("\"cwa\": \"(.*?)\"")

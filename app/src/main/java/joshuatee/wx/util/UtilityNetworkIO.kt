@@ -39,19 +39,6 @@ object UtilityNetworkIO {
     private const val ACCEPT_HEADER =
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
 
-    private fun getStringFromUrlNew(url: String, withNewLine: Boolean): String {
-        UtilityLog.download("getStringFromUrlNew $withNewLine: $url")
-        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT).build()
-        return requestToString(request, withNewLine)
-    }
-
-    // String.getHtml()
-    // output has newlines removed
-    fun getStringFromUrl(url: String): String = getStringFromUrlNew(url, false)
-
-    // String.getHtmlWithNewLine()
-    fun getStringFromUrlWithNewLine(url: String): String = getStringFromUrlNew(url, true)
-
     // String.getImage()
     fun getBitmapFromUrl(url: String): Bitmap = try {
         UtilityLog.download("getBitmapFromUrl: $url")
@@ -95,11 +82,17 @@ object UtilityNetworkIO {
         return requestToString(request)
     }
 
-    // target for String.getNwsHtml()
-    fun getStringFromUrlBaseNoAcceptHeader1(url: String): String {
-        UtilityLog.download("getStringFromUrlBaseNoAcceptHeader1 getNwsHtml: $url")
+    // String.getHtml()
+    // output has newlines removed
+    fun getStringFromUrl(url: String): String = getStringFromUrlNew(url, false)
+
+    // String.getHtmlWithNewLine()
+    fun getStringFromUrlWithNewLine(url: String): String = getStringFromUrlNew(url, true)
+
+    private fun getStringFromUrlNew(url: String, withNewLine: Boolean): String {
+        UtilityLog.download("getStringFromUrlNew $withNewLine: $url")
         val request = Request.Builder().url(url).header("User-Agent", USER_AGENT).build()
-        return requestToString(request)
+        return requestToString(request, withNewLine)
     }
 
     // PolygonWarning.kt
