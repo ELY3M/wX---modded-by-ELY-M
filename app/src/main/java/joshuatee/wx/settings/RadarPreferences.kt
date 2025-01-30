@@ -38,9 +38,6 @@ object RadarPreferences {
     //elys mod
     var sn_key = ""
     var sn_locationreport = false		
-    //
-    // Radar Preferences
-    //
     var showRadarWhenPan = true
     var warnings = false
     var locationDotFollowsGps = false

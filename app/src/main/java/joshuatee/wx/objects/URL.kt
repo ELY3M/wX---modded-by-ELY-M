@@ -6,7 +6,6 @@
 
 package joshuatee.wx.objects
 
-import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
 import okhttp3.Request
@@ -47,15 +46,15 @@ class URL(val url: String) {
 //        return out.toString().replace(breakStr, "<br>")
 //    }
 
-    fun getBytes(): ByteArray {
-        UtilityLog.download("getByte $url")
-        return try {
-            val request = Request.Builder().url(url).build()
-            val response = MyApplication.httpClient.newCall(request).execute()
-            response.body.bytes()
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-            ByteArray(0)
-        }
-    }
+//    fun getBytes(): ByteArray {
+//        UtilityLog.download("getByte $url")
+//        return try {
+//            val request = Request.Builder().url(url).build()
+//            val response = MyApplication.httpClient.newCall(request).execute()
+//            response.body.bytes()
+//        } catch (e: Exception) {
+//            UtilityLog.handleException(e)
+//            ByteArray(0)
+//        }
+//    }
 }

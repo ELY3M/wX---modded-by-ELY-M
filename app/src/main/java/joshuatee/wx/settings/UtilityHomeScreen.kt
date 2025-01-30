@@ -38,11 +38,9 @@ import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.spc.SpcThunderStormOutlookActivity
 import joshuatee.wx.ui.CardHSImage
-import joshuatee.wx.util.SoundingSites
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.wpc.NationalImagesActivity
 import joshuatee.wx.wpc.NationalTextActivity
-import java.util.Locale
 
 internal object UtilityHomeScreen {
 
@@ -79,15 +77,14 @@ internal object UtilityHomeScreen {
             homeScreenImageCards[ii].connect {
                 if (argsOrig != null) {
                     val args = argsOrig.copyOf(argsOrig.size)
-                    args.indices.forEach { z ->
-                        if (args[z] == "WFO_FOR_SND") // Check that this is not needed TODO FIXME
-                            args[z] = SoundingSites.sites.getNearest(Location.latLon)
-//                            args[z] = UtilityLocation.getNearestSoundingSite(LatLon(Location.x, Location.y))
-                        if (args[z] == "WFO_FOR_GOES")
-                            args[z] = Location.wfo.lowercase(Locale.US)
-                        if (args[z] == "RID_FOR_CA")
-                            args[z] = Location.rid
-                    }
+//                    args.indices.forEach { z ->
+//                        if (args[z] == "WFO_FOR_SND")
+//                            args[z] = SoundingSites.sites.getNearest(Location.latLon)
+//                        if (args[z] == "WFO_FOR_GOES")
+//                            args[z] = Location.wfo.lowercase(Locale.US)
+//                        if (args[z] == "RID_FOR_CA")
+//                            args[z] = Location.rid
+//                    }
                     if (cl != null && id != null) {
                         val intent = Intent(MyApplication.appContext, cl)
                         intent.putExtra(id, args)
@@ -165,12 +162,13 @@ internal object UtilityHomeScreen {
         classId["GOES16"] = GoesActivity.RID
 
         classes["SND"] = SpcSoundingsActivity::class.java
-        classArgs["SND"] = arrayOf("WFO_FOR_SND", "")
+//        classArgs["SND"] = arrayOf("WFO_FOR_SND", "")
+        classArgs["SND"] = arrayOf("", "")
         classId["SND"] = SpcSoundingsActivity.URL
 
-        classes["OBS"] = SpcSoundingsActivity::class.java
-        classArgs["OBS"] = arrayOf("", "")
-        classId["OBS"] = SpcSoundingsActivity.URL
+//        classes["OBS"] = SpcSoundingsActivity::class.java
+//        classArgs["OBS"] = arrayOf("", "")
+//        classId["OBS"] = SpcSoundingsActivity.URL
 
         classes["RTMA_DEW"] = RtmaActivity::class.java
         classArgs["RTMA_DEW"] = arrayOf("2m_dwpt")

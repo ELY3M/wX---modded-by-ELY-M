@@ -66,7 +66,6 @@ class FavAddActivity : BaseActivity() {
     private fun setupVars() {
         when (type) {
             FavoriteType.SND -> {
-//                data = GlobalArrays.soundingSites.map { "$it " + UtilityLocation.getSoundingSiteName(it) }
                 data = SoundingSites.sites.nameList
                 verboseTitle = "sounding site"
             }

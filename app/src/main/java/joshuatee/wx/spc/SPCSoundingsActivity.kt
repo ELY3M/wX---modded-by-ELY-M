@@ -93,8 +93,6 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         objectToolbarBottom.connect(this)
         star = objectToolbarBottom.getFavIcon()
         touchImage = TouchImage(this, toolbar, toolbarBottom, R.id.iv)
-//        office = UtilityLocation.getNearestSoundingSite(Location.latLon)
-
         office = if (arguments.size > 1 && arguments[1] != "") {
             arguments[1]
         } else {

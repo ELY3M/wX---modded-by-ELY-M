@@ -79,8 +79,6 @@ object Location {
             currentLocation = To.int(currentLocationStr) - 1
         }
 
-//    val state get() = locations.getOrNull(currentLocation)?.state ?: "MI"
-
     val wfo get() = locations.getOrNull(currentLocation)?.wfo ?: "DTX"
 
     val rid get() = locations.getOrNull(currentLocation)?.rid ?: "DTX"
@@ -179,8 +177,6 @@ object Location {
             wfo = wfoAndRadar[0]
             radarSite = wfoAndRadar[1]
             if (wfo == "") {
-//                wfo = UtilityLocation.getNearestOffice(OfficeTypeEnum.WFO, LatLon(xStr, yStr))
-//                    .lowercase(Locale.US)
                 wfo = WfoSites.sites.getNearest(LatLon(xStr, yStr))
             }
             if (radarSite == "" || radarSite == "LIX") {
