@@ -215,8 +215,6 @@
     <string name="spc_storm_reports">SPC Storm Reports</string>
     <string name="spc_thunderstorm_outlooks">SPC Thunderstorm Outlooks</string>
     <string name="spotters">Spotters</string>
-    <string name="twitter_states">Twitter states</string>
-    <string name="twitter_tornado">Twitter tornado</string>
     <string name="us_alerts">US Alerts</string>
     <string name="wpc_gefs">WPC GEFS</string>
     <string name="aurora">Aurora Forecast</string>

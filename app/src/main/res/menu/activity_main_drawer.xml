@@ -126,14 +126,6 @@
         android:icon="@drawable/spotters"
         android:title="@string/spotters" />
     <item
-        android:id="@+id/twitter_states"
-        android:icon="@drawable/twstate"
-        android:title="@string/twitter_states" />
-    <item
-        android:id="@+id/twitter_tornado"
-        android:icon="@drawable/twtornado"
-        android:title="@string/twitter_tornado" />
-    <item
         android:id="@+id/us_alerts"
         android:icon="@drawable/uswarn"
         android:title="@string/us_alerts" />

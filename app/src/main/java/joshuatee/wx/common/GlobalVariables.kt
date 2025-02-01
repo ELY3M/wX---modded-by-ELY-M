@@ -40,7 +40,6 @@ object GlobalVariables {
     const val NWS_AWC_WEBSITE_PREFIX = "https://www.aviationweather.gov"
     const val NWS_GRAPHICAL_WEBSITE_PREFIX = "https://graphical.weather.gov"
     const val NWS_CPC_NCEP_WEBSITE_PREFIX = "https://www.cpc.ncep.noaa.gov"
-    //    const val NWS_GOES_WEBSITE_PREFIX = "https://www.goes.noaa.gov"
     const val NWS_OPC_WEBSITE_PREFIX = "https://ocean.weather.gov"
     const val NWS_NHC_WEBSITE_PREFIX = "https://www.nhc.noaa.gov"
     const val NWS_MAG_NCEP_WEBSITE_PREFIX = "https://mag.ncep.noaa.gov"

@@ -2,6 +2,11 @@
 
 # Developer ChangeLog
 
+## 55940 2025_01_30
+
+* [REF] misc cleanup
+* [FIX] more error handling in network io
+
 ## 55939 2025_01_30
 
 * [REF] misc cleanup

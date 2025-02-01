@@ -30,6 +30,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import joshuatee.wx.MyApplication
 import joshuatee.wx.common.GlobalVariables
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 
 object UtilityNetworkIO {
@@ -77,7 +78,8 @@ object UtilityNetworkIO {
     // used for CapAlert (XML)
     fun getStringFromUrlXml(url: String): String {
         UtilityLog.download("getStringFromUrlXml: $url")
-        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT)
+        val httpUrl = url.toHttpUrlOrNull() ?: return ""
+        val request = Request.Builder().url(httpUrl).header("User-Agent", USER_AGENT)
             .addHeader("Accept", "application/atom+xml").build()
         return requestToString(request)
     }
@@ -91,7 +93,8 @@ object UtilityNetworkIO {
 
     private fun getStringFromUrlNew(url: String, withNewLine: Boolean): String {
         UtilityLog.download("getStringFromUrlNew $withNewLine: $url")
-        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT).build()
+        val httpUrl = url.toHttpUrlOrNull() ?: return ""
+        val request = Request.Builder().url(httpUrl).header("User-Agent", USER_AGENT).build()
         return requestToString(request, withNewLine)
     }
 
@@ -99,7 +102,8 @@ object UtilityNetworkIO {
     // FYI - this is probably not needed and could use getStringFromUrlBaseNoAcceptHeader1 instead
     fun getStringFromUrlBaseNoHeader1(url: String): String {
         UtilityLog.download("getStringFromUrlBaseNoHeader1: $url")
-        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT)
+        val httpUrl = url.toHttpUrlOrNull() ?: return ""
+        val request = Request.Builder().url(httpUrl).header("User-Agent", USER_AGENT)
             .addHeader("Accept", ACCEPT_HEADER).build()
         return requestToString(request)
     }
@@ -107,7 +111,8 @@ object UtilityNetworkIO {
     // used by CapAlert.kt
     fun getStringFromUrlSep(url: String): String {
         UtilityLog.download("getStringFromUrlSep: $url")
-        val request = Request.Builder().url(url).header("User-Agent", USER_AGENT)
+        val httpUrl = url.toHttpUrlOrNull() ?: return ""
+        val request = Request.Builder().url(httpUrl).header("User-Agent", USER_AGENT)
             .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1").build()
         return requestToString(request)
     }

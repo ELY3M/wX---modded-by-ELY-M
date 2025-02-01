@@ -19,7 +19,6 @@
 
  */
 //modded by ELY M.
-//keeping twitter 
 //aurora stuff 
 
 package joshuatee.wx.settings
@@ -63,8 +62,6 @@ internal object UtilityNavDrawer {
         "SPC Storm Reports",
         "SPC Thunderstorm Outlooks",
         "Spotters",
-        "Twitter states",
-        "Twitter tornado",
         "US Alerts",
         "WPC GEFS",
         "Aurora Forecast"
@@ -141,8 +138,6 @@ internal object UtilityNavDrawer {
         R.id.spc_storm_reports to "spcstormrpt1",
         R.id.spc_thunderstorm_outlooks to "spctstorm",
         R.id.spotters to "spotters",
-        R.id.twitter_states to "twitter_state",
-        R.id.twitter_tornado to "twitter_tornado",
         R.id.us_alerts to "uswarn",
         R.id.wpc_gefs to "wpcgefs",
         R.id.aurora to "aurora"

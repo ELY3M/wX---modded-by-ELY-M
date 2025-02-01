@@ -33,8 +33,6 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.misc.ImageCollectionActivity
 import joshuatee.wx.misc.NwsObsSitesActivity
 import joshuatee.wx.misc.USAlertsActivity
-import joshuatee.wx.misc.WebView
-import joshuatee.wx.misc.WebViewTwitter
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.radar.RadarMosaicActivity
@@ -130,19 +128,6 @@ class MiscFragment : Fragment() {
                 arrayOf(),
                 "wpcimages", "National Images"
             )
-	    //elys mod - keeping twitter
-            hm["twitter_state"] = TileObject(
-                    R.drawable.twstate,
-                    WebViewTwitter::class.java,
-                    "",
-                    arrayOf(),
-                    "twitter_state", "Twitter state"
-            )
-            hm["twitter_tornado"] = TileObject(
-                    R.drawable.twtornado, WebView::class.java, WebView.URL,
-                    arrayOf("https://mobile.twitter.com/hashtag/tornado", "#tornado"),
-                     "twitter_tornado", "Twitter tornado"
-            )
             hm["opc"] = TileObject(
                 R.drawable.opc,
                 ImageCollectionActivity::class.java,
@@ -226,7 +211,7 @@ class MiscFragment : Fragment() {
                     "aurora", "Aurora Forecast"
             )
 	    //end
-            val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:"
+            val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:"
             var miscPref = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wxoglquad")) {
                 miscPref += "wxoglquad:"
@@ -266,7 +251,11 @@ class MiscFragment : Fragment() {
 	    //end
             val tiles = miscPref.split(":").dropLastWhile { it.isEmpty() }
             return tiles
-                    .filterNot { it.contains("model_cod") || it.contains("model_wrf") || it.contains("model_ncar_ensemble") }
-                    .map { hm[it]!! }.toMutableList()
+                .filterNot {
+                    it.contains("model_cod") || it.contains("model_wrf") || it.contains("model_ncar_ensemble") || it.contains(
+                        "twitter"
+                    )
+                }
+                .map { hm[it]!! }.toMutableList()
         }
 }

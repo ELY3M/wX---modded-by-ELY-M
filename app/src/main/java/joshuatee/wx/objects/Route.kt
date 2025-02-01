@@ -43,7 +43,7 @@ import joshuatee.wx.settings.SettingsColorPickerActivity
 import joshuatee.wx.settings.SettingsLocationGenericActivity
 import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.settings.SettingsRadarActivity
-import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.space.UtilityAurora
 import joshuatee.wx.spc.LsrByWfoActivity
 import joshuatee.wx.spc.SpcCompmapActivity
 import joshuatee.wx.spc.SpcFireOutlookActivity
@@ -582,13 +582,6 @@ class Route() {
                 arrayOf(product, label, "sound")
             )
         }
-        //elys mod - keeping twitter
-        fun webViewTwitterStates(context: Context) {
-            Route(context, WebViewTwitter::class.java)
-        }
-        fun webViewTwitterTornado(context: Context) {
-            webView(context, "https://mobile.twitter.com/hashtag/tornado", "#tornado")
-        }	
         //elys mod - for radar longpress menu
         fun vis00(context: Context) {
             Route(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "00"))
@@ -596,6 +589,10 @@ class Route() {
         //elys mod - for longpress in radar
         fun radarMosaicConus(context: Context) {
                 Route(context, RadarMosaicActivity::class.java, RadarMosaicActivity.URL, arrayOf("CONUS"))
+        }
+		//elys mod - for Aurora Forecast   
+        fun auroraForecast(context: Context) {
+            Route(context, UtilityAurora::class.java, "", arrayOf())
         }		
     }
 }

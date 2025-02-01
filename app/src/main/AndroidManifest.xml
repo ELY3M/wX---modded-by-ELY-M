@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="55939"
-    android:versionName="55939-elys">
+    android:versionCode="55940"
+    android:versionName="55940-elys">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -168,9 +168,6 @@
             android:parentActivityName="WX" />
         <activity
             android:name=".misc.WebView"
-            android:parentActivityName="WX" />
-        <activity
-      	    android:name=".misc.WebViewTwitter"
             android:parentActivityName="WX" />
         <activity
             android:name=".spc.SpcMcdWatchShowActivity"

@@ -19,7 +19,6 @@
 
 */
 //modded by ELY M.   
-//keeping twitter 
 
 package joshuatee.wx.ui
 
@@ -196,10 +195,10 @@ class Drawer(
                 R.id.spc_storm_reports -> Route.spcStormReports(activity)
                 R.id.spc_thunderstorm_outlooks -> Route.spcTstorm(activity)
                 R.id.spotters -> Route.spotters(activity)
-                R.id.twitter_states -> Route.webViewTwitterStates(activity)
-                R.id.twitter_tornado -> Route.webViewTwitterTornado(activity)
                 R.id.us_alerts -> Route.alerts(activity)
                 R.id.wpc_gefs -> Route.wpcGefs(activity)
+                R.id.aurora -> Route.auroraForecast(activity)
+		
             }
             closeDrawer()
             true
