@@ -6,6 +6,7 @@
 
 * [REF] misc cleanup
 * [FIX] more error handling in network io
+* [FIX] scope issues in decode8BitAndGenRadials.c similar to NexradDecodeEightBit.kt
 
 ## 55939 2025_01_30
 

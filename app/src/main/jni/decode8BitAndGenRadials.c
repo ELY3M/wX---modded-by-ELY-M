@@ -58,15 +58,11 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
     color_r[0] = bgColorRed;
     color_g[0] = bgColorGreen;
     color_b[0] = bgColorBlue;
-    int total_bins = 0;
-    float angle;
-    float angle_v;
     double W_180_DIV_PI = 180.0 / M_PI;
     jfloat * rBuff = (*env)->GetDirectBufferAddress(env, radarBuffer);
     jbyte * cBuff = (*env)->GetDirectBufferAddress(env, colorBuffer);
     int r_i = 0;
     int c_i = 0;
-    int cur_level;
     const char * src_path = (*env)->GetStringUTFChars(env, src, NULL);
     jbyte * oBuff = (*env)->GetDirectBufferAddress(env, outputBuffer);
     jbyte * iBuff = (*env)->GetDirectBufferAddress(env, inputBuffer);
@@ -85,40 +81,38 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
     if (fread_return != length) {
         return -1;
     }
+
     BZ2_bzBuffToBuffDecompress((char *) oBuff, (unsigned int *) &ret_size, (char *) iBuff, length, 1, 0);  // 1 for small, 0 verbosity
-    int o_idx = 20;
-    char array[2];
-    array[0] = oBuff[o_idx++];
-    array[1] = oBuff[o_idx++];
+    int o_idx = 30;
     int number_of_radials  = 360;
     if (productCode == 2153 || productCode == 2154) {
         number_of_radials = 720;
     }
-    o_idx += 8;  // skip 4 short or unsigned short
-    unsigned short number_of_rle_halfwords = 0;
-    unsigned short tn = 0;
-    unsigned short tn_next = 0;
-    float angle_0 = 0.0f;
     float angle_next;
+    float angle_0 = 0.0f;
+    int total_bins = 0;
     for (int r = 0; r < number_of_radials; r++) {
+        char array[2];
         array[0] = oBuff[o_idx++];
         array[1] = oBuff[o_idx++];
-        number_of_rle_halfwords = toShort(array);
+        unsigned short number_of_rle_halfwords = toShort(array);
         array[0] = oBuff[o_idx++];
         array[1] = oBuff[o_idx++];
-        tn = toShort(array);
+        float angle = (float) (450 - toShort(array) / 10.0);
+
         o_idx += 2;
+
         array[0] = oBuff[o_idx + number_of_rle_halfwords + 2];
         array[1] = oBuff[o_idx + number_of_rle_halfwords + 3];
-        tn_next = toShort(array);
-        angle_next = (float) (450 - (tn_next / 10.0));
-        angle = (float) (450 - (tn / 10.0));
-        if (r == 0) {
-            angle_0 = angle;
-        }
+        angle_next = (float) (450 - toShort(array) / 10.0);
+
         int level = 0;
         int level_count = 0;
         float bin_start = binSize;
+        if (r == 0) {
+            angle_0 = angle;
+        }
+        float angle_v;
         if (r < 359) {
             angle_v = angle_next;
         } else {
@@ -129,7 +123,7 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials(
         double angleCos = cos(angle / W_180_DIV_PI);
         double angleSin = sin(angle / W_180_DIV_PI);
         for (int bin = 0; bin < number_of_rle_halfwords; bin++) {
-            cur_level = (unsigned char) oBuff[o_idx++];
+            int cur_level = (unsigned char) oBuff[o_idx++];
             if (cur_level == level) {
                 level_count += 1;
             } else {
