@@ -456,7 +456,7 @@
 		 <item name="popupMenuBackground">@color/black</item>
         <item name="android:textColor">@color/aqua</item>
         <item name="colorPrimary">@color/black</item>		
-        <item name="android:buttonTint">@color/aqua</item>
+        <item name="android:buttonTint">@color/blue</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/aqua</item>
         <item name="android:windowBackground">@color/black</item>
