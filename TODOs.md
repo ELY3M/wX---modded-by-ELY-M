@@ -18,6 +18,7 @@
 #
 ## DONE!
 ====================================
+* removed twitter - I do not want to do anything with the new owner!  
 * rename application id and change icon color so someone can run both versions of wX - Now you can run my app version along with Joshuas app.      
 * removed conus radar overlay.  you can see conus radar map by accessing it from long press menu in radar.   
 * Fixed few bugs esp in Spotter functions.  
