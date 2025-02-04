@@ -2,11 +2,19 @@
 
 # Developer ChangeLog
 
-## 55940 2025_01_30
+## 55941 2025_02_03
+
+* [ADD]
+
+## 55940 2025_02_03
 
 * [REF] misc cleanup
 * [FIX] more error handling in network io
 * [FIX] scope issues in decode8BitAndGenRadials.c similar to NexradDecodeEightBit.kt
+* [FIX] activity_main.xml activity_main_drawer_right.xml activity_main_drawer.xml FAB was
+  overlapping when gesture capable
+  device had 3 button mode
+  enabled (needs more testing)
 
 ## 55939 2025_01_30
 

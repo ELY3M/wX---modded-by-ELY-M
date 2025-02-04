@@ -20,27 +20,82 @@
 
  -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:id="@+id/main_content"-->
+<!--    android:fitsSystemWindows="true"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/rl"-->
+<!--        android:background="?attr/popupMenuBackground"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--        <include layout="@layout/widget_toolbar_bottom" />-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/ll"-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="fill_parent"-->
+<!--            android:layout_above="@id/toolbar_bottom"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <com.google.android.material.tabs.TabLayout-->
+<!--                android:id="@+id/slidingTabLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:height="?attr/actionBarSize"-->
+<!--                android:background="?attr/colorPrimary" />-->
+
+<!--            <androidx.viewpager2.widget.ViewPager2-->
+<!--                android:id="@+id/viewPager"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent" />-->
+<!--        </LinearLayout>-->
+<!--    </RelativeLayout>-->
+
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_above="@id/ll"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_marginRight="16dp"-->
+<!--        android:layout_marginBottom="92dp"-->
+<!--        app:elevation="@dimen/fab_elevation"-->
+<!--        app:layout_anchor="@id/rl"-->
+<!--        app:layout_anchorGravity="bottom|right"-->
+<!--        app:pressedTranslationZ="@dimen/fab_elevation_pressed"-->
+<!--        app:srcCompat="@drawable/ic_play_arrow_24dp"-->
+<!--        android:contentDescription="@string/radarIcon" />-->
+
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_content"
+    android:id="@+id/rl"
     android:fitsSystemWindows="true"
+    android:background="?attr/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/rl"
+    <include layout="@layout/widget_toolbar_bottom" />
+
+    <LinearLayout
+        android:id="@+id/ll"
         android:background="?attr/popupMenuBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/toolbar_bottom"
+        android:orientation="vertical">
 
-        <include layout="@layout/widget_toolbar_bottom" />
-
-        <LinearLayout
-            android:id="@+id/ll"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/toolbar_bottom"
-            android:orientation="vertical">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/slidingTabLayout"
@@ -53,22 +108,22 @@
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </LinearLayout>
-    </RelativeLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/ll"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="92dp"
-        app:elevation="@dimen/fab_elevation"
-        app:layout_anchor="@id/rl"
-        app:layout_anchorGravity="bottom|right"
-        app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-        app:srcCompat="@drawable/ic_play_arrow_24dp"
-        android:contentDescription="@string/radarIcon" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="22dp"
+                app:elevation="@dimen/fab_elevation"
+                app:layout_anchor="@id/viewPager"
+                app:layout_anchorGravity="bottom|right"
+                app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+                app:srcCompat="@drawable/ic_play_arrow_24dp"
+                android:contentDescription="@string/radarIcon" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+</RelativeLayout>
