@@ -2,9 +2,14 @@
 
 # Developer ChangeLog
 
-## 55941 2025_02_03
+## 55942 2025_02_04
 
-* [ADD]
+* [FIX]
+
+## 55941 2025_02_04
+
+* [FIX] activity_main.xml (tabs) needed one more mod for fab issue
+* [FIX] statusbar background was inconsistent across many activities
 
 ## 55940 2025_02_03
 

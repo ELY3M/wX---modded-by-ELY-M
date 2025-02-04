@@ -2,6 +2,7 @@
 
 ## Bugs
 
+* [FIX] fab spacing in location add and colorpal when gesture nav turned off
 * [FIX] during recent AS updates
 
 ```
