@@ -18,31 +18,139 @@
 
  -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:id="@+id/main_content"-->
+<!--    android:fitsSystemWindows="true"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="?attr/colorPrimary">-->
+
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/rl"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--        <include layout="@layout/widget_toolbar_bottom" />-->
+
+<!--        <LinearLayout-->
+<!--            android:background="?attr/popupMenuBackground"-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="fill_parent"-->
+<!--            android:layout_above="@id/toolbar_bottom"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <include layout="@layout/widget_toolbar_top" />-->
+
+<!--            <ScrollView-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="fill_parent"-->
+<!--                android:scrollbars="none">-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linearLayout"-->
+<!--                    android:layout_width="fill_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:padding="@dimen/padding_ll">-->
+
+<!--                    <androidx.cardview.widget.CardView-->
+<!--                        android:id="@+id/cv1"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_gravity="center">-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:orientation="vertical">-->
+
+<!--                            <EditText-->
+<!--                                android:id="@+id/locLabelEt"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:hint="@string/name_of_location"-->
+<!--                                android:inputType="text"-->
+<!--                                android:textSize="18sp"-->
+<!--                                android:importantForAutofill="no" />-->
+
+<!--                            <EditText-->
+<!--                                android:id="@+id/locXEt"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:hint="@string/latitude_you_are_not_required_to_enter"-->
+<!--                                android:inputType="text"-->
+<!--                                android:textSize="18sp"-->
+<!--                                android:importantForAutofill="no" />-->
+
+<!--                            <EditText-->
+<!--                                android:id="@+id/locYEt"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:hint="@string/longitude_you_are_not_required_to_enter"-->
+<!--                                android:inputType="text"-->
+<!--                                android:textSize="18sp"-->
+<!--                                android:importantForAutofill="no" />-->
+<!--                        </LinearLayout>-->
+<!--                    </androidx.cardview.widget.CardView>-->
+
+<!--                    <androidx.appcompat.widget.AppCompatTextView-->
+<!--                        android:id="@+id/notif_text"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:text="@string/notifications"-->
+<!--                        android:textSize="@dimen/large_text" />-->
+
+<!--                    <androidx.appcompat.widget.AppCompatTextView-->
+<!--                        android:id="@+id/notif_text_perm"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:text="@string/androidNotificationWarning" />-->
+<!--                </LinearLayout>-->
+<!--            </ScrollView>-->
+<!--        </LinearLayout>-->
+<!--    </RelativeLayout>-->
+
+<!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+<!--        android:id="@+id/fab"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="36dp"-->
+<!--        app:elevation="@dimen/fab_elevation"-->
+<!--        app:layout_anchor="@id/rl"-->
+<!--        app:layout_anchorGravity="bottom|center"-->
+<!--        app:pressedTranslationZ="@dimen/fab_elevation_pressed"-->
+<!--        app:srcCompat="@drawable/ic_done_24dp"-->
+<!--        android:contentDescription="@string/save" />-->
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_content"
-    android:fitsSystemWindows="true"
+    android:id="@+id/rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/colorPrimary"
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:id="@+id/rl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <include layout="@layout/widget_toolbar_bottom" />
 
-        <include layout="@layout/widget_toolbar_bottom" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/toolbar_bottom"
+        android:background="?attr/popupMenuBackground"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:background="?attr/popupMenuBackground"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/toolbar_bottom"
-            android:orientation="vertical">
+        <include layout="@layout/widget_toolbar_top" />
 
-            <include layout="@layout/widget_toolbar_top" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:scrollbars="none">
@@ -70,27 +178,27 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="@string/name_of_location"
+                                android:importantForAutofill="no"
                                 android:inputType="text"
-                                android:textSize="18sp"
-                                android:importantForAutofill="no" />
+                                android:textSize="18sp" />
 
                             <EditText
                                 android:id="@+id/locXEt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="@string/latitude_you_are_not_required_to_enter"
+                                android:importantForAutofill="no"
                                 android:inputType="text"
-                                android:textSize="18sp"
-                                android:importantForAutofill="no" />
+                                android:textSize="18sp" />
 
                             <EditText
                                 android:id="@+id/locYEt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="@string/longitude_you_are_not_required_to_enter"
+                                android:importantForAutofill="no"
                                 android:inputType="text"
-                                android:textSize="18sp"
-                                android:importantForAutofill="no" />
+                                android:textSize="18sp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -108,18 +216,18 @@
                         android:text="@string/androidNotificationWarning" />
                 </LinearLayout>
             </ScrollView>
-        </LinearLayout>
-    </RelativeLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="36dp"
-        app:elevation="@dimen/fab_elevation"
-        app:layout_anchor="@id/rl"
-        app:layout_anchorGravity="bottom|center"
-        app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-        app:srcCompat="@drawable/ic_done_24dp"
-        android:contentDescription="@string/save" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:contentDescription="@string/save"
+                app:elevation="@dimen/fab_elevation"
+                app:layout_anchor="@id/scrollView"
+                app:layout_anchorGravity="bottom|center"
+                app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+                app:srcCompat="@drawable/ic_done_24dp" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+</RelativeLayout>

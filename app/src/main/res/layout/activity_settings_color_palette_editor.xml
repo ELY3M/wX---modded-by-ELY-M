@@ -18,33 +18,121 @@
 
  -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:id="@+id/main_content"-->
+<!--    android:fitsSystemWindows="true"-->
+<!--    android:background="?attr/colorPrimary"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/rl"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--        <include layout="@layout/widget_toolbar_bottom" />-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="fill_parent"-->
+<!--            android:layout_above="@id/toolbar_bottom"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <include layout="@layout/widget_toolbar_top" />-->
+
+<!--            <ScrollView-->
+<!--                android:background="?attr/popupMenuBackground"-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="fill_parent"-->
+<!--                android:scrollbars="none">-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/ll"-->
+<!--                    android:layout_width="fill_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:padding="@dimen/padding_ll">-->
+
+<!--                    <androidx.cardview.widget.CardView-->
+<!--                        android:id="@+id/cv1"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_gravity="center">-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:orientation="vertical">-->
+
+<!--                            <EditText-->
+<!--                                android:id="@+id/palTitle"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:hint="@string/name"-->
+<!--                                android:inputType="text"-->
+<!--                                android:textSize="18sp"-->
+<!--                                android:importantForAutofill="no" />-->
+
+<!--                            <EditText-->
+<!--                                android:id="@+id/palContent"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:hint="@string/color_palette"-->
+<!--                                android:inputType="textMultiLine"-->
+<!--                                android:textSize="@dimen/list_item_text"-->
+<!--                                android:importantForAutofill="no" />-->
+
+<!--                        </LinearLayout>-->
+<!--                    </androidx.cardview.widget.CardView>-->
+
+<!--                </LinearLayout>-->
+<!--            </ScrollView>-->
+<!--        </LinearLayout>-->
+<!--    </RelativeLayout>-->
+
+<!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+<!--        android:id="@+id/fab"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="28dp"-->
+<!--        app:elevation="@dimen/fab_elevation"-->
+<!--        app:layout_anchor="@id/rl"-->
+<!--        app:layout_anchorGravity="bottom|center"-->
+<!--        app:pressedTranslationZ="@dimen/fab_elevation_pressed"-->
+<!--        app:srcCompat="@drawable/ic_done_24dp"-->
+<!--        android:contentDescription="@string/done" />-->
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_content"
-    android:fitsSystemWindows="true"
-    android:background="?attr/colorPrimary"
+    android:id="@+id/rl"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:id="@+id/rl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <include layout="@layout/widget_toolbar_bottom" />
 
-        <include layout="@layout/widget_toolbar_bottom" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/toolbar_bottom"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/toolbar_bottom"
-            android:orientation="vertical">
+        <include layout="@layout/widget_toolbar_top" />
 
-            <include layout="@layout/widget_toolbar_top" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ScrollView
-                android:background="?attr/popupMenuBackground"
+                android:id="@+id/scrollView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:background="?attr/popupMenuBackground"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -70,36 +158,36 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="@string/name"
+                                android:importantForAutofill="no"
                                 android:inputType="text"
-                                android:textSize="18sp"
-                                android:importantForAutofill="no" />
+                                android:textSize="18sp" />
 
                             <EditText
                                 android:id="@+id/palContent"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="@string/color_palette"
+                                android:importantForAutofill="no"
                                 android:inputType="textMultiLine"
-                                android:textSize="@dimen/list_item_text"
-                                android:importantForAutofill="no" />
+                                android:textSize="@dimen/list_item_text" />
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
             </ScrollView>
-        </LinearLayout>
-    </RelativeLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="28dp"
-        app:elevation="@dimen/fab_elevation"
-        app:layout_anchor="@id/rl"
-        app:layout_anchorGravity="bottom|center"
-        app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-        app:srcCompat="@drawable/ic_done_24dp"
-        android:contentDescription="@string/done" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:contentDescription="@string/done"
+                app:elevation="@dimen/fab_elevation"
+                app:layout_anchor="@id/scrollView"
+                app:layout_anchorGravity="bottom|center"
+                app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+                app:srcCompat="@drawable/ic_done_24dp" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+</RelativeLayout>

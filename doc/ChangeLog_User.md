@@ -8,6 +8,36 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55942 2025_02_05 (BETA)
+
+* [FIX] statusbar background was inconsistent across many activities
+* [FIX] Main button (lower right) on main screen and location add screen was not properly aligned in
+  certain situations
+* [ADD] In National Images remove "experimental" from the label for "Week 3-4 Outlooks -
+  Temperature" and "Week 3-4 Outlooks - Precipitation" per *SCN24-104: The Experimental Weeks 3-4
+  Precipitation Outlooks Will Become Operational on or about January 17, 2025*
+* [ADD] "Prognostic Discussion for Week 3-4 Temperature and Precipitation Outlooks" in National Text
+  Product Screen under **General Forecast Discussions**
+* [ADD] NWS has discontinued the following per SCN24-108: Termination of the 72-Hour Low Tracks
+  Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
+  Forecast Tool: Effective January 20, 2025 , remove from National Images
+* [FIX] In National Graphics the URL for **GLSEA Ice Analysis** had changed
+* [ADD] In Nexrad "long press" (press and hold), add Observation(Metar) site name next to the
+  station code
+* [ADD] On homescreen if "Weather Story" is configured and you tap on it image is opened up in
+  dedicated image viewer allowing you to share the image or zoom in with the full screen.
+* [ADD] Similar to SPC Convective Outlook outlines as a preference in Nexrad Radar, make SPC Fire
+  Weather Outlook outlines available as well (BETA - no dry thunderstorm support yet)
+* [ADD] Better "Weather Story" handling for image in homescreen (if configured and if your WFO
+  offers it or something similar)
+* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI) (
+  required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
+  work for Guam/CNMI due to insufficient LAT/LON adjustment, it's a WIP
+* [ADD] geographic boundaries for US Virgin Islands and American Samoa
+* [ADD] long press in nexrad will now show best vis sat image for Hawaii and areas around Puerto
+  Rico
+* [ADD] add Metars for Puerto Rico and US Virgin Islands
+
 ## 55925 2025_01_04
 
 * [ADD] In hourly, abbreviate "Drizzle" to "Dz"

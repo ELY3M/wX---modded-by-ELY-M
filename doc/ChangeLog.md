@@ -2,9 +2,14 @@
 
 # Developer ChangeLog
 
+## 55943 2025_02_04
+
+* [ADD]
+
 ## 55942 2025_02_04
 
-* [FIX]
+* [FIX] activity_settings_location_generic.xml and activity_settings_color_palette_editor.xml were
+  overlapping when gesture capable
 
 ## 55941 2025_02_04
 
