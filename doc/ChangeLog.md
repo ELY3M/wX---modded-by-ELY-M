@@ -2,9 +2,9 @@
 
 # Developer ChangeLog
 
-## 55943 2025_02_04
+## 55943 2025_02_06
 
-* [ADD]
+* [FIX] add Mist, Light Mist in UtilityMetarConditions
 
 ## 55942 2025_02_04
 

@@ -355,6 +355,8 @@ object UtilityMetarConditions {
 
         "Blizzard" to "blizzard",
 
+        "Mist" to "fg",
+        "Light Mist" to "fg",
         "Fog" to "fg",
         "Fog/Mist" to "fg",
         "Freezing Fog" to "fg",
