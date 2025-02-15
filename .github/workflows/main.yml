@@ -26,6 +26,11 @@ jobs:
           VERSIONNAME=$(grep -Po 'android:versionName="(.*)"' app/src/main/AndroidManifest.xml | sed -r 's/.*android:versionName="([^ ]+)".*/\1/')
           echo "VERSIONNAME=$VERSIONNAME" >> $GITHUB_ENV
           echo VERSIONNAME is: $VERSIONNAME
+          
+      - uses: thecodemonkey/action-get-gradle-version@master
+        id: gradleversion
+        run: | 
+          echo gradle version: ${{ steps.gradleversion.outputs.version }}      
          
       - uses: actions/setup-java@v4
         with:
@@ -33,7 +38,7 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 8.7
+          gradle-version: ${{ steps.gradleversion.outputs.version }}
           gradle-home-cache-cleanup: true
           
       - uses: nttld/setup-ndk@v1

@@ -2,9 +2,15 @@
 
 # Developer ChangeLog
 
-## 55943 2025_02_06
+## 55943 2025_02_15
 
 * [FIX] add Mist, Light Mist in UtilityMetarConditions
+* [ADD] tooling update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.8.0'
++        classpath 'com.android.tools.build:gradle:8.8.1'
+```
 
 ## 55942 2025_02_04
 
