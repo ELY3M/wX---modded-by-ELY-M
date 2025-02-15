@@ -26,9 +26,12 @@ jobs:
           VERSIONNAME=$(grep -Po 'android:versionName="(.*)"' app/src/main/AndroidManifest.xml | sed -r 's/.*android:versionName="([^ ]+)".*/\1/')
           echo "VERSIONNAME=$VERSIONNAME" >> $GITHUB_ENV
           echo VERSIONNAME is: $VERSIONNAME
-          
+
+      - name: Getting Grade Version          
       - uses: thecodemonkey/action-get-gradle-version@master
         id: gradleversion
+        
+      - name: Show Grade Version          
         run: | 
           echo gradle version: ${{ steps.gradleversion.outputs.version }}      
          
