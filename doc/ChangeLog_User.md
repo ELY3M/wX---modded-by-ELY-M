@@ -8,6 +8,10 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55944 2025_03_02 (BETA)
+
+* [FIX] in current conditions, show proper icon for **Mist** and  **Light Mist**
+
 ## 55942 2025_02_05 (BETA)
 
 * [FIX] statusbar background was inconsistent across many activities

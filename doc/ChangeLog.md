@@ -2,9 +2,21 @@
 
 # Developer ChangeLog
 
-## 55944 2025_02_16
+## 55945 2025_03_02
 
-* [ADD]
+* [ADD] tool update
+```
+-        classpath 'com.android.tools.build:gradle:8.8.1'
++        classpath 'com.android.tools.build:gradle:8.8.2'
+```
+
+## 55944 2025_02_25
+
+* [ADD] lib update
+```
+-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
++    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+```
 
 ## 55943 2025_02_16
 
