@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="55947"
-    android:versionName="55947-elys">
+    android:versionCode="55948"
+    android:versionName="55948-elys">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -91,7 +91,7 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".WX"
+            android:name="joshuatee.wx.WX"
             android:launchMode="singleTop"
             android:theme="@style/MyCustomTheme_whiter_NOAB" />
         <activity
@@ -268,7 +268,7 @@
             android:parentActivityName="WX" />
 
         <receiver
-            android:name=".Widget"
+            android:name="joshuatee.wx.Widget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -279,7 +279,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetCC"
+            android:name="joshuatee.wx.WidgetCC"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -291,7 +291,7 @@
 
 
         <receiver
-            android:name=".WidgetNexrad"
+            android:name="joshuatee.wx.WidgetNexrad"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -302,7 +302,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetMosaics"
+            android:name="joshuatee.wx.WidgetMosaics"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -313,7 +313,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetMosaicsRad"
+            android:name="joshuatee.wx.WidgetMosaicsRad"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -324,7 +324,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetTextProd"
+            android:name="joshuatee.wx.WidgetTextProd"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -335,7 +335,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetTextHWO"
+            android:name="joshuatee.wx.WidgetTextHWO"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -346,7 +346,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetSPCMESO"
+            android:name="joshuatee.wx.WidgetSPCMESO"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -357,7 +357,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetSPCSWO"
+            android:name="joshuatee.wx.WidgetSPCSWO"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -368,7 +368,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetWPCIMG"
+            android:name="joshuatee.wx.WidgetWPCIMG"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -379,7 +379,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetCONUSWV"
+            android:name="joshuatee.wx.WidgetCONUSWV"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -390,7 +390,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetSTRPT"
+            android:name="joshuatee.wx.WidgetSTRPT"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -401,7 +401,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetNHC"
+            android:name="joshuatee.wx.WidgetNHC"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -412,7 +412,7 @@
         </receiver>
 
         <receiver
-            android:name=".WidgetTextWPC"
+            android:name="joshuatee.wx.WidgetTextWPC"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -497,7 +497,7 @@
 
         <provider
             android:name=".util.FileProvider"
-            android:authorities=".wx.fileprovider"
+            android:authorities="joshuatee.wx.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -529,11 +529,11 @@
         <provider
             android:name="WeatherDataProvider"
             android:exported="true"
-            android:authorities=".weatherlistwidget.provider"
+            android:authorities="joshuatee.wx.weatherlistwidget.provider"
             tools:ignore="ExportedContentProvider" />
 
         <service
-            android:name=".notifications.WXJobService"
+            android:name="joshuatee.wx.notifications.WXJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="true" />
 

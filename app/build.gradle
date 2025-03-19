@@ -22,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "elys.joshuatee.wx"
+        applicationId "joshuatee.wx"
         // 2023-09-09 changed from 23 to 25
         minSdkVersion 27
         targetSdkVersion 35

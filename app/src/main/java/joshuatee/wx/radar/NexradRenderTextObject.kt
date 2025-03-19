@@ -280,7 +280,7 @@ class NexradRenderTextObject(
         // hack fix for quad pane: glviewWidth - 200
         //
         if (abs(coordinates[0] * scale) < glviewWidth && abs(coordinates[1] * scale) < glviewHeight) {
-            val textView = TextViewMetal(context, text, color, textSize, numberOfPanes)
+            val textView = TextViewMetal(context, text, color, textSize)
             textViews.add(textView.getView())
             relativeLayout.addView(textView.getView())
             if ((coordinates[1] * scale).toInt() < 0) {
@@ -342,7 +342,6 @@ class NexradRenderTextObject(
                     "",
                     color,
                     textSizeTv,
-                    numberOfPanes,
                     singleLine,
                     drawText = false
                 )

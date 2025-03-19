@@ -2,9 +2,14 @@
 
 # Developer ChangeLog
 
-## 55946 2025_03_19
+## 55948 2025_03_19
 
 * [ADD]
+
+## 55947 2025_03_19
+
+* [FIX] more work on issue "quad pane nexrad is not properly taking all screen space when textual
+  labels are enabled"
 
 ## 55946 2025_03_19
 

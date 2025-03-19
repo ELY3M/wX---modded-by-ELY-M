@@ -33,18 +33,13 @@ class TextViewMetal(
     text: String,
     color: Int,
     textSize: Float,
-    numberOfPanes: Int,
-    private var singleLine: Boolean = true,
+    singleLine: Boolean = true,
     drawText: Boolean = true
 ) : Widget {
 
     private val textView = TextView(context)
 
     init {
-        if (numberOfPanes > 2) {
-            singleLine = false
-        }
-
         textView.setTextColor(color)
         textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
         if (singleLine) {
