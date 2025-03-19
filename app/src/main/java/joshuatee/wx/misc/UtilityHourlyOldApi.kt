@@ -25,8 +25,10 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.ljust
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityDownloadNws
+import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
 object UtilityHourlyOldApi {
@@ -38,12 +40,17 @@ object UtilityHourlyOldApi {
         var windDirData = "Precip%" + GlobalVariables.newline
         var conditionData = "Cloud%" + GlobalVariables.newline
         val lines = mutableListOf<String>()
+        var timeSpacing = 9
+        if (UIPreferences.hourlyShowAMPM) {
+            timeSpacing = 11
+        }
         val header =
-            "Time".ljust(9) + " " + "Temp".ljust(6) + "Dew".ljust(5) + "Precip%".ljust(7) + "Cloud%".ljust(
+            "Time".ljust(timeSpacing) + " " + "Temp".ljust(6) + "Dew".ljust(5) + "Precip%".ljust(7) + "Cloud%".ljust(
                 6
             )
         lines.add(header)
         html.split(GlobalVariables.newline).drop(2).forEach {
+            UtilityLog.d("WX HOUR", it)
             val items = it.split("\\s+".toRegex())
             if (items.size > 5) {
                 timeData += items[0] + " " + " " + items[1] + GlobalVariables.newline
@@ -51,11 +58,21 @@ object UtilityHourlyOldApi {
                 windSpeedData += items[3] + GlobalVariables.newline
                 windDirData += items[4] + GlobalVariables.newline
                 conditionData += items[5] + GlobalVariables.newline
-                lines.add(
-                    items[0] + "  " + items[1].ljust(4) + " " + items[2].ljust(5) + " " + items[3].ljust(
-                        4
-                    ) + " " + items[4].ljust(6) + " " + items[5].ljust(5)
-                )
+                if (UIPreferences.hourlyShowAMPM) {
+                    lines.add(
+                        items[0] + " " + items[1] + " " + items[2].ljust(4) + " " + items[3].ljust(
+                            5
+                        ) + " " + items[4].ljust(
+                            4
+                        ) + " " + items[5].ljust(6) + " " + items[6].ljust(5)
+                    )
+                } else {
+                    lines.add(
+                        items[0] + "  " + items[1].ljust(4) + " " + items[2].ljust(5) + " " + items[3].ljust(
+                            4
+                        ) + " " + items[4].ljust(6) + " " + items[5].ljust(5)
+                    )
+                }
             }
         }
         return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData, lines)
@@ -99,7 +116,7 @@ object UtilityHourlyOldApi {
             }
             val time = ObjectDateTime.translateTimeForHourly(time2List[j])
             sb += To.stringPadLeft(time, 10)
-            sb += "   "
+//            sb += "   "
             sb += To.stringPadLeft(temp2List[j], 8)
             sb += To.stringPadLeft(temp3Val, 8)
             sb += To.stringPadLeft(temp4Val, 8)

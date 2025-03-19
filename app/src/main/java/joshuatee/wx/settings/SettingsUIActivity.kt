@@ -123,6 +123,12 @@ class SettingsUIActivity : BaseActivity() {
             ),
 	    //elys mod - I hate fab buttons!!!
             Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.main_screen_radar_button),
+            Switch(
+                this,
+                "Hourly screen: show with AM/PM",
+                "HOURLY_SHOW_AM_PM",
+                R.string.hourly_show_am_pm
+            ),
             Switch(this, "Millibars in current conditions", "UNITS_M", R.string.units_m_label),
             Switch(
                 this,

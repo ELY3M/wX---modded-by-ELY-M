@@ -77,7 +77,6 @@ class SettingsMainActivity : BaseActivity() {
             Switch(this,"Check for Internet on startup","CHECKINTERNET", R.string.checkinternet_switch_label)
         )
         //elys mod end
-
     }
 
     private fun updateNotificationStatus() {

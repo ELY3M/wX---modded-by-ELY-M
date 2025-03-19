@@ -129,6 +129,7 @@ enum class PolygonType(
         RadarPreferences.wpcFronts,
         RadarPreferences.wpcFrontLineSize.toFloat()
     ),
+    //elys mod
     USERPOINTS(0, "USERPOINTS", RadarPreferences.userPoints, 0.0f),
     NONE(0, "", false, 0.0f);
 
@@ -155,10 +156,12 @@ enum class PolygonType(
             STI.pref = RadarPreferences.sti
             TVS.pref = RadarPreferences.tvs
             HI.pref = RadarPreferences.hailIndex
+	    //elys mod
 	    HAIL_LABELS.pref = RadarPreferences.hailSizeLabel
             OBS.pref = RadarPreferences.obs
             SWO.pref = RadarPreferences.swo
-	    FIRE.pref = RadarPreferences.fire
+            FIRE.pref = RadarPreferences.fire
+	    //elys mod
             USERPOINTS.pref = RadarPreferences.userPoints
             MCD.color = RadarPreferences.colorMcd
             MPD.color = RadarPreferences.colorMpd

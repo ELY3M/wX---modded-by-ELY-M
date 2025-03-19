@@ -96,6 +96,7 @@ object UIPreferences {
     var lockToolbars = false
     var unitsM = false
     var unitsF = false
+    var hourlyShowAMPM = false
     var widgetTextColor = 0
     var widgetHighlightTextColor = 0
     var widgetNexradSize = 0
@@ -186,6 +187,7 @@ object UIPreferences {
         lockToolbars = getInitialPreference("LOCK_TOOLBARS", "true")
         unitsM = getInitialPreference("UNITS_M", "true")
         unitsF = getInitialPreference("UNITS_F", "true")
+        hourlyShowAMPM = getInitialPreference("HOURLY_SHOW_AM_PM", "false")
         widgetTextColor = getInitialPreference("WIDGET_TEXT_COLOR", Color.WHITE)
         widgetHighlightTextColor = getInitialPreference("WIDGET_HIGHLIGHT_TEXT_COLOR", Color.YELLOW)
         widgetNexradSize = getInitialPreference("WIDGET_NEXRAD_SIZE", 10)

@@ -2,17 +2,28 @@
 
 # Developer ChangeLog
 
-## 55945 2025_03_02
+## 55946 2025_03_18
 
-* [ADD] tool update
+## 55945 2025_03_18
+
+* [ADD] option UI Preferences -> "Hourly screen: show with AM/PM"
+* [FIX] OPC "Alaska/Arctic SST/Ice Edge Analysis" - image was no longer working, fix to use new URL
+* [ADD] tool updates
+
 ```
 -        classpath 'com.android.tools.build:gradle:8.8.1'
 +        classpath 'com.android.tools.build:gradle:8.8.2'
 ```
 
+```
+-        classpath 'com.android.tools.build:gradle:8.8.2'
++        classpath 'com.android.tools.build:gradle:8.9.0'
+```
+
 ## 55944 2025_02_25
 
 * [ADD] lib update
+
 ```
 -    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 +    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'

@@ -152,7 +152,7 @@ object RadarPreferences {
         obs = getInitialPreference("WXOGL_OBS", "false")
         obsWindbarbs = getInitialPreference("WXOGL_OBS_WINDBARBS", "false")
         swo = getInitialPreference("RADAR_SHOW_SWO", "false")
-        fire = getInitialPreference("RADAR_SHOW_FIRE", "false")	
+        fire = getInitialPreference("RADAR_SHOW_FIRE", "false")
         userPoints = getInitialPreference("RADAR_USERPOINTS", "false")
         cities = getInitialPreference("COD_CITIES_DEFAULT", "")
         locDot = getInitialPreference("COD_LOCDOT_DEFAULT", "true")

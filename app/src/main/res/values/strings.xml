@@ -17,7 +17,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <!-- modded by ELY M. -->
-
 <resources>
     <string name="label_pin">Add shortcut to home screen</string>
     <string name="radar_shortcut">Radar</string>
@@ -49,7 +48,7 @@
         Additional software and tools are used from Telecine, GraphView,
         bzip2, TouchImageView, OkHttp, ImageMap, HoloColorPicker, and OpenStreetMaps.
         Software is provided \"as is\". Use at your own risk. Use for educational purposes and non-commercial purposes only.
-        Do not use for operational purposes.  &#169; 2013&#8211;2024 joshua.tee@gmail.com .
+        Do not use for operational purposes.  &#169; 2013&#8211;2025 joshua.tee@gmail.com .
         Privacy Policy: this app does not collect any data from the user or the user’s device.
         Please report bugs or suggestions via email to me as opposed to app store reviews.
         wX is licensed under the GNU GPLv3 license. For more information on the license please go here:

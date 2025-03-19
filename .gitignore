@@ -10,6 +10,7 @@ build
 .gradle
 app/src/main/obj
 .idea
+.kotlin/
 .DS_Store
 git.txt
 update.bat

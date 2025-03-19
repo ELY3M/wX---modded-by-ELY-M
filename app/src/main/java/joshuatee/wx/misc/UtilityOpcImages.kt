@@ -129,7 +129,8 @@ internal object UtilityOpcImages {
         GlobalVariables.NWS_OPC_WEBSITE_PREFIX + "/shtml/P_096hrwper_color.gif",
 
         GlobalVariables.NWS_OPC_WEBSITE_PREFIX + "/shtml/arctic/UA_LATEST.gif",
-        GlobalVariables.NWS_OPC_WEBSITE_PREFIX + "/shtml/arctic/NSSTICE_LATEST.gif",
+//        GlobalVariables.NWS_OPC_WEBSITE_PREFIX + "/shtml/arctic/NSSTICE_LATEST.gif",
+        GlobalVariables.NWS_OPC_WEBSITE_PREFIX + "/data/nsst/nsst_f00.png",
         GlobalVariables.NWS_OPC_WEBSITE_PREFIX + "/shtml/arctic/24SFC_LATEST.gif",
         GlobalVariables.NWS_OPC_WEBSITE_PREFIX + "/shtml/arctic/48SFC_LATEST.gif",
         GlobalVariables.NWS_OPC_WEBSITE_PREFIX + "/shtml/arctic/72SFC_LATEST.gif",

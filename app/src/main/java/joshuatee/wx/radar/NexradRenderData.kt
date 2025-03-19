@@ -51,8 +51,7 @@ class NexradRenderData(val context: Context) {
     val locationDotBuffers = OglBuffers(PolygonType.LOCDOT)
 	//elys mod
     val locIconBuffers = OglBuffers()
-    val locBugBuffers = OglBuffers()
-	
+    val locBugBuffers = OglBuffers()	
     val wbCircleBuffers = OglBuffers(PolygonType.WIND_BARB_CIRCLE, zoomToHideMiscFeatures)
     val wbBuffers = OglBuffers(PolygonType.WIND_BARB, zoomToHideMiscFeatures)
     val wbGustsBuffers = OglBuffers(PolygonType.WIND_BARB_GUSTS, zoomToHideMiscFeatures)
@@ -64,12 +63,12 @@ class NexradRenderData(val context: Context) {
     var hiBuffersList = mutableListOf<OglBuffers>()	
     val tvsBuffers = OglBuffers(PolygonType.TVS, zoomToHideMiscFeatures)
     val polygonBuffers = mapOf(
-            PolygonType.WATCH to OglBuffers(PolygonType.WATCH),
-            PolygonType.WATCH_TORNADO to OglBuffers(PolygonType.WATCH_TORNADO),
-            PolygonType.MCD to OglBuffers(PolygonType.MCD),
-            PolygonType.MPD to OglBuffers(PolygonType.MPD),
+        PolygonType.WATCH to OglBuffers(PolygonType.WATCH),
+        PolygonType.WATCH_TORNADO to OglBuffers(PolygonType.WATCH_TORNADO),
+        PolygonType.MCD to OglBuffers(PolygonType.MCD),
+        PolygonType.MPD to OglBuffers(PolygonType.MPD),
     )
-    val warningBuffers = mutableMapOf<PolygonWarningType, OglBuffers>()		
+    val warningBuffers = mutableMapOf<PolygonWarningType, OglBuffers>()
 	//elys mod
     val userPointsBuffers = OglBuffers(PolygonType.USERPOINTS, zoomToHideMiscFeatures)
 }

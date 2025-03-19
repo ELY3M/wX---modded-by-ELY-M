@@ -448,6 +448,8 @@ Only the first tab will be available along with all action bar items. Can be use
     </string>
     <string name="units_f_label">
 Use Fahrenheit instead of Celsius in current conditions.</string>
+    <string name="hourly_show_am_pm">
+Show time in Hourly screen with AM/PM.</string>
     <string name="units_m_label">
 Use Millibars instead of inches.</string>
 

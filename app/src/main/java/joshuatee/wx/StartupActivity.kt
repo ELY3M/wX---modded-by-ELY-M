@@ -30,7 +30,6 @@ import java.io.*
 import java.nio.charset.Charset
 import kotlin.system.exitProcess
 
-
 class StartupActivity : Activity() {
 
     //

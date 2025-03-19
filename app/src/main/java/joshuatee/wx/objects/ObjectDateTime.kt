@@ -22,6 +22,7 @@
 package joshuatee.wx.objects
 
 import joshuatee.wx.parse
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityTimeSunMoon
@@ -251,7 +252,11 @@ class ObjectDateTime() {
         fun translateTimeForHourly(originalTime: String): String {
             val timeNoTz = originalTime.split("-").dropLast(1).joinToString("-")
             val objectDateTime = parse(timeNoTz, "yyyy'-'MM'-'dd'T'HH':'mm':'ss")
-            return objectDateTime.format("E HH")
+            return if (UIPreferences.hourlyShowAMPM) {
+                objectDateTime.format("E hh a")
+            } else {
+                objectDateTime.format("E HH")
+            }
         }
 
         //
