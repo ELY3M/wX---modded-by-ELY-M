@@ -48,8 +48,8 @@ http://bmx3r.com/wx/switch
 #
 ## DONE!
 ====================================
-* I am sorry.  due to too many bugs and crashes.  I went back to joshuatee.wx application id.  have to choose which app to install :(   
-* removed twitter - I do not want to do anything with the new owner!  
+* I am sorry.  due to too many bugs and crashes.  I went back to joshuatee.wx application id.  You have to choose which app to install :(   
+* removed twitter - I do not want to do anything with the new owner!   I HATE HIM FOR WHAT HE IS DOING TO NWS!!!!  HE IS PUTTING LIVES AT RISK!!!! 
 * rename application id and change icon color so someone can run both versions of wX - Now you can run my app version along with Joshuas app.      
 * removed conus radar overlay.  you can see conus radar map by accessing it from long press menu in radar.   
 * Fixed few bugs esp in Spotter functions.  
