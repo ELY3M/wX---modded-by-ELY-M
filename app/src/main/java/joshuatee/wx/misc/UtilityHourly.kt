@@ -45,8 +45,12 @@ object UtilityHourly {
         var windDirData = "WindDir" + GlobalVariables.newline
         var conditionData = "Condition" + GlobalVariables.newline
         val lines = mutableListOf<String>()
+        var padForTime = 0
+        if (UIPreferences.hourlyShowAMPM) {
+            padForTime = 2
+        }
         val header =
-            "Time".ljust(8) + "T".ljust(3) + "Wind".ljust(7) + "Dir".ljust(
+            "Time".ljust(8 + padForTime) + "T".ljust(3) + "Wind".ljust(7) + "Dir".ljust(
                 5
             )
         lines.add(header)

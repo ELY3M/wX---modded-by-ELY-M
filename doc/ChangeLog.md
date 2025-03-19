@@ -2,7 +2,16 @@
 
 # Developer ChangeLog
 
-## 55946 2025_03_18
+## 55946 2025_03_19
+
+* [ADD]
+
+## 55946 2025_03_19
+
+* [FIX] old api hourly graph with AM/PM was not working after recent change
+* [FIX] new api hourly with AM/PM header was not aligned after recent change
+* [FIX] quad pane nexrad is not properly taking all screen space when textual labels are enabled, if
+  quad pane hardcode relative layout width in NexradRenderTextObject
 
 ## 55945 2025_03_18
 

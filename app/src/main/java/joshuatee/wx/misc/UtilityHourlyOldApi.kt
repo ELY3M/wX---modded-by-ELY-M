@@ -52,12 +52,16 @@ object UtilityHourlyOldApi {
         html.split(GlobalVariables.newline).drop(2).forEach {
             UtilityLog.d("WX HOUR", it)
             val items = it.split("\\s+".toRegex())
-            if (items.size > 5) {
-                timeData += items[0] + " " + " " + items[1] + GlobalVariables.newline
-                tempData += items[2] + GlobalVariables.newline
-                windSpeedData += items[3] + GlobalVariables.newline
-                windDirData += items[4] + GlobalVariables.newline
-                conditionData += items[5] + GlobalVariables.newline
+            var indexShift = 0
+            if (UIPreferences.hourlyShowAMPM) {
+                indexShift = 1
+            }
+            if (items.size > 5 + indexShift) {
+                timeData += items[0 + indexShift] + " " + " " + items[1 + indexShift] + GlobalVariables.newline
+                tempData += items[2 + indexShift] + GlobalVariables.newline
+                windSpeedData += items[3 + indexShift] + GlobalVariables.newline
+                windDirData += items[4 + indexShift] + GlobalVariables.newline
+                conditionData += items[5 + indexShift] + GlobalVariables.newline
                 if (UIPreferences.hourlyShowAMPM) {
                     lines.add(
                         items[0] + " " + items[1] + " " + items[2].ljust(4) + " " + items[3].ljust(

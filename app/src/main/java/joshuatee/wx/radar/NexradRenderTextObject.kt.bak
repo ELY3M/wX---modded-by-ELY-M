@@ -37,7 +37,6 @@ import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.TextViewMetal
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
-import joshuatee.wx.util.UtilityLog
 import kotlin.math.*
 
 class NexradRenderTextObject(
@@ -77,10 +76,6 @@ class NexradRenderTextObject(
             MyApplication.dm.heightPixels
         }
         projectionNumbers = ProjectionNumbers(state.rid, ProjectionType.WX_OGL)
-
-        if (numberOfPanes == 4) {
-            relativeLayout.layoutParams.width = glviewWidth
-        }
     }
 
     private fun addCities() {
@@ -204,9 +199,9 @@ class NexradRenderTextObject(
                 spotterString = lastName
             }
                     checkAndDrawText(
-                        wxglSurfaceView.spotterLabels,
-                        it.latLon.lat,
-                        it.latLon.lon * -1.0,
+                            wxglSurfaceView.spotterLabels,
+                            it.latLon.lat,
+                            it.latLon.lon * -1.0,
                             spotterString,
                             RadarPreferences.colorSpotter
                     )
@@ -256,6 +251,7 @@ class NexradRenderTextObject(
             relativeLayout.removeView(it)
         }
     }
+    
     private fun checkAndDrawText(
         textViews: MutableList<TextView>,
         lat: Double,
@@ -263,8 +259,6 @@ class NexradRenderTextObject(
         text: String,
         color: Int
     ) {
-        UtilityLog.d("WX TEXT width", glviewWidth.toString())
-        UtilityLog.d("WX TEXT height", glviewHeight.toString())
         val renderX: Float
         val renderY: Float
         if (RadarPreferences.wxoglCenterOnLocation) {
@@ -277,10 +271,8 @@ class NexradRenderTextObject(
         val coordinates = Projection.computeMercatorNumbers(lat, lon, projectionNumbers)
         coordinates[0] = coordinates[0] + renderX
         coordinates[1] = coordinates[1] - renderY
-        // hack fix for quad pane: glviewWidth - 200
-        //
         if (abs(coordinates[0] * scale) < glviewWidth && abs(coordinates[1] * scale) < glviewHeight) {
-            val textView = TextViewMetal(context, text, color, textSize, numberOfPanes)
+            val textView = TextViewMetal(context, text, color, textSize)
             textViews.add(textView.getView())
             relativeLayout.addView(textView.getView())
             if ((coordinates[1] * scale).toInt() < 0) {
@@ -337,15 +329,7 @@ class NexradRenderTextObject(
         if (abs(coordinates[0] * scale) < glviewWidth && abs(coordinates[1] * scale) < glviewHeight) {
             drawText = true
             val textView =
-                TextViewMetal(
-                    context,
-                    "",
-                    color,
-                    textSizeTv,
-                    numberOfPanes,
-                    singleLine,
-                    drawText = false
-                )
+                TextViewMetal(context, "", color, textSizeTv, singleLine, drawText = false)
             textViews.add(textView.getView())
 //            textView.setTextColor(color)
 //            textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
@@ -485,7 +469,6 @@ class NexradRenderTextObject(
         if (numberOfPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
             addSpotter()
         }
-        //elys mod
         addHailLabels()
         addWpcPressureCenters()
     }
@@ -498,7 +481,6 @@ class NexradRenderTextObject(
         if (numberOfPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
             hideSpotter()
         }
-        //elys mod
         hideHailLabels()
         hideWpcPressureCenters()
     }

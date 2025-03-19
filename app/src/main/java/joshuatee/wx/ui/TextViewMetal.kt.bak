@@ -26,25 +26,19 @@ import android.util.TypedValue
 import android.widget.RelativeLayout
 import android.widget.TextView
 import joshuatee.wx.R
-import joshuatee.wx.util.UtilityLog
 
 class TextViewMetal(
     context: Context,
     text: String,
     color: Int,
     textSize: Float,
-    numberOfPanes: Int,
-    private var singleLine: Boolean = true,
+    singleLine: Boolean = true,
     drawText: Boolean = true
 ) : Widget {
 
     private val textView = TextView(context)
 
     init {
-        if (numberOfPanes > 2) {
-            singleLine = false
-        }
-
         textView.setTextColor(color)
         textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
         if (singleLine) {
