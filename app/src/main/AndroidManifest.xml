@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="55948"
-    android:versionName="55948-elys">
+    android:versionCode="55949"
+    android:versionName="55949-elys">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -77,7 +77,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".StartupActivity"
+            android:name="joshuatee.wx.StartupActivity"
       android:requestLegacyExternalStorage="true"
             android:launchMode="singleTop"
             android:exported="true">

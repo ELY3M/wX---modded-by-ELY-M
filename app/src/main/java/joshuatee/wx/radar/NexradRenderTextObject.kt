@@ -80,6 +80,7 @@ class NexradRenderTextObject(
 
         if (numberOfPanes == 4) {
             relativeLayout.layoutParams.width = glviewWidth
+            relativeLayout.layoutParams.height = glviewHeight
         }
     }
 

@@ -2,9 +2,15 @@
 
 # Developer ChangeLog
 
-## 55948 2025_03_19
+## 55949 2025_03_22
 
 * [ADD]
+
+## 55948 2025_03_22
+
+* [ADD] in National Images -> CPC add Hawaiian Extended Range Outlooks per SCN25-16
+* [FIX] in quad pane set RL height in render text object, move image map out of table in 2 XML
+  layouts
 
 ## 55947 2025_03_19
 

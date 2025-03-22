@@ -35,7 +35,7 @@ internal object UtilityWpcImages {
         MenuTitle("QPF", 29),
         MenuTitle("Snow / Ice", 17),
         MenuTitle("National Digital Forecast Database", 15),
-        MenuTitle("CPC Outlooks", 24),
+        MenuTitle("CPC Outlooks", 28),
         MenuTitle("Aviation", 16),
         MenuTitle("Space Weather", 3)
     )
@@ -138,6 +138,10 @@ internal object UtilityWpcImages {
         "6 to 10 Day Outlooks - Precipitation",
         "8 to 14 Day Outlooks - Temperature",
         "8 to 14 Day Outlooks - Precipitation",
+        "6 to 10 Day Hawaiian Outlooks - Temperature", // SCN25-16: The Experimental Hawaiian Extended Range Forecast Webpage Will Transition to Operational Status on March 12, 2025
+        "6 to 10 Day Hawaiian Outlooks - Precipitation",
+        "8 to 14 Day Hawaiian Outlooks - Temperature",
+        "8 to 14 Day Hawaiian Outlooks - Precipitation",
         "6-10 Day Heat Index Outlook",
         "8-14 Day Heat Index Outlook",
         "6-10 Day Lowest Wind Chill Outlook",
@@ -281,6 +285,10 @@ internal object UtilityWpcImages {
         "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/predictions/610day/610prcp.new.gif",
         "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/predictions/814day/814temp.new.gif",
         "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/predictions/814day/814prcp.new.gif",
+        GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX + "/products/predictions/short_range/HI/610temp.HI.wide.gif",
+        GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX + "/products/predictions/short_range/HI/610prcp.HI.wide.gif",
+        GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX + "/products/predictions/short_range/HI/814temp.HI.wide.gif",
+        GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX + "/products/predictions/short_range/HI/814prcp.HI.wide.gif",
         "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/predictions/short_range/heat/himx.wcp0.08.gif",
         "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/predictions/short_range/heat/himx.wcp0.11.gif",
         "${GlobalVariables.NWS_CPC_NCEP_WEBSITE_PREFIX}/products/predictions/short_range/cold/LWCF.5.gif",
