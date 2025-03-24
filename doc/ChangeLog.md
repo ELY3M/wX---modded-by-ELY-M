@@ -2,9 +2,18 @@
 
 # Developer ChangeLog
 
+## 55950 2025_03_24
+
+* [ADD] tooling update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.9.0'
++        classpath 'com.android.tools.build:gradle:8.9.1'
+```
+
 ## 55949 2025_03_22
 
-* [ADD]
+* [FIX] in dual pane set RL height in render text object,
 
 ## 55948 2025_03_22
 

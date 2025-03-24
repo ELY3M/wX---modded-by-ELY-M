@@ -35,6 +35,7 @@ import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.ui.TextViewMetal
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityLog
@@ -81,6 +82,14 @@ class NexradRenderTextObject(
         if (numberOfPanes == 4) {
             relativeLayout.layoutParams.width = glviewWidth
             relativeLayout.layoutParams.height = glviewHeight
+        }
+
+        if (numberOfPanes == 2) {
+            if (UtilityUI.isLandScape(context)) {
+                relativeLayout.layoutParams.height = glviewWidth
+            } else {
+                relativeLayout.layoutParams.height = glviewHeight
+            }
         }
     }
 
