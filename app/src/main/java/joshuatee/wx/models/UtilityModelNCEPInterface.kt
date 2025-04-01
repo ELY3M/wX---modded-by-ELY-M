@@ -202,10 +202,10 @@ internal object UtilityModelNcepInterface {
         "ARCTIC",
         "ATL-PAC",
         "ATLANTIC",
-        "EAST-GOA",
+        "EAST-GOAK",
         "EAST-PAC",
         "EUROPE",
-        "GOM",
+        "GOAM",
         "GUAM",
         "HAWAII",
         "INDIA",
@@ -221,7 +221,7 @@ internal object UtilityModelNcepInterface {
         "US-SAMOA",
         "WA-OR",
         "WEST-ATL",
-        "WEST-GOA"
+        "WEST-GOAK"
     )
 
     val sectorsGfsWave = listOf(
@@ -230,10 +230,10 @@ internal object UtilityModelNcepInterface {
         "ARCTIC",
         "ATL-PAC",
         "ATLANTIC",
-        "EAST-GOA",
+        "EAST-GOAK",
         "EAST-PAC",
         "EUROPE",
-        "GOM",
+        "GOAM",
         "GUAM",
         "HAWAII",
         "INDIA",
@@ -249,12 +249,12 @@ internal object UtilityModelNcepInterface {
         "US-SAMOA",
         "WA-OR",
         "WEST-ATL",
-        "WEST-GOA"
+        "WEST-GOAK"
     )
 
     val sectorsStofs = listOf(
-        "EAST-GOA",
-        "EAST-GOM",
+        "EAST-GOAK",
+        "EAST-GOAM",
         "HAWAII",
         "MID-ATL",
         "NE-COAST",
@@ -262,8 +262,8 @@ internal object UtilityModelNcepInterface {
         "SE-COAST",
         "SOUTH-CAL",
         "WA-OR",
-        "WEST-GOA",
-        "WEST-GOM"
+        "WEST-GOAK",
+        "WEST-GOAM"
     )
 
     val sectorsFirewx = listOf(

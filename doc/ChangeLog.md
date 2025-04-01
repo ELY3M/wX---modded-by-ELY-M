@@ -2,8 +2,14 @@
 
 # Developer ChangeLog
 
-## 55950 2025_03_24
+## 55951 2025_03_27
 
+* [ADD]
+
+## 55950 2025_03_27
+
+* [ADD] Models - NCEP MAG comply with Service Change Notice 25-29 which consists of renaming some
+  sectors for GEFS-WAVE, GFS-WAVE, and STOFS
 * [ADD] tooling update
 
 ```

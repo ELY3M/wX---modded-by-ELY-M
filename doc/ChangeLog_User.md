@@ -8,6 +8,16 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55950 2025_03_27 (BETA)
+
+* [ADD] Models - NCEP MAG comply with Service Change Notice 25-29 which consists of renaming some
+  sectors for GEFS-WAVE, GFS-WAVE, and STOFS
+* [ADD] in National Images -> CPC add Hawaiian Extended Range Outlooks per SCN25-16
+* [FIX] quad/dual pane nexrad is not properly taking all screen space when textual labels are enabled, if
+  quad pane hardcode relative layout width in NexradRenderTextObject
+* [ADD] option UI Preferences -> "Hourly screen: show with AM/PM"
+* [FIX] OPC "Alaska/Arctic SST/Ice Edge Analysis" - image was no longer working, fix to use new URL
+
 ## 55944 2025_03_02 (BETA)
 
 * [FIX] in current conditions, show proper icon for **Mist** and  **Light Mist**
