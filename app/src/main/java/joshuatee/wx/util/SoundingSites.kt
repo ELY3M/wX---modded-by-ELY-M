@@ -35,7 +35,7 @@ object SoundingSites {
         "ABR" to "SD, Aberdeen",
         "ALB" to "NY, Albany",
         "AMA" to "TX, Amarillo",
-        "APX" to "Gaylord, MI",
+        "APX" to "MI, Gaylord",
         "BIS" to "ND, Bismarck",
         "BMX" to "AL, Birmingham",
         "BNA" to "TN, Nashville",
