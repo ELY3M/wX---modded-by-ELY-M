@@ -2,9 +2,10 @@
 
 # Developer ChangeLog
 
-## 55951 2025_04_04
+## 55951 2025_04_08
 
 * [ADD] use UtilityDownloadNws.getLocationPointData in Location.getWfoRadarSiteFromPoint
+* [FIX] replace GOES 16 URLS with GOES 19, redirects were in place but better to avoid
 
 ## 55950 2025_03_27
 

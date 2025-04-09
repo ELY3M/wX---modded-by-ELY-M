@@ -47,7 +47,7 @@ object UtilityGoes {
         } else {
             "SECTOR/$sector"
         }
-        var satellite = "GOES16"
+        var satellite = "GOES19"
         if (sectorsInGoes17.contains(sector)) {
             satellite = "GOES17"
             if (sector == "CONUS-G17") {
@@ -79,7 +79,7 @@ object UtilityGoes {
         val satellite = if (sectorsInGoes17.contains(sector)) {
             "G17"
         } else {
-            "G16"
+            "G19"
         }
         val productLocal = product.replace("GLM", "EXTENT3")
         val url = when (sector) {
