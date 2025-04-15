@@ -2,10 +2,22 @@
 
 # Developer ChangeLog
 
-## 55951 2025_04_08
+## 55952 2025_04_14
+
+*
+
+## 55951 2025_04_14
 
 * [ADD] use UtilityDownloadNws.getLocationPointData in Location.getWfoRadarSiteFromPoint
 * [FIX] replace GOES 16 URLS with GOES 19, redirects were in place but better to avoid
+* [REF] comment out FileProvider.query as it appears to not be in use and requires changes based on
+  update below
+* [ADD] lib update
+
+```
+-    implementation 'androidx.core:core-ktx:1.15.0'
++    implementation 'androidx.core:core-ktx:1.16.0'
+```
 
 ## 55950 2025_03_27
 
