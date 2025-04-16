@@ -44,12 +44,9 @@ class NexradDownload {
 
     companion object {
 
-        // in response to 56+ hr maint on 2022-04-19 to nomads, change URL to backup
-        // https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf
         private const val NWS_RADAR_LEVEL2_PUB =
             "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
 
-        // private const val nwsRadarLevel2Pub = "https://ftpprd.ncep.noaa.gov/data/nccf/radar/nexrad_level2/"
         private val pattern1: Pattern = Pattern.compile(">(sn.[0-9]{4})</a>")
         private val pattern2: Pattern =
             Pattern.compile(".*?([0-9]{2}-[A-Za-z]{3}-[0-9]{4} [0-9]{2}:[0-9]{2}).*?")

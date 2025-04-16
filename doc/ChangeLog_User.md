@@ -8,6 +8,10 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55951 2025_04_16 (BETA)
+
+* [FIX] replace GOES 16 URLS with GOES 19, redirects were in place but one product was not working
+
 ## 55950 2025_03_27 (BETA)
 
 * [ADD] Models - NCEP MAG comply with Service Change Notice 25-29 which consists of renaming some
