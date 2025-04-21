@@ -34,6 +34,13 @@
     <!--            android:layout_height="fill_parent"-->
     <!--            android:orientation="vertical">-->
 
+    <joshuatee.wx.util.ImageMap
+        android:id="@+id/map"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ncar_nexrad_sites"
+        ctc:map="ncar_nexrad_sites" />
+
     <TableLayout
         android:id="@+id/tl"
         android:layout_width="match_parent"
@@ -67,12 +74,12 @@
                 android:layout_height="match_parent" />
         </TableRow>
 
-        <joshuatee.wx.util.ImageMap
-            android:id="@+id/map"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:src="@drawable/ncar_nexrad_sites"
-            ctc:map="ncar_nexrad_sites" />
+        <!--        <joshuatee.wx.util.ImageMap-->
+        <!--            android:id="@+id/map"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="0dp"-->
+        <!--            android:src="@drawable/ncar_nexrad_sites"-->
+        <!--            ctc:map="ncar_nexrad_sites" />-->
 
     </TableLayout>
     <!--        </LinearLayout>-->

@@ -34,7 +34,9 @@ import java.util.regex.Pattern
 internal object UtilityModelNcepInputOutput {
 
     private val pattern1: Pattern = Pattern.compile("([0-9]{2}Z)")
-    private val pattern2: Pattern = Pattern.compile("var current_cycle_white . .([0-9 ]{11} UTC)")
+
+    //    private val pattern2: Pattern = Pattern.compile("var current_cycle_white . .([0-9 ]{11} UTC)")
+    private val pattern2: Pattern = Pattern.compile("data-cycle-date=.([0-9 ]{11} UTC)")
 
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()

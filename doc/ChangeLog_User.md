@@ -8,6 +8,15 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55954 2025_04_21 (BETA)
+
+* [FIX] dual pane nexrad radar map selector was not taking up entire screen
+* [FIX] Nexrad sites starting with "T" were not being shown in **Add Radar** in Nexrad screen
+
+## 55952 2025_04_19 (BETA)
+
+* [FIX] NCEP Models were not working after NWS code change
+
 ## 55951 2025_04_16 (BETA)
 
 * [FIX] replace GOES 16 URLS with GOES 19, redirects were in place but one product was not working
@@ -17,7 +26,8 @@ impacting all or some users.
 * [ADD] Models - NCEP MAG comply with Service Change Notice 25-29 which consists of renaming some
   sectors for GEFS-WAVE, GFS-WAVE, and STOFS
 * [ADD] in National Images -> CPC add Hawaiian Extended Range Outlooks per SCN25-16
-* [FIX] quad/dual pane nexrad is not properly taking all screen space when textual labels are enabled, if
+* [FIX] quad/dual pane nexrad is not properly taking all screen space when textual labels are
+  enabled, if
   quad pane hardcode relative layout width in NexradRenderTextObject
 * [ADD] option UI Preferences -> "Hourly screen: show with AM/PM"
 * [FIX] OPC "Alaska/Arctic SST/Ice Edge Analysis" - image was no longer working, fix to use new URL

@@ -2,9 +2,35 @@
 
 # Developer ChangeLog
 
-## 55952 2025_04_14
+## 55955 2025_04_21
 
-*
+* [ADD] tooling update
+
+```
+-        classpath 'com.android.tools.build:gradle:8.9.1'
++        classpath 'com.android.tools.build:gradle:8.9.2'
+```
+
+## 55954 2025_04_21
+
+* [FIX] dual pane nexrad radar map selector was not taking up entire screen
+
+## 55953 2025_04_19
+
+* [FIX] RadarSites was not properly handling Nexrad starting with "T" in adding them to Add Radar in
+  Nexrad
+
+## 55952 2025_04_18
+
+* [FIX] NCEP Models were not working after NWS code change
+* [ADD] lib update
+
+```
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1'
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
+```
 
 ## 55951 2025_04_14
 
