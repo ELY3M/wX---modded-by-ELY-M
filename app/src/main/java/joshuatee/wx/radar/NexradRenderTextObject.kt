@@ -38,7 +38,6 @@ import joshuatee.wx.ui.TextViewMetal
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.To
-//import joshuatee.wx.util.UtilityLog
 import kotlin.math.*
 
 class NexradRenderTextObject(
@@ -273,8 +272,8 @@ class NexradRenderTextObject(
         text: String,
         color: Int
     ) {
-        //UtilityLog.d("WX TEXT width", glviewWidth.toString())
-        //UtilityLog.d("WX TEXT height", glviewHeight.toString())
+//        UtilityLog.d("WX TEXT width", glviewWidth.toString())
+//        UtilityLog.d("WX TEXT height", glviewHeight.toString())
         val renderX: Float
         val renderY: Float
         if (RadarPreferences.wxoglCenterOnLocation) {

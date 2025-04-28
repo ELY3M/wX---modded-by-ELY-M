@@ -26,7 +26,6 @@ import android.util.TypedValue
 import android.widget.RelativeLayout
 import android.widget.TextView
 import joshuatee.wx.R
-import joshuatee.wx.util.UtilityLog
 
 class TextViewMetal(
     context: Context,

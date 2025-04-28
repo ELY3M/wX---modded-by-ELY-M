@@ -2,7 +2,17 @@
 
 # Developer ChangeLog
 
-## 55955 2025_04_21
+## 55956 2025_04_27
+
+* [ADD]
+
+## 55955 2025_04_27
+
+* [FIX] bad characters in certain city names by converting `cityall.txt` to **UTF-8**
+
+```bash
+iconv -f "windows-1252" -t "UTF-8"   ./app/src/main/res/raw/cityall.txt  > cityall_utf8.txt
+```
 
 * [ADD] tooling update
 

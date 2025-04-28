@@ -8,6 +8,54 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+
+## 55955 2025_04_28 (BETA)
+
+* [FIX] bad characters in certain city names by converting `cityall.txt` to **UTF-8**
+
+## 55954 2025_04_22
+
+* [FIX] NCEP Models were not working after NWS code change
+* [FIX] dual pane nexrad radar map selector was not taking up entire screen
+* [FIX] Nexrad sites starting with "T" were not being shown in **Add Radar** in Nexrad screen
+* [FIX] replace GOES 16 URLS with GOES 19, redirects were in place but one product was not working
+* [ADD] Models - NCEP MAG comply with Service Change Notice 25-29 which consists of renaming some
+  sectors for GEFS-WAVE, GFS-WAVE, and STOFS
+* [ADD] in National Images -> CPC add Hawaiian Extended Range Outlooks per SCN25-16
+* [FIX] quad/dual pane nexrad is not properly taking all screen space when textual labels are
+  enabled, if
+  quad pane hardcode relative layout width in NexradRenderTextObject
+* [ADD] option UI Preferences -> "Hourly screen: show with AM/PM"
+* [FIX] OPC "Alaska/Arctic SST/Ice Edge Analysis" - image was no longer working, fix to use new URL
+* [FIX] in current conditions, show proper icon for **Mist** and  **Light Mist**
+* [FIX] statusbar background was inconsistent across many activities
+* [FIX] Main button (lower right) on main screen and location add screen was not properly aligned in
+  certain situations
+* [ADD] In National Images remove "experimental" from the label for "Week 3-4 Outlooks -
+  Temperature" and "Week 3-4 Outlooks - Precipitation" per *SCN24-104: The Experimental Weeks 3-4
+  Precipitation Outlooks Will Become Operational on or about January 17, 2025*
+* [ADD] "Prognostic Discussion for Week 3-4 Temperature and Precipitation Outlooks" in National Text
+  Product Screen under **General Forecast Discussions**
+* [ADD] NWS has discontinued the following per SCN24-108: Termination of the 72-Hour Low Tracks
+  Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
+  Forecast Tool: Effective January 20, 2025 , remove from National Images
+* [FIX] In National Graphics the URL for **GLSEA Ice Analysis** had changed
+* [ADD] In Nexrad "long press" (press and hold), add Observation(Metar) site name next to the
+  station code
+* [ADD] On homescreen if "Weather Story" is configured and you tap on it image is opened up in
+  dedicated image viewer allowing you to share the image or zoom in with the full screen.
+* [ADD] Similar to SPC Convective Outlook outlines as a preference in Nexrad Radar, make SPC Fire
+  Weather Outlook outlines available as well (BETA - no dry thunderstorm support yet)
+* [ADD] Better "Weather Story" handling for image in homescreen (if configured and if your WFO
+  offers it or something similar)
+* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI) (
+  required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
+  work for Guam/CNMI due to insufficient LAT/LON adjustment, it's a WIP
+* [ADD] geographic boundaries for US Virgin Islands and American Samoa
+* [ADD] long press in nexrad will now show best vis sat image for Hawaii and areas around Puerto
+  Rico
+* [ADD] add Metars for Puerto Rico and US Virgin Islands
+
 ## 55954 2025_04_21 (BETA)
 
 * [FIX] dual pane nexrad radar map selector was not taking up entire screen
