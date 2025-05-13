@@ -4,6 +4,8 @@
 
 * [FIX] fab spacing in location add and colorpal when gesture nav turned off
 * [FIX] during recent AS updates
+* [FIX] models don't show correct time when older run is selected
+* [FIX] legend in nexrad doesn't match for tvs
 
 ```
 Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
