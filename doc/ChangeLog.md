@@ -2,9 +2,26 @@
 
 # Developer ChangeLog
 
-## 55956 2025_04_27
+## 55956 2025_05_30
 
-* [ADD]
+* [ADD] per *Service Change Notice 25-22 Migration of the Tropical Weather Summary Information from
+  Text
+  Product Format to hurricanes.gov: Effective on or about May 15, 2025*, remove these two text
+  products from the main NHC activity
+* [FIX] In NHC Activity remove images "EPAC Daily Analysis" and "ATL Daily Analysis" which no longer
+  seem to be available
+* [REF] lib/tool updates
+
+```
+-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
++    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0'
+
+-        classpath 'com.android.tools.build:gradle:8.9.2'
++        classpath 'com.android.tools.build:gradle:8.10.1'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.11.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+```
 
 ## 55955 2025_04_27
 
