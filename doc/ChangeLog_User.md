@@ -9,6 +9,13 @@ review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/
 impacting all or some users.
 
 
+## 55956 2025_05_30 (BETA)
+* [ADD] per *Service Change Notice 25-22 Migration of the Tropical Weather Summary Information from Text
+  Product Format to hurricanes.gov: Effective on or about May 15, 2025*, remove these two text products from the main NHC activity
+* [FIX] In NHC Activity remove images "EPAC Daily Analysis" and "ATL Daily Analysis" which no longer
+  seem to be available
+
+
 ## 55955 2025_04_28 (BETA)
 
 * [FIX] bad characters in certain city names by converting `cityall.txt` to **UTF-8**
