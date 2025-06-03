@@ -2,6 +2,20 @@
 
 # Developer ChangeLog
 
+## 55958 2025_06_03
+
+* [ADD]
+
+## 55957 2025_06_03
+
+* [REF] gradle fix for newer versions
+* [ADD] okhttp update
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
++    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.16"
+```
+
 ## 55956 2025_05_30
 
 * [ADD] per *Service Change Notice 25-22 Migration of the Tropical Weather Summary Information from

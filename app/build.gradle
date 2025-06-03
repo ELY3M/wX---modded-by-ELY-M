@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'joshuatee.wx'
+    namespace = 'joshuatee.wx'
 //    compileSdkVersion 33
 //    buildToolsVersion '33.0.1'
 
@@ -82,7 +82,7 @@ android {
     // see https://developer.android.com/guide/practices/page-sizes#build
     packagingOptions {
         jniLibs {
-            useLegacyPackaging true
+            useLegacyPackaging = true
         }
     }
 
@@ -97,15 +97,9 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'Typos'
-        checkReleaseBuilds false
-        abortOnError false
-    }
-
     compileOptions {
         // Flag to enable support for the new language APIs
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -117,8 +111,8 @@ android {
 //        additionalParameters '--no-version-vectors'
 //    }
     lint {
-        abortOnError false
-        checkReleaseBuilds false
+        abortOnError = false
+        checkReleaseBuilds = false
         disable 'Typos'
     }
 //    compileSdkPreview 'Baklava'
@@ -139,7 +133,7 @@ dependencies {
 //    implementation 'com.jjoe64:graphview:4.2.2'
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.16"
 
     // https://developer.android.com/studio/write/java8-support
     // https://developer.android.com/studio/write/java8-support-table
@@ -199,6 +193,6 @@ repositories {
     mavenCentral()
     google()
     maven {
-        url "https://maven.google.com"
+        url = "https://maven.google.com"
     }
 }
