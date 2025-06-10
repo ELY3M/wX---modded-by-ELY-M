@@ -10,11 +10,9 @@ buildscript {
     dependencies {
 //        https://mvnrepository.com/artifact/com.android.tools.build/gradle
         classpath 'com.android.tools.build:gradle:8.10.1'
-//        classpath 'com.android.tools.build:gradle:8.9.0-beta01'
 
 //         https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-gradle-plugin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
-//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.10"
     }
 }
 

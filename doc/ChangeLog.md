@@ -2,9 +2,28 @@
 
 # Developer ChangeLog
 
-## 55958 2025_06_03
+## 55959 2025_06_10
 
 * [ADD]
+
+## 55958 2025_06_10
+
+* [ADD] Target update
+
+```
+-        compileSdk = 35
++        compileSdk = 36
+
+-        targetSdkVersion 35
++        targetSdkVersion 36
+```
+
+* [ADD] lib update
+
+```
+-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0'
++    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1'
+```
 
 ## 55957 2025_06_03
 
