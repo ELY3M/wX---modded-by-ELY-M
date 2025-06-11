@@ -2,9 +2,13 @@
 
 # Developer ChangeLog
 
-## 55960 2025_06_10
+## 55961 2025_06_11
 
-* [ADD]
+* [FIX] 
+
+## 55960 2025_06_11
+
+* [FIX] 7 day widget was not working on Android 16
 
 ## 55959 2025_06_10
 

@@ -96,7 +96,7 @@ internal class StackRemoteViewsFactory(private val context: Context) :
         iconString = preferences.getString("CC_WIDGET_ICON_URL", "NULL")!! + "!" + iconString
         val icons = iconString.split("!")
         if (position < icons.size) {
-            remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
+//            remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
             remoteViews.setImageViewBitmap(
                 R.id.iv,
                 UtilityForecastIcon.getIcon(context, icons[position])
