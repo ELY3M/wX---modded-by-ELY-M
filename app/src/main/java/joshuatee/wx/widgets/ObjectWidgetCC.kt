@@ -128,12 +128,12 @@ class ObjectWidgetCC(context: Context) {
             (wbIcon.height * scaleFactor).toInt(),
             false
         )
-        remoteViews.setImageViewUri(R.id.wind_barb, Uri.parse(""))
+//        remoteViews.setImageViewUri(R.id.wind_barb, Uri.parse(""))
         if (windBardRotate < 500) {
             remoteViews.setImageViewBitmap(R.id.wind_barb, rotatedWb)
         }
         if (!currentConditionsList[0].contains("NA")) {
-            remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
+//            remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
             remoteViews.setImageViewBitmap(R.id.iv, bitmap)
         }
         if (!UIPreferences.widgetPreventTap) {

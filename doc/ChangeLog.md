@@ -2,9 +2,13 @@
 
 # Developer ChangeLog
 
-## 55959 2025_06_10
+## 55960 2025_06_10
 
 * [ADD]
+
+## 55959 2025_06_10
+
+* [FIX] Current Conditions widget was not working on Android 16
 
 ## 55958 2025_06_10
 
