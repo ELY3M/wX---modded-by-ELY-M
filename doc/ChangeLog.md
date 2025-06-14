@@ -2,9 +2,13 @@
 
 # Developer ChangeLog
 
-## 55961 2025_06_11
+## 55961 2025_06_14
 
-* [FIX] 
+* [FIX] tool update
+```
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.2-all.zip
+```
 
 ## 55960 2025_06_11
 

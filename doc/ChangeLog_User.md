@@ -8,6 +8,13 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55960 2025_06_14
+
+* [FIX] 7 day widget was not working on Android 16
+* [FIX] Current Conditions widget was not working on Android 16
+* [ADD] app now targets the latest version of android (Android 16 - SDK 36)
+* [ADD] update library okhttp to latest version - okhttp:5.0.0-alpha.16
+
 ## 55956 2025_06_05
 
 * [ADD] per *Service Change Notice 25-22 Migration of the Tropical Weather Summary Information from
