@@ -31,7 +31,6 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.common.RegExp
 import joshuatee.wx.getHtml
 import joshuatee.wx.getHtmlWithNewLine
-import joshuatee.wx.getHtml
 import joshuatee.wx.parse
 import joshuatee.wx.parseAcrossLines
 import joshuatee.wx.removeHtml
@@ -47,6 +46,9 @@ object DownloadText {
     fun byProduct(context: Context, prodF: String): String {
         var text: String
         // TODO FIXME rename to product
+        if (prodF == "") {
+            return ""
+        }
         val prod = prodF.uppercase(Locale.US)
         when {
             prod == "AFDLOC" -> text = byProduct(context, "afd" + Location.wfo.lowercase(Locale.US))

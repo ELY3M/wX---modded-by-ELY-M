@@ -22,7 +22,6 @@
 
 package joshuatee.wx.common
 
-@Suppress("SpellCheckingInspection")
 object GlobalArrays {
 
     val nwsImageProducts = listOf(

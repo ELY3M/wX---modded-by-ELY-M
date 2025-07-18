@@ -29,6 +29,7 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.net.Uri
 import joshuatee.wx.R
+import joshuatee.wx.WX
 import joshuatee.wx.misc.WfoTextActivity
 import joshuatee.wx.misc.SevereDashboardActivity
 import joshuatee.wx.objects.ObjectIntentShortcut
@@ -63,7 +64,7 @@ object UtilityShortcut {
         // https://developer.android.com/guide/topics/ui/shortcuts
         // Pinned shortcuts in API 26 8.0
         val intent: Intent?
-        var imageId = 0
+        var imageId: Int
         when (type) {
             ShortcutType.SevereDashboard -> {
                 intent = ObjectIntentShortcut(context, SevereDashboardActivity::class.java).intent
@@ -112,7 +113,7 @@ object UtilityShortcut {
                         Intent.ACTION_MAIN,
                         Uri.EMPTY,
                         context,
-                        joshuatee.wx.WX::class.java
+                        WX::class.java
                     ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK), intent
                 )
             )

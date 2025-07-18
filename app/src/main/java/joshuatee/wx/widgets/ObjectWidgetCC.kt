@@ -24,7 +24,6 @@ package joshuatee.wx.widgets
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.net.Uri
 import android.widget.RemoteViews
 import joshuatee.wx.R
 import joshuatee.wx.WX

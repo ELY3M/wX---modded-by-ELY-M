@@ -2,12 +2,56 @@
 
 # Developer ChangeLog
 
-## 55961 2025_06_14
+## 55963 2025_07_18
+
+* [ADD]
+
+## 55962 2025_07_17
+
+* [FIX] lints
+* [ADD] tool/lib updates
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.0.0"
++    implementation "com.squareup.okhttp3:okhttp:5.1.0"
+
+-        classpath 'com.android.tools.build:gradle:8.11.0'
++        classpath 'com.android.tools.build:gradle:8.11.1'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.2-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.3-all.zip
+
+-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1'
++    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2'
+```
+
+## 55961 2025_07_07
+
+* [FIX] NHC Activity would crash if an NHC Storm is clicked on which is no longer issuing
+  advisories (such as a PTC)
+* [FIX] `gradle.build` update around kotlinOptions
+* [ADD] okhttp update to **5.0.0**
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.16"
++    implementation "com.squareup.okhttp3:okhttp:5.0.0"
+```
 
 * [FIX] tool update
+
 ```
 -distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
 +distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.2-all.zip
+```
+
+```
+-        classpath 'com.android.tools.build:gradle:8.10.1'
++        classpath 'com.android.tools.build:gradle:8.11.0'
+```
+
+```
+-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0"
 ```
 
 ## 55960 2025_06_11

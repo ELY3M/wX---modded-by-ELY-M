@@ -7,8 +7,8 @@ package joshuatee.wx.util
 
 import android.content.Context
 import java.util.Arrays
-import android.database.Cursor
-import android.database.MatrixCursor
+//import android.database.Cursor
+//import android.database.MatrixCursor
 import android.net.Uri
 import android.provider.MediaStore
 import java.io.File

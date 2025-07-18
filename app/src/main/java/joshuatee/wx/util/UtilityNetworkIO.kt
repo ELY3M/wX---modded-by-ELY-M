@@ -57,9 +57,9 @@ object UtilityNetworkIO {
             BitmapFactory.decodeStream(BufferedInputStream(response.body.byteStream()))
                 ?: UtilityImg.getBlankBitmap()
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         UtilityImg.getBlankBitmap()
-    } catch (e: OutOfMemoryError) {
+    } catch (_: OutOfMemoryError) {
         UtilityImg.getBlankBitmap()
     }
 

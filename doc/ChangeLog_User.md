@@ -8,6 +8,11 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55961 2025_07_07 (BETA)
+
+* [FIX] NHC Activity would crash if an NHC Storm is clicked on which is no longer issuing
+  advisories (such as a PTC)
+
 ## 55960 2025_06_14
 
 * [FIX] 7 day widget was not working on Android 16

@@ -30,7 +30,6 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.view.View
 import android.widget.TextView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.LatLon
@@ -213,9 +212,9 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
 
     override fun onLongPress(event: MotionEvent) {
         if (fullScreen) {
-            toolbar!!.visibility = View.VISIBLE
+            toolbar!!.visibility = VISIBLE
             if (!archiveMode) {
-                toolbarBottom!!.visibility = View.VISIBLE
+                toolbarBottom!!.visibility = VISIBLE
             }
         }
         density = (wxglRender.state.ortInt * 2.0f) / width
@@ -323,8 +322,8 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     private fun adjustToolbarsLock() {
         if (fullScreen || wxglRenders.size > 1) {
             if (!UIPreferences.lockToolbars) {
-                toolbar!!.visibility = View.GONE
-                toolbarBottom!!.visibility = View.GONE
+                toolbar!!.visibility = GONE
+                toolbarBottom!!.visibility = GONE
                 toolbarsHidden = true
             }
         }
@@ -491,10 +490,10 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
 
     private fun adjustToolbars() {
         if (!locationFragment && (fullScreen || wxglRenders.size > 1)) {
-            toolbar!!.visibility = View.VISIBLE
+            toolbar!!.visibility = VISIBLE
             toolbarsHidden = false
             if (!archiveMode) {
-                toolbarBottom!!.visibility = View.VISIBLE
+                toolbarBottom!!.visibility = VISIBLE
             }
         }
     }

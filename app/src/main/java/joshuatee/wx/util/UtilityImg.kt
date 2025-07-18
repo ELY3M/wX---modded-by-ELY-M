@@ -112,7 +112,7 @@ object UtilityImg {
         if (width > 0 && height > 0) {
             try {
                 bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
-            } catch (e: OutOfMemoryError) {
+            } catch (_: OutOfMemoryError) {
                 return getBlankBitmap()
             }
             val canvas = Canvas(bitmap)
@@ -139,7 +139,7 @@ object UtilityImg {
                 }
                 b.setPixels(pixels, 0, width, 0, 0, width, height)
                 b
-            } catch (e: OutOfMemoryError) {
+            } catch (_: OutOfMemoryError) {
                 getBlankBitmap()
             }
         } else {
