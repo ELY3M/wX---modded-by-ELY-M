@@ -8,11 +8,7 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
-## 55962 2025_07_23 (BETA)
-
-* [ADD] library updates, no functional changes
-
-## 55961 2025_07_07 (BETA)
+## 55962 2025_08_02
 
 * [FIX] NHC Activity would crash if an NHC Storm is clicked on which is no longer issuing
   advisories (such as a PTC)

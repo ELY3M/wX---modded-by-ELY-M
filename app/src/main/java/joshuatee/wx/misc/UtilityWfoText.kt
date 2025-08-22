@@ -21,7 +21,6 @@
 
 package joshuatee.wx.misc
 
-@Suppress("SpellCheckingInspection")
 object UtilityWfoText {
 
     val labels = listOf(

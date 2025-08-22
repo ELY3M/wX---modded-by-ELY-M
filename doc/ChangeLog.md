@@ -2,9 +2,28 @@
 
 # Developer ChangeLog
 
-## 55963 2025_07_18
+## 55964 2025_08_22
 
-* [ADD]
+* [ADD] tool/lib updates
+
+```
+-    def ndkVersion = "android-ndk-r27c"
++    def ndkVersion = "android-ndk-r27d"
+```
+
+## 55963 2025_08_22
+
+* [ADD] tool/lib updates
+
+```
+-        classpath 'com.android.tools.build:gradle:8.11.1'
++        classpath 'com.android.tools.build:gradle:8.12.1'
+
+-    implementation 'androidx.core:core-ktx:1.16.0'
+-    implementation 'androidx.media:media:1.7.0'
++    implementation 'androidx.core:core-ktx:1.17.0'
++    implementation 'androidx.media:media:1.7.1'
+```
 
 ## 55962 2025_07_17
 

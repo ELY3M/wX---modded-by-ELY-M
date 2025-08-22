@@ -131,7 +131,6 @@ internal object Metar {
                         ovcInt
                     }
 
-                    @Suppress("KotlinConstantConditions")
                     val aviationColor = if (visInt > 5 && lowestCig > 3000) {
                         Color.GREEN
                     } else if (visInt in 3..5 || lowestCig in 1000..3000) {
