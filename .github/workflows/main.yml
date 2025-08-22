@@ -46,7 +46,7 @@ jobs:
           
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r27c
+          ndk-version: r27d
       - run: ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=app/src/main/jni/Android.mk NDK_APPLICATION_MK=app/src/main/jni/Application.mk
      
         
