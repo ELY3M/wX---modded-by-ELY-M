@@ -2,8 +2,27 @@
 
 # Developer ChangeLog
 
-## 55964 2025_08_22
+## 55966 2025_08_24
 
+* [ADD]
+
+## 55965 2025_08_24
+
+* [REF] In preparation for `com.google.android.material:material:1.14.0+` the following changes were
+  needed
+
+```
+implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+
+// SettingsLocationGenericActivity.kt
+-            searchView.findViewById<AutoCompleteTextView>(androidx.constraintlayout.widget.R.id.search_src_text)
++            searchView.findViewById<AutoCompleteTextView>(androidx.appcompat.R.id.search_src_text)
+
+```
+
+## 55964 2025_08_23
+
+* [ADD] lint
 * [ADD] tool/lib updates
 
 ```

@@ -59,7 +59,8 @@ class HourlyActivity : BaseActivity() {
     }
 
     private var htmlShare = listOf<String>()
-    private lateinit var card: Card
+
+    //    private lateinit var card: Card
     private lateinit var cardVerticalText: CardVerticalText
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox
@@ -88,7 +89,7 @@ class HourlyActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        card = Card(this, R.color.black, R.id.graphCard)
+        Card(this, R.color.black, R.id.graphCard)
         scrollView = findViewById(R.id.scrollView)
         box = VBox.fromResource(this)
         graphCard = Card(this, R.id.graphCard)

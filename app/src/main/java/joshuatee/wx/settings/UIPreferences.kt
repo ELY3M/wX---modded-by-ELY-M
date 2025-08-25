@@ -37,9 +37,9 @@ import joshuatee.wx.util.UtilityFavorites
 object UIPreferences {
 
     // These are set in myapp still
-    var telecineVideoSizePercentage = 0
-    var telecineSwitchShowCountdown = false
-    var telecineSwitchRecordingNotification = false
+//    var telecineVideoSizePercentage = 0
+//    var telecineSwitchShowCountdown = false
+//    var telecineSwitchRecordingNotification = false
     var deviceScale = 0.0f
     var cardCorners = 0.0f
     var padding = 0
@@ -49,7 +49,8 @@ object UIPreferences {
     var actionBarHeight = 0
     var refreshLocMin = 0
     var translateText = false
-    private var nwsTextRemovelinebreaks = false
+
+    //    private var nwsTextRemovelinebreaks = false
     var recordScreenShare = false
     var backgroundColor = Color.BLACK //elys mod
     var colorNotif = 0
@@ -153,8 +154,8 @@ object UIPreferences {
         homescreenTextLength = Utility.readPrefInt(context, "HOMESCREEN_TEXT_LENGTH_PREF", 500)
         refreshLocMin = Utility.readPrefInt(context, "REFRESH_LOC_MIN", 10)
         translateText = Utility.readPref(context, "TRANSLATE_TEXT", "false").startsWith("t")
-        nwsTextRemovelinebreaks =
-            Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
+//        nwsTextRemovelinebreaks =
+//            Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
         recordScreenShare = Utility.readPref(context, "RECORD_SCREEN_SHARE", "true").startsWith("t")
         dualpaneRadarIcon =
             Utility.readPref(context, "DUALPANE_RADAR_ICON", "false").startsWith("t")

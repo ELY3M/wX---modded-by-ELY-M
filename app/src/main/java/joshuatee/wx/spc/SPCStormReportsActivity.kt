@@ -227,7 +227,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             stateArray.indices.forEach {
                 stateArrayLabel.add(stateArray[it] + ": " + mapState[stateArray[it]])
             }
-            if (stateArrayLabel.size > 0) {
+            if (stateArrayLabel.isNotEmpty()) {
                 navDrawer.updateLists(stateArrayLabel)
             }
             firstRun = false

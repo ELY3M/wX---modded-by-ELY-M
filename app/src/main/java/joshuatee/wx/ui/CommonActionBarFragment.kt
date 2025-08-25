@@ -22,7 +22,6 @@
 
 package joshuatee.wx.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
@@ -92,7 +91,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
                 try {
                     startForResult.launch(intent)
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     Toast.makeText(
                         this,
                         "Error initializing speech to text engine.",
@@ -109,7 +108,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val data = result.data
                 val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 val spokenCommand = thingsYouSaid!![0]

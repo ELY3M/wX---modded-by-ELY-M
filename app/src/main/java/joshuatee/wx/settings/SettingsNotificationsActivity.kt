@@ -23,7 +23,6 @@ package joshuatee.wx.settings
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.net.Uri
@@ -242,7 +241,7 @@ class SettingsNotificationsActivity : BaseActivity() {
     // https://developer.android.com/training/basics/intents/result#register
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val data = result.data
                 val uri = data!!.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                 if (uri != null) {

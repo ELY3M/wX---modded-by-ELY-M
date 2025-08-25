@@ -22,7 +22,6 @@
 
 package joshuatee.wx.radar
 
-import android.app.Activity
 import android.content.Context
 import android.opengl.GLSurfaceView
 import androidx.appcompat.widget.Toolbar
@@ -58,7 +57,8 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     var toolbar: Toolbar? = null
     var toolbarBottom: Toolbar? = null
     var archiveMode = false
-    private var toolbarsHidden = false
+
+    //    private var toolbarsHidden = false
     private var mScaleFactor = 1.0f
     private var newX = 0.0
     private var newY = 0.0
@@ -87,7 +87,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     var hailTextView = mutableListOf<TextView>()
     var textObjects = mutableListOf<NexradRenderTextObject>()
     var locationFragment = false
-    private var activity: Activity? = null
+//    private var activity: Activity? = null
 
     constructor(context: Context, widthDivider: Int, heightDivider: Int) : super(context) {
         this.widthDivider = widthDivider
@@ -111,17 +111,17 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
         this.wxglSurfaceViews = wxglSurfaceViews
     }
 
-    fun setRenderVar(
-        wxglRender: NexradRender,
-        wxglRenders: List<NexradRender>,
-        wxglSurfaceViews: List<NexradRenderSurfaceView>,
-        activity: Activity
-    ) {
-        this.wxglRenders = wxglRenders
-        this.wxglRender = wxglRender
-        this.wxglSurfaceViews = wxglSurfaceViews
-        this.activity = activity
-    }
+//    fun setRenderVar(
+//        wxglRender: NexradRender,
+//        wxglRenders: List<NexradRender>,
+//        wxglSurfaceViews: List<NexradRenderSurfaceView>,
+//        activity: Activity
+//    ) {
+//        this.wxglRenders = wxglRenders
+//        this.wxglRender = wxglRender
+//        this.wxglSurfaceViews = wxglSurfaceViews
+////        this.activity = activity
+//    }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.actionMasked) {
@@ -324,7 +324,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
             if (!UIPreferences.lockToolbars) {
                 toolbar!!.visibility = GONE
                 toolbarBottom!!.visibility = GONE
-                toolbarsHidden = true
+//                toolbarsHidden = true
             }
         }
     }
@@ -491,7 +491,7 @@ class NexradRenderSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener
     private fun adjustToolbars() {
         if (!locationFragment && (fullScreen || wxglRenders.size > 1)) {
             toolbar!!.visibility = VISIBLE
-            toolbarsHidden = false
+//            toolbarsHidden = false
             if (!archiveMode) {
                 toolbarBottom!!.visibility = VISIBLE
             }

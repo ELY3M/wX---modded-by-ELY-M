@@ -93,9 +93,9 @@ class NavDrawerCombo(
         drawerLayout.openDrawer(listView)
     }
 
-    fun close() {
-        drawerLayout.closeDrawer(listView)
-    }
+//    fun close() {
+//        drawerLayout.closeDrawer(listView)
+//    }
 
     fun syncState() {
         actionBarDrawerToggle.syncState()

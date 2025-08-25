@@ -420,7 +420,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_region -> ObjectDialogue.generic(this, om.sectors, ::getContent) {
                 om.sector = om.sectors[it]
-                om.sectorInt = it
+//                om.sectorInt = it
                 om.displayData.image.forEach { touchImage -> touchImage.resetZoom() }
             }
 

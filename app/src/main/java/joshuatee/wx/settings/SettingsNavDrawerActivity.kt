@@ -32,7 +32,7 @@ import joshuatee.wx.util.Utility
 
 class SettingsNavDrawerActivity : BaseActivity() {
 
-    private var tokenList = ""
+    //    private var tokenList = ""
     private lateinit var box: VBox
 
     @SuppressLint("MissingSuperCall")
@@ -40,7 +40,7 @@ class SettingsNavDrawerActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_settings_navdrawer, null, false)
         setTitle("Navigation Drawer", "Turn items off or on for the main screen nav drawer.")
         box = VBox.fromResource(this)
-        tokenList = UtilityNavDrawer.getNavDrawerTokenList(this)
+//        tokenList = UtilityNavDrawer.getNavDrawerTokenList(this)
         addCards()
     }
 

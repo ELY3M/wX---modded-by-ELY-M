@@ -41,16 +41,16 @@ class NexradLevel2 {
     val binWord: ByteBuffer = ByteBuffer.allocateDirect(720 * numberOfRangeBins)
     private val days: ByteBuffer = ByteBuffer.allocateDirect(2)
     private val msecs: ByteBuffer = ByteBuffer.allocateDirect(4)
-    private var obuff = ByteBuffer.allocate(0)
-    private var ibuff = ByteBuffer.allocate(0)
+//    private var obuff = ByteBuffer.allocate(0)
+//    private var ibuff = ByteBuffer.allocate(0)
 
-    init {
-        if (RadarPreferences.useJni) {
-            obuff = ByteBuffer.allocateDirect(829472)
-            ibuff = ByteBuffer.allocateDirect(600000)
-            // decomp size is a follows ref 827040 vel 460800
-        }
-    }
+//    init {
+//        if (RadarPreferences.useJni) {
+//            obuff = ByteBuffer.allocateDirect(829472)
+//            ibuff = ByteBuffer.allocateDirect(600000)
+//            // decomp size is a follows ref 827040 vel 460800
+//        }
+//    }
 
     // last argument is true/false on whether or not the DECOMP stage needs to happen
     fun decodeAndPlot(

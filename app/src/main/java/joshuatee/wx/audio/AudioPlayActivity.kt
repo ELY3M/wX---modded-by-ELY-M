@@ -45,8 +45,9 @@ abstract class AudioPlayActivity : AppCompatActivity() {
     protected lateinit var objectToolbar: ObjectToolbar
     protected lateinit var objectToolbarBottom: ObjectToolbar
     private lateinit var pause: MenuItem
-    private var ttsProd = ""
-    private var ttsTxt = ""
+
+    //    private var ttsProd = ""
+//    private var ttsTxt = ""
     private lateinit var view: View
     private var pausePressedIcon = 0
     protected var tabletInLandscape = false
@@ -76,9 +77,9 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
     }
 
-    fun setTitle(s: String) {
-        title = s
-    }
+//    fun setTitle(s: String) {
+//        title = s
+//    }
 
     fun setTitle(s: String, sub: String) {
         title = s
@@ -102,8 +103,8 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         prod: String,
         playlistToken: String
     ): Boolean {
-        ttsProd = prod
-        ttsTxt = txt
+//        ttsProd = prod
+//        ttsTxt = txt
         when (item) {
             R.id.action_read_aloud -> {
                 UtilityTts.synthesizeTextAndPlay(this, txt, prod)

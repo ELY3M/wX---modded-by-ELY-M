@@ -38,10 +38,10 @@ class ObjectDateTime() {
         this.dateTime = dateTime
     }
 
-    constructor(hours: Int, minutes: Int) : this() {
-        this.dateTime = LocalDate.now().atTime(hours, minutes)
-//        this.dateTime = LocalDate.now(ZoneId.of("UTC")).atTime(hours, minutes)
-    }
+//    constructor(hours: Int, minutes: Int) : this() {
+//        this.dateTime = LocalDate.now().atTime(hours, minutes)
+////        this.dateTime = LocalDate.now(ZoneId.of("UTC")).atTime(hours, minutes)
+//    }
 
     override fun toString(): String = dateTime.toString()
 

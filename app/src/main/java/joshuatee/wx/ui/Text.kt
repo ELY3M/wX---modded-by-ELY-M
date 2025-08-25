@@ -87,9 +87,9 @@ class Text(val context: Context) : Widget {
         }
     }
 
-    constructor(view: View, resourceId: Int, color: Int) : this(view, resourceId) {
-        this.color = color
-    }
+//    constructor(view: View, resourceId: Int, color: Int) : this(view, resourceId) {
+//        this.color = color
+//    }
 
     constructor(view: View, resourceId: Int, size: TextSize) : this(view.context, size) {
         tv = view.findViewById(resourceId)

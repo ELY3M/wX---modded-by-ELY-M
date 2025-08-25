@@ -33,13 +33,14 @@ class ForecastIcon {
 
     private var bitmap: Bitmap
     private var canvas: Canvas
-    private var context: Context
+
+    //    private var context: Context
     private val paint = ObjectPaint()
     private val paintStripe = PaintStripe()
     private val nullImage = R.drawable.white_box
 
     constructor(context: Context, weatherCondition: String) {
-        this.context = context
+//        this.context = context
         bitmap = Bitmap.createBitmap(DIMENSIONS_INT, DIMENSIONS_INT, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
@@ -50,7 +51,7 @@ class ForecastIcon {
     }
 
     constructor(context: Context, leftWeatherCondition: String, rightWeatherCondition: String) {
-        this.context = context
+//        this.context = context
         val leftCropA = if (leftWeatherCondition.contains("fg")) {
             MIDDLE_POINT_INT
         } else {

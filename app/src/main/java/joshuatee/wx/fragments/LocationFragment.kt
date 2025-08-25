@@ -471,7 +471,7 @@ class LocationFragment : Fragment() {
         locationStatusDialogue = ObjectDialogue(activityReference, locationStatusDialogueList)
         locationStatusDialogue!!.connect { dialog, index ->
             val item = locationStatusDialogueList[index]
-            val renderOrNull = if (nexradState.wxglRenders.size > 0) {
+            val renderOrNull = if (nexradState.wxglRenders.isNotEmpty()) {
                 nexradState.wxglRenders[0]
             } else {
                 null

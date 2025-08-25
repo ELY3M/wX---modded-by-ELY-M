@@ -47,7 +47,8 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         private set
     var text = ""
         private set
-    private var wfos = listOf<String>()
+
+    //    private var wfos = listOf<String>()
     private var stringOfLatLon = ""
     private var latLons = listOf<String>()
 
@@ -92,8 +93,8 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
         }
         stringOfLatLon = LatLon.storeWatchMcdLatLon(textWithLatLon).replace(":", "")
         latLons = stringOfLatLon.split(" ")
-        val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
-        wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
+//        val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
+//        wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
     }
 
     fun getImage() {

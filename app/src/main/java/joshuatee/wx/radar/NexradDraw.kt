@@ -69,7 +69,7 @@ internal object NexradDraw {
                 nexradState.wxglRenders[index],
                 nexradState.wxglRenders,
                 nexradState.wxglSurfaceViews,
-                activity
+//                activity
             )
             fullScreen = true
             setOnProgressChangeListener(changeListener)

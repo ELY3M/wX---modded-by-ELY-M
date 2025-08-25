@@ -21,16 +21,16 @@
 
 package joshuatee.wx.nhc
 
-import android.graphics.Bitmap
 import joshuatee.wx.common.GlobalVariables
 
 class NhcRegionSummary(region: NhcOceanEnum) {
 
     var urls: List<String>
     var titles: List<String>
-    var bitmaps = listOf<Bitmap>()
-    private var replaceString: String
-    private var baseUrl: String
+
+    //    var bitmaps = listOf<Bitmap>()
+//    private var replaceString: String
+//    private var baseUrl: String
 
     init {
         when (region) {
@@ -45,8 +45,8 @@ class NhcRegionSummary(region: NhcOceanEnum) {
                     "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_2d0.png",
                     "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_atl_7d0.png"
                 )
-                replaceString = "NHC Atlantic Wallet"
-                baseUrl = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/nhc_at"
+//                replaceString = "NHC Atlantic Wallet"
+//                baseUrl = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/nhc_at"
             }
 
             NhcOceanEnum.EPAC -> {
@@ -60,8 +60,8 @@ class NhcRegionSummary(region: NhcOceanEnum) {
                     "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_2d0.png",
                     "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_pac_7d0.png"
                 )
-                replaceString = "NHC Eastern Pacific Wallet"
-                baseUrl = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/nhc_ep"
+//                replaceString = "NHC Eastern Pacific Wallet"
+//                baseUrl = "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/nhc_ep"
             }
 
             NhcOceanEnum.CPAC -> {
@@ -75,8 +75,8 @@ class NhcRegionSummary(region: NhcOceanEnum) {
                     "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_2d0.png",
                     "${GlobalVariables.NWS_NHC_WEBSITE_PREFIX}/xgtwo/two_cpac_7d0.png"
                 )
-                replaceString = ""
-                baseUrl = ""
+//                replaceString = ""
+//                baseUrl = ""
             }
         }
     }

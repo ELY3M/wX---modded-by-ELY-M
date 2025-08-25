@@ -65,8 +65,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     companion object {
         var RID = ""
         var dspLegendMax = 0.0f
-        var velMax: Short = 120
-        var velMin: Short = -120
+
+        //        var velMax: Short = 120
+//        var velMin: Short = -120
         var spotterId = ""
         var spotterShowSelected = false
     }

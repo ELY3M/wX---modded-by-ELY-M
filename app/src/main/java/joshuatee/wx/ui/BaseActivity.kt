@@ -59,9 +59,9 @@ abstract class BaseActivity : AppCompatActivity() {
         UtilityToolbar.setElevation(toolbar)
     }
 
-    fun setTitle(s: String) {
-        title = s
-    }
+//    fun setTitle(s: String) {
+//        title = s
+//    }
 
     fun setTitle(s: String, sub: String) {
         title = s

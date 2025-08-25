@@ -63,7 +63,8 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
     private var nothingPresentStr = ""
     private var activityLabel = ""
     private var titleString = ""
-    private var product = ""
+
+    //    private var product = ""
     private val bitmaps = mutableListOf<Bitmap>()
     private val mcdNumbers = mutableListOf<String>()
     private var polygonType = PolygonType.WATCH
@@ -92,7 +93,7 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
             patternStr = "[om] Watch #([0-9]*?)</a>"
             nothingPresentStr = "No active watches"
             activityLabel = "Watches"
-            product = "SPCWAT$number"
+//            product = "SPCWAT$number"
             polygonType = PolygonType.WATCH
         } else {
             url = "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/md/"
@@ -100,7 +101,7 @@ class SpcMcdWatchShowSummaryActivity : BaseActivity() {
                 "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
             nothingPresentStr = "No active MCDs"
             activityLabel = "MCDs"
-            product = "SPCMCD$number"
+//            product = "SPCMCD$number"
             polygonType = PolygonType.MCD
         }
         title = activityLabel

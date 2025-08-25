@@ -29,7 +29,8 @@ import joshuatee.wx.util.UtilityString
 class ObjectWarning() {
 
     var url = ""
-    var title = ""
+
+    //    var title = ""
     var area = ""
     var effective = ""
     var expires = ""
@@ -37,7 +38,8 @@ class ObjectWarning() {
     var sender = ""
     private var polygon = ""
     private var vtec = ""
-    private var geometry = ""
+
+    //    private var geometry = ""
     var isCurrent = true
 
     constructor(
@@ -50,11 +52,11 @@ class ObjectWarning() {
         sender: String,
         polygon: String,
         vtec: String,
-        geometry: String
+//        geometry: String
     ) : this() {
         this.url = url
         // detailed desc
-        this.title = title
+//        this.title = title
         this.area = area
 
         this.effective = effective
@@ -69,7 +71,7 @@ class ObjectWarning() {
         this.sender = sender
         this.polygon = polygon
         this.vtec = vtec
-        this.geometry = geometry
+//        this.geometry = geometry
         this.isCurrent = ObjectDateTime.isVtecCurrent(this.vtec)
         if (vtec.startsWith("O.EXP") || vtec.startsWith("O.CAN")) {
             this.isCurrent = false
@@ -124,7 +126,7 @@ class ObjectWarning() {
                 .replace(" ", "")
             val listOfPolygonRaw = UtilityString.parseColumn(data, RegExp.warningLatLonPattern)
             val vtecs = UtilityString.parseColumn(html, RegExp.warningVtecPattern)
-            val geometryList = UtilityString.parseColumn(html, "\"geometry\": (.*?),")
+//            val geometryList = UtilityString.parseColumn(html, "\"geometry\": (.*?),")
             urlList.indices.forEach { index ->
                 warnings.add(
                     ObjectWarning(
@@ -137,7 +139,7 @@ class ObjectWarning() {
                         Utility.safeGet(senderNameList, index),
                         Utility.safeGet(listOfPolygonRaw, index),
                         Utility.safeGet(vtecs, index),
-                        Utility.safeGet(geometryList, index)
+//                        Utility.safeGet(geometryList, index)
                     )
                 )
             }

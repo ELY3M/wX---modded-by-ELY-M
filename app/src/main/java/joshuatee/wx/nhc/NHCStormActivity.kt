@@ -58,7 +58,8 @@ class NhcStormActivity : BaseActivity() {
     }
 
     private lateinit var stormData: NhcStormDetails
-    private var product = ""
+
+    //    private var product = ""
     private var bitmapsAttr = mutableListOf<BitmapAttr>()
     private lateinit var cardText: CardText
     private lateinit var box: VBox
@@ -112,7 +113,7 @@ class NhcStormActivity : BaseActivity() {
         boxText = VBox(this)
         box.addLayout(boxImage)
         box.addLayout(boxText)
-        product = "MIATCP${stormData.binNumber}"
+//        product = "MIATCP${stormData.binNumber}"
         textProductUrl = stormData.advisoryNumber
         if (textProductUrl.startsWith("HFO")) {
             office = "HFO"

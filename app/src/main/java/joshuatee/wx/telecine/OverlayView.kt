@@ -56,7 +56,7 @@ internal class OverlayView private constructor(
     }
 
     init {
-        View.inflate(context, R.layout.telecine_overlay_jellybean_view, this)
+        inflate(context, R.layout.telecine_overlay_jellybean_view, this)
         distanceToolView = findViewById(R.id.record_overlay_distance_tool)
         drawToolView = findViewById(R.id.record_overlay_drawtool)
         val cancelView: View = findViewById(R.id.record_overlay_cancel)
@@ -64,7 +64,7 @@ internal class OverlayView private constructor(
         distanceToolView.setOnClickListener(this)
         drawToolView.setOnClickListener(this)
         cancelView.setOnClickListener(this)
-        distanceToolView.visibility = View.VISIBLE
+        distanceToolView.visibility = VISIBLE
         drawToolView.background = UtilityImg.bitmapToLayerDrawable(
                 context,
                 UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_edit_24dp, Color.WHITE)
@@ -77,7 +77,7 @@ internal class OverlayView private constructor(
                 context,
                 UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.WHITE)
         )
-        if (getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL) {
+        if (getLayoutDirectionFromLocale(Locale.getDefault()) == LAYOUT_DIRECTION_RTL) {
             animationWidth =
                 -animationWidth // Account for animating in from the other side of screen.
         }
@@ -136,7 +136,7 @@ internal class OverlayView private constructor(
 
         private fun gravityEndLocaleHack(): Int {
             val direction = getLayoutDirectionFromLocale(Locale.getDefault())
-            return if (direction == View.LAYOUT_DIRECTION_RTL) Gravity.START else Gravity.END
+            return if (direction == LAYOUT_DIRECTION_RTL) Gravity.START else Gravity.END
         }
     }
 }

@@ -69,7 +69,8 @@ class NationalTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var products = listOf<String>()
     private lateinit var star: MenuItem
     private lateinit var notificationToggle: MenuItem
-    private var ridFavOld = ""
+
+    //    private var ridFavOld = ""
     private lateinit var cardText: CardText
     private lateinit var navDrawerCombo: NavDrawerCombo
     private lateinit var scrollView: ScrollView
@@ -132,7 +133,7 @@ class NationalTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         } else {
             star.setIcon(GlobalVariables.STAR_OUTLINE_ICON)
         }
-        ridFavOld = UIPreferences.favorites[FavoriteType.NWS_TEXT]!!
+//        ridFavOld = UIPreferences.favorites[FavoriteType.NWS_TEXT]!!
         FutureText(this, product, ::showText)
     }
 

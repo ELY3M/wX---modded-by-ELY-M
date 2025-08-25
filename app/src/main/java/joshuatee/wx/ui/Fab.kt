@@ -92,7 +92,7 @@ class Fab {
         fab.translationZ = UIPreferences.fabElevationDepressed
     }
 
-    fun get(): FloatingActionButton {
-        return fab
-    }
+//    fun get(): FloatingActionButton {
+//        return fab
+//    }
 }

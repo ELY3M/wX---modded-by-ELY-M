@@ -91,7 +91,7 @@ class DrawView(private val activity: Activity) : View(activity) {
         // either enable or disable the undo button
         if (undoButton != null)
         // if there are actions recorded enable the undo button
-            undoButton.isEnabled = actions.size > 0
+            undoButton.isEnabled = actions.isNotEmpty()
     }
 
     /** DrawListener will take touches and add segments  */
@@ -99,7 +99,7 @@ class DrawView(private val activity: Activity) : View(activity) {
         override fun onTouch(view: View, event: MotionEvent): Boolean {
             if (event.action == MotionEvent.ACTION_DOWN) {
                 // action down is fired when your finger hits the screen
-                if (segments.size == 0 || segments.last().points.size != 0) {
+                if (segments.isEmpty() || segments.last().points.isNotEmpty()) {
                     // when you put your finger down, we'll start a new segment
                     segments.add(Segment())
                     // and we'll indicate that the last action was a draw
@@ -132,7 +132,7 @@ internal class Point {
         this.y = y2
     }
 
-    constructor()
+//    constructor()
 
     // overwrote toString to represent the points coordinates
     override fun toString() = "$x,$y"

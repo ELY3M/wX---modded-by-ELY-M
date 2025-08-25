@@ -45,8 +45,8 @@ class NexradColorLegend(
                 WXGLRadarActivity.dspLegendMax =
                     (255.0f / nexradState.render.wxglNexradLevel3.halfword3132) * 0.01f
             }
-            WXGLRadarActivity.velMax = nexradState.render.wxglNexradLevel3.halfword48
-            WXGLRadarActivity.velMin = nexradState.render.wxglNexradLevel3.halfword47
+//            WXGLRadarActivity.velMax = nexradState.render.wxglNexradLevel3.halfword48
+//            WXGLRadarActivity.velMin = nexradState.render.wxglNexradLevel3.halfword47
             legendShown = true
             val layoutParams = RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -83,8 +83,8 @@ class NexradColorLegend(
         if (legendShown && (nexradState.product == "DSA" || nexradState.product == "DAA" || nexradState.product == "N0U")) {
             WXGLRadarActivity.dspLegendMax =
                 (255.0f / nexradState.render.wxglNexradLevel3.halfword3132) * 0.01f
-            WXGLRadarActivity.velMax = nexradState.render.wxglNexradLevel3.halfword48
-            WXGLRadarActivity.velMin = nexradState.render.wxglNexradLevel3.halfword47
+//            WXGLRadarActivity.velMax = nexradState.render.wxglNexradLevel3.halfword48
+//            WXGLRadarActivity.velMin = nexradState.render.wxglNexradLevel3.halfword47
             update()
         }
     }

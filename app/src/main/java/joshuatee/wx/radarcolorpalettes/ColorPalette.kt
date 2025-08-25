@@ -275,19 +275,19 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
             if (colorMapProductCode == 161) {
                 // pad first 16, think this is needed
                 repeat(10) {
-                    if (colorPaletteLines.size > 0) {
+                    if (colorPaletteLines.isNotEmpty()) {
                         objectColorPalette.putLine(colorPaletteLines[0])
                     }
                 }
             }
             if (colorMapProductCode == 99 || colorMapProductCode == 135) {
                 // first two levels are range folder per ICD
-                if (colorPaletteLines.size > 0) {
+                if (colorPaletteLines.isNotEmpty()) {
                     objectColorPalette.putLine(colorPaletteLines[0])
                     objectColorPalette.putLine(colorPaletteLines[0])
                 }
             }
-            if (colorPaletteLines.size > 0) {
+            if (colorPaletteLines.isNotEmpty()) {
                 (lowerEnd until colorPaletteLines[0].dbz).forEach { _ ->
                     objectColorPalette.putLine(colorPaletteLines[0])
                     if (scale == 2) { // 94 reflectivity

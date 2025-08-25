@@ -45,7 +45,7 @@ import joshuatee.wx.util.UtilityShare
 object UtilityModels {
 
     fun getContent(context: Context, om: ObjectModel, overlayImg: List<String>) {
-        om.sectorInt = om.sectors.indexOf(om.sector)
+//        om.sectorInt = om.sectors.indexOf(om.sector)
         if (om.truncateTime) {
             om.time = om.time.take(om.timeTruncate)
         }
@@ -68,7 +68,7 @@ object UtilityModels {
                         om.displayData.image[it].set(om.displayData.bitmaps[it])
                     }
                 }
-                om.animRan = false
+//                om.animRan = false
                 if (!om.firstRun) {
                     (0 until om.numPanes).forEach {
                         om.displayData.image[it].imgRestorePosnZoom(om.modelProvider + om.numPanes.toString() + it.toString())
@@ -80,7 +80,7 @@ object UtilityModels {
                     om.firstRun = true
                 }
                 updateToolbarLabels(om)
-                om.imageLoaded = true
+//                om.imageLoaded = true
             }
         )
     }
@@ -111,7 +111,7 @@ object UtilityModels {
                 (0 until om.numPanes).forEach {
                     om.displayData.animDrawable[it].startAnimation(om.displayData.image[it])
                 }
-                om.animRan = true
+//                om.animRan = true
             }
         )
     }
