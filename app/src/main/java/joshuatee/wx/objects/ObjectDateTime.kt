@@ -183,7 +183,11 @@ class ObjectDateTime() {
                     ZoneId.systemDefault()
                 )
             )
-            return nowFromMilli.format("E MMM dd HH:mm:ss YYYY") // + ZoneId.systemDefault().toString()
+            return if (UIPreferences.hourlyShowAMPM) {
+                nowFromMilli.format("E MMM dd hh:mm:ss YYYY") // downstream break if this "E MMM dd hh:mm:ss aa YYYY"
+            } else {
+                nowFromMilli.format("E MMM dd HH:mm:ss YYYY") // + ZoneId.systemDefault().toString()
+            }
         }
 
         // WAS Tue Nov 08 12:32:53 EST 2022
@@ -205,7 +209,12 @@ class ObjectDateTime() {
             if (radarTimeComponents.size < 3) {
                 return false
             }
-            val radarTimeHours = To.int(radarTimeComponents[0])
+            var radarTimeHours = To.int(radarTimeComponents[0])
+            if (UIPreferences.hourlyShowAMPM) {
+                if (radarTimeHours < 12) {
+                    radarTimeHours += 12
+                }
+            }
             val radarTimeMinutes = To.int(radarTimeComponents[1])
             val radarTimeTotalMinutes = radarTimeHours * 60 + radarTimeMinutes
             val currentTime = getCurrentLocalTimeAsString().split(" ")[1]
@@ -241,6 +250,10 @@ class ObjectDateTime() {
                 LocalDateTime.parse(timeRange, DateTimeFormatter.ofPattern("yyMMdd'T'HHmm"))
             ObjectDateTime(dateTime)
         } catch (e: Exception) {
+            UtilityLog.d(
+                "wx",
+                "Problem in ObjectDateTime.decodeVtecTime with arg: $timeRange is: $e"
+            )
             val objectDateTime = nowUtc()
             objectDateTime.addHours(1)
             objectDateTime
@@ -273,7 +286,7 @@ class ObjectDateTime() {
             val listRun = mutableListOf<String>()
             val currentTime = parse(time, fromPattern)
             listRun.add(currentTime.format(toPattern))
-            for (it in 0 until totalNumber) {
+            repeat(totalNumber) {
                 currentTime.addHours(-1 * hours.toLong())
                 listRun.add(currentTime.format(toPattern))
             }

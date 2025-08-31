@@ -8,6 +8,53 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55966 2025_08_27 (BETA)
+
+* [ADD] updates for NCEP Models for **MAG 6.0 - August 2025** in particular new products for
+  National Blend of Models (NBM)
+
+```
+precip_p01
+1hour_precip_chance
+6hour_precip_chance
+12hour_precip_chance
+precip_duration (NAMER and CONUS domains only)
+prob_rain (NAMER, CONUS, and Alaska domains only)
+prob_snow (NAMER, CONUS, and Alaska domains only)
+prob_sleet (NAMER, CONUS, and Alaska domains only)
+prob_freezing_rain (NAMER, CONUS, and Alaska domains only)
+snow_liquid_ratio (NAMER, CONUS, and Alaska domains only)
+1hour_accu_snow (NAMER, CONUS, and Alaska domains only)
+6hour_accu_snow (NAMER, CONUS, and Alaska domains only)
+total_accu_snow (NAMER, CONUS, and Alaska domains only)
+10th_percentile_1hr_snow (NAMER, CONUS, and Alaska domains only)
+50th_percentile_1hr_snow (NAMER, CONUS, and Alaska domains only)
+90th_percentile_1hr_snow (NAMER, CONUS, and Alaska domains only)
+prob_1h_snow_0.1in (NAMER, CONUS, and Alaska domains only)
+prob_1h_snow_0.3in (NAMER, CONUS, and Alaska domains only)
+prob_1h_snow_0.5in (NAMER, CONUS, and Alaska domains only)
+prob_1h_snow_0.7in (NAMER, CONUS, and Alaska domains only
+prob_1h_snow_1in (NAMER, CONUS, and Alaska domains only)
+prob_1h_snow_1.5in (NAMER, CONUS, and Alaska domains only)
+prob_1h_snow_2in (NAMER, CONUS, and Alaska domains only)
+prob_1h_snow_3in (NAMER, CONUS, and Alaska domains only)
+prob_1h_snow_4in (NAMER, CONUS, and Alaska domains only)
+tstm_coverage
+visibility
+ceiling
+cape
+echo_top
+prob_tstm
+prob_vis_5mi (NAMER and CONUS domains only)
+prob_vis_3mi (NAMER and CONUS domains only)
+prob_vis_2mi (NAMER and CONUS domains only)
+prob_vis_1mi (NAMER and CONUS domains only)
+prob_ceil_1000ft (NAMER and CONUS domains only)
+prob_ceil_2000ft (NAMER and CONUS domains only)
+prob_ceil_3000ft (NAMER and CONUS domains only)
+prob_ceil_6500ft (NAMER and CONUS domains only)
+```
+
 ## 55962 2025_08_02
 
 * [FIX] NHC Activity would crash if an NHC Storm is clicked on which is no longer issuing

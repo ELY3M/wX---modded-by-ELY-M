@@ -85,7 +85,7 @@ object UtilityHourlyOldApi {
     fun getHourlyString(locNumber: Int): String {
         val latLon = Location.getLatLon(locNumber)
         val html = UtilityDownloadNws.getHourlyOldData(latLon)
-        val header = To.stringPadLeft("Time", 12) + " " +
+        val header = To.stringPadLeft("Time", 9) + " " +
                 To.stringPadLeft("Temp", 8) +
                 To.stringPadLeft("Dew", 8) +
                 To.stringPadLeft("Precip%", 8) +

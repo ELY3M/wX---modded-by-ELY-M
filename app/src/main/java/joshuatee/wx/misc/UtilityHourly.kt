@@ -100,7 +100,11 @@ object UtilityHourly {
 
     private fun getString(locationNumber: Int): List<String> {
         val html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locationNumber))
-        val header = To.stringPadLeft("Time", 7) + " " +
+        var padForTime = 7
+        if (UIPreferences.hourlyShowAMPM) {
+            padForTime = 9
+        }
+        val header = To.stringPadLeft("Time", padForTime) + " " +
                 To.stringPadLeft("Temp", 5) +
                 To.stringPadLeft("WindSpd", 9) +
                 To.stringPadLeft("WindDir", 8) +
@@ -115,10 +119,14 @@ object UtilityHourly {
         val windDirection = html.parseColumn("\"windDirection\": \"(.*?)\"")
         val shortForecast = html.parseColumn("\"shortForecast\": \"(.*?)\"")
         var content = ""
+        var padForTime = 8
+        if (UIPreferences.hourlyShowAMPM) {
+            padForTime = 10
+        }
         startTime.indices.forEach {
             val time =
                 ObjectDateTime.translateTimeForHourly(startTime[it]) //.replace(Regex("-0[0-9]:00"), ""))
-            content += To.stringPadLeft(time, 8)
+            content += To.stringPadLeft(time, padForTime)
             if (temperature.size > it) content += To.stringPadLeft(
                 temperature[it].replace(
                     "\"",

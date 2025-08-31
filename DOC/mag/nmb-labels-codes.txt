@@ -1,0 +1,308 @@
+<strong>Model Guidance Products Page</strong><br/>
+</p>
+<ul>
+<li><p> Available model cycles are displayed with the latest cycle as the default, displayed on the right-most cell, and highlighted in red.  To view the products from a previous cycle, click on the desired <strong>MM/DD/YYYY HHUTC</strong> link. That link will turn red, and the page will show all the products generated for that cycle.</p>
+</li>
+<li><p> Below the cycles are the products that are available for the chosen model and area.  To select a product, click on its name.  The product name will turn red, and then a table of forecast hours will be displayed.  Once a product is chosen, more information on the product can be displayed by clicking on the <strong>Open product information</strong> button.</p>
+</li>
+<li><p>For the SREF-CLUSTER model, a Clusters table is shown below the forecast hours.  Once a product and then a forecast hour is clicked, the Clusters table shows links for available clusters for the chosen products.  Clicking on a cluster link will show the image in a new window.</p>
+</li>
+</ul>
+      </div>
+   </div>
+</div>
+
+
+
+<div id="params_container">
+<div id="left_container" class="col-2">
+<button class="accordion active" id="mod_cycles_acbutton">Cycles</button>
+<div  id="cycles_panel" class="panel" style="display:block" >
+<div class="param_text"> 
+<a class='cycle_link bluehover' id='2025082606UTC' href='#' data-action='load_cycle_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-fourpanel-selection='no' data-image-size='' data-cycle-date='20250826 06 UTC' title='20250826 06 UTC' style='color:red'>08/26/2025 06UTC</a> 
+</div>
+<div class="param_text"> 
+<a class='cycle_link bluehover' id='2025082600UTC' href='#' data-action='load_cycle_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-fourpanel-selection='no' data-image-size='' data-cycle-date='20250826 00 UTC' title='20250826 00 UTC' style='color:blue'>08/26/2025 00UTC</a> 
+</div>
+<div class="param_text"> 
+<a class='cycle_link bluehover' id='2025082518UTC' href='#' data-action='load_cycle_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-fourpanel-selection='no' data-image-size='' data-cycle-date='20250825 18 UTC' title='20250825 18 UTC' style='color:blue'>08/25/2025 18UTC</a> 
+</div>
+<div class="param_text"> 
+<a class='cycle_link bluehover' id='2025082512UTC' href='#' data-action='load_cycle_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-fourpanel-selection='no' data-image-size='' data-cycle-date='20250825 12 UTC' title='20250825 12 UTC' style='color:blue'>08/25/2025 12UTC</a> 
+</div>
+<input type="hidden" id="cycle_date_list_id" value="08/26/2025 06UTC,08/26/2025 00UTC,08/25/2025 18UTC,08/25/2025 12UTC" ></div>
+</div>
+<div id="middle_container" class="col-1" >&nbsp;</div><div id="right_container" class="col-9" >
+<button class="accordion active" id="mod_precipitation_acbutton">Precipitation</button>
+<div class="panel" style="max-height:320px;display:block">
+<table class="panel_table noborder" style="table-layout:fixed">
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='precip_p01' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='precip_p01' data-cycle-date='20250826 06 UTC' title='1-hour precipitation' style='color:blue'>precip_p01</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='precip_p06' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='precip_p06' data-cycle-date='20250826 06 UTC' title='Total precipitation every 6 hours' style='color:blue'>precip_p06</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='precip_ptot' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='precip_ptot' data-cycle-date='20250826 06 UTC' title='Accumulated precip' style='color:blue'>precip_ptot</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='1hour_precip_chance' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='1hour_precip_chance' data-cycle-date='20250826 06 UTC' title='1-hour chance of precipitation' style='color:blue'>1hour_precip_chance</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='6hour_precip_chance' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='6hour_precip_chance' data-cycle-date='20250826 06 UTC' title='6-hour chance of precipitation' style='color:blue'>6hour_precip_chance</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='12hour_precip_chance' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='12hour_precip_chance' data-cycle-date='20250826 06 UTC' title='12-hour chance of precipitation' style='color:blue'>12hour_precip_chance</a> 
+</div> 
+</td> 
+</tr> 
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='precip_duration' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='precip_duration' data-cycle-date='20250826 06 UTC' title='Precipitation duration' style='color:blue'>precip_duration</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_rain' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_rain' data-cycle-date='20250826 06 UTC' title='Probability of rain' style='color:blue'>prob_rain</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_snow' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_snow' data-cycle-date='20250826 06 UTC' title='Probability of snow' style='color:blue'>prob_snow</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_sleet' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_sleet' data-cycle-date='20250826 06 UTC' title='Probability of sleet' style='color:blue'>prob_sleet</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_freezing_rain' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_freezing_rain' data-cycle-date='20250826 06 UTC' title='Probability of freezing rain' style='color:blue'>prob_freezing_rain</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='snow_liquid_ratio' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='snow_liquid_ratio' data-cycle-date='20250826 06 UTC' title='Snow Liquid Ratio' style='color:blue'>snow_liquid_ratio</a> 
+</div> 
+</td> 
+</tr> 
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='1hour_accu_snow' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='1hour_accu_snow' data-cycle-date='20250826 06 UTC' title='1-hour accumulated snow' style='color:blue'>1hour_accu_snow</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='6hour_accu_snow' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='6hour_accu_snow' data-cycle-date='20250826 06 UTC' title='6-hour accumulated snow' style='color:blue'>6hour_accu_snow</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='total_accu_snow' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='total_accu_snow' data-cycle-date='20250826 06 UTC' title='Total Accumulated Snowfall' style='color:blue'>total_accu_snow</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='10th_percentile_1hr_snow' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='10th_percentile_1hr_snow' data-cycle-date='20250826 06 UTC' title='10th Percentile Hourly Snowfall' style='color:blue'>10th_percentile_1hr_snow</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='50th_percentile_1hr_snow' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='50th_percentile_1hr_snow' data-cycle-date='20250826 06 UTC' title='50th Percentile Hourly Snowfall' style='color:blue'>50th_percentile_1hr_snow</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='90th_percentile_1hr_snow' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='90th_percentile_1hr_snow' data-cycle-date='20250826 06 UTC' title='90th Percentile Hourly Snowfall' style='color:blue'>90th_percentile_1hr_snow</a> 
+</div> 
+</td> 
+</tr> 
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_0.1in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_0.1in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 0.1 inch of snow' style='color:blue'>prob_1h_snow_0.1in</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_0.3in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_0.3in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 0.3 inch of snow' style='color:blue'>prob_1h_snow_0.3in</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_0.5in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_0.5in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 0.5 inch of snow' style='color:blue'>prob_1h_snow_0.5in</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_0.7in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_0.7in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 0.7 inch of snow' style='color:blue'>prob_1h_snow_0.7in</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_1in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_1in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 1 inch of snow' style='color:blue'>prob_1h_snow_1in</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_1.5in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_1.5in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 1.5 inch of snow' style='color:blue'>prob_1h_snow_1.5in</a> 
+</div> 
+</td> 
+</tr> 
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_2in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_2in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 2 inches of snow' style='color:blue'>prob_1h_snow_2in</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_3in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_3in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 3 inches of snow' style='color:blue'>prob_1h_snow_3in</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_1h_snow_4in' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_1h_snow_4in' data-cycle-date='20250826 06 UTC' title='Probability of 1-hour 4 inches of snow' style='color:blue'>prob_1h_snow_4in</a> 
+</div> 
+</td> 
+<td></td><td></td><td></td></tr> 
+</table>
+</div>
+<button class="accordion active" id="mod_surface_parms_acbutton">Surface Parms</button>
+<div class="panel" style="max-height:320px;display:block">
+<table class="panel_table noborder" style="table-layout:fixed">
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='2m_temp_10m_wnd' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='2m_temp_10m_wnd' data-cycle-date='20250826 06 UTC' title='2 meter Temperature and 10 meter Wind' style='color:blue'>2m_temp_10m_wnd</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='2m_dewp_10m_wnd' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='2m_dewp_10m_wnd' data-cycle-date='20250826 06 UTC' title='2 meter dew point temp and 10 meter wind' style='color:blue'>2m_dewp_10m_wnd</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='2m_relh_10m_wnd' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='2m_relh_10m_wnd' data-cycle-date='20250826 06 UTC' title='2 meter Relative Humidity and 10 meter Wind' style='color:blue'>2m_relh_10m_wnd</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='2m_apparent_temp' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='2m_apparent_temp' data-cycle-date='20250826 06 UTC' title='2 meter Apparent Temperature and 10 meter Wind' style='color:blue'>2m_apparent_temp</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='2m_min_temp' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='2m_min_temp' data-cycle-date='20250826 06 UTC' title='2 meter minimum Temperature' style='color:blue'>2m_min_temp</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='2m_max_temp' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='2m_max_temp' data-cycle-date='20250826 06 UTC' title='2 meter maximum temperature' style='color:blue'>2m_max_temp</a> 
+</div> 
+</td> 
+</tr> 
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='10m_wnd_gust' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='10m_wnd_gust' data-cycle-date='20250826 06 UTC' title='10 meter wind and gust' style='color:blue'>10m_wnd_gust</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='total_cloud_cover' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='total_cloud_cover' data-cycle-date='20250826 06 UTC' title='Total Cloud Cover' style='color:blue'>total_cloud_cover</a> 
+</div> 
+</td> 
+<td></td><td></td><td></td><td></td></tr> 
+</table>
+</div>
+<button class="accordion active" id="mod_aviation_acbutton">Aviation</button>
+<div class="panel" style="max-height:320px;display:block">
+<table class="panel_table noborder" style="table-layout:fixed">
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='tstm_coverage' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='tstm_coverage' data-cycle-date='20250826 06 UTC' title='Thunderstorm Coverage' style='color:blue'>tstm_coverage</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='visibility' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='visibility' data-cycle-date='20250826 06 UTC' title='2-meter Visibility' style='color:blue'>visibility</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='ceiling' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='ceiling' data-cycle-date='20250826 06 UTC' title='Ceiling' style='color:blue'>ceiling</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='cape' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='cape' data-cycle-date='20250826 06 UTC' title='Surface-based CAPE' style='color:blue'>cape</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='echo_top' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='echo_top' data-cycle-date='20250826 06 UTC' title='Echo Top Height' style='color:blue'>echo_top</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_tstm' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_tstm' data-cycle-date='20250826 06 UTC' title='Thunderstorm Probability' style='color:blue'>prob_tstm</a> 
+</div> 
+</td> 
+</tr> 
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_vis_5mi' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_vis_5mi' data-cycle-date='20250826 06 UTC' title='Probability of Visibility 5 miles or less' style='color:blue'>prob_vis_5mi</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_vis_3mi' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_vis_3mi' data-cycle-date='20250826 06 UTC' title='Probability of Visibility less than 3 miles' style='color:blue'>prob_vis_3mi</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_vis_2mi' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_vis_2mi' data-cycle-date='20250826 06 UTC' title='Probability of Visibility less than 2 miles' style='color:blue'>prob_vis_2mi</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_vis_1mi' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_vis_1mi' data-cycle-date='20250826 06 UTC' title='Probability of Visibility less than 1 mile' style='color:blue'>prob_vis_1mi</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_ceil_1000ft' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_ceil_1000ft' data-cycle-date='20250826 06 UTC' title='Probability of Ceiling Less than 1000 feet' style='color:blue'>prob_ceil_1000ft</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_ceil_2000ft' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_ceil_2000ft' data-cycle-date='20250826 06 UTC' title='Probability of Ceiling Less than 2000 feet' style='color:blue'>prob_ceil_2000ft</a> 
+</div> 
+</td> 
+</tr> 
+<tr><td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_ceil_3000ft' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_ceil_3000ft' data-cycle-date='20250826 06 UTC' title='Probability of Ceiling 3000 feet or less' style='color:blue'>prob_ceil_3000ft</a> 
+</div> 
+</td> 
+<td> 
+<div class="param_text_products"> 
+<a class='params_link bluehover' id='prob_ceil_6500ft' href='#' data-action='load_model' data-group-name='Model Guidance' data-model-name='nbm' data-area-name='namer' data-previous-selection='area' data-image-size='' data-param-name='prob_ceil_6500ft' data-cycle-date='20250826 06 UTC' title='Probability of Ceiling 6500 feet or less' style='color:blue'>prob_ceil_6500ft</a> 
+</div> 
+</td> 
+<td></td><td></td><td></td><td></td></tr> 
+</table> 
+</div>
+</div>
+<div style="clear:both"></div></div><div style="clear:both"></div><div id="fhrs_div"></div>
+<!-- End Content Body -->

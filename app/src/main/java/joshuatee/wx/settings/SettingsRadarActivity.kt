@@ -147,7 +147,7 @@ class SettingsRadarActivity : BaseActivity() {
             ),
             Switch(
                 this,
-                "Center radar on location",
+                "Center radar on location (disables pan to move in a direction)",
                 "RADAR_CENTER_ON_LOCATION",
                 R.string.radar_center_on_location_default_label
             ),

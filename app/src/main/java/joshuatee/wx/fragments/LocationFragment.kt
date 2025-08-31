@@ -314,7 +314,8 @@ class LocationFragment : Fragment() {
             }
         }
         if (UIPreferences.refreshLocMin != 0 || dataNotInitialized) {
-            if (downloadTimer.isRefreshNeeded() || currentConditions.latLon.toString() != Location.latLon.toString()) {
+            if (downloadTimer.isRefreshNeeded() || currentConditions.latLon.toString() != Location.latLon.toString() || UIPreferences.settingsUIVisitedNeedRefresh) {
+                UIPreferences.settingsUIVisitedNeedRefresh = false
                 getContent()
             }
             dataNotInitialized = false

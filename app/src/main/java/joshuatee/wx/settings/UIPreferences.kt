@@ -132,6 +132,7 @@ object UIPreferences {
     var mainScreenRefreshToTop = false
     const val ANIMATION_INTERVAL_DEFAULT = 8
     const val HOMESCREEN_FAVORITE_DEFAULT = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
+    var settingsUIVisitedNeedRefresh = false
 
     fun initPreferences(context: Context) {
         useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "true").startsWith("t")

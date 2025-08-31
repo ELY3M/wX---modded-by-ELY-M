@@ -125,7 +125,7 @@ class SettingsUIActivity : BaseActivity() {
             Switch(this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.main_screen_radar_button),
             Switch(
                 this,
-                "Hourly screen: show with AM/PM",
+                "Hourly/Nexrad: show with AM/PM",
                 "HOURLY_SHOW_AM_PM",
                 R.string.hourly_show_am_pm
             ),
@@ -294,6 +294,7 @@ class SettingsUIActivity : BaseActivity() {
         ) {
             Utility.restart()
         }
+        UIPreferences.settingsUIVisitedNeedRefresh = true
         super.onStop()
     }
 
