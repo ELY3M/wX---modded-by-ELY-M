@@ -290,18 +290,10 @@ class NexradRenderConstruct(
             data.swoBuffers.chunkCount = totalBinsSwo / data.swoBuffers.breakSize
             data.swoBuffers.chunkCount += 1
         }
-//        (0..4).forEach {
         for (riskLevel in SwoDayOne.threatList) {
             if (hashSwo.containsKey(riskLevel) && hashSwo[riskLevel]!!.isNotEmpty()) {
-//            if (hashSwo[it] != null) {
                 for (j in hashSwo.getOrElse(riskLevel) { listOf() }.indices step 4) {
                     data.swoBuffers.putColor6(SwoDayOne.colors[riskLevel]!!)
-//                    data.swoBuffers.putColor(Color.red(color).toByte())
-//                    data.swoBuffers.putColor(Color.green(color).toByte())
-//                    data.swoBuffers.putColor(Color.blue(color).toByte())
-//                    data.swoBuffers.putColor(Color.red(color).toByte())
-//                    data.swoBuffers.putColor(Color.green(color).toByte())
-//                    data.swoBuffers.putColor(Color.blue(color).toByte())
                     coordinates =
                         Projection.computeMercatorNumbers(
                             hashSwo.getOrElse(riskLevel) { listOf() }[j],
@@ -342,18 +334,10 @@ class NexradRenderConstruct(
             data.fireBuffers.chunkCount = totalBinsSwo / data.fireBuffers.breakSize
             data.fireBuffers.chunkCount += 1
         }
-//        (0..4).forEach {
-//            if (hashSwo[it] != null) {
         for (riskLevel in SwoDayOne.threatList) {
             if (hashSwo.containsKey(riskLevel) && hashSwo[riskLevel]!!.isNotEmpty()) {
                 for (j in hashSwo.getOrElse(riskLevel) { listOf() }.indices step 4) {
                     data.fireBuffers.putColor6(FireDayOne.colors[riskLevel]!!)
-//                    data.fireBuffers.putColor(Color.red(FireDayOne.colors[riskLevel]!!).toByte())
-//                    data.fireBuffers.putColor(Color.green(FireDayOne.colors[riskLevel]!!).toByte())
-//                    data.fireBuffers.putColor(Color.blue(FireDayOne.colors[riskLevel]!!).toByte())
-//                    data.fireBuffers.putColor(Color.red(FireDayOne.colors[riskLevel]!!).toByte())
-//                    data.fireBuffers.putColor(Color.green(FireDayOne.colors[riskLevel]!!).toByte())
-//                    data.fireBuffers.putColor(Color.blue(FireDayOne.colors[riskLevel]!!).toByte())
                     coordinates =
                         Projection.computeMercatorNumbers(
                             hashSwo.getOrElse(riskLevel) { listOf() }[j],
@@ -415,13 +399,6 @@ class NexradRenderConstruct(
                     )
                     data.wpcFrontBuffersList[z].putFloat(coordinates[0].toFloat())
                     data.wpcFrontBuffersList[z].putFloat((coordinates[1] * -1.0f).toFloat())
-//                    data.wpcFrontBuffersList[z].putColor(Color.red(data.wpcFrontPaints[z]).toByte())
-//                    data.wpcFrontBuffersList[z].putColor(
-//                        Color.green(data.wpcFrontPaints[z]).toByte()
-//                    )
-//                    data.wpcFrontBuffersList[z].putColor(
-//                        Color.blue(data.wpcFrontPaints[z]).toByte()
-//                    )
                     coordinates = Projection.computeMercatorNumbers(
                         front.coordinates[j + 1].lat,
                         front.coordinates[j + 1].lon,
@@ -429,13 +406,6 @@ class NexradRenderConstruct(
                     )
                     data.wpcFrontBuffersList[z].putFloat(coordinates[0].toFloat())
                     data.wpcFrontBuffersList[z].putFloat((coordinates[1] * -1.0f).toFloat())
-//                    data.wpcFrontBuffersList[z].putColor(Color.red(data.wpcFrontPaints[z]).toByte())
-//                    data.wpcFrontBuffersList[z].putColor(
-//                        Color.green(data.wpcFrontPaints[z]).toByte()
-//                    )
-//                    data.wpcFrontBuffersList[z].putColor(
-//                        Color.blue(data.wpcFrontPaints[z]).toByte()
-//                    )
                 }
             }
         }
