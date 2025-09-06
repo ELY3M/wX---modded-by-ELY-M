@@ -2,9 +2,26 @@
 
 # Developer ChangeLog
 
-## 55968 2025_08_31
+## 55969 2025_09_03
 
-* [ADD]
+* [ADD] In **Settings->Locations** if a Location has a notification of any kind enabled "+Alert" is
+  shown in the card. This has been changed to "+Notif" to more clearly represent that this is not
+  the **Alert** notification but rather could be any type of notification for that location.
+* [ADD] lib update
+
+```
+-    implementation 'com.google.android.material:material:1.12.0'
++    implementation 'com.google.android.material:material:1.13.0'
+```
+
+* [REF] have SPC SWO/Fire code match desktop ports
+
+## 55968 2025_09_03
+
+* [FIX] WeatherWidgetService.getViewAt - few crash reports
+  `Exception android.database.CursorIndexOutOfBoundsException: Before first row.`
+* [FIX] joshuatee.wx.settings.SettingsHomeScreenActivity.prodClicked - few crash reports
+  `Exception java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState`
 
 ## 55967 2025_08_31
 

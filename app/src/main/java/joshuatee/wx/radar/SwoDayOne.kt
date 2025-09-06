@@ -34,13 +34,14 @@ import joshuatee.wx.util.To
 internal object SwoDayOne {
 
     val timer = DownloadTimer("SWO")
-    val polygonBy = mutableMapOf<Int, List<Double>>()
-    val colors = intArrayOf(
-        Color.MAGENTA,
-        Color.RED,
-        Color.rgb(255, 140, 0),
-        Color.YELLOW,
-        Color.rgb(0, 100, 0)
+    val polygonBy = mutableMapOf<String, List<Double>>()
+    val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
+    val colors = mapOf(
+        "HIGH" to Color.MAGENTA,
+        "MDT" to Color.RED,
+        "ENH" to Color.rgb(255, 140, 0),
+        "SLGT" to Color.YELLOW,
+        "MRGL" to Color.rgb(0, 100, 0)
     )
 
     fun get() {
@@ -61,18 +62,16 @@ internal object SwoDayOne {
 		       41912155 42182207 42402218 42952203 43482148
 
 		&&*/
-            val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
             val day = 1
 //            val html = ("${GlobalVariables.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlSep()
             val html =
                 ("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlWithNewLine()
 
             val htmlChunk = html.parseAcrossLines("... CATEGORICAL ...(.*?&)&")
-            threatList.indices.forEach { threatIndex ->
+            threatList.forEach { threat ->
                 var data = ""
-                val threatLevelCode = threatList[threatIndex]
                 val htmlList =
-                    htmlChunk.parseColumnAcrossLines(threatLevelCode.substring(1) + "(.*?)[A-Z&]")
+                    htmlChunk.parseColumnAcrossLines(threat.substring(1) + "(.*?)[A-Z&]")
                 val warningList = mutableListOf<Double>()
                 htmlList.forEach { polygon ->
                     val coordinates = polygon.parseColumnAcrossLines("([0-9]{8}).*?")
@@ -109,10 +108,10 @@ internal object SwoDayOne {
                             warningList.add(x.last())
                             warningList.add(y[x.lastIndex])
                         }
-                        polygonBy[threatIndex] = warningList
+                        polygonBy[threat] = warningList
                     }
                 } else {
-                    polygonBy[threatIndex] = listOf()
+                    polygonBy[threat] = listOf()
                 }
             }
         }

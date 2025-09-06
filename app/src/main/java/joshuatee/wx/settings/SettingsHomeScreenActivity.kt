@@ -305,7 +305,9 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         with(bottomSheetFragment) {
             functions = listOf(::deleteItem, ::moveUp, ::moveDown)
             labelList = listOf("Delete Item", "Move Up", "Move Down")
-            show(supportFragmentManager, bottomSheetFragment.tag)
+            if (!isFinishing && !isDestroyed) {
+                show(supportFragmentManager, bottomSheetFragment.tag)
+            }
         }
     }
 }

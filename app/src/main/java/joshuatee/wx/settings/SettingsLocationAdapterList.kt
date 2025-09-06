@@ -64,7 +64,7 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
         with(holder) {
             text1.text = Location.getName(position)
             if (UtilityLocation.hasAlerts(position)) {
-                text1.text = Location.getName(position) + " +Alert"
+                text1.text = Location.getName(position) + " +Notif"
             }
             text1.color = UIPreferences.textHighlightColor
             currentConditions.text = Location.getObservation(position)

@@ -278,7 +278,8 @@ class NexradRenderConstruct(
         val hashSwo = SwoDayOne.polygonBy.toMap()
         var coordinates: DoubleArray
         val fSize =
-            (0..4).filter { hashSwo[it] != null }.sumOf { hashSwo.getOrElse(it) { listOf() }.size }
+            hashSwo.keys.filter { hashSwo[it] != null }
+                .sumOf { hashSwo.getOrElse(it) { listOf() }.size }
         data.swoBuffers.breakSize = 15000
         data.swoBuffers.chunkCount = 1
         val totalBinsSwo = fSize / 4
@@ -289,27 +290,30 @@ class NexradRenderConstruct(
             data.swoBuffers.chunkCount = totalBinsSwo / data.swoBuffers.breakSize
             data.swoBuffers.chunkCount += 1
         }
-        (0..4).forEach {
-            if (hashSwo[it] != null) {
-                for (j in hashSwo.getOrElse(it) { listOf() }.indices step 4) {
-                    data.swoBuffers.putColor(Color.red(SwoDayOne.colors[it]).toByte())
-                    data.swoBuffers.putColor(Color.green(SwoDayOne.colors[it]).toByte())
-                    data.swoBuffers.putColor(Color.blue(SwoDayOne.colors[it]).toByte())
-                    data.swoBuffers.putColor(Color.red(SwoDayOne.colors[it]).toByte())
-                    data.swoBuffers.putColor(Color.green(SwoDayOne.colors[it]).toByte())
-                    data.swoBuffers.putColor(Color.blue(SwoDayOne.colors[it]).toByte())
+//        (0..4).forEach {
+        for (riskLevel in SwoDayOne.threatList) {
+            if (hashSwo.containsKey(riskLevel) && hashSwo[riskLevel]!!.isNotEmpty()) {
+//            if (hashSwo[it] != null) {
+                for (j in hashSwo.getOrElse(riskLevel) { listOf() }.indices step 4) {
+                    data.swoBuffers.putColor6(SwoDayOne.colors[riskLevel]!!)
+//                    data.swoBuffers.putColor(Color.red(color).toByte())
+//                    data.swoBuffers.putColor(Color.green(color).toByte())
+//                    data.swoBuffers.putColor(Color.blue(color).toByte())
+//                    data.swoBuffers.putColor(Color.red(color).toByte())
+//                    data.swoBuffers.putColor(Color.green(color).toByte())
+//                    data.swoBuffers.putColor(Color.blue(color).toByte())
                     coordinates =
                         Projection.computeMercatorNumbers(
-                            hashSwo.getOrElse(it) { listOf() }[j],
-                            (hashSwo.getOrElse(it) { listOf() }[j + 1] * -1.0f),
+                            hashSwo.getOrElse(riskLevel) { listOf() }[j],
+                            (hashSwo.getOrElse(riskLevel) { listOf() }[j + 1] * -1.0f),
                             state.projectionNumbers
                         )
                     data.swoBuffers.putFloat(coordinates[0].toFloat())
                     data.swoBuffers.putFloat(coordinates[1].toFloat() * -1.0f)
                     coordinates =
                         Projection.computeMercatorNumbers(
-                            hashSwo.getOrElse(it) { listOf() }[j + 2],
-                            (hashSwo.getOrElse(it) { listOf() }[j + 3] * -1.0f),
+                            hashSwo.getOrElse(riskLevel) { listOf() }[j + 2],
+                            (hashSwo.getOrElse(riskLevel) { listOf() }[j + 3] * -1.0f),
                             state.projectionNumbers
                         )
                     data.swoBuffers.putFloat(coordinates[0].toFloat())
@@ -326,7 +330,8 @@ class NexradRenderConstruct(
         val hashSwo = FireDayOne.polygonBy.toMap()
         var coordinates: DoubleArray
         val fSize =
-            (0..4).filter { hashSwo[it] != null }.sumOf { hashSwo.getOrElse(it) { listOf() }.size }
+            hashSwo.keys.filter { hashSwo[it] != null }
+                .sumOf { hashSwo.getOrElse(it) { listOf() }.size }
         data.fireBuffers.breakSize = 15000
         data.fireBuffers.chunkCount = 1
         val totalBinsSwo = fSize / 4
@@ -337,27 +342,30 @@ class NexradRenderConstruct(
             data.fireBuffers.chunkCount = totalBinsSwo / data.fireBuffers.breakSize
             data.fireBuffers.chunkCount += 1
         }
-        (0..4).forEach {
-            if (hashSwo[it] != null) {
-                for (j in hashSwo.getOrElse(it) { listOf() }.indices step 4) {
-                    data.fireBuffers.putColor(Color.red(FireDayOne.colors[it]).toByte())
-                    data.fireBuffers.putColor(Color.green(FireDayOne.colors[it]).toByte())
-                    data.fireBuffers.putColor(Color.blue(FireDayOne.colors[it]).toByte())
-                    data.fireBuffers.putColor(Color.red(FireDayOne.colors[it]).toByte())
-                    data.fireBuffers.putColor(Color.green(FireDayOne.colors[it]).toByte())
-                    data.fireBuffers.putColor(Color.blue(FireDayOne.colors[it]).toByte())
+//        (0..4).forEach {
+//            if (hashSwo[it] != null) {
+        for (riskLevel in SwoDayOne.threatList) {
+            if (hashSwo.containsKey(riskLevel) && hashSwo[riskLevel]!!.isNotEmpty()) {
+                for (j in hashSwo.getOrElse(riskLevel) { listOf() }.indices step 4) {
+                    data.fireBuffers.putColor6(FireDayOne.colors[riskLevel]!!)
+//                    data.fireBuffers.putColor(Color.red(FireDayOne.colors[riskLevel]!!).toByte())
+//                    data.fireBuffers.putColor(Color.green(FireDayOne.colors[riskLevel]!!).toByte())
+//                    data.fireBuffers.putColor(Color.blue(FireDayOne.colors[riskLevel]!!).toByte())
+//                    data.fireBuffers.putColor(Color.red(FireDayOne.colors[riskLevel]!!).toByte())
+//                    data.fireBuffers.putColor(Color.green(FireDayOne.colors[riskLevel]!!).toByte())
+//                    data.fireBuffers.putColor(Color.blue(FireDayOne.colors[riskLevel]!!).toByte())
                     coordinates =
                         Projection.computeMercatorNumbers(
-                            hashSwo.getOrElse(it) { listOf() }[j],
-                            (hashSwo.getOrElse(it) { listOf() }[j + 1] * -1.0f),
+                            hashSwo.getOrElse(riskLevel) { listOf() }[j],
+                            (hashSwo.getOrElse(riskLevel) { listOf() }[j + 1] * -1.0f),
                             state.projectionNumbers
                         )
                     data.fireBuffers.putFloat(coordinates[0].toFloat())
                     data.fireBuffers.putFloat(coordinates[1].toFloat() * -1.0f)
                     coordinates =
                         Projection.computeMercatorNumbers(
-                            hashSwo.getOrElse(it) { listOf() }[j + 2],
-                            (hashSwo.getOrElse(it) { listOf() }[j + 3] * -1.0f),
+                            hashSwo.getOrElse(riskLevel) { listOf() }[j + 2],
+                            (hashSwo.getOrElse(riskLevel) { listOf() }[j + 3] * -1.0f),
                             state.projectionNumbers
                         )
                     data.fireBuffers.putFloat(coordinates[0].toFloat())
@@ -399,6 +407,7 @@ class NexradRenderConstruct(
             }
             for (j in 0 until front.coordinates.size step 2) {
                 if (j < front.coordinates.size - 1) {
+                    data.wpcFrontBuffersList[z].putColor6(data.wpcFrontPaints[z])
                     coordinates = Projection.computeMercatorNumbers(
                         front.coordinates[j].lat,
                         front.coordinates[j].lon,
@@ -406,13 +415,13 @@ class NexradRenderConstruct(
                     )
                     data.wpcFrontBuffersList[z].putFloat(coordinates[0].toFloat())
                     data.wpcFrontBuffersList[z].putFloat((coordinates[1] * -1.0f).toFloat())
-                    data.wpcFrontBuffersList[z].putColor(Color.red(data.wpcFrontPaints[z]).toByte())
-                    data.wpcFrontBuffersList[z].putColor(
-                        Color.green(data.wpcFrontPaints[z]).toByte()
-                    )
-                    data.wpcFrontBuffersList[z].putColor(
-                        Color.blue(data.wpcFrontPaints[z]).toByte()
-                    )
+//                    data.wpcFrontBuffersList[z].putColor(Color.red(data.wpcFrontPaints[z]).toByte())
+//                    data.wpcFrontBuffersList[z].putColor(
+//                        Color.green(data.wpcFrontPaints[z]).toByte()
+//                    )
+//                    data.wpcFrontBuffersList[z].putColor(
+//                        Color.blue(data.wpcFrontPaints[z]).toByte()
+//                    )
                     coordinates = Projection.computeMercatorNumbers(
                         front.coordinates[j + 1].lat,
                         front.coordinates[j + 1].lon,
@@ -420,13 +429,13 @@ class NexradRenderConstruct(
                     )
                     data.wpcFrontBuffersList[z].putFloat(coordinates[0].toFloat())
                     data.wpcFrontBuffersList[z].putFloat((coordinates[1] * -1.0f).toFloat())
-                    data.wpcFrontBuffersList[z].putColor(Color.red(data.wpcFrontPaints[z]).toByte())
-                    data.wpcFrontBuffersList[z].putColor(
-                        Color.green(data.wpcFrontPaints[z]).toByte()
-                    )
-                    data.wpcFrontBuffersList[z].putColor(
-                        Color.blue(data.wpcFrontPaints[z]).toByte()
-                    )
+//                    data.wpcFrontBuffersList[z].putColor(Color.red(data.wpcFrontPaints[z]).toByte())
+//                    data.wpcFrontBuffersList[z].putColor(
+//                        Color.green(data.wpcFrontPaints[z]).toByte()
+//                    )
+//                    data.wpcFrontBuffersList[z].putColor(
+//                        Color.blue(data.wpcFrontPaints[z]).toByte()
+//                    )
                 }
             }
         }

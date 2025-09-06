@@ -35,16 +35,12 @@ import joshuatee.wx.util.UtilityString
 internal object FireDayOne {
 
     val timer = DownloadTimer("FIRE")
-    val polygonBy = mutableMapOf<Int, List<Double>>()
-    private val threatList = listOf(
-        "ELEV",
-        "CRIT",
-        "EXTM"
-    )
-    val colors = intArrayOf(
-        Color.rgb(255, 128, 0),
-        Color.rgb(255, 0, 0),
-        Color.rgb(255, 128, 255),
+    val polygonBy = mutableMapOf<String, List<Double>>()
+    val threatList = listOf("ELEV", "CRIT", "EXTM")
+    val colors = mapOf(
+        "ELEV" to Color.rgb(255, 128, 0),
+        "CRIT" to Color.rgb(255, 0, 0),
+        "EXTM" to Color.rgb(255, 128, 255),
     )
 
     fun get() {
@@ -78,11 +74,10 @@ internal object FireDayOne {
             val html =
                 (GlobalVariables.NWS_SPC_WEBSITE_PREFIX + arealOutlineUrl).getHtmlWithNewLine()
             val htmlChunk = html.parseAcrossLines("... CATEGORICAL ...(.*?&)&")
-            threatList.indices.forEach { threatIndex ->
+            threatList.forEach { threat ->
                 var data = ""
-                val threatLevelCode = threatList[threatIndex]
                 val htmlList =
-                    htmlChunk.parseColumnAcrossLines(threatLevelCode.substring(1) + "(.*?)[A-Z&]")
+                    htmlChunk.parseColumnAcrossLines(threat.substring(1) + "(.*?)[A-Z&]")
                 val warningList = mutableListOf<Double>()
                 htmlList.forEach { polygon ->
                     val coordinates = polygon.parseColumnAcrossLines("([0-9]{8}).*?")
@@ -119,10 +114,10 @@ internal object FireDayOne {
                             warningList.add(x.last())
                             warningList.add(y[x.lastIndex])
                         }
-                        polygonBy[threatIndex] = warningList
+                        polygonBy[threat] = warningList
                     }
                 } else {
-                    polygonBy[threatIndex] = listOf()
+                    polygonBy[threat] = listOf()
                 }
             }
         }

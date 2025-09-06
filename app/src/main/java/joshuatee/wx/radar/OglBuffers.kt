@@ -157,6 +157,15 @@ open class OglBuffers() {
         }
     }
 
+    fun putColor6(color: Int) {
+        putColor(Color.red(color).toByte())
+        putColor(Color.green(color).toByte())
+        putColor(Color.blue(color).toByte())
+        putColor(Color.red(color).toByte())
+        putColor(Color.green(color).toByte())
+        putColor(Color.blue(color).toByte())
+    }
+
     val colorArray: ByteArray
         get() = byteArrayOf(solidColorRed, solidColorGreen, solidColorBlue)
 

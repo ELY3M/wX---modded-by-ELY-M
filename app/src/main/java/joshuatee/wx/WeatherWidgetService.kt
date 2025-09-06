@@ -25,6 +25,7 @@ import android.widget.RemoteViewsService
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.UtilityLocationFragment
 import joshuatee.wx.util.UtilityForecastIcon
+import joshuatee.wx.util.UtilityLog
 
 /**
  * This is the service that provides the factory to be bound to the collection service.
@@ -51,16 +52,17 @@ internal class StackRemoteViewsFactory(private val context: Context) :
         cursor?.close()
     }
 
-    override fun getCount() = if (cursor != null) cursor!!.count else 0
+    override fun getCount() = cursor?.count ?: 0
 
     override fun getViewAt(position: Int): RemoteViews {
         var day = "Unknown Day"
-//        var temp = 0
-        if (cursor!!.moveToPosition(position)) {
-            val dayColIndex = cursor!!.getColumnIndex(WeatherDataProvider.Columns.DAY)
-//            val tempColIndex = cursor!!.getColumnIndex(WeatherDataProvider.Columns.TEMPERATURE)
-            day = cursor!!.getString(dayColIndex)
-//            temp = cursor!!.getInt(tempColIndex)
+        try {
+            if (cursor != null && cursor!!.moveToPosition(position)) {
+                val dayColIndex = cursor!!.getColumnIndex(WeatherDataProvider.Columns.DAY)
+                day = cursor!!.getString(dayColIndex)
+            }
+        } catch (exception: Exception) {
+            UtilityLog.d("wx", "WeatherWidgetService.getViewAt: $exception")
         }
         var t1 = ""
         var t2 = ""
