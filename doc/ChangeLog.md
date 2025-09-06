@@ -2,7 +2,16 @@
 
 # Developer ChangeLog
 
-## 55969 2025_09_03
+## 55971 2025_09_06
+
+* [REF]
+
+## 55970 2025_09_06
+
+* [REF] misc lint
+* [REF] refactor in parts of Nexrad code
+
+## 55969 2025_09_06
 
 * [ADD] In **Settings->Locations** if a Location has a notification of any kind enabled "+Alert" is
   shown in the card. This has been changed to "+Notif" to more clearly represent that this is not
@@ -15,6 +24,7 @@
 ```
 
 * [REF] have SPC SWO/Fire code match desktop ports
+* [REF] misc lint
 
 ## 55968 2025_09_03
 

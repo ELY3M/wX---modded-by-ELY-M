@@ -30,8 +30,6 @@ import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import androidx.core.graphics.drawable.DrawableCompat
@@ -44,32 +42,34 @@ import joshuatee.wx.radar.CanvasCreate
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.radar.NexradUtil
 import joshuatee.wx.ui.UtilityUI
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.createBitmap
 
 object UtilityImg {
 
     fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap): Bitmap =
         layerDrawableToBitmap(
             listOf(
-                BitmapDrawable(context.resources, imageA),
-                BitmapDrawable(context.resources, imageB)
+                imageA.toDrawable(context.resources),
+                imageB.toDrawable(context.resources)
             )
         )
 
     fun addColorBackground(context: Context, bitmap: Bitmap, color: Int): Bitmap =
         layerDrawableToBitmap(
             listOf(
-                ColorDrawable(color),
-                BitmapDrawable(context.resources, bitmap)
+                color.toDrawable(),
+                bitmap.toDrawable(context.resources)
             )
         )
 
-    fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
+    fun getBlankBitmap(): Bitmap = createBitmap(10, 10)
 
     fun getBitmapAddWhiteBackground(context: Context, imgUrl: String): Bitmap =
         layerDrawableToBitmap(
             listOf(
-                ColorDrawable(Color.WHITE),
-                BitmapDrawable(context.resources, imgUrl.getImage())
+                Color.WHITE.toDrawable(),
+                imgUrl.getImage().toDrawable(context.resources)
             )
         )
 
@@ -102,7 +102,7 @@ object UtilityImg {
         50 * Utility.readPrefInt(context, "ANIM_INTERVAL", UIPreferences.ANIMATION_INTERVAL_DEFAULT)
 
     fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable =
-        LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
+        LayerDrawable(arrayOf(bitmap.toDrawable(context.resources)))
 
     fun layerDrawableToBitmap(layers: List<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
@@ -111,7 +111,7 @@ object UtilityImg {
         val height = drawable.intrinsicHeight
         if (width > 0 && height > 0) {
             try {
-                bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
+                bitmap = createBitmap(width, height)
             } catch (_: OutOfMemoryError) {
                 return getBlankBitmap()
             }
@@ -182,7 +182,7 @@ object UtilityImg {
     }
 
     fun scaleBitmap(bitmap: Bitmap, wantedWidth: Int, wantedHeight: Int): Bitmap {
-        val output = Bitmap.createBitmap(wantedWidth, wantedHeight, Config.ARGB_8888)
+        val output = createBitmap(wantedWidth, wantedHeight)
         val canvas = Canvas(output)
         val matrix = Matrix()
         matrix.setScale(
@@ -209,7 +209,7 @@ object UtilityImg {
             bitmap
         } catch (e: Exception) {
             UtilityLog.handleException(e)
-            Bitmap.createBitmap(10, 10, Config.ARGB_8888)
+            createBitmap(10, 10)
         }
 
     // used in UtilityUSImgWX for nexrad
@@ -229,14 +229,13 @@ object UtilityImg {
         bitmap
     } catch (e: Exception) {
         UtilityLog.handleException(e)
-        Bitmap.createBitmap(10, 10, Config.ARGB_8888)
+        createBitmap(10, 10)
     }
 
     fun vectorDrawableToBitmap(context: Context, resourceDrawable: Int, color: Int): Bitmap {
         val drawable = ContextCompat.getDrawable(context, resourceDrawable)!!
         DrawableCompat.setTint(drawable, color)
-        val bitmap =
-            Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Config.ARGB_8888)
+        val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
         val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
@@ -256,7 +255,7 @@ object UtilityImg {
         if (width == 0 || height == 0) {
             return getBlankBitmap()
         }
-        combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
+        combinedImage = createBitmap(width, height)
         val comboImage = Canvas(combinedImage)
         var workingHeight = 0.0f
         images.forEach {
@@ -279,7 +278,7 @@ object UtilityImg {
         if (width == 0 || height == 0) {
             return getBlankBitmap()
         }
-        combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
+        combinedImage = createBitmap(width, height)
         val comboImage = Canvas(combinedImage)
         var workingHeight = 0.0f
         images.forEach {

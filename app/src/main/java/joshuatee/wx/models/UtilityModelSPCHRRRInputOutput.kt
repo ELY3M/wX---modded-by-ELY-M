@@ -25,8 +25,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import java.util.Locale
 import joshuatee.wx.util.UtilityImg
@@ -38,6 +36,7 @@ import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.parse
 import joshuatee.wx.parseColumn
 import joshuatee.wx.util.To
+import androidx.core.graphics.drawable.toDrawable
 
 internal object UtilityModelSpcHrrrInputOutput {
 
@@ -77,8 +76,8 @@ internal object UtilityModelSpcHrrrInputOutput {
                     time
                 ) + "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
         bitmaps.add(UtilityImg.eraseBackground(backgroundUrl.getImage(), -1))
-        layers.add(ColorDrawable(Color.WHITE))
-        layers += bitmaps.map { BitmapDrawable(context.resources, it) }
+        layers.add(Color.WHITE.toDrawable())
+        layers += bitmaps.map { it.toDrawable(context.resources) }
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 

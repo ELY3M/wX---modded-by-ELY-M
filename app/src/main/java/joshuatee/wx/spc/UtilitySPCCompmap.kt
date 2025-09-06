@@ -24,31 +24,30 @@ package joshuatee.wx.spc
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import joshuatee.wx.getInputStream
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.external.ExternalGifDecoder
 import joshuatee.wx.util.UtilityImg
+import androidx.core.graphics.drawable.toDrawable
 
 internal object UtilitySpcCompmap {
 
     fun getImage(context: Context, layerString: String): Bitmap {
         val drawables = mutableListOf<Drawable>()
         val layers = layerString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        drawables.add(ColorDrawable(Color.WHITE))
+        drawables.add(Color.WHITE.toDrawable())
         if (layerString != "") {
             layers.indices.forEach {
                 layers[it] = layers[it].replace("a", "")
                 val gd = ExternalGifDecoder()
                 gd.read(("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/compmap/" + layers[it] + ".gif").getInputStream())
-                drawables.add(BitmapDrawable(context.resources, gd.bitmap))
+                drawables.add(gd.bitmap.toDrawable(context.resources))
             }
         } else {
             val externalGifDecoder = ExternalGifDecoder()
             externalGifDecoder.read(("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/compmap/" + "basemap" + ".gif").getInputStream())
-            drawables.add(BitmapDrawable(context.resources, externalGifDecoder.bitmap))
+            drawables.add(externalGifDecoder.bitmap.toDrawable(context.resources))
         }
         return UtilityImg.layerDrawableToBitmap(drawables)
     }

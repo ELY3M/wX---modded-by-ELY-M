@@ -23,7 +23,6 @@ package joshuatee.wx.models
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import java.util.Locale
 import joshuatee.wx.util.UtilityImg
@@ -34,6 +33,7 @@ import joshuatee.wx.getImage
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.parse
 import joshuatee.wx.safeGet
+import androidx.core.graphics.drawable.toDrawable
 
 internal object UtilityModelSpcHrefInputOutput {
 
@@ -117,10 +117,10 @@ internal object UtilityModelSpcHrefInputOutput {
         val layers = mutableListOf<Drawable>()
         val resIds = listOf(R.drawable.spc_white_1050px, R.drawable.noaa_overlay_1050px)
         resIds.forEach {
-            layers.add(BitmapDrawable(context.resources, UtilityImg.loadBitmap(context, it, false)))
+            layers.add(UtilityImg.loadBitmap(context, it, false).toDrawable(context.resources))
         }
         bitmaps.forEach {
-            layers.add(BitmapDrawable(context.resources, it))
+            layers.add(it.toDrawable(context.resources))
         }
         return UtilityImg.layerDrawableToBitmap(layers)
     }

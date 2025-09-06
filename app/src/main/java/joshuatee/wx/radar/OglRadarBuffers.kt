@@ -21,6 +21,7 @@
 
 package joshuatee.wx.radar
 
+import android.graphics.Color
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import joshuatee.wx.util.UtilityLog
@@ -89,5 +90,26 @@ class OglRadarBuffers(var bgColor: Int) : OglBuffers() {
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
+    }
+
+    fun putColorsByIndex(colorIndex: Int, level: Int) {
+        colorBuffer.put(
+            colorIndex,
+            colormap.redValues.get(level and 0xFF)
+        )
+        colorBuffer.put(
+            colorIndex + 1,
+            colormap.greenValues.get(level and 0xFF)
+        )
+        colorBuffer.put(
+            colorIndex + 2,
+            colormap.blueValues.get(level and 0xFF)
+        )
+    }
+
+    fun putBackgroundColor() {
+        colormap.redValues.put(0, Color.red(bgColor).toByte())
+        colormap.greenValues.put(0, Color.green(bgColor).toByte())
+        colormap.blueValues.put(0, Color.blue(bgColor).toByte())
     }
 }

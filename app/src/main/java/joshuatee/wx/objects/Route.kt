@@ -60,6 +60,7 @@ import joshuatee.wx.wpc.NationalImagesActivity
 import joshuatee.wx.wpc.RainfallOutlookActivity
 import joshuatee.wx.wpc.RainfallOutlookSummaryActivity
 import joshuatee.wx.wpc.NationalTextActivity
+import androidx.core.net.toUri
 
 //
 // Used to start another activity
@@ -524,7 +525,7 @@ class Route() {
         }
 
         fun web(context: Context, url: String) {
-            Route(context, Intent.ACTION_VIEW, Uri.parse(url))
+            Route(context, Intent.ACTION_VIEW, url.toUri())
         }
 
         fun webView(context: Context, url: String, title: String) {

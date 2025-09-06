@@ -23,7 +23,6 @@ package joshuatee.wx.radar
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.result.ActivityResult
@@ -36,6 +35,7 @@ import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.ui.ObjectToolbar
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.UtilityLog
+import androidx.core.net.toUri
 
 abstract class VideoRecordActivity : AppCompatActivity() {
 
@@ -104,7 +104,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         if (!Settings.canDrawOverlays(this)) {
             UtilityLog.d("wx", "checkDrawOverlayPermission - perm check")
             val intent =
-                Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+                Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "package:$packageName".toUri())
 //            startActivityForResult(intent, REQUEST_CODE_PERM)
             startForResult.launch(intent)
         } else {

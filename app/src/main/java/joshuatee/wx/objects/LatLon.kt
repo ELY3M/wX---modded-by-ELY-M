@@ -106,23 +106,23 @@ class LatLon() {
             yStr = lonNum.toString()
         }
 
-    var latString: String
+    val latString: String
         get() {
             return xStr
         }
-        set(newValue) {
-            xStr = newValue
-            latNum = To.double(newValue)
-        }
+//        set(newValue) {
+//            xStr = newValue
+//            latNum = To.double(newValue)
+//        }
 
-    var lonString: String
+    val lonString: String
         get() {
             return yStr
         }
-        set(newValue) {
-            yStr = newValue
-            lonNum = To.double(newValue)
-        }
+//        set(newValue) {
+//            yStr = newValue
+//            lonNum = To.double(newValue)
+//        }
 
     private fun latInRadians() = UtilityMath.deg2rad(lat)
 

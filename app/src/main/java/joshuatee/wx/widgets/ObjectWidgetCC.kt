@@ -35,6 +35,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityForecastIcon
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityTimeSunMoon
+import androidx.core.graphics.scale
 
 class ObjectWidgetCC(context: Context) {
 
@@ -121,8 +122,7 @@ class ObjectWidgetCC(context: Context) {
         val matrix = Matrix()
         matrix.postRotate(windBardRotate, 100f, 100f)
         var rotatedWb = Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
-        rotatedWb = Bitmap.createScaledBitmap(
-            rotatedWb,
+        rotatedWb = rotatedWb.scale(
             (wbIcon.width * scaleFactor).toInt(),
             (wbIcon.height * scaleFactor).toInt(),
             false

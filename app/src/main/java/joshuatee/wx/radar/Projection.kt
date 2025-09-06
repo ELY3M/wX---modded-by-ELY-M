@@ -47,6 +47,18 @@ object Projection {
             )) * pn.oneDegreeScaleFactor)) + pn.yCenter
         )
 
+    fun computeMercatorNumbersF(x: Double, y: Double, pn: ProjectionNumbers): FloatArray =
+        floatArrayOf(
+            ((-1.0 * ((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter).toFloat(),
+            ((-1.0 * ((180.0 / PI * log(
+                tan(PI / 4.0 + x * (PI / 180.0) / 2.0),
+                E
+            ) - 180.0 / PI * log(
+                tan(PI / 4.0 + pn.xDbl * (PI / 180.0) / 2.0),
+                E
+            )) * pn.oneDegreeScaleFactor)) + pn.yCenter).toFloat()
+        )
+
     // nexrad widget storm info
     fun computeMercatorNumbers(x: Float, y: Float, pn: ProjectionNumbers): List<Float> =
         listOf(

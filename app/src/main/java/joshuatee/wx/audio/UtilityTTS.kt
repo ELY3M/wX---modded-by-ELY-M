@@ -23,7 +23,6 @@ package joshuatee.wx.audio
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
@@ -36,6 +35,7 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.math.min
+import androidx.core.net.toUri
 
 object UtilityTts {
 
@@ -211,7 +211,7 @@ object UtilityTts {
     private fun playMediaPlayerFile(context: Context, fileNum: Int) {
         mediaPlayer?.reset()
         val fileName = File(context.filesDir, FILENAME + fileNum.toString()).absolutePath
-        val uri = Uri.parse("file://$fileName")
+        val uri = "file://$fileName".toUri()
         try {
             mediaPlayer?.setDataSource(context, uri)
             mediaPlayer?.prepare()

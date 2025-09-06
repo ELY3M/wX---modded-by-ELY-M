@@ -21,8 +21,8 @@
 
 package joshuatee.wx.models
 
-import android.util.SparseArray
-import joshuatee.wx.util.Group
+//import android.util.SparseArray
+//import joshuatee.wx.util.Group
 
 @Suppress("SpellCheckingInspection")
 internal object UtilityModelWpcGefsInterface {
@@ -39,9 +39,9 @@ internal object UtilityModelWpcGefsInterface {
                 ObjectMenuTitle("Other", 46)
         )*/
 
-    var shortCodes = Array(13) { Array(50) { "" } }
-    var longCodes = Array(13) { Array(50) { "" } }
-    val groups = SparseArray<Group>()
+//    var shortCodes = Array(13) { Array(50) { "" } }
+//    var longCodes = Array(13) { Array(50) { "" } }
+//    val groups = SparseArray<Group>()
 
     /*    internal fun createData() {
             var k = 0

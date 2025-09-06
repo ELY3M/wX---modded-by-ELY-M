@@ -56,12 +56,12 @@ open class ExternalGlobalCoordinates(
 
     constructor(ec: ExternalGlobalCoordinates) : this(ec.latitude, ec.longitude)
 
-    var latitude: Double
+    val latitude: Double
         get() = mLatitude
-        set(latitude) {
-            mLatitude = latitude
-            canonicalize()
-        }
+//        set(latitude) {
+//            mLatitude = latitude
+//            canonicalize()
+//        }
     /**
      * Get longitude.
      *
@@ -72,12 +72,12 @@ open class ExternalGlobalCoordinates(
      * longitude is western hemisphere.
      *
      */
-    var longitude: Double
+    val longitude: Double
         get() = mLongitude
-        set(longitude) {
-            mLongitude = longitude
-            canonicalize()
-        }
+//        set(longitude) {
+//            mLongitude = longitude
+//            canonicalize()
+//        }
 
     /**
      * Canonicalize the current latitude and longitude values such that:

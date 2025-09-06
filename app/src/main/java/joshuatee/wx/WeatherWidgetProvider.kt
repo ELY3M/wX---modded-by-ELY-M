@@ -25,7 +25,6 @@ import android.content.ComponentName
 import android.content.ContentValues
 import android.content.ContentUris
 import android.database.ContentObserver
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -38,6 +37,7 @@ import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.widgets.UtilityWidget
 import java.util.Random
+import androidx.core.net.toUri
 
 /**
  * Our data observer just notifies an update for all weather widgets when it detects a change.
@@ -195,7 +195,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                 // embed the appWidgetId via the data otherwise it will be ignored.
                 val intent = Intent(context, WeatherWidgetService::class.java)
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
+                intent.data = intent.toUri(Intent.URI_INTENT_SCHEME).toUri()
                 remoteViews = RemoteViews(context.packageName, R.layout.widget_7day_layout)
                 remoteViews.setRemoteAdapter(R.id.weather_list, intent)
                 val requestId = ObjectDateTime.currentTimeMillis().toInt()

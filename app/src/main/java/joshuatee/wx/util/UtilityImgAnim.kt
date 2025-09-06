@@ -24,9 +24,9 @@ package joshuatee.wx.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.BitmapDrawable
 import joshuatee.wx.getImage
 import joshuatee.wx.ui.TouchImage
+import androidx.core.graphics.drawable.toDrawable
 
 object UtilityImgAnim {
 
@@ -43,7 +43,7 @@ object UtilityImgAnim {
                 if (index == bitmaps.lastIndex) {
                     delay *= 3
                 }
-                animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
+                animationDrawable.addFrame(bitmap.toDrawable(context.resources), delay)
             }
         }
         return animationDrawable
@@ -60,7 +60,7 @@ object UtilityImgAnim {
                 if (index == bitmaps.lastIndex) {
                     delay *= 3
                 }
-                animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
+                animationDrawable.addFrame(bitmap.toDrawable(context.resources), delay)
             }
         }
         return animationDrawable

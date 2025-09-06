@@ -135,6 +135,23 @@ open class OglBuffers() {
         }
     }
 
+    fun putFloatsInvertY(newValue1: Float, newValue2: Float) {
+        try {
+            floatBuffer.putFloat(newValue1)
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
+        }
+        try {
+            floatBuffer.putFloat(newValue2 * -1.0f)
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
+        }
+    }
+
+    fun putFloatsDInvertY(newValue1: Double, newValue2: Double) {
+        putFloatsInvertY(newValue1.toFloat(), newValue2.toFloat())
+    }
+
     fun putFloat(index: Int, newValue: Float) {
         floatBuffer.putFloat(index, newValue)
     }

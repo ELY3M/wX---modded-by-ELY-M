@@ -50,8 +50,9 @@ class CapAlert {
     var url = ""
         private set
     var event = ""
-    var effective = ""
-    var expires = ""
+
+    //    var effective = ""
+//    var expires = ""
     var points = listOf<String>()
     private var nwsHeadLine = ""
     var windThreat = ""
@@ -91,8 +92,8 @@ class CapAlert {
                 eventText.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
             capAlert.area = eventText.parse("<cap:areaDesc>(.*?)</cap:areaDesc>")
             capAlert.area = capAlert.area.replace("&apos;", "'")
-            capAlert.effective = eventText.parse("<cap:effective>(.*?)</cap:effective>")
-            capAlert.expires = eventText.parse("<cap:expires>(.*?)</cap:expires>")
+//            capAlert.effective = eventText.parse("<cap:effective>(.*?)</cap:effective>")
+//            capAlert.expires = eventText.parse("<cap:expires>(.*?)</cap:expires>")
             capAlert.event = eventText.parse("<cap:event>(.*?)</cap:event>")
             capAlert.vtec = eventText.parse("<valueName>VTEC</valueName>.*?<value>(.*?)</value>")
             capAlert.zones = eventText.parse("<valueName>UGC</valueName>.*?<value>(.*?)</value>")

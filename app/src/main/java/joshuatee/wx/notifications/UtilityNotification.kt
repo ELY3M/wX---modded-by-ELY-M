@@ -26,7 +26,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.audio.UtilityTts
 import android.app.NotificationChannel
@@ -34,6 +33,8 @@ import android.graphics.Color
 import android.media.AudioAttributes
 import joshuatee.wx.settings.NotificationPreferences
 import joshuatee.wx.settings.UIPreferences
+import androidx.core.net.toUri
+import androidx.core.graphics.scale
 
 object UtilityNotification {
 
@@ -52,7 +53,7 @@ object UtilityNotification {
             NotificationChannel("default", "Channel name", NotificationManager.IMPORTANCE_HIGH)
         channel.description = "wX weather"
         channel.setSound(
-            Uri.parse(NotificationPreferences.notifSoundUri), AudioAttributes.Builder()
+            NotificationPreferences.notifSoundUri.toUri(), AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                 .build()
         )
@@ -107,7 +108,7 @@ object UtilityNotification {
                     .setOnlyAlertOnce(true)
                     .setAutoCancel(NotificationPreferences.alertAutocancel)
                     .setColor(UIPreferences.colorNotif)
-                    .setSound(Uri.parse(NotificationPreferences.notifSoundUri)) // was Settings.System.DEFAULT_NOTIFICATION_URI
+                    .setSound(NotificationPreferences.notifSoundUri.toUri()) // was Settings.System.DEFAULT_NOTIFICATION_URI
                     .setPriority(objectNotification.priority)
                     .addAction(
                         objectNotification.iconAction,
@@ -172,7 +173,7 @@ object UtilityNotification {
             context.resources.getDimension(android.R.dimen.notification_large_icon_height).toInt()
         val width =
             context.resources.getDimension(android.R.dimen.notification_large_icon_width).toInt()
-        val bitmap = Bitmap.createScaledBitmap(iconAlert, width, height, false)
+        val bitmap = iconAlert.scale(width, height, false)
         val notification: Notification
         if (sound) {
             notification = NotificationCompat.BigTextStyle(
@@ -183,7 +184,7 @@ object UtilityNotification {
                     .setOnlyAlertOnce(true)
                     .setAutoCancel(false)
                     .setColor(UIPreferences.colorNotif)
-                    .setSound(Uri.parse(NotificationPreferences.notifSoundUri))
+                    .setSound(NotificationPreferences.notifSoundUri.toUri())
                     .setPriority(prio)
                     .setSmallIcon(smallIcon)
                     .setLargeIcon(bitmap)

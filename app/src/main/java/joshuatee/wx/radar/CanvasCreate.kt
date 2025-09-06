@@ -23,10 +23,7 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Bitmap.Config
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import joshuatee.wx.getInputStream
 import joshuatee.wx.objects.ProjectionType
@@ -35,6 +32,8 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.R
 import joshuatee.wx.settings.RadarPreferences
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.createBitmap
 
 object CanvasCreate {
 
@@ -65,9 +64,9 @@ object CanvasCreate {
             }
         }
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
+        val colorDrawable = RadarPreferences.nexradBackgroundColor.toDrawable()
         try {
-            var bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
+            var bitmapCanvas = createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT)
             if (!product.startsWith("L2")) {
                 // TODO FIXME method to detect 4bit project?
                 if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith(
@@ -84,7 +83,7 @@ object CanvasCreate {
             CanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, CITY_SIZE)
             bitmapCanvas = UtilityImg.drawText(context, bitmapCanvas)
             layers.add(colorDrawable)
-            layers.add(BitmapDrawable(context.resources, bitmapCanvas))
+            layers.add(bitmapCanvas.toDrawable(context.resources))
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {
@@ -106,8 +105,8 @@ object CanvasCreate {
             scaleType = ProjectionType.WX_RENDER_48
         }
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = ColorDrawable(RadarPreferences.nexradBackgroundColor)
-        var bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
+        val colorDrawable = RadarPreferences.nexradBackgroundColor.toDrawable()
+        var bitmapCanvas = createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT)
         if (!product.startsWith("L2")) {
             // TODO FIXME method to detect 4bit project?
             if (product.contains("N0R") || product.contains("N0S") || product.contains("N0V") || product.startsWith(
@@ -124,7 +123,7 @@ object CanvasCreate {
         CanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, radarSite, CITY_SIZE)
         bitmapCanvas = UtilityImg.drawText(context, bitmapCanvas)
         layers.add(colorDrawable)
-        layers.add(BitmapDrawable(context.resources, bitmapCanvas))
+        layers.add(bitmapCanvas.toDrawable(context.resources))
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
@@ -136,18 +135,18 @@ object CanvasCreate {
         )
         val layers = mutableListOf<Drawable>()
         val colorDrawable = if (RadarPreferences.blackBg) {
-            ColorDrawable(Color.BLACK)
+            Color.BLACK.toDrawable()
         } else {
-            ColorDrawable(Color.WHITE)
+            Color.WHITE.toDrawable()
         }
         try {
-            val bitmapCanvas = Bitmap.createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT, Config.ARGB_8888)
+            val bitmapCanvas = createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT)
             CanvasRadial8Bit.decodeAndPlot(
                 context, bitmapCanvas, fileName, NexradUtil.productCodeStringToCode[product]
                     ?: "N0Q"
             )
             layers.add(colorDrawable)
-            layers.add(BitmapDrawable(context.resources, bitmapCanvas))
+            layers.add(bitmapCanvas.toDrawable(context.resources))
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {

@@ -27,6 +27,7 @@ import android.view.View
 import joshuatee.wx.util.ImageMap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.radar.NexradRenderTextObject
+import androidx.core.view.isGone
 
 class ObjectImageMap(
     val activity: Activity,
@@ -48,7 +49,7 @@ class ObjectImageMap(
         if (toolbarAlpha == 0) {
             isRadarWithTransparent = true
         }
-        if (map.visibility == View.GONE) {
+        if (map.isGone) {
             setupMap()
             if (isRadarWithTransparent) {
                 if (UtilityUI.isThemeAllWhite()) {

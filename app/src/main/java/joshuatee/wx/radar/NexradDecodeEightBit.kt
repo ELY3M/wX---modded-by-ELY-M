@@ -22,7 +22,6 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import android.graphics.Color
 import java.nio.ByteBuffer
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
@@ -37,13 +36,11 @@ internal object NexradDecodeEightBit {
         try {
             val dataInputStream = UtilityIO.uncompress(context, radarBuffers.fileName)
             dataInputStream.skipBytes(30)
-            radarBuffers.colormap.redValues.put(0, Color.red(radarBuffers.bgColor).toByte())
-            radarBuffers.colormap.greenValues.put(0, Color.green(radarBuffers.bgColor).toByte())
-            radarBuffers.colormap.blueValues.put(0, Color.blue(radarBuffers.bgColor).toByte())
+            radarBuffers.putBackgroundColor()
             radarBuffers.floatBuffer.position(0)
             radarBuffers.colorBuffer.position(0)
             var colorIndex = 0
-            var radialIndex = 0
+//            var radialIndex = 0
             var angleNext = 0.0f
             var angle0 = 0.0f
             val numberOfRadials = radarBuffers.numberOfRadials
@@ -80,40 +77,39 @@ internal object NexradDecodeEightBit {
                     if (curLevel == level) {
                         levelCount += 1
                     } else {
-                        radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVCos)
-                        radarBuffers.floatBuffer.putFloat(radialIndex + 4, binStart * angleVSin)
-                        radarBuffers.floatBuffer.putFloat(
-                            radialIndex + 8,
-                            (binStart + radarBuffers.binSize * levelCount) * angleVCos
-                        )
-                        radarBuffers.floatBuffer.putFloat(
-                            radialIndex + 12,
-                            (binStart + radarBuffers.binSize * levelCount) * angleVSin
-                        )
-                        radarBuffers.floatBuffer.putFloat(
-                            radialIndex + 16,
-                            (binStart + radarBuffers.binSize * levelCount) * angleCos
-                        )
-                        radarBuffers.floatBuffer.putFloat(
-                            radialIndex + 20,
-                            (binStart + radarBuffers.binSize * levelCount) * angleSin
-                        )
-                        radarBuffers.floatBuffer.putFloat(radialIndex + 24, binStart * angleCos)
-                        radarBuffers.floatBuffer.putFloat(radialIndex + 28, binStart * angleSin)
-                        radialIndex += 32
-                        for (unused in 0..3) {
-                            radarBuffers.colorBuffer.put(
-                                colorIndex,
-                                radarBuffers.colormap.redValues.get(level.toInt() and 0xFF)
-                            )
-                            radarBuffers.colorBuffer.put(
-                                colorIndex + 1,
-                                radarBuffers.colormap.greenValues.get(level.toInt() and 0xFF)
-                            )
-                            radarBuffers.colorBuffer.put(
-                                colorIndex + 2,
-                                radarBuffers.colormap.blueValues.get(level.toInt() and 0xFF)
-                            )
+                        radarBuffers.floatBuffer.putFloat(binStart * angleVCos)
+                        radarBuffers.floatBuffer.putFloat(binStart * angleVSin)
+                        radarBuffers.floatBuffer.putFloat((binStart + radarBuffers.binSize * levelCount) * angleVCos)
+                        radarBuffers.floatBuffer.putFloat((binStart + radarBuffers.binSize * levelCount) * angleVSin)
+                        radarBuffers.floatBuffer.putFloat((binStart + radarBuffers.binSize * levelCount) * angleCos)
+                        radarBuffers.floatBuffer.putFloat((binStart + radarBuffers.binSize * levelCount) * angleSin)
+                        radarBuffers.floatBuffer.putFloat(binStart * angleCos)
+                        radarBuffers.floatBuffer.putFloat(binStart * angleSin)
+
+//                        radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVCos)
+//                        radarBuffers.floatBuffer.putFloat(radialIndex + 4, binStart * angleVSin)
+//                        radarBuffers.floatBuffer.putFloat(
+//                            radialIndex + 8,
+//                            (binStart + radarBuffers.binSize * levelCount) * angleVCos
+//                        )
+//                        radarBuffers.floatBuffer.putFloat(
+//                            radialIndex + 12,
+//                            (binStart + radarBuffers.binSize * levelCount) * angleVSin
+//                        )
+//                        radarBuffers.floatBuffer.putFloat(
+//                            radialIndex + 16,
+//                            (binStart + radarBuffers.binSize * levelCount) * angleCos
+//                        )
+//                        radarBuffers.floatBuffer.putFloat(
+//                            radialIndex + 20,
+//                            (binStart + radarBuffers.binSize * levelCount) * angleSin
+//                        )
+//                        radarBuffers.floatBuffer.putFloat(radialIndex + 24, binStart * angleCos)
+//                        radarBuffers.floatBuffer.putFloat(radialIndex + 28, binStart * angleSin)
+//                        radialIndex += 32
+
+                        repeat(4) {
+                            radarBuffers.putColorsByIndex(colorIndex, level.toInt())
                             colorIndex += 3
                         }
                         totalBins += 1
@@ -138,13 +134,11 @@ internal object NexradDecodeEightBit {
         binBuff: ByteBuffer,
         radialStart: ByteBuffer
     ): Int {
-        radarBuffers.colormap.redValues.put(0, Color.red(radarBuffers.bgColor).toByte())
-        radarBuffers.colormap.greenValues.put(0, Color.green(radarBuffers.bgColor).toByte())
-        radarBuffers.colormap.blueValues.put(0, Color.blue(radarBuffers.bgColor).toByte())
+        radarBuffers.putBackgroundColor()
         var totalBins = 0
         var binIndex = 0
         var colorIndex = 0
-        var radialIndex = 0
+//        var radialIndex = 0
         val radarBlackHole: Float
         val radarBlackHoleAdd: Float
         when (radarBuffers.productCode.toInt()) {
@@ -178,40 +172,39 @@ internal object NexradDecodeEightBit {
                 if (curLevel == level) {
                     levelCount += 1
                 } else {
-                    radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVCos)
-                    radarBuffers.floatBuffer.putFloat(radialIndex + 4, binStart * angleVSin)
-                    radarBuffers.floatBuffer.putFloat(
-                        radialIndex + 8,
-                        (binStart + radarBuffers.binSize * levelCount) * angleVCos
-                    )
-                    radarBuffers.floatBuffer.putFloat(
-                        radialIndex + 12,
-                        (binStart + radarBuffers.binSize * levelCount) * angleVSin
-                    )
-                    radarBuffers.floatBuffer.putFloat(
-                        radialIndex + 16,
-                        (binStart + radarBuffers.binSize * levelCount) * angleCos
-                    )
-                    radarBuffers.floatBuffer.putFloat(
-                        radialIndex + 20,
-                        (binStart + radarBuffers.binSize * levelCount) * angleSin
-                    )
-                    radarBuffers.floatBuffer.putFloat(radialIndex + 24, binStart * angleCos)
-                    radarBuffers.floatBuffer.putFloat(radialIndex + 28, binStart * angleSin)
-                    radialIndex += 32
-                    for (unused in 0..3) {
-                        radarBuffers.colorBuffer.put(
-                            colorIndex,
-                            radarBuffers.colormap.redValues.get(level and 0xFF)
-                        )
-                        radarBuffers.colorBuffer.put(
-                            colorIndex + 1,
-                            radarBuffers.colormap.greenValues.get(level and 0xFF)
-                        )
-                        radarBuffers.colorBuffer.put(
-                            colorIndex + 2,
-                            radarBuffers.colormap.blueValues.get(level and 0xFF)
-                        )
+
+//                    radarBuffers.floatBuffer.putFloat(radialIndex, binStart * angleVCos)
+//                    radarBuffers.floatBuffer.putFloat(radialIndex + 4, binStart * angleVSin)
+//                    radarBuffers.floatBuffer.putFloat(
+//                        radialIndex + 8,
+//                        (binStart + radarBuffers.binSize * levelCount) * angleVCos
+//                    )
+//                    radarBuffers.floatBuffer.putFloat(
+//                        radialIndex + 12,
+//                        (binStart + radarBuffers.binSize * levelCount) * angleVSin
+//                    )
+//                    radarBuffers.floatBuffer.putFloat(
+//                        radialIndex + 16,
+//                        (binStart + radarBuffers.binSize * levelCount) * angleCos
+//                    )
+//                    radarBuffers.floatBuffer.putFloat(
+//                        radialIndex + 20,
+//                        (binStart + radarBuffers.binSize * levelCount) * angleSin
+//                    )
+//                    radarBuffers.floatBuffer.putFloat(radialIndex + 24, binStart * angleCos)
+//                    radarBuffers.floatBuffer.putFloat(radialIndex + 28, binStart * angleSin)
+//                    radialIndex += 32
+
+                    radarBuffers.floatBuffer.putFloat(binStart * angleVCos)
+                    radarBuffers.floatBuffer.putFloat(binStart * angleVSin)
+                    radarBuffers.floatBuffer.putFloat((binStart + radarBuffers.binSize * levelCount) * angleVCos)
+                    radarBuffers.floatBuffer.putFloat((binStart + radarBuffers.binSize * levelCount) * angleVSin)
+                    radarBuffers.floatBuffer.putFloat((binStart + radarBuffers.binSize * levelCount) * angleCos)
+                    radarBuffers.floatBuffer.putFloat((binStart + radarBuffers.binSize * levelCount) * angleSin)
+                    radarBuffers.floatBuffer.putFloat(binStart * angleCos)
+                    radarBuffers.floatBuffer.putFloat(binStart * angleSin)
+                    repeat(4) {
+                        radarBuffers.putColorsByIndex(colorIndex, level)
                         colorIndex += 3
                     }
                     totalBins += 1

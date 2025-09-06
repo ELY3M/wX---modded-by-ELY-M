@@ -24,6 +24,7 @@ import android.database.MatrixCursor
 import android.net.Uri
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.util.To
+import androidx.core.net.toUri
 
 /**
  * A dummy class that we are going to use internally to store weather data.  Generally, this data
@@ -109,7 +110,7 @@ class WeatherDataProvider : ContentProvider() {
 
     companion object {
         val CONTENT_URI: Uri =
-            Uri.parse("content://${GlobalVariables.PACKAGE_NAME}.weatherlistwidget.provider")
+            "content://${GlobalVariables.PACKAGE_NAME}.weatherlistwidget.provider".toUri()
 
         /**
          * Generally, this data will be stored in an external and persistent location (ie. File,

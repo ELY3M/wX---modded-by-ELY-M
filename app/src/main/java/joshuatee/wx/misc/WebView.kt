@@ -23,7 +23,6 @@ package joshuatee.wx.misc
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -35,6 +34,7 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.Route
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.UtilityUI
+import androidx.core.net.toUri
 
 class WebView : BaseActivity() {
 
@@ -96,7 +96,7 @@ class WebView : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_browser -> {
-            Route(this, Intent.ACTION_VIEW, Uri.parse(url))
+            Route(this, Intent.ACTION_VIEW, url.toUri())
             true
         }
 

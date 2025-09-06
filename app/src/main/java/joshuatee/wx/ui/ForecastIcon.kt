@@ -28,6 +28,7 @@ import android.graphics.Paint
 import joshuatee.wx.R
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityNwsIcon
+import androidx.core.graphics.createBitmap
 
 class ForecastIcon {
 
@@ -41,7 +42,7 @@ class ForecastIcon {
 
     constructor(context: Context, weatherCondition: String) {
 //        this.context = context
-        bitmap = Bitmap.createBitmap(DIMENSIONS_INT, DIMENSIONS_INT, Bitmap.Config.ARGB_8888)
+        bitmap = createBitmap(DIMENSIONS_INT, DIMENSIONS_INT)
         canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
         val fileName = UtilityNwsIcon.iconMap["$weatherCondition.png"] ?: nullImage
@@ -62,7 +63,7 @@ class ForecastIcon {
         } else {
             4
         }
-        bitmap = Bitmap.createBitmap(DIMENSIONS_INT, DIMENSIONS_INT, Bitmap.Config.ARGB_8888)
+        bitmap = createBitmap(DIMENSIONS_INT, DIMENSIONS_INT)
         canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
         val fileNameLeft = UtilityNwsIcon.iconMap["$leftWeatherCondition.png"] ?: nullImage
@@ -139,7 +140,7 @@ class ForecastIcon {
         private const val MIDDLE_POINT_INT = 45
         private const val Y_TEXT = 84.0f
 
-        fun blankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+        fun blankBitmap(): Bitmap = createBitmap(10, 10)
     }
 }
 

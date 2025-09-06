@@ -23,10 +23,10 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import joshuatee.wx.R
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.TextSize
+import androidx.core.net.toUri
 
 class CanadaLegal(context: Context, box: VBox, url: String) {
 
@@ -36,7 +36,7 @@ class CanadaLegal(context: Context, box: VBox, url: String) {
         with(text) {
             refreshTextSize(TextSize.SMALL)
             center()
-            connect { Route(context, Intent.ACTION_VIEW, Uri.parse(url)) }
+            connect { Route(context, Intent.ACTION_VIEW, url.toUri()) }
             text = context.resources.getText(R.string.main_screen_ca_disclaimer).toString()
             box.addWidget(this)
         }

@@ -25,7 +25,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.common.GlobalVariables
@@ -33,6 +32,7 @@ import joshuatee.wx.getHtml
 import joshuatee.wx.getImage
 import joshuatee.wx.parseColumn
 import joshuatee.wx.ui.ObjectToolbar
+import androidx.core.graphics.drawable.toDrawable
 
 object UtilitySpcMesoInputOutput {
 
@@ -64,7 +64,7 @@ object UtilitySpcMesoInputOutput {
         val imgUrl =
             "${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
         val bitmap = imgUrl.getImage()
-        drawables.add(ColorDrawable(Color.WHITE))
+        drawables.add(Color.WHITE.toDrawable())
         if (param == "hodo" || param.startsWith("skewt")) {
             layers[SpcMesoLayerType.Radar]!!.isEnabled = true
         }
@@ -79,7 +79,7 @@ object UtilitySpcMesoInputOutput {
                 drawables.add(getDrawable(context, layers[it]!!.getUrl(sector)))
             }
         }
-        drawables.add(BitmapDrawable(context.resources, bitmap))
+        drawables.add(bitmap.toDrawable(context.resources))
         listOf(SpcMesoLayerType.Outlook, SpcMesoLayerType.Watwarn).forEach {
             if (layers[it]!!.isEnabled) {
                 drawables.add(getDrawable(context, layers[it]!!.getUrl(sector)))
@@ -89,7 +89,7 @@ object UtilitySpcMesoInputOutput {
     }
 
     private fun getDrawable(context: Context, url: String): BitmapDrawable =
-        BitmapDrawable(context.resources, UtilityImg.eraseBackground(url.getImage(), -1))
+        UtilityImg.eraseBackground(url.getImage(), -1).toDrawable(context.resources)
 
     fun getAnimation(product: String, sector: String, frameCount: Int): List<String> {
         val timeList =

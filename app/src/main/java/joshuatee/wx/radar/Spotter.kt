@@ -62,7 +62,7 @@ class Spotter internal constructor(
     var note = ""
     var firstName = ""
     var lastName = ""	
-    private var lastNameSort = ""
+    //private var lastNameSort = ""
     val latLon = LatLon(lat, lon)
 
     init {

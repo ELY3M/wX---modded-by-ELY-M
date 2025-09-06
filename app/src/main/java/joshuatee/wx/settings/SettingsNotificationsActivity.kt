@@ -50,6 +50,7 @@ import joshuatee.wx.ui.Switch
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.util.Utility
+import androidx.core.net.toUri
 
 class SettingsNotificationsActivity : BaseActivity() {
 
@@ -229,7 +230,7 @@ class SettingsNotificationsActivity : BaseActivity() {
     private fun notifSoundPicker() {
         var uri: Uri? = null
         if (NotificationPreferences.notifSoundUri != "") {
-            uri = Uri.parse(NotificationPreferences.notifSoundUri)
+            uri = NotificationPreferences.notifSoundUri.toUri()
         }
         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)

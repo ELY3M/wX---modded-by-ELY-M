@@ -23,7 +23,6 @@ package joshuatee.wx.objects
 
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.BitmapDrawable
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.getImage
@@ -32,6 +31,7 @@ import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.ui.TouchImage
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
+import androidx.core.graphics.drawable.toDrawable
 
 class ObjectAnimate(val context: Context, val image: TouchImage) {
 
@@ -110,7 +110,7 @@ class ObjectAnimate(val context: Context, val image: TouchImage) {
                     if (index == bitmaps.lastIndex) {
                         delay *= 3
                     }
-                    animationDrawable.addFrame(BitmapDrawable(context.resources, bitmap), delay)
+                    animationDrawable.addFrame(bitmap.toDrawable(context.resources), delay)
                 }
             }
             return animationDrawable

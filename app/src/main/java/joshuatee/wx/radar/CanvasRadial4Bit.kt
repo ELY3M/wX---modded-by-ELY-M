@@ -28,7 +28,6 @@ import java.io.IOException
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Paint.Style
@@ -39,6 +38,7 @@ import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityMath
+import androidx.core.graphics.toColorInt
 
 @Suppress("SpellCheckingInspection")
 internal object CanvasRadial4Bit {
@@ -119,39 +119,39 @@ internal object CanvasRadial4Bit {
                 }
                 dis.close()
                 val graphColor = IntArray(16)
-                graphColor[0] = Color.parseColor("#000000")
-                graphColor[1] = Color.parseColor("#00ECEC")
-                graphColor[2] = Color.parseColor("#01A0F6")
-                graphColor[3] = Color.parseColor("#0000F6")
-                graphColor[4] = Color.parseColor("#00FF00")
-                graphColor[5] = Color.parseColor("#00C800")
-                graphColor[6] = Color.parseColor("#009000")
-                graphColor[7] = Color.parseColor("#FFFF00")
-                graphColor[8] = Color.parseColor("#E7C000")
-                graphColor[9] = Color.parseColor("#FF9000")
-                graphColor[10] = Color.parseColor("#FF0000")
-                graphColor[11] = Color.parseColor("#D60000")
-                graphColor[12] = Color.parseColor("#C00000")
-                graphColor[13] = Color.parseColor("#FF00FF")
-                graphColor[14] = Color.parseColor("#9955C9")
-                graphColor[15] = Color.parseColor("#FFFFFF")
+                graphColor[0] = "#000000".toColorInt()
+                graphColor[1] = "#00ECEC".toColorInt()
+                graphColor[2] = "#01A0F6".toColorInt()
+                graphColor[3] = "#0000F6".toColorInt()
+                graphColor[4] = "#00FF00".toColorInt()
+                graphColor[5] = "#00C800".toColorInt()
+                graphColor[6] = "#009000".toColorInt()
+                graphColor[7] = "#FFFF00".toColorInt()
+                graphColor[8] = "#E7C000".toColorInt()
+                graphColor[9] = "#FF9000".toColorInt()
+                graphColor[10] = "#FF0000".toColorInt()
+                graphColor[11] = "#D60000".toColorInt()
+                graphColor[12] = "#C00000".toColorInt()
+                graphColor[13] = "#FF00FF".toColorInt()
+                graphColor[14] = "#9955C9".toColorInt()
+                graphColor[15] = "#FFFFFF".toColorInt()
                 val graphColor2 = IntArray(16)
-                graphColor2[0] = Color.parseColor("#000000")
-                graphColor2[1] = Color.parseColor("#02FC02")
-                graphColor2[2] = Color.parseColor("#01E401")
-                graphColor2[3] = Color.parseColor("#01C501")
-                graphColor2[4] = Color.parseColor("#07AC04")
-                graphColor2[5] = Color.parseColor("#068F03")
-                graphColor2[6] = Color.parseColor("#047202")
-                graphColor2[7] = Color.parseColor("#7C977B")
-                graphColor2[8] = Color.parseColor("#987777")
-                graphColor2[9] = Color.parseColor("#890000")
-                graphColor2[10] = Color.parseColor("#A20000")
-                graphColor2[11] = Color.parseColor("#B90000")
-                graphColor2[12] = Color.parseColor("#D80000")
-                graphColor2[13] = Color.parseColor("#EF0000")
-                graphColor2[14] = Color.parseColor("#FE0000")
-                graphColor2[15] = Color.parseColor("#9000A0")
+                graphColor2[0] = "#000000".toColorInt()
+                graphColor2[1] = "#02FC02".toColorInt()
+                graphColor2[2] = "#01E401".toColorInt()
+                graphColor2[3] = "#01C501".toColorInt()
+                graphColor2[4] = "#07AC04".toColorInt()
+                graphColor2[5] = "#068F03".toColorInt()
+                graphColor2[6] = "#047202".toColorInt()
+                graphColor2[7] = "#7C977B".toColorInt()
+                graphColor2[8] = "#987777".toColorInt()
+                graphColor2[9] = "#890000".toColorInt()
+                graphColor2[10] = "#A20000".toColorInt()
+                graphColor2[11] = "#B90000".toColorInt()
+                graphColor2[12] = "#D80000".toColorInt()
+                graphColor2[13] = "#EF0000".toColorInt()
+                graphColor2[14] = "#FE0000".toColorInt()
+                graphColor2[15] = "#9000A0".toColorInt()
                 val binSize = NexradUtil.getBinSize(productCode.toInt())
                 val centerX = 500
                 val centerY = 500

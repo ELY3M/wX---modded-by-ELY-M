@@ -75,13 +75,13 @@ class ExternalPolygon private constructor(
          *
          * @return The builder
          */
-        fun close(): Builder {
-            validate()
-            // add last Line
-            sides.add(ExternalLine(vertexes[vertexes.size - 1], vertexes[0]))
-            isClosed = true
-            return this
-        }
+//        fun close(): Builder {
+//            validate()
+//            // add last Line
+//            sides.add(ExternalLine(vertexes[vertexes.size - 1], vertexes[0]))
+//            isClosed = true
+//            return this
+//        }
 
         /**
          * Build the instance of the polygon shape.

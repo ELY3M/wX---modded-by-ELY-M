@@ -130,7 +130,6 @@ internal object Metar {
                     } else {
                         ovcInt
                     }
-
                     val aviationColor = if (visInt > 5 && lowestCig > 3000) {
                         Color.GREEN
                     } else if (visInt in 3..5 || lowestCig in 1000..3000) {
@@ -229,23 +228,8 @@ internal object Metar {
         return (GlobalVariables.TGFTP_WEBSITE_PREFIX + "/data/observations/metar/decoded/" + localMetarSite.codeName + ".TXT").getHtmlWithNewLine()
     }
 
-    // causing crash reports in the current condition notification for
-    // Exception java.lang.IllegalArgumentException: Comparison method violates its general contract!
-    // possibly reverting to older code below
     fun findClosestObservation(latLon: LatLon, order: Int = 0): Site {
         return sites.getNearestSite(latLon, order)
-//        loadMetarData(context)
-//        val obsSites = sites1.toMutableList()
-//        for (it in obsSites.indices) {
-//            obsSites[it].distance =
-//                LatLon.distance(location, obsSites[it].latLon).toInt()
-//        }
-//        try {
-//            obsSites.sortBy { it.distance }
-//        } catch (e: Exception) {
-//            UtilityLog.handleException(e)
-//        }
-//        return obsSites[index]
     }
 
     //

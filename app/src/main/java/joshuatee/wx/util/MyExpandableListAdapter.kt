@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import joshuatee.wx.R
 import joshuatee.wx.ui.UtilityUI
+import androidx.core.util.size
 
 class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Group>) :
     BaseExpandableListAdapter() {
@@ -53,7 +54,7 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
 
     override fun getGroup(groupPosition: Int): Any = groups.get(groupPosition)
 
-    override fun getGroupCount() = groups.size()
+    override fun getGroupCount() = groups.size
 
     override fun getGroupId(groupPosition: Int): Long = 0
 
