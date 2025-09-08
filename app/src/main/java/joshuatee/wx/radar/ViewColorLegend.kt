@@ -212,7 +212,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         drawText(
                             canvas,
                             (it / 100.0).toString().take(4) + units,
-                            3.0f * scaledHeightVel * (100 - it) + heightFudge
+                            3.0f * scaledHeightVel * (100 - it)
                         )
                         units = ""
                     }

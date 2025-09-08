@@ -41,7 +41,7 @@ android {
         }
     }
 
-/*
+
     def ndkDir = "D:\\android-sdk\\android-ndk-r27d"
     tasks.register('buildNative', Exec) {
         commandLine "$ndkDir\\ndk-build.cmd",
@@ -76,7 +76,7 @@ android {
         compileTask -> compileTask.dependsOn buildNative
     }
 
-*/
+
 
 
     // required to support API 35+ 16KB page sizes
@@ -151,10 +151,10 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
     //elys mods
-    implementation 'ch.acra:acra-mail:5.9.7'
-    implementation 'ch.acra:acra-core:5.9.7'
-    implementation 'com.markodevcic:peko:3.0.1'
-    implementation 'org.shredzone.commons:commons-suncalc:3.5'
+    implementation 'ch.acra:acra-mail:5.12.0'
+    implementation 'ch.acra:acra-core:5.12.0'
+    implementation 'com.markodevcic:peko:3.0.5'
+    implementation 'org.shredzone.commons:commons-suncalc:3.11'
     implementation 'com.github.HBiSoft:HBRecorder:3.0.3'
 
 //    def composeBom = platform('androidx.compose:compose-bom:2024.03.00')
