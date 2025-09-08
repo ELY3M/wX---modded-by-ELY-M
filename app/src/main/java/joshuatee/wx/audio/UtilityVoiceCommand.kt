@@ -32,7 +32,7 @@ import joshuatee.wx.util.Utility
 object UtilityVoiceCommand {
 
     fun processCommand(context: Context, vrStringOriginal: String): Boolean {
-        var radarSite = Location.rid
+        var radarSite = Location.radarSite
         var wfo = Location.wfo
         var gotHit = true
         val tokens = RegExp.space.split(vrStringOriginal)

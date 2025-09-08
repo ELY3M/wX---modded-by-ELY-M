@@ -34,7 +34,6 @@ object Projection {
     fun computeMercatorNumbers(ec: ExternalGlobalCoordinates, pn: ProjectionNumbers): DoubleArray =
         computeMercatorNumbers(ec.latitude, ec.longitude * -1.0, pn)
 
-    // TODO FIXME returning a List<Float> would remove some boilerplate but would likely require changes in quite a few spots and may not be worth it
     fun computeMercatorNumbers(x: Double, y: Double, pn: ProjectionNumbers): DoubleArray =
         doubleArrayOf(
             (-1.0 * ((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat(),
@@ -55,19 +54,6 @@ object Projection {
                 E
             ) - 180.0 / PI * log(
                 tan(PI / 4.0 + pn.xDbl * (PI / 180.0) / 2.0),
-                E
-            )) * pn.oneDegreeScaleFactor)) + pn.yCenter).toFloat()
-        )
-
-    // nexrad widget storm info
-    fun computeMercatorNumbers(x: Float, y: Float, pn: ProjectionNumbers): List<Float> =
-        listOf(
-            ((-1.0f * ((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat()).toFloat(),
-            ((-1.0f * ((180.0f / PI * log(
-                tan(PI / 4.0 + x * (PI / 180.0f) / 2.0f),
-                E
-            ) - 180.0f / PI * log(
-                tan(PI / 4.0f + pn.xDbl * (PI / 180.0f) / 2.0f),
                 E
             )) * pn.oneDegreeScaleFactor)) + pn.yCenter).toFloat()
         )

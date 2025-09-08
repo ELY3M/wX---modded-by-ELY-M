@@ -98,22 +98,4 @@ object UtilityCanvasProjection {
             tmpBuffer.putFloat(y)
         }
     }
-
-//    fun computeMercatorNumbers(latLon: LatLon, projectionNumbers: ProjectionNumbers) =
-//        computeMercatorNumbers(latLon.lat, latLon.lon, projectionNumbers)
-
-//    fun computeMercatorNumbers(ec: ExternalGlobalCoordinates, pn: ProjectionNumbers) =
-//        computeMercatorNumbers(ec.latitude, ec.longitude * -1.0, pn)
-
-//    fun computeMercatorNumbers(x: Double, y: Double, pn: ProjectionNumbers) =
-//        doubleArrayOf(
-//            (-((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat(),
-//            (-((180 / PI * log(
-//                tan(PI / 4 + x * (PI / 180) / 2),
-//                E
-//            ) - 180 / PI * log(
-//                tan(PI / 4 + pn.xDbl * (PI / 180) / 2),
-//                E
-//            )) * pn.oneDegreeScaleFactor)) + pn.yCenter
-//        )
 }

@@ -107,6 +107,12 @@ class OglRadarBuffers(var bgColor: Int) : OglBuffers() {
         )
     }
 
+    fun putColors(level: Int) {
+        colorBuffer.put(colormap.redValues.get(level and 0xFF))
+        colorBuffer.put(colormap.greenValues.get(level and 0xFF))
+        colorBuffer.put(colormap.blueValues.get(level and 0xFF))
+    }
+
     fun putBackgroundColor() {
         colormap.redValues.put(0, Color.red(bgColor).toByte())
         colormap.greenValues.put(0, Color.green(bgColor).toByte())

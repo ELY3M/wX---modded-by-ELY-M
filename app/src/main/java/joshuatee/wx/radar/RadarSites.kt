@@ -39,7 +39,6 @@ object RadarSites {
     private fun nexradRadarCodes(): List<String> {
         val radars = mutableListOf<String>()
         for (radar in sites.codeList) {
-//            if (!radar.startsWith("T")) {
             if (radar.length == 3) {
                 radars.add(radar)
             }
@@ -51,7 +50,6 @@ object RadarSites {
         val radars = mutableListOf<String>()
         for (radar in sites.codeList) {
             if (radar.length == 4) {
-//            if (radar.startsWith("T")) {
                 radars.add(radar)
             }
         }
@@ -62,7 +60,6 @@ object RadarSites {
         val radars = mutableListOf<String>()
         for (radar in sites.nameList) {
             val tokens = radar.split(":")
-//            if (!radar.startsWith("T") && radar[3] == ':') {
             if (tokens[0].length == 3) {
                 radars.add(radar)
             }

@@ -70,12 +70,12 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
             currentConditions.text = Location.getObservation(position)
             if (nonUs) {
                 text2.text =
-                    "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${
+                    "RID: ${Location.getRadarSite(position)} ${UtilityLocation.hasAlerts(position)} (${
                         lat.take(6)
                     } , ${lon.take(6)})"
             } else {
                 text2.text =
-                    "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${
+                    "WFO: ${Location.getWfo(position)}  RID: ${Location.getRadarSite(position)} (${
                         Location.getX(position).take(8)
                     } , ${Location.getY(position).take(9)})"
             }

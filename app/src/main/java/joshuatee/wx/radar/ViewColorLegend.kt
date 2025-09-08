@@ -41,7 +41,6 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     private val paintText = Paint(Paint.ANTI_ALIAS_FLAG)
     //elys mod
     private val width = RadarPreferences.showLegendWidth.toFloat() //was 50f
-    private val textFromLegend = 10.0f
     private val startHeight = UIPreferences.actionBarHeight.toFloat()
     private val h0CLabels = listOf(
         "ND",
@@ -90,10 +89,12 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     }
 
     private fun drawText(canvas: Canvas, label: String, y: Float) {
+        val heightFudge = 30.0f
+        val textFromLegend = 10.0f
         canvas.drawText(
             label,
             width + textFromLegend,
-            y + startHeight,
+            y + startHeight + heightFudge,
             paintText
         )
     }
@@ -106,13 +107,12 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
             textSize = RadarPreferences.showLegendTextSize.toFloat() //was 30f
             color = RadarPreferences.showLegendTextColor
         }
-        val heightFudge = 30.0f
         val screenHeight = MyApplication.dm.heightPixels.toFloat()
         var scaledHeight = (screenHeight - 2.0f * startHeight) / 256.0f
         val scaledHeightText = (screenHeight - 2.0f * startHeight) / (95.0f + 32.0f)
         val scaledHeightVel = (screenHeight - 2.0f * startHeight) / (127.0f * 2.0f)
         when (product) {
-            "N0Q", "L2REF", "TZL" -> {
+            "N0Q", "L2REF", "TZL", "TZ0", "N1Q", "N2Q", "N3Q" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(94, 255 - it)
                     drawRect(canvas, it, scaledHeight)
@@ -123,14 +123,14 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         drawText(
                             canvas,
                             it.toString() + units,
-                            scaledHeightText * (95 - it) + heightFudge
+                            scaledHeightText * (95 - it)
                         )
                         units = ""
                     }
                 }
             }
 
-            "N0U", "L2VEL", "TV0" -> {
+            "N0U", "L2VEL", "TV0", "N1U", "N2U", "N3U" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(99, 255 - it)
                     drawRect(canvas, it, scaledHeight)
@@ -141,7 +141,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         drawText(
                             canvas,
                             it.toString() + units,
-                            scaledHeightVel * (122 - it) + heightFudge
+                            scaledHeightVel * (122 - it)
                         )
                         units = ""
                     }
@@ -159,7 +159,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         drawText(
                             canvas,
                             it.toString() + units,
-                            3.64f * scaledHeightVel * (70 - it) + heightFudge
+                            3.64f * scaledHeightVel * (70 - it)
                         )
                         units = ""
                     }
@@ -178,14 +178,14 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                         drawText(
                             canvas,
                             it.toString() + units,
-                            3.64f * scaledHeightVel * (70 - it) + heightFudge
+                            3.64f * scaledHeightVel * (70 - it)
                         )
                         units = ""
                     }
                 }
             }
 
-            "N0X" -> {
+            "N0X", "N1X", "N2X", "N3X" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(159, 255 - it)
                     drawRect(canvas, it, scaledHeight)
@@ -195,13 +195,13 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     drawText(
                         canvas,
                         it.toString() + units,
-                        16.0f * scaledHeightVel * (8 - it) + heightFudge
+                        16.0f * scaledHeightVel * (8 - it)
                     )
                     units = ""
                 }
             }
 
-            "N0C" -> {
+            "N0C", "N1C", "N2C", "N3C" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(161, 255 - it)
                     drawRect(canvas, it, scaledHeight)
@@ -219,7 +219,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 }
             }
 
-            "N0K" -> {
+            "N0K", "N1K", "N2K", "N3K" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(163, 255 - it)
                     drawRect(canvas, it, scaledHeight)
@@ -229,7 +229,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     drawText(
                         canvas,
                         it.toString() + units,
-                        20.0f * scaledHeightVel * (10 - it) + heightFudge
+                        20.0f * scaledHeightVel * (10 - it)
                     )
                     units = ""
                 }
@@ -243,7 +243,11 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 }
                 (159 downTo -1 + 1).forEach {
                     if (it % 10 == 0) {
-                        drawText(canvas, h0CLabels[it / 10], scaledHeight * (159 - it))
+                        drawText(
+                            canvas,
+                            h0CLabels[it / 10],
+                            scaledHeight * (159 - it) - 50
+                        )
                     }
                 }
             }
@@ -258,7 +262,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 while (j > 0) {
                     drawText(
                         canvas, j.toString().take(4) + units,
-                        255.0f / WXGLRadarActivity.dspLegendMax * scaledHeightVel * (WXGLRadarActivity.dspLegendMax - j) + heightFudge
+                        255.0f / WXGLRadarActivity.dspLegendMax * scaledHeightVel * (WXGLRadarActivity.dspLegendMax - j)
                     )
                     units = ""
                     j -= WXGLRadarActivity.dspLegendMax / 16.0f

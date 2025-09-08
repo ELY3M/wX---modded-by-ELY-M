@@ -166,7 +166,7 @@ internal object NexradLevel2Util {
                         break
                     }
                 } catch (ee: EOFException) {
-                    Log.i("wx", "got EOFException")
+                    Log.i("wx", "got EOFException$ee")
                     break // assume this is ok
                 }
                 /*

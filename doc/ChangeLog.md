@@ -4,7 +4,9 @@
 
 ## 55971 2025_09_06
 
-* [REF]
+* [REF] various files esp nexrad
+* [FIX] Colormap Legend would not show if radar product TZ0 selected (TDWR)
+* [FIX] Colormap Legend would not show for tilts other then lowest tilt for ref/vel
 
 ## 55970 2025_09_06
 

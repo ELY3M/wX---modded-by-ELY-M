@@ -81,16 +81,19 @@ object NotificationLocal {
                     locationIndex
                 )
             ) {
-                val url2 = Location.getRid(locationIndex) + "US"
-                val bitmap = UtilityImg.getNexradRefBitmap(context, Location.getRid(locationIndex))
+                val url2 = Location.getRadarSite(locationIndex) + "US"
+                val bitmap =
+                    UtilityImg.getNexradRefBitmap(context, Location.getRadarSite(locationIndex))
                 val title =
-                    "(" + Location.getName(locationIndex) + ") " + Location.getRid(locationIndex) + " Radar"
+                    "(" + Location.getName(locationIndex) + ") " + Location.getRadarSite(
+                        locationIndex
+                    ) + " Radar"
                 val notifier2 =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val resultIntent2 = Intent(context, WXGLRadarActivity::class.java)
                 resultIntent2.putExtra(
                     WXGLRadarActivity.RID,
-                    arrayOf(Location.getRid(locationIndex), "STATE NOT USED")
+                    arrayOf(Location.getRadarSite(locationIndex), "STATE NOT USED")
                 )
                 val stackBuilder2 = TaskStackBuilder.create(context)
                 stackBuilder2.addParentStack(WX::class.java)

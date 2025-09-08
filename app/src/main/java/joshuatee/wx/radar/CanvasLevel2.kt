@@ -45,10 +45,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Paint.Style
-import androidx.core.content.ContextCompat
-import joshuatee.wx.R
 import joshuatee.wx.radarcolorpalettes.ColorPalette
-import joshuatee.wx.util.Utility
+import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.UtilityMath
 
 // The code in this file is used exclusively by the code path that generates bitmaps ( ie not OpenGL radar )
@@ -68,11 +66,7 @@ internal object CanvasLevel2 {
         val numberOfRadials = 720
         val numberOfRangeBins = 916
         // 1832 vel 1192 vel
-        val zeroColor = if (Utility.readPref(context, "NWS_RADAR_BG_BLACK", "") != "true") {
-            ContextCompat.getColor(context, R.color.white)
-        } else {
-            ContextCompat.getColor(context, R.color.black)
-        }
+        val zeroColor = RadarPreferences.nexradBackgroundColor
         val radialStartAngle = ByteBuffer.allocateDirect(720 * 4)
         radialStartAngle.order(ByteOrder.nativeOrder())
         radialStartAngle.position(0)

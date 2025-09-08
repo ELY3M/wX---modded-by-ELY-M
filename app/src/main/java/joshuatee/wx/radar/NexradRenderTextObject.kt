@@ -98,11 +98,6 @@ class NexradRenderTextObject(
             hideCities()
             wxglSurfaceView.cities.clear()
             scale = getScale()
-//            oglrZoom = 1.0f
-//            if (state.zoom < 1.00f) {
-//                oglrZoom = state.zoom * 0.8f
-//            }
-//            textSize = UIPreferences.textSizeSmall * oglrZoom * 0.75f * RadarPreferences.textSize
             textSize = UIPreferences.textSizeSmall * RadarPreferences.textSize * 0.80f
             val cityMinZoom = 0.50
             if (state.zoom > cityMinZoom) {
@@ -272,8 +267,6 @@ class NexradRenderTextObject(
         text: String,
         color: Int
     ) {
-//        UtilityLog.d("WX TEXT width", glviewWidth.toString())
-//        UtilityLog.d("WX TEXT height", glviewHeight.toString())
         val renderX: Float
         val renderY: Float
         if (RadarPreferences.wxoglCenterOnLocation) {
@@ -287,7 +280,6 @@ class NexradRenderTextObject(
         coordinates[0] = coordinates[0] + renderX
         coordinates[1] = coordinates[1] - renderY
         // hack fix for quad pane: glviewWidth - 200
-        //
         if (abs(coordinates[0] * scale) < glviewWidth && abs(coordinates[1] * scale) < glviewHeight) {
             val textView = TextViewMetal(context, text, color, textSize)
             textViews.add(textView.getView())
@@ -355,12 +347,7 @@ class NexradRenderTextObject(
                     drawText = false
                 )
             textViews.add(textView.getView())
-//            textView.setTextColor(color)
-//            textView.setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
-//            if (singleLine)
-//                textView.setSingleLine()
             relativeLayout.addView(textView.getView())
-//            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizeTv)
             if ((coordinates[1] * scale).toInt() < 0) {
                 if ((coordinates[0] * scale).toInt() < 0)
                     textView.setPadding(
@@ -392,10 +379,6 @@ class NexradRenderTextObject(
                         0
                     )
             }
-//            val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
-//            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-//            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
-//            textView.layoutParams = layoutParams
         }
         return drawText
     }
@@ -429,11 +412,9 @@ class NexradRenderTextObject(
                 indexSpotterReport += 1
             }
             val latLon = if (!report) {
-                // UtilitySpotter.spotterList[indexSpotter].latLon
                 val spotter = UtilitySpotter.spotterList.getOrNull(indexSpotter)
                 spotter?.latLon ?: LatLon.empty()
             } else {
-//                UtilitySpotter.reports[indexSpotterReport].latLon
                 val spotter = UtilitySpotter.reports.getOrNull(indexSpotterReport)
                 spotter?.latLon ?: LatLon.empty()
             }
@@ -556,15 +537,10 @@ class NexradRenderTextObject(
             projectionNumbers = ProjectionNumbers(state.rid, ProjectionType.WX_OGL)
             var lat = 0.0
             var lon = 0.0
-//            val fontScaleFactorObs = 0.65f
             hideObservations()
             wxglSurfaceView.observations.clear()
             scale = getScale()
             oglrZoom = 1.0f
-//            if (state.zoom < 1.0f) {
-//                oglrZoom = state.zoom * 0.8f
-//            }
-//            textSize = UIPreferences.textSizeSmall * oglrZoom * fontScaleFactorObs * RadarPreferences.textSize
             textSize = UIPreferences.textSizeSmall * oglrZoom * RadarPreferences.textSize * 0.75f
             val obsArr = Metar.data[paneNumber].obsArr.toList()
             val obsArrExt = Metar.data[paneNumber].obsArrExt.toList()

@@ -25,8 +25,6 @@ object To {
 
     fun int(s: String): Int = s.toIntOrNull() ?: 0
 
-//    fun float(s: String): Float = s.toFloatOrNull() ?: 0.0f
-
     fun double(s: String): Double = s.toDoubleOrNull() ?: 0.0
 
     fun string(i: Int): String = i.toString()

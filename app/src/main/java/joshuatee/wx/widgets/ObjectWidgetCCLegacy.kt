@@ -67,7 +67,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         val sdExt = Utility.readPref(context, "7DAY_EXT_WIDGET", "No data")
         val hazardRaw = Utility.readPref(context, "HAZARD_RAW_WIDGET", "No data")
         val wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "")
-        val radarSite = Location.getRid(context, widgetLocationNumber)
+        val radarSite = Location.getRadarSite(context, widgetLocationNumber)
         val locLabel = Utility.readPref(context, "LOC" + widgetLocationNumber + "_LABEL", "")
         remoteViews.setImageViewResource(R.id.b_radar, R.drawable.ic_flash_on_24dp_white2)
         remoteViews.setImageViewResource(R.id.b_cloud, R.drawable.ic_cloud_24dp_white)

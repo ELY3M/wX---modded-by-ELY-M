@@ -153,9 +153,9 @@ object CanvasWindbarbs {
         wbCircleXArr.indices.forEach { k ->
             if (Metar.data[index].obsArrAviationColor.size > k) {
                 paint.color = Metar.data[index].obsArrAviationColor[k]
-                val list = Projection.computeMercatorNumbers(
-                    wbCircleXArr[k].toFloat(),
-                    wbCircleYArr[k].toFloat(),
+                val list = Projection.computeMercatorNumbersF(
+                    wbCircleXArr[k],
+                    wbCircleYArr[k],
                     projectionNumbers
                 )
                 val pixXInit = list[0]

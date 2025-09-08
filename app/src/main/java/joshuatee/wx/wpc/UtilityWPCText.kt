@@ -29,14 +29,12 @@ import joshuatee.wx.ui.MenuTitle
 @Suppress("SpellCheckingInspection")
 internal object UtilityWpcText {
 
-    fun needsFixedWidthFont(product: String): Boolean {
-        val productList = listOf("RWRMX", "UVICAC", "MIATWSEP", "MIATWSAT")
-        return product.startsWith("TPT")
+    fun needsFixedWidthFont(product: String) =
+        product.startsWith("TPT")
                 || product.startsWith("SWPC")
                 || product.startsWith("MIAPW")
                 || product.startsWith("MIATCM")
-                || productList.contains(product)
-    }
+                || listOf("RWRMX", "UVICAC", "MIATWSEP", "MIATWSAT").contains(product)
 
     fun getLabel(token: String): String {
         val list = labelsWithCodes.filter { it.startsWith(token) }

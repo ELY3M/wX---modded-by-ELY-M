@@ -102,7 +102,7 @@ internal object UtilityWidgetDownload {
 
     private fun nexrad(context: Context) {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val rid = Location.getRid(context, widgetLocationNumber)
+        val rid = Location.getRadarSite(context, widgetLocationNumber)
         //
         // Warnings
         //

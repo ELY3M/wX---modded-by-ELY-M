@@ -54,10 +54,10 @@ internal object NexradDecodeFourBit {
                 numberOfRleHalfWords[r] = dataInputStream.readUnsignedShort()
                 radialStart.putFloat(450.0f - dataInputStream.readUnsignedShort() / 10.0f)
                 dataInputStream.skipBytes(2)
-                for (s in 0 until numberOfRleHalfWords[r] * 2) {
+                repeat(numberOfRleHalfWords[r] * 2) {
                     bin = dataInputStream.readUnsignedByte().toShort()
                     numOfBins = bin.toInt() shr 4
-                    for (u in 0 until numOfBins) {
+                    repeat(numOfBins) {
                         binWord.put((bin % 16).toByte())
                     }
                 }
@@ -92,12 +92,12 @@ internal object NexradDecodeFourBit {
             // 232 rows in NCZ
             var bin: Short
             var numOfBins: Int
-            for (unused in 0 until numberOfRows) {
+            repeat(numberOfRows) {
                 val numberOfBytes = dataInputStream.readUnsignedShort()
-                for (s in 0 until numberOfBytes) {
+                repeat(numberOfBytes) {
                     bin = dataInputStream.readUnsignedByte().toShort()
                     numOfBins = bin.toInt() shr 4
-                    for (u in 0 until numOfBins) {
+                    repeat(numOfBins) {
                         binWord.put((bin % 16).toByte())
                     }
                 }

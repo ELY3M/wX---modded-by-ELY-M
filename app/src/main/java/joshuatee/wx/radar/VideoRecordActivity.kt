@@ -39,11 +39,6 @@ import androidx.core.net.toUri
 
 abstract class VideoRecordActivity : AppCompatActivity() {
 
-//    companion object {
-//        /** code to post/handler request for permission  */
-//        private const val REQUEST_CODE_PERM = 999
-//    }
-
     lateinit var toolbar: Toolbar
     lateinit var toolbarBottom: Toolbar
     lateinit var objectToolbar: ObjectToolbar
@@ -78,10 +73,6 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         UtilityToolbar.setElevation(toolbar)
     }
 
-//    fun setTitle(s: String) {
-//        title = s
-//    }
-
     fun setTitle(s: String, sub: String) {
         title = s
         toolbar.subtitle = sub
@@ -91,21 +82,11 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         checkDrawOverlayPermission()
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        if (requestCode == REQUEST_CODE_PERM) {
-//            if (Settings.canDrawOverlays(this)) {
-//                telecineService = TelecineService()
-//                telecineService.start(this)
-//            }
-//        }
-//    }
-
     private fun checkDrawOverlayPermission() {
         if (!Settings.canDrawOverlays(this)) {
             UtilityLog.d("wx", "checkDrawOverlayPermission - perm check")
             val intent =
                 Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "package:$packageName".toUri())
-//            startActivityForResult(intent, REQUEST_CODE_PERM)
             startForResult.launch(intent)
         } else {
             telecineService = TelecineService()
@@ -119,14 +100,6 @@ abstract class VideoRecordActivity : AppCompatActivity() {
                 telecineService = TelecineService()
                 telecineService.start(this)
             }
-
-//        if (result.resultCode == Activity.RESULT_OK) {
-//            val intent = result.data
-//            if (Settings.canDrawOverlays(this)) {
-//                telecineService = TelecineService()
-//                telecineService.start(this)
-//            }
-//        }
         }
 
     // https://developer.android.com/training/permissions/requesting.html

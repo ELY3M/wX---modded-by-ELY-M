@@ -68,7 +68,7 @@ object UtilitySpotter {
             reportsList.clear()
             val lats = mutableListOf<String>()
             val lons = mutableListOf<String>()
-            var html = ("http://www.spotternetwork.org/feeds/csv.txt").getHtmlWithNewLine()
+            var html = "http://www.spotternetwork.org/feeds/csv.txt".getHtmlWithNewLine()
             val reportData = html.replace(".*?#storm reports".toRegex(), "")
             process(reportData)
             html = html.replace("#storm reports.*?$".toRegex(), "")

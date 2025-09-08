@@ -26,8 +26,6 @@ import joshuatee.wx.objects.Sites
 @Suppress("SpellCheckingInspection")
 object WfoSites {
 
-    // grep NWS_LOC UtilityPref.dart |sed "s/Utility.writePref(.NWS_LOCATION_/\"/" | sed 's/",/" to/' | sed "s/);/,/"
-
     fun getState(office: String): String {
         return getFullName(office).split(",")[0]
     }

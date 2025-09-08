@@ -49,19 +49,17 @@ internal object NexradRaster {
         val halfPoint = numberOfRows / 2
         for (rowNumber in 0 until numberOfRows) {
             for (bin in 0 until binsPerRow) {
+                radarBuffers.floatBuffer.putFloat((bin - halfPoint) * scaleFactor)
+                radarBuffers.floatBuffer.putFloat((rowNumber - halfPoint) * scaleFactor * yShift)
+                radarBuffers.floatBuffer.putFloat((bin - halfPoint) * scaleFactor)
+                radarBuffers.floatBuffer.putFloat((rowNumber + 1.0f - halfPoint) * scaleFactor * yShift)
+                radarBuffers.floatBuffer.putFloat((bin + 1.0f - halfPoint) * scaleFactor)
+                radarBuffers.floatBuffer.putFloat((rowNumber + 1.0f - halfPoint) * scaleFactor * yShift)
+                radarBuffers.floatBuffer.putFloat((bin + 1.0f - halfPoint) * scaleFactor)
+                radarBuffers.floatBuffer.putFloat((rowNumber - halfPoint) * scaleFactor * yShift)
                 val curLevel = binBuff.get(rowNumber * numberOfRows + bin).toInt()
-                radarBuffers.floatBuffer.putFloat((bin - halfPoint) * scaleFactor)
-                radarBuffers.floatBuffer.putFloat((rowNumber - halfPoint) * scaleFactor * yShift)
-                radarBuffers.floatBuffer.putFloat((bin - halfPoint) * scaleFactor)
-                radarBuffers.floatBuffer.putFloat((rowNumber + 1.0f - halfPoint) * scaleFactor * yShift)
-                radarBuffers.floatBuffer.putFloat((bin + 1.0f - halfPoint) * scaleFactor)
-                radarBuffers.floatBuffer.putFloat((rowNumber + 1.0f - halfPoint) * scaleFactor * yShift)
-                radarBuffers.floatBuffer.putFloat((bin + 1.0f - halfPoint) * scaleFactor)
-                radarBuffers.floatBuffer.putFloat((rowNumber - halfPoint) * scaleFactor * yShift)
-                for (unused in 0..3) {
-                    radarBuffers.colorBuffer.put(radarBuffers.colormap.redValues.get(curLevel and 0xFF))
-                    radarBuffers.colorBuffer.put(radarBuffers.colormap.greenValues.get(curLevel and 0xFF))
-                    radarBuffers.colorBuffer.put(radarBuffers.colormap.blueValues.get(curLevel and 0xFF))
+                repeat(4) {
+                    radarBuffers.putColors(curLevel)
                 }
                 totalBins += 1
             }

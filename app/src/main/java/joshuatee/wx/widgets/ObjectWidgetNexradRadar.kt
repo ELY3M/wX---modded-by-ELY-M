@@ -35,7 +35,7 @@ class ObjectWidgetNexradRadar(context: Context) {
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val radarSite = Location.getRid(context, widgetLocationNumber)
+        val radarSite = Location.getRadarSite(context, widgetLocationNumber)
         UtilityWidget.setImage(context, remoteViews, WidgetFile.NEXRAD_RADAR.fileName)
         if (!UIPreferences.widgetPreventTap) {
             UtilityWidget.setupIntent(

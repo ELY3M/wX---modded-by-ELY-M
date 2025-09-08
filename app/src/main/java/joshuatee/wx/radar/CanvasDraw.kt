@@ -37,11 +37,11 @@ import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.util.ProjectionNumbers
-import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.UtilityCities
 import joshuatee.wx.util.UtilityLog
 import java.nio.ByteBuffer
+import kotlin.math.abs
 
 internal object CanvasDraw {
 
@@ -98,17 +98,17 @@ internal object CanvasDraw {
         }
         paint.textSize = textSize.toFloat()
         UtilityCities.list.forEach {
-            val coordinates = Projection.computeMercatorNumbers(it.x, it.y, projectionNumbers)
+            val coordinates = Projection.computeMercatorNumbersF(it.x, it.y, projectionNumbers)
             if (textSize > 0) {
                 canvas.drawText(
                     RegExp.comma.split(it.city)[0],
-                    coordinates[0].toFloat() + 4.0f,
-                    coordinates[1].toFloat() - 4.0f,
+                    coordinates[0] + 4.0f,
+                    coordinates[1] - 4.0f,
                     paint
                 )
-                canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
+                canvas.drawCircle(coordinates[0], coordinates[1], 2.0f, paint)
             } else {
-                canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 1.0f, paint)
+                canvas.drawCircle(coordinates[0], coordinates[1], 1.0f, paint)
             }
         }
     }
@@ -128,18 +128,18 @@ internal object CanvasDraw {
         if (projectionType.needsCanvasShift) {
             canvas.translate(CanvasMain.xOffset, CanvasMain.yOffset)
         }
-        val x = To.double(Location.x)
-        val y = To.double(Location.y.replace("-", ""))
-        val coordinates = Projection.computeMercatorNumbers(x, y, projectionNumbers)
+        val x = Location.latLon.lat
+        val y = abs(Location.latLon.lon)
+        val coordinates = Projection.computeMercatorNumbersF(x, y, projectionNumbers)
         paint.color = RadarPreferences.colorLocdot
 	    //elys mod
         //custom locationdot//
         if (RadarPreferences.locationDotFollowsGps) {
             val locationicon: Bitmap = BitmapFactory.decodeFile(GlobalVariables.FilesPath + "location.png");
             val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, RadarPreferences.locIconSize, RadarPreferences.locIconSize, false)
-            canvas.drawBitmap(locationiconresized, coordinates[0].toFloat(), coordinates[1].toFloat(), null)
+            canvas.drawBitmap(locationiconresized, coordinates[0], coordinates[1], null)
         } else {
-        canvas.drawCircle(coordinates[0].toFloat(), coordinates[1].toFloat(), 2.0f, paint)
+        canvas.drawCircle(coordinates[0], coordinates[1], 2.0f, paint)
 	}
     }    
     fun mcd(

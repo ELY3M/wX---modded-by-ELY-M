@@ -280,7 +280,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private fun startFourPaneNexrad() {
         nexradState.writePreferencesMultipane(this, nexradArguments.doNotSavePref)
-        Route.radarMultiPane(this, arrayOf(joshuatee.wx.settings.Location.rid, "", "4", "true"))
+        Route.radarMultiPane(
+            this,
+            arrayOf(joshuatee.wx.settings.Location.radarSite, "", "4", "true")
+        )
     }
 
     private fun startScreenRecord() {

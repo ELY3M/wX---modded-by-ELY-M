@@ -56,26 +56,6 @@ class NexradStatePane(
         wxglRenders.indices.forEach {
             relativeLayouts.add(activity.findViewById(relativeLayoutResIdList[it]))
             relativeLayouts.last().addView(wxglSurfaceViews[it])
-            //
-            // setup special sizing for quad
-            //
-
-            // disabled Apr 2024 after changes in layout xml
-//            if (numberOfPanes == 4) {
-//                val params = relativeLayouts[it].layoutParams
-//                if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)
-//                    params.height = MyApplication.dm.heightPixels / 2 + UtilityUI.statusBarHeight(activity)
-//                else
-//                    params.height = MyApplication.dm.heightPixels /
-//                            2 - UIPreferences.actionBarHeight /
-//                            2 - UtilityUI.statusBarHeight(activity) / 2 -
-//                            (UtilityUI.navigationBarHeight(activity) / 2.0).toInt()
-//                if (UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode) {
-//                    // UtilityLog.d("wxsize", MyApplication.dm.heightPixels.toString())
-//                    params.height = MyApplication.dm.heightPixels / 2
-//                }
-//                params.width = MyApplication.dm.widthPixels / 2
-//            }
         }
         wxglSurfaceViews.indices.forEach {
             wxglTextObjects.add(
@@ -119,7 +99,7 @@ class NexradStatePane(
     fun readPreferences(nexradArguments: NexradArgumentsSinglePane) {
         product = "N0Q"
         radarSite = if (nexradArguments.arguments == null) {
-            joshuatee.wx.settings.Location.rid
+            joshuatee.wx.settings.Location.radarSite
         } else {
             nexradArguments.arguments!![0]
         }
@@ -157,7 +137,7 @@ class NexradStatePane(
         wxglRenders.forEachIndexed { index, wxglRender ->
             var initialRadarSite = nexradArguments.arguments!![0]
             if (nexradArguments.arguments!![0] == "") {
-                initialRadarSite = joshuatee.wx.settings.Location.rid
+                initialRadarSite = joshuatee.wx.settings.Location.radarSite
             }
             if (!nexradArguments.useSinglePanePref) {
                 wxglRender.state.rid = Utility.readPref(

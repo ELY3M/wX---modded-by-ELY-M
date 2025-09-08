@@ -78,53 +78,53 @@ object NexradUtil {
         172
     )
 
-    private val closestTdwrToNexrad = mapOf(
-        "DTX" to "DTW",
-        "LOT" to "ORD",
-        "MKX" to "MKE",
-        "MPX" to "MSP",
-        "FTG" to "DEN",
-        "BOX" to "BOS",
-        "CLE" to "LVE",
-        "EAX" to "MCI",
-        "FFC" to "ATL",
-        "FWS" to "DFW",
-        "GSP" to "CLT",
-        "HGX" to "HOU",
-        "IND" to "IDS",
-        "LIX" to "MSY",
-        "LVX" to "SDF",
-        "LSX" to "STL",
-        "NQA" to "MEM",
-        "AMX" to "MIA",
-        "OHX" to "BNA",
-        "OKX" to "JFK",
-        "TLX" to "OKC",
-        "PBZ" to "PIT",
-        "DIX" to "PHL",
-        "IWA" to "PHX",
-        "RAX" to "RDU",
-        "MTX" to "SLC",
-        "TBW" to "TPA",
-        "INX" to "TUL",
-        "ESX" to "LAS",
-        "TBW" to "TPA",
-        "JUA" to "SJU",
-        "LWX" to "DCA",
-        "ILN" to "CMH",
-        "MLB" to "MCO",
-        "ICT" to "ICT",
-        "CMH" to "CMH",
-        "CVG" to "CVG",
-        "DAL" to "DAL",
-        "DAY" to "DAY",
-        "EWR" to "EWR",
-        "FLL" to "FLL",
-        "IAD" to "IAD",
-        "IAH" to "IAH",
-        "MDW" to "MDW",
-        "PBI" to "PBI"
-    )
+//    private val closestTdwrToNexrad = mapOf(
+//        "DTX" to "DTW",
+//        "LOT" to "ORD",
+//        "MKX" to "MKE",
+//        "MPX" to "MSP",
+//        "FTG" to "DEN",
+//        "BOX" to "BOS",
+//        "CLE" to "LVE",
+//        "EAX" to "MCI",
+//        "FFC" to "ATL",
+//        "FWS" to "DFW",
+//        "GSP" to "CLT",
+//        "HGX" to "HOU",
+//        "IND" to "IDS",
+//        "LIX" to "MSY",
+//        "LVX" to "SDF",
+//        "LSX" to "STL",
+//        "NQA" to "MEM",
+//        "AMX" to "MIA",
+//        "OHX" to "BNA",
+//        "OKX" to "JFK",
+//        "TLX" to "OKC",
+//        "PBZ" to "PIT",
+//        "DIX" to "PHL",
+//        "IWA" to "PHX",
+//        "RAX" to "RDU",
+//        "MTX" to "SLC",
+//        "TBW" to "TPA",
+//        "INX" to "TUL",
+//        "ESX" to "LAS",
+//        "TBW" to "TPA",
+//        "JUA" to "SJU",
+//        "LWX" to "DCA",
+//        "ILN" to "CMH",
+//        "MLB" to "MCO",
+//        "ICT" to "ICT",
+//        "CMH" to "CMH",
+//        "CVG" to "CVG",
+//        "DAL" to "DAL",
+//        "DAY" to "DAY",
+//        "EWR" to "EWR",
+//        "FLL" to "FLL",
+//        "IAD" to "IAD",
+//        "IAH" to "IAH",
+//        "MDW" to "MDW",
+//        "PBI" to "PBI"
+//    )
 
     // 19    .54   124 16
 
@@ -171,7 +171,7 @@ object NexradUtil {
         else -> BIN_SIZE_54
     }
 
-    fun getTdwrFromRid(rid: String): String = closestTdwrToNexrad[rid] ?: ""
+//    fun getTdwrFromRid(rid: String): String = closestTdwrToNexrad[rid] ?: ""
 
     fun getRadarInfo(context: Context, pane: String): String =
         Utility.readPref(context, "WX_RADAR_CURRENT_INFO$pane", "")

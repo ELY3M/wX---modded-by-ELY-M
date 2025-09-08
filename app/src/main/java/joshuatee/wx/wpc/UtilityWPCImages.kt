@@ -49,8 +49,6 @@ internal object UtilityWpcImages {
         "Analysis with Satellite (NHEM+PAC)",
         "High resolution surface analysis",
         "Automated Low Clusters",
-//        "Significant Surface Low Tracks",
-//        "Low Tracks and Clusters",
 
         "National Forecast Chart Day 1",
         "National Forecast Chart Day 2",
@@ -138,7 +136,7 @@ internal object UtilityWpcImages {
         "6 to 10 Day Outlooks - Precipitation",
         "8 to 14 Day Outlooks - Temperature",
         "8 to 14 Day Outlooks - Precipitation",
-        "6 to 10 Day Hawaiian Outlooks - Temperature", // SCN25-16: The Experimental Hawaiian Extended Range Forecast Webpage Will Transition to Operational Status on March 12, 2025
+        "6 to 10 Day Hawaiian Outlooks - Temperature",
         "6 to 10 Day Hawaiian Outlooks - Precipitation",
         "8 to 14 Day Hawaiian Outlooks - Temperature",
         "8 to 14 Day Hawaiian Outlooks - Precipitation",
@@ -194,8 +192,6 @@ internal object UtilityWpcImages {
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/satsfc.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/sfc/lrgnamsfc09wbg.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/lowclusters/lowclusters_latest.png",
-//        "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/wwd/lowtrack_circles.gif",
-//        "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}/lowtracks/lowtrack_ensembles.gif",
 
         GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/NationalForecastChart/staticmaps/noaad1.png",
         GlobalVariables.NWS_WPC_WEBSITE_PREFIX + "/NationalForecastChart/staticmaps/noaad2.png",
@@ -262,7 +258,6 @@ internal object UtilityWpcImages {
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}//wwd/pwpf_d47/gif/prbww_sn25_DAY5_conus.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}//wwd/pwpf_d47/gif/prbww_sn25_DAY6_conus.gif",
         "${GlobalVariables.NWS_WPC_WEBSITE_PREFIX}//wwd/pwpf_d47/gif/prbww_sn25_DAY7_conus.gif",
-//        "https://coastwatch.glerl.noaa.gov/glsea/cur/glsea_cur.png",
         "https://apps.glerl.noaa.gov/coastwatch/webdata/glsea/cur/glsea_cur.png", // https://coastwatch.glerl.noaa.gov/satellite-data-products/great-lakes-surface-environmental-analysis-glsea/
 
         "${GlobalVariables.NWS_GRAPHICAL_WEBSITE_PREFIX}/images/conus/MaxT",

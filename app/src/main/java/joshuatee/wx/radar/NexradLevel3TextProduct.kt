@@ -77,6 +77,7 @@ object NexradLevel3TextProduct {
                         }
                     }
                 } catch (e: EOFException) {
+                    UtilityLog.d("wx", "getVwp: $e")
                     // getting to this point is on purpose
                     // UtilityLog.handleException(e)
                 } finally {

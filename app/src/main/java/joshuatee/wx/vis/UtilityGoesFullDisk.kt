@@ -295,10 +295,9 @@ internal object UtilityGoesFullDisk {
         }
     }
 
-    fun canAnimate(url: String): Boolean {
-        return !url.contains("GUAM")
+    fun canAnimate(url: String) =
+        !url.contains("GUAM")
                 && !url.contains("https://www.ospo.noaa.gov/Products/imagery/sohemi")
                 && !url.contains("https://www.ospo.noaa.gov/img/samoa_.PNG")
                 && !url.contains("https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/tsp/Sandwich/900x540.jpg")
-    }
 }

@@ -174,25 +174,6 @@ class GoesActivity : VideoRecordActivity() {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.GOES16)
             R.id.action_animate -> getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
-//                if (!goesFloater) {
-//                    objectAnimate.animateClicked({ getContent(sector) }) {
-//                        UtilityGoes.getAnimation(navDrawer.url, sector, To.int(RadarPreferences.uiAnimIconFrames))
-//                    }
-//                } else {
-//                    objectAnimate.animateClicked({ getContent(sector) }) {
-//                        UtilityGoes.getAnimationGoesFloater(navDrawer.url, sector, To.int(RadarPreferences.uiAnimIconFrames))
-//                    }
-//                }
-//            }
-
-            //                {
-//                if (objectAnimate.isRunning()) {
-//                    objectAnimate.stop()
-//                } else {
-//                    getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
-//                }
-//            }
-
             R.id.action_a12 -> getAnimate(12)
             R.id.action_a24 -> getAnimate(24)
             R.id.action_a36 -> getAnimate(36)

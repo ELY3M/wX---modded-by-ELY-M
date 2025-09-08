@@ -65,9 +65,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     companion object {
         var RID = ""
         var dspLegendMax = 0.0f
-
-        //        var velMax: Short = 120
-//        var velMin: Short = -120
         var spotterId = ""
         var spotterShowSelected = false
     }
@@ -109,8 +106,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         nexradState.initGlView(nexradLongPressMenu.changeListener)
         nexradState.readPreferences(nexradArguments)
         nexradColorLegend = NexradColorLegend(this, nexradState)
-        nexradAnimation =
-            NexradAnimation(this, nexradState, nexradUI) // removed nexradArguments as last arg
+        nexradAnimation = NexradAnimation(this, nexradState, nexradUI)
         getContent()
     }
 
@@ -333,7 +329,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                             2 -> Route.favoriteRemove(this, FavoriteType.RID)
                             else -> {
                                 if (nexradState.radarSitesForFavorites[it] == " ") {
-                                    nexradState.radarSite = joshuatee.wx.settings.Location.rid
+                                    nexradState.radarSite = joshuatee.wx.settings.Location.radarSite
                                 } else {
                                     nexradState.radarSite =
                                         nexradState.radarSitesForFavorites[it].split(" ")
@@ -349,27 +345,13 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
             android.R.id.home -> {
                 NavUtils.navigateUpFromSameTask(this)
-//                if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
-//                    NavUtils.navigateUpFromSameTask(this)
-//                } else {
-//                    navigateUp()
-//                }
             }
 
             else -> super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
     }
-
-//    private fun navigateUp() {
-//        val upIntent = NavUtils.getParentActivityIntent(this)
-//        if (NavUtils.shouldUpRecreateTask(this, upIntent!!) || isTaskRoot) {
-//            TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities()
-//        } else {
-//            NavUtils.navigateUpTo(this, upIntent)
-//        }
-//    }
-
+    
 /* orinigal 
     private fun getContentVwp() {
         FutureText2(
@@ -388,7 +370,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             nexradState.writePreferences(this, nexradArguments)
             Route.radarMultiPane(
                 this,
-                arrayOf(joshuatee.wx.settings.Location.rid, "", numberOfPanes.toString(), "true")
+                arrayOf(
+                    joshuatee.wx.settings.Location.radarSite,
+                    "",
+                    numberOfPanes.toString(),
+                    "true"
+                )
             )
         } else {
             Route.radarMultiPane(

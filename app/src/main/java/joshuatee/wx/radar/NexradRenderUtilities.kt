@@ -54,7 +54,7 @@ internal object NexradRenderUtilities {
             if (chunkIndex == chunkCount - 1) {
                 breakSize = remainder
             }
-            for (notUsed in 0 until breakSize) {
+            repeat(breakSize) {
                 indexBuff.putShort(indexForIndex, indexCount.toShort())
                 indexBuff.putShort(indexForIndex + 2, (1 + indexCount).toShort())
                 indexBuff.putShort(indexForIndex + 4, (2 + indexCount).toShort())
@@ -87,7 +87,7 @@ internal object NexradRenderUtilities {
             if (it == chunkCount - 1) {
                 breakSize = remainder
             }
-            for (notUsed in 0 until breakSize) {
+            repeat(breakSize) {
                 indexBuff.putShort(indexForIndex, indexCount.toShort())
                 indexBuff.putShort(indexForIndex + 2, (1 + indexCount).toShort())
                 indexForIndex += 4
@@ -339,7 +339,7 @@ internal object NexradRenderUtilities {
     fun colorGen(colorBuff: ByteBuffer, length: Int, colors: ByteArray) {
         try {
             if (length * 3 <= colorBuff.limit()) {
-                for (notUsed in 0 until length) {
+                repeat(length) {
                     if (colorBuff.hasRemaining()) colorBuff.put(colors[0])
                     if (colorBuff.hasRemaining()) colorBuff.put(colors[1])
                     if (colorBuff.hasRemaining()) colorBuff.put(colors[2])

@@ -154,7 +154,7 @@ class MiscFragment : Fragment() {
                     R.drawable.wxogldualpane,
                     WXGLRadarActivityMultiPane::class.java,
                     WXGLRadarActivityMultiPane.RID,
-                    arrayOf(Location.rid, "", "2"),
+                    arrayOf(Location.radarSite, "", "2"),
                     "wxogl", "Dual pane nexrad radar"
                 )
             } else {
@@ -162,7 +162,7 @@ class MiscFragment : Fragment() {
                     R.drawable.wxoglsinglepane,
                     WXGLRadarActivity::class.java,
                     WXGLRadarActivity.RID,
-                    arrayOf(Location.rid, ""),
+                    arrayOf(Location.radarSite, ""),
                     "wxogl", "Single pane nexrad radar"
                 )
             }
@@ -171,7 +171,7 @@ class MiscFragment : Fragment() {
                 R.drawable.wxoglquadpane,
                 WXGLRadarActivityMultiPane::class.java,
                 WXGLRadarActivityMultiPane.RID,
-                arrayOf(Location.rid, "", "4"),
+                arrayOf(Location.radarSite, "", "4"),
                 "wxoglquad", "Dual pane nexrad radar"
             )
             hm["model_nssl_wrf"] = TileObject(

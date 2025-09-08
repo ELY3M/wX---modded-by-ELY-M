@@ -186,37 +186,38 @@ object CanvasStormInfo {
                 }
             }
         }
-        val stormLists = FloatArray(stormList.size)
-        stormList.indices.forEach {
-            stormLists[it] = stormList[it].toFloat()
-        }
+//        val stormLists = FloatArray(stormList.size)
+//        stormList.indices.forEach {
+//            stormLists[it] = stormList[it].toFloat()
+//        }
+        val stormListF = stormList.map { it.toFloat() }.toFloatArray()
         paint.color = RadarPreferences.colorSti
-        canvas.drawLines(stormLists, paint)
+        canvas.drawLines(stormListF, paint)
         val wallPath = Path()
         wallPath.reset()
         for (i in 0 until stormList.size step 4) {
-            val list: List<Float>
-            val list2: List<Float>
+            val list: FloatArray
+            val list2: FloatArray
             if (projectionType.isMercator) {
-                list = Projection.computeMercatorNumbers(
-                    stormLists[i],
-                    stormLists[i + 1],
+                list = Projection.computeMercatorNumbersF(
+                    stormList[i],
+                    stormList[i + 1],
                     projectionNumbers
                 )
-                list2 = Projection.computeMercatorNumbers(
-                    stormLists[i + 2],
-                    stormLists[i + 3],
+                list2 = Projection.computeMercatorNumbersF(
+                    stormList[i + 2],
+                    stormList[i + 3],
                     projectionNumbers
                 )
             } else {
-                list = Projection.computeMercatorNumbers(
-                    stormLists[i],
-                    stormLists[i + 1],
+                list = Projection.computeMercatorNumbersF(
+                    stormList[i],
+                    stormList[i + 1],
                     projectionNumbers
                 )
-                list2 = Projection.computeMercatorNumbers(
-                    stormLists[i + 2],
-                    stormLists[i + 3],
+                list2 = Projection.computeMercatorNumbersF(
+                    stormList[i + 2],
+                    stormList[i + 3],
                     projectionNumbers
                 )
             }

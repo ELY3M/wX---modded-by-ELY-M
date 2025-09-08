@@ -98,8 +98,6 @@ class MyApplication : Application() {
         appContext = applicationContext
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         editor = preferences.edit()
-//        preferencesTelecine = getSharedPreferences("telecine", MODE_PRIVATE)
-//        contentResolverLocal = contentResolver
         val res = resources
         dm = res.displayMetrics
         UIPreferences.deviceScale = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, dm)
@@ -154,11 +152,9 @@ class MyApplication : Application() {
 
         lateinit var preferences: SharedPreferences
 
-        //        private lateinit var preferencesTelecine: SharedPreferences
         lateinit var editor: SharedPreferences.Editor
         lateinit var dm: DisplayMetrics
         lateinit var appContext: Context
-//        var contentResolverLocal: ContentResolver? = null
 
         fun initPreferences(context: Context) {
             RadarPreferences.initRadarPreferences()
@@ -177,12 +173,6 @@ class MyApplication : Application() {
                 preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(),
                 dm
             )
-//            UIPreferences.telecineVideoSizePercentage =
-//                preferencesTelecine.getInt("video-size", 100)
-//            UIPreferences.telecineSwitchShowCountdown =
-//                preferencesTelecine.getBoolean("show-countdown", false)
-//            UIPreferences.telecineSwitchRecordingNotification =
-//                preferencesTelecine.getBoolean("recording-notification", false)
             Location.currentLocationStr = getInitialPreferenceString("CURRENT_LOC_FRAGMENT", "1")
             PolygonWatch.load(context)
         }

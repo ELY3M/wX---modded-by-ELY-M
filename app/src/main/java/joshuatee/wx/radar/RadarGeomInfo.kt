@@ -77,7 +77,7 @@ class RadarGeomInfo(val context: Context, private val type: RadarGeometryTypeEnu
             try {
                 val inputStream = context.resources.openRawResource(fileId)
                 val dataInputStream = DataInputStream(BufferedInputStream(inputStream))
-                for (unused in 0 until count) {
+                repeat(count) {
                     lineData.putFloat(dataInputStream.readFloat())
                 }
                 dataInputStream.close()
@@ -92,8 +92,7 @@ class RadarGeomInfo(val context: Context, private val type: RadarGeometryTypeEnu
         val typeToCount = mapOf(
             RadarGeometryTypeEnum.CaLines to 161792,
             RadarGeometryTypeEnum.MxLines to 151552,
-            RadarGeometryTypeEnum.StateLines to 234828,  // 2025_01_05 was 822992 bytes / 205748 floats
-            //   now 939312 bytes / 234828 floats
+            RadarGeometryTypeEnum.StateLines to 234828,
             RadarGeometryTypeEnum.CountyLines to 212992,
             RadarGeometryTypeEnum.HwLines to 862208,
             RadarGeometryTypeEnum.HwExtLines to 770048,

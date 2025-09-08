@@ -113,7 +113,7 @@ internal object CanvasRadial8Bit {
             val bufR = ColorPalette.colorMap[colorMapProductCode]!!.redValues
             val bufG = ColorPalette.colorMap[colorMapProductCode]!!.greenValues
             val bufB = ColorPalette.colorMap[colorMapProductCode]!!.blueValues
-            for (g in 0 until numberOfRadials) {
+            repeat(numberOfRadials) {
                 val angle = radialStart.float
                 binWord.mark()
                 var level = binWord.get().toInt() and 0xFF

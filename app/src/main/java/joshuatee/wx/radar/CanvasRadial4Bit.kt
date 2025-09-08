@@ -31,26 +31,19 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Paint.Style
-import androidx.core.content.ContextCompat
-import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.objects.ObjectDateTime
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityMath
 import androidx.core.graphics.toColorInt
+import joshuatee.wx.settings.RadarPreferences
 
 @Suppress("SpellCheckingInspection")
 internal object CanvasRadial4Bit {
 
     fun decodeAndPlot(context: Context, bitmap: Bitmap, fileName: String, product: String) {
         val canvas = Canvas(bitmap)
-        val nwsRadarBgBlack = Utility.readPref(context, "NWS_RADAR_BG_BLACK", "")
-        val zeroColor = if (nwsRadarBgBlack != "true") {
-            ContextCompat.getColor(context, R.color.white)
-        } else {
-            ContextCompat.getColor(context, R.color.black)
-        }
+        val zeroColor = RadarPreferences.nexradBackgroundColor
         val isVelocity = product.contains("S") || product.contains("V") || product.contains("U")
         val dis = try {
             val fis = context.openFileInput(fileName)
@@ -107,11 +100,11 @@ internal object CanvasRadial4Bit {
                     radialAngleDelta[r] = dis.readUnsignedShort().toFloat()
                     radialAngleDelta[r] = 1.0f
                     var binCount = 0
-                    for (s in 0 until numberOfRleHalfwords[r] * 2) {
+                    repeat(numberOfRleHalfwords[r] * 2) {
                         // old 4 bit
                         val bin = dis.readUnsignedByte()
                         val numOfBins = bin shr 4
-                        for (u in 0 until numOfBins) {
+                        repeat(numOfBins) {
                             binWord[r][binCount] = bin % 16
                             binCount += 1
                         }

@@ -340,7 +340,7 @@ class LocationFragment : Fragment() {
         // if radarForLocation is not equal to -1 it means the user has a radar for the current location (default)
         //if (radarForLocation != -1)
         if (radarForLocationIndex != -1 && !radarLocationChangedList[radarForLocationIndex]) {
-            nexradState.wxglRenders[radarForLocationIndex].state.rid = Location.rid
+            nexradState.wxglRenders[radarForLocationIndex].state.rid = Location.radarSite
         }
         nexradState.adjustForTdwr(idx)
         NexradDraw.initGeom(
@@ -441,7 +441,7 @@ class LocationFragment : Fragment() {
 
     // main screen will not show GPS so if configured just show it off the screen
     // NOTE - this was backed out as it's not a good solution when user enables "center radar on location", removed private fun getLatLon() = LatLon(0.0, 0.0)
-    private fun getLatLon() = LatLon(Location.x, Location.y)
+    private fun getLatLon() = Location.latLon
 
     override fun onPause() {
         if (glviewInitialized) {

@@ -171,7 +171,7 @@ class NexradRenderConstruct(
             if (it == buffers.chunkCount - 1) {
                 buffers.breakSize = remainder
             }
-            for (notUsed in 0 until buffers.breakSize) {
+            repeat(buffers.breakSize) {
                 if (points.size > (vList + 3)) {
                     buffers.putFloatsDInvertY(points[vList], points[vList + 1])
                     buffers.putFloatsDInvertY(points[vList + 2], points[vList + 3])
@@ -214,7 +214,7 @@ class NexradRenderConstruct(
             if (it == buffers.chunkCount - 1) {
                 buffers.breakSize = remainder
             }
-            for (notUsed in 0 until buffers.breakSize) {
+            repeat(buffers.breakSize) {
                 buffers.putFloatsDInvertY(list[vList], list[vList + 1])
                 buffers.putFloatsDInvertY(list[vList + 2], list[vList + 3])
                 vList += 4

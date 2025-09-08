@@ -42,7 +42,6 @@ import joshuatee.wx.objects.LatLon
 import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.Route
-import joshuatee.wx.radar.NexradUtil
 import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.ui.CardStormReportItem
 import joshuatee.wx.ui.CardText
@@ -288,11 +287,11 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var x = stormReports[id].lat
         var y = stormReports[id].lon
         var time = stormReports[id].time
-        var radarSite = RadarSites.getNearestCode(LatLon(x, y))
+        val radarSite = RadarSites.getNearestCode(LatLon(x, y))
         time = time.take(3)
-        if (prod == "TR0" || prod == "TV0") {
-            radarSite = NexradUtil.getTdwrFromRid(radarSite)
-        }
+//        if (prod == "TR0" || prod == "TV0") {
+//            radarSite = NexradUtil.getTdwrFromRid(radarSite)
+//        }
         if (To.int(stormReports[id].time) < 1000) {
             val monthStr = To.stringPadLeftZeros(month + 1, 2)
             val dayStr = To.stringPadLeftZeros(day + 1, 2)

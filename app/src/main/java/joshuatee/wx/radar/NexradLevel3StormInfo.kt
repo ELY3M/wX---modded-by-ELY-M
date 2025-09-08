@@ -62,7 +62,7 @@ internal object NexradLevel3StormInfo {
         val sti15IncrementLength = 0.40
         val stormList = mutableListOf<Double>()
         if (posnNumbers.size == motNumbers.size && posnNumbers.size > 1) {
-            (0 until (posnNumbers.size) step 2).forEach { s ->
+            (0 until posnNumbers.size step 2).forEach { s ->
                 val degree = posnNumbers[s].toDouble()
                 val nm = posnNumbers[s + 1].toDouble()
                 val degree2 = motNumbers[s].toDouble()

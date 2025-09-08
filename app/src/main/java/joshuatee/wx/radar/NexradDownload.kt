@@ -249,6 +249,7 @@ class NexradDownload {
                 val response = MyApplication.httpClient.newCall(request).execute()
                 response.body.byteStream()
             } catch (e: IOException) {
+                UtilityLog.d("wx", "getInputStreamFromUrlL2: $e")
                 null
             }
         }

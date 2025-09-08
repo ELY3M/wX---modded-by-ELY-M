@@ -81,11 +81,11 @@ object Location {
 
     val wfo get() = locations.getOrNull(currentLocation)?.wfo ?: "DTX"
 
-    val rid get() = locations.getOrNull(currentLocation)?.rid ?: "DTX"
+    val radarSite get() = locations.getOrNull(currentLocation)?.rid ?: "DTX"
 
-    val x get() = locations.getOrNull(currentLocation)?.x ?: "0.0"
+    private val x get() = locations.getOrNull(currentLocation)?.x ?: "0.0"
 
-    val y get() = locations.getOrNull(currentLocation)?.y ?: "-0.0"
+    private val y get() = locations.getOrNull(currentLocation)?.y ?: "-0.0"
 
     val latLon get() = LatLon(x, y)
 
@@ -97,7 +97,10 @@ object Location {
 
     fun getY(locNum: Int): String = locations.getOrNull(locNum)?.y ?: "-0.0"
 
-    fun getRid(locNum: Int): String = locations.getOrNull(locNum)?.rid ?: "DTX"
+    fun getRadarSite(locNum: Int): String = locations.getOrNull(locNum)?.rid ?: "DTX"
+
+    fun getRadarSite(context: Context, locNum: String): String =
+        Utility.readPref(context, "RID$locNum", "")
 
     fun getWfo(locNum: Int): String = locations.getOrNull(locNum)?.wfo ?: "DTX"
 
@@ -118,9 +121,6 @@ object Location {
 
     val isUS get() = locations.getOrNull(currentLocation)?.isUS ?: true
 
-    fun getRid(context: Context, locNum: String): String =
-        Utility.readPref(context, "RID$locNum", "")
-
     fun refreshLocationData(context: Context) {
         initNumLocations(context)
         clearListOfNames()
@@ -130,8 +130,6 @@ object Location {
     }
 
     private fun getWfoRadarSiteFromPoint(location: LatLon): List<String> {
-//        val pointData =
-//            ("https://api.weather.gov/points/" + location.latForNws + "," + location.lonForNws).getHtml()
         val pointData = UtilityDownloadNws.getLocationPointData(location)
         // "cwa": "IWX",
         // "radarStation": "KGRR"

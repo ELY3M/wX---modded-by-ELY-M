@@ -238,7 +238,7 @@ internal object NexradDecodeEightBit {
             radialStartAngle.position(0)
             var tnMod10: Int
             var tn: Int
-            for (r in 0 until numberOfRadials) {
+            repeat(numberOfRadials) {
                 numberOfRleHalfwords = dataInputStream.readUnsignedShort()
                 tn = dataInputStream.readUnsignedShort()
                 // the code below must stay as drawing to canvas is not as precise as opengl directly for some reason
@@ -253,7 +253,7 @@ internal object NexradDecodeEightBit {
                 }
                 radialStartAngle.putFloat(450.0f - tn / 10.0f)
                 dataInputStream.skipBytes(2)
-                for (s in 0 until numberOfRleHalfwords) {
+                repeat(numberOfRleHalfwords) {
                     binWord.put((dataInputStream.readUnsignedByte() and 0xFF).toByte())
                 }
             }

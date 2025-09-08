@@ -221,7 +221,7 @@ private constructor(
         // offset is from "start of digital radar data message header"
         val offset = messageOffset + MESSAGE_HEADER_SIZE.toLong() + getDataOffset(dataType).toLong()
         ucarRandomAccessFile.seek(offset)
-        for (i in 0..915) {
+        repeat(916) {
             binWord.put(ucarRandomAccessFile.readUnsignedByte().toByte())
         }
     }

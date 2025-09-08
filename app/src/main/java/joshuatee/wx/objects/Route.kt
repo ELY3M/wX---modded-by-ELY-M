@@ -269,9 +269,9 @@ class Route() {
 
         fun radarMainScreen(context: Context) {
             if (!UIPreferences.dualpaneRadarIcon) {
-                radar(context, arrayOf(Location.rid, ""))
+                radar(context, arrayOf(Location.radarSite, ""))
             } else {
-                radarMultiPane(context, arrayOf(Location.rid, "STATE NOT USED", "2"))
+                radarMultiPane(context, arrayOf(Location.radarSite, "STATE NOT USED", "2"))
             }
         }
 
@@ -294,11 +294,11 @@ class Route() {
         }
 
         fun radarMultiPane2(context: Context) {
-            radarMultiPane(context, arrayOf(Location.rid, "STATE NOT USED", "2"))
+            radarMultiPane(context, arrayOf(Location.radarSite, "STATE NOT USED", "2"))
         }
 
         fun radarMultiPane4(context: Context) {
-            radarMultiPane(context, arrayOf(Location.rid, "STATE NOT USED", "4"))
+            radarMultiPane(context, arrayOf(Location.radarSite, "STATE NOT USED", "4"))
         }
 
         fun radarMosaic(context: Context) {
