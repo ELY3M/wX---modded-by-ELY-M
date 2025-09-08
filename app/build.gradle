@@ -41,7 +41,7 @@ android {
         }
     }
 
-
+/*
     def ndkDir = "D:\\android-sdk\\android-ndk-r27d"
     tasks.register('buildNative', Exec) {
         commandLine "$ndkDir\\ndk-build.cmd",
@@ -76,7 +76,7 @@ android {
         compileTask -> compileTask.dependsOn buildNative
     }
 
-
+*/
 
 
     // required to support API 35+ 16KB page sizes
