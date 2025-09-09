@@ -58,8 +58,6 @@ class NhcStormActivity : BaseActivity() {
     }
 
     private lateinit var stormData: NhcStormDetails
-
-    //    private var product = ""
     private var bitmapsAttr = mutableListOf<BitmapAttr>()
     private lateinit var cardText: CardText
     private lateinit var box: VBox
@@ -113,7 +111,6 @@ class NhcStormActivity : BaseActivity() {
         boxText = VBox(this)
         box.addLayout(boxImage)
         box.addLayout(boxText)
-//        product = "MIATCP${stormData.binNumber}"
         textProductUrl = stormData.advisoryNumber
         if (textProductUrl.startsWith("HFO")) {
             office = "HFO"
@@ -141,7 +138,6 @@ class NhcStormActivity : BaseActivity() {
         imageUrls.forEach {
             var url = stormData.baseUrl
             if (it == "WPCQPF_sm2.gif" || it == "WPCERO_sm2.gif") {
-                // url = url.dropLast(2)
                 url =
                     url.replace(ObjectDateTime.getYearString(), ObjectDateTime.getYearShortString())
             }

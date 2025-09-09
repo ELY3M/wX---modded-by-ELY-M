@@ -143,7 +143,6 @@ class Nhc(val context: Context, box: VBox) {
             for (adv in publicAdvisories) {
                 val productToken = adv.split("/").last().replace(".shtml", "")
                 val text = DownloadText.byProduct(context, productToken)
-//                val status = text.replace("\n", " ").parseFirst("(\\.\\.\\..*?\\.\\.\\.)")
                 val status = text.replace("\n", " ")
                     .parseFirst("BULLETIN.*?" + ObjectDateTime.getYearString() + " (.*?)SUMMARY OF ")
                 statusList.add(status)
@@ -164,12 +163,8 @@ class Nhc(val context: Context, box: VBox) {
                         longitudes[index],
                         intensities[index],
                         Utility.safeGet(statusList, index),
-//                            statusList[index],
                         Utility.safeGet(publicAdvisories, index),
-                        Utility.safeGet(publicAdvisoriesNumbers, index),
-//                            Utility.safeGet(forecastAdvisories, index),
-//                            Utility.safeGet(forecastDiscussions, index),
-//                            Utility.safeGet(windSpeedProbabilities, index),
+                        Utility.safeGet(publicAdvisoriesNumbers, index)
                     )
                     nhcStormDetailsList.add(objectNhc)
                 }

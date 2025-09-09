@@ -97,8 +97,6 @@ class Route() {
 
     companion object {
 
-        // TODO FIXME alphabetize
-
         fun alerts(context: Context) {
             Route(
                 context,
@@ -276,7 +274,6 @@ class Route() {
         }
 
         fun radarBySite(context: Context, radarSite: String) {
-//            val radarLabel = UtilityLocation.getRadarSiteName(radarSite)
             radar(context, arrayOf(radarSite, "STATE NOT USED", "N0Q", ""))
         }
 
@@ -326,7 +323,6 @@ class Route() {
             Route(context, SevereDashboardActivity::class.java)
         }
 
-        // TODO FIXME 1st arg seems unused, changed 2nd arg from "" to site
         fun sounding(context: Context, site: String = "") {
             Route(
                 context,

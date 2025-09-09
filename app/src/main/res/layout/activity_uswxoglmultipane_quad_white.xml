@@ -24,16 +24,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--    <RelativeLayout-->
-    <!--        android:id="@+id/rl"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent">-->
-
-    <!--        <LinearLayout-->
-    <!--            android:layout_width="fill_parent"-->
-    <!--            android:layout_height="fill_parent"-->
-    <!--            android:orientation="vertical">-->
-
     <joshuatee.wx.util.ImageMap
         android:id="@+id/map"
         android:layout_below="@+id/toolbar_top"
@@ -86,47 +76,6 @@
         </TableRow>
 
     </TableLayout>
-    <!--        </LinearLayout>-->
-    <!--    </RelativeLayout>-->
-
-    <!--    <RelativeLayout-->
-    <!--        android:id="@+id/rl"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent">-->
-
-    <!--        <RelativeLayout-->
-    <!--            android:id="@+id/rl1"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent" />-->
-
-    <!--        <RelativeLayout-->
-    <!--            android:id="@+id/rl2"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_toRightOf="@+id/rl1" />-->
-
-    <!--        <RelativeLayout-->
-    <!--            android:id="@+id/rl3"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_below="@+id/rl1" />-->
-
-    <!--        <RelativeLayout-->
-    <!--            android:id="@+id/rl4"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_below="@+id/rl2"-->
-    <!--            android:layout_toRightOf="@+id/rl3" />-->
-
-    <!--        <joshuatee.wx.util.ImageMap-->
-    <!--            android:id="@+id/map"-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="0dp"-->
-    <!--            android:layout_centerInParent="true"-->
-    <!--            android:src="@drawable/ncar_nexrad_sites"-->
-    <!--            ctc:map="ncar_nexrad_sites" />-->
-
-    <!--    </RelativeLayout>-->
 
     <include layout="@layout/widget_toolbar_top_white" />
 

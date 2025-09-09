@@ -72,18 +72,14 @@
     <string name="label_l2vel">SuperRes Velocity</string>
     <string name="label_tzl">TZL: Long Range Digital Base Reflectivity</string>
     <string name="label_tz0">TZ0: Digital Base Reflectivity</string>
-    <!--<string name="label_tr0">TR0: Digital Base Reflectivity</string>-->
     <string name="label_tv0">TV0: Digital Base Velocity</string>
     <string name="label_dhr">DHR: Digital Hybrid Scan Reflectivity</string>
     <string name="label_n1p">N1P: One Hour Precipitation Total</string>
     <string name="label_ntp">NTP: Storm Total Precipitation</string>
-
     <string name="label_ncr">NCR: Composite Reflectivity 124nm</string>
     <string name="label_ncz">NCZ: Composite Reflectivity 248nm</string>
-
     <string name="label_et">ET: Echo Tops</string>
     <string name="label_vil">VIL: Vertically Integrated Liquid</string>
-
     <string name="label_a3">Animate 3 frames</string>
     <string name="label_a6">Animate 6 frames</string>
     <string name="label_a12">Animate 12 frames</string>
@@ -309,14 +305,10 @@
     <string name="wind_speed_probabilities">Wind Speed Probabilities</string>
     <string name="atl_tropical_weather_outlook">ATL Tropical Weather Outlook</string>
     <string name="atl_tropical_weather_discussion">ATL Tropical Weather Discussion</string>
-    <!--    <string name="atl_monthly_tropical_summary">ATL Monthly Tropical Summary</string>-->
     <string name="epac_tropical_weather_outlook">EPAC Tropical Weather Outlook</string>
     <string name="epac_tropical_weather_discussion">EPAC Tropical Weather Discussion</string>
-    <!--    <string name="epac_monthly_tropical_summary">EPAC Monthly Tropical Summary</string>-->
     <string name="cpac_tropical_weather_outlook">CPAC Tropical Weather Outlook</string>
     <string name="sst_images">SST images…</string>
-    <!--    <string name="epac_daily_analysis">EPAC Daily Analysis</string>-->
-    <!--    <string name="atl_daily_analysis">ATL Daily Analysis</string>-->
     <string name="epac_daily_sst_analysis">EPAC Daily SST Analysis</string>
     <string name="atl_daily_sst_analysis">ATL Daily SST Analysis</string>
     <string name="epac_sst_anomaly">EPAC SST Anomaly</string>

@@ -89,54 +89,34 @@ class LatLon() {
     }
 
     var lat: Double
-        get() {
-            return latNum
-        }
+        get() = latNum
         set(newValue) {
             latNum = newValue
             xStr = latNum.toString()
         }
 
     var lon: Double
-        get() {
-            return lonNum
-        }
+        get() = lonNum
         set(newValue) {
             lonNum = newValue
             yStr = lonNum.toString()
         }
 
     val latString: String
-        get() {
-            return xStr
-        }
-//        set(newValue) {
-//            xStr = newValue
-//            latNum = To.double(newValue)
-//        }
+        get() = xStr
 
     val lonString: String
-        get() {
-            return yStr
-        }
-//        set(newValue) {
-//            yStr = newValue
-//            lonNum = To.double(newValue)
-//        }
+        get() = yStr
 
     private fun latInRadians() = UtilityMath.deg2rad(lat)
 
     private fun lonInRadians() = UtilityMath.deg2rad(lon)
 
     val latForNws: String
-        get() {
-            return latNum.toBigDecimal().setScale(4, RoundingMode.UP).toDouble().toString()
-        }
+        get() = latNum.toBigDecimal().setScale(4, RoundingMode.UP).toDouble().toString()
 
     val lonForNws: String
-        get() {
-            return lonNum.toBigDecimal().setScale(4, RoundingMode.UP).toDouble().toString()
-        }
+        get() = lonNum.toBigDecimal().setScale(4, RoundingMode.UP).toDouble().toString()
 
     fun reverse(): LatLon = LatLon(lat, -1.0 * lon)
 
@@ -194,9 +174,8 @@ class LatLon() {
             return bearing
         }
 
-        fun calculateDirection(start: LatLon, end: LatLon): String {
-            return UtilityMath.bearingToDirection(calculateBearing(start, end))
-        }
+        fun calculateDirection(start: LatLon, end: LatLon): String =
+            UtilityMath.bearingToDirection(calculateBearing(start, end))
 
         // take a space separated list of numbers and return a list of LatLon, list is of the format
         // lon0 lat0 lon1 lat1 for watch

@@ -56,7 +56,4 @@
         android:id="@+id/action_a18"
         android:title="@string/label_a18"
         app:showAsAction="never" />
-    <!--        </menu>-->
-    <!--    </item>-->
-
 </menu>

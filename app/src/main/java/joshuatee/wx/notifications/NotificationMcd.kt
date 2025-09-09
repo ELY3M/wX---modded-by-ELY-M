@@ -82,7 +82,6 @@ internal object NotificationMcd {
                 for (n in 1..Location.getNumberOfLocations()) {
                     val locNum = n.toString()
                     if (Location.locations.getOrNull(n - 1)?.notificationMcd == true) {
-//                    if (Location.locations[n - 1].notificationMcd) {
                         // if location is watching for MCDs pull ib lat/lon and iterate over polygons
                         // call secondary method to send notif if required
                         if (polygonShape.contains(Location.getLatLon(n - 1).asPoint())) {

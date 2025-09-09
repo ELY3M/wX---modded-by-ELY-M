@@ -84,24 +84,6 @@ class HBox(val context: Context) {
 
     fun get() = linearLayout
 
-//    var visibility
-//        get() = linearLayout.visibility
-//        set(value) {
-//            linearLayout.visibility = value
-//        }
-
-//    var isBaselineAligned
-//        get() = linearLayout.isBaselineAligned
-//        set(value) {
-//            linearLayout.isBaselineAligned = value
-//        }
-
-//    var orientation
-//        get() = linearLayout.orientation
-//        set(value) {
-//            linearLayout.orientation = value
-//        }
-
     private var gravityBacking = Gravity.START
 
     var gravity

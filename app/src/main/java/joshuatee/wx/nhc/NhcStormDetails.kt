@@ -42,9 +42,6 @@ class NhcStormDetails(
     var status: String,
     advisoryUrl: String,
     val advisoryIssuanceNumber: String,
-//        var forecastAdvisoryUrl: String,
-//        var forecastDiscussionUrl: String,
-//        var windSpeedProbabilitiesUrl: String
 ) : Serializable {
 
     var center = "$lat $lon"

@@ -426,13 +426,9 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
             }
         }
         } //displayHold
-
     } //onDrawFrame(gl: GL10) End
-
-
-
+    
 //elys mod
-
     private fun drawUserPoints(buffers: OglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
@@ -478,7 +474,6 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
                 GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         }
     }
-
     private fun drawLocationBug(buffers: OglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
@@ -502,9 +497,6 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         }
     }
-
-
-
     private fun drawTVS(buffers: OglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
@@ -525,11 +517,8 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
                 ///GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-
-
         }
     }
-
     //elys mod - hailmod
     private fun drawHI(buffers: OglBuffers, hailicon: String) {
         if (buffers.isInitialized) {
@@ -552,12 +541,9 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
             //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
             GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-
         }
-
         Log.i("drawhi", "hailicon: " + buffers.hailIcon)
     }
-
     // FIXME CRASHING HERE sometimes -- FIXED via "displayhold" code
     /*
         java.lang.IllegalArgumentException: Must use a native order direct Buffer
@@ -567,13 +553,82 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         at joshuatee.wx.radar.WXGLRender.onDrawFrame(WXGLRender.kt:359)
     * */
 ///////////  
+
     private fun drawTriangles(buffers: OglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
-            GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-            GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice().asFloatBuffer())
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            GLES20.glVertexAttribPointer(
+                positionHandle,
+                2,
+                GLES20.GL_FLOAT,
+                false,
+                0,
+                buffers.floatBuffer.slice().asFloatBuffer()
+            )
+            GLES20.glVertexAttribPointer(
+                colorHandle,
+                3,
+                GLES20.GL_UNSIGNED_BYTE,
+                true,
+                0,
+                buffers.colorBuffer.slice().asFloatBuffer()
+            )
+            GLES20.glDrawElements(
+                GLES20.GL_TRIANGLES,
+                buffers.floatBuffer.capacity() / 8,
+                GLES20.GL_UNSIGNED_SHORT,
+                buffers.indexBuffer.slice().asShortBuffer()
+            )
         }
+    }
+
+    private fun gLSetAttribPosition(buffers: OglBuffers) {
+        GLES20.glVertexAttribPointer(
+            positionHandle,
+            2,
+            GLES20.GL_FLOAT,
+            false,
+            0,
+            buffers.floatBuffer.slice().asFloatBuffer()
+        )
+    }
+
+    private fun gLSetAttribColor(buffers: OglBuffers) {
+        GLES20.glVertexAttribPointer(
+            colorHandle,
+            3,
+            GLES20.GL_UNSIGNED_BYTE,
+            true,
+            0,
+            buffers.colorBuffer
+        )
+    }
+
+    private fun glDrawElements(count: Int) {
+        GLES20.glDrawElements(
+            GLES20.GL_LINES,
+            count,
+            GLES20.GL_UNSIGNED_SHORT,
+            lineIndexBuffer.slice().asShortBuffer()
+        )
+    }
+
+    private fun glDrawLines(count: Int) {
+        GLES20.glDrawElements(
+            GLES20.GL_LINES,
+            count,
+            GLES20.GL_UNSIGNED_SHORT,
+            lineIndexBuffer.slice().asShortBuffer()
+        )
+    }
+
+    private fun glDrawTriangles(buffers: OglBuffers) {
+        GLES20.glDrawElements(
+            GLES20.GL_TRIANGLES,
+            buffers.floatBuffer.capacity() / 8,
+            GLES20.GL_UNSIGNED_SHORT,
+            buffers.indexBuffer.slice().asShortBuffer()
+        )
     }
 
     private fun drawPolygons(buffers: OglBuffers, countDivisor: Int) {

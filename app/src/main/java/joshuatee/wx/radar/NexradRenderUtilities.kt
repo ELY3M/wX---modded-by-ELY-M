@@ -126,7 +126,7 @@ internal object NexradRenderUtilities {
             buffers.putIndex((indexCount + 1).toShort())
             buffers.putIndex((indexCount + 2).toShort())
             indexCount += 3
-            (0..2).forEach { _ ->
+            repeat(3) {
                 buffers.putColor(buffers.solidColorRed)
                 buffers.putColor(buffers.solidColorGreen)
                 buffers.putColor(buffers.solidColorBlue)
@@ -165,7 +165,7 @@ internal object NexradRenderUtilities {
             buffers.putIndex((indexCount + 1).toShort())
             buffers.putIndex((indexCount + 2).toShort())
             indexCount += 3
-            (0..2).forEach { _ ->
+            repeat(3) {
                 buffers.putColor(buffers.solidColorRed)
                 buffers.putColor(buffers.solidColorGreen)
                 buffers.putColor(buffers.solidColorBlue)
@@ -304,7 +304,7 @@ internal object NexradRenderUtilities {
         var indexCount = 0
         val pixXD = (-1.0 * ((latLon.lon - projectionNumbers.yDbl) * projectionNumbers.oneDegreeScaleFactor) + projectionNumbers.xCenter).toFloat()
         val pixYD = -1.0f * ((test1 - test2) * projectionNumbers.oneDegreeScaleFactorFloat) + projectionNumbers.yCenter.toFloat()
-        (0 until triangleAmount).forEach {
+        repeat(triangleAmount) {
             buffers.putFloat(pixXD + length * cos(it * TWICE_PI / triangleAmount))
             buffers.putFloat(-1.0f * pixYD + length * sin(it * TWICE_PI / triangleAmount))
             buffers.putFloat(pixXD + length * cos((it + 1) * TWICE_PI / triangleAmount))
@@ -325,7 +325,7 @@ internal object NexradRenderUtilities {
         var indexCount = 0
         val pixXD = (-1.0 * ((latLon.lon - projectionNumbers.yDbl) * projectionNumbers.oneDegreeScaleFactor) + projectionNumbers.xCenter).toFloat()
         val pixYD = -1.0f * ((test1 - test2) * projectionNumbers.oneDegreeScaleFactorFloat) + projectionNumbers.yCenter.toFloat()
-        (0 until triangleAmount).forEach {
+        repeat(triangleAmount) {
             buffers.putFloat(pixXD + length * cos(it * TWICE_PI / triangleAmount))
             buffers.putFloat(-1.0f * pixYD + length * sin(it * TWICE_PI / triangleAmount))
             buffers.putFloat(pixXD + length * cos((it + 1) * TWICE_PI / triangleAmount))
@@ -386,7 +386,7 @@ internal object NexradRenderUtilities {
         val len = 0f
         val triangleAmount = 1
         pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
-        (0 until triangleAmount).forEach {
+        repeat(triangleAmount) {
             buffers.putFloat(pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
             buffers.putFloat(-pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
             buffers.putFloat(pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
@@ -419,7 +419,7 @@ internal object NexradRenderUtilities {
             test2 = M_180_DIV_PI * log(tan(M_PI_DIV_4 + pn.xDbl * M_PI_DIV_360), E).toFloat()
             pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
             pixXD = (-((pointY - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
-            (0 until triangleAmount).forEach {
+            repeat(triangleAmount) {
                 buffers.putFloat(lI, pixXD)
                 lI += 4
                 buffers.putFloat(lI, -pixYD)

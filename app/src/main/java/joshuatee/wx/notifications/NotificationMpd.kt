@@ -85,7 +85,6 @@ internal object NotificationMpd {
                     val locNum = n.toString()
                     // have received crash reports for array out of bounds
                     if (Location.locations.getOrNull(n - 1)?.notificationWpcMpd == true) {
-//                    if (Location.locations[n - 1].notificationWpcMpd) {
                         // if location is watching for MPDs pull ib lat/lon and iterate over polygons
                         // call secondary method to send notification if required
                         val contains = polygon2.contains(Location.getLatLon(n - 1).asPoint())

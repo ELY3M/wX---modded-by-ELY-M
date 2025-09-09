@@ -33,10 +33,6 @@
         android:id="@+id/action_atl_twd"
         android:title="@string/atl_tropical_weather_discussion"
         app:showAsAction="never" />
-<!--    <item-->
-<!--        android:id="@+id/action_atl_tws"-->
-<!--        android:title="@string/atl_monthly_tropical_summary"-->
-<!--        app:showAsAction="never" />-->
     <item
         android:id="@+id/action_epac_two"
         android:title="@string/epac_tropical_weather_outlook"
@@ -45,10 +41,6 @@
         android:id="@+id/action_epac_twd"
         android:title="@string/epac_tropical_weather_discussion"
         app:showAsAction="never" />
-<!--    <item-->
-<!--        android:id="@+id/action_epac_tws"-->
-<!--        android:title="@string/epac_monthly_tropical_summary"-->
-<!--        app:showAsAction="never" />-->
     <item
         android:id="@+id/action_cpac_two"
         android:title="@string/cpac_tropical_weather_outlook"
@@ -58,14 +50,6 @@
         android:title="@string/sst_images"
         app:showAsAction="never">
         <menu>
-<!--            <item-->
-<!--                android:id="@+id/action_epac_daily"-->
-<!--                android:title="@string/epac_daily_analysis"-->
-<!--                app:showAsAction="never" />-->
-<!--            <item-->
-<!--                android:id="@+id/action_atl_daily"-->
-<!--                android:title="@string/atl_daily_analysis"-->
-<!--                app:showAsAction="never" />-->
             <item
                 android:id="@+id/action_epac_7daily"
                 android:title="@string/epac_daily_sst_analysis"

@@ -37,11 +37,6 @@ class VBox(val context: Context) : Widget {
         linearLayout.orientation = LinearLayout.VERTICAL
     }
 
-//    constructor(context: Context, orientation: Int, parentView: LinearLayout) : this(context) {
-//        linearLayout.orientation = orientation
-//        parentView.addView(linearLayout)
-//    }
-
     companion object {
         fun fromResource(activity: Activity): VBox {
             val box = VBox(activity)
@@ -119,13 +114,6 @@ class VBox(val context: Context) : Widget {
         )
     }
 
-//    fun wrap() {
-//        linearLayout.layoutParams = LinearLayout.LayoutParams(
-//            LinearLayout.LayoutParams.WRAP_CONTENT,
-//            LinearLayout.LayoutParams.WRAP_CONTENT
-//        )
-//    }
-
     fun get() = linearLayout
 
     override fun getView() = linearLayout
@@ -135,12 +123,6 @@ class VBox(val context: Context) : Widget {
         set(value) {
             linearLayout.visibility = value
         }
-
-//    var orientation
-//        get() = linearLayout.orientation
-//        set(value) {
-//            linearLayout.orientation = value
-//        }
 
     private var gravityBacking = Gravity.START
 

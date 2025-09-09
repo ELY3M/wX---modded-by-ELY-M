@@ -41,11 +41,6 @@ class TouchImage {
     private var drw: NavDrawer? = null
     var bitmap = UtilityImg.getBlankBitmap()
 
-//    constructor(context: Context) {
-//        img = TouchImageView2(context)
-//        this.context = context
-//    }
-
     constructor(activity: Activity, resourceId: Int) {
         img = activity.findViewById(resourceId)
         this.context = activity
@@ -73,17 +68,6 @@ class TouchImage {
         this.drw = drw
         this.prefTokenIdx = prefTokenIdx
     }
-
-//    constructor(
-//        activity: Activity,
-//        toolbar: Toolbar,
-//        toolbarBottom: Toolbar,
-//        resourceId: Int,
-//        drw: NavDrawer,
-//        prefTokenIdx: String
-//    ) : this(activity, resourceId, drw, prefTokenIdx) {
-//        connectClick { UtilityToolbar.showHide(toolbar, toolbarBottom) }
-//    }
 
     constructor(
         activity: Activity, toolbar: Toolbar, resourceId: Int, drw: NavDrawer, prefTokenIdx: String

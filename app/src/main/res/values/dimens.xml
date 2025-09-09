@@ -56,8 +56,6 @@
     <dimen name="fab_margin_mini_2">80dp</dimen>
 
     <!-- telecine -->
-    <!--    <dimen name="overlay_width">144dp</dimen>-->
-    <!--    <dimen name="overlay_jellybean_width">96dp</dimen>-->
     <dimen name="overlay_width">96dp</dimen>
     <dimen name="overlay_jellybean_width">96dp</dimen>
 

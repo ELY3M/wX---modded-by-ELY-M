@@ -30,7 +30,6 @@
     <string name="label_NW">Northwest</string>
     <string name="label_GL">Great Lakes</string>
     <string name="label_GB">Intermountain West</string>
-
     <string name="california">California</string>
     <string name="colorado">Colorado</string>
     <string name="florida">Florida</string>
@@ -39,17 +38,13 @@
     <string name="montana">Montana</string>
     <string name="texas">Texas</string>
     <string name="wisconsin">wisconsin</string>
-
     <string name="northSouthCarolina">North/South Carolina</string>
     <string name="northSouthDakota">North/South Dakota</string>
-
     <string name="ohioValley">Ohio Valley</string>
     <string name="nwPacific">NW Pacific</string>
     <string name="swUs">SW US</string>
     <string name="gulfCoast">Gulf Coast</string>
     <string name="midAtlantic">Mid Atlantic</string>
     <string name="midWest">Mid West</string>
-
     <string name="newEngland">New England</string>
-
 </resources>

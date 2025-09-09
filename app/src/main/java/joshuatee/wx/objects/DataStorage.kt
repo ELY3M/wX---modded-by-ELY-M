@@ -22,7 +22,6 @@
 package joshuatee.wx.objects
 
 import android.content.Context
-import androidx.preference.PreferenceManager
 import joshuatee.wx.util.Utility
 
 //
@@ -43,9 +42,6 @@ class DataStorage(private val preference: String) {
 
     fun valueSet(context: Context, newValue: String) {
         storedVal = newValue
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val editor = preferences.edit()
-        editor.putString(preference, newValue)
-        editor.apply()
+        Utility.writePref(context, preference, newValue)
     }
 }

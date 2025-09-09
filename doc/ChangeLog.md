@@ -2,7 +2,15 @@
 
 # Developer ChangeLog
 
-## 55973 2025_09_08
+## 55975 2025_09_09
+
+* [REF] misc
+
+## 55974 2025_09_09
+
+* [REF] misc
+
+## 55973 2025_09_09
 
 * [REF] enhance in MyApp and Location similar to desktop ports
 

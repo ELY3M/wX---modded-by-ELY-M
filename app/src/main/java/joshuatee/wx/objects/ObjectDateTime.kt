@@ -64,13 +64,14 @@ class ObjectDateTime() {
     // milliseconds since epoch
     fun toEpochMilli(): Long = dateTime.toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli()
 
-    fun getYear() = dateTime.year
+    fun getYear(): Int = dateTime.year
 
     fun getMonth(): Int = dateTime.monthValue
 
     fun getDayOfMonth(): Int = dateTime.dayOfMonth
 
-    val now: LocalDateTime get() = LocalDateTime.now()
+    val now: LocalDateTime
+        get() = LocalDateTime.now()
 
     fun get(): LocalDateTime = dateTime
 
@@ -156,9 +157,7 @@ class ObjectDateTime() {
 
         // UtilityNotificationUtils
         val currentHourIn24: Int
-            get() {
-                return getHour()
-            }
+            get() = getHour()
 
         fun convertFromUtcForMetar(time: String): String = try {
             val ccTime = parse(time.trim(), "yyyy.MM.dd HHmm")

@@ -90,16 +90,6 @@ class Sites(
         return sites[order]
     }
 
-    // FIXME TODO
-//    fun getNearestList(latLon: LatLon, count: Int = 5): List<String> {
-//        for (site in sites) {
-//            site.distance = LatLon.distance(latLon, site.latLon).toInt()
-//        }
-////        self.sites.sort(key=lambda x: x.distance, reverse=False)
-//        sites.sortBy { it.distance }
-//        return [site.codeName for site in self.sites[0:count]]
-//    }
-
     fun getNearestInMiles(latLon: LatLon): Int {
         synchronized(sites) {
             for (site in sites) {

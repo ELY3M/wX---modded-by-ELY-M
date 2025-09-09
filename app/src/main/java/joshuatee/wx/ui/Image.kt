@@ -72,16 +72,6 @@ open class Image : Widget {
         card.addWidget(img)
     }
 
-//    constructor(context: Context, toolbar: Toolbar, bitmap: Bitmap) {
-//        this.context = context
-//        card = Card(context)
-//        img = TouchImageView2(context)
-//        img.layoutParams = layoutParams
-//        UtilityImg.resizeViewSetImgInCard(bitmap, img)
-//        card.addWidget(img)
-//        connect { UtilityToolbar.showHide(toolbar) }
-//    }
-
     open fun set(bitmap: Bitmap, numberAcross: Int = 1) {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams

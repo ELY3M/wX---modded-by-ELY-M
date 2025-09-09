@@ -213,7 +213,6 @@ If set to true the lightning icon on the bottom toolbar of the main screen will 
     <string name="locdot_follows_gps_label">
 Location dot will use the GPS of your device and will also keep the screen on and refresh data according to the refresh interval setting which is 3 minutes by default.
 </string>
-
     <string name="locdot_bug_label">
 add heading bug to your GPS location if you are following your GPS.
 </string>
@@ -295,7 +294,6 @@ Toggle location ( as in current selected location on first tab ) dot on/off.
     <string name="nws_black_bg_label">
 Use a white or black background in as many radar products as possible.
     </string>
-
     <string name="animation_interval_np_label">
 Animation speed. Lower is faster. Default is 8.
       </string>
@@ -344,10 +342,8 @@ Thickness of lines for wind barbs. Smaller number is thinner.
 </string>
     <string name="locdot_size_np">
 Allows one to change the size of the location marker.</string>
-
     <string name="locicon_size_np">
 Allows one to change the size of the GPS location Image.</string>
-
     <string name="locbug_size_np">
 Allows one to change the size of the GPS location Bug.</string>
 

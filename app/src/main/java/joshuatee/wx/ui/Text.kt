@@ -87,10 +87,6 @@ class Text(val context: Context) : Widget {
         }
     }
 
-//    constructor(view: View, resourceId: Int, color: Int) : this(view, resourceId) {
-//        this.color = color
-//    }
-
     constructor(view: View, resourceId: Int, size: TextSize) : this(view.context, size) {
         tv = view.findViewById(resourceId)
         refreshTextSize(size)
@@ -134,10 +130,6 @@ class Text(val context: Context) : Widget {
     fun setTextSize(unit: Int, size: Float) {
         tv.setTextSize(unit, size)
     }
-
-//    fun setSizeHourly() {
-//        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UtilityUI.spToPx(14, context))
-//    }
 
     fun setMonoSpaced() {
         tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)

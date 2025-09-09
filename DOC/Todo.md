@@ -1,11 +1,10 @@
 # TODOs
 
-Sep 2025
-MyApp - radar pref init should handle color init, not 2 calls from myapp
+## Sep 2025
+getter/setter consistency
 ObjectLocation fix handling of notif vars
 UtilityStorePreferences.setDefaults use Utility.writePref
 If Settings - Colors visited, refresh main screen (for Nexrad)
-remove RadarPreferences.blackBg
 better way to handle text color in ViewColorLegend
 
 ## Bugs

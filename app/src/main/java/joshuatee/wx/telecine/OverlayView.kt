@@ -22,10 +22,10 @@ import joshuatee.wx.R
 import joshuatee.wx.util.UtilityImg
 import java.util.Locale
 import android.graphics.PixelFormat.TRANSLUCENT
-import android.text.TextUtils.getLayoutDirectionFromLocale
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+import androidx.core.text.layoutDirection
 
 @SuppressLint("ViewConstructor")
 internal class OverlayView private constructor(
@@ -77,7 +77,7 @@ internal class OverlayView private constructor(
                 context,
                 UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.WHITE)
         )
-        if (getLayoutDirectionFromLocale(Locale.getDefault()) == LAYOUT_DIRECTION_RTL) {
+        if (Locale.getDefault().layoutDirection == LAYOUT_DIRECTION_RTL) {
             animationWidth =
                 -animationWidth // Account for animating in from the other side of screen.
         }
@@ -135,7 +135,7 @@ internal class OverlayView private constructor(
         }
 
         private fun gravityEndLocaleHack(): Int {
-            val direction = getLayoutDirectionFromLocale(Locale.getDefault())
+            val direction = Locale.getDefault().layoutDirection
             return if (direction == LAYOUT_DIRECTION_RTL) Gravity.START else Gravity.END
         }
     }

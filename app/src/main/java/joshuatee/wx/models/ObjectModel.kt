@@ -42,8 +42,6 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
     var currentParam = ""
     var numPanes = 1
     var model = "WRF"
-
-    //    var sectorInt = 0
     var curImg = 0
     var modelType = ModelType.NSSL
     var startStep = 0
@@ -78,14 +76,9 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
     var groups = SparseArray<Group>()
     var routeFn: (Context) -> Unit = {}
 
-    //
     private var defaultModel = ""
     var spinnerTimeValue = 0
-
-    //    var animRan = false
     var firstRun = false
-
-    //    var imageLoaded = false
     lateinit var miStatusParam1: MenuItem
     lateinit var miStatusParam2: MenuItem
     var fab1: Fab? = null

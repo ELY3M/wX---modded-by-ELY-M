@@ -29,8 +29,6 @@ import joshuatee.wx.util.UtilityString
 class ObjectWarning() {
 
     var url = ""
-
-    //    var title = ""
     var area = ""
     var effective = ""
     var expires = ""
@@ -38,13 +36,10 @@ class ObjectWarning() {
     var sender = ""
     private var polygon = ""
     private var vtec = ""
-
-    //    private var geometry = ""
     var isCurrent = true
 
     constructor(
         url: String,
-        title: String,
         area: String,
         effective: String,
         expires: String,
@@ -52,11 +47,8 @@ class ObjectWarning() {
         sender: String,
         polygon: String,
         vtec: String,
-//        geometry: String
     ) : this() {
         this.url = url
-        // detailed desc
-//        this.title = title
         this.area = area
 
         this.effective = effective
@@ -71,7 +63,6 @@ class ObjectWarning() {
         this.sender = sender
         this.polygon = polygon
         this.vtec = vtec
-//        this.geometry = geometry
         this.isCurrent = ObjectDateTime.isVtecCurrent(this.vtec)
         if (vtec.startsWith("O.EXP") || vtec.startsWith("O.CAN")) {
             this.isCurrent = false
@@ -115,7 +106,7 @@ class ObjectWarning() {
                 html,
                 "\"id\": \"(https://api.weather.gov/alerts/urn.*?)\""
             )
-            val titleList = UtilityString.parseColumn(html, "\"description\": \"(.*?)\"")
+//            val titleList = UtilityString.parseColumn(html, "\"description\": \"(.*?)\"")
             val areaDescList = UtilityString.parseColumn(html, "\"areaDesc\": \"(.*?)\"")
             val effectiveList = UtilityString.parseColumn(html, "\"effective\": \"(.*?)\"")
             val expiresList = UtilityString.parseColumn(html, "\"expires\": \"(.*?)\"")
@@ -131,7 +122,6 @@ class ObjectWarning() {
                 warnings.add(
                     ObjectWarning(
                         Utility.safeGet(urlList, index),
-                        Utility.safeGet(titleList, index),
                         Utility.safeGet(areaDescList, index),
                         Utility.safeGet(effectiveList, index),
                         Utility.safeGet(expiresList, index),
@@ -139,7 +129,6 @@ class ObjectWarning() {
                         Utility.safeGet(senderNameList, index),
                         Utility.safeGet(listOfPolygonRaw, index),
                         Utility.safeGet(vtecs, index),
-//                        Utility.safeGet(geometryList, index)
                     )
                 )
             }

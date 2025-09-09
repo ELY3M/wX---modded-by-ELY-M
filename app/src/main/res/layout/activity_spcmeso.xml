@@ -70,10 +70,4 @@
         android:background="?attr/colorPrimary"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
-</androidx.drawerlayout.widget.DrawerLayout><!--
-
-?attr/colorPrimary
-
-    android:background="@color/primary_dark_blue"
-    android:divider="@android:color/transparent"
-this was in ExpandableListView-->
+</androidx.drawerlayout.widget.DrawerLayout>
