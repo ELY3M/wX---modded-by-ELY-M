@@ -41,7 +41,7 @@ import joshuatee.wx.util.UtilityLog
 
 internal object NotificationMcd {
 
-    fun locationNeedsMcd() = (0 until Location.numLocations).any {
+    fun locationNeedsMcd() = (0 until Location.getNumberOfLocations()).any {
         Location.locations.getOrNull(it)?.notificationMcd ?: false
     }
 
@@ -79,7 +79,7 @@ internal object NotificationMcd {
                 val polygonFrame = ExternalPolygon.Builder()
                 latLons.forEach { latLon -> polygonFrame.addVertex(ExternalPoint(latLon)) }
                 val polygonShape = polygonFrame.build()
-                for (n in 1..Location.numLocations) {
+                for (n in 1..Location.getNumberOfLocations()) {
                     val locNum = n.toString()
                     if (Location.locations.getOrNull(n - 1)?.notificationMcd == true) {
 //                    if (Location.locations[n - 1].notificationMcd) {

@@ -59,8 +59,6 @@ class HourlyActivity : BaseActivity() {
     }
 
     private var htmlShare = listOf<String>()
-
-    //    private lateinit var card: Card
     private lateinit var cardVerticalText: CardVerticalText
     private lateinit var scrollView: ScrollView
     private lateinit var box: VBox

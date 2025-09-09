@@ -69,7 +69,7 @@ class SettingsLocationGenericSwitches(
         var alertNotificationWpcmpdCurrent =
             Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$locationNumber", "false")
         // If this this is a new location
-        if (To.int(locationNumber) == Location.numLocations + 1) {
+        if (To.int(locationNumber) == Location.getNumberOfLocations() + 1) {
             editTextLabel.setText("Location $locationNumber")
             editTextLabel.setSelection(editTextLabel.length())
             alertNotificationCurrent = "false"

@@ -116,9 +116,8 @@ class SevereDashboardActivity : BaseActivity() {
                 { bitmaps[1] = UtilitySpc.getStormReportsTodayUrl().getImage() },
                 ::showItems
             )
-            // TODO FIXME .values()
-            warningsByType.forEach { (_, severeWarning) ->
-                FutureVoid({ severeWarning.download() }, ::updateWarnings)
+            warningsByType.values.forEach {
+                FutureVoid({ it.download() }, ::updateWarnings)
             }
         }
     }

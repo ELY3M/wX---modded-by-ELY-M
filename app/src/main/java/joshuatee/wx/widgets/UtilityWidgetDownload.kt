@@ -51,7 +51,7 @@ internal object UtilityWidgetDownload {
 
     fun getWidgetData(context: Context) {
         UtilityLog.d("WX", "background widget download")
-        (1..Location.numLocations).forEach {
+        (1..Location.getNumberOfLocations()).forEach {
             val locNum = it.toString()
             val locNumInt = To.int(locNum) - 1
             val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")

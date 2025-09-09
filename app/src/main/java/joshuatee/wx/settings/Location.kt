@@ -36,11 +36,13 @@ import joshuatee.wx.util.WfoSites
 object Location {
 
     var locations = listOf<ObjectLocation>()
-    var numLocations = 1
+    private var numLocations = 1
     var currentLocation = 0
         private set
 
     val listOf = mutableListOf<String>()
+
+    fun getNumberOfLocations(): Int = numLocations
 
     fun us(xStr: String): Boolean = if (xStr.isNotEmpty()) {
         Character.isDigit(xStr[0])
@@ -121,11 +123,12 @@ object Location {
 
     val isUS get() = locations.getOrNull(currentLocation)?.isUS ?: true
 
-    fun refreshLocationData(context: Context) {
+    fun refresh(context: Context) {
         initNumLocations(context)
         clearListOfNames()
-        locations = (0 until numLocations).map { ObjectLocation(context, it) }
+        locations = (0 until getNumberOfLocations()).map { ObjectLocation(context, it) }
         addToListOfNames(ADD_LOC_STR)
+        setCurrentLocationStr(context, Utility.readPref(context, "CURRENT_LOC_FRAGMENT", "1"))
         checkCurrentLocationValidity()
     }
 
@@ -188,7 +191,7 @@ object Location {
             Utility.writePref(context, "RID$locNum", radarSite.uppercase(Locale.US))
             Utility.writePref(context, "NWS$locNum", wfo.uppercase(Locale.US))
         }
-        refreshLocationData(context)
+        refresh(context)
         setCurrentLocationStr(context, locNum)
         return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.uppercase(Locale.US) + "(" + radarSite.uppercase(
             Locale.US
@@ -320,7 +323,7 @@ object Location {
             val shiftNum = (widgetLocNumInt - 1).toString()
             Utility.writePref(context, "WIDGET_LOCATION", shiftNum)
         }
-        refreshLocationData(context)
+        refresh(context)
     }
 
     private const val ADD_LOC_STR = "Add Location..."

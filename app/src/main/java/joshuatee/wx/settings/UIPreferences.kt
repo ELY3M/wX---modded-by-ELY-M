@@ -24,6 +24,7 @@ package joshuatee.wx.settings
 
 import android.content.Context
 import android.graphics.Color
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import joshuatee.wx.MyApplication
@@ -36,10 +37,6 @@ import joshuatee.wx.util.UtilityFavorites
 
 object UIPreferences {
 
-    // These are set in myapp still
-//    var telecineVideoSizePercentage = 0
-//    var telecineSwitchShowCountdown = false
-//    var telecineSwitchRecordingNotification = false
     var deviceScale = 0.0f
     var cardCorners = 0.0f
     var padding = 0
@@ -49,8 +46,6 @@ object UIPreferences {
     var actionBarHeight = 0
     var refreshLocMin = 0
     var translateText = false
-
-    //    private var nwsTextRemovelinebreaks = false
     var recordScreenShare = false
     var backgroundColor = Color.BLACK //elys mod
     var colorNotif = 0
@@ -134,7 +129,7 @@ object UIPreferences {
     const val HOMESCREEN_FAVORITE_DEFAULT = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
     var settingsUIVisitedNeedRefresh = false
 
-    fun initPreferences(context: Context) {
+    fun initialize(context: Context, dm: DisplayMetrics) {
         useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "true").startsWith("t")
         useNwsApiForHourly = Utility.readPref(context, "USE_NWS_API_HOURLY", "true").startsWith("t")
         navDrawerMainScreen =
@@ -155,8 +150,6 @@ object UIPreferences {
         homescreenTextLength = Utility.readPrefInt(context, "HOMESCREEN_TEXT_LENGTH_PREF", 500)
         refreshLocMin = Utility.readPrefInt(context, "REFRESH_LOC_MIN", 10)
         translateText = Utility.readPref(context, "TRANSLATE_TEXT", "false").startsWith("t")
-//        nwsTextRemovelinebreaks =
-//            Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
         recordScreenShare = Utility.readPref(context, "RECORD_SCREEN_SHARE", "true").startsWith("t")
         dualpaneRadarIcon =
             Utility.readPref(context, "DUALPANE_RADAR_ICON", "false").startsWith("t")
@@ -184,63 +177,95 @@ object UIPreferences {
         tabHeaders[0] = Utility.readPref(context, "TAB1_HEADER", "LOCAL")
         tabHeaders[1] = Utility.readPref(context, "TAB2_HEADER", "SPC")
         tabHeaders[2] = Utility.readPref(context, "TAB3_HEADER", "MISC")
-        widgetPreventTap = getInitialPreference("UI_WIDGET_PREVENT_TAP", "")
-        fullscreenMode = getInitialPreference("FULLSCREEN_MODE", "false")
-        lockToolbars = getInitialPreference("LOCK_TOOLBARS", "true")
-        unitsM = getInitialPreference("UNITS_M", "true")
-        unitsF = getInitialPreference("UNITS_F", "true")
-        hourlyShowAMPM = getInitialPreference("HOURLY_SHOW_AM_PM", "false")
-        widgetTextColor = getInitialPreference("WIDGET_TEXT_COLOR", Color.WHITE)
-        widgetHighlightTextColor = getInitialPreference("WIDGET_HIGHLIGHT_TEXT_COLOR", Color.YELLOW)
-        widgetNexradSize = getInitialPreference("WIDGET_NEXRAD_SIZE", 10)
-        nwsIconTextColor = getInitialPreference("NWS_ICON_TEXT_COLOR", Color.rgb(38, 97, 139))
-        nwsIconBottomColor = getInitialPreference("NWS_ICON_BOTTOM_COLOR", Color.rgb(255, 255, 255))
-        elevationPref = getInitialPreference("ELEVATION_PREF", elevationPrefDefault).toFloat()
+        widgetPreventTap = Utility.readPref(context, "UI_WIDGET_PREVENT_TAP", "").startsWith("t")
+        fullscreenMode = Utility.readPref(context, "FULLSCREEN_MODE", "false").startsWith("t")
+        lockToolbars = Utility.readPref(context, "LOCK_TOOLBARS", "true").startsWith("t")
+        unitsM = Utility.readPref(context, "UNITS_M", "true").startsWith("t")
+        unitsF = Utility.readPref(context, "UNITS_F", "true").startsWith("t")
+        hourlyShowAMPM = Utility.readPref(context, "HOURLY_SHOW_AM_PM", "false").startsWith("t")
+        widgetTextColor = Utility.readPrefInt(context, "WIDGET_TEXT_COLOR", Color.WHITE)
+        widgetHighlightTextColor =
+            Utility.readPrefInt(context, "WIDGET_HIGHLIGHT_TEXT_COLOR", Color.YELLOW)
+        widgetNexradSize = Utility.readPrefInt(context, "WIDGET_NEXRAD_SIZE", 10)
+        nwsIconTextColor =
+            Utility.readPrefInt(context, "NWS_ICON_TEXT_COLOR", Color.rgb(38, 97, 139))
+        nwsIconBottomColor =
+            Utility.readPrefInt(context, "NWS_ICON_BOTTOM_COLOR", Color.rgb(255, 255, 255))
+        elevationPref =
+            Utility.readPrefInt(context, "ELEVATION_PREF", elevationPrefDefault).toFloat()
         elevationPref =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, MyApplication.dm)
         cardElevation = elevationPref
         fabElevation = elevationPref
         fabElevationDepressed = elevationPref * 2
 		//elys mod 
-		checkinternet = getInitialPreference("CHECKINTERNET", "false")
-        simpleMode = getInitialPreference("SIMPLE_MODE", "false")
-        checkspc = getInitialPreference("CHECKSPC", "false")
-        checkwpc = getInitialPreference("CHECKWPC", "false")
-        checktor = getInitialPreference("CHECKTOR", "false")
-        vrButton = getInitialPreference("VR_BUTTON", "false")
+		checkinternet = Utility.readPref(context, "CHECKINTERNET", "false").startsWith("t")
+        simpleMode = Utility.readPref(context, "SIMPLE_MODE", "false").startsWith("t")
+        checkspc = Utility.readPref(context, "CHECKSPC", "false").startsWith("t")
+        checkwpc = Utility.readPref(context, "CHECKWPC", "false").startsWith("t")
+        checktor = Utility.readPref(context, "CHECKTOR", "false").startsWith("t")
+        vrButton = Utility.readPref(context, "VR_BUTTON", "false").startsWith("t")
         if (UtilityUI.isTablet()) {
             nwsIconSizeDefault = 6
         }
-        nwsIconSize = MyApplication.preferences.getInt("NWS_ICON_SIZE_PREF", nwsIconSizeDefault)
-        homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", HOMESCREEN_FAVORITE_DEFAULT)
+        nwsIconSize = Utility.readPrefInt(context, "NWS_ICON_SIZE_PREF", nwsIconSizeDefault)
+        homescreenFav = Utility.readPref(context, "HOMESCREEN_FAV", HOMESCREEN_FAVORITE_DEFAULT)
         isNexradOnMainScreen = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
         FavoriteType.entries.forEach {
-            favorites[it] = getInitialPreferenceString(
+            favorites[it] = Utility.readPref(
+                context,
                 UtilityFavorites.getPrefToken(it),
                 GlobalVariables.PREFERENCE_SEPARATOR
             )
         }
-        spotterFav = getInitialPreferenceString("SPOTTER_FAV", "")
-        wfoTextFav = getInitialPreferenceString("WFO_TEXT_FAV", "AFD")
-        wpcTextFav = getInitialPreferenceString("WPC_TEXT_FAV", "pmdspd")
-        playlistStr = getInitialPreferenceString("PLAYLIST", "")
-        widgetCCShow7Day = getInitialPreference("WIDGET_CC_DONOTSHOW_7_DAY", "true")
-        hourlyShowGraph = getInitialPreference("HOURLY_SHOW_GRAPH", "true")
-        mainScreenRefreshToTop = getInitialPreference("MAIN_SCREEN_SCROLL_TOP_RESTART", "false")
-        primaryColor = MyApplication.preferences.getInt("MYAPP_PRIMARY_COLOR", 0)
+        spotterFav = Utility.readPref(context, "SPOTTER_FAV", "")
+        wfoTextFav = Utility.readPref(context, "WFO_TEXT_FAV", "AFD")
+        wpcTextFav = Utility.readPref(context, "WPC_TEXT_FAV", "pmdspd")
+        playlistStr = Utility.readPref(context, "PLAYLIST", "")
+        widgetCCShow7Day =
+            Utility.readPref(context, "WIDGET_CC_DONOTSHOW_7_DAY", "true").startsWith("t")
+        hourlyShowGraph = Utility.readPref(context, "HOURLY_SHOW_GRAPH", "true").startsWith("t")
+        mainScreenRefreshToTop =
+            Utility.readPref(context, "MAIN_SCREEN_SCROLL_TOP_RESTART", "false").startsWith("t")
+        primaryColor = Utility.readPrefInt(context, "MYAPP_PRIMARY_COLOR", 0)
         spinnerLayout = if (themeIsWhite) {
             R.layout.spinner_row_white
         } else {
             R.layout.spinner_row_blue
         }
+
+        val res = context.resources
+        deviceScale = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 1f,
+            MyApplication.Companion.dm
+        )
+        padding = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            res.getDimension(R.dimen.padding_dynamic_tv),
+            MyApplication.Companion.dm
+        ).toInt()
+        paddingSettings = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            res.getDimension(R.dimen.padding_dynamic_tv_settings),
+            MyApplication.Companion.dm
+        ).toInt()
+        paddingSmall = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            res.getDimension(R.dimen.padding_dynamic_tv_small),
+            MyApplication.Companion.dm
+        ).toInt()
+        lLpadding = res.getDimension(R.dimen.padding_ll)
+
+        cardCorners = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            Utility.readPrefInt(context, "CARD_CORNER_RADIUS", 0).toFloat(),
+            dm
+        )
+
+        val tv = TypedValue()
+        if (context.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            actionBarHeight =
+                TypedValue.complexToDimensionPixelSize(tv.data, res.displayMetrics)
+        }
     }
-
-    private fun getInitialPreference(pref: String, initValue: Int): Int =
-        MyApplication.preferences.getInt(pref, initValue)
-
-    private fun getInitialPreference(pref: String, initValue: String): Boolean =
-        (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
-
-    private fun getInitialPreferenceString(pref: String, initValue: String): String =
-        MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

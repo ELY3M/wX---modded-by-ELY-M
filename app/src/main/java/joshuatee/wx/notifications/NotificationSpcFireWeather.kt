@@ -39,7 +39,7 @@ import joshuatee.wx.util.To
 @Suppress("SpellCheckingInspection")
 internal object NotificationSpcFireWeather {
 
-    fun locationNeedsSpcFireWeather() = (0 until Location.numLocations).any {
+    fun locationNeedsSpcFireWeather() = (0 until Location.getNumberOfLocations()).any {
         Location.locations.getOrNull(it)?.notificationSpcFw ?: false
     }
 
@@ -118,7 +118,7 @@ internal object NotificationSpcFireWeather {
                             polygonFrame.addVertex(ExternalPoint(latLon))
                         }
                         val polygonShape = polygonFrame.build()
-                        (1..Location.numLocations).forEach { n ->
+                        (1..Location.getNumberOfLocations()).forEach { n ->
                             val locNum = n.toString()
                             if (Location.locations.getOrNull(n - 1)?.notificationSpcFw == true) {
                                 // if location is watching for MCDs pull ib lat/lon and iterate over polygons

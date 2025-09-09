@@ -28,17 +28,9 @@ import joshuatee.wx.objects.PolygonWarning
 internal object UtilityColor {
 
     fun setColor(prefVal: String): Int = when (prefVal) {
-        "RADAR_COLOR_HW" -> if (RadarPreferences.blackBg) {
-            Color.BLUE
-        } else {
-            Color.BLUE
-        }
+        "RADAR_COLOR_HW" -> Color.BLUE
         "DRAW_TOOL_COLOR" -> Color.rgb(143, 213, 253)
-        "RADAR_COLOR_HW_EXT" -> if (RadarPreferences.blackBg) {
-            Color.BLUE
-        } else {
-            Color.BLUE
-        }
+        "RADAR_COLOR_HW_EXT" -> Color.BLUE
         "RADAR_COLOR_STATE" -> Color.WHITE
         "RADAR_COLOR_TSTORM" -> Color.YELLOW
         "RADAR_COLOR_TSTORM_WATCH" -> Color.BLUE

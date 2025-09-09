@@ -38,7 +38,7 @@ object UtilityLocation {
 
     fun latLonAsDouble(): List<Double> {
         val latLon = mutableListOf<Double>()
-        (0 until joshuatee.wx.settings.Location.numLocations).forEach {
+        (0 until joshuatee.wx.settings.Location.getNumberOfLocations()).forEach {
             val lat: String
             val lon: String
             if (!joshuatee.wx.settings.Location.getX(it).contains(":")) {

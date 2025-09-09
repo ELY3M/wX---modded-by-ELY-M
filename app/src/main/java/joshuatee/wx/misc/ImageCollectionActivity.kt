@@ -66,7 +66,6 @@ class ImageCollectionActivity : VideoRecordActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
-//        if (navDrawer.url.contains("jma") && imageCollection.title == "GOESFD") {
         if (imageCollection.title == "GOESFD" && UtilityGoesFullDisk.canAnimate(navDrawer.url)) {
             actionAnimate.isVisible = true
         }

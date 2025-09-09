@@ -545,20 +545,5 @@ object UtilitySpcMeso {
         "22" to LatLon(40.95, -110.63),
     )
 
-//    val sectorMapLong = mapOf(
-//        "19" to "CONUS",
-//        "20" to "Midwest",
-//        "21" to "Great Lakes",
-//        "22" to "Intermountain West",
-//        "13" to "North Central",
-//        "14" to "Central",
-//        "15" to "South Central",
-//        "16" to "Northeast",
-//        "17" to "Central East",
-//        "18" to "Southeast",
-//        "12" to "Southwest",
-//        "11" to "Northwest"
-//    )
-
-    fun getNearest(latLon: LatLon) = UtilityLocation.getNearest(latLon, sectorToLatLon)
+    fun getNearest(latLon: LatLon): String = UtilityLocation.getNearest(latLon, sectorToLatLon)
 }

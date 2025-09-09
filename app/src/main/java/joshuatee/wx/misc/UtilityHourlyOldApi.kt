@@ -120,7 +120,6 @@ object UtilityHourlyOldApi {
             }
             val time = ObjectDateTime.translateTimeForHourly(time2List[j])
             sb += To.stringPadLeft(time, 10)
-//            sb += "   "
             sb += To.stringPadLeft(temp2List[j], 8)
             sb += To.stringPadLeft(temp3Val, 8)
             sb += To.stringPadLeft(temp4Val, 8)

@@ -91,7 +91,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun updateList() {
-        locations = MutableList(Location.numLocations) { "" }
+        locations = MutableList(Location.getNumberOfLocations()) { "" }
         Location.locations.forEach {
             it.updateObservation("")
         }
@@ -102,14 +102,14 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         settingsLocationAdapterList = SettingsLocationAdapterList(locations)
         recyclerView.adapter = settingsLocationAdapterList
         updateTitle()
-        Location.refreshLocationData(this)
+        Location.refresh(this)
         getContent()
         super.onRestart()
     }
 
     private fun updateTitle() {
         setTitle(
-            "Locations (" + To.string(Location.numLocations) + ")",
+            "Locations (" + To.string(Location.getNumberOfLocations()) + ")",
             "Tap location to edit, delete, or move."
         )
     }
@@ -147,17 +147,17 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             locA.saveToNewSlot(position)
             locB.saveToNewSlot(position - 1)
         } else {
-            val locA = ObjectLocation(this, Location.numLocations - 1)
+            val locA = ObjectLocation(this, Location.getNumberOfLocations() - 1)
             val locB = ObjectLocation(this, 0)
             locA.saveToNewSlot(0)
-            locB.saveToNewSlot(Location.numLocations - 1)
+            locB.saveToNewSlot(Location.getNumberOfLocations() - 1)
         }
         settingsLocationAdapterList.notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun moveDown(position: Int) {
-        if (position < Location.numLocations - 1) {
+        if (position < Location.getNumberOfLocations() - 1) {
             val locA = ObjectLocation(this, position)
             val locB = ObjectLocation(this, position + 1)
             locA.saveToNewSlot(position + 1)

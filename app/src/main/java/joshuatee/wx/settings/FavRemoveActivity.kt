@@ -51,8 +51,6 @@ class FavRemoveActivity : BaseActivity() {
 
     private var favorites = mutableListOf<String>()
     private var favoriteString = ""
-
-    //    private var prefTokenLocation = ""
     private var labels = mutableListOf<String>()
     private lateinit var objectRecyclerView: ObjectRecyclerView
     private lateinit var type: FavoriteType
@@ -70,25 +68,13 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun setupVars() {
-        when (type) {
-            FavoriteType.SND -> {
-//                prefTokenLocation = "NWS_LOCATION_"
-                verboseTitle = "sounding sites"
-            }
-
-            FavoriteType.WFO -> {
-//                prefTokenLocation = "NWS_LOCATION_"
-                verboseTitle = "NWS offices"
-            }
-
-            FavoriteType.RID -> {
-//                prefTokenLocation = "RID_LOC_"
-                verboseTitle = "radar sites"
-            }
-
-            FavoriteType.NWS_TEXT -> verboseTitle = "text products"
-            FavoriteType.SREF -> verboseTitle = "parameters"
-            FavoriteType.SPCMESO -> verboseTitle = "parameters"
+        verboseTitle = when (type) {
+            FavoriteType.SND -> "sounding sites"
+            FavoriteType.WFO -> "NWS offices"
+            FavoriteType.RID -> "radar sites"
+            FavoriteType.NWS_TEXT -> "text products"
+            FavoriteType.SREF -> "parameters"
+            FavoriteType.SPCMESO -> "parameters"
         }
         favoriteString = Utility.readPref(
             this,

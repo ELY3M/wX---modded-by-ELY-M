@@ -21,9 +21,10 @@
 
 package joshuatee.wx.settings
 
+import android.content.Context
 import android.provider.Settings
-import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.NotificationTextProduct
+import joshuatee.wx.util.Utility
 
 object NotificationPreferences {
 
@@ -55,52 +56,50 @@ object NotificationPreferences {
     const val NOTIFICATION_STRING_SEPARATOR = ","
     var notifTextProdStr = ""
 
-    fun initPreferences() {
+    fun initialize(context: Context) {
         alertNotificationSoundTornadoCurrent =
-            getInitialPreference("ALERT_NOTIFICATION_SOUND_TORNADO", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND_TORNADO", "false").startsWith("t")
         alertNotificationSoundSpcmcd =
-            getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCMCD", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND_SPCMCD", "false").startsWith("t")
         alertNotificationSoundWpcmpd =
-            getInitialPreference("ALERT_NOTIFICATION_SOUND_WPCMPD", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND_WPCMPD", "false").startsWith("t")
         alertNotificationSoundNhcAtl =
-            getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_ATL", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND_NHC_ATL", "false").startsWith("t")
         alertNotificationSoundSpcwat =
-            getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCWAT", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND_SPCWAT", "false").startsWith("t")
         alertNotificationSoundSpcswo =
-            getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCSWO", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND_SPCSWO", "false").startsWith("t")
         alertNotificationSoundTextProd =
-            getInitialPreference("ALERT_NOTIFICATION_SOUND_TEXT_PROD", "false")
-        notifSoundRepeat = getInitialPreference("NOTIF_SOUND_REPEAT", "false")
-        notifTts = getInitialPreference("NOTIF_TTS", "false")
-        alertBlackoutAmCurrent = getInitialPreference("ALERT_BLACKOUT_AM", 7)
-        alertBlackoutPmCurrent = getInitialPreference("ALERT_BLACKOUT_PM", 22)
-        alertTornadoNotification = getInitialPreference("ALERT_TORNADO_NOTIFICATION", "false")
-        alertSpcMcdNotification = getInitialPreference("ALERT_SPCMCD_NOTIFICATION", "false")
-        alertSpcWatchNotification = getInitialPreference("ALERT_SPCWAT_NOTIFICATION", "false")
-        alertSpcSwoNotification = getInitialPreference("ALERT_SPCSWO_NOTIFICATION", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND_TEXT_PROD", "false").startsWith("t")
+        notifSoundRepeat = Utility.readPref(context, "NOTIF_SOUND_REPEAT", "false").startsWith("t")
+        notifTts = Utility.readPref(context, "NOTIF_TTS", "false").startsWith("t")
+        alertBlackoutAmCurrent = Utility.readPrefInt(context, "ALERT_BLACKOUT_AM", 7)
+        alertBlackoutPmCurrent = Utility.readPrefInt(context, "ALERT_BLACKOUT_PM", 22)
+        alertTornadoNotification =
+            Utility.readPref(context, "ALERT_TORNADO_NOTIFICATION", "false").startsWith("t")
+        alertSpcMcdNotification =
+            Utility.readPref(context, "ALERT_SPCMCD_NOTIFICATION", "false").startsWith("t")
+        alertSpcWatchNotification =
+            Utility.readPref(context, "ALERT_SPCWAT_NOTIFICATION", "false").startsWith("t")
+        alertSpcSwoNotification =
+            Utility.readPref(context, "ALERT_SPCSWO_NOTIFICATION", "false").startsWith("t")
         alertSpcSwoSlightNotification =
-            getInitialPreference("ALERT_SPCSWO_SLIGHT_NOTIFICATION", "false")
-        alertWpcMpdNotification = getInitialPreference("ALERT_WPCMPD_NOTIFICATION", "false")
-        alertBlackoutTornado = getInitialPreference("ALERT_BLACKOUT_TORNADO", "true")
-        alertNhcEpacNotification = getInitialPreference("ALERT_NHC_EPAC_NOTIFICATION", "false")
-        alertNhcAtlNotification = getInitialPreference("ALERT_NHC_ATL_NOTIFICATION", "false")
-        alertAutocancel = getInitialPreference("ALERT_AUTOCANCEL", "true")
-        alertBlackout = getInitialPreference("ALERT_BLACKOUT", "false")
-        alertOnlyOnce = getInitialPreference("ALERT_ONLYONCE", "true")
-        notifSoundUri = getInitialPreferenceString("NOTIF_SOUND_URI", "")
+            Utility.readPref(context, "ALERT_SPCSWO_SLIGHT_NOTIFICATION", "false").startsWith("t")
+        alertWpcMpdNotification =
+            Utility.readPref(context, "ALERT_WPCMPD_NOTIFICATION", "false").startsWith("t")
+        alertBlackoutTornado =
+            Utility.readPref(context, "ALERT_BLACKOUT_TORNADO", "true").startsWith("t")
+        alertNhcEpacNotification =
+            Utility.readPref(context, "ALERT_NHC_EPAC_NOTIFICATION", "false").startsWith("t")
+        alertNhcAtlNotification =
+            Utility.readPref(context, "ALERT_NHC_ATL_NOTIFICATION", "false").startsWith("t")
+        alertAutocancel = Utility.readPref(context, "ALERT_AUTOCANCEL", "true").startsWith("t")
+        alertBlackout = Utility.readPref(context, "ALERT_BLACKOUT", "false").startsWith("t")
+        alertOnlyOnce = Utility.readPref(context, "ALERT_ONLYONCE", "true").startsWith("t")
+        notifSoundUri = Utility.readPref(context, "NOTIF_SOUND_URI", "")
         if (notifSoundUri == "") {
             notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
         }
-        notifTextProdStr = getInitialPreferenceString(NotificationTextProduct.PREF_TOKEN, "")
+        notifTextProdStr = Utility.readPref(context, NotificationTextProduct.PREF_TOKEN, "")
     }
-
-    private fun getInitialPreference(pref: String, initValue: Int): Int =
-        MyApplication.preferences.getInt(pref, initValue)
-
-    private fun getInitialPreference(pref: String, initValue: String): Boolean =
-        (MyApplication.preferences.getString(pref, initValue) ?: initValue).startsWith("t")
-
-    @Suppress("SameParameterValue")
-    private fun getInitialPreferenceString(pref: String, initValue: String): String =
-        MyApplication.preferences.getString(pref, initValue) ?: initValue
 }

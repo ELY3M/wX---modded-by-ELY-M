@@ -95,7 +95,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
 
     private fun addSpinner() {
         val sectors = listOf("regional", "usa")
-        val locations = (1..Location.numLocations).map {
+        val locations = (1..Location.getNumberOfLocations()).map {
             "$it: " + Utility.readPref(this, "LOC" + it + "_LABEL", "").take(20)
         }
         val nexradCenterList = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")

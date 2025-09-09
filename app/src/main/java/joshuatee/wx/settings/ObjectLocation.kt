@@ -96,7 +96,7 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
         Utility.writePref(context, "NWS$iStr", wfo)
         Utility.writePref(context, "RID$iStr", rid)
         Utility.writePref(context, "LOC" + iStr + "_OBSERVATION", observation)
-        Location.refreshLocationData(context)
+        Location.refresh(context)
     }
 
     fun updateObservation(observation: String) {

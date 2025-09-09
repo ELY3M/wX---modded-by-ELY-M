@@ -143,7 +143,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun initializeDataStructures() {
-        objectToolbarBottom.find(R.id.action_delete).isVisible = Location.numLocations > 1
+        objectToolbarBottom.find(R.id.action_delete).isVisible = Location.getNumberOfLocations() > 1
         CitiesExtended.create(this)
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
         Utility.writePref(this, "LOCATION_CANADA_CITY", "")
@@ -192,7 +192,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             UtilityWXJobService.startService(this)
             Utility.writePref(this, "RESTART_NOTIF", "false")
         }
-        Location.refreshLocationData(this)
+        Location.refresh(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -358,7 +358,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         val subTitleString = "WFO: " +
                 Utility.readPref(this, "NWS$locationNumber", "") +
                 " - Nexrad: " + Utility.readPref(this, "RID$locationNumber", "")
-        if (subTitleString != "WFO:  - Nexrad: " && (To.int(locationNumber) != Location.numLocations + 1)) {
+        if (subTitleString != "WFO:  - Nexrad: " && (To.int(locationNumber) != Location.getNumberOfLocations() + 1)) {
             toolbar.subtitle = subTitleString
         }
     }

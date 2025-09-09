@@ -293,7 +293,7 @@ class SettingsRadarActivity : BaseActivity() {
         }
         RadarGeometry.updateConfig()
         PolygonType.refresh()
-        RadarPreferences.initGenericRadarWarnings(this)
+        PolygonWarning.load(this)
         super.onPause()
     }
 

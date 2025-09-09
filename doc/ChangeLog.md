@@ -2,11 +2,23 @@
 
 # Developer ChangeLog
 
-## 55971 2025_09_06
+## 55973 2025_09_08
+
+* [REF] enhance in MyApp and Location similar to desktop ports
+
+## 55972 2025_09_08
+
+* [ADD] start to move off getInitialPreference in RadarPreferences (and UI/Notif)
+* [ADD] remove obsolete option "Black background" (this was moved to Settings->About->Developer
+  Settings awhile ago), it conflicts with the ability to set any arbitrary color for **Nexrad Radar
+  Background color** in Settings -> Colors
+
+## 55971 2025_09_08
 
 * [REF] various files esp nexrad
 * [FIX] Colormap Legend would not show if radar product TZ0 selected (TDWR)
 * [FIX] Colormap Legend would not show for tilts other then lowest tilt for ref/vel
+* [ADD] start to move off getInitialPreference in RadarPreferences
 
 ## 55970 2025_09_06
 

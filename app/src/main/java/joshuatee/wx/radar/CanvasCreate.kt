@@ -134,11 +134,7 @@ object CanvasCreate {
                 ?: R.raw.dvn94, fileName
         )
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = if (RadarPreferences.blackBg) {
-            Color.BLACK.toDrawable()
-        } else {
-            Color.WHITE.toDrawable()
-        }
+        val colorDrawable = Color.BLACK.toDrawable()
         try {
             val bitmapCanvas = createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT)
             CanvasRadial8Bit.decodeAndPlot(

@@ -54,7 +54,7 @@ class BackgroundFetch(val context: Context) {
         //
         // iterate over locations and if enabled check for alerts
         //
-        (1..Location.numLocations).forEach {
+        (1..Location.getNumberOfLocations()).forEach {
             val requestID = ObjectDateTime.currentTimeMillis().toInt()
             notificationUrls += NotificationLocal.send(context, it.toString(), requestID + 1)
         }
@@ -90,7 +90,7 @@ class BackgroundFetch(val context: Context) {
             notificationUrls += NotificationNhc.send(context)
         }
         // send 7day and current conditions notifications for locations
-        (1..Location.numLocations).forEach {
+        (1..Location.getNumberOfLocations()).forEach {
             val requestID = ObjectDateTime.currentTimeMillis().toInt()
             notificationUrls += NotificationLocal.sendCurrentConditionsAnd7Day(
                 context,

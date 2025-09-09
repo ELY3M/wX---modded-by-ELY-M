@@ -81,7 +81,7 @@ object UtilityVoiceCommand {
             vrStringOriginal.contains("day 4") -> Route.spcSwo(context, "4-8", "sound")
             vrStringOriginal.contains("add") -> Route.locationEdit(
                 context,
-                (Location.numLocations + 1).toString()
+                (Location.getNumberOfLocations() + 1).toString()
             )
 
             vrStringOriginal.contains("edit") -> Route.locationEdit(

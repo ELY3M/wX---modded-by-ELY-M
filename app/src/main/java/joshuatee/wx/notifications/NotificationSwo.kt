@@ -42,7 +42,7 @@ import joshuatee.wx.util.Utility
 
 internal object NotificationSwo {
 
-    fun locationNeedsSwo() = (0 until Location.numLocations).any {
+    fun locationNeedsSwo() = (0 until Location.getNumberOfLocations()).any {
         Location.locations.getOrNull(it)?.notificationSwo ?: false
     }
 
@@ -147,7 +147,7 @@ internal object NotificationSwo {
                         val polygonFrame = ExternalPolygon.Builder()
                         latLons.forEach { latLon -> polygonFrame.addVertex(ExternalPoint(latLon)) }
                         val polygonShape = polygonFrame.build()
-                        (1..Location.numLocations).forEach { n ->
+                        (1..Location.getNumberOfLocations()).forEach { n ->
                             val locNum = n.toString()
                             if (Location.locations[n - 1].notificationSwo) {
                                 // if location is watching for MCDs pull ib lat/lon and iterate over polygons
@@ -259,7 +259,7 @@ internal object NotificationSwo {
                         val polygonFrame = ExternalPolygon.Builder()
                         latLons.forEach { latLon -> polygonFrame.addVertex(ExternalPoint(latLon)) }
                         val polygonShape = polygonFrame.build()
-                        (1..Location.numLocations).forEach { n ->
+                        (1..Location.getNumberOfLocations()).forEach { n ->
                             val locNum = n.toString()
                             if (Location.locations[n - 1].notificationSwo) {
                                 // if location is watching for MCDs pull ib lat/lon and iterate over polygons

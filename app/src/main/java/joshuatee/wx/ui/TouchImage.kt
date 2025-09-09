@@ -200,7 +200,7 @@ class TouchImage {
 
     fun firstRun(pref: String) {
         if (!firstRun) {
-            img.setZoom(pref)
+            img.setZoom(context, pref)
             firstRun = true
         }
     }

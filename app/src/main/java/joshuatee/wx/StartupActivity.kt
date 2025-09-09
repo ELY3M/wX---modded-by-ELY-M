@@ -34,37 +34,22 @@ class StartupActivity : Activity() {
 
     //
     // This activity is the first activity started when the app starts.
-    // It's job is to initialize preferences if not done previously,
-    // display the splash screen, start the service that handles notifications,
-    // and display the version in the title.
+    // It's job is to start the background service that handles notifications
+    // and start the initial activity
     //
-
+    // This occurs after MyApplication.onCreate is run (Application class)
+    //
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initPreferences()
+        UtilityWXJobService.startService(this)
+        Route(this, WX::class.java)
+	//elys mod
         askPerms()
-        initBackgroundJobs()
-        startInitialActivity()
         finish()
     }
-
-    private fun initPreferences() {
-        if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) {
-            UtilityStorePreferences.setDefaults(this)
-        }
-        MyApplication.initPreferences(this)
-        Location.refreshLocationData(this)
-    }
-
-    private fun initBackgroundJobs() {
-        UtilityWXJobService.startService(this)
-    }
-
-    private fun startInitialActivity() {
-        Route(this, WX::class.java)
-    }
-
+    
+    //elys mod
     private fun askPerms() {
         PermissionRequester.initialize(applicationContext)
         val requester = PermissionRequester.instance()

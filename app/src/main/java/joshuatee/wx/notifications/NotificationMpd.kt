@@ -41,7 +41,7 @@ import joshuatee.wx.util.UtilityLog
 
 internal object NotificationMpd {
 
-    fun locationNeedsMpd() = (0 until Location.numLocations).any {
+    fun locationNeedsMpd() = (0 until Location.getNumberOfLocations()).any {
         Location.locations.getOrNull(it)?.notificationWpcMpd ?: false
     }
 
@@ -81,7 +81,7 @@ internal object NotificationMpd {
                     poly2.addVertex(ExternalPoint(latLon))
                 }
                 val polygon2 = poly2.build()
-                (1..Location.numLocations).forEach { n ->
+                (1..Location.getNumberOfLocations()).forEach { n ->
                     val locNum = n.toString()
                     // have received crash reports for array out of bounds
                     if (Location.locations.getOrNull(n - 1)?.notificationWpcMpd == true) {

@@ -45,27 +45,6 @@ object UtilityRtma {
         "vis"
     )
 
-//    val sectors = listOf(
-//        "alaska",
-//        "ca",
-//        "co",
-//        "fl",
-//        "guam",
-//        "gulf-coast",
-//        "mi",
-//        "mid-atl",
-//        "mid-west",
-//        "mt",
-//        "nc_sc",
-//        "nd_sd",
-//        "new-eng",
-//        "nw-pacific",
-//        "ohio-valley",
-//        "sw_us",
-//        "tx",
-//        "wi"
-//    )
-
     // approx based off inspection
     private val sectorToLatLon = mapOf(
         "alaska" to LatLon(63.25, -156.5),

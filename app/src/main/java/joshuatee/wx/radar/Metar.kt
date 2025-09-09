@@ -70,8 +70,8 @@ internal object Metar {
     }
 
     @Synchronized
-    fun get(rid: String, paneNumber: Int) {
-        if (timer.isRefreshNeeded() || rid != data[paneNumber].obsStateOld) {
+    fun get(radarSite: String, paneNumber: Int) {
+        if (timer.isRefreshNeeded() || radarSite != data[paneNumber].obsStateOld) {
             val obsAl = mutableListOf<String>()
             val obsAlExt = mutableListOf<String>()
             val obsAlWb = mutableListOf<String>()
@@ -79,8 +79,8 @@ internal object Metar {
             val obsAlX = mutableListOf<Double>()
             val obsAlY = mutableListOf<Double>()
             val obsAlAviationColor = mutableListOf<Int>()
-            data[paneNumber].obsStateOld = rid
-            val obsList = getNearbyObsSites(rid)
+            data[paneNumber].obsStateOld = radarSite
+            val obsList = getNearbyObsSites(radarSite)
             val html =
                 "https://www.aviationweather.gov/cgi-bin/data/metar.php?ids=$obsList".getHtmlWithNewLine()
             val metarsTmp = html.split(GlobalVariables.newline)
@@ -228,9 +228,8 @@ internal object Metar {
         return (GlobalVariables.TGFTP_WEBSITE_PREFIX + "/data/observations/metar/decoded/" + localMetarSite.codeName + ".TXT").getHtmlWithNewLine()
     }
 
-    fun findClosestObservation(latLon: LatLon, order: Int = 0): Site {
-        return sites.getNearestSite(latLon, order)
-    }
+    fun findClosestObservation(latLon: LatLon, order: Int = 0): Site =
+        sites.getNearestSite(latLon, order)
 
     //
     // Returns a comma separated list of the closest obs to a particular radar site

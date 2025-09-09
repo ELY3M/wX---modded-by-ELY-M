@@ -93,11 +93,7 @@ class DrawLineView : View {
             this.textSize = UIPreferences.textSizeLarge
         }
         with(paintText) {
-            color = if (!RadarPreferences.blackBg) {
-                Color.BLACK
-            } else {
-                Color.WHITE
-            }
+            color = Color.WHITE
             isAntiAlias = true
             strokeWidth = 4.5f
             this.textSize = UIPreferences.textSizeLarge

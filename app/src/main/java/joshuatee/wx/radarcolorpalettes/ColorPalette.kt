@@ -24,7 +24,9 @@ package joshuatee.wx.radarcolorpalettes
 import android.content.Context
 import android.graphics.Color
 import joshuatee.wx.R
+import joshuatee.wx.radar.NexradUtil
 import joshuatee.wx.util.To
+import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityIO
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -112,6 +114,15 @@ class ColorPalette(val context: Context, private val colormapCode: Int) {
         val colorMap = mutableMapOf<Int, ColorPalette>()
         val radarColorPalette = mutableMapOf<Int, String>()
         val radarColorPaletteList = mutableMapOf<Int, String>()
+
+        fun initialize(context: Context) {
+            NexradUtil.colorPaletteProducts.forEach {
+                radarColorPalette[it] =
+                    Utility.readPref(context, "RADAR_COLOR_PALETTE_$it", "CODENH")
+                radarColorPaletteList[it] =
+                    Utility.readPref(context, "RADAR_COLOR_PALETTE_" + it + "_LIST", "")
+            }
+        }
 
         private fun generate4bitGeneric(context: Context, product: Int) {
             colorMap[product]!!.position(0)

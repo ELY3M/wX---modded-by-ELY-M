@@ -9,8 +9,6 @@ TouchImageView is available under the MIT license. See the LICENSE file for more
  */
 package joshuatee.wx.ui;
 
-//import android.annotation.TargetApi;
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -20,7 +18,6 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-//import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -37,8 +34,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
-import joshuatee.wx.MyApplication;
 import joshuatee.wx.objects.ObjectDateTime;
+import joshuatee.wx.util.Utility;
 import joshuatee.wx.util.UtilityLog;
 import kotlin.Suppress;
 
@@ -499,10 +496,10 @@ public class TouchImageView2 extends AppCompatImageView {
     }
 
     // Josh added
-    public void setZoom(String prefix) {
-        float scaleLocal = MyApplication.preferences.getFloat(prefix + "_ZOOM", 1.0f);
-        float focusXLocal = MyApplication.preferences.getFloat(prefix + "_X", 0.5f);
-        float focusYLocal = MyApplication.preferences.getFloat(prefix + "_Y", 0.5f);
+    public void setZoom(Context context, String prefix) {
+        float scaleLocal = Utility.INSTANCE.readPrefFloat(context, prefix + "_ZOOM", 1.0f);
+        float focusXLocal = Utility.INSTANCE.readPrefFloat(context, prefix + "_X", 0.5f);
+        float focusYLocal = Utility.INSTANCE.readPrefFloat(context, prefix + "_Y", 0.5f);
         onDrawReady = false; // NEEDED FOR API28 issue
         setZoom(scaleLocal, focusXLocal, focusYLocal);
     }

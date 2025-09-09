@@ -248,7 +248,7 @@ class LocationFragment : Fragment() {
     private fun changeLocation(position: Int) {
         locationChanged = true
         // If user did not choose the last option "Add Location..."
-        if (position != Location.numLocations) {
+        if (position != Location.getNumberOfLocations()) {
             Location.setCurrentLocationStr(activityReference, (position + 1).toString())
             if (UIPreferences.isNexradOnMainScreen && radarForLocationIndex != -1) {
                 radarLocationChangedList[radarForLocationIndex] = false
