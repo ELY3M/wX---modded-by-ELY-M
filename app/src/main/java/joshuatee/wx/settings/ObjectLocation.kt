@@ -72,7 +72,6 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
             Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
         observation = Utility.readPref(context, "LOC" + jStr + "_OBSERVATION", "")
         isUS = Location.us(x)
-        Location.addToListOfNames(name)
     }
 
     fun saveToNewSlot(newLocNumInt: Int) {

@@ -75,9 +75,13 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
                     } , ${lon.take(6)})"
             } else {
                 text2.text =
-                    "WFO: ${Location.getWfo(position)}  RID: ${Location.getRadarSite(position)} (${
-                        Location.getX(position).take(8)
-                    } , ${Location.getY(position).take(9)})"
+                    "WFO: ${Location.getWfo(position)}  Nexrad Radar: ${
+                        Location.getRadarSite(
+                            position
+                        )
+                    } (${
+                        Location.latLon.latForNws
+                    } , ${Location.latLon.lonForNws})"
             }
         }
     }

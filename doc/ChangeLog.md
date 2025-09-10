@@ -2,9 +2,16 @@
 
 # Developer ChangeLog
 
-## 55975 2025_09_09
+## 55976 2025_09_10
 
-* [REF] misc
+* [REF]
+
+## 55975 2025_09_10
+
+* [REF] Location.save remove older code that is no longer needed (was there for poor radar site
+  detection and support for Canada which is no longer needed) - and changes around listOf
+* [ADD] In **Settings -> Location** change **RID** to **Nexrad Radar** (for clarity) and show Latlon
+  with 4 digit precision.
 
 ## 55974 2025_09_09
 

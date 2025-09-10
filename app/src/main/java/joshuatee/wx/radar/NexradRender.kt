@@ -261,30 +261,11 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
                 }
                 try {
                     data.radarBuffers.floatBuffer.position(it * breakSizeRadar * 32)
-                    GLES20.glVertexAttribPointer(
-                        positionHandle,
-                        2,
-                        GLES20.GL_FLOAT,
-                        false,
-                        0,
-                        data.radarBuffers.floatBuffer.slice().asFloatBuffer()
-                    )
+                    gLSetAttribPosition(data.radarBuffers)
                     data.radarBuffers.colorBuffer.position(it * breakSizeRadar * 12)
-                    GLES20.glVertexAttribPointer(
-                        colorHandle,
-                        3,
-                        GLES20.GL_UNSIGNED_BYTE,
-                        true,
-                        0,
-                        data.radarBuffers.colorBuffer.slice()
-                    )
+                    gLSetAttribColor(data.radarBuffers)
                     triangleIndexBuffer.position(0)
-                    GLES20.glDrawElements(
-                        GLES20.GL_TRIANGLES,
-                        radarChunkCnt,
-                        GLES20.GL_UNSIGNED_SHORT,
-                        triangleIndexBuffer.slice().asShortBuffer()
-                    )
+                    glDrawTrianglesNexrad()
                 } catch (e: Exception) {
                     UtilityLog.handleException(e)
                 }
@@ -557,28 +538,9 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
     private fun drawTriangles(buffers: OglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
-            GLES20.glVertexAttribPointer(
-                positionHandle,
-                2,
-                GLES20.GL_FLOAT,
-                false,
-                0,
-                buffers.floatBuffer.slice().asFloatBuffer()
-            )
-            GLES20.glVertexAttribPointer(
-                colorHandle,
-                3,
-                GLES20.GL_UNSIGNED_BYTE,
-                true,
-                0,
-                buffers.colorBuffer.slice().asFloatBuffer()
-            )
-            GLES20.glDrawElements(
-                GLES20.GL_TRIANGLES,
-                buffers.floatBuffer.capacity() / 8,
-                GLES20.GL_UNSIGNED_SHORT,
-                buffers.indexBuffer.slice().asShortBuffer()
-            )
+            gLSetAttribPosition(buffers)
+            gLSetAttribColor(buffers)
+            glTriangles(buffers)
         }
     }
 
@@ -622,12 +584,21 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
         )
     }
 
-    private fun glDrawTriangles(buffers: OglBuffers) {
+    private fun glTriangles(buffers: OglBuffers) {
         GLES20.glDrawElements(
             GLES20.GL_TRIANGLES,
             buffers.floatBuffer.capacity() / 8,
             GLES20.GL_UNSIGNED_SHORT,
             buffers.indexBuffer.slice().asShortBuffer()
+        )
+    }
+
+    private fun glDrawTrianglesNexrad() {
+        GLES20.glDrawElements(
+            GLES20.GL_TRIANGLES,
+            radarChunkCnt,
+            GLES20.GL_UNSIGNED_SHORT,
+            triangleIndexBuffer.slice().asShortBuffer()
         )
     }
 
@@ -637,28 +608,9 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
             (0 until buffers.chunkCount).forEach { _ ->
                 lineIndexBuffer.position(0)
                 buffers.setToPositionZero()
-                GLES20.glVertexAttribPointer(
-                    positionHandle,
-                    2,
-                    GLES20.GL_FLOAT,
-                    false,
-                    0,
-                    buffers.floatBuffer.slice().asFloatBuffer()
-                )
-                GLES20.glVertexAttribPointer(
-                    colorHandle,
-                    3,
-                    GLES20.GL_UNSIGNED_BYTE,
-                    true,
-                    0,
-                    buffers.colorBuffer
-                )
-                GLES20.glDrawElements(
-                    GLES20.GL_LINES,
-                    buffers.floatBuffer.capacity() / countDivisor,
-                    GLES20.GL_UNSIGNED_SHORT,
-                    lineIndexBuffer.slice().asShortBuffer()
-                )
+                gLSetAttribPosition(buffers)
+                gLSetAttribColor(buffers)
+                glDrawElements(buffers.floatBuffer.capacity() / countDivisor)
             }
         }
     }
@@ -676,28 +628,9 @@ class NexradRender(private val context: Context, val paneNumber: Int) : Renderer
                     buffers.floatBuffer.position(it * 480000)
                     buffers.colorBuffer.position(0)
                     lineIndexBuffer.position(0)
-                    GLES20.glVertexAttribPointer(
-                        positionHandle,
-                        2,
-                        GLES20.GL_FLOAT,
-                        false,
-                        0,
-                        buffers.floatBuffer.slice().asFloatBuffer()
-                    )
-                    GLES20.glVertexAttribPointer(
-                        colorHandle,
-                        3,
-                        GLES20.GL_UNSIGNED_BYTE,
-                        true,
-                        0,
-                        buffers.colorBuffer.slice()
-                    )
-                    GLES20.glDrawElements(
-                        GLES20.GL_LINES,
-                        lineCnt,
-                        GLES20.GL_UNSIGNED_SHORT,
-                        lineIndexBuffer.slice().asShortBuffer()
-                    )
+                    gLSetAttribPosition(buffers)
+                    gLSetAttribColor(buffers)
+                    glDrawLines(lineCnt)
                 } catch (e: Exception) {
                 }
             }

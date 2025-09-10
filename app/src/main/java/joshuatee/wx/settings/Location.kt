@@ -25,7 +25,6 @@ import android.content.Context
 import joshuatee.wx.objects.LatLon
 import joshuatee.wx.util.Utility
 import java.util.Locale
-import joshuatee.wx.common.GlobalDictionaries
 import joshuatee.wx.parse
 import joshuatee.wx.radar.RadarSites
 import joshuatee.wx.util.To
@@ -40,6 +39,8 @@ object Location {
     var currentLocation = 0
         private set
 
+    // used only on the main screen in the dialogue to choose the location
+    // needs to remain a mutable list
     val listOf = mutableListOf<String>()
 
     fun getNumberOfLocations(): Int = numLocations
@@ -50,19 +51,11 @@ object Location {
         true
     }
 
-    fun addToListOfNames(name: String) {
-        listOf.add(name)
-    }
-
     fun checkCurrentLocationValidity() {
         if (currentLocation >= locations.size) {
             currentLocation = locations.lastIndex
             currentLocationStr = (currentLocation + 1).toString()
         }
-    }
-
-    private fun clearListOfNames() {
-        listOf.clear()
     }
 
     private fun initNumLocations(context: Context) {
@@ -118,16 +111,18 @@ object Location {
 
     fun isUS(locationNumber: Int): Boolean = locations.getOrNull(locationNumber)?.isUS ?: true
 
+    // FIXME get rid of
     fun isUS(locationNumberString: String): Boolean =
         locations[locationNumberString.toInt() - 1].isUS
 
+    // FIXME call usUS(int)
     val isUS get() = locations.getOrNull(currentLocation)?.isUS ?: true
 
     fun refresh(context: Context) {
         initNumLocations(context)
-        clearListOfNames()
         locations = (0 until getNumberOfLocations()).map { ObjectLocation(context, it) }
-        addToListOfNames(ADD_LOC_STR)
+        listOf.clear()
+        listOf.addAll(locations.map { it.name } + ADD_LOC_STR)
         setCurrentLocationStr(context, Utility.readPref(context, "CURRENT_LOC_FRAGMENT", "1"))
         checkCurrentLocationValidity()
     }
@@ -171,26 +166,18 @@ object Location {
         Utility.writePref(context, "LOC" + locNum + "_X", xStr)
         Utility.writePref(context, "LOC" + locNum + "_Y", yStr)
         Utility.writePref(context, "LOC" + locNum + "_LABEL", labelStr)
-        var wfo = ""
-        var radarSite = ""
-        if (us(xStr)) {
-            setNumLocations(context, locNumToSave)
-            val wfoAndRadar = getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
-            wfo = wfoAndRadar[0]
-            radarSite = wfoAndRadar[1]
-            if (wfo == "") {
-                wfo = WfoSites.sites.getNearest(LatLon(xStr, yStr))
-            }
-            if (radarSite == "" || radarSite == "LIX") {
-                radarSite = RadarSites.getNearestCode(LatLon(xStr, yStr))
-            }
-            // CT shows mosaic not nexrad so the old way is needed
-            if (radarSite == "") {
-                radarSite = GlobalDictionaries.wfoToRadarSite[wfo.uppercase(Locale.US)] ?: ""
-            }
-            Utility.writePref(context, "RID$locNum", radarSite.uppercase(Locale.US))
-            Utility.writePref(context, "NWS$locNum", wfo.uppercase(Locale.US))
+        setNumLocations(context, locNumToSave)
+        val wfoAndRadar = getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
+        var wfo = wfoAndRadar[0]
+        var radarSite = wfoAndRadar[1]
+        if (wfo == "") {
+            wfo = WfoSites.sites.getNearest(LatLon(xStr, yStr))
         }
+        if (radarSite == "" || radarSite == "LIX") {
+            radarSite = RadarSites.getNearestCode(LatLon(xStr, yStr))
+        }
+        Utility.writePref(context, "RID$locNum", radarSite.uppercase(Locale.US))
+        Utility.writePref(context, "NWS$locNum", wfo.uppercase(Locale.US))
         refresh(context)
         setCurrentLocationStr(context, locNum)
         return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.uppercase(Locale.US) + "(" + radarSite.uppercase(
@@ -198,6 +185,7 @@ object Location {
         ) + ")"
     }
 
+    // FIXME change property at top to match this (incorporate currentLocation)
     fun setCurrentLocationStr(context: Context, locNum: String) {
         Utility.writePref(context, "CURRENT_LOC_FRAGMENT", locNum)
         currentLocationStr = locNum
