@@ -44,7 +44,7 @@ public class CursorMode {
     protected final Paint mRectPaint;
     protected final Paint mTextPaint;
     protected double mCurrentSelectionX;
-    protected final Styles mStyles;
+    private final Styles mStyles;
     protected int cachedLegendWidth;
 
     public CursorMode(GraphView graphView) {

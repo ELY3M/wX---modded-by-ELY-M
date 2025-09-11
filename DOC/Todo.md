@@ -1,7 +1,7 @@
 # TODOs
 
 ## Sep 2025
-add keyboard shortcuts for animation to GOES/Mosaic
+add keyboard shortcuts for animation to GOES/Mosaic, Dashboard
 key cntrl-N does not work in chromeOS
 getter/setter consistency
 ObjectLocation fix handling of notif vars

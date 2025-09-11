@@ -26,6 +26,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.R
@@ -258,5 +259,15 @@ class GoesActivity : VideoRecordActivity() {
                 )
             }
         }
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) navDrawer.open()
+            KeyEvent.KEYCODE_A -> if (event.isCtrlPressed) getAnimate(To.int(RadarPreferences.uiAnimIconFrames))
+            KeyEvent.KEYCODE_REFRESH -> getContent(sector)
+            else -> return super.onKeyUp(keyCode, event)
+        }
+        return true
     }
 }

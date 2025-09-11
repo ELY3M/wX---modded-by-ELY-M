@@ -26,6 +26,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.R
@@ -154,5 +155,20 @@ class RadarMosaicActivity : VideoRecordActivity() {
     override fun onStop() {
         touchImage.imgSavePosnZoom(prefImagePosition)
         super.onStop()
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) navDrawer.open()
+            KeyEvent.KEYCODE_A -> if (event.isCtrlPressed) objectAnimate.animateClicked(::getContent) {
+                UtilityRadarMosaic.getAnimation(
+                    navDrawer.url
+                )
+            }
+
+            KeyEvent.KEYCODE_REFRESH -> getContent()
+            else -> return super.onKeyUp(keyCode, event)
+        }
+        return true
     }
 }

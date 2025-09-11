@@ -506,10 +506,6 @@ public class LineGraphSeries<E extends DataPointInterface> extends BaseSeries<E>
 
     /**
      * just a wrapper to draw lines on canvas
-     *
-     * @param canvas
-     * @param pts
-     * @param paint
      */
     private void renderLine(Canvas canvas, float[] pts, Paint paint) {
         if (pts.length == 4 && pts[0] == pts[2] && pts[1] == pts[3]) {

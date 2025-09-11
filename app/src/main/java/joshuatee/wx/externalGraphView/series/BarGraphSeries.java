@@ -241,11 +241,11 @@ public class BarGraphSeries<E extends DataPointInterface> extends BaseSeries<E> 
                 : graphView.getGraphContentWidth() / (numBarSlots - 1);
 
         // Total spacing (both sides) between sets of bars
-        double spacing = Math.min(barSlotWidth * mSpacing / 100, barSlotWidth * 0.98f);
+        double spacing = Math.min((float) (barSlotWidth * mSpacing) / 100, barSlotWidth * 0.98f);
         // Width of an individual bar
         double barWidth = (barSlotWidth - spacing) / numBarSeries;
         // Offset from the center of a given bar to start drawing
-        double offset = barSlotWidth / 2;
+        double offset = (double) barSlotWidth / 2;
 
         double diffY = maxY - minY;
         double diffX = maxX - minX;

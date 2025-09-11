@@ -98,7 +98,6 @@ public class StaticLabelsFormatter implements LabelFormatter {
      * @param value    raw input number
      * @param isValueX true if it is a value for the x axis
      *                 false if it is a value for the y axis
-     * @return
      */
     @Override
     public String formatLabel(double value, boolean isValueX) {

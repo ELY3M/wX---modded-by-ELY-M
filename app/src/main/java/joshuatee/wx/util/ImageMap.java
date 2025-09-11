@@ -663,19 +663,17 @@ public class ImageMap extends AppCompatImageView {
             Bitmap newbits = Bitmap.createScaledBitmap(mScaleFromOriginal ? mOriginal : mImage, newWidth,
                     newHeight, true);
             // if successful, fix up all the tracking variables
-            if (newbits != null) {
-                if (mImage != mOriginal) {
-                    mImage.recycle();
-                }
-                mImage = newbits;
-                mExpandWidth = newWidth;
-                mExpandHeight = newHeight;
-                mResizeFactorX = ((float) newWidth / mImageWidth);
-                mResizeFactorY = ((float) newHeight / mImageHeight);
-
-                mRightBound = mExpandWidth > mViewWidth ? -(mExpandWidth - mViewWidth) : 0;
-                mBottomBound = mExpandHeight > mViewHeight ? -(mExpandHeight - mViewHeight) : 0;
+            if (mImage != mOriginal) {
+                mImage.recycle();
             }
+            mImage = newbits;
+            mExpandWidth = newWidth;
+            mExpandHeight = newHeight;
+            mResizeFactorX = ((float) newWidth / mImageWidth);
+            mResizeFactorY = ((float) newHeight / mImageHeight);
+
+            mRightBound = mExpandWidth > mViewWidth ? -(mExpandWidth - mViewWidth) : 0;
+            mBottomBound = mExpandHeight > mViewHeight ? -(mExpandHeight - mViewHeight) : 0;
         }
     }
 

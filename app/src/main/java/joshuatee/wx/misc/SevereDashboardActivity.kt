@@ -24,6 +24,7 @@ package joshuatee.wx.misc
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.getImage
@@ -218,6 +219,16 @@ class SevereDashboardActivity : BaseActivity() {
             R.id.action_share -> UtilityShare.text(this, "Severe Dashboard", "", bitmaps)
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.SevereDashboard)
             else -> return super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_1 -> Route.alerts(this)
+            KeyEvent.KEYCODE_2 -> Route.spcStormReports(this)
+            KeyEvent.KEYCODE_REFRESH -> getContent()
+            else -> return super.onKeyUp(keyCode, event)
         }
         return true
     }

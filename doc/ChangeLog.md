@@ -2,9 +2,15 @@
 
 # Developer ChangeLog
 
-## 55976 2025_09_10
+## 55977 2025_09_11
+
+* [ADD]
+
+## 55976 2025_09_11
 
 * [REF] remove CanadaLegal since Canada support was dropped awhile ago
+* [ADD] add keyboard shortcuts in GOES/RadarMosaic for testing (ctrl-A for animate, refresh button
+* [ADD] add keyboard shortcuts in SevereDashboard (ctrl-1 ctrl-2 for US Alerts and SPC Storm reports)
 
 ## 55975 2025_09_10
 

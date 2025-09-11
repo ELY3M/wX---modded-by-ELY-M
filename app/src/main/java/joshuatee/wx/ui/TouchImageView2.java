@@ -1081,7 +1081,7 @@ public class TouchImageView2 extends AppCompatImageView {
         }
 
         float origScale = normalizedScale;
-        normalizedScale *= deltaScale;
+        normalizedScale *= (float) deltaScale;
         if (normalizedScale > upperScale) {
             normalizedScale = upperScale;
             deltaScale = upperScale / origScale;

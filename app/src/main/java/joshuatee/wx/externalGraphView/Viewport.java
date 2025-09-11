@@ -662,7 +662,6 @@ public class Viewport {
      * will be called on a touch event.
      * needed to use scaling and scrolling
      *
-     * @param event
      * @return true if it was consumed
      */
     public boolean onTouchEvent(MotionEvent event) {

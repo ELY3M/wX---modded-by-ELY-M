@@ -87,7 +87,6 @@ public class GraphView extends View {
         /**
          * to be called to process the events
          *
-         * @param event
          * @return true if there was a tap event. otherwise returns false.
          */
         public boolean onTouchEvent(MotionEvent event) {
@@ -167,8 +166,6 @@ public class GraphView extends View {
 
     /**
      * Initialize the GraphView view
-     *
-     * @param context
      */
     public GraphView(Context context) {
         super(context);
@@ -177,9 +174,6 @@ public class GraphView extends View {
 
     /**
      * Initialize the GraphView view.
-     *
-     * @param context
-     * @param attrs
      */
     public GraphView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -188,10 +182,6 @@ public class GraphView extends View {
 
     /**
      * Initialize the GraphView view
-     *
-     * @param context
-     * @param attrs
-     * @param defStyle
      */
     public GraphView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -292,8 +282,6 @@ public class GraphView extends View {
 
     /**
      * draw all the stuff on canvas
-     *
-     * @param canvas
      */
     protected void drawGraphElements(Canvas canvas) {
         // must be in hardware accelerated mode
@@ -333,7 +321,7 @@ public class GraphView extends View {
     protected void onDraw(@NonNull Canvas canvas) {
         if (isInEditMode()) {
             canvas.drawColor(Color.rgb(200, 200, 200));
-            canvas.drawText("GraphView: No Preview available", getWidth() / 2, getHeight() / 2, mPreviewPaint);
+            canvas.drawText("GraphView: No Preview available", (float) getWidth() / 2, (float) getHeight() / 2, mPreviewPaint);
         } else {
             drawGraphElements(canvas);
         }
@@ -351,7 +339,7 @@ public class GraphView extends View {
             mPaintTitle.setColor(mStyles.titleColor);
             mPaintTitle.setTextSize(mStyles.titleTextSize);
             mPaintTitle.setTextAlign(Paint.Align.CENTER);
-            float x = canvas.getWidth() / 2;
+            float x = (float) canvas.getWidth() / 2;
             float y = mPaintTitle.getTextSize();
             canvas.drawText(mTitle, x, y, mPaintTitle);
         }
@@ -384,11 +372,6 @@ public class GraphView extends View {
      * Called by Android system if the size
      * of the view was changed. Will recalculate
      * the viewport and labels.
-     *
-     * @param w
-     * @param h
-     * @param oldw
-     * @param oldh
      */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -433,16 +416,13 @@ public class GraphView extends View {
         int graphWidth = getWidth() - (2 * border) - getGridLabelRenderer().getLabelVerticalWidth();
         if (mSecondScale != null) {
             graphWidth -= getGridLabelRenderer().getLabelVerticalSecondScaleWidth();
-            graphWidth -= mSecondScale.getVerticalAxisTitleTextSize();
+            graphWidth -= (int) mSecondScale.getVerticalAxisTitleTextSize();
         }
         return graphWidth;
     }
 
     /**
      * will be called from Android system.
-     *
-     * @param event
-     * @return
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -523,17 +503,17 @@ public class GraphView extends View {
         onDataChanged(false, false);
     }
 
-    /**
-     * takes a snapshot and return it as bitmap
-     *
-     * @return snapshot of graph
-     */
-    public Bitmap takeSnapshot() {
-        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        draw(canvas);
-        return bitmap;
-    }
+//    /**
+//     * takes a snapshot and return it as bitmap
+//     *
+//     * @return snapshot of graph
+//     */
+//    public Bitmap takeSnapshot() {
+//        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(bitmap);
+//        draw(canvas);
+//        return bitmap;
+//    }
 
     public CursorMode getCursorMode() {
         return mCursorMode;
