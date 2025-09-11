@@ -102,6 +102,7 @@ internal object UtilityWidgetDownload {
 
     private fun nexrad(context: Context) {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val widgetLocationNumberAsInteger = To.int(widgetLocationNumber) - 1
         val rid = Location.getRadarSite(context, widgetLocationNumber)
         //
         // Warnings
@@ -126,7 +127,7 @@ internal object UtilityWidgetDownload {
             Metar.get(rid, 5)
         }
         try {
-            val bitmap = if (Location.isUS(widgetLocationNumber)) {
+            val bitmap = if (Location.isUS(widgetLocationNumberAsInteger)) {
                 UtilityImg.getNexradRefBitmap(context, rid)
             } else {
                 UtilityImg.getBlankBitmap()

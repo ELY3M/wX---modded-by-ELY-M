@@ -32,6 +32,7 @@ import android.view.View
 import joshuatee.wx.R
 import kotlin.math.min
 import kotlin.math.roundToInt
+import androidx.core.content.withStyledAttributes
 
 class ValueBar : View {
 
@@ -167,28 +168,31 @@ class ValueBar : View {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val a = context.obtainStyledAttributes(attrs, R.styleable.ValueBar, defStyle, 0)
-        val b = context.resources
-        mBarThickness = a.getDimensionPixelSize(
-            R.styleable.ValueBar_bar_thickness_vbar,
-            b.getDimensionPixelSize(R.dimen.bar_thickness)
-        )
-        mBarLength = a.getDimensionPixelSize(
-            R.styleable.ValueBar_bar_length_vbar,
-            b.getDimensionPixelSize(R.dimen.bar_length)
-        )
-        mPreferredBarLength = mBarLength
-        mBarPointerRadius = a.getDimensionPixelSize(
-            R.styleable.ValueBar_bar_pointer_radius_vbar,
-            b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
-        )
-        mBarPointerHaloRadius = a.getDimensionPixelSize(
-            R.styleable.ValueBar_bar_pointer_halo_radius_vbar,
-            b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
-        )
-        mOrientation =
-            a.getBoolean(R.styleable.ValueBar_bar_orientation_horizontal_vbar, ORIENTATION_DEFAULT)
-        a.recycle()
+        context.withStyledAttributes(attrs, R.styleable.ValueBar, defStyle, 0) {
+            val b = context.resources
+            mBarThickness = getDimensionPixelSize(
+                R.styleable.ValueBar_bar_thickness_vbar,
+                b.getDimensionPixelSize(R.dimen.bar_thickness)
+            )
+            mBarLength = getDimensionPixelSize(
+                R.styleable.ValueBar_bar_length_vbar,
+                b.getDimensionPixelSize(R.dimen.bar_length)
+            )
+            mPreferredBarLength = mBarLength
+            mBarPointerRadius = getDimensionPixelSize(
+                R.styleable.ValueBar_bar_pointer_radius_vbar,
+                b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
+            )
+            mBarPointerHaloRadius = getDimensionPixelSize(
+                R.styleable.ValueBar_bar_pointer_halo_radius_vbar,
+                b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
+            )
+            mOrientation =
+                getBoolean(
+                    R.styleable.ValueBar_bar_orientation_horizontal_vbar,
+                    ORIENTATION_DEFAULT
+                )
+        }
         mBarPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mBarPaint!!.shader = shader
         mBarPointerPosition = mBarPointerHaloRadius

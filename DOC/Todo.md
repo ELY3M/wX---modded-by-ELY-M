@@ -1,6 +1,8 @@
 # TODOs
 
 ## Sep 2025
+add keyboard shortcuts for animation to GOES/Mosaic
+key cntrl-N does not work in chromeOS
 getter/setter consistency
 ObjectLocation fix handling of notif vars
 UtilityStorePreferences.setDefaults use Utility.writePref

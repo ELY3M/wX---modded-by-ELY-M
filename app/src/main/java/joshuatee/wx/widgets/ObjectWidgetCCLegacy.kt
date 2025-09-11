@@ -40,6 +40,7 @@ import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.spc.UtilitySpc
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityUS
@@ -61,6 +62,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val widgetLocationNumberAsInteger = To.int(widgetLocationNumber) - 1
         val cc = Utility.readPref(context, "CC_WIDGET", "No data")
         val sd = Utility.readPref(context, "7DAY_WIDGET", "No data")
         val updateTime = Utility.readPref(context, "UPDTIME_WIDGET", "No data")
@@ -139,7 +141,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             actionRadar
         )
         // local alerts
-        if (Location.isUS(widgetLocationNumber)) {
+        if (Location.isUS(widgetLocationNumberAsInteger)) {
             UtilityWidget.setupIntent(
                 context,
                 remoteViews,
@@ -154,7 +156,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             )
         }
         // Hourly
-        if (Location.isUS(widgetLocationNumber)) {
+        if (Location.isUS(widgetLocationNumberAsInteger)) {
             UtilityWidget.setupIntent(
                 context,
                 remoteViews,
@@ -166,7 +168,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             )
         }
         // AFD
-        if (Location.isUS(widgetLocationNumber)) {
+        if (Location.isUS(widgetLocationNumberAsInteger)) {
             UtilityWidget.setupIntent(
                 context,
                 remoteViews,

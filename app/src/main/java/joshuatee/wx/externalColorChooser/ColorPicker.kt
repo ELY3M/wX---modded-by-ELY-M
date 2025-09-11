@@ -30,6 +30,7 @@ import android.view.MotionEvent
 import android.view.View
 import kotlin.math.*
 import joshuatee.wx.R
+import androidx.core.content.withStyledAttributes
 
 /**
  * Displays a holo-themed color picker.
@@ -300,41 +301,41 @@ class ColorPicker : View {
     private var oldSelectedListenerColor: Int = 0
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val a = context.obtainStyledAttributes(
+        context.withStyledAttributes(
             attrs,
             R.styleable.ColorPicker, defStyle, 0
-        )
-        val b = context.resources
+        ) {
+            val b = context.resources
 
-        mColorWheelThickness = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_wheel_thickness,
-            b.getDimensionPixelSize(R.dimen.color_wheel_thickness)
-        )
-        mColorWheelRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_wheel_radius,
-            b.getDimensionPixelSize(R.dimen.color_wheel_radius)
-        )
-        mPreferredColorWheelRadius = mColorWheelRadius
-        mColorCenterRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_center_radius,
-            b.getDimensionPixelSize(R.dimen.color_center_radius)
-        )
-        mPreferredColorCenterRadius = mColorCenterRadius
-        mColorCenterHaloRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_center_halo_radius,
-            b.getDimensionPixelSize(R.dimen.color_center_halo_radius)
-        )
-        mPreferredColorCenterHaloRadius = mColorCenterHaloRadius
-        mColorPointerRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_pointer_radius,
-            b.getDimensionPixelSize(R.dimen.color_pointer_radius)
-        )
-        mColorPointerHaloRadius = a.getDimensionPixelSize(
-            R.styleable.ColorPicker_color_pointer_halo_radius,
-            b.getDimensionPixelSize(R.dimen.color_pointer_halo_radius)
-        )
+            mColorWheelThickness = getDimensionPixelSize(
+                R.styleable.ColorPicker_color_wheel_thickness,
+                b.getDimensionPixelSize(R.dimen.color_wheel_thickness)
+            )
+            mColorWheelRadius = getDimensionPixelSize(
+                R.styleable.ColorPicker_color_wheel_radius,
+                b.getDimensionPixelSize(R.dimen.color_wheel_radius)
+            )
+            mPreferredColorWheelRadius = mColorWheelRadius
+            mColorCenterRadius = getDimensionPixelSize(
+                R.styleable.ColorPicker_color_center_radius,
+                b.getDimensionPixelSize(R.dimen.color_center_radius)
+            )
+            mPreferredColorCenterRadius = mColorCenterRadius
+            mColorCenterHaloRadius = getDimensionPixelSize(
+                R.styleable.ColorPicker_color_center_halo_radius,
+                b.getDimensionPixelSize(R.dimen.color_center_halo_radius)
+            )
+            mPreferredColorCenterHaloRadius = mColorCenterHaloRadius
+            mColorPointerRadius = getDimensionPixelSize(
+                R.styleable.ColorPicker_color_pointer_radius,
+                b.getDimensionPixelSize(R.dimen.color_pointer_radius)
+            )
+            mColorPointerHaloRadius = getDimensionPixelSize(
+                R.styleable.ColorPicker_color_pointer_halo_radius,
+                b.getDimensionPixelSize(R.dimen.color_pointer_halo_radius)
+            )
 
-        a.recycle()
+        }
         mAngle = (-PI / 2).toFloat()
         val s = SweepGradient(0f, 0f, COLORS, null)
         mColorWheelPaint = Paint(Paint.ANTI_ALIAS_FLAG)

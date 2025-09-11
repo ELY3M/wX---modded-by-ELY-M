@@ -49,7 +49,6 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.RadarPreferences
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.settings.UtilityHomeScreen
-import joshuatee.wx.ui.CanadaLegal
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.CardCurrentConditions
 import joshuatee.wx.ui.CardHazards
@@ -338,7 +337,6 @@ class LocationFragment : Fragment() {
 
     private fun getRadar(idx: Int) {
         // if radarForLocation is not equal to -1 it means the user has a radar for the current location (default)
-        //if (radarForLocation != -1)
         if (radarForLocationIndex != -1 && !radarLocationChangedList[radarForLocationIndex]) {
             nexradState.wxglRenders[radarForLocationIndex].state.rid = Location.radarSite
         }
@@ -545,9 +543,6 @@ class LocationFragment : Fragment() {
         if (isAdded) {
             if (UIPreferences.homescreenFav.contains("TXT-7DAY")) {
                 sevenDayCollection?.update(sevenDay, Location.latLon, Location.isUS)
-                if (!Location.isUS) {
-                    CanadaLegal(activityReference, boxForecast!!, "")
-                }
             }
         }
     }

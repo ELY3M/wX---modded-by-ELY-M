@@ -38,25 +38,27 @@ object UtilityLocation {
 
     fun latLonAsDouble(): List<Double> {
         val latLon = mutableListOf<Double>()
-        (0 until joshuatee.wx.settings.Location.getNumberOfLocations()).forEach {
-            val lat: String
-            val lon: String
-            if (!joshuatee.wx.settings.Location.getX(it).contains(":")) {
-                lat = joshuatee.wx.settings.Location.getX(it)
-                lon = joshuatee.wx.settings.Location.getY(it).replace("-", "")
+        joshuatee.wx.settings.Location.locations.forEach {
+            var lat = ""
+            var lon = ""
+            if (it.isUS) {
+                lat = it.x
+                lon = it.y.replace("-", "")
             } else {
-                val tmpXArr = joshuatee.wx.settings.Location.getX(it).split(":")
-                lat = if (tmpXArr.size > 2) {
-                    tmpXArr[2]
-                } else {
-                    ""
-                }
-                val tmpYArr = joshuatee.wx.settings.Location.getY(it).replace("-", "").split(":")
-                lon = if (tmpYArr.size > 1) {
-                    tmpYArr[1]
-                } else {
-                    ""
-                }
+                // Canadian locations were deprecated some time ago
+
+//                val tmpXArr = joshuatee.wx.settings.Location.getX(it).split(":")
+//                lat = if (tmpXArr.size > 2) {
+//                    tmpXArr[2]
+//                } else {
+//                    ""
+//                }
+//                val tmpYArr = joshuatee.wx.settings.Location.getY(it).replace("-", "").split(":")
+//                lon = if (tmpYArr.size > 1) {
+//                    tmpYArr[1]
+//                } else {
+//                    ""
+//                }
             }
             latLon.add(To.double(lat))
             latLon.add(To.double(lon))

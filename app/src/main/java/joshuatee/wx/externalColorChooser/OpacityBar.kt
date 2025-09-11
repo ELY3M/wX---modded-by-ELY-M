@@ -32,6 +32,7 @@ import android.view.View
 import joshuatee.wx.R
 import kotlin.math.min
 import kotlin.math.roundToInt
+import androidx.core.content.withStyledAttributes
 
 @Suppress("SpellCheckingInspection")
 class OpacityBar : View {
@@ -168,34 +169,34 @@ class OpacityBar : View {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val a = context.obtainStyledAttributes(
+        context.withStyledAttributes(
             attrs,
             R.styleable.OpacityBar, defStyle, 0
-        )
-        val b = context.resources
+        ) {
+            val b = context.resources
 
-        mBarThickness = a.getDimensionPixelSize(
-            R.styleable.OpacityBar_obar_thickness,
-            b.getDimensionPixelSize(R.dimen.bar_thickness)
-        )
-        mBarLength = a.getDimensionPixelSize(
-            R.styleable.OpacityBar_obar_length,
-            b.getDimensionPixelSize(R.dimen.bar_length)
-        )
-        mPreferredBarLength = mBarLength
-        mBarPointerRadius = a.getDimensionPixelSize(
-            R.styleable.OpacityBar_obar_pointer_radius,
-            b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
-        )
-        mBarPointerHaloRadius = a.getDimensionPixelSize(
-            R.styleable.OpacityBar_obar_pointer_halo_radius,
-            b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
-        )
-        mOrientation = a.getBoolean(
-            R.styleable.OpacityBar_obar_orientation_horizontal, ORIENTATION_DEFAULT
-        )
+            mBarThickness = getDimensionPixelSize(
+                R.styleable.OpacityBar_obar_thickness,
+                b.getDimensionPixelSize(R.dimen.bar_thickness)
+            )
+            mBarLength = getDimensionPixelSize(
+                R.styleable.OpacityBar_obar_length,
+                b.getDimensionPixelSize(R.dimen.bar_length)
+            )
+            mPreferredBarLength = mBarLength
+            mBarPointerRadius = getDimensionPixelSize(
+                R.styleable.OpacityBar_obar_pointer_radius,
+                b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
+            )
+            mBarPointerHaloRadius = getDimensionPixelSize(
+                R.styleable.OpacityBar_obar_pointer_halo_radius,
+                b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
+            )
+            mOrientation = getBoolean(
+                R.styleable.OpacityBar_obar_orientation_horizontal, ORIENTATION_DEFAULT
+            )
 
-        a.recycle()
+        }
 
         mBarPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mBarPaint!!.shader = shader

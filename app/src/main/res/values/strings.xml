@@ -139,7 +139,6 @@
     <string name="uswarn_start_time">Start:&#160;%1$s</string>
     <string name="uswarn_end_time">End:&#160;&#160;&#160;%1$s</string>
     <string name="help_menu_item">Help</string>
-    <string name="main_screen_ca_disclaimer">Support for Canada forecast data is now deprecated.</string>
     <string name="menu_regions">Regions</string>
     <string name="action_radar_site_status_l3">Level 3 Radar Status</string>
     <string name="action_radar_site_status_l2">Level 2 Radar Status</string>

@@ -51,10 +51,11 @@ object Location {
         true
     }
 
-    fun checkCurrentLocationValidity() {
+    fun checkCurrentLocationValidity(context: Context) {
         if (currentLocation >= locations.size) {
-            currentLocation = locations.lastIndex
-            currentLocationStr = (currentLocation + 1).toString()
+            setCurrentLocationStr(context, (locations.lastIndex + 1).toString())
+//            currentLocation = locations.lastIndex
+//            currentLocationStr = (currentLocation + 1).toString()
         }
     }
 
@@ -63,16 +64,16 @@ object Location {
         setNumLocations(context, numberOfLocations)
     }
 
-    private fun setNumLocations(context: Context, numLocations: Int) {
-        Location.numLocations = numLocations
-        Utility.writePrefInt(context, "LOC_NUM_INT", numLocations)
+    private fun setNumLocations(context: Context, numberOfLocations: Int) {
+        numLocations = numberOfLocations
+        Utility.writePrefInt(context, "LOC_NUM_INT", numberOfLocations)
     }
 
-    var currentLocationStr: String
+    val currentLocationStr: String
         get() = (currentLocation + 1).toString()
-        set(currentLocationStr) {
-            currentLocation = To.int(currentLocationStr) - 1
-        }
+//        set(currentLocationStr) {
+//            currentLocation = To.int(currentLocationStr) - 1
+//        }
 
     val wfo get() = locations.getOrNull(currentLocation)?.wfo ?: "DTX"
 
@@ -111,12 +112,7 @@ object Location {
 
     fun isUS(locationNumber: Int): Boolean = locations.getOrNull(locationNumber)?.isUS ?: true
 
-    // FIXME get rid of
-    fun isUS(locationNumberString: String): Boolean =
-        locations[locationNumberString.toInt() - 1].isUS
-
-    // FIXME call usUS(int)
-    val isUS get() = locations.getOrNull(currentLocation)?.isUS ?: true
+    val isUS get() = isUS(currentLocation)
 
     fun refresh(context: Context) {
         initNumLocations(context)
@@ -124,7 +120,7 @@ object Location {
         listOf.clear()
         listOf.addAll(locations.map { it.name } + ADD_LOC_STR)
         setCurrentLocationStr(context, Utility.readPref(context, "CURRENT_LOC_FRAGMENT", "1"))
-        checkCurrentLocationValidity()
+        checkCurrentLocationValidity(context)
     }
 
     private fun getWfoRadarSiteFromPoint(location: LatLon): List<String> {
@@ -140,7 +136,7 @@ object Location {
     fun save(context: Context, latLon: LatLon, name: String = latLon.toString()): String =
         save(
             context,
-            (numLocations + 1).toString(),
+            (getNumberOfLocations() + 1).toString(),
             latLon.latString,
             latLon.lonString,
             name
@@ -157,7 +153,7 @@ object Location {
             return "Location label, latitude, and longitude all must have valid values, please try again."
         }
         val locNumInt = To.int(locNum)
-        val locNumIntCurrent = numLocations
+        val locNumIntCurrent = getNumberOfLocations()
         val locNumToSave = if (locNumInt == locNumIntCurrent + 1) {
             locNumInt
         } else {
@@ -185,15 +181,15 @@ object Location {
         ) + ")"
     }
 
-    // FIXME change property at top to match this (incorporate currentLocation)
     fun setCurrentLocationStr(context: Context, locNum: String) {
         Utility.writePref(context, "CURRENT_LOC_FRAGMENT", locNum)
-        currentLocationStr = locNum
+//        currentLocationStr = locNum
+        currentLocation = To.int(locNum) - 1
     }
 
     fun delete(context: Context, locToDeleteStr: String) {
         val locToDeleteInt = To.int(locToDeleteStr)
-        val locNumIntCurrent = numLocations
+        val locNumIntCurrent = getNumberOfLocations()
         val locNumIntCurrentStr = locNumIntCurrent.toString()
         if (locToDeleteInt == locNumIntCurrent) {
             setNumLocations(context, locNumIntCurrent - 1)
@@ -297,11 +293,13 @@ object Location {
         val locFragCurrentInt = currentLocation
         if (locToDeleteInt == (locFragCurrentInt + 1)) {
             Utility.writePref(context, "CURRENT_LOC_FRAGMENT", "1")
-            currentLocationStr = "1"
+//            currentLocationStr = "1"
+            setCurrentLocationStr(context, "1")
         } else if (locFragCurrentInt > locToDeleteInt) {
             val shiftNum = (locFragCurrentInt - 1).toString()
             Utility.writePref(context, "CURRENT_LOC_FRAGMENT", shiftNum)
-            currentLocationStr = shiftNum
+//            currentLocationStr = shiftNum
+            setCurrentLocationStr(context, shiftNum)
         }
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
         val widgetLocNumInt = To.int(widgetLocNum)

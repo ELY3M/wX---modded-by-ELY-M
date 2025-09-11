@@ -80,7 +80,6 @@ class SettingsDeveloperActivity : BaseActivity() {
                 "RADAR_STATE_HIRES",
                 R.string.state_hires_label
             ),
-//            Switch(this, "Black background", "NWS_RADAR_BG_BLACK", R.string.nws_black_bg_label),
             Switch(
                 this,
                 "Show graph in hourly activity",

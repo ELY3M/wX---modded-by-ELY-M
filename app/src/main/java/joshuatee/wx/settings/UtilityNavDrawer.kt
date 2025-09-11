@@ -176,7 +176,7 @@ internal object UtilityNavDrawer {
     // Write the string to storage
     fun generateNewTokenList(context: Context) {
         var tokenList = ""
-        labelToTokenMap.forEach { (_, value) ->
+        labelToTokenMap.values.forEach { value ->
             // check for not false since by default these aren't set at all
             if (Utility.readPref(context, getPrefVar(value), "") != "false") {
                 tokenList += ":$value"

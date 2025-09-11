@@ -166,7 +166,7 @@ class MiscFragment : Fragment() {
                     "wxogl", "Single pane nexrad radar"
                 )
             }
-            Location.checkCurrentLocationValidity()
+//            Location.checkCurrentLocationValidity()
             hm["wxoglquad"] = TileObject(
                 R.drawable.wxoglquadpane,
                 WXGLRadarActivityMultiPane::class.java,

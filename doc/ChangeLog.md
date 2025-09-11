@@ -4,7 +4,7 @@
 
 ## 55976 2025_09_10
 
-* [REF]
+* [REF] remove CanadaLegal since Canada support was dropped awhile ago
 
 ## 55975 2025_09_10
 
