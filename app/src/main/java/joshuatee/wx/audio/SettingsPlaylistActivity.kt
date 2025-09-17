@@ -138,9 +138,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getContent() {
-        FutureVoid(
-            { UtilityPlayList.downloadAll(this) })
-        { updateListNoInit(); adapter.notifyDataSetChanged() }
+        FutureVoid({ UtilityPlayList.downloadAll(this) }) {
+            updateListNoInit(); adapter.notifyDataSetChanged()
+        }
     }
 
     private fun updateList() {

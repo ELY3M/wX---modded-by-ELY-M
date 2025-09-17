@@ -50,9 +50,6 @@ class CapAlert {
     var url = ""
         private set
     var event = ""
-
-    //    var effective = ""
-//    var expires = ""
     var points = listOf<String>()
     private var nwsHeadLine = ""
     var windThreat = ""

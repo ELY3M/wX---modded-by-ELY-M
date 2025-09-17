@@ -7,17 +7,6 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace = 'joshuatee.wx'
-//    compileSdkVersion 33
-//    buildToolsVersion '33.0.1'
-
-//    buildFeatures {
-//        compose true
-//    }
-//
-//    composeOptions {
-//        // https://developer.android.com/jetpack/androidx/releases/compose-compiler
-//        kotlinCompilerExtensionVersion = "1.5.11"
-//    }
 
     defaultConfig {
         compileSdk = 36
@@ -26,7 +15,8 @@ android {
 
     defaultConfig {
         applicationId "joshuatee.wx"
-        minSdkVersion 27
+	/* FUCK YOU GOOGLE PLAY!!!  WHY DO WE HAVE TO DENY OLD ANDROID VERSIONS?  you are causing more e-waste */
+        minSdkVersion 26
         targetSdkVersion 36
 
         // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
@@ -51,19 +41,6 @@ android {
                 'all'
     }
 
-//    defaultConfig {
-//        ...
-//        // This block is different from the one you use to link Gradle
-//        // to your CMake or ndk-build script.
-//        externalNativeBuild {
-//            // For ndk-build, instead use the ndkBuild block.
-//            cmake {
-//                // Passes optional arguments to CMake.
-//                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
-//            }
-//        }
-//    }
-
     tasks.register('cleanNative', Exec) {
         commandLine "$ndkDir\\ndk-build.cmd",
                 '-C', file('src/main/jni').absolutePath,
@@ -78,7 +55,6 @@ android {
 
 */
 
-
     // required to support API 35+ 16KB page sizes
     // see https://developer.android.com/guide/practices/page-sizes#build
     packagingOptions {
@@ -87,9 +63,7 @@ android {
         }
     }
 
-
     // Flag to tell aapt to keep the attribute ids around - (2016_02_25 add 23.2 )
-
     buildTypes {
         release {
             shrinkResources = false
@@ -108,23 +82,14 @@ android {
     tasks.withType(KotlinJvmCompile).configureEach {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
-//            freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
         }
     }
 
-//    kotlinOptions {
-//        jvmTarget = "11"
-//
-//    }
-//    androidResources {
-//        additionalParameters '--no-version-vectors'
-//    }
     lint {
         abortOnError = false
         checkReleaseBuilds = false
         disable 'Typos'
     }
-//    compileSdkPreview 'Baklava'
 }
 
 dependencies {
@@ -140,7 +105,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     // graphview source code was merged locally into project on 2023-12-30
-//    implementation 'com.jjoe64:graphview:4.2.2'
+    // implementation 'com.jjoe64:graphview:4.2.2'
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation "com.squareup.okhttp3:okhttp:5.1.0"
@@ -156,47 +121,7 @@ dependencies {
     implementation 'com.markodevcic:peko:3.0.5'
     implementation 'org.shredzone.commons:commons-suncalc:3.11'
     implementation 'com.github.HBiSoft:HBRecorder:3.0.3'
-
-//    def composeBom = platform('androidx.compose:compose-bom:2024.03.00')
-//    implementation composeBom
-////    androidTestImplementation composeBom
-//
-//    // Choose one of the following:
-//    // Material Design 3
-//    implementation 'androidx.compose.material3:material3'
-////    // or Material Design 2
-////    implementation 'androidx.compose.material:material'
-////    // or skip Material Design and build directly on top of foundational components
-////    implementation 'androidx.compose.foundation:foundation'
-////    // or only import the main APIs for the underlying toolkit systems,
-////    // such as input and measurement/layout
-////    implementation 'androidx.compose.ui:ui'
-//
-//    // Android Studio Preview support
-//    implementation 'androidx.compose.ui:ui-tooling-preview'
-//    debugImplementation 'androidx.compose.ui:ui-tooling'
-//
-//    // UI Tests
-////    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
-////    debugImplementation 'androidx.compose.ui:ui-test-manifest'
-//
-//    // Optional - Included automatically by material, only add when you need
-//    // the icons but not the material library (e.g. when using Material3 or a
-//    // custom design system based on Foundation)
-//    implementation 'androidx.compose.material:material-icons-core'
-//    // Optional - Add full set of material icons
-//    implementation 'androidx.compose.material:material-icons-extended'
-//    // Optional - Add window size utils
-//    implementation 'androidx.compose.material3:material3-window-size-class'
-//
-//    // Optional - Integration with activities
-//    implementation 'androidx.activity:activity-compose:1.8.2'
-//    // Optional - Integration with ViewModels
-//    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
-////    // Optional - Integration with LiveData
-////    implementation 'androidx.compose.runtime:runtime-livedata'
-////    // Optional - Integration with RxJava
-////    implementation 'androidx.compose.runtime:runtime-rxjava2'
+    
 }
 
 repositories {

@@ -24,8 +24,8 @@ package joshuatee.wx.misc
 internal class Hourly(
     val time: String = "",
     val temp: String = "",
-    val windSpeed: String = "",
-    val windDir: String = "",
+//    val windSpeed: String = "",
+//    val windDir: String = "",
     val conditions: String = "",
     val data: List<String> = listOf()
 )

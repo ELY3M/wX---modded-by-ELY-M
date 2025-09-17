@@ -110,9 +110,22 @@
         <item name="android:background">@color/black</item>
     </style>
 
+    <!--    <style name="AppCompatAlertDialogStyle2" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">-->
+    <!--        <item name="colorAccent">@color/yellow</item>-->
+    <!--        <item name="colorOnSecondary">@color/yellow</item>-->
+    <!--        <item name="android:textColor">@color/white</item>-->
+    <!--        <item name="android:textColorPrimary">@color/white</item>-->
+    <!--        <item name="android:textColorSecondary">@color/white</item>-->
+    <!--        <item name="android:background">?attr/colorPrimary</item>-->
+    <!--        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>-->
+    <!--        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>-->
+    <!--    </style>-->
+
+    <!-- from v28/styles.xml -->
     <style name="AppCompatAlertDialogStyle2" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
         <item name="colorAccent">@color/yellow</item>
         <item name="colorOnSecondary">@color/yellow</item>
+        <item name="android:dialogCornerRadius">0dp</item><!-- elys mod I hate rounded corners! -->
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>

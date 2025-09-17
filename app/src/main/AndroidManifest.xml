@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="55977"
-    android:versionName="55977-elys">
+    android:versionCode="55978"
+    android:versionName="55978-elys">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -515,7 +515,7 @@
             <!-- This specifies the widget provider info -->
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_7day_scoll" />
+                android:resource="@xml/widget_7day_scroll" />
         </receiver>
 
         <!-- The service serving the RemoteViews to the collection widget -->

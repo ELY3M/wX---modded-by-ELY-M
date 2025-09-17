@@ -46,7 +46,6 @@ internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) :
             itemView.setOnClickListener(this)
         }
 
-        //        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
         override fun onClick(v: View) {
             myClickListener!!.onItemClick(layoutPosition)
         }

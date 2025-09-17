@@ -71,14 +71,13 @@ class ForecastActivity : BaseActivity() {
         return true
     }
 
-    //    @SuppressLint("MissingSuperCall")
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         val arguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(arguments[0], arguments[1])
-        locationName = latLon.prettyPrint() + " - " + UtilityLocation.getNearestCity(this, latLon)
-        setTitle("Forecast for", locationName)
+        locationName = UtilityLocation.getNearestCity(this, latLon)
+        setTitle("Forecast: ${latLon.prettyPrint()}", locationName)
         setupUI()
         getContent()
     }
@@ -103,9 +102,13 @@ class ForecastActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        FutureVoid(::downloadCc, ::updateCc)
-        FutureVoid(::downloadHazards, ::updateHazards)
-        FutureVoid(::download7Day, ::update7Day)
+        FutureVoid(::downloadCc) {
+            cardCurrentConditions.update(currentConditions, true)
+        }
+        FutureVoid({ hazards = Hazards(latLon) }, ::updateHazards)
+        FutureVoid({ sevenDay = SevenDay(latLon) }) {
+            sevenDayCollection.update(sevenDay, latLon, true)
+        }
     }
 
     private fun downloadCc() {
@@ -113,13 +116,13 @@ class ForecastActivity : BaseActivity() {
         currentConditions.timeCheck()
     }
 
-    private fun updateCc() {
-        cardCurrentConditions.update(currentConditions, true)
-    }
+//    private fun updateCc() {
+//        cardCurrentConditions.update(currentConditions, true)
+//    }
 
-    private fun downloadHazards() {
-        hazards = Hazards(latLon)
-    }
+//    private fun downloadHazards() {
+//        hazards = Hazards(latLon)
+//    }
 
     private fun updateHazards() {
         if (hazards.titles.isEmpty()) {
@@ -131,13 +134,13 @@ class ForecastActivity : BaseActivity() {
         }
     }
 
-    private fun download7Day() {
-        sevenDay = SevenDay(latLon)
-    }
+//    private fun download7Day() {
+//        sevenDay = SevenDay(latLon)
+//    }
 
-    private fun update7Day() {
-        sevenDayCollection.update(sevenDay, latLon, true)
-    }
+//    private fun update7Day() {
+//        sevenDayCollection.update(sevenDay, latLon, true)
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -148,7 +151,7 @@ class ForecastActivity : BaseActivity() {
     }
 
     private fun saveLocation() {
-        val message = Location.save(this, latLon, locationName)
+        val message = Location.save(this, latLon, latLon.prettyPrint() + " - " + locationName)
         PopupMessage(box.get(), message)
     }
 }

@@ -73,7 +73,8 @@ object UtilityHourly {
                 ).ljust(18)
             )
         }
-        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData, lines)
+//        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData, lines)
+        return Hourly(timeData, tempData, conditionData, lines)
     }
 
     private fun shortenConditions(s: String) =

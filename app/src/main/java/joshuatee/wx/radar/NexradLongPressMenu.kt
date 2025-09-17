@@ -34,6 +34,7 @@ import joshuatee.wx.objects.PolygonWatch
 import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.Site
 import joshuatee.wx.settings.RadarPreferences
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.util.SoundingSites
@@ -123,6 +124,7 @@ class NexradLongPressMenu(
             val distRidKm = LatLon.distance(radarSiteLatLon, latLon, DistanceUnit.KM)
             val directionFromRadarSite = LatLon.calculateDirection(latLon, radarSiteLatLon)
             val latLonTitle = latLon.prettyPrint()
+            val forecastCloseTo = UtilityLocation.getNearestCity(context, latLon)
             longPressDialogue.setTitle(latLonTitle)
             longPressList.add("${dist.toString().take(6)} mi $direction to location")
             longPressList.add(
@@ -170,7 +172,7 @@ class NexradLongPressMenu(
                 add("Radar Mosaic")
                 add("GOES Satellite")
                 add("Observation: ${obsSite.codeName} ${obsSite.fullName} ${obsSite.distance} mi $obsDirection")
-                add("Forecast: $latLonTitle")
+                add("Forecast: $latLonTitle ($forecastCloseTo)")
                 add("Meteogram: ${obsSite.codeName}")
                 add("Radar status message: ${closestRadarSites.first().codeName}")
             }

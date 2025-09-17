@@ -79,7 +79,8 @@ object UtilityHourlyOldApi {
                 }
             }
         }
-        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData, lines)
+//        return Hourly(timeData, tempData, windSpeedData, windDirData, conditionData, lines)
+        return Hourly(timeData, tempData, conditionData, lines)
     }
 
     fun getHourlyString(locNumber: Int): String {

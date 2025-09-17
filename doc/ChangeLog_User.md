@@ -8,6 +8,43 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55977 2025_09_17 (BETAR)
+
+* [ADD] per upcoming changes: Android prior to Android 9.0 (API 28) will no longer be supported
+  (set minSdkVersion 29)
+* [ADD] In the screen that opens when you long-press (press and hold) in Nexrad radar add the
+  nearest city to the item to show an adhoc forecast
+* [ADD] minor optimization to title/subtitle in adhoc location (long press in nexrad view forecast,
+  etc)
+* [ADD] add keyboard shortcuts in GOES/RadarMosaic for testing (ctrl-A for animate, refresh button
+* [ADD] add keyboard shortcuts in SevereDashboard (ctrl-1 ctrl-2 for US Alerts and SPC Storm
+  reports)
+* [ADD] In **Settings -> Location** change **RID** to **Nexrad Radar** (for clarity) and show Latlon
+  with 4 digit precision.
+* [ADD] remove obsolete option "Black background" (this was moved to Settings->About->Developer
+  Settings awhile ago), it conflicts with the ability to set any arbitrary color for **Nexrad Radar
+  Background color** in Settings -> Colors
+* [FIX] Colormap Legend would not show if radar product TZ0 selected (TDWR)
+* [FIX] Colormap Legend would not show for tilts other then lowest tilt for ref/vel
+* [ADD] In **Settings->Locations** if a Location has a notification of any kind enabled "+Alert" is
+  shown in the card. This has been changed to "+Notif" to more clearly represent that this is not
+  the **Alert** notification but rather could be any type of notification for that location.
+* [FIX] WeatherWidgetService.getViewAt - few crash reports
+  `Exception android.database.CursorIndexOutOfBoundsException: Before first row.`
+* [FIX] joshuatee.wx.settings.SettingsHomeScreenActivity.prodClicked - few crash reports
+  `Exception java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState`
+* [ADD] In **Settings->UI** change "Hourly screen: show with AM/PM" to "Hourly/Nexrad: show with
+  AM/PM" as nexrad is now impacted by this setting. Note that in Nexrad due to space reasons AM/PM
+  is not shown.
+* [ADD] If **Settings->UI** is visited, force refresh on main screen in case any setting is changed
+* [FIX] formatting issues if hourly is shown on main screen via **Settings->Home Screen**
+* [ADD] In **Settings->Radar** add this in parenthesis to clarify about this option which is not
+  normally needed:
+
+```
+Center radar on location (disables pan to move in a direction)
+```
+
 ## 55966 2025_09_08
 
 * [ADD] updates for NCEP Models for **MAG 6.0 - August 2025** in particular new products for

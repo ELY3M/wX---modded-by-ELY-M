@@ -2,15 +2,25 @@
 
 # Developer ChangeLog
 
-## 55977 2025_09_11
+## 55978 2025_09_16
 
 * [ADD]
+
+## 55977 2025_09_16
+
+* [ADD] per upcoming changes: Android prior to Android 9.0 (API 28) will no longer be supported
+  after 2025-10-01 (set minSdkVersion 29)
+* [ADD] In the screen that opens when you long-press (press and hold) in Nexrad radar add the
+  nearest city to the item to show an adhoc forecast
+* [ADD] minor optimization to title/subtitle in adhoc location (long press in nexrad view forecast,
+  etc)
 
 ## 55976 2025_09_11
 
 * [REF] remove CanadaLegal since Canada support was dropped awhile ago
 * [ADD] add keyboard shortcuts in GOES/RadarMosaic for testing (ctrl-A for animate, refresh button
-* [ADD] add keyboard shortcuts in SevereDashboard (ctrl-1 ctrl-2 for US Alerts and SPC Storm reports)
+* [ADD] add keyboard shortcuts in SevereDashboard (ctrl-1 ctrl-2 for US Alerts and SPC Storm
+  reports)
 
 ## 55975 2025_09_10
 

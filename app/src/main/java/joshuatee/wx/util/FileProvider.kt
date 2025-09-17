@@ -6,11 +6,11 @@
 package joshuatee.wx.util
 
 import android.content.Context
-import java.util.Arrays
+//import java.util.Arrays
 //import android.database.Cursor
 //import android.database.MatrixCursor
 import android.net.Uri
-import android.provider.MediaStore
+//import android.provider.MediaStore
 import java.io.File
 
 class FileProvider : androidx.core.content.FileProvider() {
@@ -36,15 +36,15 @@ class FileProvider : androidx.core.content.FileProvider() {
 //        return cursor
 //    }
 
-    private fun columnNamesWithData(columnNames: Array<String>): Array<String> {
-        columnNames
-            .filter { MediaStore.MediaColumns.DATA == it }
-            .forEach { _ -> return columnNames }
-        @Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
-        val newColumnNames = Arrays.copyOf(columnNames, columnNames.size + 1)
-        newColumnNames[columnNames.size] = MediaStore.MediaColumns.DATA
-        return newColumnNames
-    }
+//    private fun columnNamesWithData(columnNames: Array<String>): Array<String> {
+//        columnNames
+//            .filter { MediaStore.MediaColumns.DATA == it }
+//            .forEach { _ -> return columnNames }
+//        @Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
+//        val newColumnNames = Arrays.copyOf(columnNames, columnNames.size + 1)
+//        newColumnNames[columnNames.size] = MediaStore.MediaColumns.DATA
+//        return newColumnNames
+//    }
 
     companion object {
         fun getUriForFile(context: Context, authority: String, file: File): Uri =

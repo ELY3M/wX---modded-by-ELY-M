@@ -59,13 +59,14 @@ object Utility {
     fun getVersion(context: Context): String =
         context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: ""
 
-    @SuppressLint("ApplySharedPref")
+    @SuppressLint("ApplySharedPref", "UseKtx")
     fun commitPref(context: Context) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
         editor.commit()
     }
 
+    @SuppressLint("UseKtx")
     fun writePref(context: Context, key: String, value: String) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
@@ -73,6 +74,7 @@ object Utility {
         editor.apply()
     }
 
+    @SuppressLint("UseKtx")
     fun writePrefWithNull(context: Context, key: String, value: String?) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
@@ -80,6 +82,7 @@ object Utility {
         editor.apply()
     }
 
+    @SuppressLint("UseKtx")
     fun writePrefInt(context: Context, key: String, value: Int) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
@@ -87,6 +90,7 @@ object Utility {
         editor.apply()
     }
 
+    @SuppressLint("UseKtx")
     fun writePrefFloat(context: Context, key: String, value: Float) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
@@ -94,6 +98,7 @@ object Utility {
         editor.apply()
     }
 
+    @SuppressLint("UseKtx")
     fun writePrefLong(context: Context, key: String, value: Long) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
@@ -121,7 +126,7 @@ object Utility {
     fun readPrefWithNull(context: Context, key: String, value: String?): String? =
         PreferenceManager.getDefaultSharedPreferences(context).getString(key, value)
 
-    @SuppressLint("ApplySharedPref")
+    @SuppressLint("ApplySharedPref", "UseKtx")
     fun removePref(context: Context, key: String) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         preferences.edit().remove(key).commit()
