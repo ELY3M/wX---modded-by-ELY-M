@@ -215,7 +215,7 @@ public class LegendRenderer {
                     lTop = mGraphView.getGraphContentTop() + mStyles.margin;
                     break;
                 case MIDDLE:
-                    lTop = mGraphView.getHeight() / 2 - legendHeight / 2;
+                    lTop = (float) mGraphView.getHeight() / 2 - legendHeight / 2;
                     break;
                 default:
                     lTop = mGraphView.getGraphContentTop() + mGraphView.getGraphContentHeight() - mStyles.margin - legendHeight - 2 * mStyles.padding;

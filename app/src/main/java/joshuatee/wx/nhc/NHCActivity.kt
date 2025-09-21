@@ -83,21 +83,8 @@ class NhcActivity : BaseActivity() {
             R.id.action_atl_twd -> showTextProduct("MIATWDAT")
             R.id.action_epac_two -> showTextProduct("MIATWOEP")
             R.id.action_epac_twd -> showTextProduct("MIATWDEP")
-//            R.id.action_atl_tws -> showTextProduct("MIATWSAT")
-//            R.id.action_epac_tws -> showTextProduct("MIATWSEP")
             R.id.action_cpac_two -> showTextProduct("HFOTWOCP")
             R.id.action_share -> UtilityShare.text(this, "NHC", "", nhc.bitmaps)
-//            R.id.action_epac_daily -> Route.image(
-//                this,
-//                "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg",
-//                "EPAC Daily Analysis"
-//            )
-
-//            R.id.action_atl_daily -> Route.image(
-//                this,
-//                "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg",
-//                "ATL Daily Analysis"
-//            )
 
             R.id.action_epac_7daily -> Route.image(
                 this,

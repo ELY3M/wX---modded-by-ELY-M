@@ -478,7 +478,7 @@ object RadarSites {
         "HKM" to "20.125",
 
         "TDTW" to "42.11111",  // Detroit (DTW), MI TDTW DTX 772
-        "TADW" to "5", //  Andrews Air Force Base (ADW), MD TADW LWX 346
+        "TADW" to "38.695", //  Andrews Air Force Base (ADW), MD TADW LWX 346
         "TATL" to "33.646193", // Atlanta (ATL), GA TATL FFC 1,075
         "TBNA" to "35.979079", // Nashville (BNA), TN TBNA OHX 817
         "TBOS" to "42.15806", // Boston (BOS), MA TBOS BOX 264
@@ -522,19 +522,6 @@ object RadarSites {
         "TSTL" to "38.804691", // St Louis (STL), MO TSTL LSX 647
         "TTPA" to "27.85867", // Tampa Bay (TPA), FL TTPA TBW 93
         "TTUL" to "36.070184", // Tulsa (TUL), OK TTUL TSA 823
-
-//        "latest" to "36.105", // nws conus
-//        "centgrtlakes" to "42.127",
-//        "uppermissvly" to "42.75",
-//        "northrockies" to "42.75",
-//        "northeast" to "42.425",
-//        "pacnorthwest" to "42.425",
-//        "pacsouthwest" to "35.15",
-//        "southrockies" to "32.5",
-//        "southplains" to "31.6",
-//        "southmissvly" to "31.6",
-//        "southeast" to "29.86",
-//        "hawaii" to "19.91"
     )
 
     private val lon = mapOf(
@@ -640,8 +627,6 @@ object RadarSites {
         "VAX" to "83.002",
         "MHX" to "76.876",
         "OHX" to "86.563",
-//            "LIX" to "89.825",
-//        "LIX" to "0.0",
         "OKX" to "72.864",
         "AEC" to "165.293",
         "AKQ" to "77.008",
@@ -699,7 +684,7 @@ object RadarSites {
         "HKM" to "155.778",
 
         "TDTW" to "83.515",
-        "TADW" to "5",
+        "TADW" to "76.845",
         "TATL" to "84.262233",
         "TBNA" to "86.661691",
         "TBOS" to "70.93389",
@@ -742,20 +727,7 @@ object RadarSites {
         "TSLC" to "111.929722",
         "TSTL" to "90.488558",
         "TTPA" to "82.51755",
-        "TTUL" to "95.826313",
-
-//        "latest" to "97.141",
-//        "centgrtlakes" to "84.544",
-//        "uppermissvly" to "97.10",
-//        "northrockies" to "108.60",
-//        "northeast" to "74.10",
-//        "pacnorthwest" to "120.10",
-//        "pacsouthwest" to "120.15",
-//        "southrockies" to "110.50",
-//        "southplains" to "100.00",
-//        "southmissvly" to "90.00",
-//        "southeast" to "82.658",
-//        "hawaii" to "157.55"
+        "TTUL" to "95.826313"
     )
 
     val sites: Sites = Sites(names, lat, lon, false)

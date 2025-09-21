@@ -187,7 +187,7 @@ public class CursorMode {
         canvas.drawRoundRect(new RectF(lLeft, lTop, lRight, lBottom), 8, 8, mRectPaint);
 
         mTextPaint.setFakeBoldText(true);
-        canvas.drawText(mGraphView.getGridLabelRenderer().getLabelFormatter().formatLabel(mCurrentSelectionX, true), lLeft + mStyles.padding, lTop + mStyles.padding / 2 + mStyles.textSize, mTextPaint);
+        canvas.drawText(mGraphView.getGridLabelRenderer().getLabelFormatter().formatLabel(mCurrentSelectionX, true), lLeft + mStyles.padding, lTop + (float) mStyles.padding / 2 + mStyles.textSize, mTextPaint);
 
         mTextPaint.setFakeBoldText(false);
 
@@ -195,7 +195,7 @@ public class CursorMode {
         for (Map.Entry<BaseSeries, DataPointInterface> entry : mCurrentSelection.entrySet()) {
             mRectPaint.setColor(entry.getKey().getColor());
             canvas.drawRect(new RectF(lLeft + mStyles.padding, lTop + mStyles.padding + (i * (mStyles.textSize + mStyles.spacing)), lLeft + mStyles.padding + shapeSize, lTop + mStyles.padding + (i * (mStyles.textSize + mStyles.spacing)) + shapeSize), mRectPaint);
-            canvas.drawText(getTextForSeries(entry.getKey(), entry.getValue()), lLeft + mStyles.padding + shapeSize + mStyles.spacing, lTop + mStyles.padding / 2 + mStyles.textSize + (i * (mStyles.textSize + mStyles.spacing)), mTextPaint);
+            canvas.drawText(getTextForSeries(entry.getKey(), entry.getValue()), lLeft + mStyles.padding + shapeSize + mStyles.spacing, lTop + (float) mStyles.padding / 2 + mStyles.textSize + (i * (mStyles.textSize + mStyles.spacing)), mTextPaint);
             i++;
         }
     }
@@ -240,17 +240,17 @@ public class CursorMode {
         mStyles.backgroundColor = color;
     }
 
-    public void setSpacing(int s) {
-        mStyles.spacing = s;
-    }
+//    public void setSpacing(int s) {
+//        mStyles.spacing = s;
+//    }
 
     public void setPadding(int s) {
         mStyles.padding = s;
     }
 
-    public void setMargin(int s) {
-        mStyles.margin = s;
-    }
+//    public void setMargin(int s) {
+//        mStyles.margin = s;
+//    }
 
     public void setWidth(int s) {
         mStyles.width = s;

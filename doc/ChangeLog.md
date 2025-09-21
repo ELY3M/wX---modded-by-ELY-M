@@ -2,9 +2,20 @@
 
 # Developer ChangeLog
 
-## 55978 2025_09_16
+## 55979 2025_09_21
 
 * [ADD]
+
+## 55978 2025_09_21
+
+* [FIX] TDWR radar **TADW** (Andrews Air Force Base (ADW)) was not working correctly (wrong LAT/LON)
+* [ADD] In adhoc location forecast change "Save Location" to "Save" to save room in top toolbar
+* [ADD] lib update
+
+```
+-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.3'
++    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4'
+```
 
 ## 55977 2025_09_16
 

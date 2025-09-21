@@ -520,7 +520,7 @@ public class TouchImageView2 extends AppCompatImageView {
         int drawableWidth = drawable.getIntrinsicWidth();
         int drawableHeight = drawable.getIntrinsicHeight();
 
-        PointF point = transformCoordTouchToBitmap(viewWidth / 2, viewHeight / 2, true);
+        PointF point = transformCoordTouchToBitmap((float) viewWidth / 2, (float) viewHeight / 2, true);
         point.x /= drawableWidth;
         point.y /= drawableHeight;
         return point;
@@ -1063,7 +1063,7 @@ public class TouchImageView2 extends AppCompatImageView {
             }
 
             if (animateToZoomBoundary) {
-                DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2, viewHeight / 2, true);
+                DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, (float) viewWidth / 2, (float) viewHeight / 2, true);
                 compatPostOnAnimation(doubleTap);
             }
         }
@@ -1128,7 +1128,7 @@ public class TouchImageView2 extends AppCompatImageView {
             // Used for translating image during scaling
             //
             startTouch = transformCoordBitmapToTouch(bitmapX, bitmapY);
-            endTouch = new PointF(viewWidth / 2, viewHeight / 2);
+            endTouch = new PointF((float) viewWidth / 2, (float) viewHeight / 2);
         }
 
         @Override

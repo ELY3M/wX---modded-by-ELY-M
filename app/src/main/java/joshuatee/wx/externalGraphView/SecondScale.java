@@ -233,7 +233,7 @@ public class SecondScale {
             mPaintAxisTitle.setColor(getVerticalAxisTitleColor());
             mPaintAxisTitle.setTextSize(getVerticalAxisTitleTextSize());
             float x = canvas.getWidth() - getVerticalAxisTitleTextSize() / 2;
-            float y = canvas.getHeight() / 2;
+            float y = (float) canvas.getHeight() / 2;
             canvas.save();
             canvas.rotate(-90, x, y);
             canvas.drawText(mVerticalAxisTitle, x, y, mPaintAxisTitle);
