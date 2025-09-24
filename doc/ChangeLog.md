@@ -2,9 +2,27 @@
 
 # Developer ChangeLog
 
-## 55979 2025_09_21
+## 55981 2025_09_24
 
-* [ADD]
+* [REF]
+
+## 55980 2025_09_24
+
+* [REF] Have SettingsPlaylistActivity handle dialogue more like SettingsHomeScreenActivity
+* [REF] in ObjectDialogue move connect into constructor impacts the following
+
+```
+	modified:   app/src/main/java/joshuatee/wx/audio/SettingsPlaylistActivity.kt
+	modified:   app/src/main/java/joshuatee/wx/fragments/LocationFragment.kt (location choice and tap on location cc icon)
+	modified:   app/src/main/java/joshuatee/wx/radar/NexradLongPressMenu.kt (long press menu)
+	modified:   app/src/main/java/joshuatee/wx/radar/NexradUI.kt (tdwr selector)
+	modified:   app/src/main/java/joshuatee/wx/settings/SettingsHomeScreenActivity.kt
+	modified:   app/src/main/java/joshuatee/wx/ui/ObjectDialogue.kt
+```
+
+## 55979 2025_09_24
+
+* [FIX] transient display glitch in **Settings->Locations** if a location is removed
 
 ## 55978 2025_09_21
 

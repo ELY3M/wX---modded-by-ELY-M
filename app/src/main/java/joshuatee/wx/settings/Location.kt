@@ -51,11 +51,9 @@ object Location {
         true
     }
 
-    fun checkCurrentLocationValidity(context: Context) {
+    private fun checkCurrentLocationValidity(context: Context) {
         if (currentLocation >= locations.size) {
             setCurrentLocationStr(context, (locations.lastIndex + 1).toString())
-//            currentLocation = locations.lastIndex
-//            currentLocationStr = (currentLocation + 1).toString()
         }
     }
 
@@ -71,9 +69,6 @@ object Location {
 
     val currentLocationStr: String
         get() = (currentLocation + 1).toString()
-//        set(currentLocationStr) {
-//            currentLocation = To.int(currentLocationStr) - 1
-//        }
 
     val wfo get() = locations.getOrNull(currentLocation)?.wfo ?: "DTX"
 
@@ -118,7 +113,7 @@ object Location {
         initNumLocations(context)
         locations = (0 until getNumberOfLocations()).map { ObjectLocation(context, it) }
         listOf.clear()
-        listOf.addAll(locations.map { it.name } + ADD_LOC_STR)
+        listOf.addAll(locations.map { it.name } + "Add Location...")
         setCurrentLocationStr(context, Utility.readPref(context, "CURRENT_LOC_FRAGMENT", "1"))
         checkCurrentLocationValidity(context)
     }
@@ -142,14 +137,8 @@ object Location {
             name
         )
 
-    fun save(
-        context: Context,
-        locNum: String,
-        xStr: String,
-        yStr: String,
-        labelStr: String
-    ): String {
-        if (xStr == "" || yStr == "" || labelStr == "") {
+    fun save(context: Context, locNum: String, x: String, y: String, label: String): String {
+        if (x == "" || y == "" || label == "") {
             return "Location label, latitude, and longitude all must have valid values, please try again."
         }
         val locNumInt = To.int(locNum)
@@ -159,31 +148,30 @@ object Location {
         } else {
             locNumIntCurrent
         }
-        Utility.writePref(context, "LOC" + locNum + "_X", xStr)
-        Utility.writePref(context, "LOC" + locNum + "_Y", yStr)
-        Utility.writePref(context, "LOC" + locNum + "_LABEL", labelStr)
+        Utility.writePref(context, "LOC" + locNum + "_X", x)
+        Utility.writePref(context, "LOC" + locNum + "_Y", y)
+        Utility.writePref(context, "LOC" + locNum + "_LABEL", label)
         setNumLocations(context, locNumToSave)
-        val wfoAndRadar = getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
+        val wfoAndRadar = getWfoRadarSiteFromPoint(LatLon(x, y))
         var wfo = wfoAndRadar[0]
         var radarSite = wfoAndRadar[1]
         if (wfo == "") {
-            wfo = WfoSites.sites.getNearest(LatLon(xStr, yStr))
+            wfo = WfoSites.sites.getNearest(LatLon(x, y))
         }
         if (radarSite == "" || radarSite == "LIX") {
-            radarSite = RadarSites.getNearestCode(LatLon(xStr, yStr))
+            radarSite = RadarSites.getNearestCode(LatLon(x, y))
         }
         Utility.writePref(context, "RID$locNum", radarSite.uppercase(Locale.US))
         Utility.writePref(context, "NWS$locNum", wfo.uppercase(Locale.US))
         refresh(context)
         setCurrentLocationStr(context, locNum)
-        return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.uppercase(Locale.US) + "(" + radarSite.uppercase(
+        return "Saving location $locNum as $label ($x,$y) " + wfo.uppercase(Locale.US) + "(" + radarSite.uppercase(
             Locale.US
         ) + ")"
     }
 
     fun setCurrentLocationStr(context: Context, locNum: String) {
         Utility.writePref(context, "CURRENT_LOC_FRAGMENT", locNum)
-//        currentLocationStr = locNum
         currentLocation = To.int(locNum) - 1
     }
 
@@ -293,12 +281,10 @@ object Location {
         val locFragCurrentInt = currentLocation
         if (locToDeleteInt == (locFragCurrentInt + 1)) {
             Utility.writePref(context, "CURRENT_LOC_FRAGMENT", "1")
-//            currentLocationStr = "1"
             setCurrentLocationStr(context, "1")
         } else if (locFragCurrentInt > locToDeleteInt) {
             val shiftNum = (locFragCurrentInt - 1).toString()
             Utility.writePref(context, "CURRENT_LOC_FRAGMENT", shiftNum)
-//            currentLocationStr = shiftNum
             setCurrentLocationStr(context, shiftNum)
         }
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
@@ -311,6 +297,4 @@ object Location {
         }
         refresh(context)
     }
-
-    private const val ADD_LOC_STR = "Add Location..."
 }

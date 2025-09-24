@@ -206,8 +206,11 @@ class LocationFragment : Fragment() {
 
     private fun setupLocationLabel() {
         // The dialogue that opens when the user wants to change location
-        locationDialogue = ObjectDialogue(activityReference, "Select location:", Location.listOf)
-        locationDialogue.connect { dialog, index ->
+        locationDialogue = ObjectDialogue(
+            activityReference,
+            Location.listOf,
+            "Select location:"
+        ) { dialog, index ->
             changeLocation(index)
             dialog.dismiss()
         }

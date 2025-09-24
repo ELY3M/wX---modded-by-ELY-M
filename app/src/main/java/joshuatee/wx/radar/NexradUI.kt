@@ -114,17 +114,12 @@ class NexradUI(
     }
 
     fun showTdwrDialog() {
-        val objectDialogue = ObjectDialogue(activity, RadarSites.tdwrRadars())
-        objectDialogue.connectCancel { dialog, _ ->
-            dialog.dismiss()
-        }
-        objectDialogue.connect { dialog, itemIndex ->
+        ObjectDialogue(activity, RadarSites.tdwrRadars()) { dialog, itemIndex ->
             val s = RadarSites.tdwrRadars()[itemIndex]
             nexradState.radarSite = s.split(":")[0]
             mapSwitch(nexradState.radarSite)
             dialog.dismiss()
-        }
-        objectDialogue.show()
+        }.show()
     }
 
     fun showRadarScanInfo() {

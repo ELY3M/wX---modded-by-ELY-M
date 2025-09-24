@@ -46,47 +46,30 @@ class ObjectDialogue {
             getContent: () -> Unit,
             fn: (Int) -> Unit
         ) {
-            val objectDialogue = ObjectDialogue(context, list)
-            objectDialogue.connectCancel { dialog, _ ->
-                dialog.dismiss()
-            }
-            objectDialogue.connect { dialog, which ->
+            ObjectDialogue(context, list) { dialog, which ->
                 fn(which)
                 getContent()
                 dialog.dismiss()
-            }
-            objectDialogue.show()
+            }.show()
         }
     }
 
     private val alertDialog: AlertDialog.Builder
     private val arrayAdapter: ArrayAdapter<String>
 
-    constructor(context: Context, title: String, list: List<String>) {
+    constructor(
+        context: Context,
+        list: List<String>,
+        title: String = "",
+        listener: DialogInterface.OnClickListener
+    ) {
         alertDialog = if (UtilityUI.isThemeMaterial3()) {
             MaterialAlertDialogBuilder(context)
         } else {
             AlertDialog.Builder(context)
         }
-        alertDialog.setTitle(title)
-        arrayAdapter =
-            object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
-                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                    val view = super.getView(position, convertView, parent)
-                    val textView: TextView = view.findViewById(android.R.id.text1)
-                    setupTextView(textView)
-                    return view
-                }
-            }
-        arrayAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
-        alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }
-    }
-
-    constructor(context: Context, list: List<String>) {
-        alertDialog = if (UtilityUI.isThemeMaterial3()) {
-            MaterialAlertDialogBuilder(context)
-        } else {
-            AlertDialog.Builder(context)
+        if (title != "") {
+            alertDialog.setTitle(title)
         }
         arrayAdapter =
             object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
@@ -99,6 +82,7 @@ class ObjectDialogue {
             }
         arrayAdapter.setDropDownViewResource(UIPreferences.spinnerLayout)
         alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }
+        connect(listener)
     }
 
     constructor(context: Context, text: String) {
@@ -118,7 +102,7 @@ class ObjectDialogue {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
     }
 
-    fun setupTextView(textView: TextView) {
+    private fun setupTextView(textView: TextView) {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
         if (UtilityUI.isThemeAllWhite()) {
             textView.setTextColor(Color.BLACK)
@@ -132,19 +116,8 @@ class ObjectDialogue {
         alertDialog.show()
     }
 
-    fun connect(listener: DialogInterface.OnClickListener) {
+    private fun connect(listener: DialogInterface.OnClickListener) {
         alertDialog.setSingleChoiceItems(arrayAdapter, CHECKED_ITEM, listener)
-    }
-
-    fun connect2(fn: (DialogInterface, String) -> Unit) {
-        alertDialog.setSingleChoiceItems(arrayAdapter, CHECKED_ITEM) { dialog, index ->
-            val s = arrayAdapter.getItem(index) ?: ""
-            fn(dialog, s)
-        }
-    }
-
-    fun connectCancel(listener: DialogInterface.OnClickListener) {
-        alertDialog.setNegativeButton("Cancel", listener)
     }
 
     fun setTitle(title: String) {

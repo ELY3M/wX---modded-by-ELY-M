@@ -84,35 +84,35 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private fun setupUI() {
         dialogueMain = ObjectDialogue(
             this,
-            "Select text products:",
-            UtilityHomeScreen.localChoicesText + UtilityWpcText.labelsWithCodes
-        )
-        dialogueMain.connect { dialog, index -> dialogClicked(dialogueMain, "TXT-", index, dialog) }
+            UtilityHomeScreen.localChoicesText + UtilityWpcText.labelsWithCodes,
+            "Select text products:"
+        ) { dialog, index -> dialogClicked(dialogueMain, "TXT-", index, dialog) }
 
         dialogueImages = ObjectDialogue(
             this,
-            "Select image products:",
-            UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts
-        )
-        dialogueImages.connect { dialog, index -> dialogClicked(dialogueImages, "", index, dialog) }
+            UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts,
+            "Select image products:"
+        ) { dialog, index -> dialogClicked(dialogueImages, "", index, dialog) }
 
         dialogueAfd =
-            ObjectDialogue(this, "Select fixed location AFD products:", WfoSites.sites.nameList)
-        dialogueAfd.connect { dialog, index ->
-            dialogClicked(
-                dialogueAfd,
-                "TXT-" + "AFD",
-                index,
-                dialog
-            )
-        }
+            ObjectDialogue(
+                this,
+                WfoSites.sites.nameList,
+                "Select fixed location AFD products:"
+            ) { dialog, index ->
+                dialogClicked(
+                    dialogueAfd,
+                    "TXT-" + "AFD",
+                    index,
+                    dialog
+                )
+            }
 
         dialogueRadar = ObjectDialogue(
             this,
-            "Select fixed location Nexrad products:",
-            RadarSites.nexradRadars() + RadarSites.tdwrRadars()
-        )
-        dialogueRadar.connect { dialog, index ->
+            RadarSites.nexradRadars() + RadarSites.tdwrRadars(),
+            "Select fixed location Nexrad products:"
+        ) { dialog, index ->
             dialogClicked(
                 dialogueRadar,
                 "NXRD-",

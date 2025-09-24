@@ -99,14 +99,26 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun setupDialogue() {
         diaAfd =
-            ObjectDialogue(this, "Select fixed location AFD products:", WfoSites.sites.nameList)
-        diaAfd.connect2 { dialog, item -> addProductToPlayList(dialog, item, "AFD") }
+            ObjectDialogue(
+                this,
+                WfoSites.sites.nameList,
+                "Select fixed location AFD products:"
+            ) { dialog, item -> addProductToPlayList(diaAfd, item, "AFD", dialog) }
 
-        diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labelsWithCodes)
-        diaMain.connect2 { dialog, item -> addProductToPlayList(dialog, item, "") }
+        diaMain = ObjectDialogue(
+            this,
+            UtilityWpcText.labelsWithCodes,
+            "Select text products:"
+        ) { dialog, item -> addProductToPlayList(diaMain, item, "", dialog) }
     }
 
-    private fun addProductToPlayList(dialog: DialogInterface, item: String, prefix: String) {
+    private fun addProductToPlayList(
+        objectDialogue: ObjectDialogue,
+        index: Int,
+        prefix: String,
+        dialog: DialogInterface
+    ) {
+        val item = objectDialogue.getItem(index)
         val product = prefix + item.split(":")[0].uppercase(Locale.US)
         if (!playListString.contains(product)) {
             updateFav(product)

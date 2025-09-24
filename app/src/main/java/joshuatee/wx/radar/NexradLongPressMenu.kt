@@ -55,13 +55,8 @@ class NexradLongPressMenu(
 ) {
 
     private val radarLongPressItems = mutableListOf<String>()
-    private var longPressDialogue = ObjectDialogue(activity, radarLongPressItems)
-
-    init {
-        longPressDialogue.connectCancel { dialog, _ ->
-            dialog.dismiss()
-        }
-        longPressDialogue.connect { dialog, itemIndex ->
+    private var longPressDialogue =
+        ObjectDialogue(activity, radarLongPressItems) { dialog, itemIndex ->
             doLongPressAction(
                 activity,
                 radarLongPressItems[itemIndex],
@@ -71,7 +66,12 @@ class NexradLongPressMenu(
             )
             dialog.dismiss()
         }
-    }
+
+//    init {
+//        longPressDialogue.connectCancel { dialog, _ ->
+//            dialog.dismiss()
+//        }
+//    }
 
     val changeListener = object : NexradRenderSurfaceView.OnProgressChangeListener {
         override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
@@ -192,6 +192,7 @@ class NexradLongPressMenu(
             val nearestWfoLatLon = WfoSites.sites.byCode[nearestWfo]!!.latLon
             val bearingToWfo = LatLon.calculateDirection(latLon, nearestWfoLatLon)
             longPressList.add("AFD: $nearestWfo ${WfoSites.sites.getNearestInMiles(latLon)} mi $bearingToWfo")
+
             val nearestSpcMeso = UtilitySpcMeso.getNearest(latLon)
             longPressList.add("Spc Meso: ${UtilitySpcMeso.sectorMap[nearestSpcMeso]}")
             //elys mod

@@ -127,11 +127,12 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         Route.locationEdit(this, (position + 1).toString())
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun delete(position: Int) {
         if (settingsLocationAdapterList.itemCount > 1) {
             Location.delete(this, (position + 1).toString())
             settingsLocationAdapterList.deleteItem(position)
-            settingsLocationAdapterList.notifyItemRemoved(position)
+            settingsLocationAdapterList.notifyDataSetChanged()
             updateTitle()
             UtilityWXJobService.startService(this)
         } else {
