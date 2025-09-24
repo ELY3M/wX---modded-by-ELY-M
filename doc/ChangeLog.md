@@ -2,9 +2,14 @@
 
 # Developer ChangeLog
 
+## 55982 2025_09_24
+
+* [ADD]
+
 ## 55981 2025_09_24
 
-* [REF]
+* [FIX] https://aviationweather.gov/ changed their API w/o following the Service Change Notice
+  process, This broke wind barbs in Nexrad
 
 ## 55980 2025_09_24
 

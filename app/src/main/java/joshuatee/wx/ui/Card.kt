@@ -41,17 +41,6 @@ class Card : Widget {
         setupCard()
     }
 
-    private fun setupCard() {
-        with(card) {
-            setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
-            cardElevation = UIPreferences.cardElevation
-            setContentPadding(PADDING, PADDING, PADDING, PADDING)
-            radius = UIPreferences.cardCorners
-            useCompatPadding = true
-            preventCornerOverlap = true
-        }
-    }
-
     constructor(context: Context, color: Int) : this(context) {
         card.setCardBackgroundColor(color)
     }
@@ -72,6 +61,17 @@ class Card : Widget {
 
     constructor(activity: Activity, color: Int, resId: Int) : this(activity, resId) {
         card.setCardBackgroundColor(color)
+    }
+
+    private fun setupCard() {
+        with(card) {
+            setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
+            cardElevation = UIPreferences.cardElevation
+            setContentPadding(PADDING, PADDING, PADDING, PADDING)
+            radius = UIPreferences.cardCorners
+            useCompatPadding = true
+            preventCornerOverlap = true
+        }
     }
 
     var layoutParams: ViewGroup.LayoutParams

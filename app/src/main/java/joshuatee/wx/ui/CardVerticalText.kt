@@ -27,7 +27,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.objects.TextSize
 
-class CardVerticalText(val context: Context) : Widget {
+class CardVerticalText(val context: Context, toolbar: Toolbar) : Widget {
 
     private val card = Card(context)
     private val box = VBox(context, Gravity.CENTER)
@@ -35,11 +35,6 @@ class CardVerticalText(val context: Context) : Widget {
     init {
         box.matchParent()
         card.addLayout(box)
-    }
-
-    constructor(context: Context, toolbar: Toolbar) : this(
-        context,
-    ) {
         connect { UtilityToolbar.showHide(toolbar) }
     }
 

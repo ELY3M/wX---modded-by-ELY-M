@@ -70,6 +70,22 @@ class NavDrawer(val activity: Activity, private var labels: List<String>) {
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
     }
 
+    constructor(activity: Activity, items: List<String>, tokens: List<String>) : this(
+        activity,
+        items
+    ) {
+        this.tokens = tokens
+    }
+
+    constructor(
+        activity: Activity,
+        items: List<String>,
+        tokens: List<String>,
+        fn: () -> Unit
+    ) : this(activity, items, tokens) {
+        connectInternal(fn)
+    }
+
     fun updateLists(items: List<String>, tokens: List<String>) {
         listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
         if (UtilityUI.isThemeAllWhite()) {
@@ -113,22 +129,6 @@ class NavDrawer(val activity: Activity, private var labels: List<String>) {
             listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
         }
         labels = items
-    }
-
-    constructor(activity: Activity, items: List<String>, tokens: List<String>) : this(
-        activity,
-        items
-    ) {
-        this.tokens = tokens
-    }
-
-    constructor(
-        activity: Activity,
-        items: List<String>,
-        tokens: List<String>,
-        fn: () -> Unit
-    ) : this(activity, items, tokens) {
-        connectInternal(fn)
     }
 
     val url: String

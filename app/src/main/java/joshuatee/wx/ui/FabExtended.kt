@@ -65,11 +65,6 @@ class FabExtended(
             fab.text = newValue
         }
 
-    fun set(resourceDrawable: Int) {
-        val drawable = ContextCompat.getDrawable(context, resourceDrawable)
-        fab.icon = drawable
-    }
-
     private fun setupFab(icon: Int, text: String) {
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList =
@@ -82,5 +77,10 @@ class FabExtended(
         fab.text = text
         fab.elevation = UIPreferences.fabElevation
         fab.translationZ = UIPreferences.fabElevationDepressed
+    }
+
+    fun set(resourceDrawable: Int) {
+        val drawable = ContextCompat.getDrawable(context, resourceDrawable)
+        fab.icon = drawable
     }
 }

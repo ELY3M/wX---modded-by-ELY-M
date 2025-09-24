@@ -38,6 +38,7 @@ class CardHSText(context: Context, val product: String) : Widget {
 
     init {
         card.addWidget(text)
+        connect { toggleText() }
     }
 
     fun toggleText() {
@@ -84,7 +85,7 @@ class CardHSText(context: Context, val product: String) : Widget {
         textShort = text
     }
 
-    fun connect(fn: View.OnClickListener) {
+    private fun connect(fn: View.OnClickListener) {
         text.connect(fn)
     }
 

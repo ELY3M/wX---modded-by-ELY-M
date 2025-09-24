@@ -37,8 +37,12 @@ class CardDashAlertItem(val context: Context, private val warning: ObjectWarning
     private val textStart = Text(context)
     private val textEnd = Text(context)
     private val textBottom = Text(context, backgroundText = true)
-    private val radarButton = Button(context, "Radar", GlobalVariables.ICON_RADAR)
-    private val detailsButton = Button(context, "Details", GlobalVariables.ICON_CURRENT)
+    private val radarButton = Button(context, "Radar", GlobalVariables.ICON_RADAR) {
+        Route.radarBySite(context, warning.getClosestRadar())
+    }
+    private val detailsButton = Button(context, "Details", GlobalVariables.ICON_CURRENT) {
+        Route.hazard(context, warning.url)
+    }
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
@@ -54,8 +58,6 @@ class CardDashAlertItem(val context: Context, private val warning: ObjectWarning
         }
         card.addLayout(vbox)
         setTextFields()
-        radarButton.connect { Route.radarBySite(context, warning.getClosestRadar()) }
-        detailsButton.connect { Route.hazard(context, warning.url) }
     }
 
     fun connect(fn: View.OnClickListener) {

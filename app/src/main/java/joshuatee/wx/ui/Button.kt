@@ -28,7 +28,7 @@ import android.view.View
 import com.google.android.material.button.MaterialButton
 import joshuatee.wx.setPadding
 
-class Button(context: Context, title: String, icon: Int) : Widget {
+class Button(context: Context, title: String, icon: Int, fn: View.OnClickListener) : Widget {
 
     private val button = MaterialButton(context)
 
@@ -45,9 +45,10 @@ class Button(context: Context, title: String, icon: Int) : Widget {
                 iconTintMode = PorterDuff.Mode.LIGHTEN
             }
         }
+        connect(fn)
     }
 
-    fun connect(fn: View.OnClickListener) {
+    private fun connect(fn: View.OnClickListener) {
         button.setOnClickListener(fn)
     }
 

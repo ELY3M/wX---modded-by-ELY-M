@@ -32,7 +32,7 @@ import joshuatee.wx.objects.Route
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.util.WfoSites
 
-class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
+class CardAlertDetail(val context: Context, val capAlert: CapAlert) : Widget {
 
     private val card = Card(context)
     private val textViewTop = Text(context, UIPreferences.textHighlightColor)
@@ -40,8 +40,12 @@ class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
     private val textViewStart = Text(context, TextSize.SMALL)
     private val textViewEnd = Text(context, TextSize.SMALL)
     private val textViewBottom = Text(context, backgroundText = true)
-    private val radarButton = Button(context, "Radar", GlobalVariables.ICON_RADAR)
-    private val detailsButton = Button(context, "Details", GlobalVariables.ICON_CURRENT)
+    private val radarButton = Button(context, "Radar", GlobalVariables.ICON_RADAR) {
+        Route.radarBySite(context, capAlert.getClosestRadarXml())
+    }
+    private val detailsButton = Button(context, "Details", GlobalVariables.ICON_CURRENT) {
+        Route.hazard(context, capAlert.url)
+    }
 
     init {
         val vbox = VBox(context, Gravity.CENTER_VERTICAL)
@@ -73,7 +77,7 @@ class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
             location = ""
         }
 
-        setTextFields(office, location, capAlert)
+        setTextFields(office, location)
     }
 
     override fun getView() = card.getView()
@@ -82,7 +86,7 @@ class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
         card.connect(fn)
     }
 
-    private fun setTextFields(office: String, location: String, capAlert: CapAlert) {
+    private fun setTextFields(office: String, location: String) {
         val items = UtilityCapAlert.timesForCard(capAlert)
         val startTime = items[0]
         val endTime = items[1]
@@ -101,9 +105,6 @@ class CardAlertDetail(val context: Context, capAlert: CapAlert) : Widget {
         }
         if (capAlert.points.size < 2) {
             radarButton.visibility = View.GONE
-        } else {
-            radarButton.connect { Route.radarBySite(context, capAlert.getClosestRadarXml()) }
         }
-        detailsButton.connect { Route.hazard(context, capAlert.url) }
     }
 }

@@ -148,7 +148,6 @@ class LocationFragment : Fragment() {
                     val card = CardHSText(activityReference, token.replace("TXT-", ""))
                     box.addWidget(card)
                     textCards.add(card)
-                    card.connect { card.toggleText() }
                 }
 
                 token.contains("IMG-") -> {
@@ -470,24 +469,24 @@ class LocationFragment : Fragment() {
         }
 
     private fun setupLocationStatusDialogue() {
-        locationStatusDialogue = ObjectDialogue(activityReference, locationStatusDialogueList)
-        locationStatusDialogue!!.connect { dialog, index ->
-            val item = locationStatusDialogueList[index]
-            val renderOrNull = if (nexradState.wxglRenders.isNotEmpty()) {
-                nexradState.wxglRenders[0]
-            } else {
-                null
+        locationStatusDialogue =
+            ObjectDialogue(activityReference, locationStatusDialogueList) { dialog, index ->
+                val item = locationStatusDialogueList[index]
+                val renderOrNull = if (nexradState.wxglRenders.isNotEmpty()) {
+                    nexradState.wxglRenders[0]
+                } else {
+                    null
+                }
+                UtilityLocationFragment.handleIconTap(
+                    item,
+                    renderOrNull,
+                    activityReference,
+                    ::getContent,
+                    nexradState::resetAllGlview,
+                    ::getAllRadars
+                )
+                dialog.dismiss()
             }
-            UtilityLocationFragment.handleIconTap(
-                item,
-                renderOrNull,
-                activityReference,
-                ::getContent,
-                nexradState::resetAllGlview,
-                ::getAllRadars
-            )
-            dialog.dismiss()
-        }
     }
 
     private fun longPressRadarSiteSwitch(s: String) {

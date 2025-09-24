@@ -56,20 +56,6 @@ class CardText(context: Context) : Widget {
         connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
-//    constructor(
-//        context: Context,
-//        toolbar: Toolbar,
-//        toolbarBottom: Toolbar,
-//        textValue: String
-//    ) : this(context) {
-//        connect { UtilityToolbar.showHide(toolbar, toolbarBottom) }
-//        text = textValue
-//    }
-
-//    constructor(context: Context, toolbar: Toolbar) : this(context) {
-//        connect { UtilityToolbar.showHide(toolbar) }
-//    }
-
     constructor(context: Context, text: String) : this(context) {
         tv.text = text
         tv.isFocusable = false
@@ -140,16 +126,6 @@ class CardText(context: Context) : Widget {
         tv.isFocusable = false
         connect { Route(context, clazz) }
     }
-
-//    constructor(context: Context, text: String, textSize: Float, clazz: Class<*>) : this(
-//        context,
-//        text
-//    ) {
-//        tv.text = text
-//        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-//        tv.isFocusable = false
-//        connect { Route(context, clazz) }
-//    }
 
     fun setPaddingAmount(padding: Int) {
         this.padding = padding

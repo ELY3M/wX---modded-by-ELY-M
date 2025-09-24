@@ -81,8 +81,9 @@ internal object Metar {
             val obsAlAviationColor = mutableListOf<Int>()
             data[paneNumber].obsStateOld = radarSite
             val obsList = getNearbyObsSites(radarSite)
+            // https://aviationweather.gov/data/api/#changes
             val html =
-                "https://www.aviationweather.gov/cgi-bin/data/metar.php?ids=$obsList".getHtmlWithNewLine()
+                "https://www.aviationweather.gov/api/data/metar?ids=$obsList".getHtmlWithNewLine()
             val metarsTmp = html.split(GlobalVariables.newline)
             val metars = condense(metarsTmp)
             metars.forEach { z ->
@@ -252,15 +253,19 @@ internal object Metar {
     }
 
     // used to condense a list of metar that contains multiple entries for one site, newest is first so simply grab first/append
+    // entries now look like this, strip off the lead token
+    // SPECI KLPR 242048Z AUTO 28005KT 1 1/2SM +RA BR BKN012 OVC060 21/19 A2993 RMK AO2 RAB1959 P0007
+    // METAR KCMH 242051Z 22003KT 10SM FEW030 OVC041 24/17 A2991 RMK AO2 SLP122 T02390172 58010
     private fun condense(list: List<String>): List<String> {
         val siteMap = mutableMapOf<String, Boolean>()
         val goodObsList = mutableListOf<String>()
         list.forEach {
-            val tokens = it.split(" ")
+            val line = it.replace("METAR ", "").replace("SPECI ", "")
+            val tokens = line.split(" ")
             if (tokens.count() > 3) {
                 if (siteMap[tokens[0]] != true) {
                     siteMap[tokens[0]] = true
-                    goodObsList.add(it)
+                    goodObsList.add(line)
                 }
             }
         }

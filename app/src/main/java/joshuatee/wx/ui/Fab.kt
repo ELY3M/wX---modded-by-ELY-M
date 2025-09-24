@@ -38,7 +38,7 @@ class Fab {
     constructor(activity: Activity, resId: Int, fn: View.OnClickListener) {
         fab = activity.findViewById(resId)
         context = activity
-        setupFab(activity)
+        setupFab()
         connect(fn)
     }
 
@@ -62,33 +62,23 @@ class Fab {
             }
         }
 
-    fun set(resourceDrawable: Int) {
+    private fun setupFab(icon: Int = 0) {
+        if (UIPreferences.themeIsWhite) {
+            fab.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+        } else {
+            fab.backgroundTintList =
+                ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
+        }
+        if (icon != 0) {
+            set(icon)
+        }
+        fab.elevation = UIPreferences.fabElevation
+        fab.translationZ = UIPreferences.fabElevationDepressed
+    }
+
+    private fun set(resourceDrawable: Int) {
         val drawable = ContextCompat.getDrawable(context, resourceDrawable)
         fab.setImageDrawable(drawable)
-    }
-
-    private fun setupFab(icon: Int) {
-        if (UIPreferences.themeIsWhite) {
-            fab.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
-        } else {
-            fab.backgroundTintList =
-                ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
-        }
-        set(icon)
-        fab.elevation = UIPreferences.fabElevation
-        fab.translationZ = UIPreferences.fabElevationDepressed
-    }
-
-    private fun setupFab(context: Context) {
-        if (UIPreferences.themeIsWhite) {
-            fab.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
-        } else {
-            fab.backgroundTintList =
-                ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))
-        }
-        fab.elevation = UIPreferences.fabElevation
-        fab.translationZ = UIPreferences.fabElevationDepressed
     }
 }
