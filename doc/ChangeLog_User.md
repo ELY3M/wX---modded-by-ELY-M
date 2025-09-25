@@ -8,7 +8,15 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
-## 55977 2025_09_17 (BETAR)
+## 55981 2025_09_24 (BETA)
+
+* [FIX] https://aviationweather.gov/ changed their API w/o following the Service Change Notice
+  process, this broke wind barbs in Nexrad
+* [FIX] transient display glitch in **Settings->Locations** if a location is removed
+* [FIX] TDWR radar **TADW** (Andrews Air Force Base (ADW)) was not working correctly (wrong LAT/LON)
+* [ADD] In adhoc location forecast change "Save Location" to "Save" to save room in top toolbar
+
+## 55977 2025_09_17 (BETA)
 
 * [ADD] per upcoming changes: Android prior to Android 9.0 (API 28) will no longer be supported
   (set minSdkVersion 29)
