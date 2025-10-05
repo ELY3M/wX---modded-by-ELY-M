@@ -43,31 +43,23 @@ class LatLon() {
     private var yStr = "0.0"
 
     constructor(latLon: DoubleArray) : this() {
-        latNum = latLon[0]
-        lonNum = latLon[1]
-        xStr = latNum.toString()
-        yStr = lonNum.toString()
+        lat = latLon[0]
+        lon = latLon[1]
     }
 
     constructor(latNum: Double, lonNum: Double) : this() {
-        this.latNum = latNum
-        this.lonNum = lonNum
-        xStr = latNum.toString()
-        yStr = lonNum.toString()
+        lat = latNum
+        lon = lonNum
     }
 
     constructor(latNum: Float, lonNum: Float) : this() {
-        this.latNum = latNum.toDouble()
-        this.lonNum = lonNum.toDouble()
-        xStr = latNum.toString()
-        yStr = lonNum.toString()
+        lat = latNum.toDouble()
+        lon = lonNum.toDouble()
     }
 
     constructor(xStr: String, yStr: String) : this() {
-        this.xStr = xStr
-        this.yStr = yStr
-        latNum = To.double(xStr)
-        lonNum = To.double(yStr)
+        lat = To.double(xStr)
+        lon = To.double(yStr)
     }
 
     constructor(temp: String) : this() {

@@ -22,7 +22,11 @@
 package joshuatee.wx.ui
 
 import android.view.View
+import android.widget.LinearLayout
 
-interface Widget {
-    fun getView(): View
+interface Box {
+    fun getView(): LinearLayout
+    fun addWidget(view: View)
+    fun addWidget(widget: Widget)
+    fun addLayout(box: Box)
 }

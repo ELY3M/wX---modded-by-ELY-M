@@ -193,7 +193,7 @@ class SevereDashboardActivity : BaseActivity() {
         }
         bitmaps.indices.forEach {
             if (it % imagesPerRow == 0) {
-                boxRows.add(HBox(this, boxImages.get()))
+                boxRows.add(HBox(this, boxImages))
             }
             val card = Image(this, bitmaps[it], imagesPerRow)
             boxRows.last().addWidget(card)

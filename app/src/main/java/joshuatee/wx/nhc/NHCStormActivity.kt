@@ -159,9 +159,9 @@ class NhcStormActivity : BaseActivity() {
         bitmapsAttr = bitmapsAttr.filter { it.width > 100 }.toMutableList()
         bitmapsAttr.forEachIndexed { index, bitmapAttr ->
             if (index % imagesPerRow == 0) {
-                boxRows.add(HBox(this, boxImage.get()))
+                boxRows.add(HBox(this, boxImage))
             }
-            val image = Image(this, bitmapAttr, imagesPerRow)
+            val image = Image(this, bitmapAttr.bitmap, imagesPerRow)
             boxRows.last().addWidget(image)
             image.connect {
                 Route.image(this, bitmapAttr.url, bitmapAttr.title)

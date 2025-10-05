@@ -152,6 +152,6 @@ class ForecastActivity : BaseActivity() {
 
     private fun saveLocation() {
         val message = Location.save(this, latLon, latLon.prettyPrint() + " - " + locationName)
-        PopupMessage(box.get(), message)
+        PopupMessage(box.getView(), message)
     }
 }

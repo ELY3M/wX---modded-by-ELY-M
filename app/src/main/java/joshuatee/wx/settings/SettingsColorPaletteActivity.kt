@@ -180,8 +180,9 @@ class SettingsColorPaletteActivity : BaseActivity() {
                     )
 		    //elys mod
 		    allItems.add(TileObjectColorPalette("ELY", toolbar, prefToken, this, type, true))
-                    val prefArr = ColorPalette.radarColorPaletteList[94]!!.split(":")
-                        .dropLastWhile { it.isEmpty() }
+                    val prefArr =
+                        ColorPalette.radarColorPaletteList[94]!!.replace("::", ":").split(":")
+                            .dropLastWhile { it.isEmpty() }
                     prefArr.asSequence().filter { it != "" }.mapTo(allItems) {
                         TileObjectColorPalette(it, toolbar, prefToken, this, type, false)
                     }
@@ -279,7 +280,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
         if (rowListItem[globalPosition].prefToken == "RADAR_COLOR_PALETTE_$type") {
             if (!rowListItem[globalPosition].builtin) {
                 val newValue = ColorPalette.radarColorPaletteList[typeAsInt]!!.replace(
-                    ":" + rowListItem[globalPosition].colorMapLabel,
+                    ":" + rowListItem[globalPosition].colorMapLabel + ":",
                     ""
                 )
                 ColorPalette.radarColorPaletteList[typeAsInt] = newValue

@@ -260,7 +260,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                NotificationTextProduct.toggle(this, box.get(), product + wfo)
+                NotificationTextProduct.toggle(this, box.getView(), product + wfo)
                 updateSubmenuNotificationText()
             }
 

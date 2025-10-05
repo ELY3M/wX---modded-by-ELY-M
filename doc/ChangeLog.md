@@ -2,9 +2,23 @@
 
 # Developer ChangeLog
 
-## 55982 2025_09_24
+## 55986 2025_10_04
 
-* [ADD]
+* [REF]
+
+## 55985 2025_10_04
+
+* [FIX] The buttons in **Settings->Locations** and the subsequent **Edit** screen were not the
+  correct color for the text and icon
+* [REF] LatLon constructor simplify
+
+## 55984 2025_09_27
+
+* [REF] misc
+
+## 55983 2025_09_26
+
+* [REF] misc
 
 ## 55981 2025_09_24
 

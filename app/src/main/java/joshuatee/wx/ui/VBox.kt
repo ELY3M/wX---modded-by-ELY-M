@@ -29,7 +29,7 @@ import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
-class VBox(val context: Context) : Widget {
+class VBox(context: Context) : Box {
 
     private var linearLayout = LinearLayout(context)
 
@@ -38,6 +38,8 @@ class VBox(val context: Context) : Widget {
     }
 
     companion object {
+        fun centered(context: Context): VBox = VBox(context, Gravity.CENTER_VERTICAL)
+
         fun fromResource(activity: Activity): VBox {
             val box = VBox(activity)
             box.linearLayout = activity.findViewById(R.id.linearLayout)
@@ -51,7 +53,7 @@ class VBox(val context: Context) : Widget {
         }
     }
 
-    constructor(context: Context, gravity: Int) : this(context) {
+    private constructor(context: Context, gravity: Int) : this(context) {
         linearLayout.orientation = LinearLayout.VERTICAL
         this.gravity = gravity
     }
@@ -62,25 +64,21 @@ class VBox(val context: Context) : Widget {
         linearLayout.removeAllViewsInLayout()
     }
 
-    fun addWidget(child: View) {
-        linearLayout.addView(child)
+    override fun addWidget(view: View) {
+        linearLayout.addView(view)
     }
 
-    fun addWidget(child: Widget) {
-        linearLayout.addView(child.getView())
+    override fun addWidget(widget: Widget) {
+        linearLayout.addView(widget.getView())
     }
 
-    fun addLayout(child: HBox) {
-        linearLayout.addView(child.get())
+    override fun addLayout(box: Box) {
+        linearLayout.addView(box.getView())
     }
 
-    fun addLayout(child: VBox) {
-        linearLayout.addView(child.get())
-    }
-
-    fun addWidgets(children: List<Widget>) {
+    fun addWidgets(vararg children: Widget) {
         children.forEach {
-            linearLayout.addView(it.getView())
+            addWidget(it)
         }
     }
 
@@ -114,10 +112,6 @@ class VBox(val context: Context) : Widget {
         )
     }
 
-    fun get() = linearLayout
-
-    override fun getView() = linearLayout
-
     var visibility
         get() = linearLayout.visibility
         set(value) {
@@ -132,4 +126,6 @@ class VBox(val context: Context) : Widget {
             linearLayout.gravity = value
             gravityBacking = value
         }
+
+    override fun getView() = linearLayout
 }

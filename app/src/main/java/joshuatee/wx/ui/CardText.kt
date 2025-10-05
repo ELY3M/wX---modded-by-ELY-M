@@ -41,10 +41,10 @@ class CardText(context: Context) : Widget {
     private var padding = UIPreferences.padding
 
     init {
+        setTextSize(UIPreferences.textSizeSmall)
         with(tv) {
             setPadding(padding)
             gravity = Gravity.START
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
             setTextColor(UIPreferences.backgroundColor)
             setTextIsSelectable(true)
             isFocusable = false
@@ -63,7 +63,7 @@ class CardText(context: Context) : Widget {
 
     constructor(context: Context, text: String, textSize: Float) : this(context, text) {
         tv.text = text
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        setTextSize(textSize)
         tv.isFocusable = false
     }
 
@@ -78,10 +78,9 @@ class CardText(context: Context) : Widget {
         text,
         textSize
     ) {
-        this.padding = padding
-        tv.setPadding(padding)
+        setPaddingAmount(padding)
         tv.text = text
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        setTextSize(textSize)
         tv.isFocusable = false
     }
 
@@ -91,10 +90,9 @@ class CardText(context: Context) : Widget {
     ) {
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
-        this.padding = padding
-        tv.setPadding(padding)
+        setPaddingAmount(padding)
         tv.text = text
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        setTextSize(textSize)
         tv.isFocusable = false
         connect { fn() }
     }
@@ -104,10 +102,9 @@ class CardText(context: Context) : Widget {
         text
     ) {
         val padding = UIPreferences.paddingSettings
-        this.padding = padding
-        tv.setPadding(padding)
+        setPaddingAmount(padding)
         tv.text = text
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        setTextSize(textSize)
         tv.isFocusable = false
         connect { fn() }
     }
@@ -119,10 +116,9 @@ class CardText(context: Context) : Widget {
     ) {
         val textSize = UIPreferences.textSizeLarge
         val padding = UIPreferences.paddingSettings
-        this.padding = padding
-        tv.setPadding(padding)
+        setPaddingAmount(padding)
         tv.text = text
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        setTextSize(textSize)
         tv.isFocusable = false
         connect { Route(context, clazz) }
     }
@@ -158,8 +154,8 @@ class CardText(context: Context) : Widget {
         tv.setTextColor(color)
     }
 
-    fun setTextSize(type: Int, size: Float) {
-        tv.setTextSize(type, size)
+    fun setTextSize(size: Float) {
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
     }
 
     fun typefaceMono() {
@@ -174,8 +170,6 @@ class CardText(context: Context) : Widget {
         tv.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     }
 
-    override fun getView() = card.getView()
-
     var visibility
         get() = card.visibility
         set(newValue) {
@@ -187,14 +181,16 @@ class CardText(context: Context) : Widget {
     }
 
     fun refreshTextSize(size: TextSize) = when (size) {
-        TextSize.SMALL -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
-        TextSize.MEDIUM -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-        TextSize.LARGE -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
+        TextSize.SMALL -> setTextSize(UIPreferences.textSizeSmall)
+        TextSize.MEDIUM -> setTextSize(UIPreferences.textSizeNormal)
+        TextSize.LARGE -> setTextSize(UIPreferences.textSizeLarge)
     }
 
     fun setupHazard() {
         setPaddingAmount(UIPreferences.paddingSettings)
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+        setTextSize(UIPreferences.textSizeNormal)
         setTextColor(UIPreferences.textHighlightColor)
     }
+
+    override fun getView() = card.getView()
 }

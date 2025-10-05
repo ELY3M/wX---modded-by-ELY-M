@@ -93,7 +93,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val boxRows = mutableListOf<HBox>()
         (0..4).forEach {
             if (it % imagesPerRow == 0) {
-                boxRows.add(HBox(this, box.get()))
+                boxRows.add(HBox(this, box))
             }
             images.add(Image(this))
             boxRows.last().addWidget(images.last())

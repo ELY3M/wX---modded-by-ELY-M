@@ -27,7 +27,6 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.app.NavUtils
 import joshuatee.wx.R
@@ -41,6 +40,7 @@ import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.Switch
 import joshuatee.wx.ui.VBox
 import joshuatee.wx.ui.NumberPicker
+import joshuatee.wx.ui.TextEdit
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
@@ -50,9 +50,9 @@ class SettingsUIActivity : BaseActivity() {
     private var navDrawerMainScreen = false
     private var navDrawerMainScreenOnRight = true
     private lateinit var box: VBox
-    private lateinit var et1: EditText
-    private lateinit var et2: EditText
-    private lateinit var et3: EditText
+    private lateinit var et1: TextEdit
+    private lateinit var et2: TextEdit
+    private lateinit var et3: TextEdit
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -275,12 +275,12 @@ class SettingsUIActivity : BaseActivity() {
     }
 
     override fun onStop() {
-        UIPreferences.tabHeaders[0] = et1.text.toString()
-        UIPreferences.tabHeaders[1] = et2.text.toString()
-        UIPreferences.tabHeaders[2] = et3.text.toString()
-        Utility.writePref(this, "TAB1_HEADER", et1.text.toString())
-        Utility.writePref(this, "TAB2_HEADER", et2.text.toString())
-        Utility.writePref(this, "TAB3_HEADER", et3.text.toString())
+        UIPreferences.tabHeaders[0] = et1.text
+        UIPreferences.tabHeaders[1] = et2.text
+        UIPreferences.tabHeaders[2] = et3.text
+        Utility.writePref(this, "TAB1_HEADER", et1.text)
+        Utility.writePref(this, "TAB2_HEADER", et2.text)
+        Utility.writePref(this, "TAB3_HEADER", et3.text)
         MyApplication.initPreferences(this)
         UIPreferences.navDrawerMainScreen =
             Utility.readPref(this@SettingsUIActivity, "NAV_DRAWER_MAIN_SCREEN", "false")
@@ -299,12 +299,12 @@ class SettingsUIActivity : BaseActivity() {
     }
 
     private fun addEditText() {
-        et1 = findViewById(R.id.et1)
-        et2 = findViewById(R.id.et2)
-        et3 = findViewById(R.id.et3)
-        et1.setText(UIPreferences.tabHeaders[0])
-        et2.setText(UIPreferences.tabHeaders[1])
-        et3.setText(UIPreferences.tabHeaders[2])
+        et1 = TextEdit(this, R.id.et1)
+        et2 = TextEdit(this, R.id.et2)
+        et3 = TextEdit(this, R.id.et3)
+        et1.text = UIPreferences.tabHeaders[0]
+        et2.text = UIPreferences.tabHeaders[1]
+        et3.text = UIPreferences.tabHeaders[2]
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             listOf(et1, et2, et3).forEach {
                 it.setTextColor(Color.BLACK)

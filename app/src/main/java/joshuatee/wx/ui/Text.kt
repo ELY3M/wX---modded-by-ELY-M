@@ -28,6 +28,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import joshuatee.wx.setPadding
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
@@ -55,11 +56,9 @@ class Text(val context: Context) : Widget {
         }
 
     init {
-        with(tv) {
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
-            setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
-            gravity = Gravity.START
-        }
+        setTextSize(UIPreferences.textSizeNormal)
+        tv.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)
+        gravity = Gravity.START
     }
 
     constructor(context: Context, text: String) : this(context) {
@@ -78,6 +77,10 @@ class Text(val context: Context) : Widget {
 
     constructor(view: View, resourceId: Int) : this(view.context) {
         tv = view.findViewById(resourceId)
+    }
+
+    constructor(view: AlertDialog, resourceId: Int) : this(view.context) {
+        tv = view.findViewById(resourceId)!!
     }
 
     constructor(view: View, resourceId: Int, backgroundText: Boolean) : this(view, resourceId) {
@@ -106,20 +109,9 @@ class Text(val context: Context) : Widget {
 
     fun refreshTextSize(size: TextSize) {
         when (size) {
-            TextSize.SMALL -> tv.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                UIPreferences.textSizeSmall
-            )
-
-            TextSize.MEDIUM -> tv.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                UIPreferences.textSizeNormal
-            )
-
-            TextSize.LARGE -> tv.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                UIPreferences.textSizeLarge
-            )
+            TextSize.SMALL -> setTextSize(UIPreferences.textSizeSmall)
+            TextSize.MEDIUM -> setTextSize(UIPreferences.textSizeNormal)
+            TextSize.LARGE -> setTextSize(UIPreferences.textSizeLarge)
         }
     }
 
@@ -127,8 +119,8 @@ class Text(val context: Context) : Widget {
         refreshTextSize(size)
     }
 
-    fun setTextSize(unit: Int, size: Float) {
-        tv.setTextSize(unit, size)
+    fun setTextSize(size: Float) {
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
     }
 
     fun setMonoSpaced() {
@@ -154,7 +146,7 @@ class Text(val context: Context) : Widget {
 
     private fun setSmall() {
         tv.setTextColor(UIPreferences.backgroundColor)
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+        setTextSize(UIPreferences.textSizeSmall)
     }
 
     fun wrap() {

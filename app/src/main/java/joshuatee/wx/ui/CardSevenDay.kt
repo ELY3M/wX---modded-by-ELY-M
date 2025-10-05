@@ -41,7 +41,7 @@ class CardSevenDay(context: Context, iconUrl: String, isUS: Boolean, forecast: S
         val vbox = VBox(context)
         topLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
         bottomLineText.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
-        vbox.addWidgets(listOf(topLineText, bottomLineText))
+        vbox.addWidgets(topLineText, bottomLineText)
         if (!UIPreferences.locfragDontShowIcons) {
             hbox.addWidget(photo)
         }

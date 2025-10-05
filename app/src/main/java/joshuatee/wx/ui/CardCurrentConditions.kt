@@ -39,7 +39,7 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
 
     init {
         val hbox = HBox(context)
-        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
+        val vbox = VBox.centered(context)
         if (version == 2) {
             text1.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
             text2.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
@@ -49,8 +49,9 @@ class CardCurrentConditions(val context: Context, version: Int) : Widget {
                 UIPreferences.paddingSmall,
                 UIPreferences.paddingSmall
             )
-            vbox.addWidgets(listOf(text1, text2, text3))
-            hbox.addWidgets(listOf(photo, vbox))
+            vbox.addWidgets(text1, text2, text3)
+            hbox.addWidget(photo)
+            hbox.addLayout(vbox)
         } else {
             // legacy code
             text1.gravity = Gravity.CENTER

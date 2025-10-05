@@ -25,14 +25,15 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.TableLayout
-import joshuatee.wx.objects.BitmapAttr
+import joshuatee.wx.MyApplication
+import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.util.UtilityImg
 
 open class Image : Widget {
 
     protected val card: Card
     private val context: Context
-    var img: TouchImageView2
+    protected var imageView: TouchImageView2
     internal val layoutParams = TableLayout.LayoutParams(
         TableLayout.LayoutParams.WRAP_CONTENT,
         TableLayout.LayoutParams.WRAP_CONTENT
@@ -41,59 +42,37 @@ open class Image : Widget {
 
     constructor(context: Context) {
         this.context = context
-        img = TouchImageView2(context)
         card = Card(context)
+        imageView = TouchImageView2(context)
     }
 
-    constructor(context: Context, bitmap: Bitmap) {
-        this.context = context
-        card = Card(context)
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        card.addWidget(img)
-    }
-
-    constructor(context: Context, bitmap: Bitmap, numberAcross: Int = 1) {
-        this.context = context
-        card = Card(context)
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        card.addWidget(img)
-    }
-
-    constructor(context: Context, bitmapAttr: BitmapAttr, numberAcross: Int = 1) {
-        this.context = context
-        card = Card(context)
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        UtilityImg.resizeViewSetImgInCard(bitmapAttr.bitmap, img, numberAcross)
-        card.addWidget(img)
+    constructor(context: Context, bitmap: Bitmap, numberAcross: Int = 1) : this(context) {
+        this.bitmap = bitmap
+        imageView.layoutParams = layoutParams
+        resizeViewSetImgInCard(numberAcross)
+        card.addWidget(imageView)
     }
 
     open fun set(bitmap: Bitmap, numberAcross: Int = 1) {
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        card.addWidget(img)
         this.bitmap = bitmap
+        imageView = TouchImageView2(context)
+        imageView.layoutParams = layoutParams
+        resizeViewSetImgInCard(numberAcross)
+        card.addWidget(imageView)
     }
 
     open fun set2(bitmap: Bitmap, numberAcross: Int = 1) {
-        card.removeAllViews()
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        card.addWidget(img)
         this.bitmap = bitmap
+        card.removeAllViews()
+        imageView = TouchImageView2(context)
+        imageView.layoutParams = layoutParams
+        resizeViewSetImgInCard(numberAcross)
+        card.addWidget(imageView)
     }
 
     fun resetZoom() {
-        img.resetZoom()
+        imageView.resetZoom()
     }
-
-    override fun getView() = card.getView()
 
     var visibility
         get() = card.visibility
@@ -102,6 +81,18 @@ open class Image : Widget {
         }
 
     fun connect(fn: View.OnClickListener) {
-        img.setOnClickListener(fn)
+        imageView.setOnClickListener(fn)
     }
+
+    protected fun resizeViewSetImgInCard(numberAcross: Int = 1) {
+        val layoutParams = imageView.layoutParams
+        layoutParams.width =
+            (MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) / numberAcross
+        layoutParams.height =
+            ((MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) * bitmap.height / bitmap.width) / numberAcross
+        imageView.layoutParams = layoutParams
+        imageView.setImageBitmap(bitmap)
+    }
+
+    override fun getView() = card.getView()
 }

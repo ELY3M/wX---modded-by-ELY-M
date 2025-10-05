@@ -53,7 +53,7 @@ object Location {
 
     private fun checkCurrentLocationValidity(context: Context) {
         if (currentLocation >= locations.size) {
-            setCurrentLocationStr(context, (locations.lastIndex + 1).toString())
+            setCurrentLocationStr(context, To.string(locations.lastIndex + 1))
         }
     }
 
@@ -131,7 +131,7 @@ object Location {
     fun save(context: Context, latLon: LatLon, name: String = latLon.toString()): String =
         save(
             context,
-            (getNumberOfLocations() + 1).toString(),
+            To.string(getNumberOfLocations() + 1),
             latLon.latString,
             latLon.lonString,
             name

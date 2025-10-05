@@ -69,6 +69,11 @@ class FabExtended(
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList =
                 ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+            fab.setTextColor(
+                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.off_white))
+            )
+            fab.iconTint =
+                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.off_white))
         } else {
             fab.backgroundTintList =
                 ColorStateList.valueOf(UtilityTheme.getPrimaryColorFromSelectedTheme(context, 2))

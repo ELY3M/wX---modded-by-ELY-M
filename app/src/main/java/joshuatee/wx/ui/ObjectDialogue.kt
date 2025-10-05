@@ -28,8 +28,6 @@ import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
 import android.widget.ArrayAdapter
 import joshuatee.wx.R
-import android.util.TypedValue
-import android.widget.TextView
 import android.view.ViewGroup
 import android.view.View
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -75,8 +73,8 @@ class ObjectDialogue {
             object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                     val view = super.getView(position, convertView, parent)
-                    val textView: TextView = view.findViewById(android.R.id.text1)
-                    setupTextView(textView)
+                    val text = Text(view, android.R.id.text1)
+                    setupTextView(text)
                     return view
                 }
             }
@@ -98,12 +96,12 @@ class ObjectDialogue {
         val ad = alertDialog.create()
         ad.setCanceledOnTouchOutside(true)
         ad.show()
-        val textView: TextView = ad.findViewById(android.R.id.message)!!
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+        val text = Text(ad, android.R.id.message)
+        text.setTextSize(UIPreferences.textSizeNormal)
     }
 
-    private fun setupTextView(textView: TextView) {
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+    private fun setupTextView(textView: Text) {
+        textView.setTextSize(UIPreferences.textSizeNormal)
         if (UtilityUI.isThemeAllWhite()) {
             textView.setTextColor(Color.BLACK)
         } else {

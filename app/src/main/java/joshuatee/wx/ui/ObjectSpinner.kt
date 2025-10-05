@@ -53,7 +53,7 @@ class ObjectSpinner(
             gravity = Gravity.CENTER_VERTICAL
             connect { ObjectDialogue(context, context.resources.getString(strId)) }
         }
-        val hbox = HBox(context, Gravity.CENTER_VERTICAL)
+        val hbox = HBox.centered(context)
         hbox.matchParent()
         hbox.addWidget(text)
         val spinner = AppCompatSpinner(context)
@@ -89,8 +89,6 @@ class ObjectSpinner(
         card.addLayout(hbox)
     }
 
-    override fun getView() = card.getView()
-
     companion object {
 
         fun setupSpinner(spinner: Spinner, light: Boolean) {
@@ -102,4 +100,6 @@ class ObjectSpinner(
             spinner.backgroundTintList = tint
         }
     }
+
+    override fun getView() = card.getView()
 }

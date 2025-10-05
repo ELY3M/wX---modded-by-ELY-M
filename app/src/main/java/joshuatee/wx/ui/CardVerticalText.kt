@@ -22,7 +22,6 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.objects.TextSize
@@ -30,7 +29,7 @@ import joshuatee.wx.objects.TextSize
 class CardVerticalText(val context: Context, toolbar: Toolbar) : Widget {
 
     private val card = Card(context)
-    private val box = VBox(context, Gravity.CENTER)
+    private val box = VBox.centered(context)
 
     init {
         box.matchParent()
@@ -48,9 +47,9 @@ class CardVerticalText(val context: Context, toolbar: Toolbar) : Widget {
         }
     }
 
-    override fun getView() = card.getView()
-
     fun connect(fn: View.OnClickListener) {
         card.connect(fn)
     }
+
+    override fun getView() = card.getView()
 }

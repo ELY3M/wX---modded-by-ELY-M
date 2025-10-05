@@ -24,7 +24,6 @@ package joshuatee.wx.ui
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.view.Gravity
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
@@ -39,10 +38,9 @@ class CardStormReportItem(context: Context, stormReport: StormReport, k: Int) : 
     private val textBottom = Text(context, backgroundText = true)
 
     init {
-        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        vbox.addWidgets(listOf(textTop, textTitle, textBottom))
+        val vbox = VBox.centered(context)
+        vbox.addWidgets(textTop, textTitle, textBottom)
         card.addLayout(vbox)
-
         setId(k)
         setTextFields(stormReport)
     }
@@ -50,8 +48,6 @@ class CardStormReportItem(context: Context, stormReport: StormReport, k: Int) : 
     fun registerForContextMenu(activity: Activity) {
         activity.registerForContextMenu(card.getView())
     }
-
-    override fun getView() = card.getView()
 
     // This is needed for long press on the card for archived L2 radar (unreliable feature which should be removed)
     private fun setId(id: Int) {
@@ -77,4 +73,6 @@ class CardStormReportItem(context: Context, stormReport: StormReport, k: Int) : 
         textTop.setBackgroundColor(Color.BLACK)
         textTop.setTextColor(Color.WHITE)
     }
+
+    override fun getView() = card.getView()
 }

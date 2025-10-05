@@ -23,7 +23,6 @@ package joshuatee.wx.misc
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
@@ -113,7 +112,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         // TODO FIXME need better way to handle this
         if (title.contains("Sounding for ")) {
             cardText.setText1(html)
-            cardText.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeSmall)
+            cardText.setTextSize(UIPreferences.textSizeSmall)
         }
         UtilityTts.conditionalPlay(arguments, 2, applicationContext, html, "textscreen")
     }

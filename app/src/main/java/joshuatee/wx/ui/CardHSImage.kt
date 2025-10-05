@@ -23,17 +23,17 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Bitmap
-import joshuatee.wx.util.UtilityImg
 
 class CardHSImage(context: Context, val product: String) : Image(context) {
 
     init {
-        img = TouchImageView2(context)
-        img.layoutParams = layoutParams
-        card.addWidget(img)
+        imageView = TouchImageView2(context)
+        imageView.layoutParams = layoutParams
+        card.addWidget(imageView)
     }
 
     fun set(bitmap: Bitmap) {
-        UtilityImg.resizeViewSetImgInCard(bitmap, img)
+        this.bitmap = bitmap
+        resizeViewSetImgInCard()
     }
 }

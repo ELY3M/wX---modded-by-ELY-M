@@ -23,7 +23,6 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Color
-import android.view.Gravity
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.objects.TextSize
 
@@ -33,9 +32,7 @@ class CardBlackHeaderText(context: Context, val title: String) : Widget {
     private val text = Text(context, UIPreferences.textHighlightColor)
 
     init {
-        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        vbox.addWidget(text)
-        card.addLayout(vbox)
+        card.addWidget(text)
         setTextHeader()
     }
 

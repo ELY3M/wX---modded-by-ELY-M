@@ -65,7 +65,7 @@ class ObjectRecyclerView(
         adapter.deleteItem(index)
     }
 
-    override fun getView() = recyclerView
-
     override fun toString(): String = adapter.toString()
+
+    override fun getView() = recyclerView
 }

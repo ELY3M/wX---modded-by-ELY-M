@@ -67,12 +67,6 @@ class NexradLongPressMenu(
             dialog.dismiss()
         }
 
-//    init {
-//        longPressDialogue.connectCancel { dialog, _ ->
-//            dialog.dismiss()
-//        }
-//    }
-
     val changeListener = object : NexradRenderSurfaceView.OnProgressChangeListener {
         override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
             if (progress != 50000) {

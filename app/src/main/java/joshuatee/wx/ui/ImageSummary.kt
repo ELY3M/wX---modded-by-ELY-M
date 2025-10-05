@@ -46,7 +46,7 @@ class ImageSummary(context: Context, box: VBox, bitmaps: List<Bitmap>) {
         val boxRows = mutableListOf<HBox>()
         bitmaps.forEachIndexed { index, bitmap ->
             if (index % imagesPerRow == 0) {
-                boxRows.add(HBox(context, box.get()))
+                boxRows.add(HBox(context, box))
             }
             images.add(Image(context, bitmap, imagesPerRow))
             boxRows.last().addWidget(images.last())

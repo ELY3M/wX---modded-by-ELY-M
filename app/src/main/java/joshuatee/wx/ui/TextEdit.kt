@@ -21,25 +21,31 @@
 
 package joshuatee.wx.ui
 
-import android.content.Context
-import joshuatee.wx.objects.Route
-import joshuatee.wx.util.Hazards
-import joshuatee.wx.util.Utility
+import android.app.Activity
+import android.util.TypedValue
+import android.widget.EditText
 
-class CardHazardsCA(context: Context, boxHazards: VBox?, hazards: Hazards, hazUrl: String) {
+class TextEdit(activity: Activity, resourceId: Int) : Widget {
 
-    private val hazardCards = mutableListOf<CardText>()
+    private val tv: EditText = activity.findViewById(resourceId)
 
-    init {
-        boxHazards?.removeChildrenAndLayout()
-        hazardCards.clear()
-        hazardCards.add(CardText(context))
-        hazardCards.last().setupHazard()
-        hazardCards.last().text = hazUrl
-        val hazUrlCa = hazards.hazards
-        hazardCards.last().connect { Route.text(context, Utility.fromHtml(hazUrlCa), hazUrl) }
-        if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) {
-            boxHazards?.addWidget(hazardCards.last())
+    var text
+        get() = tv.text.toString()
+        set(value) {
+            tv.setText(value)
         }
+
+    fun setTextSize(size: Float) {
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
     }
+
+    fun setHintTextColor(color: Int) {
+        tv.setHintTextColor(color)
+    }
+
+    fun setTextColor(color: Int) {
+        tv.setTextColor(color)
+    }
+
+    override fun getView() = tv
 }

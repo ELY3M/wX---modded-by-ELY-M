@@ -53,7 +53,7 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
             val strInner = context.resources.getString(strId)
             connect { ObjectDialogue(context, strInner) }
         }
-        val hbox = HBox(context, Gravity.CENTER_VERTICAL)
+        val hbox = HBox.centered(context)
         hbox.matchParent()
         hbox.addWidget(text)
         checkBox.gravity = Gravity.CENTER_VERTICAL
@@ -190,9 +190,9 @@ class Switch(context: Activity, label: String, pref: String, strId: Int) : Widge
             card.visibility = value
         }
 
-    override fun getView() = card.getView()
-
     internal fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener) {
         checkBox.setOnCheckedChangeListener(listener)
     }
+
+    override fun getView() = card.getView()
 }

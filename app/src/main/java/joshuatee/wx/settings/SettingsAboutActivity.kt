@@ -81,12 +81,15 @@ class SettingsAboutActivity : BaseActivity() {
         cardText = CardText(this, Utility.showVersion(this))
         val cardDeleteFiles = CardText(this, "Delete old radar files (should not be needed)")
         cardDeleteFiles.connect {
-            PopupMessage(box.get(), "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
+            PopupMessage(
+                box.getView(),
+                "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this)
+            )
         }
         box.addWidget(faqButton)
         box.addWidget(releaseNotesButton)
         box.addWidget(dataProviderButton)
-	box.addWidget(privacyPolicyButton)
+        box.addWidget(privacyPolicyButton)
         box.addWidget(releasePageButton)
 		box.addWidget(latestAPKButton)
         box.addWidget(CardText(this, "Celsius to fahrenheit table") { Route.text(this, UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table") })

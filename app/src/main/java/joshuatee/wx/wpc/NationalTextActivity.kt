@@ -160,7 +160,7 @@ class NationalTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                NotificationTextProduct.toggle(this, box.get(), product.uppercase(Locale.US))
+                NotificationTextProduct.toggle(this, box.getView(), product.uppercase(Locale.US))
                 updateSubmenuNotificationText()
             }
 

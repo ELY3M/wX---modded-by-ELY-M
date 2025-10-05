@@ -22,7 +22,6 @@
 package joshuatee.wx.nhc
 
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.ui.Card
@@ -35,7 +34,7 @@ import java.util.Locale
 class CardNhcStormReportItem(context: Context, stormData: NhcStormDetails) : Widget {
 
     private val card = Card(context)
-    private val vbox = VBox(context, Gravity.CENTER_VERTICAL)
+    private val vbox = VBox.centered(context)
     private val textViewTop = Text(context, UIPreferences.textHighlightColor)
     private val textViewTime = Text(context)
     private val textViewMovement = Text(context)
@@ -44,8 +43,8 @@ class CardNhcStormReportItem(context: Context, stormData: NhcStormDetails) : Wid
     private val textViewBottom = Text(context, backgroundText = true)
 
     init {
-        vbox.addWidgets(listOf(textViewTop, textViewTime, textViewMovement))
-        vbox.addWidgets(listOf(textViewPressure, textViewWindSpeed, textViewBottom))
+        vbox.addWidgets(textViewTop, textViewTime, textViewMovement)
+        vbox.addWidgets(textViewPressure, textViewWindSpeed, textViewBottom)
         card.addLayout(vbox)
         textViewTop.text =
             stormData.name + " (" + stormData.classification + ") " + stormData.center

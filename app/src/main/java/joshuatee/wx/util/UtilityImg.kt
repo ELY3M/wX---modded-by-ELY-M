@@ -147,16 +147,6 @@ object UtilityImg {
         }
     }
 
-    fun resizeViewSetImgInCard(bitmap: Bitmap, imageView: ImageView, numberAcross: Int = 1) {
-        val layoutParams = imageView.layoutParams
-        layoutParams.width =
-            (MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) / numberAcross
-        layoutParams.height =
-            ((MyApplication.dm.widthPixels - (UIPreferences.lLpadding * 2).toInt()) * bitmap.height / bitmap.width) / numberAcross
-        imageView.layoutParams = layoutParams
-        imageView.setImageBitmap(bitmap)
-    }
-
     fun resizeViewAndSetImage(context: Context, bitmap: Bitmap, imageView: ImageView) {
         if (UtilityUI.isLandScape(context)) {
             resizeViewSetImgByWidth(bitmap, imageView)

@@ -22,6 +22,7 @@
 package joshuatee.wx.settings
 
 import android.content.Context
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 
 class ObjectLocation(val context: Context, locNumInt: Int) {
@@ -45,7 +46,7 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
     private val prefNumberString: String
 
     init {
-        val jStr = (locNumInt + 1).toString()
+        val jStr = To.string(locNumInt + 1)
         prefNumberString = jStr
         x = Utility.readPref(context, "LOC" + jStr + "_X", "0.0")
         y = Utility.readPref(context, "LOC" + jStr + "_Y", "0.0")
@@ -75,7 +76,7 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
     }
 
     fun saveToNewSlot(newLocNumInt: Int) {
-        val iStr = (newLocNumInt + 1).toString()
+        val iStr = To.string(newLocNumInt + 1)
         Utility.writePref(context, "ALERT" + iStr + "_NOTIFICATION", alertNotificationCurrent)
         Utility.writePref(context, "ALERT_CC" + iStr + "_NOTIFICATION", alertCcNotificationCurrent)
         Utility.writePref(

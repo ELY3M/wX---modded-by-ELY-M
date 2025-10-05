@@ -196,7 +196,7 @@ class Nhc(val context: Context, box: VBox) {
         urls.indices.forEach { index ->
             val bitmap = UtilityImg.getBlankBitmap()
             val image = if (numberOfImages % imagesPerRow == 0) {
-                val hbox = HBox(context, boxImages.get())
+                val hbox = HBox(context, boxImages)
                 boxRows.add(hbox)
                 val image = Image(context, bitmap, imagesPerRow)
                 hbox.addWidget(image)

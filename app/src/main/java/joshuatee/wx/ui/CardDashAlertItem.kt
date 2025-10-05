@@ -22,7 +22,6 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.common.GlobalVariables
@@ -45,10 +44,8 @@ class CardDashAlertItem(val context: Context, private val warning: ObjectWarning
     }
 
     init {
-        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        listOf(textTop, textTitle, textStart, textEnd, textBottom).forEach {
-            vbox.addWidget(it)
-        }
+        val vbox = VBox.centered(context)
+        vbox.addWidgets(textTop, textTitle, textStart, textEnd, textBottom)
         val hbox = HBox(context)
         with(hbox) {
             wrap()

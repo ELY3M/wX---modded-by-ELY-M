@@ -22,7 +22,6 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.misc.CapAlert
@@ -35,11 +34,11 @@ import joshuatee.wx.util.WfoSites
 class CardAlertDetail(val context: Context, val capAlert: CapAlert) : Widget {
 
     private val card = Card(context)
-    private val textViewTop = Text(context, UIPreferences.textHighlightColor)
-    private val textViewTitle = Text(context)
-    private val textViewStart = Text(context, TextSize.SMALL)
-    private val textViewEnd = Text(context, TextSize.SMALL)
-    private val textViewBottom = Text(context, backgroundText = true)
+    private val textTop = Text(context, UIPreferences.textHighlightColor)
+    private val textTitle = Text(context)
+    private val textStart = Text(context, TextSize.SMALL)
+    private val textEnd = Text(context, TextSize.SMALL)
+    private val textBottom = Text(context, backgroundText = true)
     private val radarButton = Button(context, "Radar", GlobalVariables.ICON_RADAR) {
         Route.radarBySite(context, capAlert.getClosestRadarXml())
     }
@@ -48,16 +47,8 @@ class CardAlertDetail(val context: Context, val capAlert: CapAlert) : Widget {
     }
 
     init {
-        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
-        vbox.addWidgets(
-            listOf(
-                textViewTop,
-                textViewTitle,
-                textViewStart,
-                textViewEnd,
-                textViewBottom
-            )
-        )
+        val vbox = VBox.centered(context)
+        vbox.addWidgets(textTop, textTitle, textStart, textEnd, textBottom)
         val hbox = HBox(context)
         with(hbox) {
             //wrap() remove for ChromeOS optimization
@@ -66,7 +57,6 @@ class CardAlertDetail(val context: Context, val capAlert: CapAlert) : Widget {
             vbox.addLayout(this)
         }
         card.addLayout(vbox)
-
         val office: String
         val location: String
         if (capAlert.vtec.length > 15 && capAlert.event != "Special Weather Statement") {
@@ -76,7 +66,6 @@ class CardAlertDetail(val context: Context, val capAlert: CapAlert) : Widget {
             office = ""
             location = ""
         }
-
         setTextFields(office, location)
     }
 
@@ -91,17 +80,17 @@ class CardAlertDetail(val context: Context, val capAlert: CapAlert) : Widget {
         val startTime = items[0]
         val endTime = items[1]
         val title = items[2]
-        textViewTop.text = "$office ($location)"
+        textTop.text = "$office ($location)"
         if (office == "") {
-            textViewTop.visibility = View.GONE
+            textTop.visibility = View.GONE
         }
-        textViewBottom.text = capAlert.area
-        textViewTitle.text = title
-        textViewStart.text = "Start: $startTime"
+        textBottom.text = capAlert.area
+        textTitle.text = title
+        textStart.text = "Start: $startTime"
         if (endTime != "") {
-            textViewEnd.text = "End: $endTime"
+            textEnd.text = "End: $endTime"
         } else {
-            textViewEnd.visibility = View.GONE
+            textEnd.visibility = View.GONE
         }
         if (capAlert.points.size < 2) {
             radarButton.visibility = View.GONE

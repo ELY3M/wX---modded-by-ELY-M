@@ -70,7 +70,7 @@ internal class NumberPicker(
             gravity = Gravity.TOP
             connect { ObjectDialogue(context, context.resources.getString(strId)) }
         }
-        val vbox = VBox(context, Gravity.CENTER_VERTICAL)
+        val vbox = VBox.centered(context)
         vbox.matchParent()
         vbox.addWidget(text)
         seekBar.max = highValue - lowValue
@@ -88,10 +88,7 @@ internal class NumberPicker(
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (pref == "TEXTVIEW_FONT_SIZE") {
-                    text.setTextSize(
-                        TypedValue.COMPLEX_UNIT_PX,
-                        UtilityUI.spToPx(convertForSave(seekBar.progress), context)
-                    )
+                    text.setTextSize(UtilityUI.spToPx(convertForSave(seekBar.progress), context))
                 }
                 updateLabel()
             }

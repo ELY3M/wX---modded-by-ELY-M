@@ -26,7 +26,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 
-class HBox(val context: Context) {
+class HBox(context: Context) : Box {
 
     private val linearLayout = LinearLayout(context)
 
@@ -34,34 +34,28 @@ class HBox(val context: Context) {
         linearLayout.orientation = LinearLayout.HORIZONTAL
     }
 
-    constructor(context: Context, parentView: LinearLayout) : this(context) {
-        parentView.addView(linearLayout)
+    companion object {
+        fun centered(context: Context): HBox = HBox(context, Gravity.CENTER_VERTICAL)
     }
 
-    constructor(context: Context, gravity: Int) : this(context) {
+    constructor(context: Context, box: Box) : this(context) {
+        box.getView().addView(linearLayout)
+    }
+
+    private constructor(context: Context, gravity: Int) : this(context) {
         this.gravity = gravity
     }
 
-    fun addWidget(child: View) {
-        linearLayout.addView(child)
+    override fun addWidget(view: View) {
+        linearLayout.addView(view)
     }
 
-    fun addWidget(child: Widget) {
-        linearLayout.addView(child.getView())
+    override fun addWidget(widget: Widget) {
+        linearLayout.addView(widget.getView())
     }
 
-    fun addLayout(objectLinearLayout: VBox) {
-        linearLayout.addView(objectLinearLayout.get())
-    }
-
-    fun addLayout(child: HBox) {
-        linearLayout.addView(child.get())
-    }
-
-    fun addWidgets(children: List<Widget>) {
-        children.forEach {
-            linearLayout.addView(it.getView())
-        }
+    override fun addLayout(box: Box) {
+        linearLayout.addView(box.getView())
     }
 
     fun matchParent() {
@@ -82,8 +76,6 @@ class HBox(val context: Context) {
         linearLayout.orientation = LinearLayout.VERTICAL
     }
 
-    fun get() = linearLayout
-
     private var gravityBacking = Gravity.START
 
     var gravity
@@ -92,4 +84,6 @@ class HBox(val context: Context) {
             linearLayout.gravity = value
             gravityBacking = value
         }
+
+    override fun getView() = linearLayout
 }

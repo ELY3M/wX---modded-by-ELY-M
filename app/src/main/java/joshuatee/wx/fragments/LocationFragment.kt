@@ -52,7 +52,6 @@ import joshuatee.wx.settings.UtilityHomeScreen
 import joshuatee.wx.ui.Card
 import joshuatee.wx.ui.CardCurrentConditions
 import joshuatee.wx.ui.CardHazards
-import joshuatee.wx.ui.CardHazardsCA
 import joshuatee.wx.ui.CardHSImage
 import joshuatee.wx.ui.CardHSText
 import joshuatee.wx.ui.CardSevenDay
@@ -119,7 +118,7 @@ class LocationFragment : Fragment() {
 
                 token == "TXT-HAZ" -> {
                     boxHazards = VBox(activityReference)
-                    box.addWidget(boxHazards!!.get())
+                    box.addLayout(boxHazards!!)
                 }
 
                 token == "TXT-7DAY" || token == "TXT-7DAY2" -> {
@@ -333,7 +332,7 @@ class LocationFragment : Fragment() {
             it.refreshTextSize()
         }
         hazardsCards.forEach {
-            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+            it.setTextSize(UIPreferences.textSizeNormal)
         }
     }
 
@@ -572,13 +571,13 @@ class LocationFragment : Fragment() {
                     }
                 }
             } else {
-                if (hazards.getHazardsShort() != "") {
-                    val hazardsSum = hazards.getHazardsShort().uppercase(Locale.US)
-                    if (UIPreferences.homescreenFav.contains("TXT-HAZ")) {
-                        boxHazards?.visibility = View.VISIBLE
-                        CardHazardsCA(activityReference, boxHazards, hazards, hazardsSum)
-                    }
-                }
+//                if (hazards.getHazardsShort() != "") {
+//                    val hazardsSum = hazards.getHazardsShort().uppercase(Locale.US)
+//                    if (UIPreferences.homescreenFav.contains("TXT-HAZ")) {
+//                        boxHazards?.visibility = View.VISIBLE
+//                        CardHazardsCA(activityReference, boxHazards, hazards, hazardsSum)
+//                    }
+//                }
             }
         }
     }

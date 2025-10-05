@@ -29,9 +29,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.MenuItem
-import android.widget.EditText
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.common.GlobalVariables
@@ -41,9 +39,9 @@ import joshuatee.wx.radarcolorpalettes.ColorPalette
 import joshuatee.wx.radarcolorpalettes.UtilityColorPalette
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.Card
-import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.Fab
 import joshuatee.wx.ui.FabExtended
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.TextEdit
 //elys mod - leave this alone
 import joshuatee.wx.util.*
 import java.io.File
@@ -60,8 +58,8 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     private var name = ""
     private var type = ""
     private var typeAsInt = 0
-    private lateinit var palTitle: EditText
-    private lateinit var palContent: EditText
+    private lateinit var palTitle: TextEdit
+    private lateinit var palContent: TextEdit
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,19 +81,13 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         } else {
             arguments[1] + "_" + formattedDate
         }
-        palTitle.setText(name)
-        palContent.setText(
-            UtilityColorPalette.getColorMapStringFromDisk(
-                this,
-                typeAsInt,
-                arguments[1]
-            )
-        )
+        palTitle.text = name
+        palContent.text = UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1])
     }
 
     private fun setupUI() {
-        palTitle = findViewById(R.id.palTitle)
-        palContent = findViewById(R.id.palContent)
+        palTitle = TextEdit(this, R.id.palTitle)
+        palContent = TextEdit(this, R.id.palContent)
         toolbarBottom.setOnMenuItemClickListener(this)
         FabExtended(this, R.id.fab, GlobalVariables.ICON_DONE, "Save") { savePalette(this) }
         Card(this, R.id.cv1)
@@ -105,25 +97,25 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 it.setHintTextColor(Color.GRAY)
             }
         }
-        palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeLarge)
-        palContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
+        palTitle.setTextSize(UIPreferences.textSizeLarge)
+        palContent.setTextSize(UIPreferences.textSizeNormal)
     }
 
     private fun savePalette(context: Context) {
         val date = ObjectDateTime.getDateAsString("HH:mm")
         val errorCheck = checkMapForErrors()
         if (errorCheck == "") {
-            var textToSave = palContent.text.toString()
+            var textToSave = palContent.text
             textToSave = textToSave.replace(",,".toRegex(), ",")
-            palContent.setText(textToSave)
+            palContent.text = textToSave
             Utility.writePref(
                 context,
-                "RADAR_COLOR_PAL_" + type + "_" + palTitle.text.toString(),
+                "RADAR_COLOR_PAL_" + type + "_" + palTitle.text,
                 textToSave
             )
-            if (!ColorPalette.radarColorPaletteList[typeAsInt]!!.contains(palTitle.text.toString())) {
+            if (!ColorPalette.radarColorPaletteList[typeAsInt]!!.contains(palTitle.text)) {
                 ColorPalette.radarColorPaletteList[typeAsInt] =
-                    ColorPalette.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text.toString()
+                    ColorPalette.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text + ":"
                 Utility.writePref(
                     context,
                     "RADAR_COLOR_PALETTE_" + type + "_LIST",
@@ -131,20 +123,20 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 )
             }
 	    //elys mod
-            savepalfile(palTitle.text.toString()+"_"+type+".txt", textToSave)
+            savepalfile(palTitle.text+"_"+type+".txt", textToSave)
             toolbar.subtitle = "Last saved: $date"
         } else {
             ObjectDialogue(this, errorCheck)
         }
-        val fileName = "colormap" + type + palTitle.text.toString()
+        val fileName = "colormap" + type + palTitle.text
         if (UtilityFileManagement.internalFileExist(context, fileName)) {
             UtilityFileManagement.deleteFile(context, fileName)
         }
     }
 
     private fun checkMapForErrors(): String {
-        val text = convertPalette(palContent.text.toString())
-        palContent.setText(text)
+        val text = convertPalette(palContent.text)
+        palContent.text = text
         val lines = text.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
         var errors = ""
         var priorValue = -200.0
@@ -191,20 +183,19 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     @SuppressLint("SetTextI18n")
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_reset -> palContent.setText(
+            R.id.action_reset -> palContent.text =
                 UtilityColorPalette.getColorMapStringFromDisk(
                     this,
                     typeAsInt,
                     arguments[1]
                 )
-            )
 
-            R.id.action_clear -> palContent.setText("")
+            R.id.action_clear -> palContent.text = ""
             R.id.action_share -> UtilityShare.textAsAttachment(
                 this,
-                palTitle.text.toString(),
-                palContent.text.toString(),
-                "wX_colormap_" + palTitle.text.toString() + ".txt"
+                palTitle.text,
+                palContent.text,
+                "wX_colormap_" + palTitle.text + ".txt"
             )
 
             else -> return super.onOptionsItemSelected(item)
@@ -213,7 +204,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onStop() {
-        UtilityFileManagement.deleteFile(this, "colormap" + type + palTitle.text.toString())
+        UtilityFileManagement.deleteFile(this, "colormap" + type + palTitle.text)
         super.onStop()
     }
 
@@ -227,27 +218,28 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun displaySettings(txt: String) {
-        palContent.setText(txt)
+        //palContent.setText(txt)
+	palContent.text = txt
     }
 
     private fun convertPalette(txt: String): String {
         var txtLocal = txt
-                .replace("color", "Color")
-                .replace("product", "#product")
-                .replace("unit", "#unit")
-                .replace("step", "#step")
-                .replace(":", " ")
-                .trim { it <= ' ' }.replace(" +".toRegex(), " ")
-                .trim { it <= ' ' }.replace(" ".toRegex(), ",")
-                .replace("\\s".toRegex(), "")
+            .replace("color", "Color")
+            .replace("product", "#product")
+            .replace("unit", "#unit")
+            .replace("step", "#step")
+            .replace(":", " ")
+            .trim { it <= ' ' }.replace(" +".toRegex(), " ")
+            .trim { it <= ' ' }.replace(" ".toRegex(), ",")
+            .replace("\\s".toRegex(), "")
         val lines = txtLocal.split(GlobalVariables.newline.toRegex()).dropLastWhile { it.isEmpty() }
         if (lines.size < 3) {
             txtLocal = txtLocal.replace("Color", GlobalVariables.newline + "Color")
         }
         txtLocal = txtLocal.replace("Step", GlobalVariables.newline + "#Step")
-                .replace("Units", GlobalVariables.newline + "#Units")
-                .replace("ND", GlobalVariables.newline + "#ND")
-                .replace("RF", GlobalVariables.newline + "#RF")
+            .replace("Units", GlobalVariables.newline + "#Units")
+            .replace("ND", GlobalVariables.newline + "#ND")
+            .replace("RF", GlobalVariables.newline + "#RF")
         return txtLocal
     }
     /**
@@ -295,7 +287,8 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         }
         fileName = fileName.replace(".txt", "").replace(".pal", "")
         name = fileName + "_" + formattedDate
-        palTitle.setText(name)
+        //palTitle.setText(name)
+	palTitle.text = name
         return convertPalette(content)
     }
 

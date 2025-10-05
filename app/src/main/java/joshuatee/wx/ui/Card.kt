@@ -94,12 +94,8 @@ class Card : Widget {
         card.addView(view.getView())
     }
 
-    fun addLayout(objectLinearLayout: VBox) {
-        card.addView(objectLinearLayout.get())
-    }
-
-    fun addLayout(objectLinearLayout: HBox) {
-        card.addView(objectLinearLayout.get())
+    fun addLayout(box: Box) {
+        card.addView(box.getView())
     }
 
     fun connect(fn: View.OnClickListener) {
