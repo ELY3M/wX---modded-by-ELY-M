@@ -50,7 +50,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     companion object {
         const val URL = ""
-        private const val READ_REQUEST_CODE = 42
     }
 
     private lateinit var arguments: Array<String>
@@ -69,7 +68,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             R.menu.settings_color_palette_editor,
             true
         )
-	showLoadFromFileMenuItem()
         arguments = intent.getStringArrayExtra(URL)!!
         type = arguments[0]
         typeAsInt = type.toIntOrNull() ?: 94
@@ -82,7 +80,8 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             arguments[1] + "_" + formattedDate
         }
         palTitle.text = name
-        palContent.text = UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1])
+        palContent.text =
+            UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, arguments[1])
     }
 
     private fun setupUI() {
@@ -208,20 +207,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         super.onStop()
     }
 
-
-    private fun showLoadFromFileMenuItem() {
-        toolbarBottom.menu.findItem(R.id.action_load).isVisible = true
-    }
-
-    private fun loadSettings() {
-        performFileSearch()
-    }
-
-    private fun displaySettings(txt: String) {
-        //palContent.setText(txt)
-	palContent.text = txt
-    }
-
     private fun convertPalette(txt: String): String {
         var txtLocal = txt
             .replace("color", "Color")
@@ -242,56 +227,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             .replace("RF", GlobalVariables.newline + "#RF")
         return txtLocal
     }
-    /**
-     * Fires an intent to spin up the "file chooser" UI and select an image.
-     */
-    private fun performFileSearch() {
-        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser.
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        // Filter to only show results that can be "opened", such as a
-        // file (as opposed to a list of contacts or timezones)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        // Filter to show only images, using the image MIME data type.
-        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-        // To search for all documents available via installed storage providers,
-        // it would be "*/*".
-        intent.type = "*/*"
-        startActivityForResult(intent, READ_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
-        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
-        // response to some other intent, and the code below shouldn't run at all.
-
-        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            // The document selected by the user won't be returned in the intent.
-            // Instead, a URI to that document will be contained in the return intent
-            // provided to this method as a parameter.
-            // Pull that URI using resultData.getData().
-            //val uri: Uri
-            resultData?.let {
-                val uri = it.data
-                displaySettings(readTextFromUri(uri!!))
-            }
-        }
-    }
-
-    private fun readTextFromUri(uri: Uri): String {
-        val content = UtilityIO.readTextFromUri(this, uri)
-        val uriArr = uri.lastPathSegment!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        var fileName = "map"
-        if (uriArr.isNotEmpty()) {
-            fileName = uriArr.last()
-        }
-        fileName = fileName.replace(".txt", "").replace(".pal", "")
-        name = fileName + "_" + formattedDate
-        //palTitle.setText(name)
-	palTitle.text = name
-        return convertPalette(content)
-    }
-
     //elys mod
     private fun savepalfile(fileName: String, text: String) {
         val dir = GlobalVariables.PalFilesPath
@@ -300,6 +235,4 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             it.println(text)
         }
     }
-
-
 }
