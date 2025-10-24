@@ -2,9 +2,21 @@
 
 # Developer ChangeLog
 
-## 55986 2025_10_04
+## 55987 2025_10_16
 
 * [REF]
+
+## 55986 2025_10_16
+
+* [REF] lib update and lint suggest
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.1.0"
++    implementation "com.squareup.okhttp3:okhttp:5.2.1"
+
+-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
++            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+```
 
 ## 55985 2025_10_04
 
