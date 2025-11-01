@@ -164,7 +164,7 @@ object DownloadText {
                     || prod == "UVICAC"
                     || prod == "RWRMX"
                     || prod.startsWith("TPT") -> {
-                val product = prod.substring(0, 3)
+                val product = prod.take(3)
                 val site = prod.substring(3)
                 val url =
                     "https://forecast.weather.gov/product.php?site=NWS&issuedby=$site&product=$product&format=txt&version=1&glossary=0"
@@ -173,7 +173,7 @@ object DownloadText {
             }
 
             prod.startsWith("GLF") -> {
-                val product = prod.substring(0, 3)
+                val product = prod.take(3)
                 val site = prod.substring(3).replace("%", "")
                 val url =
                     "https://forecast.weather.gov/product.php?site=NWS&issuedby=$site&product=$product&format=txt&version=1&glossary=0"
@@ -264,7 +264,7 @@ object DownloadText {
             }
 
             prod.startsWith("RWR") -> {
-                val product = prod.substring(0, 3)
+                val product = prod.take(3)
                 val location = prod.substring(3).replace("%", "")
                 val state = WfoSites.getState(location)
                 val url =
@@ -275,7 +275,7 @@ object DownloadText {
             }
 
             prod.startsWith("NSH") || (prod.startsWith("RTP") && prod.length == 6) -> {
-                val product = prod.substring(0, 3)
+                val product = prod.take(3)
                 val location = prod.substring(3).replace("%", "")
                 val url =
                     "https://forecast.weather.gov/product.php?site=$location&issuedby=$location&product=$product"
@@ -284,7 +284,7 @@ object DownloadText {
             }
 
             prod.startsWith("RTP") && prod.length == 5 -> {
-                val product = prod.substring(0, 3)
+                val product = prod.take(3)
                 val location = prod.substring(3, 5).replace("%", "")
                 val url =
                     GlobalVariables.NWS_API_URL + "/products/types/$product/locations/$location"
@@ -312,7 +312,7 @@ object DownloadText {
                 // Feb 8 2020 Sat
                 // The NWS API for text products has been unstable Since Wed Feb 5
                 // resorting to alternatives
-                val t1 = prod.substring(0, 3)
+                val t1 = prod.take(3)
                 val t2 = prod.substring(3).replace("%", "")
                 if (USE_NWS_API) {
                     val url = GlobalVariables.NWS_API_URL + "/products/types/$t1/locations/$t2"
@@ -397,7 +397,7 @@ object DownloadText {
 
     fun byProduct(prodF: String, version: Int): String {
         val prod = prodF.uppercase(Locale.US)
-        val t1 = prod.substring(0, 3)
+        val t1 = prod.take(3)
         val t2 = prod.substring(3)
         val url =
             "https://forecast.weather.gov/product.php?site=NWS&product=$t1&issuedby=$t2&version=$version"

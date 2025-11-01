@@ -67,7 +67,7 @@ object NotificationTextProduct {
             if (s != "") {
                 val textProdChunk = DownloadText.byProduct(context, s)
                 val textProdFirstLine = if (textProdChunk.length > matchSize) {
-                    textProdChunk.substring(0, matchSize - 2)
+                    textProdChunk.take(matchSize - 2)
                 } else {
                     textProdChunk
                 }

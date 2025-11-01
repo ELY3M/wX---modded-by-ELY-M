@@ -74,12 +74,18 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         //
         heightDivider =
             setupLayout(savedInstanceState, nexradArguments.numberOfPanes, heightDivider)
-        val widthDivider = if (nexradArguments.numberOfPanes == 4) {
-            2
-        } else if (nexradArguments.numberOfPanes == 2 && landScape) {
-            2
-        } else {
-            1
+        val widthDivider = when (nexradArguments.numberOfPanes) {
+            4 -> {
+                2
+            }
+
+            2 if landScape -> {
+                2
+            }
+
+            else -> {
+                1
+            }
         }
         nexradState = NexradStatePane(
             this,

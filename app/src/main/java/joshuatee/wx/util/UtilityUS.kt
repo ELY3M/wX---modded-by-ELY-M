@@ -132,7 +132,7 @@ object UtilityUS {
             } else {
                 val tmpString = Utility.safeGet(timeP24n7List, j)
                 if (tmpString.length > 3) {
-                    sb.append(tmpString.substring(0, 3))
+                    sb.append(tmpString.take(3))
                 } else {
                     sb.append("")
                 }

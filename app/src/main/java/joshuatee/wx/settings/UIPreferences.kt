@@ -237,22 +237,22 @@ object UIPreferences {
         val res = context.resources
         deviceScale = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, 1f,
-            MyApplication.Companion.dm
+            MyApplication.dm
         )
         padding = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             res.getDimension(R.dimen.padding_dynamic_tv),
-            MyApplication.Companion.dm
+            MyApplication.dm
         ).toInt()
         paddingSettings = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             res.getDimension(R.dimen.padding_dynamic_tv_settings),
-            MyApplication.Companion.dm
+            MyApplication.dm
         ).toInt()
         paddingSmall = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             res.getDimension(R.dimen.padding_dynamic_tv_small),
-            MyApplication.Companion.dm
+            MyApplication.dm
         ).toInt()
         lLpadding = res.getDimension(R.dimen.padding_ll)
 

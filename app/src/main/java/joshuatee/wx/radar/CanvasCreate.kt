@@ -41,13 +41,8 @@ object CanvasCreate {
     private const val IMAGE_HEIGHT = 1000
     private const val CITY_SIZE = 18
 
-    fun layeredImage(context: Context, radarSiteArg: String, product: String): Bitmap {
-        val radarSite = radarSiteArg
+    fun layeredImage(context: Context, radarSite: String, product: String): Bitmap {
         val scaleType = ProjectionType.WX_RENDER
-//        if (NexradUtil.isProductTdwr(product)) {
-//            radarSite = NexradUtil.getTdwrFromRid(radarSite)
-//            scaleType = ProjectionType.WX_RENDER_48
-//        }
         if (!product.contains("L2")) {
             val url = NexradDownload.getRadarFileUrl(radarSite, product)
             val inputStream = url.getInputStream()
@@ -94,16 +89,11 @@ object CanvasCreate {
 
     fun layeredImageFromFile(
         context: Context,
-        radarSiteArg: String,
+        radarSite: String,
         product: String,
         idxStr: String
     ): Bitmap {
-        val radarSite = radarSiteArg
         val scaleType = ProjectionType.WX_RENDER
-//        if (NexradUtil.isProductTdwr(product)) {
-//            radarSite = NexradUtil.getTdwrFromRid(radarSite)
-//            scaleType = ProjectionType.WX_RENDER_48
-//        }
         val layers = mutableListOf<Drawable>()
         val colorDrawable = RadarPreferences.nexradBackgroundColor.toDrawable()
         var bitmapCanvas = createBitmap(IMAGE_WIDTH, IMAGE_HEIGHT)

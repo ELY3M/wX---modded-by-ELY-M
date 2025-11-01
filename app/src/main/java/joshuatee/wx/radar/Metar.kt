@@ -160,7 +160,7 @@ internal object Metar {
                     var windGustInKt = ""
                     if (windBlob.contains("KT") && windBlob.length == 7) {
                         validWind = true
-                        windDir = windBlob.substring(0, 3)
+                        windDir = windBlob.take(3)
                         windInKt = windBlob.substring(3, 5)
                         val windDirInt = To.int(windDir)
                         windBlob =
@@ -168,7 +168,7 @@ internal object Metar {
                     } else if (windBlob.contains("KT") && windBlob.length == 10) {
                         validWind = true
                         validWindGust = true
-                        windDir = windBlob.substring(0, 3)
+                        windDir = windBlob.take(3)
                         windInKt = windBlob.substring(3, 5)
                         windGustInKt = windBlob.substring(6, 8)
                         val windDirInt = To.int(windDir)

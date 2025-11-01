@@ -156,14 +156,14 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                             errors += "The following lines do not have dbz values in increasing order: " + GlobalVariables.newline + priorValue + " " + list[1] + GlobalVariables.newline
                         }
                         priorValue = To.double(list[1])
-                        if (To.double(list[2]) > 255.0 || To.double(list[2]) < 0.0) {
+                        if (To.double(list[2]) !in 0.0..255.0) {
                             errors =
                                 errors + "Red value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
-                        if (To.double(list[3]) > 255.0 || To.double(list[3]) < 0.0) {
+                        if (To.double(list[3]) !in 0.0..255.0) {
                             errors += "Green value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
-                        if (To.double(list[4]) > 255.0 || To.double(list[4]) < 0.0) {
+                        if (To.double(list[4]) !in 0.0..255.0) {
                             errors += "Blue value must be between 0 and 255: " + GlobalVariables.newline + line + GlobalVariables.newline
                         }
                     } else {

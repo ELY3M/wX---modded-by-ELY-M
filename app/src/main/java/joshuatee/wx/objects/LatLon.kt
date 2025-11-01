@@ -63,7 +63,7 @@ class LatLon() {
     }
 
     constructor(temp: String) : this() {
-        xStr = temp.substring(0, 4)
+        xStr = temp.take(4)
         yStr = temp.substring(4, 8)
         if (yStr.matches("^0".toRegex())) {
             yStr = yStr.replace("^0".toRegex(), "")
@@ -229,7 +229,7 @@ class LatLon() {
             val coordinates = html.parseColumn("([0-9]{8}).*?")
             var string = ""
             coordinates.forEach { temp ->
-                var xStrTmp = temp.substring(0, 4)
+                var xStrTmp = temp.take(4)
                 var yStrTmp = temp.substring(4, 8)
                 if (yStrTmp.matches("^0".toRegex())) {
                     yStrTmp = yStrTmp.replace("^0".toRegex(), "")

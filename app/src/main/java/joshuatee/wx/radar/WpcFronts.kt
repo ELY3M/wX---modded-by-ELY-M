@@ -213,11 +213,11 @@ object WpcFronts {
         return if (string.length != 7) {
             listOf(0.0, 0.0)
         } else {
-            val latitude = To.double(string.substring(0, 2) + "." + string.substring(2, 3))
+            val latitude = To.double(string.take(2) + "." + string[2])
             val longitude = if (string[3] == '0') {
-                To.double(string.substring(4, 6) + "." + string.substring(6, 7))
+                To.double(string.substring(4, 6) + "." + string[6])
             } else {
-                To.double(string.substring(3, 6) + "." + string.substring(6, 7))
+                To.double(string.substring(3, 6) + "." + string[6])
             }
             listOf(latitude, longitude)
         }

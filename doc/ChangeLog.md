@@ -2,9 +2,26 @@
 
 # Developer ChangeLog
 
-## 55987 2025_10_16
+## 55987 2025_10_25
 
-* [REF]
+* refactor: replace substring with take in multiple files
+* refactor: WpcFronts use index operator/take instead of substring
+* refactor: SettingsColorPaletteEditor convert comparisons to range checks
+* refactor: WXGLRadarActivityMultiPane replace if with when for widthDivider
+* refactor: inline var in CanvasCreate
+* refactor: redundant Companion reference in UIPreferences
+* feat: tooling/lib update
+
+```
+-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0"
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.3-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.2.0-all.zip
+
+-    implementation "com.squareup.okhttp3:okhttp:5.2.1"
++    implementation "com.squareup.okhttp3:okhttp:5.3.0"
+```
 
 ## 55986 2025_10_16
 
