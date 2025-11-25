@@ -34,6 +34,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import androidx.core.content.withStyledAttributes
 
+@Suppress("SimplifyBooleanWithConstants", "KotlinConstantConditions")
 class ValueBar : View {
 
     // FIXME reformat whole file

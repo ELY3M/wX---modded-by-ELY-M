@@ -163,6 +163,7 @@ class ExternalPolygon private constructor(
      * @param side
      * @return `True` if both lines intersect, otherwise return `False`
      */
+    @Suppress("KotlinConstantConditions")
     private fun intersect(ray: ExternalLine, side: ExternalLine): Boolean {
         val intersectPoint: ExternalPoint?
         // if both vectors aren't from the kind of x=1 lines then go into

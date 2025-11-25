@@ -84,8 +84,12 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     private fun update() {
         locations.clear()
         Location.locations.forEachIndexed { index, location ->
-            location.updateObservation(currentConditionsList[index].topLine)
-            locations.add(currentConditionsList[index].topLine)
+            if (currentConditionsList.size > index) {
+                location.updateObservation(currentConditionsList[index].topLine)
+                locations.add(currentConditionsList[index].topLine)
+            } else {
+                locations.add("")
+            }
         }
         settingsLocationAdapterList.notifyDataSetChanged()
     }

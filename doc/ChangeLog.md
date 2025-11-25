@@ -2,8 +2,44 @@
 
 # Developer ChangeLog
 
-## 55987 2025_10_25
+## 55990 2025_11_25
 
+* fix: crash at (need size check)
+
+```
+  at joshuatee.wx.settings.SettingsLocationRecyclerViewActivity.update (SettingsLocationRecyclerViewActivity.kt:87)
+```
+
+## 55989 2025_11_21
+
+* fix: lib update
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.3.1"
++    implementation "com.squareup.okhttp3:okhttp:5.3.2"
+```
+
+## 55988 2025_11_20
+
+* feat: tool/lib updates
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.3.0"
++    implementation "com.squareup.okhttp3:okhttp:5.3.1"
+
+-        classpath 'com.android.tools.build:gradle:8.13.0'
++        classpath 'com.android.tools.build:gradle:8.13.1'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.2.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.2.1-all.zip
+
+-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4'
++    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0'
+```
+
+## 55987 2025_11_01
+
+* fix: suppress some warnings in external code
 * refactor: replace substring with take in multiple files
 * refactor: WpcFronts use index operator/take instead of substring
 * refactor: SettingsColorPaletteEditor convert comparisons to range checks

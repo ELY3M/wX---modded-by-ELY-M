@@ -34,7 +34,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import androidx.core.content.withStyledAttributes
 
-@Suppress("SpellCheckingInspection")
+@Suppress("SpellCheckingInspection", "SimplifyBooleanWithConstants", "KotlinConstantConditions")
 class OpacityBar : View {
 
     // FIXME reformat whole file
