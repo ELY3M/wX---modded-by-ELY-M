@@ -2,12 +2,42 @@
 
 # Developer ChangeLog
 
-## 55990 2025_11_25
+## 55991 2026_03_05
 
+*
+
+## 55990 2026_03_05
+
+* fix: SPC CONUS Convective outlook images for Day1-3 broke after NWS SPC made changes to image
+  format
 * fix: crash at (need size check)
 
 ```
   at joshuatee.wx.settings.SettingsLocationRecyclerViewActivity.update (SettingsLocationRecyclerViewActivity.kt:87)
+```
+
+* feat: updates
+
+```
+-apply plugin: 'kotlin-android'
++//apply plugin: 'kotlin-android'
+
+-        classpath 'com.android.tools.build:gradle:8.13.1'
++        classpath 'com.android.tools.build:gradle:9.0.1'
+
++#android.defaults.buildfeatures.resvalues=true
++#android.sdk.defaultTargetSdkToCompileSdkIfUnset=false
++#android.enableAppCompileTimeRClass=false
++#android.usesSdkInManifest.disallowed=false
++#android.uniquePackageNames=false
++#android.dependency.useConstraints=true
++#android.r8.strictFullModeForKeepRules=false
++#android.r8.optimizedResourceShrinking=false
++#android.builtInKotlin=false
++#android.newDsl=false
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.2.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-all.zip
 ```
 
 ## 55989 2025_11_21

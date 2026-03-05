@@ -8,6 +8,11 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55990 2026_03_TBD (BETA)
+
+* fix: SPC CONUS Convective outlook images for Day1-3 broke after NWS SPC made changes to image
+  format
+
 ## 55985 2025_10_07
 * [FIX] The buttons in **Settings->Locations** and the subsequent **Edit** screen were not the
   correct color for the text and icon

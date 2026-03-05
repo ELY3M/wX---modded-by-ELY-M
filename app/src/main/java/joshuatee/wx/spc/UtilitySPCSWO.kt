@@ -67,15 +67,15 @@ internal object UtilitySpcSwo {
             val time = html.parse("show_tab\\(.otlk_([0-9]{4}).\\)")
             when (day) {
                 "1", "2" -> {
-                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day${day}otlk_$time.gif")
-                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day${day}probotlk_" + time + "_torn.gif")
-                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day${day}probotlk_" + time + "_hail.gif")
-                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day${day}probotlk_" + time + "_wind.gif")
+                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day${day}otlk_$time.png")
+                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day${day}probotlk_" + time + "_torn.png")
+                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day${day}probotlk_" + time + "_hail.png")
+                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day${day}probotlk_" + time + "_wind.png")
                 }
 
                 "3" -> {
-                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day3otlk_$time.gif")
-                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day3prob_$time.gif")
+                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day3otlk_$time.png")
+                    imgUrls.add("${GlobalVariables.NWS_SPC_WEBSITE_PREFIX}/products/outlook/day3prob_$time.png")
                 }
 
                 else -> {
@@ -100,16 +100,16 @@ internal object UtilitySpcSwo {
                 "1", "2" -> {
                     val day1BaseUrl =
                         GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + "probotlk_"
-                    val day1Urls = listOf("_torn.gif", "_hail.gif", "_wind.gif")
+                    val day1Urls = listOf("_torn.png", "_hail.png", "_wind.png")
                     val urls =
-                        mutableListOf(GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + "otlk_" + time + ".gif")
+                        mutableListOf(GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + "otlk_" + time + ".png")
                     urls += day1Urls.map { day1BaseUrl + time + it }
                     urls
                 }
 
                 "3" -> {
                     listOf("otlk_", "prob_").map {
-                        GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + it + time + ".gif"
+                        GlobalVariables.NWS_SPC_WEBSITE_PREFIX + "/products/outlook/day" + day + it + time + ".png"
                     }
                 }
 
