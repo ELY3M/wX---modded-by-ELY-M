@@ -8,7 +8,7 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
-## 55990 2026_03_05 (BETA)
+## 55990 2026_03_06
 
 * fix: SPC CONUS Convective outlook images for Day1-3 broke after NWS SPC made changes to image
   format

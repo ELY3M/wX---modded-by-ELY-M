@@ -1,5 +1,8 @@
 # TODOs
 
+## Mar 2026
+revamp temp notification to not use static images, handle negatives
+
 ## Sep 2025
 add keyboard shortcuts for animation to GOES/Mosaic, Dashboard
 key cntrl-N does not work in chromeOS

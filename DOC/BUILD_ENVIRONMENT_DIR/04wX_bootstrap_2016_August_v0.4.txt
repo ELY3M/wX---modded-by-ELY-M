@@ -1,9 +1,9 @@
 
 #
-# setup a fresh build environment under Linux Mint 17.3 for wX
+# set up a fresh build environment under Linux Mint 17.3 for wX
 # 2016 July
 #
-# Linux Mint 17.3 install is mostly defaults, choose LVM and use 50GB at least for disk
+# the Linux Mint 17.3 installation is mostly defaults, choose LVM and use 50GB at least for disk
 #
 #Download latest wX tarball and android.jks from box.com
 
@@ -53,7 +53,7 @@ unzip android-ndk*zip
 
 #
 # open up a new terminal to pickup above changes, launch IDE
-# take default options will will download various SDK components
+# take default options which will download various SDK components
 # Choose to open existing project and choose ~/StudioProjects/wX
 # it will prompt to choose a JDK
 #
