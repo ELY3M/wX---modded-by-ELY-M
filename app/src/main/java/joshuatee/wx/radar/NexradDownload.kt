@@ -44,8 +44,11 @@ class NexradDownload {
 
     companion object {
 
+//        private const val NWS_RADAR_LEVEL2_PUB =
+//            "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+
         private const val NWS_RADAR_LEVEL2_PUB =
-            "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+            "https://tgftp.nws.noaa.gov/data/radar/nexrad_level2/"
 
         private val pattern1: Pattern = Pattern.compile(">(sn.[0-9]{4})</a>")
         private val pattern2: Pattern =

@@ -313,7 +313,8 @@ object RadarSites {
         "TTPA" to "FL, Tampa Bay",
         "TTUL" to "OK, Tulsa",
         "TDCA" to "MD, Washington National",
-        "TPBI" to "FL, West Palm Beach",
+//        "TPBI" to "FL, West Palm Beach",
+        "TDJT" to "FL, West Palm Beach",
         "TICH" to "KS, Wichita"
     )
 
@@ -511,7 +512,8 @@ object RadarSites {
         "TMSY" to "30.021389", // New Orleans (MSY), LA TMSY LIX 99
         "TOKC" to "35.27611", // Oklahoma City (OKC), OK TOKC OUN 1,308
         "TORD" to "41.796589", // Chicago O'Hare (ORD), IL TORD LOT 744
-        "TPBI" to "26.687812", // West Palm Beach (PBI), FL TPBI MFL 133
+//        "TPBI" to "26.687812", // West Palm Beach (PBI), FL TPBI MFL 133
+        "TDJT" to "26.687812", // West Palm Beach (PBI), FL TPBI MFL 133
         "TPHL" to "39.950061", // Philadelphia (PHL), PA TPHL PHI 153
         "TPHX" to "33.420352", // Phoenix (PHX), AZ TPHX PSR 1,089
         "TPIT" to "40.501066", // Pittsburgh (PIT), PA TPIT PBZ 1,386
@@ -717,7 +719,8 @@ object RadarSites {
         "TMSY" to "90.402919",
         "TOKC" to "97.51",
         "TORD" to "87.857628",
-        "TPBI" to "80.272931",
+//        "TPBI" to "80.272931",
+        "TDJT" to "80.272931",
         "TPHL" to "75.069979",
         "TPHX" to "112.16318",
         "TPIT" to "80.486586",

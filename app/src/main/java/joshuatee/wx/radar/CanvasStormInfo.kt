@@ -195,7 +195,7 @@ object CanvasStormInfo {
         canvas.drawLines(stormListF, paint)
         val wallPath = Path()
         wallPath.reset()
-        for (i in 0 until stormList.size step 4) {
+        for (i in stormList.indices step 4) {
             val list: FloatArray
             val list2: FloatArray
             if (projectionType.isMercator) {

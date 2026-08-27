@@ -2,9 +2,78 @@
 
 # Developer ChangeLog
 
-## 55993 2026_06_06
+## 55997 2026_08_27
 
 *
+
+## 55996 2026_08_27
+
+* per NWS Service Change Notice 26-61, update TDWR TPBI to TDJT
+* tool and lib updates
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.4.0"
++    implementation "com.squareup.okhttp3:okhttp:5.5.0"
+
+-        classpath 'com.android.tools.build:gradle:9.3.0'
++        classpath 'com.android.tools.build:gradle:9.3.2'
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.6.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.7.1-all.zip
+```
+
+## 55995 2026_07_19
+
+* per NWS Service Change Notice 26-67 Subject: Migration of NEXRAD Level 2 Radar Data Dissemination
+  from
+  nomads.ncep.noaa.gov to tgftp.nws.noaa.gov Effective: September 15, 2026 - change URL
+  from https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/
+  to https://tgftp.nws.noaa.gov/data/radar/nexrad_level2/
+* tool/lib updates
+
+```
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.6.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.6.1-all.zip
+
+-        classpath 'com.android.tools.build:gradle:9.2.1'
++        classpath 'com.android.tools.build:gradle:9.3.0'
+```
+
+## 55994 2026_06_24
+
+* tool/lib updates
+
+```
+-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0'
++    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0'
+
+-    implementation "com.squareup.okhttp3:okhttp:5.3.2"
++    implementation "com.squareup.okhttp3:okhttp:5.4.0"
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.5.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.6.0-all.zip
+```
+
+## 55993 2026_06_08
+
+* fix: NWS has officially decommissioned the following text products issued by local offices (by Jul
+  7, 2026), remove
+  them from text viewer
+    - complete nationwide discontinuation of the Max/Min Temperature and Precipitation Table
+      Product (RTP) (Service Change Notice 26-34)
+* feat: target API 37 and update libs
+
+```
+-        compileSdk = 36
++        compileSdk = 37
+
+
+-        targetSdkVersion 36
++        targetSdkVersion 37
+
+-    implementation 'androidx.core:core-ktx:1.18.0'
++    implementation 'androidx.core:core-ktx:1.19.0'
+```
 
 ## 55992 2026_06_06
 

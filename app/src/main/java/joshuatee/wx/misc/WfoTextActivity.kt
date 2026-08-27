@@ -147,21 +147,11 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         } else {
             arguments[1]
         }
-        if (product.startsWith("RTP") && product.length == 5) {
-//            val state = UtilityLocation.getWfoSiteName(wfo).split(",")[0]
-            val state = WfoSites.getState(wfo)
-            product = "RTP$state"
-        }
     }
 
     private fun changeProduct() {
         invalidateOptionsMenu()
         when (navDrawer.token) {
-            "RTPZZ" -> {
-                val state = WfoSites.getState(wfo)
-                getProduct(navDrawer.token.replace("ZZ", state))
-            }
-
             else -> getProduct(navDrawer.token)
         }
     }
@@ -195,7 +185,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun download(): String = when {
         product == "CLI" -> DownloadText.byProduct(this, product + wfo + originalWfo)
-        product.startsWith("RTP") && product.length == 5 -> DownloadText.byProduct(this, product)
         else -> {
             if (version == 1) {
                 DownloadText.byProduct(this, product + wfo)
@@ -208,7 +197,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun update(html1: String) {
         var html = html1
         title = when {
-            product.startsWith("RTP") && product.length == 5 -> product
             else -> product + wfo
         }
         toolbar.subtitle = UtilityWfoText.codeToName[product]
@@ -221,18 +209,14 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             html = "None issued by this office recently."
         }
         cardText.setTextAndTranslate(html)
-        if (listOf("RTP", "RWR", "CLI", "RVA").contains(product) || product.startsWith("RTP")) {
+        if (listOf("RWR", "CLI", "RVA").contains(product)) {
             cardText.typefaceMono()
         } else {
             cardText.typefaceDefault()
         }
         UtilityTts.conditionalPlay(arguments, 2, applicationContext, html, product)
         if (arguments[1] == "") {
-            if (product.startsWith("RTP") && product.length == 5) {
-                Utility.writePref(this, "WFO_TEXT_FAV", "RTPZZ")
-            } else {
-                Utility.writePref(this, "WFO_TEXT_FAV", product)
-            }
+            Utility.writePref(this, "WFO_TEXT_FAV", product)
             UIPreferences.wfoTextFav = product
         }
         oldProduct = product
@@ -372,10 +356,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                         else -> {
                             wfo = locationList[it].split(" ").getOrNull(0) ?: ""
                             originalWfo = wfo
-                            if (product.startsWith("RTP") && product.length == 5) {
-                                val state = WfoSites.getState(wfo)
-                                product = "RTP$state"
-                            }
                         }
                     }
                 }
