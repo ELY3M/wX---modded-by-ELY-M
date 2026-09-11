@@ -8,6 +8,27 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55996 2026_09_10
+
+* per **NWS Service Change Notice 26-67 Subject: Migration of NEXRAD Level 2 Radar Data
+  Dissemination
+  from
+  nomads.ncep.noaa.gov to tgftp.nws.noaa.gov Effective: September 15, 2026** - change URL
+  from https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/
+  to https://tgftp.nws.noaa.gov/data/radar/nexrad_level2/
+  **NOTE:** What this means is that previously the Nexrad Level 2 and Nexrad Level 3 data were
+  served
+  from different servers. Now they are served from one: TGTFP. I have noticed download of Level 2 is
+  now slower in some situations. Via the FAQ item *Why is Level 2 radar not the default?* I have for
+  quite some time advised users to use a different program if you desire Level 2 data as your
+  default, the recommendation is even more relavent now.
+* fix: NWS has officially decommissioned the following text products issued by local offices (by Jul
+  7, 2026), remove
+  them from text viewer
+    - complete nationwide discontinuation of the Max/Min Temperature and Precipitation Table
+      Product (RTP) (Service Change Notice 26-34)
+* per NWS Service Change Notice 26-61, update TDWR TPBI to TDJT
+
 ## 55990 2026_03_06
 
 * fix: SPC CONUS Convective outlook images for Day1-3 broke after NWS SPC made changes to image

@@ -2,9 +2,19 @@
 
 # Developer ChangeLog
 
-## 55997 2026_08_27
+## 55998 2026_09_10
 
 *
+
+## 55997 2026_09_10
+
+* tag for fdroid, no other changes save tool update below
+* tool/lib updates:
+
+```
+-        classpath 'com.android.tools.build:gradle:9.3.2'
++        classpath 'com.android.tools.build:gradle:9.4.0'
+```
 
 ## 55996 2026_08_27
 
