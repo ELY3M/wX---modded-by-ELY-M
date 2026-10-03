@@ -32,7 +32,7 @@ android {
     }
 
 /*
-    def ndkDir = "D:\\android-sdk\\android-ndk-r27d"
+    def ndkDir = "D:\\android-sdk\\android-ndk-r30"
     tasks.register('buildNative', Exec) {
         commandLine "$ndkDir\\ndk-build.cmd",
                 '-C', file('src/main/jni').absolutePath,
@@ -75,14 +75,8 @@ android {
     compileOptions {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled = true
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
-
-    tasks.withType(KotlinJvmCompile).configureEach {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     lint {
@@ -100,7 +94,7 @@ dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.core:core-ktx:1.19.0'
+    implementation 'androidx.core:core-ktx:1.19.1'
     implementation 'androidx.media:media:1.8.0'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
@@ -129,5 +123,11 @@ repositories {
     google()
     maven {
         url = "https://maven.google.com"
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
     }
 }

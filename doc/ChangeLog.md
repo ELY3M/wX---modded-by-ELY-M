@@ -2,9 +2,24 @@
 
 # Developer ChangeLog
 
-## 55998 2026_09_10
+## 55998 202610_03
 
-*
+* tool updates (and gradle changes)
+
+```
+-        classpath 'com.android.tools.build:gradle:9.4.0'
++        classpath 'com.android.tools.build:gradle:9.4.1'
+
+-    def ndkVersion = "android-ndk-r27d"
++    def ndkVersion = "android-ndk-r30"
+
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.7.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.8.0-all.zip
+
+-    implementation 'androidx.core:core-ktx:1.19.0'
++    implementation 'androidx.core:core-ktx:1.19.1'
+```
 
 ## 55997 2026_09_10
 
@@ -35,8 +50,7 @@
 ## 55995 2026_07_19
 
 * per NWS Service Change Notice 26-67 Subject: Migration of NEXRAD Level 2 Radar Data Dissemination
-  from
-  nomads.ncep.noaa.gov to tgftp.nws.noaa.gov Effective: September 15, 2026 - change URL
+  from nomads.ncep.noaa.gov to tgftp.nws.noaa.gov Effective: September 15, 2026 - change URL
   from https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/
   to https://tgftp.nws.noaa.gov/data/radar/nexrad_level2/
 * tool/lib updates
@@ -67,10 +81,9 @@
 ## 55993 2026_06_08
 
 * fix: NWS has officially decommissioned the following text products issued by local offices (by Jul
-  7, 2026), remove
-  them from text viewer
-    - complete nationwide discontinuation of the Max/Min Temperature and Precipitation Table
-      Product (RTP) (Service Change Notice 26-34)
+  7, 2026), remove them from text viewer
+    - complete nationwide discontinuation of the Max/Min Temperature and Precipitation Table Product
+      (RTP) (Service Change Notice 26-34)
 * feat: target API 37 and update libs
 
 ```
@@ -472,8 +485,8 @@ implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 
 ## 55961 2025_07_07
 
-* [FIX] NHC Activity would crash if an NHC Storm is clicked on which is no longer issuing
-  advisories (such as a PTC)
+* [FIX] NHC Activity would crash if an NHC Storm is clicked on which is no longer issuing advisories
+  (such as a PTC)
 * [FIX] `gradle.build` update around kotlinOptions
 * [ADD] okhttp update to **5.0.0**
 
@@ -539,8 +552,7 @@ implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 ## 55956 2025_05_30
 
 * [ADD] per *Service Change Notice 25-22 Migration of the Tropical Weather Summary Information from
-  Text
-  Product Format to hurricanes.gov: Effective on or about May 15, 2025*, remove these two text
+  Text Product Format to hurricanes.gov: Effective on or about May 15, 2025*, remove these two text
   products from the main NHC activity
 * [FIX] In NHC Activity remove images "EPAC Daily Analysis" and "ATL Daily Analysis" which no longer
   seem to be available
@@ -690,9 +702,7 @@ iconv -f "windows-1252" -t "UTF-8"   ./app/src/main/res/raw/cityall.txt  > citya
 * [FIX] more error handling in network io
 * [FIX] scope issues in decode8BitAndGenRadials.c similar to NexradDecodeEightBit.kt
 * [FIX] activity_main.xml activity_main_drawer_right.xml activity_main_drawer.xml FAB was
-  overlapping when gesture capable
-  device had 3 button mode
-  enabled (needs more testing)
+  overlapping when gesture capable device had 3 button mode enabled (needs more testing)
 
 ## 55939 2025_01_30
 
@@ -738,8 +748,8 @@ iconv -f "windows-1252" -t "UTF-8"   ./app/src/main/res/raw/cityall.txt  > citya
   Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
   Forecast Tool: Effective January 20, 2025 , remove from National Images
 * [FIX] In National Graphics the URL for **GLSEA Ice Analysis** had changed
-* [REF] NexradDecodeEightBit change scope for key vars to be more local to enhance readability (
-  originally created like this for performance reasons)
+* [REF] NexradDecodeEightBit change scope for key vars to be more local to enhance readability
+  (originally created like this for performance reasons)
 
 ```
 "Significant Surface Low Tracks",
@@ -747,9 +757,8 @@ iconv -f "windows-1252" -t "UTF-8"   ./app/src/main/res/raw/cityall.txt  > citya
 ```
 
 * [ADD] "Automated Low Clusters" in National Images per SCN24-108: Termination of the 72-Hour Low
-  Tracks
-  Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
-  Forecast Tool: Effective January 20, 2025
+  Tracks Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low
+  Clusters Forecast Tool: Effective January 20, 2025
 
 * [ADD] lib update
 
@@ -760,7 +769,7 @@ iconv -f "windows-1252" -t "UTF-8"   ./app/src/main/res/raw/cityall.txt  > citya
 
 ## 55933 2025_01_15
 
-* [ADD] In Nexrad "long press" (press and hold), add Observation(Metar) site name next to the
+* [ADD] In Nexrad "long press" (press and hold), add Observation (Metar) site name next to the
   station code
 * [REF] Add Metar.sites using the "Site/Sites" framework and modify most functions in this file,
   impacts
@@ -786,8 +795,8 @@ iconv -f "windows-1252" -t "UTF-8"   ./app/src/main/res/raw/cityall.txt  > citya
 
 * [ADD] Better "Weather Story" handling for image in homescreen (if configured and if your WFO
   offers it or something similar)
-* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI) (
-  required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
+* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI)
+  (required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
   work for Guam/CNMI due to insufficient LAT/LON adjustment, it's a WIP
 * [ADD] 2 observations points in Guam/CNMI but they are not yet usable within the program, it's a
   WIP
@@ -842,14 +851,12 @@ missed one
 
 * [FIX] Pre-launch report for wX version 55926 captured multiple issues likely due to the newer
   kotlin version in use, replicated on physical as well. Crashes are in two areas but caused by the
-  same thing. Not able to identify true root cause yet
-  but the implication seems to be that UtilityNetworkIO.getBitmapFromUrl (called in extension
-  function String.getImage()) which should return only
-  Bitmap is in some cases returning null.
-  Workaround for now is that in two functions which accepted Bitmap are not taking Bitmap? and then
-  doing null check.
-  Both crashes were seen in model activities in which the image was not present on the server (
-  common with incomplete runs, etc or improper start times)
+  same thing. Not able to identify true root cause yet but the implication seems to be that
+  UtilityNetworkIO.getBitmapFromUrl (called in extension function String.getImage ()) which should
+  return only Bitmap is in some cases returning null. Workaround for now is that in two functions
+  which accepted Bitmap are not taking Bitmap? and then doing null check. Both crashes were seen in
+  model activities in which the image was not present on the server (common with incomplete runs,
+  etc or improper start times)
 
 ```
 Process: joshuatee.wx, PID: 20099
@@ -995,8 +1002,8 @@ Exception java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 
 
 * [ADD] additional Soundings sites (especially AK/HI), remove some that were obsolete
 * [ADD] Sites/Site framework to be used by Sounding sites and wfo/radar in the future
-* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom (
-  includes direction)
+* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom
+  (includes direction)
 * [ADD] Nexrad "Long press" now shows direction in addition to distance for closest radars and
   observation point
 * [ADD] Nexrad "Long press" more concise verbiage: miles to mi (in 2 spots)
@@ -1081,7 +1088,7 @@ app/src/main/res/mipmap-anydpi/ic_launcher_new.xml
 	renamed:    mipmap-anydpi-v26/ic_launcher_new.xml -> mipmap-anydpi/ic_launcher_new.xml
 ```
 
-* [ADD] convenience LatLon.empty()
+* [ADD] convenience LatLon.empty ()
 
 ## 55911 2024_09_19
 
@@ -1169,9 +1176,8 @@ files impacted - need to be cleaned up later
 ## 55906 2024_09_14
 
 * [FIX] GOES "Full Disk" (Misc Tab) images location and product names have changed, animations are
-  now available for all products. They have been
-  moved here (there are many more Himawari images that have been added which are not yet
-  incorporated):
+  now available for all products. They have been moved here (there are many more Himawari images
+  that have been added which are not yet incorporated):
     - [https://www.ospo.noaa.gov/products/imagery/meteosat.html](https://www.ospo.noaa.gov/products/imagery/meteosat.html)
     - [https://www.ospo.noaa.gov/products/imagery/meteosatio.html](https://www.ospo.noaa.gov/products/imagery/meteosatio.html)
     - [https://www.ospo.noaa.gov/products/imagery/fulldisk.html](https://www.ospo.noaa.gov/products/imagery/fulldisk.html)
@@ -1242,9 +1248,9 @@ files impacted - need to be cleaned up later
 ## 55900 2024_07_21
 
 * [FIX] add @Synchronized to Metar.get
-* [FIX] Exception java.lang.IndexOutOfBoundsException: Index 7 out of bounds for length 7
-  at joshuatee.wx.notifications.NotificationMpd.sendLocation (NotificationMpd.kt:81) (do this in Mcd
-  as well)
+* [FIX] Exception java.lang.IndexOutOfBoundsException: Index 7 out of bounds for length 7 at
+  joshuatee.wx.notifications.NotificationMpd.sendLocation (NotificationMpd.kt:81) (do this in Mcd as
+  well)
 
 ## 55899 2024_07_12
 
@@ -1404,7 +1410,7 @@ buffers.yList[index]
 ```
 
 * [REF] remove unused VoiceCommandActivity.kt
-* [FIX] add UtilityTts.initTts(this) in CommonActionBarFragment.kt when VR is invoked
+* [FIX] add UtilityTts.initTts (this) in CommonActionBarFragment.kt when VR is invoked
 * [FIX] UtilityTts.initTts, move 2 statements into callback
 
 ## 55887 2024_05_01
@@ -1518,8 +1524,7 @@ Exception java.lang.ArithmeticException: divide by zero
 ## 55878 2024_04_03
 
 * [ADD] In support of **SCN24-02: New Forecast Product “Offshore Waters Forecast for SW N Atlantic
-  Ocean”
-  Will Start on March 26, 2024**
+  Ocean” Will Start on March 26, 2024**
   add `offnt5` and rename title for `offnt3`. These products are accessed via "National Text"
   activity.
 * [FIX] lint in UtilityTheme.setPrimaryColor by using different methods
@@ -1544,8 +1549,8 @@ Exception java.lang.ArithmeticException: divide by zero
 * [FIX] migration to API34 (or a newer material lib, etc) required NavigationView background to be
   hardcoded in Drawer.kt
 * [ADD] enable compose
-* [REF] fix build
-  warning `warning: [options] source value 8 is obsolete and will be removed in a future release`
+* [REF] fix build warning
+  `warning: [options] source value 8 is obsolete and will be removed in a future release`
 
 ```
 -        sourceCompatibility JavaVersion.VERSION_1_8
@@ -1562,14 +1567,12 @@ Exception java.lang.ArithmeticException: divide by zero
 ## 55874 2024_03_24
 
 * [ADD] per upcoming changes: wX Android screen recording (**but not** associated drawing tools)
-  will not be available
-  after May 1, 2024 Please use native screen recording and screen shot capabilities instead.
-  This existing functionality does not fall within Google's accepted "Foreground Service Type" once
-  the app
-  targets API34 (Android 14) which is required by sometime later in 2024.
+  will not be available after May 1, 2024 Please use native screen recording and screen shot
+  capabilities instead. This existing functionality does not fall within Google's accepted
+  "Foreground Service Type" once the app targets API34 (Android 14) which is required by sometime
+  later in 2024.
 * [ADD] Target the latest version of Android (API 34, this is periodically required to be compliant
-  with
-  Google Play Store)
+  with Google Play Store)
 * [ADD] update libs
 
 ```
@@ -1585,8 +1588,7 @@ Exception java.lang.ArithmeticException: divide by zero
 ```
 
 * [ADD] Prelim KHDC data (commented out) for Service Change Notice 24-11 Hammond, LA WSR-88D (KHDC)
-  to Begin NEXRAD Level III
-  Product Dissemination on or around March 31, 2024
+  to Begin NEXRAD Level III Product Dissemination on or around March 31, 2024
 * [FIX] lint cleanup
 * [ADD] NCEP MAG updates [MAG 5.0 - March 2024](https://mag.ncep.noaa.gov/version_updates.php)
 
@@ -1653,14 +1655,13 @@ Added the following products to NAEFS:
 ## 55871 2024_03_02
 
 * [REF] lint - constant renames to upper (part1)
-* [REF] deprecate String.getHtmlSep() (UtilityNetworkIO.getStringFromUrlWithSeparator) used in
+* [REF] deprecate String.getHtmlSep () (UtilityNetworkIO.getStringFromUrlWithSeparator) used in
   NotificationSpcFireWeather.kt
 
 ## 55870 2024_03_01
 
 * [REF] minor lint
-* [ADD] tool upgrade
-  2024_03_01:
+* [ADD] tool upgrade 2024_03_01:
 
 ```
 -    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
@@ -1686,9 +1687,9 @@ Added the following products to NAEFS:
 
 * [FIX] WPC Rainfall Outlook Day 1 - 5, Title was truncated, move parts of Title to Sub-title
 * [FIX] usalerts on chromeOS, cards should take remaining horizontal space on screen
-* [ADD] Previously, the graph in the hourly activity was set to a fixed size height.
-  On laptops (ie ChromeOS) this led to the graph being very narrow. The graph is now set to
-  slightly less then the width and the height is a fixed fraction of that width.
+* [ADD] Previously, the graph in the hourly activity was set to a fixed size height. On laptops (ie
+  ChromeOS) this led to the graph being very narrow. The graph is now set to slightly less then the
+  width and the height is a fixed fraction of that width.
 * [REF] lint
 * [ADD] ChromeOS keyboard shortcut for main screen "Ctrl - s" (SPC SWO Summary)
 * [ADD] ChromeOS keyboard shortcut for main screen "Ctrl - g" (Rainfall Outlook Summary)
@@ -1818,10 +1819,9 @@ renamed:    app/src/main/java/joshuatee/wx/misc/USAlertsDetailActivity.kt -> app
 
 * [REF] in gradle.properties, comment out `android.enableJetifier=true`, the default is `false`
 * [ADD] Hourly graph: remove the following external dependency and integrate the APL2.0 licensed
-  code directly into the project
-  for ongoing stability. The repo maintainer states they are looking for someone else to take it
-  over and not many changes
-  done in past few years to keep current, this should enable TODO to be completed:
+  code directly into the project for ongoing stability. The repo maintainer states they are looking
+  for someone else to take it over and not many changes done in past few years to keep current, this
+  should enable TODO to be completed:
   `migrate from "android.enableJetifier=true" to "android.enableJetifier=false" in`
 
 ```
@@ -1837,12 +1837,12 @@ build.gradle:
 
 * [ADD] ObjectModelGet
 * [FIX] SPC SREF - time menu was not showing up in bottom toolbar
-* [FIX] SPC HREF - when change sector, reset zoom level on image(s)
+* [FIX] SPC HREF - when change sector, reset zoom level on image (s)
 * [FIX] SPC HREF - remove first time "00" in series which is not valid for this model
-* [FIX] NCEP MAG Models - when change sector, reset zoom level on image(s)
+* [FIX] NCEP MAG Models - when change sector, reset zoom level on image (s)
 * [REF] remove unused resources
-* [ADD] change keyboard shortcuts (ie for ChromeOS) to more closely match desktop ports, SPC Meso (
-  cltr-Z), Nat Text (cltr-T), Settings (cltr-P)
+* [ADD] change keyboard shortcuts (ie for ChromeOS) to more closely match desktop ports, SPC Meso
+  (cltr-Z), Nat Text (cltr-T), Settings (cltr-P)
 
 ```
 	deleted:    app/src/main/res/drawable/ic_skip_next_24dp.xml
@@ -1873,8 +1873,7 @@ build.gradle:
 * [FIX] Orange theme still had blue FAB
 * [ADD] Main screen: make location label and hazards bold
 * [FIX] Nexrad radar city textual labels and observation labels were not working well on ChromeOS,
-  change the way size is
-  computed.
+  change the way size is computed.
 * [ADD] AppCompatAlertDialogStyle2 in app/src/main/res/values-v28/styles.xml to have less rounder
   corners in dialogue
 * [FIX] Rainfall Outlook Summary - swap title and subtitle as title was too long
@@ -1884,10 +1883,9 @@ build.gradle:
 ## 55858 2022_12_24
 
 * [ADD] as mentioned in "Upcoming Changes" since Aug 2022:
-  The option **Icons evenly spaced** will be removed in **Settings->UI**.
-  This was meant to be a bridge from Android 4.4 to Android 5.0 back in Fall 2014.
-  It goes against modern Android design and has caused issues in the past for users who have
-  unknowingly enabled it.
+  The option **Icons evenly spaced** will be removed in **Settings->UI**. This was meant to be a
+  bridge from Android 4.4 to Android 5.0 back in Fall 2014. It goes against modern Android design
+  and has caused issues in the past for users who have unknowingly enabled it.
 * [REF] lint
 * [ADD] SPC SWO Summary - similar to Severe Dashboard, move "pin to homescreen" icon to submenu so
   it's clear what this is doing
@@ -1909,8 +1907,8 @@ build.gradle:
 
 * [ADD] NDK update android-ndk-r25c -> android-ndk-r26b
     - add variable in `build.gradle` for NDK path
-    - `app/src/main/jni/genCircleWithColor.c` required type definition in func for C99 compliance (
-      should have been there from start)
+    - `app/src/main/jni/genCircleWithColor.c` required type definition in func for C99 compliance
+      (should have been there from start)
 
 * [ADD]  okhttp minor update
 
@@ -1936,9 +1934,8 @@ build.gradle:
 
 ## 55855 2022_12_04
 
-* [FIX] KLIX (LA, New Orleans) nexrad radar is being physically moved.
-  This update prevents it from being used as an active radar in long press radar
-  selection or if adding a new location.
+* [FIX] KLIX (LA, New Orleans) nexrad radar is being physically moved. This update prevents it from
+  being used as an active radar in long press radar selection or if adding a new location.
 * [REF] tooling update:
 
 ```
@@ -1952,8 +1949,7 @@ build.gradle:
 ## 55854 2022_11_28
 
 * [FIX] WPC US Hazards Outlook Days 3-7: product discontinued via SCN23-101: Termination of the
-  Weather Prediction Center Day 3-7
-  Hazards Outlook Discussion Effective November 15, 2023
+  Weather Prediction Center Day 3-7 Hazards Outlook Discussion Effective November 15, 2023
 * [REF] cleanup in DownloadText.kt
 
 ## 55853 2022_11_25
@@ -1996,10 +1992,10 @@ build.gradle:
 
 * [ADD] target API33 until after May 1, 2024 - at that time screen recorder will be removed along
   with drawing tools
-* [ADD] as communicated in "Upcoming changes": after support for Android 7.1 is removed
-  the option **Settings->Radar->Launch app directly to radar** will be removed since Android 8.0 and
-  higher supports *static pinned launchers* i.e. if you long press on the app icon in the android
-  home screen you can launch the radar directly and also setup another icon to do so.
+* [ADD] as communicated in "Upcoming changes": after support for Android 7.1 is removed the option
+  **Settings->Radar->Launch app directly to radar** will be removed since Android 8.0 and higher
+  supports *static pinned launchers* i.e. if you long press on the app icon in the android home
+  screen you can launch the radar directly and also setup another icon to do so.
 
 ## 55843 2022_10_26
 
@@ -2116,8 +2112,8 @@ build.gradle:
 
 ## 55832 2022_09_10
 
-* [ADD] All model activities (ie SPC SREF/HREF/HRRR, ESRL, NCEP, etc) - use floating buttons (
-  similar to single pane) for back/forward
+* [ADD] All model activities (ie SPC SREF/HREF/HRRR, ESRL, NCEP, etc) - use floating buttons
+  (similar to single pane) for back/forward
 * [REF] lint and format (including menu and layout)
 
 ## 55831 2022_09_10
@@ -2186,8 +2182,7 @@ build.gradle:
 ## 55825 2022_09_06
 
 * [ADD] as mentioned in "Upcoming Changes" deprecated option "Prevent accidental exit" as this
-  interferes with Google's
-  long term strategy for the back button
+  interferes with Google's long term strategy for the back button
 * [ADD] Settings Playlist: use Floating button with text
 * [ADD] VAD Wind Profile text now shows as fixed width
 * [ADD] option "Models: use FAB" is removed as mentioned in Upcoming changes (added 2022-08-17)
@@ -2196,8 +2191,7 @@ build.gradle:
 * [ADD] Move the "Celsius to fahrenheit table" to Settings->About instead of the main Settings
   screen.
 * [ADD] Settings->Radar. Improve option labels and move 3 settings to Settings->About->Developer as
-  they are not
-  relevant or recommended to most users:
+  they are not relevant or recommended to most users:
   "Multipurpose radar icons" "Counties use high resolution data" "States use high resolution data" "
   Black background"
 
@@ -2237,10 +2231,8 @@ build.gradle:
 * [FIX] per lint - git mv drawable/temp_* drawable-nodpi
 * [REF] move perm handling for notif tts in settings->Notifications into Switch.kt
 * [ADD] Radar Mosaics are no longer pulled from the AWC Website which is due to be upgraded on Sep
-  12, 2023.
-  It appears the mosaic graphics are no longer going to be provided so the default is to now use the
-  graphics
-  used prior to using AWC.
+  12, 2023. It appears the mosaic graphics are no longer going to be provided so the default is to
+  now use the graphics used prior to using AWC.
 
 ## 55819 2022_09_03
 
@@ -2251,27 +2243,24 @@ build.gradle:
 * [ADD] Beta label to Color Palettes in Settings->Radar
 * [ADD] Settings->About: minor visual changes
 * [ADD] In Settings->Radar about "Beta" to label for "Color Palettes". The code has not changed but
-  in general this feature
-  is not easy to use and it probably has more bugs then other parts of the program.
+  in general this feature is not easy to use and it probably has more bugs then other parts of the
+  program.
 * [ADD] Settings->About->Developer Settings and move settings from other areas that are easy for the
-  developer only, will be
-  deprecated soon (soon upcoming changes doc linked from top of FAQ), or in general are not
-  applicable to the
-  majority of users. As a reminder you can tap on the textual label for settings to open a pop-up
-  with more information.
+  developer only, will be deprecated soon (soon upcoming changes doc linked from top of FAQ), or in
+  general are not applicable to the majority of users. As a reminder you can tap on the textual
+  label for settings to open a pop-up with more information.
 
 ## 55817 2022_09_03
 
 * [ADD] SPC Thunderstorm Outlooks will now scale graphic size to match how many images are shown
 * [ADD] BitmapAttr object which wraps Bitmap and provides a String field to store url
 * [FIX] in the NHC Storm activity do not show images that don't exist. For example storms staying
-  over the ocean do not
-  have QPF and excessive rainfall graphics.
+  over the ocean do not have QPF and excessive rainfall graphics.
 
 ## 55816 2022_08_30
 
-* [ADD] NHC notifications will now be sent (less often) when the advNum changes for publicAdvisory (
-  as opposed to lastUpdate for the storm)
+* [ADD] NHC notifications will now be sent (less often) when the advNum changes for publicAdvisory
+  (as opposed to lastUpdate for the storm)
   https://www.nhc.noaa.gov/CurrentStorms.json
 * [ADD] Android Studio update and tooling upgrade
 
@@ -2413,9 +2402,8 @@ build.gradle:
 ## 55797 2022_06_01
 
 * [ADD] Excessive Rainfall Outlook activity (MISC Tab) now shows a Day 4 and Day 5 image. No
-  dedicated text
-  product exists similar to Day1-Day3 and so discussion is included in the PMDEPD "Extended Forecast
-  Discussion"
+  dedicated text product exists similar to Day1-Day3 and so discussion is included in the PMDEPD
+  "Extended Forecast Discussion"
   more details here:
   [Service Change Notice 23-55](https://www.weather.gov/media/notification/pdf_2023_24/scn23-55_ero_days_4_5_t2o.pdf)
   and
@@ -2430,14 +2418,14 @@ build.gradle:
 
 ## 55795 2022_05_26
 
-* [FIX] As communicated in the "upcoming changes" document in April 2022,
-  Canadian local forecast support is being removed.
-  In support of this the ability to add new Canadian locations is being disabled.
+* [FIX] As communicated in the "upcoming changes" document in April 2022, Canadian local forecast
+  support is being removed. In support of this the ability to add new Canadian locations is being
+  disabled.
 
 ## 55794 2022_05_26
 
 * [FIX] Attempt to avoid text wrap in Nexrad radar: set single line in NexradRenderTextObject.kt via
-  textView.setSingleLine() in 2 spots
+  textView.setSingleLine () in 2 spots
 
 ## 55793 2022_05_25
 
@@ -2585,8 +2573,8 @@ build.gradle:
 
 ## 55783 2022_02_12
 
-* [FIX] NWS Has removed static graphic for space weather: Estimated Planetary K index
-  and replaced with a web accessible version for this product
+* [FIX] NWS Has removed static graphic for space weather: Estimated Planetary K index and replaced
+  with a web accessible version for this product
   at https://www.swpc.noaa.gov/products/planetary-k-index
   if you use this data you could access via a browser, etc
 * [ADD] tooling updates:
@@ -2629,8 +2617,8 @@ build.gradle:
 * [ADD] Tap on label "Tab 1 Label" (and 2,3) in Settings -> UI now shows popup with brief
   description.
 * [ADD] In the location editor change the label from "Conditions" to "Current Conditions" to add
-  clarity on what this notifications for.
-  As an FYI, you can tap on the textual label for all notifications for a greater description.
+  clarity on what this notifications for. As an FYI, you can tap on the textual label for all
+  notifications for a greater description.
 * [ADD] In the location editor change the label from "Radar" to "Radar image with alert" to add
   clarity on what this notifications for.
 * [ADD] In the location editor change the label from "Sound" to "Play sound for alert notification"
@@ -2650,7 +2638,7 @@ build.gradle:
 
 * [REF] simply DownloadText.byProduct using version as used in LsrByWfoActivity.kt and
   WfoTextActivity.kt
-* [REF] remove apparent unnecessary code in CapAlert.kt using String.getHtmlSep()
+* [REF] remove apparent unnecessary code in CapAlert.kt using String.getHtmlSep ()
 * [REF] UtilityNetworkIO.kt consolidate to shared function:
   getStringFromUrl/getStringFromUrlWithNewLine
 * [ADD] Text widgets AFD/HWO/National Text now match formatting as seen within the main app
@@ -2664,7 +2652,7 @@ build.gradle:
 
 ## 55756 2022_11_29
 
-* [REF] replace String.getHtmlSep() with String.getHtmlWithNewLine() in UtilityCanada.kt
+* [REF] replace String.getHtmlSep () with String.getHtmlWithNewLine () in UtilityCanada.kt
   NotificationSwo.kt NexradDownload.kt
 * [REF] rename SpotterUtil to UtilitySpotter to match other ports
 * [REF] deprecate UtilityString.getHtmlAndParseSep
@@ -2672,7 +2660,7 @@ build.gradle:
 ## 55755 2022_11_29
 
 * [REF] misc
-* [REF] replace String.getHtmlSep() with String.getHtmlWithNewLine() in WpcFronts.kt
+* [REF] replace String.getHtmlSep () with String.getHtmlWithNewLine () in WpcFronts.kt
   SpcStormReportsActivity.kt SwoDayOne.kt ObjectMetar.kt Metar.kt SpotterUtil.kt
 
 ## 55754 2022_11_28
@@ -2681,8 +2669,8 @@ build.gradle:
 
 ## 55753 2022_11_27
 
-* [REF] converge ModelsSpcHrefActivity.kt / ModelsSpcSrefActivity.kt(delete)
-* [REF] converge ModelsGenericActivity.kt / ModelsSpcHrrrActivity.kt(delete)
+* [REF] converge ModelsSpcHrefActivity.kt / ModelsSpcSrefActivity.kt (delete)
+* [REF] converge ModelsGenericActivity.kt / ModelsSpcHrrrActivity.kt (delete)
 * [REF] NavDrawer.connect2 (rename to connect) in USWarningsWithRadarActivity.kt
   SpcCompmapActivity.kt SpcStormReportsActivity.kt
 
@@ -2779,7 +2767,7 @@ build.gradle:
 * [REF] UtilityForecastIcon - chain up replace
 * [FIX] NSSL WRF (and other NSSL models) run only once per day, not twice
 * [REF] implement new ObjectDateTime.generateModelRuns using LocalDateTime
-* [REF] implement new ObjectDateTime.currentHourInUtc() using LocalDateTime (WPC GEFS)
+* [REF] implement new ObjectDateTime.currentHourInUtc () using LocalDateTime (WPC GEFS)
 
 ## 55734 2022_11_07
 
@@ -2801,8 +2789,8 @@ app/build.gradle
 + implementation 'com.google.android.material:material:1.7.0'
 
 this caused an error (Duplicate class androidx.lifecycle.ViewTreeViewModelKt found in modules
-jetified-lifecycle-viewmodel-ktx-2.3.1-runtime) so had to add
-implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+jetified-lifecycle-viewmodel-ktx-2.3.1-runtime) so had to add implementation "androidx.lifecycle:
+lifecycle-viewmodel-ktx:2.5.1"
 might be this
 https://issuetracker.google.com/issues/238425626?pli=1
 
@@ -3029,8 +3017,8 @@ https://issuetracker.google.com/issues/238425626?pli=1
 ## 55698 2022_09_05
 
 * [REF] refactor in notif code cont
-* [REF] ObjectNotification.send: create the notification as well (
-  createNotificationBigTextWithAction)
+* [REF] ObjectNotification.send: create the notification as well
+  (createNotificationBigTextWithAction)
 * [FIX] SPC Meso - layers topo and county were not working together
 * [ADD] SPC Meso - add more layers: Observations/Population (Topo and Population can't be shown
   together)
@@ -3084,18 +3072,17 @@ https://issuetracker.google.com/issues/238425626?pli=1
 ## 55691 2022_09_01
 
 * [ADD] If running Android 13, screen recording is regrettably no longer working. Updated Nexrad to
-  only show drawing tools. Updated all other image based activities
-  to offer normal image sharing. Updated FAQ and Upcoming Changes
+  only show drawing tools. Updated all other image based activities to offer normal image sharing.
+  Updated FAQ and Upcoming Changes
 * [FIX] In Settings->Homescreen remove the "Web" option from the menu. This is meant as a workaround
   when NWS 7 day is not working. However, the web widget appears to no longer be working either.
 
 ## 55690 2022_08_31
 
 * [FIX] UtilityWidgetDownload.nexrad needed obs for wind barbs
-* [REF] misc refactor
-  renamed:    app/src/main/java/joshuatee/wx/UtilityWidget.kt ->
-  app/src/main/java/joshuatee/wx/util/UtilityWidget.kt
-  renamed:    app/src/main/java/joshuatee/wx/UtilityWidgetDownload.kt ->
+* [REF] misc refactor renamed:    app/src/main/java/joshuatee/wx/UtilityWidget.kt ->
+  app/src/main/java/joshuatee/wx/util/UtilityWidget.kt renamed:
+  app/src/main/java/joshuatee/wx/UtilityWidgetDownload.kt ->
   app/src/main/java/joshuatee/wx/util/UtilityWidgetDownload.kt
 * [ADD] Target Android 13
 
@@ -3148,8 +3135,8 @@ https://issuetracker.google.com/issues/238425626?pli=1
 * [REF] nexrad widget, refactor and re-order some of the drawing
 * [REF] remove unused ProjectionType.WX_OGL_48
 * [ADD] Settings->Radar has been split it two activities. The line/marker (tvs/hail) size settings
-  can now be accessed
-  via a second activity accessible from the "Line / Marker sizes" button 3rd from the top
+  can now be accessed via a second activity accessible from the "Line / Marker sizes" button 3rd
+  from the top
 * [FIX] SPC SREF - when using left/right button to move through model images, image was download
   twice instead of just once
 
@@ -3204,8 +3191,8 @@ https://issuetracker.google.com/issues/238425626?pli=1
 * [FIX] In single pane nexrad, if animating, switching radars via the map was not working
 * [FIX] nexrad help in submenu needed to be freshened up a bit
 * [FIX] The main screen will no longer show the primary "location dot" surrounded by a circle as
-  this shape is reserved from the dedicated
-  nexrad viewer which if configured does use active GPS location
+  this shape is reserved from the dedicated nexrad viewer which if configured does use active GPS
+  location
 * [ADD] NexradLongPressMenu and changes in NexradState* and NexradArguments* to make it happen
 
 ## 55675 2022_08_21
@@ -3227,7 +3214,7 @@ https://issuetracker.google.com/issues/238425626?pli=1
 * [REF] more work on NexradState
 * [ADD] Nexrad multipane, if you tap on the text in the upper left that lists radar site/product it
   will take you to severe dashboard (similar to single pane)
-* [ADD] Nexrad multipane, if warnings(tor/ffw/tst) enabled, show in top toolbar similar to single
+* [ADD] Nexrad multipane, if warnings (tor/ffw/tst) enabled, show in top toolbar similar to single
   pane
 * [REF] Nexrad multipane, remove idxIntAl, it is redundant to NexradState.curRadar
 
@@ -3240,7 +3227,8 @@ https://issuetracker.google.com/issues/238425626?pli=1
 * [REF] nexrad - migrate away from paneList
 * [FIX] tap on any NHC notification would cause a crash (user reported)
 * [FIX] NHC graphics for ATL storms
-* [FIX] wxglrender @Synchronized fun constructWarningLines(polygonWarningType: PolygonWarningType) {
+* [FIX] wxglrender @Synchronized fun constructWarningLines (polygonWarningType:
+  PolygonWarningType) {
 * [REF] use NexradState in single pane Nexrad
 
 ## 55670 2022_08_19
@@ -3293,7 +3281,7 @@ https://issuetracker.google.com/issues/238425626?pli=1
 
 * [ADD] WPC Fronts to PolygonType
 * [ADD] wxglrender remove deconstruct stuff
-* [REF] remove checks in NexradLayerDownload: if (!wxglRender.product.startsWith("2")) {
+* [REF] remove checks in NexradLayerDownload: if (!wxglRender.product.startsWith ("2")) {
 
 ## 55664 2022_08_15
 
@@ -3313,7 +3301,7 @@ https://issuetracker.google.com/issues/238425626?pli=1
   do so
 * [ADD] NexradDraw and move content from UtilityRadarUI
 * [FIX] Nexrad long press observation dialogue was not respecting the text size setting
-* [FIX] Nexrad new - wpc fronts exceptions (@Synchronized fun constructWpcFronts())
+* [FIX] Nexrad new - wpc fronts exceptions (@Synchronized fun constructWpcFronts ())
 
 ## 55661 2022_08_14
 
@@ -3409,11 +3397,10 @@ https://issuetracker.google.com/issues/238425626?pli=1
 * [FIX] ObjectCurrentConditions.kt - if the heat index and the temp (both rounded) are equal, don't
   show heat index
 * [ADD] SPC MCD/Watch summary icons in SPC Tab now show only images regardless of how many Watch or
-  MCD there are. This resolves one bug
-  and makes the interface more predictable. Please note that the "Severe Dashboard" accessible on
-  the main screen via octagon icon
-  is the preferred method to see MCD/Watch. When the Navigation drawer is configured as compared to
-  Tabs they are not even visible.
+  MCD there are. This resolves one bug and makes the interface more predictable. Please note that
+  the "Severe Dashboard" accessible on the main screen via octagon icon is the preferred method to
+  see MCD/Watch. When the Navigation drawer is configured as compared to Tabs they are not even
+  visible.
 * [ADD] SPC MCD/Watch summary - if no watch or mcd is present use a bigger font with a "high light"
   color
 * [ADD] SPC MCD/Watch summary - add timer and onrestart
@@ -3461,8 +3448,8 @@ https://issuetracker.google.com/issues/238425626?pli=1
   entries
 * [FIX] The following model is being removed from the program due to it's experimental nature and
   numerous breaking changes over the years:
-  **it was accessible only via the NHC activity**: Great Lakes Coastal Forecasting System, GLCFS
-  You can access it via a web browser here: https://www.glerl.noaa.gov/res/glcfs/
+  **it was accessible only via the NHC activity**: Great Lakes Coastal Forecasting System, GLCFS You
+  can access it via a web browser here: https://www.glerl.noaa.gov/res/glcfs/
   As a reminder the best model interface in terms of stability continues to be MAG NCEP (MISC Tab -
   upper left)
   I believe all other models with interfaces provided are not considered true production services,
@@ -3475,8 +3462,8 @@ https://issuetracker.google.com/issues/238425626?pli=1
 * [ADD] Vis/SPC Meso/Radar Mosaic now have a play/stop/pause bottom for animations that is more
   appropriate to the circumstance and similar to Nexrad
 * [ADD] In GOES/SPC Meso animate icon now uses the number of frames (default 10 - can be change in
-  settings->UI), similar to nexrad
-  a submenu in the main menu will allow access to the other frame count choices
+  settings->UI), similar to nexrad a submenu in the main menu will allow access to the other frame
+  count choices
 
 ## 55644 2022_07_27
 
@@ -3587,8 +3574,8 @@ https://issuetracker.google.com/issues/238425626?pli=1
 
 * [ADD] In US Alerts - if you touch blank space in the top toolbar or the label to the left it will
   open the navigation drawer
-* [REF] In all activities when a context is needed replace "this@ForecastActivity" with "this" (
-  example)
+* [REF] In all activities when a context is needed replace "this@ForecastActivity" with "this"
+  (example)
 
 ## 55625 2022_07_20
 
@@ -3818,9 +3805,8 @@ https://issuetracker.google.com/issues/238425626?pli=1
 ## 55590 2022_02_23
 
 * [FIX] prune the list of Observation points by removing 57 sites that had not updated in the past
-  28 days
-  This pruning will occur more frequently in the future to avoid a bad user experience
-  In the future as the new NWS API stabilizes there might be a less manual (but still performant)
+  28 days This pruning will occur more frequently in the future to avoid a bad user experience In
+  the future as the new NWS API stabilizes there might be a less manual (but still performant)
   way to handle this
 * [ADD] software upgrades that wX uses (in this case to just keep the linter happy)
 
@@ -3880,18 +3866,17 @@ KLOT 41.6 -88.1
     - only at KRAX so far https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.00n1b/ missing
       lowest tilt
     - changes in the following to accommodate:
-      modified:   app/src/main/java/joshuatee/wx/ColorPalettes.kt
-      modified:   app/src/main/java/joshuatee/wx/GlobalDictionaries.kt
-      modified:   app/src/main/java/joshuatee/wx/radar/ObjectOglRadarBuffers.kt
-      modified:   app/src/main/java/joshuatee/wx/radar/UtilityWXOGLPerf.kt
-      modified:   app/src/main/java/joshuatee/wx/radar/WXGLNexrad.kt
-      modified:   app/src/main/java/joshuatee/wx/radar/WXGLNexradLevel3.kt
-      modified:   app/src/main/java/joshuatee/wx/radar/WXGLRadarActivity.kt
-      modified:   app/src/main/java/joshuatee/wx/radar/WXGLRadarActivityMultiPane.kt
-      modified:   app/src/main/jni/decode8BitAndGenRadials.c
-      modified:   app/src/main/res/menu/uswxoglradar.xml
-      modified:   app/src/main/res/menu/uswxoglradarmultipane.xml
-      modified:   app/src/main/res/values/strings.xml
+      modified:   app/src/main/java/joshuatee/wx/ColorPalettes.kt modified:
+      app/src/main/java/joshuatee/wx/GlobalDictionaries.kt modified:
+      app/src/main/java/joshuatee/wx/radar/ObjectOglRadarBuffers.kt modified:
+      app/src/main/java/joshuatee/wx/radar/UtilityWXOGLPerf.kt modified:
+      app/src/main/java/joshuatee/wx/radar/WXGLNexrad.kt modified:
+      app/src/main/java/joshuatee/wx/radar/WXGLNexradLevel3.kt modified:
+      app/src/main/java/joshuatee/wx/radar/WXGLRadarActivity.kt modified:
+      app/src/main/java/joshuatee/wx/radar/WXGLRadarActivityMultiPane.kt modified:
+      app/src/main/jni/decode8BitAndGenRadials.c modified:   app/src/main/res/menu/uswxoglradar.xml
+      modified:   app/src/main/res/menu/uswxoglradarmultipane.xml modified:
+      app/src/main/res/values/strings.xml
 
 ## 55584 2022_01_31
 
