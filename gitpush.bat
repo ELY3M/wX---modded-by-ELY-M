@@ -3,5 +3,6 @@ set /p versionname=<versionname
 del versionname
 git add .  
 git commit -m %versionname%
-git push 
+git push
+git push elymbmx 
 pause
