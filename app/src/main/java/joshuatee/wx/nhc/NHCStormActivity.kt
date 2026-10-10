@@ -66,7 +66,8 @@ class NhcStormActivity : BaseActivity() {
     private var imagesPerRow = 2
     private val boxRows = mutableListOf<HBox>()
     private val imageUrls = listOf(
-        "_5day_cone_with_line_and_wind_sm2.png",
+//        "_5day_cone_with_line_and_wind_sm2.png",
+        "_5day_cone.png",
         "_key_messages.png",
         "WPCQPF_sm2.gif",
         "WPCERO_sm2.gif",

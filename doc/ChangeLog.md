@@ -2,8 +2,13 @@
 
 # Developer ChangeLog
 
-## 55998 202610_03
+## 55999 2026_10_10
 
+*
+
+## 55998 2026_10_10
+
+* fix: NHC storm detail screen was missing track image
 * tool updates (and gradle changes)
 
 ```
@@ -15,7 +20,7 @@
 
 
 -distributionUrl=https\://services.gradle.org/distributions/gradle-9.7.1-all.zip
-+distributionUrl=https\://services.gradle.org/distributions/gradle-9.8.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.8.1-all.zip
 
 -    implementation 'androidx.core:core-ktx:1.19.0'
 +    implementation 'androidx.core:core-ktx:1.19.1'

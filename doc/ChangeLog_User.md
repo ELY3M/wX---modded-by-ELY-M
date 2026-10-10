@@ -8,6 +8,10 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55998 2026_10_10
+
+* fix: NHC storm detail screen was missing track image
+
 ## 55996 2026_09_10
 
 * per **NWS Service Change Notice 26-67 Subject: Migration of NEXRAD Level 2 Radar Data
