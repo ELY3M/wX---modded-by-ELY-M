@@ -381,7 +381,7 @@ class NexradRenderConstruct(
                 FrontTypeEnum.OCFNT -> data.wpcFrontPaints.add(Color.rgb(255, 0, 255))
                 FrontTypeEnum.TROF -> data.wpcFrontPaints.add(Color.rgb(254, 216, 177))
             }
-            for (j in 0 until front.coordinates.size step 2) {
+            for (j in front.coordinates.indices step 2) {
                 if (j < front.coordinates.size - 1) {
                     data.wpcFrontBuffersList[z].putColor6(data.wpcFrontPaints[z])
                     coordinates = Projection.computeMercatorNumbersF(

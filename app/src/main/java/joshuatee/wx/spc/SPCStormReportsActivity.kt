@@ -342,10 +342,6 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (navDrawer.onOptionsItemSelected(item)) {
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
+        return navDrawer.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
     }
 }

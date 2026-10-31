@@ -2,12 +2,30 @@
 
 # Developer ChangeLog
 
-## 55999 2026_10_10
+## 56000 2026_10_29
 
 *
 
-## 55998 2026_10_10
+## 55999 2026_10_29
 
+* fix: handle bad input in nexrad wpc fronts
+* feat: lib/tool update
+
+```
+-    implementation "com.squareup.okhttp3:okhttp:5.5.0"
++    implementation "com.squareup.okhttp3:okhttp:5.5.1"
+
+-    id 'com.android.application' version '9.4.1' apply false
++    id 'com.android.application' version '9.5.0' apply false
+
+
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.8.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.8.2-all.zip
+```
+
+## 55998 2026_10_14
+
+* ref: lint
 * fix: NHC storm detail screen was missing track image
 * tool updates (and gradle changes)
 

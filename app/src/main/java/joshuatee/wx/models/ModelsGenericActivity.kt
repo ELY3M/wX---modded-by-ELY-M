@@ -329,7 +329,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 om.run = om.rtd.mostRecentRun
                 om.rtd.listRun = om.ncepRuns
                 miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
-                (0 until om.times.size).forEach {
+                om.times.indices.forEach {
                     val items = RegExp.space.split(om.times[it])[0]
                     om.times[it] = "$items " + UtilityModels.convertTimeRunToTimeString(
                         om.rtd.mostRecentRun.replace(
@@ -342,7 +342,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 om.run = om.rtd.mostRecentRun
                 miStatus.isVisible = true
                 miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
-                (0 until om.times.size).forEach {
+                om.times.indices.forEach {
                     om.times[it] = om.times[it] + " " + UtilityModels.convertTimeRunToTimeString(
                         om.rtd.mostRecentRun.replace("Z", ""),
                         om.times[it],

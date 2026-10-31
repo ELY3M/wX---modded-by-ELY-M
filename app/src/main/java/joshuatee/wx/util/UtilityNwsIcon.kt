@@ -23,7 +23,6 @@ package joshuatee.wx.util
 
 import joshuatee.wx.R
 
-@Suppress("SpellCheckingInspection")
 object UtilityNwsIcon {
 
     val iconMap = mapOf(
@@ -113,7 +112,6 @@ object UtilityNwsIcon {
         "nsnow.png" to R.drawable.nsn,
         "tsra_sct.png" to R.drawable.scttsra,
         "ntsra_sct.png" to R.drawable.nscttsra,
-        "ra_sn.png" to R.drawable.ra_sn,
         "sn_ip.png" to R.drawable.sn_ip,
         "snow_sleet.png" to R.drawable.sn_ip,
         "nsn_ip.png" to R.drawable.nsn_ip,

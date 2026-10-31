@@ -363,6 +363,7 @@ class LocationFragment : Fragment() {
                 )
             }
         }) {
+	    //elys mod
             //if (idx == oglrIdx) {
             //    radarTimeStampLocal = getRadarTimeStampForHomescreen(nexradState.wxglRenders[oglrIdx].rid)
             //}
@@ -460,7 +461,7 @@ class LocationFragment : Fragment() {
     }
 
     private fun radarTimestamps(): List<String> =
-        (0 until nexradState.wxglSurfaceViews.size).map {
+        nexradState.wxglSurfaceViews.indices.map {
             getRadarTimeStamp(
                 nexradState.wxglRenders[it].wxglNexradLevel3.timestamp,
                 it

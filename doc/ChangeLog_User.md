@@ -8,6 +8,10 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 55999 2026_10_30
+
+* fix: handle bad input in nexrad wpc fronts
+
 ## 55998 2026_10_10
 
 * fix: NHC storm detail screen was missing track image

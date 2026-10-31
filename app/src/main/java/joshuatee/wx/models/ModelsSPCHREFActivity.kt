@@ -208,7 +208,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun runStatusUpdate() {
         if (om.modelType == ModelType.SPCSREF) {
-            (0 until om.times.size).forEach {
+            om.times.indices.forEach {
                 om.times[it] = om.times[it] + " " +
                         UtilityModels.convertTimeRunToTimeString(
                             om.rtd.mostRecentRun.replace("z", ""),

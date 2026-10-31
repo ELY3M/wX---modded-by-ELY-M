@@ -46,7 +46,7 @@ object UtilityMetarConditions {
         "Mostly Cloudy" to "bkn",
         "Mostly Cloudy with Haze" to "bkn",
         "Mostly Cloudy and Breezy" to "bkn",
-        "Cumulonimbus Clouds Observed" to "bkn",
+//        "Cumulonimbus Clouds Observed" to "bkn",
 
         "Overcast" to "ovc",
         "Overcast with Haze" to "ovc",

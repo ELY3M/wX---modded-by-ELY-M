@@ -4,3 +4,4 @@ echo VERSIONNAME is: $VERSIONNAME
 git add . 
 git commit -m $VERSIONNAME
 git push
+git push elymbmx

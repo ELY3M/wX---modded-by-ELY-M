@@ -241,25 +241,27 @@ object WpcFronts {
                 if (index < lines.size - 1) {
                     // Handle lines that wrap around, check to see if lines don't start
                     // with a known character
-                    if (lines[index + 1][0] != 'H'
-                        && lines[index + 1][0] != 'L'
-                        && lines[index + 1][0] != 'C'
-                        && lines[index + 1][0] != 'S'
-                        && lines[index + 1][0] != 'O'
-                        && lines[index + 1][0] != 'T'
-                        && lines[index + 1][0] != 'W'
-                    ) {
-                        lines[index] = lines[index] + lines[index + 1]
-                        if (index < lines.size - 2
-                            && lines[index + 2][0] != 'H'
-                            && lines[index + 2][0] != 'L'
-                            && lines[index + 2][0] != 'C'
-                            && lines[index + 2][0] != 'S'
-                            && lines[index + 2][0] != 'O'
-                            && lines[index + 2][0] != 'T'
-                            && lines[index + 2][0] != 'W'
+                    if (lines[index + 1].isNotEmpty() && lines[index + 2].isNotEmpty()) {
+                        if (lines[index + 1][0] != 'H'
+                            && lines[index + 1][0] != 'L'
+                            && lines[index + 1][0] != 'C'
+                            && lines[index + 1][0] != 'S'
+                            && lines[index + 1][0] != 'O'
+                            && lines[index + 1][0] != 'T'
+                            && lines[index + 1][0] != 'W'
                         ) {
-                            lines[index] = lines[index] + lines[index + 2]
+                            lines[index] = lines[index] + lines[index + 1]
+                            if (index < lines.size - 2
+                                && lines[index + 2][0] != 'H'
+                                && lines[index + 2][0] != 'L'
+                                && lines[index + 2][0] != 'C'
+                                && lines[index + 2][0] != 'S'
+                                && lines[index + 2][0] != 'O'
+                                && lines[index + 2][0] != 'T'
+                                && lines[index + 2][0] != 'W'
+                            ) {
+                                lines[index] = lines[index] + lines[index + 2]
+                            }
                         }
                     }
                 }
@@ -269,7 +271,7 @@ object WpcFronts {
                     tokens.removeAt(0)
                     when (type) {
                         "HIGHS" -> {
-                            for (typeIndex in 0 until tokens.size step 2) {
+                            for (typeIndex in tokens.indices step 2) {
                                 if (typeIndex + 1 < tokens.size) {
                                     val coordinates = parseLatLon(tokens[typeIndex + 1])
                                     pressureCenters.add(
@@ -283,7 +285,7 @@ object WpcFronts {
                         }
 
                         "LOWS" -> {
-                            for (typeIndex in 0 until tokens.size step 2) {
+                            for (typeIndex in tokens.indices step 2) {
                                 if (typeIndex + 1 < tokens.size) {
                                     val coordinates = parseLatLon(tokens[typeIndex + 1])
                                     pressureCenters.add(
