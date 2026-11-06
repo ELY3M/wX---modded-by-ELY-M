@@ -253,13 +253,24 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 24
                     }
 
+//                    12 -> {
+//                        model = "NAM-HIRES"
+//                        params = UtilityModelNcepInterface.paramsNamHires
+//                        labels = UtilityModelNcepInterface.labelsNamHires
+//                        sectors = UtilityModelNcepInterface.sectorsNamHires
+//                        startStep = 1
+//                        endStep = 60
+//                        stepAmount = 1
+//                        numberRuns = 4
+//                    }
+
                     12 -> {
-                        model = "NAM-HIRES"
-                        params = UtilityModelNcepInterface.paramsNamHires
-                        labels = UtilityModelNcepInterface.labelsNamHires
-                        sectors = UtilityModelNcepInterface.sectorsNamHires
+                        model = "RRFS"
+                        params = UtilityModelNcepInterface.paramsRrfs
+                        labels = UtilityModelNcepInterface.labelsRrfs
+                        sectors = UtilityModelNcepInterface.sectorsRrfs
                         startStep = 1
-                        endStep = 60
+                        endStep = 84
                         stepAmount = 1
                         numberRuns = 4
                     }
@@ -396,13 +407,24 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 2
                     }
 
+//                    5 -> {
+//                        model = "HREF"
+//                        params = UtilityModelNcepInterface.paramsHref
+//                        labels = UtilityModelNcepInterface.labelsHref
+//                        sectors = UtilityModelNcepInterface.sectorsHref
+//                        startStep = 1
+//                        endStep = 48
+//                        stepAmount = 1
+//                        numberRuns = 4
+//                    }
+
                     5 -> {
-                        model = "HREF"
-                        params = UtilityModelNcepInterface.paramsHref
-                        labels = UtilityModelNcepInterface.labelsHref
-                        sectors = UtilityModelNcepInterface.sectorsHref
+                        model = "REFS"
+                        params = UtilityModelNcepInterface.paramsRefs
+                        labels = UtilityModelNcepInterface.labelsRefs
+                        sectors = UtilityModelNcepInterface.sectorsRefs
                         startStep = 1
-                        endStep = 48
+                        endStep = 60
                         stepAmount = 1
                         numberRuns = 4
                     }

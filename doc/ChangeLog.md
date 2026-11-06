@@ -2,7 +2,14 @@
 
 # Developer ChangeLog
 
-## 56001 2026_11_02
+## 56001 2026_11_05
+
+* fix: [NCEP Models major changes](https://mag.ncep.noaa.gov/version_updates.php)
+
+```
+Replace NAM-HIRES model with the Rapid Refresh Forecast System (RRFS) model.
+Replace HREF model with the Rapid Ensemble Forecast System (REFS).
+```
 
 ## 56000 2026_11_02
 
