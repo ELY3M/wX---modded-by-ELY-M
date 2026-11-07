@@ -2,7 +2,15 @@
 
 # Developer ChangeLog
 
-## 56001 2026_11_06
+## 56003 2026_11_07
+
+*
+
+## 56002 2026_11_07
+
+* fix: handle bad input in nexrad wpc fronts (try #2)
+
+## 56001 2026_11_07
 
 * fix: [NCEP Models major changes](https://mag.ncep.noaa.gov/version_updates.php)
 

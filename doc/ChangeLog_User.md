@@ -8,6 +8,18 @@ Please also
 review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md)
 impacting all or some users.
 
+## 56002 2026_11_07 (BETA)
+
+* fix: handle bad input in nexrad wpc fronts (try #2)
+* fix: [NCEP Models major changes](https://mag.ncep.noaa.gov/version_updates.php)
+
+```
+Replace NAM-HIRES model with the Rapid Refresh Forecast System (RRFS) model.
+Replace HREF model with the Rapid Ensemble Forecast System (REFS).
+Add model Artificial Intelligence Global Forecast System (AIGFS)
+Remove Models: NAM, SREF, HRW-ARW, HRW-ARW2, HRW-FV3, POLAR
+```
+
 ## 55999 2026_11_02
 
 * fix: handle bad input in nexrad wpc fronts
@@ -51,8 +63,8 @@ impacting all or some users.
 * [FIX] transient display glitch in **Settings->Locations** if a location is removed
 * [FIX] TDWR radar **TADW** (Andrews Air Force Base (ADW)) was not working correctly (wrong LAT/LON)
 * [ADD] In adhoc location forecast change "Save Location" to "Save" to save room in top toolbar
-* [ADD] per upcoming changes: Android prior to Android 9.0 (API 28) will no longer be supported
-  (set minSdkVersion 29)
+* [ADD] per upcoming changes: Android prior to Android 9.0 (API 28) will no longer be supported (set
+  minSdkVersion 29)
 * [ADD] In the screen that opens when you long-press (press and hold) in Nexrad radar add the
   nearest city to the item to show an adhoc forecast
 * [ADD] minor optimization to title/subtitle in adhoc location (long press in nexrad view forecast,
@@ -169,7 +181,7 @@ prob_ceil_6500ft (NAMER and CONUS domains only)
   quad pane hardcode relative layout width in NexradRenderTextObject
 * [ADD] option UI Preferences -> "Hourly screen: show with AM/PM"
 * [FIX] OPC "Alaska/Arctic SST/Ice Edge Analysis" - image was no longer working, fix to use new URL
-* [FIX] in current conditions, show proper icon for **Mist** and  **Light Mist**
+* [FIX] in current conditions, show proper icon for **Mist** and **Light Mist**
 * [FIX] statusbar background was inconsistent across many activities
 * [FIX] Main button (lower right) on main screen and location add screen was not properly aligned in
   certain situations
@@ -182,7 +194,7 @@ prob_ceil_6500ft (NAMER and CONUS domains only)
   Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
   Forecast Tool: Effective January 20, 2025 , remove from National Images
 * [FIX] In National Graphics the URL for **GLSEA Ice Analysis** had changed
-* [ADD] In Nexrad "long press" (press and hold), add Observation(Metar) site name next to the
+* [ADD] In Nexrad "long press" (press and hold), add Observation (Metar) site name next to the
   station code
 * [ADD] On homescreen if "Weather Story" is configured and you tap on it image is opened up in
   dedicated image viewer allowing you to share the image or zoom in with the full screen.
@@ -190,8 +202,8 @@ prob_ceil_6500ft (NAMER and CONUS domains only)
   Weather Outlook outlines available as well (BETA - no dry thunderstorm support yet)
 * [ADD] Better "Weather Story" handling for image in homescreen (if configured and if your WFO
   offers it or something similar)
-* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI) (
-  required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
+* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI)
+  (required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
   work for Guam/CNMI due to insufficient LAT/LON adjustment, it's a WIP
 * [ADD] geographic boundaries for US Virgin Islands and American Samoa
 * [ADD] long press in nexrad will now show best vis sat image for Hawaii and areas around Puerto
@@ -224,7 +236,7 @@ prob_ceil_6500ft (NAMER and CONUS domains only)
 
 ## 55944 2025_03_02 (BETA)
 
-* [FIX] in current conditions, show proper icon for **Mist** and  **Light Mist**
+* [FIX] in current conditions, show proper icon for **Mist** and **Light Mist**
 
 ## 55942 2025_02_05 (BETA)
 
@@ -240,7 +252,7 @@ prob_ceil_6500ft (NAMER and CONUS domains only)
   Graphic and the Non-Technical 72-Hour Low Tracks Graphic to be Replaced by Automated Low Clusters
   Forecast Tool: Effective January 20, 2025 , remove from National Images
 * [FIX] In National Graphics the URL for **GLSEA Ice Analysis** had changed
-* [ADD] In Nexrad "long press" (press and hold), add Observation(Metar) site name next to the
+* [ADD] In Nexrad "long press" (press and hold), add Observation (Metar) site name next to the
   station code
 * [ADD] On homescreen if "Weather Story" is configured and you tap on it image is opened up in
   dedicated image viewer allowing you to share the image or zoom in with the full screen.
@@ -248,8 +260,8 @@ prob_ceil_6500ft (NAMER and CONUS domains only)
   Weather Outlook outlines available as well (BETA - no dry thunderstorm support yet)
 * [ADD] Better "Weather Story" handling for image in homescreen (if configured and if your WFO
   offers it or something similar)
-* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI) (
-  required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
+* [ADD] geographic boundaries for Guam and the Commonwealth of the Northern Mariana Islands (CNMI)
+  (required float size change in CanvasMain.kt and RadarGeomInfo.kt). NOTE: most functions do not
   work for Guam/CNMI due to insufficient LAT/LON adjustment, it's a WIP
 * [ADD] geographic boundaries for US Virgin Islands and American Samoa
 * [ADD] long press in nexrad will now show best vis sat image for Hawaii and areas around Puerto
@@ -272,8 +284,8 @@ prob_ceil_6500ft (NAMER and CONUS domains only)
 * [ADD] Nexrad "Long press" - add show nearest vis satellite image at bottom
 * [ADD] Nexrad "Long press" - add show nearest AFD (area forecast discussion text product)
 * [ADD] additional Soundings sites (especially AK/HI), remove some that were obsolete
-* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom (
-  includes direction)
+* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom
+  (includes direction)
 * [ADD] Nexrad "Long press" now shows direction in addition to distance for closest radars and
   observation point
 * [ADD] Nexrad "Long press" more concise verbiage: miles to mi (in 2 spots)
@@ -343,8 +355,8 @@ prob_ceil_6500ft (NAMER and CONUS domains only)
 * [ADD] Nexrad "Long press" - add show nearest vis satellite image at bottom
 * [ADD] Nexrad "Long press" - add show nearest AFD (area forecast discussion text product)
 * [ADD] additional Soundings sites (especially AK/HI), remove some that were obsolete
-* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom (
-  includes direction)
+* [ADD] Nearest Sounding option to Nexrad "Long press" (press and hold) menu - added to bottom
+  (includes direction)
 * [ADD] Nexrad "Long press" now shows direction in addition to distance for closest radars and
   observation point
 * [ADD] Nexrad "Long press" more concise verbiage: miles to mi (in 2 spots)
@@ -543,8 +555,8 @@ extreme_index_mslp
 
 ## 55873 2024_03_20
 
-* [FIX] update okhttp library to newest alpha version to fix ipv6 issue seen with GOES NESDIS site (
-  thanks to "ski warz" for the suggestion)
+* [FIX] update okhttp library to newest alpha version to fix ipv6 issue seen with GOES NESDIS site
+  (thanks to "ski warz" for the suggestion)
 * [FIX] "Aviation only AFD" was not working (thanks to "ski warz" for noticing and providing fix)
 
 ## 55869 2024_02_13
@@ -560,11 +572,11 @@ extreme_index_mslp
 * [FIX] In GOES, Animate button was not working as intended. if tap Stop once animating, it should
   show latest image
 * [FIX] SPC SREF - time menu was not showing up in bottom toolbar
-* [FIX] SPC HREF - when change sector, reset zoom level on image(s)
+* [FIX] SPC HREF - when change sector, reset zoom level on image (s)
 * [FIX] SPC HREF - remove first time "00" in series which is not valid for this model
-* [FIX] NCEP MAG Models - when change sector, reset zoom level on image(s)
-* [ADD] change keyboard shortcuts (ie for ChromeOS) to more closely match desktop ports, SPC Meso (
-  cltr-Z), Nat Text (cltr-T), Settings (cltr-P)
+* [FIX] NCEP MAG Models - when change sector, reset zoom level on image (s)
+* [ADD] change keyboard shortcuts (ie for ChromeOS) to more closely match desktop ports, SPC Meso
+  (cltr-Z), Nat Text (cltr-T), Settings (cltr-P)
 * [FIX] Orange theme still had blue FAB
 * [ADD] Main screen: make location label and hazards bold
 * [FIX] Nexrad radar city textual labels and observation labels were not working well on ChromeOS,
@@ -634,8 +646,8 @@ extreme_index_mslp
 
 ```
 
-* [ADD] All model activities (ie SPC SREF/HREF/HRRR, ESRL, NCEP, etc) - use floating buttons (
-  similar to single pane) for back/forward
+* [ADD] All model activities (ie SPC SREF/HREF/HRRR, ESRL, NCEP, etc) - use floating buttons
+  (similar to single pane) for back/forward
 * [ADD] move setting from UI into settings Developer as they are discouraged to change and will
   likely be deprecated in the future
   "Radar with transparent toolbars"
@@ -669,8 +681,7 @@ extreme_index_mslp
 * [NOTE] setting "Prevent accidental exit" will be removed the settings where you need to hit the
   back button twice
   from the main screen (in Settings->UI) will be retired in the next release due to Google's long
-  term strategy
-  (this was added to upcoming changes on 2022-09-01)
+  term strategy (this was added to upcoming changes on 2022-09-01)
 * [ADD] Radar Mosaics are no longer pulled from the AWC Website which is due to be upgraded on Sep
   12, 2023.
   It appears the mosaic graphics are no longer going to be provided so the default is to now use the
@@ -703,8 +714,8 @@ extreme_index_mslp
 * [ADD] Radar Color Palette selection screen: submenu had one entry, remove and show entry in
   toolbar ("Help")
 * [FIX] Spc Fire weather and excessive rainfall were not working after recent change 55823
-* [ADD] NHC notifications will now be sent (less often) when the advNum changes for publicAdvisory (
-  as opposed to lastUpdate for the storm)
+* [ADD] NHC notifications will now be sent (less often) when the advNum changes for publicAdvisory
+  (as opposed to lastUpdate for the storm)
   FYI - data comes from: https://www.nhc.noaa.gov/CurrentStorms.json
 * [FIX] NHC Storm rainfall graphics were not working after NWS URL change (not all NHC Storms will
   have these graphics and may show as blank images)
@@ -953,7 +964,7 @@ outline [here](https://developer.android.com/guide/navigation/predictive-back-ge
   Nexrad
 * [ADD] Nexrad multipane, if you tap on the text in the upper left that lists radar site/product it
   will take you to severe dashboard (similar to single pane)
-* [ADD] Nexrad multipane, if warnings(tor/ffw/tst) enabled, show in top toolbar similar to single
+* [ADD] Nexrad multipane, if warnings (tor/ffw/tst) enabled, show in top toolbar similar to single
   pane
 * [FIX] tap on any NHC notification would cause a crash (user reported)
 * [FIX] NHC graphics for ATL storms were not working

@@ -238,7 +238,7 @@ object WpcFronts {
                     .replace(GlobalVariables.SEP, GlobalVariables.newline)
             val lines = html.split(GlobalVariables.newline).toMutableList()
             lines.indices.forEach { index ->
-                if (index < lines.size - 1) {
+                if (index < lines.size - 2) {
                     // Handle lines that wrap around, check to see if lines don't start
                     // with a known character
                     if (lines[index + 1].isNotEmpty() && lines[index + 2].isNotEmpty()) {
