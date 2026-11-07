@@ -220,18 +220,29 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 4
                     }
 
-                    11 -> {
-                        model = "NAM"
-                        params = UtilityModelNcepInterface.paramsNam
-                        labels = UtilityModelNcepInterface.labelsNam
-                        sectors = UtilityModelNcepInterface.sectorsNam
+//                    11 -> {
+//                        model = "NAM"
+//                        params = UtilityModelNcepInterface.paramsNam
+//                        labels = UtilityModelNcepInterface.labelsNam
+//                        sectors = UtilityModelNcepInterface.sectorsNam
+//                        startStep = 0
+//                        endStep = 85
+//                        stepAmount = 3
+//                        numberRuns = 4
+//                    }
+
+                    8 -> {
+                        model = "AIGFS"
+                        params = UtilityModelNcepInterface.modelAiGfsParams
+                        labels = UtilityModelNcepInterface.modelAiGfsLabels
+                        sectors = UtilityModelNcepInterface.sectorsAiGfs
                         startStep = 0
-                        endStep = 85
-                        stepAmount = 3
+                        endStep = 384
+                        stepAmount = 6
                         numberRuns = 4
                     }
 
-                    15 -> {
+                    11 -> {
                         model = "RAP"
                         params = UtilityModelNcepInterface.paramsRap
                         labels = UtilityModelNcepInterface.labelsRap
@@ -264,7 +275,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
 //                        numberRuns = 4
 //                    }
 
-                    12 -> {
+                    9 -> {
                         model = "RRFS"
                         params = UtilityModelNcepInterface.paramsRrfs
                         labels = UtilityModelNcepInterface.labelsRrfs
@@ -275,27 +286,27 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 4
                     }
 
-                    9 -> {
-                        model = "HRW-FV3"
-                        params = UtilityModelNcepInterface.modelHrwFv3Params
-                        labels = UtilityModelNcepInterface.modelHrwFv3Labels
-                        sectors = UtilityModelNcepInterface.sectorsHrwNmm
-                        startStep = 1
-                        endStep = 48
-                        stepAmount = 1
-                        numberRuns = 2
-                    }
-
-                    7 -> {
-                        model = "HRW-ARW"
-                        params = UtilityModelNcepInterface.paramsHrwNmm
-                        labels = UtilityModelNcepInterface.labelsHrwNmm
-                        sectors = UtilityModelNcepInterface.sectorsHrwNmm
-                        startStep = 1
-                        endStep = 48
-                        stepAmount = 1
-                        numberRuns = 2
-                    }
+//                    9 -> {
+//                        model = "HRW-FV3"
+//                        params = UtilityModelNcepInterface.modelHrwFv3Params
+//                        labels = UtilityModelNcepInterface.modelHrwFv3Labels
+//                        sectors = UtilityModelNcepInterface.sectorsHrwNmm
+//                        startStep = 1
+//                        endStep = 48
+//                        stepAmount = 1
+//                        numberRuns = 2
+//                    }
+//
+//                    7 -> {
+//                        model = "HRW-ARW"
+//                        params = UtilityModelNcepInterface.paramsHrwNmm
+//                        labels = UtilityModelNcepInterface.labelsHrwNmm
+//                        sectors = UtilityModelNcepInterface.sectorsHrwNmm
+//                        startStep = 1
+//                        endStep = 48
+//                        stepAmount = 1
+//                        numberRuns = 2
+//                    }
 
                     3 -> {
                         model = "GEFS-SPAG"
@@ -319,18 +330,18 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 4
                     }
 
-                    16 -> {
-                        model = "SREF"
-                        params = UtilityModelNcepInterface.paramsSref
-                        labels = UtilityModelNcepInterface.labelsSref
-                        sectors = UtilityModelNcepInterface.sectorsSref
-                        startStep = 0
-                        endStep = 88
-                        stepAmount = 3
-                        numberRuns = 5
-                    }
+//                    16 -> {
+//                        model = "SREF"
+//                        params = UtilityModelNcepInterface.paramsSref
+//                        labels = UtilityModelNcepInterface.labelsSref
+//                        sectors = UtilityModelNcepInterface.sectorsSref
+//                        startStep = 0
+//                        endStep = 88
+//                        stepAmount = 3
+//                        numberRuns = 5
+//                    }
 
-                    10 -> {
+                    7 -> {
                         model = "NAEFS"
                         params = UtilityModelNcepInterface.paramsNaefs
                         labels = UtilityModelNcepInterface.labelsNaefs
@@ -341,18 +352,18 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 4
                     }
 
-                    14 -> {
-                        model = "POLAR"
-                        params = UtilityModelNcepInterface.paramsPolar
-                        labels = UtilityModelNcepInterface.labelsPolar
-                        sectors = UtilityModelNcepInterface.sectorsPolar
-                        startStep = 24
-                        endStep = 385
-                        stepAmount = 24
-                        numberRuns = 1
-                    }
+//                    11 -> {
+//                        model = "POLAR"
+//                        params = UtilityModelNcepInterface.paramsPolar
+//                        labels = UtilityModelNcepInterface.labelsPolar
+//                        sectors = UtilityModelNcepInterface.sectorsPolar
+//                        startStep = 24
+//                        endStep = 385
+//                        stepAmount = 24
+//                        numberRuns = 1
+//                    }
 
-                    17 -> {
+                    12 -> {
                         model = "GEFS-WAVE"
                         params = UtilityModelNcepInterface.paramsGefsWave
                         labels = UtilityModelNcepInterface.labelsGefsWave
@@ -363,7 +374,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 4
                     }
 
-                    18 -> {
+                    13 -> {
                         model = "GFS-WAVE"
                         params = UtilityModelNcepInterface.paramsGfsWave
                         labels = UtilityModelNcepInterface.labelsGfsWave
@@ -396,16 +407,16 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 4
                     }
 
-                    8 -> {
-                        model = "HRW-ARW2"
-                        params = UtilityModelNcepInterface.paramsHrwArw2
-                        labels = UtilityModelNcepInterface.labelsHrwArw2
-                        sectors = UtilityModelNcepInterface.sectorsHrwArw2
-                        startStep = 1
-                        endStep = 48
-                        stepAmount = 1
-                        numberRuns = 2
-                    }
+//                    8 -> {
+//                        model = "HRW-ARW2"
+//                        params = UtilityModelNcepInterface.paramsHrwArw2
+//                        labels = UtilityModelNcepInterface.labelsHrwArw2
+//                        sectors = UtilityModelNcepInterface.sectorsHrwArw2
+//                        startStep = 1
+//                        endStep = 48
+//                        stepAmount = 1
+//                        numberRuns = 2
+//                    }
 
 //                    5 -> {
 //                        model = "HREF"
@@ -429,7 +440,7 @@ class ObjectModel(val activity: Activity, var prefModel: String, numPanesStr: St
                         numberRuns = 4
                     }
 
-                    13 -> {
+                    10 -> {
                         model = "NBM"
                         params = UtilityModelNcepInterface.paramsNbm
                         labels = UtilityModelNcepInterface.labelsNbm

@@ -2,13 +2,22 @@
 
 # Developer ChangeLog
 
-## 56001 2026_11_05
+## 56001 2026_11_06
 
 * fix: [NCEP Models major changes](https://mag.ncep.noaa.gov/version_updates.php)
 
 ```
 Replace NAM-HIRES model with the Rapid Refresh Forecast System (RRFS) model.
 Replace HREF model with the Rapid Ensemble Forecast System (REFS).
+Add model Artificial Intelligence Global Forecast System (AIGFS)
+Remove Models: NAM, SREF, HRW-ARW, HRW-ARW2, HRW-FV3, POLAR
+```
+
+* tool/lib updates
+
+```
+-    id 'com.android.application' version '9.5.0' apply false
++    id 'com.android.application' version '9.5.1' apply false
 ```
 
 ## 56000 2026_11_02
